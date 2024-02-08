@@ -10,3 +10,6 @@ A social media analysis platform for peacebuilders. The repo will be moved to
 <a href="http://datavaluepeople.com">
     <img src="https://howtobuildup.org/wp-content/uploads/2022/03/dvp.png" height="100">
 </a>
+
+# License
+[GNU AGPLv3](/COPYING)
