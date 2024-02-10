@@ -1,5 +1,10 @@
 # ref: https://docs.astral.sh/ruff/rules/
 [tool.ruff]
+include = ["*.py", "*.pyi", "**/pyproject.toml", "*.ipynb"]
+target-version = "py311"
+line-length = 99
+
+[tool.ruff.lint]
 select = [
   "F", # pyflakes
   "E", # pycodestyle errors
@@ -12,12 +17,7 @@ select = [
   "PGH", # pygrep-hooks
 ]
 unfixable = ["F401"]
-include = ["*.py", "*.pyi", "**/pyproject.toml", "*.ipynb"]
-target-version = "py311"
-line-length = 99
-
-[tool.ruff.pydocstyle]
-convention = "google"
+pydocstyle.convention = "google"
 
 [tool.mypy]
 python_version = "3.11"
