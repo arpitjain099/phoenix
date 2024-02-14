@@ -46,3 +46,36 @@ that tilt works with, see [tilt docs on clusters](https://docs.tilt.dev/choosing
 If you do this the set up of the ingress/host name and the `kubctl` setup might be different. For
 instance when using `k3s` you will need to add `<traefik-serivce-ip> phoenix.local` to your
 `/etc/hosts` and [follow cluster access](https://docs.k3s.io/cluster-access)
+
+## Using `asdf` for Version Management
+
+We use `asdf` as our tool of choice for managing multiple runtime versions for different languages
+and tools. `asdf` allows you to easily switch between different versions of tools like Node.js,
+helm, Python, and more, ensuring consistency across our development environments.
+
+You can also use a different version management system and see
+[.tool-versions](./../.tool-versions) for the configuration of versions.
+
+Install `asdf`: Follow the instructions on the `asdf`, see
+[docs](https://asdf-vm.com/guide/getting-started.html)
+
+### `asdf` install tools
+
+To install correct tool versions run this command in the root directory:
+
+```bash
+asdf install
+```
+
+You may need to add Plugins to `asdf` to install all the tools, see
+[docs](https://asdf-vm.com/manage/plugins.html)
+
+### `asdf` usage
+
+Run a shim/command:
+
+```bash
+asdf reshim
+# Check the helm version
+helm version
+```
