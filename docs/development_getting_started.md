@@ -79,3 +79,16 @@ asdf reshim
 # Check the helm version
 helm version
 ```
+
+## Running the Development Environment with tilt up
+
+Our development environment leverages [`tilt`](https://tilt.dev/) to streamline the process of
+running services in the local Kubernetes cluster.
+
+Once you have you local cluster up and running you can do:
+
+```bash
+tilt up
+```
+
+In the browser you will be able to see the `tilt` UI via the URL that `tilt up` prints.
