@@ -7,9 +7,13 @@ export default class _Document extends Document {
   static getInitialProps = getInitialProps;
 
   render() {
+    const title = "Console UI";
     return (
       <Html>
-        <Head />
+        <Head>
+          <meta name="title" content={title} />
+          <title>{title}</title>
+        </Head>
         <body>
           <Main />
           <NextScript />
