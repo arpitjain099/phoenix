@@ -10,3 +10,39 @@ production. For sub-projects, smaller-scale set-ups are available and can be use
 development tasks. See sub folders for more information on this.
 
 Thank you for contributing to our project, and happy coding!
+
+## Set up a local cluster
+
+We recommend that you use [mircok8s](https://microk8s.io/) but you can use any as documented by
+tilt, see below. To get up and running follow the steps:
+
+1. [Install mircok8s](https://microk8s.io/docs/install-alternatives)
+2. Make `kubectl` command to use the mircok8s see bellow
+3. `microk8s enable ingress`. First check that you don't have anything else running on port 80 of
+  your local machine
+4. (optional) add `127.0.0.1       phoenix.local` to `/etc/hosts` if you want to be able use host
+   names for the cluster
+
+### `kubectl` setup
+
+For `tilt` to work you need to have `kubectl` access to the `mircok8s` cluster. There are a number
+of ways to do this but here is the one we found to be the best:
+
+* `sudo microk8s config > ~/.kube/microk8s-config`
+* `export KUBECONFIG=~/.kube/microk8s-config:~/.kube/config` You can also add this to you
+  `.bashrc/.bash_profile`
+  so the config is always included. Or run you will need to run it before you set the context.
+* `kubectl config use-context microk8s`. Do this command before `tilt` commands are run to setup
+  the correct cluster.
+
+If you recreate your cluster you can recreate the config: `sudo microk8s config >
+~/.kube/microk8s-config` to set up `kubectl` again.
+
+### Using another local cluster
+
+If is possible to use a different cluster
+that tilt works with, see [tilt docs on clusters](https://docs.tilt.dev/choosing_clusters).
+
+If you do this the set up of the ingress/host name and the `kubctl` setup might be different. For
+instance when using `k3s` you will need to add `<traefik-serivce-ip> phoenix.local` to your
+`/etc/hosts` and [follow cluster access](https://docs.k3s.io/cluster-access)
