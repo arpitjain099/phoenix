@@ -4,6 +4,14 @@ A social media analysis platform for peacebuilders. The repo will be moved to
 [`phoenix`](https://gitlab.com/howtobuildup/phoenix) once the v1 of the
 platform is complete.
 
+## Run
+
+```bash
+tilt up
+```
+
+If nothing happens then have a look at [docs/development_getting_started.md](docs/development_getting_started.md).
+
 ## Organizations
 
 <a href="https://howtobuildup.org">
