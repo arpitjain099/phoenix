@@ -4,6 +4,7 @@ import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 import {
   RefineThemes,
   ThemedLayoutV2,
+  ThemedTitleV2,
   notificationProvider,
 } from "@refinedev/mantine";
 import routerProvider, {
@@ -24,7 +25,7 @@ import { useLocalStorage } from "@mantine/hooks";
 import { NotificationsProvider } from "@mantine/notifications";
 import dataProvider from "@refinedev/simple-rest";
 
-const API_URL = "https://api.fake-rest.refine.dev";
+const API_URL = "http://localhost:8000";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   noLayout?: boolean;
@@ -41,7 +42,15 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
     }
 
     return (
-      <ThemedLayoutV2 Header={() => <Header sticky />}>
+      <ThemedLayoutV2 
+        Header={() => <Header sticky />}
+        Title={({ collapsed }) => (
+          <ThemedTitleV2
+            collapsed={collapsed}
+            text="Console UI"
+          />
+        )}
+      >
         <Component {...pageProps} />
       </ThemedLayoutV2>
     );
@@ -76,21 +85,11 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
                   notificationProvider={notificationProvider}
                   resources={[
                     {
-                      name: "blog_posts",
-                      list: "/blog-posts",
-                      create: "/blog-posts/create",
-                      edit: "/blog-posts/edit/:id",
-                      show: "/blog-posts/show/:id",
-                      meta: {
-                        canDelete: true,
-                      },
-                    },
-                    {
-                      name: "categories",
-                      list: "/categories",
-                      create: "/categories/create",
-                      edit: "/categories/edit/:id",
-                      show: "/categories/show/:id",
+                      name: "instances",
+                      list: "/instances",
+                      create: "/instances/create",
+                      edit: "/instances/edit/:id",
+                      show: "/instances/show/:id",
                       meta: {
                         canDelete: true,
                       },

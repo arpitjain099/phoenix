@@ -1,7 +1,7 @@
 import { MantineCreateInferencer } from "@refinedev/inferencer/mantine";
 import { GetServerSideProps } from "next";
 
-export default function CategoryCreate() {
+export default function InstancesCreate() {
   return <MantineCreateInferencer />;
 }
 

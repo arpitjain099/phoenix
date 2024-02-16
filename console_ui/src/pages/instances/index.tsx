@@ -1,7 +1,7 @@
 import { MantineListInferencer } from "@refinedev/inferencer/mantine";
 import { GetServerSideProps } from "next";
 
-export default function BlogPostList() {
+export default function InstancesList() {
   return <MantineListInferencer />;
 }
 
