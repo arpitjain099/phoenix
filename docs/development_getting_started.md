@@ -92,3 +92,10 @@ tilt up
 ```
 
 In the browser you will be able to see the `tilt` UI via the URL that `tilt up` prints.
+
+## Hello world
+
+Once your set up is complete you should be able to see an hello world at:
+
+* [http://localhost/](http://localhost/)
+* [http://phoenix.local/](http://phoenix.local/)

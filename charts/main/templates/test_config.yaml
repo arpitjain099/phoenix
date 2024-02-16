@@ -1,7 +1,0 @@
-# From: https://helm.sh/docs/chart_template_guide/getting_started/#a-first-template
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: mychart-configmap
-data:
-  myvalue: "Hello World"
