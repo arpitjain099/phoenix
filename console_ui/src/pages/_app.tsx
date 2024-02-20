@@ -24,6 +24,7 @@ import {
 import { useLocalStorage } from "@mantine/hooks";
 import { NotificationsProvider } from "@mantine/notifications";
 import dataProvider from "@refinedev/simple-rest";
+import { appWithTranslation, useTranslation } from "next-i18next";
 
 const API_URL = "http://localhost:8000";
 
@@ -56,6 +57,14 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
     );
   };
 
+  const { t, i18n } = useTranslation();
+
+  const i18nProvider = {
+    translate: (key: string, params: object) => t(key, params),
+    changeLocale: (lang: string) => i18n.changeLanguage(lang),
+    getLocale: () => i18n.language,
+  };
+
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: "mantine-color-scheme",
     defaultValue: "light",
@@ -83,6 +92,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
                   routerProvider={routerProvider}
                   dataProvider={dataProvider(API_URL)}
                   notificationProvider={notificationProvider}
+                  i18nProvider={i18nProvider}
                   resources={[
                     {
                       name: "instances",
@@ -117,4 +127,4 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
   );
 }
 
-export default MyApp;
+export default appWithTranslation(MyApp);
