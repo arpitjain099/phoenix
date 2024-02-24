@@ -49,7 +49,7 @@ namespace_packages = true
 # mypy prepends errors with the corresponding error code
 show_error_codes = true
 
-[tool.mypy.overrides]
+[[tool.mypy.overrides]]
 module = "*.tests.*"
 # remove enforce all functions need type hints within tests dir
 disallow_untyped_defs = false
