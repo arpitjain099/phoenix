@@ -1,4 +1,4 @@
-from python:3.11.3-slim
+from python:3.11.8-slim
 
 MAINTAINER benjmain@datavaluepeople.com
 
