@@ -1,7 +1,9 @@
 ## Project specific gitignore
 
-.*venv  # we make venvs prefixed with name of project/lib
-
+# Ignore virtual environments for projects
+projects/*/.*_venv
+# Ignore virtual environments for libraries
+libs/*/.*_venv
 
 ## Standard python gitignore
 

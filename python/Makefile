@@ -47,10 +47,12 @@ upgrade_requirements: check_path_exists check_path_is_project
 	pip-compile --upgrade $(path)/requirements.in
 
 create_venv: check_path_exists
-	@venv_name=".venv_$$(basename $(path))"; \
-	echo "Creating venv for path $(path) at $$venv_name..."; \
-	python -m venv $(path)/$$venv_name; \
-	echo "Run 'source $(path)$$venv_name/bin/activate' to activate the venv."
+	# Normalise the path by removing any trailing slashes
+	@normalized_path=$$(echo "$(path)" | sed 's:/*$$::'); \
+	venv_name=".$$(basename $$normalized_path)_venv"; \
+	echo "Creating venv for path $$normalized_path at $$venv_name..."; \
+	python -m venv $$normalized_path/$$venv_name; \
+	echo "Run 'source $$normalized_path/$$venv_name/bin/activate' to activate the venv."
 
 install: check_path_exists
 	@echo "Installing for path $(path)..."
