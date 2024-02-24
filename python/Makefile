@@ -56,6 +56,10 @@ create_venv: check_path_exists
 
 install: check_path_exists
 	@echo "Installing for path $(path)..."
-	pip install -r $(path)/requirements.txt
+	@if echo "$(path)" | grep -qE '^projects/'; then \
+		pip install -r $(path)/requirements.txt; \
+	elif echo "$(path)" | grep -qE '^libs/'; then \
+		pip install -r dev-requirements.txt; \
+	fi
 	pip install -e $(path)/.
 	pre-commit install
