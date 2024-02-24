@@ -29,8 +29,9 @@ typecheck:
 # consistent with other make commands.
 test: check_path_exists
 	@echo "Running tests for path $(path)..."
-	@base_dir=$$(basename $(path)); \
-	cd $(path)$$base_dir && pytest tests
+	@normalized_path=$$(echo "$(path)" | sed 's:/*$$::'); \
+	base_dir=$$(basename $$normalized_path); \
+	cd $$normalized_path/$$base_dir && pytest tests
 
 check_path_is_project:
 	@if echo "$(path)" | grep -qvE '^projects/'; then \
