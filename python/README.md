@@ -19,6 +19,9 @@ There are three main distinct areas of the repo:
 - *`projects` directory*: this contains a directory per project/application.
 - *`libs` directory*: this contains a directory per library.
 
+Note: `tests` live inside the `project` package, i.e. at `proejcts/$(project)/$(project)/tests`.
+This greatly simplifies `mypy` usage (due to `mypy`s package discovery etc.) in the monorepo.
+
 ## Development
 
 Use pyenv for python installation management.
