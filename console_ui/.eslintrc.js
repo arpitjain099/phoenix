@@ -30,12 +30,18 @@ module.exports = {
 	plugins: ["react", "react-hooks", "prettier", "@typescript-eslint"],
 	rules: {
 		"@typescript-eslint/ban-types": "off",
-		"@typescript-eslint/interface-name-prefix": "off",
 		"@typescript-eslint/explicit-function-return-type": "off",
+		"@typescript-eslint/interface-name-prefix": "off",
+		"@typescript-eslint/naming-convention": [
+			"error",
+			{
+				selector: "memberLike",
+				modifiers: ["private"],
+				format: ["camelCase"],
+				leadingUnderscore: "require",
+			},
+		],
 		"@typescript-eslint/no-explicit-any": "off",
-		"react/prop-types": "off",
-		"react/react-in-jsx-scope": "off",
-		"no-unused-vars": "off",
 		"@typescript-eslint/no-unused-vars": [
 			"warn",
 			{
@@ -43,8 +49,28 @@ module.exports = {
 				varsIgnorePattern: "^_",
 			},
 		],
+		"react/prop-types": "off",
+		"react/react-in-jsx-scope": "off",
+		"no-unused-vars": "off",
 		"arrow-body-style": ["error", "as-needed"],
 		"react/jsx-props-no-spreading": "off",
+		"react/function-component-definition": [
+			2,
+			{
+				namedComponents: [
+					"function-declaration",
+					"function-expression",
+					"arrow-function",
+				],
+				unnamedComponents: ["function-expression", "arrow-function"],
+			},
+		],
+		"react/no-unstable-nested-components": [
+			"warn",
+			{
+				allowAsProps: true,
+			},
+		],
 		"react-hooks/exhaustive-deps": "error",
 	},
 };
