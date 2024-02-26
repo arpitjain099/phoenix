@@ -9,6 +9,7 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
+    "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
@@ -36,6 +37,12 @@
       ],
       "@styles": [
         "src/styles"
+      ],
+      "@pages/*": [
+        "src/pages/*"
+      ],
+      "@pages": [
+        "src/pages"
       ],
       "@public/*": [
         "public/*"
