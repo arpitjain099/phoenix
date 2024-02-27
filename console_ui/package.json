@@ -11,7 +11,7 @@
 		"start": "refine start",
 		"refine": "refine",
 		"prepare": "cd .. && husky install console_ui/.husky",
-    "lint": "eslint '**/*.{js,jsx,ts,tsx}'",
+		"lint": "eslint '*.{js,ts,jsx,tsx}' && prettier . --check",
 		"lint:staged": "lint-staged"
 	},
 	"dependencies": {
@@ -64,10 +64,10 @@
 		"*.{js,ts,jsx,tsx}": [
 			"eslint --fix",
 			"eslint",
-			"prettier --write"
+			"prettier . --write"
 		],
 		"*.json": [
-			"prettier --write"
+			"prettier . --write"
 		]
 	},
 	"refine": {
