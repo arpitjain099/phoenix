@@ -22,6 +22,17 @@ This folder contains the web user interface for the console of phiphi. The conso
     npm run start
 ```
 
+### Linting
+
+We have linting that works with pre commit and lint-staged. If you run `npm install` the pre
+commit will automatically be installed and run on all staged files in `console_ui/`.
+
+To run a lint check you can use the command:
+
+```bash
+  npm run lint
+```
+
 ## Learn More
 
 To learn more about **Refine**, please check out the [Documentation](https://refine.dev/docs)

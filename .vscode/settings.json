@@ -1,0 +1,7 @@
+{
+  "eslint.workingDirectories": [
+    "console_ui"
+  ],
+  "editor.formatOnSave": true,
+  "prettier.useTabs": true
+}
