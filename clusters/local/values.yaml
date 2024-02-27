@@ -6,3 +6,12 @@ superset:
     auth:
       # This is needed to override the postgresql passwords
       existingSecret: phoenixchartmain-superset-env-override
+  configOverrides:
+    proxy_override: |
+      # This will make sure the redirect_uri is properly computed, even with SSL offloading
+      ENABLE_PROXY_FIX = True
+      SESSION_COOKIE_SAMESITE = None
+      SESSION_COOKIE_SECURE = False
+      SESSION_COOKIE_HTTPONLY = False
+      WTF_CSRF_ENABLED = False
+      TALISMAN_ENABLED=False

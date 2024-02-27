@@ -20,8 +20,10 @@ tilt, see below. To get up and running follow the steps:
 2. Make `kubectl` command to use the mircok8s see bellow
 3. `microk8s enable ingress`. First check that you don't have anything else running on port 80 of
   your local machine
-4. (optional) add `127.0.0.1       phoenix.local` to `/etc/hosts` if you want to be able use host
-   names for the cluster
+4. If you want superset to work you also have to add these to `/etc/hosts`
+```
+127.0.0.1       superset.phoenix.local
+```
 
 ### `kubectl` setup
 
