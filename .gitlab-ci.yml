@@ -1,0 +1,12 @@
+# Run linting for console_ui
+image: node:21.6.2
+
+stages:
+  - lint
+
+console_ui_linting:
+  stage: lint
+  script:
+    - cd console_ui/
+    - npm install
+    - npm run lint
