@@ -22,6 +22,13 @@ This folder contains the web user interface for the console of phiphi. The conso
     npm run start
 ```
 
+### Linting
+
+We have a linter that works with pre commit:
+```bash
+  npm run lint
+```
+
 ## Learn More
 
 To learn more about **Refine**, please check out the [Documentation](https://refine.dev/docs)
