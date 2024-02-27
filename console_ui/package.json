@@ -11,7 +11,8 @@
 		"start": "refine start",
 		"refine": "refine",
 		"prepare": "cd .. && husky install console_ui/.husky",
-		"lint": "lint-staged"
+    "lint": "eslint '**/*.{js,jsx,ts,tsx}'",
+		"lint:staged": "lint-staged"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.8.2",
