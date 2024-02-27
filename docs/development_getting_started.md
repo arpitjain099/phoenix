@@ -80,6 +80,23 @@ asdf reshim
 helm version
 ```
 
+## Setting secretes
+
+To allow for the secrets to not be in the charts you can add the secrets as a Kubernetes SECRET.
+
+```bash
+cp clusters/local/.example_secrets.yaml clusters/local/secret.yaml
+```
+
+Fill in the required values of clusters/local/secret.yaml
+
+```bash
+kubectl apply -f clusters/local/secret.yaml
+```
+
+This needs to be done before `tilt up` is run otherwise passwords and secrets will be created in
+correctly.
+
 ## Running the Development Environment with tilt up
 
 Our development environment leverages [`tilt`](https://tilt.dev/) to streamline the process of

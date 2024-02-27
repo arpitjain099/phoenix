@@ -1,0 +1,8 @@
+superset:
+  enabled: true
+  # These secrets must be created before the first apply of the chart
+  envFromSecret: phoenixchartmain-superset-env-override
+  postgresql:
+    auth:
+      # This is needed to override the postgresql passwords
+      existingSecret: phoenixchartmain-superset-env-override

@@ -1,1 +1,3 @@
-# No values at the moment
+# Superset
+superset:
+  enabled: true
