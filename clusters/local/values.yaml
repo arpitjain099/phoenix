@@ -1,3 +1,29 @@
+oauth2-proxy:
+  config:
+    existingSecret: phoenixchartmain-oauth2-secrets
+    configFile: |
+      # Settings for Auth0
+      provider="oidc"
+      provider_display_name="Auth0"
+      oidc_issuer_url="https://dev-2ii4bfcaymdes14b.uk.auth0.com/"
+      code_challenge_method="S256"
+      http_address="0.0.0.0:4180"
+      upstreams="file:///dev/null"
+      email_domains="*"
+      # Important that this machtes the domain being used for the cluster
+      cookie_domains=".phoenix.local"
+      whitelist_domains=["*.phoenix.local:*", "dev-2ii4bfcaymdes14b.uk.auth0.com"]
+      # email is needed as is not in default openid scrop
+      scope="openid email"
+      pass_access_token = true
+      pass_authorization_header = true
+      pass_user_headers = true
+      set_xauthrequest = true
+      # To remove when secure version is used
+      show_debug_on_error = true
+      insecure_oidc_allow_unverified_email = true
+      ssl_insecure_skip_verify=true
+      cookie_secure="false"
 superset:
   enabled: true
   # These secrets must be created before the first apply of the chart
