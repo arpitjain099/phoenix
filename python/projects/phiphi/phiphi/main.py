@@ -1,7 +1,7 @@
 """Main for phiphi."""
 from fastapi import FastAPI
 
-app = FastAPI()
+app = FastAPI(title="phiphi")
 
 
 @app.get("/")
