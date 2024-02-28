@@ -3,3 +3,4 @@
 -r ../../dev-requirements.txt
 
 # Third party deps
+fastapi[all]
