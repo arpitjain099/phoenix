@@ -64,6 +64,10 @@ project's quality standards.
 Requests". Click "New Merge Request", and select your fork and branch as the source. Fill in the
 details, explaining your changes and why they should be included.
 
+### Helpful
+
+* [Development Getting Started](/docs/development_getting_started.md)
+
 ## Communication
 
 Use GitLab issues to ensure that everyone can participate and the conversation is recorded. Or see
