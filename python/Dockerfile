@@ -38,7 +38,8 @@ COPY projects/${PROJECT}/requirements.txt /app/projects/${PROJECT}/requirements.
 
 # Create a new requirements file without `file:libs/` lines and save those lines to a file.
 RUN sed '/^-e file:libs\/.*$/d' projects/${PROJECT}/requirements.txt > /tmp/requirements_no_local_libs.txt \
-    && grep '^-e file:libs/' projects/${PROJECT}/requirements.txt > /tmp/requirements_local_libs.txt
+    && { grep '^-e file:libs/' projects/${PROJECT}/requirements.txt > /tmp/requirements_local_libs.txt || true; }
+
 
 # Then install the Python dependencies, to leverage Docker's caching mechanism.
 RUN pip install --upgrade pip \
