@@ -9,6 +9,8 @@ x-phoenix-bind:
 services:
   api:
     image: "phiphi"
+    env_file:
+      - docker_env
     build:
       context: ../../
       args:
