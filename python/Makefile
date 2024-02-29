@@ -16,12 +16,19 @@ lint: check_path_exists
 	cd $(path) && ruff format --check .
 	cd $(path) && ruff .
 
-# Typecheck runs on all project due to mypy config constraints.
-# `path` argument is ignored (but doesn't break if given).
-typecheck:
-	@echo "Running typecheck..."
-	@echo "Note: typecheck always runs on all projects and libs due to mypy config constraints."
-	mypy .
+typecheck: check_path_exists
+	@echo "Running typecheck for project and local libs..."
+	@# Extract local library paths, remove '-e file:' prefix, and ensure proper formatting
+	@local_libs=$$(grep -E '^-e file:libs/' $(path)/requirements.txt | sed 's|^-e file:libs/|libs/|' | tr '\n' ' '); \
+	if [ -n "$$local_libs" ]; then \
+		echo "Found local libs for project, running mypy on project and libs: $$local_libs"; \
+		mypy_cmd="mypy $(path) $$local_libs"; \
+	else \
+		echo "No local libs found, running mypy only on project"; \
+		mypy_cmd="mypy $(path)"; \
+	fi; \
+	echo "Running mypy command: $$mypy_cmd"; \
+	eval $$mypy_cmd
 
 # Test command assumes directory structure where test directory is nested within the python package
 # E.g. `projects/example_project_1/example_project_1/tests` is the directory location and the
