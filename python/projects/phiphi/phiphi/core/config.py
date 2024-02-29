@@ -1,14 +1,30 @@
 """Configuration of phiphi application."""
 import os
 
+from pydantic import networks
+from pydantic_core import MultiHostUrl
 from pydantic_settings import BaseSettings
+from typing_extensions import Annotated
+
+# Validation of a sqlite:///database.db URL
+SqliteDsn = Annotated[
+    MultiHostUrl,
+    networks.UrlConstraints(
+        host_required=False,
+        allowed_schemes=[
+            "sqlite",
+            # Async
+            "sqlite+aiosqlite",
+        ],
+    ),
+]
 
 
 class Settings(BaseSettings):
     """Settings of the app taken from environment variables."""
 
     # DB ENVIRONMENT
-    SQLALCHEMY_DATABASE_URI: str
+    SQLALCHEMY_DATABASE_URI: SqliteDsn
 
 
 # Be aware that environment variables will overwrite the variables in the settings
