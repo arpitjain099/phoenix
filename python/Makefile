@@ -17,15 +17,19 @@ lint: check_path_exists
 	cd $(path) && ruff .
 
 typecheck: check_path_exists
-	@echo "Running typecheck for project and local libs..."
-	@# Extract local library paths, remove '-e file:' prefix, and ensure proper formatting
-	@local_libs=$$(grep -E '^-e file:libs/' $(path)/requirements.txt | sed 's|^-e file:libs/|libs/|' | tr '\n' ' '); \
-	if [ -n "$$local_libs" ]; then \
-		echo "Found local libs for project, running mypy on project and libs: $$local_libs"; \
-		mypy_cmd="mypy $(path) $$local_libs"; \
-	else \
-		echo "No local libs found, running mypy only on project"; \
+	@echo "Running typecheck for path $(path)..."
+	@if echo "$(path)" | grep -qE '^libs/'; then \
+		echo "Path is a library, running mypy only on library"; \
 		mypy_cmd="mypy $(path)"; \
+	elif echo "$(path)" | grep -qE '^projects/'; then \
+		local_libs=$$(grep -E '^-e file:libs/' $(path)/requirements.txt | sed 's|^-e file:libs/|libs/|' | tr '\n' ' '); \
+		if [ -n "$$local_libs" ]; then \
+			echo "Found local libs for project, running mypy on project and libs: $$local_libs"; \
+			mypy_cmd="mypy $(path) $$local_libs"; \
+		else \
+			echo "No local libs found for project, running mypy only on project"; \
+			mypy_cmd="mypy $(path)"; \
+		fi; \
 	fi; \
 	echo "Running mypy command: $$mypy_cmd"; \
 	eval $$mypy_cmd
