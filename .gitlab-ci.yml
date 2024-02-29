@@ -26,11 +26,11 @@ python_build_and_ci_projects:
   stage: test
   script:
     - cd python
-    - docker build -t $PROJECT_NAME .
-    - docker run $PROJECT_NAME make all path=projects/$PROJECT_NAME
+    - docker build --build-arg PROJECT=$PROJECT -t $PROJECT .
+    - docker run $PROJECT make all path=projects/$PROJECT
   parallel:
     matrix:
-      - PROJECT_NAME: [example_project_1]
+      - PROJECT: [example_project_1]
   rules:
     - if: '$CI_MERGE_REQUEST_ID'
 

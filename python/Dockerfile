@@ -30,28 +30,28 @@ COPY ./.docker-entrypoint.sh /app/.docker-entrypoint.sh
 RUN chmod -R +x .docker-entrypoint.sh
 
 # ARG PROJECT - used to parameterise the Dockerfile to build a serparate image per project.
-ARG PROJECT=example_project_1
+ARG PROJECT
 
 # Install Python dependencies.
 COPY pyproject.toml Makefile /app/
 COPY projects/${PROJECT}/requirements.txt /app/projects/${PROJECT}/requirements.txt
 
 # Create a new requirements file without `file:libs/` lines and save those lines to a file.
-RUN sed '/file:libs\//d' projects/${PROJECT}/requirements.txt > projects/${PROJECT}/requirements_no_local_libs.txt \
-    && grep 'file:libs/' projects/${PROJECT}/requirements.txt > projects/${PROJECT}/requirements_local_libs.txt
+RUN sed '/^-e file:libs\/.*$/d' projects/${PROJECT}/requirements.txt > /tmp/requirements_no_local_libs.txt \
+    && grep '^-e file:libs/' projects/${PROJECT}/requirements.txt > /tmp/requirements_local_libs.txt
 
-# Then install the Python dependencies, to levarage Docker's caching mechanism.
+# Then install the Python dependencies, to leverage Docker's caching mechanism.
 RUN pip install --upgrade pip \
-    && pip install --no-cache-dir -r projects/${PROJECT}/requirements_no_local_libs.txt
+    && pip install --no-cache-dir -r /tmp/requirements_no_local_libs.txt
 
 # Copy all python code:
 #   - Do this after install to leverage Docker's caching mechanism.
 #   - Copying all the code simplifies ensuring that the project has the code
-#   for al local monorepo dependencies it needs.
+#   for all local monorepo dependencies it needs.
 COPY . /app
 
-# Now install the local monorepo libaries.
-RUN pip install -r projects/${PROJECT}/requirements_local_libs.txt
+# Now install the local monorepo libraries.
+RUN if [ -f /tmp/requirements_local_libs.txt ]; then pip install -r /tmp/requirements_local_libs.txt; fi
 
 # Install the project as a package.
 RUN pip install -e projects/${PROJECT}/.
