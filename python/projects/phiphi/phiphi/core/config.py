@@ -23,6 +23,9 @@ SqliteDsn = Annotated[
 class Settings(BaseSettings):
     """Settings of the app taken from environment variables."""
 
+    TITLE: str = "phiphi"
+    VERSION: str = "v0.0.1"
+
     # DB ENVIRONMENT
     SQLALCHEMY_DATABASE_URI: SqliteDsn
 
