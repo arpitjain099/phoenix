@@ -28,6 +28,9 @@ import { NotificationsProvider } from "@mantine/notifications";
 import dataProvider from "@providers/data-provider";
 import { appWithTranslation, useTranslation } from "next-i18next";
 
+// initialize i18n
+import "../providers/i18n";
+
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
 	noLayout?: boolean;
 };
