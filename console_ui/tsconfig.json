@@ -14,7 +14,7 @@
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"jsx": "preserve",
-		"baseUrl": ".",
+		"baseUrl": "./",
 		"paths": {
 			"@components/*": ["src/components/*"],
 			"@components": ["src/components"],
@@ -24,6 +24,8 @@
 			"@styles": ["src/styles"],
 			"@pages/*": ["src/pages/*"],
 			"@pages": ["src/pages"],
+			"@providers/*": ["src/providers/*"],
+			"@providers": ["src/providers"],
 			"@public/*": ["public/*"],
 			"@public": ["public"]
 		},
