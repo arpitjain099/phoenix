@@ -4,18 +4,20 @@ import {
 	Flex,
 	Group,
 	Header as MantineHeader,
+	Menu,
 	Sx,
 	Title,
 	useMantineColorScheme,
 	useMantineTheme,
 } from "@mantine/core";
-import { useGetIdentity } from "@refinedev/core";
+import { useGetIdentity, useGetLocale, useSetLocale } from "@refinedev/core";
 import {
 	HamburgerMenu,
 	RefineThemedLayoutV2HeaderProps,
 } from "@refinedev/mantine";
-import { IconMoonStars, IconSun } from "@tabler/icons";
+import { IconChevronDown, IconMoonStars, IconSun } from "@tabler/icons";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 type IUser = {
 	id: number;
@@ -24,6 +26,11 @@ type IUser = {
 };
 
 const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({ sticky }) => {
+	const { i18n } = useTranslation();
+	const locale = useGetLocale();
+	const changeLanguage = useSetLocale();
+	const currentLocale = locale();
+
 	const { data: user } = useGetIdentity<IUser>();
 
 	const theme = useMantineTheme();
@@ -62,6 +69,34 @@ const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({ sticky }) => {
 			>
 				<HamburgerMenu />
 				<Group>
+					<Menu>
+						<Menu.Target>
+							<div className="flex items-center gap-1 cursor-pointer">
+								<Avatar size={16} src={`/images/flags/${currentLocale}.svg`} />
+								{currentLocale === "en" && "English"}
+								{currentLocale === "de" && "German"}
+								{currentLocale === "ar" && "Arabic"}
+								<IconChevronDown />
+							</div>
+						</Menu.Target>
+						<Menu.Dropdown>
+							{[...(i18n.languages || [])].sort().map((lang: string) => (
+								<Menu.Item
+									key={lang}
+									onClick={() => changeLanguage(lang)}
+									icon={
+										<span style={{ marginRight: 8 }}>
+											<Avatar size={16} src={`/images/flags/${lang}.svg`} />
+										</span>
+									}
+								>
+									{lang === "en" && "English"}
+									{lang === "de" && "German"}
+									{lang === "ar" && "Arabic"}
+								</Menu.Item>
+							))}
+						</Menu.Dropdown>
+					</Menu>
 					<ActionIcon
 						variant="outline"
 						color={dark ? "yellow" : "primary"}
