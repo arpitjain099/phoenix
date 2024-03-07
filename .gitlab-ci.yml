@@ -1,28 +1,25 @@
-# Run linting for console_ui
+services:
+  - docker:dind
 
 stages:
-  - lint
+  - test
 
+# Run linting for console_ui
 console_ui_linting:
   image: node:21.6.2
-  stage: lint
+  stage: test
   script:
     - cd console_ui/
     - npm install
     - npm run lint
 
 # Run tests for the python projects
-stages:
-  - test
-
 variables:
   DOCKER_DRIVER: overlay2
   DOCKER_HOST: tcp://docker:2375
 
 python_build_and_ci_projects:
   image: docker:latest
-  services:
-    - docker:dind
   stage: test
   script:
     - cd python
@@ -31,13 +28,8 @@ python_build_and_ci_projects:
   parallel:
     matrix:
       - PROJECT: [example_project_1]
-  rules:
-    - if: '$CI_MERGE_REQUEST_ID'
 
 python_ci_libs:
-  image: docker:latest
-  services:
-    - docker:dind
   stage: test
   image: python:3.11.8
   script:
@@ -47,5 +39,3 @@ python_ci_libs:
   parallel:
     matrix:
       - LIB_NAME: [example_lib_1]
-  rules:
-    - if: '$CI_MERGE_REQUEST_ID'
