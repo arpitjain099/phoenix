@@ -4,6 +4,8 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
+# Please add the models you want to use in the migrations to all_models.py
+from phiphi import all_models
 from phiphi.core import config as phiphi_config
 
 # this is the Alembic Config object, which provides
@@ -21,7 +23,7 @@ config.set_main_option("sqlalchemy.url", str(phiphi_config.settings.SQLALCHEMY_D
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = None
+target_metadata = all_models.base_metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
