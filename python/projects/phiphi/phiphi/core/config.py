@@ -28,6 +28,7 @@ class Settings(BaseSettings):
 
     # DB ENVIRONMENT
     SQLALCHEMY_DATABASE_URI: SqliteDsn
+    TESTING_SQLALCHEMY_DATABASE_URI: SqliteDsn
 
 
 # Be aware that environment variables will overwrite the variables in the settings
