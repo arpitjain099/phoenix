@@ -34,8 +34,8 @@ python_ci_libs:
   image: python:3.11.8
   script:
     - cd python
-    - make install path=libs/$LIB_NAME
-    - make all path=libs/$LIB_NAME
+    - make install path=libs/$LIB
+    - make all path=libs/$LIB
   parallel:
     matrix:
-      - LIB_NAME: [example_lib_1]
+      - LIB: [example_lib_1]
