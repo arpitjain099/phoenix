@@ -41,3 +41,28 @@ you password:
 ```bash
 make fix_local_permissions
 ```
+
+### Database migrations
+
+If you have created a new file with a new model, you will need to all this to
+`phiphi/all_models.py` so that alembic has it in the table metadata.
+
+Use make commands to create a revision:
+```bash
+message="<revision description>" make alembic_revision
+```
+
+This command may ask for your password as it will change the owner of the auto-generated file.
+
+This will create a new migration file in `phiphi/migrations/versions` directory. The file will be
+named with a time stamp and a description of the migration.
+
+Check and edit the migration file as needed and fixing any linting issues.
+
+The migrations will be applied when you do `make up` and the `api` service is started.
+If you want to run the migration then you can do:
+```bash
+make alembic_upgrade
+```
+
+See the `Makefile` for more commands.

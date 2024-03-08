@@ -32,3 +32,30 @@ format:
 
 fix_local_permissions:
 	sudo chown -R $(USER):$(USER) phiphi/
+
+# We are using an extra docker compose file to run alembic commands
+# because there are a few differences in the environment setup
+# when running an alembic command.
+ALEMBIC_DOCKER_COMPOSE_COMMAND=docker compose -f docker-compose.yaml -f docker-compose.alembic.yaml run api
+
+alembic_revision:
+	@if [ -z "$(message)" ]; then \
+		echo "Path argument is required; add \`message=...\` to the make command."; \
+		exit 1; \
+	fi
+	$(ALEMBIC_DOCKER_COMPOSE_COMMAND) alembic revision --autogenerate -m "$(message)"
+	$(MAKE) fix_local_permissions
+
+# Usage: make alembic_upgrade REVISION=base
+# Default is head
+alembic_upgrade:
+	REVISION="${REVISION:-head}"
+	$(ALEMBIC_DOCKER_COMPOSE_COMMAND) alembic upgrade $(REVISION)
+
+# Usage: make alembic_downgrade REVISION=base
+# or
+# make alembic_downgrade REVISION=-1
+# Default is -1
+alembic_downgrade:
+	REVISION="${REVISION:--1}"
+	$(ALEMBIC_DOCKER_COMPOSE_COMMAND) alembic downgrade $(REVISION)
