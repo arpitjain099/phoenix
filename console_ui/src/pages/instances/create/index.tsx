@@ -1,7 +1,15 @@
 import { IResourceComponentsProps, useTranslate } from "@refinedev/core";
 import { Create, useForm } from "@refinedev/mantine";
-import { TextInput, NumberInput, Select, Textarea, Alert } from "@mantine/core";
+import {
+	TextInput,
+	NumberInput,
+	Select,
+	Textarea,
+	Alert,
+	Tooltip,
+} from "@mantine/core";
 import React, { useEffect } from "react";
+import { IconInfoCircle } from "@tabler/icons";
 
 export const InstanceCreate: React.FC<IResourceComponentsProps> = () => {
 	const translate = useTranslate();
@@ -81,15 +89,34 @@ export const InstanceCreate: React.FC<IResourceComponentsProps> = () => {
 				mt="sm"
 				min={183}
 				max={365}
-				withAsterisk
-				label={translate("instances.fields.days_until_pi_expiration")}
+				label={
+					<div className="flex items-center">
+						<Tooltip label="Minimum value is 183 and Maximum value is 365">
+							<span className="flex">
+								<IconInfoCircle size={12} />
+							</span>
+						</Tooltip>
+						{translate("instances.fields.days_until_pi_expiration")}
+						<span className="text-red-500">*</span>
+					</div>
+				}
 				{...getInputProps("days_until_pi_expiration")}
 			/>
 			<NumberInput
 				mt="sm"
 				min={183}
 				max={365}
-				label={translate("instances.fields.days_until_all_data_expiration")}
+				label={
+					<div className="flex items-center">
+						<Tooltip label="Minimum value is 183 and Maximum value is 365">
+							<span className="flex">
+								<IconInfoCircle size={12} />
+							</span>
+						</Tooltip>
+						{translate("instances.fields.days_until_all_data_expiration")}
+						<span className="text-red-500">*</span>
+					</div>
+				}
 				{...getInputProps("days_until_all_data_expiration")}
 			/>
 			<Select
@@ -108,7 +135,7 @@ export const InstanceCreate: React.FC<IResourceComponentsProps> = () => {
 				label={translate("instances.fields.description")}
 				{...getInputProps("description")}
 			/>
-			<Alert mt="lg" title="Note!" color="red">
+			<Alert mt="lg" title="Note!" color="gray">
 				{translate("instances.warnings.create")}
 			</Alert>
 		</Create>
