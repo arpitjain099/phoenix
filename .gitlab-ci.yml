@@ -1,12 +1,41 @@
-# Run linting for console_ui
-image: node:21.6.2
+services:
+  - docker:dind
 
 stages:
-  - lint
+  - test
 
+# Run linting for console_ui
 console_ui_linting:
-  stage: lint
+  image: node:21.6.2
+  stage: test
   script:
     - cd console_ui/
     - npm install
     - npm run lint
+
+# Run tests for the python projects
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_HOST: tcp://docker:2375
+
+python_build_and_ci_projects:
+  image: docker:latest
+  stage: test
+  script:
+    - cd python
+    - docker build --build-arg PROJECT=$PROJECT -t $PROJECT .
+    - docker run $PROJECT make all path=projects/$PROJECT
+  parallel:
+    matrix:
+      - PROJECT: [example_project_1]
+
+python_ci_libs:
+  stage: test
+  image: python:3.11.8
+  script:
+    - cd python
+    - make install path=libs/$LIB
+    - make all path=libs/$LIB
+  parallel:
+    matrix:
+      - LIB: [example_lib_1]
