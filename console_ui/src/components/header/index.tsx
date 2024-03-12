@@ -73,10 +73,7 @@ const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({ sticky }) => {
 						<Menu.Target>
 							<div className="flex items-center gap-1 cursor-pointer">
 								<Avatar size={16} src={`/images/flags/${currentLocale}.svg`} />
-								{currentLocale === "en" && "English"}
-								{currentLocale === "de" && "German"}
-								{currentLocale === "ar" && "Arabic"}
-								<IconChevronDown />
+								<IconChevronDown size={14} />
 							</div>
 						</Menu.Target>
 						<Menu.Dropdown>
