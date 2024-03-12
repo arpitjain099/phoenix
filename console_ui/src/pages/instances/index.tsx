@@ -1,15 +1,14 @@
 import React from "react";
 import { IResourceComponentsProps, useTranslate } from "@refinedev/core";
-import { useTable } from "@refinedev/react-table";
-import { ColumnDef, flexRender } from "@tanstack/react-table";
-import { ScrollArea, Table, Pagination, Group } from "@mantine/core";
+import { ColumnDef } from "@tanstack/react-table";
+import { Group } from "@mantine/core";
 import {
-	List,
 	EditButton,
 	ShowButton,
 	DeleteButton,
 	DateField,
 } from "@refinedev/mantine";
+import TableComponent from "../../components/table";
 
 export const InstanceList: React.FC<IResourceComponentsProps> = () => {
 	const translate = useTranslate();
@@ -51,68 +50,7 @@ export const InstanceList: React.FC<IResourceComponentsProps> = () => {
 		[translate]
 	);
 
-	const {
-		getHeaderGroups,
-		getRowModel,
-		setOptions,
-		refineCore: {
-			setCurrent,
-			pageCount,
-			current,
-			tableQueryResult: { data: tableData },
-		},
-	} = useTable({
-		columns,
-	});
-
-	setOptions((prev) => ({
-		...prev,
-		meta: {
-			...prev.meta,
-		},
-	}));
-
-	return (
-		<List>
-			<ScrollArea>
-				<Table highlightOnHover>
-					<thead>
-						{getHeaderGroups().map((headerGroup) => (
-							<tr key={headerGroup.id}>
-								{headerGroup.headers.map((header) => (
-									<th key={header.id}>
-										{!header.isPlaceholder &&
-											flexRender(
-												header.column.columnDef.header,
-												header.getContext()
-											)}
-									</th>
-								))}
-							</tr>
-						))}
-					</thead>
-					<tbody>
-						{getRowModel().rows.map((row) => (
-							<tr key={row.id}>
-								{row.getVisibleCells().map((cell) => (
-									<td key={cell.id}>
-										{flexRender(cell.column.columnDef.cell, cell.getContext())}
-									</td>
-								))}
-							</tr>
-						))}
-					</tbody>
-				</Table>
-			</ScrollArea>
-			<br />
-			<Pagination
-				position="right"
-				total={pageCount}
-				page={current}
-				onChange={setCurrent}
-			/>
-		</List>
-	);
+	return <TableComponent columns={columns} />;
 };
 
 export default InstanceList;
