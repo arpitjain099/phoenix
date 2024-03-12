@@ -18,6 +18,6 @@ i18next
 		fallbackLng: ["en", "de", "ar"],
 		defaultNS: "common",
 		detection: {
-			order: ["htmlTag", "cookie"],
+			order: ["cookie"],
 		},
 	});
