@@ -17,8 +17,8 @@ export const InstanceCreate: React.FC<IResourceComponentsProps> = () => {
 			name: "",
 			description: "",
 			environment_id: "",
-			days_until_pi_expiration: undefined,
-			days_until_all_data_expiration: undefined,
+			days_until_pi_expiration: 183,
+			days_until_all_data_expiration: 183,
 		},
 		validate: {
 			id: (value) =>
