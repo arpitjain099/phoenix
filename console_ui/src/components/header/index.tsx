@@ -88,8 +88,8 @@ const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({ sticky }) => {
 									}
 								>
 									{lang === "en" && "English"}
-									{lang === "de" && "German"}
-									{lang === "ar" && "Arabic"}
+									{lang === "de" && "Deutsch"}
+									{lang === "ar" && "عربي"}
 								</Menu.Item>
 							))}
 						</Menu.Dropdown>
