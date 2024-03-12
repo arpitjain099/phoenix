@@ -15,7 +15,7 @@ import {
 	HamburgerMenu,
 	RefineThemedLayoutV2HeaderProps,
 } from "@refinedev/mantine";
-import { IconChevronDown, IconMoonStars, IconSun } from "@tabler/icons";
+import { IconLanguage, IconMoonStars, IconSun } from "@tabler/icons";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
@@ -69,31 +69,33 @@ const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({ sticky }) => {
 			>
 				<HamburgerMenu />
 				<Group>
-					<Menu>
-						<Menu.Target>
-							<div className="flex items-center gap-1 cursor-pointer">
-								<Avatar size={16} src={`/images/flags/${currentLocale}.svg`} />
-								<IconChevronDown size={14} />
-							</div>
-						</Menu.Target>
-						<Menu.Dropdown>
-							{[...(i18n.languages || [])].sort().map((lang: string) => (
-								<Menu.Item
-									key={lang}
-									onClick={() => changeLanguage(lang)}
-									icon={
-										<span style={{ marginRight: 8 }}>
-											<Avatar size={16} src={`/images/flags/${lang}.svg`} />
-										</span>
-									}
-								>
-									{lang === "en" && "English"}
-									{lang === "de" && "Deutsch"}
-									{lang === "ar" && "عربي"}
-								</Menu.Item>
-							))}
-						</Menu.Dropdown>
-					</Menu>
+					<div className="relative flex">
+						<Menu closeOnClickOutside>
+							<Menu.Target>
+								<div className="cursor-pointer">
+									<IconLanguage className="cursor-pointer" />
+								</div>
+							</Menu.Target>
+							<Menu.Dropdown>
+								{[...(i18n.languages || [])].sort().map((lang: string) => (
+									<Menu.Item
+										key={lang}
+										color={lang === currentLocale ? "green" : undefined}
+										onClick={() => changeLanguage(lang)}
+										icon={
+											<span style={{ marginRight: 8 }}>
+												<Avatar size={16} src={`/images/flags/${lang}.svg`} />
+											</span>
+										}
+									>
+										{lang === "en" && "English"}
+										{lang === "de" && "Deutsch"}
+										{lang === "ar" && "عربي"}
+									</Menu.Item>
+								))}
+							</Menu.Dropdown>
+						</Menu>
+					</div>
 					<ActionIcon
 						variant="outline"
 						color={dark ? "yellow" : "primary"}
