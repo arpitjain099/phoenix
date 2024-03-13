@@ -29,6 +29,7 @@ def test_get_user_by_email(session: sqlalchemy.orm.Session, reseed_tables) -> No
 
 
 CREATED_TIME = "2024-01-01T12:00:01"
+UPDATE_TIME = "2024-01-01T12:00:02"
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
@@ -76,13 +77,19 @@ def test_read_users_pagination(client: TestClient, reseed_tables) -> None:
     assert users[0]["id"] == 2
 
 
-def test_update_user(client: TestClient, reseed_tables) -> None:
+@pytest.mark.freeze_time(UPDATE_TIME)
+def test_update_user(client: TestClient, reseed_tables, session: sqlalchemy.orm.Session) -> None:
     """Test updating a user."""
     data = {"display_name": "new name"}
-    response = client.put("/users/1", json=data)
+    user_id = 1
+    response = client.put(f"/users/{user_id}", json=data)
     assert response.status_code == 200
     user = response.json()
     assert user["display_name"] == data["display_name"]
+    db_user = session.get(models.User, user_id)
+    assert db_user
+    assert db_user.display_name == data["display_name"]
+    assert db_user.updated_at.isoformat() == UPDATE_TIME
 
 
 def test_update_user_not_found(client: TestClient, recreate_tables) -> None:
