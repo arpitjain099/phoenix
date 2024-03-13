@@ -19,3 +19,14 @@ def read_user(session: sqlalchemy.orm.Session, user_id: int) -> schemas.User | N
     if db_user is None:
         return None
     return schemas.User.model_validate(db_user)
+
+
+def read_users(
+    session: sqlalchemy.orm.Session, start: int = 0, end: int = 100
+) -> list[schemas.User]:
+    """Retrieve users."""
+    query = sqlalchemy.select(models.User).offset(start).limit(end)
+    users = session.scalars(query).all()
+    if not users:
+        return []
+    return [schemas.User.model_validate(user) for user in users]

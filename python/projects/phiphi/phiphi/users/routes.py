@@ -20,3 +20,9 @@ def read_user(user_id: int, session: api.SessionDep) -> schemas.User:
     if user is None:
         raise fastapi.HTTPException(status_code=404, detail="User not found")
     return user
+
+
+@router.get("/users/", response_model=list[schemas.User])
+def read_users(session: api.SessionDep, start: int = 0, end: int = 100) -> list[schemas.User]:
+    """Retrieve users."""
+    return crud.read_users(session, start, end)

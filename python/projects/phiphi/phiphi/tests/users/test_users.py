@@ -51,3 +51,20 @@ def test_read_user_not_found(client: TestClient, recreate_tables) -> None:
     response = client.get("/users/1")
     assert response.status_code == 404
     assert response.json() == {"detail": "User not found"}
+
+
+def test_read_users(client: TestClient, reseed_tables) -> None:
+    """Test reading users."""
+    response = client.get("/users/")
+    assert response.status_code == 200
+    users = response.json()
+    assert len(users) == 3
+
+
+def test_read_users_pagination(client: TestClient, reseed_tables) -> None:
+    """Test reading users with pagination."""
+    response = client.get("/users/?start=1&end=1")
+    assert response.status_code == 200
+    users = response.json()
+    assert len(users) == 1
+    assert users[0]["id"] == 2
