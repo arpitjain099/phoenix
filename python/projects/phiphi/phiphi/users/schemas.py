@@ -34,3 +34,9 @@ class User(UserBase):
 
     id: int
     created_at: datetime.datetime
+
+
+class UserUpdate(pydantic.BaseModel):
+    """User update schema."""
+
+    display_name: str | None = None

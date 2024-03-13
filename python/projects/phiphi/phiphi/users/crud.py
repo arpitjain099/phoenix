@@ -38,3 +38,17 @@ def get_user_by_email(session: sqlalchemy.orm.Session, email: str) -> schemas.Us
     if db_user is None:
         return None
     return schemas.User.model_validate(db_user)
+
+
+def update_user(
+    session: sqlalchemy.orm.Session, user_id: int, user: schemas.UserUpdate
+) -> schemas.User | None:
+    """Update a user."""
+    db_user = session.get(models.User, user_id)
+    if db_user is None:
+        return None
+    for field, value in user.dict(exclude_unset=True).items():
+        setattr(db_user, field, value)
+    session.commit()
+    session.refresh(db_user)
+    return schemas.User.model_validate(db_user)

@@ -74,3 +74,20 @@ def test_read_users_pagination(client: TestClient, reseed_tables) -> None:
     users = response.json()
     assert len(users) == 1
     assert users[0]["id"] == 2
+
+
+def test_update_user(client: TestClient, reseed_tables) -> None:
+    """Test updating a user."""
+    data = {"display_name": "new name"}
+    response = client.put("/users/1", json=data)
+    assert response.status_code == 200
+    user = response.json()
+    assert user["display_name"] == data["display_name"]
+
+
+def test_update_user_not_found(client: TestClient, recreate_tables) -> None:
+    """Test updating a user that does not exist."""
+    data = {"display_name": "new name"}
+    response = client.put("/users/1", json=data)
+    assert response.status_code == 404
+    assert response.json() == {"detail": "User not found"}
