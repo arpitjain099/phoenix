@@ -32,3 +32,12 @@ make format
 Be aware that these commands use the `make` in the parent directory, but inside the container. This
 is to ensure that the commands are run in the same environment as the API and to simplify the setup
 of the development environment.
+
+## Problems with files created in the container
+
+If a file is created in the container it could have a different owner then your default shell user.
+To fix the local permissions if a file is created in the container, run. This command will ask for
+you password:
+```bash
+make fix_local_permissions
+```

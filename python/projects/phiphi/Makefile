@@ -29,3 +29,6 @@ test:
 
 format:
 	docker compose run api make format path=$(default_path)
+
+fix_local_permissions:
+	sudo chown -R $(USER):$(USER) phiphi/
