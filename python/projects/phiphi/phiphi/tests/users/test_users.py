@@ -14,6 +14,14 @@ def test_user(session: sqlalchemy.orm.Session, recreate_tables) -> None:
     assert count[0] == 0
 
 
+def test_user_seeded(session: sqlalchemy.orm.Session, reseed_tables) -> None:
+    """Test that the database is seeded."""
+    response = session.execute(sqlalchemy.select(sqlalchemy.func.count()).select_from(models.User))
+    count = response.one()
+    assert count
+    assert count[0] == 1
+
+
 CREATED_TIME = "2024-01-01T12:00:01"
 
 
