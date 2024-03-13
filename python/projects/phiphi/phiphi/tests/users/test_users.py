@@ -3,7 +3,7 @@ import pytest
 import sqlalchemy
 from fastapi.testclient import TestClient
 
-from phiphi.users import models
+from phiphi.users import crud, models
 
 
 def test_user(session: sqlalchemy.orm.Session, recreate_tables) -> None:
@@ -20,6 +20,12 @@ def test_user_seeded(session: sqlalchemy.orm.Session, reseed_tables) -> None:
     count = response.one()
     assert count
     assert count[0] == 3
+
+
+def test_get_user_by_email(session: sqlalchemy.orm.Session, reseed_tables) -> None:
+    """Test getting a user by email."""
+    user = crud.get_user_by_email(session, "test1@phiphi.com")
+    assert user
 
 
 CREATED_TIME = "2024-01-01T12:00:01"

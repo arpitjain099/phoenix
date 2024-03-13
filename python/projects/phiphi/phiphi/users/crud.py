@@ -30,3 +30,11 @@ def read_users(
     if not users:
         return []
     return [schemas.User.model_validate(user) for user in users]
+
+
+def get_user_by_email(session: sqlalchemy.orm.Session, email: str) -> schemas.User | None:
+    """Retrieve a user by email."""
+    db_user = session.query(models.User).filter(models.User.email == email).first()
+    if db_user is None:
+        return None
+    return schemas.User.model_validate(db_user)
