@@ -12,8 +12,10 @@ can provide better support.
 
 To start the development environment run the following command:
 ```bash
-docker compose up
+make up
 ```
 
 Visit the API at [`http://localhost:8080/`](http://localhost:8080/) and the docs at
 [`http://localhost:8080/docs/`](http://localhost:8080/docs/).
+
+See the [`Makefile`](Makefile) for more commands.
