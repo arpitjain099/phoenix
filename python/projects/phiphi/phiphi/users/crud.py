@@ -11,3 +11,11 @@ def create_user(session: sqlalchemy.orm.Session, user: schemas.UserCreate) -> sc
     session.commit()
     session.refresh(db_user)
     return schemas.User.model_validate(db_user)
+
+
+def read_user(session: sqlalchemy.orm.Session, user_id: int) -> schemas.User | None:
+    """Read a user."""
+    db_user = session.get(models.User, user_id)
+    if db_user is None:
+        return None
+    return schemas.User.model_validate(db_user)

@@ -18,7 +18,7 @@ CREATED_TIME = "2024-01-01T12:00:01"
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
-def test_create_user(recreate_tables, client: TestClient) -> None:
+def test_create_read_user(recreate_tables, client: TestClient) -> None:
     """Test creating a user."""
     data = {"email": "test@test.com", "display_name": "test"}
     response = client.post("/users/", json=data)
@@ -27,3 +27,19 @@ def test_create_user(recreate_tables, client: TestClient) -> None:
     assert user["email"] == data["email"]
     assert user["display_name"] == data["display_name"]
     assert user["created_at"] == CREATED_TIME
+
+    response = client.get(f"/users/{user['id']}")
+    assert response.status_code == 200
+
+    user = response.json()
+
+    assert user["email"] == data["email"]
+    assert user["display_name"] == data["display_name"]
+    assert user["created_at"] == CREATED_TIME
+
+
+def test_read_user_not_found(client: TestClient, recreate_tables) -> None:
+    """Test reading a user that does not exist."""
+    response = client.get("/users/1")
+    assert response.status_code == 404
+    assert response.json() == {"detail": "User not found"}
