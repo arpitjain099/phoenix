@@ -1,4 +1,6 @@
 """Schemas for the users."""
+import datetime
+
 import pydantic
 
 
@@ -31,3 +33,4 @@ class User(UserBase):
     model_config = pydantic.ConfigDict(from_attributes=True)
 
     id: int
+    created_at: datetime.datetime

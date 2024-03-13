@@ -1,4 +1,5 @@
 """Test Users."""
+import pytest
 import sqlalchemy
 from fastapi.testclient import TestClient
 
@@ -13,6 +14,10 @@ def test_user(session: sqlalchemy.orm.Session) -> None:
     assert count[0] == 0
 
 
+CREATED_TIME = "2024-01-01T12:00:01"
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
 def test_create_user(recreate_tables, client: TestClient) -> None:
     """Test creating a user."""
     data = {"email": "test@test.com", "display_name": "test"}
@@ -21,3 +26,4 @@ def test_create_user(recreate_tables, client: TestClient) -> None:
     user = response.json()
     assert user["email"] == data["email"]
     assert user["display_name"] == data["display_name"]
+    assert user["created_at"] == CREATED_TIME
