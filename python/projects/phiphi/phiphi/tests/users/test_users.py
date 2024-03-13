@@ -19,7 +19,7 @@ def test_user_seeded(session: sqlalchemy.orm.Session, reseed_tables) -> None:
     response = session.execute(sqlalchemy.select(sqlalchemy.func.count()).select_from(models.User))
     count = response.one()
     assert count
-    assert count[0] == 1
+    assert count[0] == 3
 
 
 CREATED_TIME = "2024-01-01T12:00:01"

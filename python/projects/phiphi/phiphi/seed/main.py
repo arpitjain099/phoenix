@@ -10,6 +10,7 @@ import logging
 from sqlalchemy.orm import Session
 
 from phiphi.core import config, db
+from phiphi.seed import users
 from phiphi.users import crud, schemas
 
 main_logger = logging.getLogger("phiphi.seed.main::" + __name__)
@@ -34,9 +35,11 @@ def init_first_admin_user(session: Session) -> schemas.User:
     return user
 
 
-def main(session: Session) -> None:
+def main(session: Session, testing: bool = False) -> None:
     """Seed the database."""
     init_first_admin_user(session)
+    if testing:
+        users.seed_test_users(session)
 
 
 if __name__ == "__main__":

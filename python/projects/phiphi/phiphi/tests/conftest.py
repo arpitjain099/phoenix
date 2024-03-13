@@ -60,5 +60,5 @@ def reseed_tables(session):
     """
     db.Base.metadata.drop_all(bind=session.get_bind())
     db.Base.metadata.create_all(bind=session.get_bind())
-    seed_main.main(session)
+    seed_main.main(session, testing=True)
     yield session
