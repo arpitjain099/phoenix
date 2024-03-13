@@ -6,7 +6,7 @@ from fastapi.testclient import TestClient
 from phiphi.users import models
 
 
-def test_user(session: sqlalchemy.orm.Session) -> None:
+def test_user(session: sqlalchemy.orm.Session, recreate_tables) -> None:
     """Test that there are no users."""
     response = session.execute(sqlalchemy.select(sqlalchemy.func.count()).select_from(models.User))
     count = response.one()
