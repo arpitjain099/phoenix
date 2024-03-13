@@ -19,3 +19,16 @@ Visit the API at [`http://localhost:8080/`](http://localhost:8080/) and the docs
 [`http://localhost:8080/docs/`](http://localhost:8080/docs/).
 
 See the [`Makefile`](Makefile) for more commands.
+
+### Testing and Linting
+
+Make commands to run testing and linting:
+```bash
+make all
+make test
+make format
+```
+
+Be aware that these commands use the `make` in the parent directory, but inside the container. This
+is to ensure that the commands are run in the same environment as the API and to simplify the setup
+of the development environment.
