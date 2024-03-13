@@ -1,6 +1,7 @@
 """Configuration of phiphi application."""
 import os
 
+import pydantic
 from pydantic import networks
 from pydantic_core import MultiHostUrl
 from pydantic_settings import BaseSettings
@@ -27,8 +28,8 @@ class Settings(BaseSettings):
     VERSION: str = "v0.0.1"
 
     # DB ENVIRONMENT
-    SQLALCHEMY_DATABASE_URI: SqliteDsn
-    TESTING_SQLALCHEMY_DATABASE_URI: SqliteDsn
+    SQLALCHEMY_DATABASE_URI: SqliteDsn | pydantic.PostgresDsn
+    TESTING_SQLALCHEMY_DATABASE_URI: SqliteDsn | pydantic.PostgresDsn
 
 
 # Be aware that environment variables will overwrite the variables in the settings
