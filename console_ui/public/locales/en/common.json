@@ -125,7 +125,9 @@
 			"show": "Show Instance"
 		},
 		"warnings": {
-			"create": "To extend 'Personal Information is deleted after' or 'All data is deleted after' days beyond 365, please contact support!"
+			"create": "To extend 'Personal Information is deleted after' or 'All data is deleted after' days beyond 365, please contact support!",
+			"days_until_pi_expiration": "Minimum value is 183 and Maximum value is 365",
+			"days_until_all_data_expiration": "Minimum value is 183 and Maximum value is 365"
 		}
 	},
 	"documentTitle": {

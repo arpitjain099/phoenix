@@ -91,7 +91,9 @@ export const InstanceCreate: React.FC<IResourceComponentsProps> = () => {
 				max={365}
 				label={
 					<div className="flex items-center">
-						<Tooltip label="Minimum value is 183 and Maximum value is 365">
+						<Tooltip
+							label={translate("instances.warnings.days_until_pi_expiration")}
+						>
 							<span className="flex">
 								<IconInfoCircle size={12} />
 							</span>
@@ -108,7 +110,11 @@ export const InstanceCreate: React.FC<IResourceComponentsProps> = () => {
 				max={365}
 				label={
 					<div className="flex items-center">
-						<Tooltip label="Minimum value is 183 and Maximum value is 365">
+						<Tooltip
+							label={translate(
+								"instances.warnings.days_until_all_data_expiration"
+							)}
+						>
 							<span className="flex">
 								<IconInfoCircle size={12} />
 							</span>
