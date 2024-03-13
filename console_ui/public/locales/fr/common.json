@@ -1,0 +1,147 @@
+{
+	"pages": {
+		"login": {
+			"title": "Connectez-vous à votre compte",
+			"signin": "Se connecter",
+			"signup": "S'inscrire",
+			"divider": "ou",
+			"fields": {
+				"email": "E-mail",
+				"password": "Mot de passe"
+			},
+			"errors": {
+				"validEmail": "Adresse e-mail invalide"
+			},
+			"buttons": {
+				"submit": "Connexion",
+				"forgotPassword": "Mot de passe oublié ?",
+				"noAccount": "Pas de compte ?",
+				"rememberMe": "Se souvenir de moi"
+			}
+		},
+		"forgotPassword": {
+			"title": "Mot de passe oublié ?",
+			"fields": {
+				"email": "E-mail"
+			},
+			"errors": {
+				"validEmail": "Adresse e-mail invalide"
+			},
+			"buttons": {
+				"submit": "Envoyer les instructions de réinitialisation"
+			}
+		},
+		"register": {
+			"title": "Inscrivez-vous pour votre compte",
+			"fields": {
+				"email": "E-mail",
+				"password": "Mot de passe"
+			},
+			"errors": {
+				"validEmail": "Adresse e-mail invalide"
+			},
+			"buttons": {
+				"submit": "S'inscrire",
+				"haveAccount": "Vous avez un compte ?"
+			}
+		},
+		"updatePassword": {
+			"title": "Mettre à jour le mot de passe",
+			"fields": {
+				"password": "Nouveau mot de passe",
+				"confirmPassword": "Confirmez le nouveau mot de passe"
+			},
+			"errors": {
+				"confirmPasswordNotMatch": "Les mots de passe ne correspondent pas"
+			},
+			"buttons": {
+				"submit": "Mettre à jour"
+			}
+		},
+		"error": {
+			"info": "Vous avez peut-être oublié d'ajouter le composant {{action}} à la ressource {{resource}}.",
+			"404": "Désolé, la page que vous avez visitée n'existe pas.",
+			"resource404": "Êtes-vous sûr d'avoir créé la ressource {{resource}}.",
+			"backHome": "Retour à l'accueil"
+		}
+	},
+	"actions": {
+		"list": "Liste",
+		"create": "Créer",
+		"edit": "Modifier",
+		"show": "Afficher"
+	},
+	"buttons": {
+		"create": "Créer",
+		"save": "Enregistrer",
+		"logout": "Déconnexion",
+		"delete": "Supprimer",
+		"edit": "Modifier",
+		"cancel": "Annuler",
+		"confirm": "Êtes-vous sûr ?",
+		"filter": "Filtrer",
+		"clear": "Effacer",
+		"refresh": "Actualiser",
+		"show": "Afficher",
+		"undo": "Annuler",
+		"import": "Importer",
+		"clone": "Cloner",
+		"notAccessTitle": "Vous n'avez pas la permission d'accéder"
+	},
+	"warnWhenUnsavedChanges": "Êtes-vous sûr de vouloir quitter ? Vous avez des modifications non enregistrées.",
+	"notifications": {
+		"success": "Succès",
+		"error": "Erreur (code de statut : {{statusCode}})",
+		"undoable": "Vous avez {{seconds}} secondes pour annuler",
+		"createSuccess": "{{resource}} créé avec succès",
+		"createError": "Une erreur s'est produite lors de la création de {{resource}} (code de statut : {{statusCode}})",
+		"deleteSuccess": "{{resource}} supprimé avec succès",
+		"deleteError": "Erreur lors de la suppression de {{resource}} (code de statut : {{statusCode}})",
+		"editSuccess": "{{resource}} édité avec succès",
+		"editError": "Erreur lors de l'édition de {{resource}} (code de statut : {{statusCode}})",
+		"importProgress": "Importation en cours : {{processed}}/{{total}}"
+	},
+	"loading": "Chargement",
+	"tags": {
+		"clone": "Cloner"
+	},
+	"instances": {
+		"instances": "Instances",
+		"fields": {
+			"id": "Identifiant unique",
+			"name": "Nom",
+			"description": "Description",
+			"environment_id": "Environnement",
+			"days_until_pi_expiration": "Les informations personnelles sont supprimées après (jours)",
+			"days_until_all_data_expiration": "Toutes les données sont supprimées après (jours)",
+			"lookup_frequency": "À quelle fréquence consulterez-vous votre tableau de bord",
+			"status": "Statut",
+			"created_at": "Créé à"
+		},
+		"titles": {
+			"create": "Créer une instance",
+			"edit": "Modifier l'instance",
+			"list": "Instances",
+			"show": "Afficher l'instance"
+		},
+		"warnings": {
+			"create": "Pour étendre 'Les informations personnelles sont supprimées après' ou 'Toutes les données sont supprimées après' jours au-delà de 365, veuillez contacter le support !",
+			"days_until_pi_expiration": "La valeur minimale est 183 et la valeur maximale est 365",
+			"days_until_all_data_expiration": "La valeur minimale est 183 et la valeur maximale est 365"
+		}
+	},
+	"documentTitle": {
+		"default": "Console UI",
+		"suffix": " | phiphi",
+		"instances": {
+			"list": "Instances | phiphi",
+			"show": "#{{id}} Afficher l'instance | phiphi",
+			"edit": "#{{id}} Modifier l'instance | phiphi",
+			"create": "Créer une nouvelle instance | phiphi",
+			"clone": "#{{id}} Cloner l'instance | phiphi"
+		}
+	},
+	"table": {
+		"actions": "Actions"
+	}
+}
