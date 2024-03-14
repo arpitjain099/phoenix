@@ -94,7 +94,7 @@
 		"error": "Fehler (status code: {{statusCode}})",
 		"undoable": "Sie haben {{seconds}} Sekunden Zeit für Undo.",
 		"createSuccess": "{{resource}} erfolgreich erstellt.",
-		"createError": "Fehler beim Erstellen {{resource}} (status code: {{statusCode}})",
+		"createError": "Fehler beim Erstellen {{resource}} (status : {{statusCode}})",
 		"deleteSuccess": "{{resource}} erfolgreich gelöscht.",
 		"deleteError": "Fehler beim Löschen {{resource}} (status code: {{statusCode}})",
 		"editSuccess": "{{resource}} erfolgreich bearbeitet.",
@@ -109,28 +109,39 @@
 		"title": "Dashboard"
 	},
 	"instances": {
-		"instances": "Kategorien",
+		"instances": "Instanzen",
 		"fields": {
-			"id": "Id",
-			"title": "Titel",
-			"createdAt": "Erstellt am"
+			"id": "Eindeutige ID",
+			"name": "Name",
+			"description": "Beschreibung",
+			"environment_id": "Umgebung",
+			"days_until_pi_expiration": "Persönliche Informationen werden gelöscht nach (Tagen)",
+			"days_until_all_data_expiration": "Alle Daten werden gelöscht nach (Tagen)",
+			"lookup_frequency": "Wie oft sehen Sie sich Ihr Dashboard an",
+			"status": "Status",
+			"created_at": "Erstellt am"
 		},
 		"titles": {
-			"create": "Erstellen",
-			"edit": "Bearbeiten",
-			"list": "Einträge",
-			"show": "Eintrag zeigen"
+			"create": "Instanz erstellen",
+			"edit": "Instanz bearbeiten",
+			"list": "Instanzen",
+			"show": "Instanz anzeigen"
+		},
+		"warnings": {
+			"create": "Um 'Persönliche Informationen werden gelöscht nach' oder 'Alle Daten werden gelöscht nach' Tage über 365 hinaus zu verlängern, kontaktieren Sie bitte den Support!",
+			"days_until_pi_expiration": "Mindestwert ist 183 und Höchstwert ist 365",
+			"days_until_all_data_expiration": "Mindestwert ist 183 und Höchstwert ist 365"
 		}
 	},
 	"documentTitle": {
-		"default": "refine",
-		"suffix": " | refine",
+		"default": "Konsole UI",
+		"suffix": " | phiphi",
 		"instances": {
-			"list": "Kategorien | refine",
-			"show": "#{{id}} Zeigen Kategorien | refine",
-			"edit": "#{{id}} Bearbeiten Kategorien | refine",
-			"create": "Neue Kategorie Erstellen | refine",
-			"clone": "#{{id}} Klon Kategorie | refine"
+			"list": "Instanzen | phiphi",
+			"show": "#{{id}} Instanz anzeigen | phiphi",
+			"edit": "#{{id}} Instanz bearbeiten | phiphi",
+			"create": "Neue Instanz erstellen | phiphi",
+			"clone": "#{{id}} Instanz klonen | phiphi"
 		}
 	},
 	"table": {

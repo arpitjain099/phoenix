@@ -1,5 +1,5 @@
 import { Refine } from "@refinedev/core";
-import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
+import { DevtoolsProvider } from "@refinedev/devtools";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 import {
 	RefineThemes,
@@ -11,8 +11,10 @@ import routerProvider, {
 	DocumentTitleHandler,
 	UnsavedChangesNotifier,
 } from "@refinedev/nextjs-router";
+import React from "react";
 import type { NextPage } from "next";
 import { AppProps } from "next/app";
+import "@styles/global.css";
 
 import Header from "@components/header";
 import {
@@ -23,10 +25,11 @@ import {
 } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import { NotificationsProvider } from "@mantine/notifications";
-import dataProvider from "@refinedev/simple-rest";
+import dataProvider from "@providers/data-provider";
 import { appWithTranslation, useTranslation } from "next-i18next";
 
-const API_URL = "http://localhost:8000";
+// initialize i18n
+import "../providers/i18n";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
 	noLayout?: boolean;
@@ -86,7 +89,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
 						<DevtoolsProvider>
 							<Refine
 								routerProvider={routerProvider}
-								dataProvider={dataProvider(API_URL)}
+								dataProvider={dataProvider}
 								notificationProvider={notificationProvider}
 								i18nProvider={i18nProvider}
 								resources={[
@@ -113,7 +116,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
 								<UnsavedChangesNotifier />
 								<DocumentTitleHandler />
 							</Refine>
-							<DevtoolsPanel />
 						</DevtoolsProvider>
 					</NotificationsProvider>
 				</MantineProvider>

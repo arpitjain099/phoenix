@@ -32,11 +32,17 @@
 		"@refinedev/react-table": "^5.6.5",
 		"@refinedev/simple-rest": "^5.0.1",
 		"@tabler/icons": "^1.1.0",
+		"@tanstack/react-table": "^8.13.0",
+		"i18next": "^20.1.0",
+		"i18next-browser-languagedetector": "^6.1.1",
+		"i18next-resources-to-backend": "^1.2.0",
+		"i18next-xhr-backend": "^3.2.2",
 		"next": "^13.0.6",
 		"next-i18next": "^8.9.0",
 		"nookies": "^2.5.2",
 		"react": "^18.0.0",
-		"react-dom": "^18.0.0"
+		"react-dom": "^18.0.0",
+		"react-i18next": "^11.8.11"
 	},
 	"devDependencies": {
 		"@types/node": "^18.0.0",
@@ -44,6 +50,7 @@
 		"@types/react-dom": "^18.0.0",
 		"@typescript-eslint/eslint-plugin": "^6.21.0",
 		"@typescript-eslint/parser": "^6.21.0",
+		"autoprefixer": "^10.4.18",
 		"cross-env": "^7.0.3",
 		"eslint": "^8.56.0",
 		"eslint-config-airbnb": "^19.0.4",
@@ -57,7 +64,9 @@
 		"eslint-plugin-react-hooks": "^4.6.0",
 		"husky": "^8.0.0",
 		"lint-staged": "^15.2.2",
+		"postcss": "^8.4.35",
 		"prettier": "^3.2.5",
+		"tailwindcss": "^3.4.1",
 		"typescript": "^4.7.4"
 	},
 	"lint-staged": {

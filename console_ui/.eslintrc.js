@@ -24,10 +24,18 @@ module.exports = {
 		},
 		{
 			extends: ["plugin:@typescript-eslint/disable-type-checked"],
-			files: ["./**/*.js"],
+			files: ["./**/*.js", "./**/*.ts", "./**/*.tsx"],
 		},
 	],
 	plugins: ["react", "react-hooks", "prettier", "@typescript-eslint"],
+	settings: {
+		"import/resolver": {
+			node: {
+				extensions: [".js", ".jsx", ".ts", ".tsx"],
+				paths: ["./src"],
+			},
+		},
+	},
 	rules: {
 		"@typescript-eslint/ban-types": "off",
 		"@typescript-eslint/explicit-function-return-type": "off",
@@ -51,6 +59,7 @@ module.exports = {
 		],
 		"react/prop-types": "off",
 		"react/react-in-jsx-scope": "off",
+		"no-nested-ternary": "off",
 		"no-unused-vars": "off",
 		"arrow-body-style": ["error", "as-needed"],
 		"react/jsx-props-no-spreading": "off",

@@ -1,0 +1,147 @@
+{
+	"pages": {
+		"login": {
+			"title": "تسجيل الدخول إلى حسابك",
+			"signin": "تسجيل الدخول",
+			"signup": "التسجيل",
+			"divider": "أو",
+			"fields": {
+				"email": "البريد الإلكتروني",
+				"password": "كلمة المرور"
+			},
+			"errors": {
+				"validEmail": "عنوان البريد الإلكتروني غير صالح"
+			},
+			"buttons": {
+				"submit": "تسجيل الدخول",
+				"forgotPassword": "هل نسيت كلمة المرور؟",
+				"noAccount": "ليس لديك حساب؟",
+				"rememberMe": "تذكرني"
+			}
+		},
+		"forgotPassword": {
+			"title": "هل نسيت كلمة المرور؟",
+			"fields": {
+				"email": "البريد الإلكتروني"
+			},
+			"errors": {
+				"validEmail": "عنوان البريد الإلكتروني غير صالح"
+			},
+			"buttons": {
+				"submit": "إرسال تعليمات إعادة التعيين"
+			}
+		},
+		"register": {
+			"title": "سجل لحسابك",
+			"fields": {
+				"email": "البريد الإلكتروني",
+				"password": "كلمة المرور"
+			},
+			"errors": {
+				"validEmail": "عنوان البريد الإلكتروني غير صالح"
+			},
+			"buttons": {
+				"submit": "التسجيل",
+				"haveAccount": "هل لديك حساب؟"
+			}
+		},
+		"updatePassword": {
+			"title": "تحديث كلمة المرور",
+			"fields": {
+				"password": "كلمة المرور الجديدة",
+				"confirmPassword": "تأكيد كلمة المرور الجديدة"
+			},
+			"errors": {
+				"confirmPasswordNotMatch": "كلمات المرور غير متطابقة"
+			},
+			"buttons": {
+				"submit": "تحديث"
+			}
+		},
+		"error": {
+			"info": "قد تكون قد نسيت إضافة مكون {{action}} إلى المورد {{resource}}.",
+			"404": "عذرًا، الصفحة التي زرتها غير موجودة.",
+			"resource404": "هل أنت متأكد من أنك قمت بإنشاء المورد {{resource}}.",
+			"backHome": "العودة إلى الصفحة الرئيسية"
+		}
+	},
+	"actions": {
+		"list": "قائمة",
+		"create": "إنشاء",
+		"edit": "تعديل",
+		"show": "عرض"
+	},
+	"buttons": {
+		"create": "إنشاء",
+		"save": "حفظ",
+		"logout": "تسجيل الخروج",
+		"delete": "حذف",
+		"edit": "تعديل",
+		"cancel": "إلغاء",
+		"confirm": "هل أنت متأكد؟",
+		"filter": "تصفية",
+		"clear": "مسح",
+		"refresh": "تحديث",
+		"show": "عرض",
+		"undo": "تراجع",
+		"import": "استيراد",
+		"clone": "نسخ",
+		"notAccessTitle": "ليس لديك إذن للوصول"
+	},
+	"warnWhenUnsavedChanges": "هل أنت متأكد أنك تريد المغادرة؟ لديك تغييرات غير محفوظة.",
+	"notifications": {
+		"success": "نجاح",
+		"error": "خطأ (كود الحالة: {{statusCode}})",
+		"undoable": "لديك {{seconds}} ثانية للتراجع",
+		"createSuccess": "تم إنشاء {{resource}} بنجاح",
+		"createError": "حدث خطأ أثناء إنشاء {{resource}} (كود الحالة: {{statusCode}})",
+		"deleteSuccess": "تم حذف {{resource}} بنجاح",
+		"deleteError": "حدث خطأ أثناء حذف {{resource}} (كود الحالة: {{statusCode}})",
+		"editSuccess": "تم تحرير {{resource}} بنجاح",
+		"editError": "حدث خطأ أثناء تحرير {{resource}} (كود الحالة: {{statusCode}})",
+		"importProgress": "جاري الاستيراد: {{processed}}/{{total}}"
+	},
+	"loading": "جار التحميل",
+	"tags": {
+		"clone": "نسخ"
+	},
+	"instances": {
+		"instances": "الحالات",
+		"fields": {
+			"id": "المعرف الفريد",
+			"name": "الاسم",
+			"description": "الوصف",
+			"environment_id": "البيئة",
+			"days_until_pi_expiration": "تُحذف المعلومات الشخصية بعد (أيام)",
+			"days_until_all_data_expiration": "تُحذف جميع البيانات بعد (أيام)",
+			"lookup_frequency": "كم مرة ستطلع على لوحة المعلومات الخاصة بك",
+			"status": "الحالة",
+			"created_at": "تاريخ الإنشاء"
+		},
+		"titles": {
+			"create": "إنشاء حالة",
+			"edit": "تعديل الحالة",
+			"list": "الحالات",
+			"show": "عرض الحالة"
+		},
+		"warnings": {
+			"create": "لتمديد 'تُحذف المعلومات الشخصية بعد' أو 'تُحذف جميع البيانات بعد' بأكثر من 365 يومًا، يُرجى الاتصال بالدعم!",
+			"days_until_pi_expiration": "القيمة الدنيا هي 183 والقيمة العظمى هي 365",
+			"days_until_all_data_expiration": "القيمة الدنيا هي 183 والقيمة العظمى هي 365"
+		}
+	},
+	"documentTitle": {
+		"default": "واجهة المستخدم للوحة التحكم",
+		"suffix": " | في في",
+		"instances": {
+			"list": "الحالات | في في",
+			"show": "#{{id}} عرض الحالة | في في",
+			"edit": "#{{id}} تعديل الحالة | في في",
+			"create": "إنشاء حالة جديدة | في في",
+			"clone": "#{{id}} نسخ الحالة | في في"
+		}
+	},
+	"table": {
+		"actions": "الإجراءات"
+	}
+}
