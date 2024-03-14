@@ -11,6 +11,7 @@ services:
     image: "phiphi"
     env_file:
       - docker_env
+    user: "${HOST_UID:-root}:${HOST_GID:-root}"
     build:
       context: ../../
       args:
