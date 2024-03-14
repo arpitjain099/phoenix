@@ -44,7 +44,6 @@ alembic_revision:
 		exit 1; \
 	fi
 	$(ALEMBIC_DOCKER_COMPOSE_COMMAND) alembic revision --autogenerate -m "$(message)"
-	$(MAKE) fix_local_permissions
 
 # Usage: make alembic_upgrade REVISION=base
 # Default is head

@@ -35,9 +35,9 @@ of the development environment.
 
 ## Problems with files created in the container
 
-If a file is created in the container it could have a different owner then your default shell user.
-To fix the local permissions if a file is created in the container, run. This command will ask for
-you password:
+If a file is created in the container, for instance using `make alembic_revision`, it could have a
+different owner then your default shell user. To fix the local permissions if a file is created in
+the container, run. This command will ask for you password:
 ```bash
 make fix_local_permissions
 ```
@@ -47,12 +47,11 @@ make fix_local_permissions
 If you have created a new file with a new model, you will need to all this to
 `phiphi/all_models.py` so that alembic has it in the table metadata.
 
-Use make commands to create a revision:
+Use make commands to create a revision. Be aware that by default the revision will be created with
+the user `root`. See "Problems with files created in the container" for more information.
 ```bash
 message="<revision description>" make alembic_revision
 ```
-
-This command may ask for your password as it will change the owner of the auto-generated file.
 
 This will create a new migration file in `phiphi/migrations/versions` directory. The file will be
 named with a time stamp and a description of the migration.
