@@ -1,5 +1,5 @@
 """Core api functionality."""
-from typing import Annotated
+from typing import Annotated, Callable
 
 import fastapi
 from sqlalchemy.orm import Session
@@ -24,8 +24,34 @@ email_header_scheme = fastapi.security.APIKeyHeader(
 EmailHeaderDep = Annotated[str, fastapi.Depends(email_header_scheme)]
 
 
-def get_current_user(email: EmailHeaderDep, session: SessionDep) -> user_schemas.User:
+# Using a noop function for the email_cookie_scheme so that if COOKIE_AUTH_NAME is None there are
+# no errors.
+def noop() -> None:
+    """No operation."""
+    return None
+
+
+email_cookie_scheme: Callable[[], None] | fastapi.security.APIKeyCookie = noop
+
+if config.settings.USE_COOKIE_AUTH and config.settings.COOKIE_AUTH_NAME:
+    email_cookie_scheme = fastapi.security.APIKeyCookie(
+        name=config.settings.COOKIE_AUTH_NAME, auto_error=False
+    )
+
+EmailCookieDep = Annotated[str, fastapi.Depends(email_cookie_scheme)]
+
+
+def get_current_user(
+    email: EmailHeaderDep,
+    session: SessionDep,
+    email_cookie: EmailCookieDep,
+    request: fastapi.Request,
+) -> user_schemas.User:
     """Get the current user."""
+    # Header takes precedence over cookie
+    if email is None and config.settings.USE_COOKIE_AUTH:
+        email = email_cookie
+
     if not email:
         raise USER_NOT_FOUND
 
