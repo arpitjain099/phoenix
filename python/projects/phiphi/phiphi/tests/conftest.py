@@ -1,6 +1,7 @@
 """Conftest."""
-from typing import Generator
+from typing import Generator, Iterator
 
+import pydantic_core
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
@@ -80,3 +81,51 @@ def reseed_tables(session):
     db.Base.metadata.create_all(bind=session.get_bind())
     seed_main.main(session, testing=True)
     yield session
+
+
+@pytest.fixture(scope="function")
+def patch_settings(request: pytest.FixtureRequest) -> Iterator[config.Settings]:
+    """Patch the settings with given variables.
+
+    Use this fixture to patch config.settings with the different values. The values are passed
+    as a dictionary in the patch_settings decorator. Any settings that are not set via the
+    dictionary will be set to the default value.
+
+    Taken from:
+    https://rednafi.com/python/patch_pydantic_settings_in_pytest/
+
+    There where a few changes to the original code to make it work with the linting and versions in
+    this project.
+
+    Example:
+    @pytest.mark.patch_settings(
+        {"USE_COOKIE_AUTH": False, "COOKIE_AUTH_NAME": COOKIE_AUTH_TEST_NAME}
+    )
+    def test_something(patch_settings):
+        pass
+    """
+    # Make a copy of the original settings
+    original_settings = config.settings.model_copy()
+
+    # Collect the values to patch
+    marker = request.node.get_closest_marker("patch_settings")
+    if marker is None:
+        env_vars_to_patch = {}
+    else:
+        env_vars_to_patch = marker.args[0]
+
+    # Patch the settings to use the default values
+    for k, v in config.settings.model_fields.items():
+        if v.default is not pydantic_core.PydanticUndefined:
+            setattr(config.settings, k, v.default)
+
+    for key, val in env_vars_to_patch.items():
+        # Raise an error if the patch settings is not defined in the settings
+        if not hasattr(config.settings, key):
+            raise ValueError(f"Unknown setting: {key}")
+
+        setattr(config.settings, key, val)
+
+    yield config.settings
+    # Restore the original settings
+    config.settings.__dict__.update(original_settings.__dict__)
