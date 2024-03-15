@@ -6,7 +6,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from phiphi import main
-from phiphi.core import api
+from phiphi.core import api, config
 from phiphi.seed import users as seed_users
 
 COOKIE_AUTH_TEST_NAME = "test_cookie_auth"
@@ -41,6 +41,17 @@ def client_cookie_test_user_1(test_app_with_cookie) -> Generator[TestClient, Non
         yield client
 
 
+@pytest.fixture(scope="session")
+def client_header_and_cookie(test_app_with_cookie) -> Generator[TestClient, None, None]:
+    """Client for testing authenticated with header and cookie."""
+    with TestClient(
+        test_app_with_cookie,
+        cookies={COOKIE_AUTH_TEST_NAME: seed_users.TEST_USER_1_CREATE.email},
+        headers={config.settings.HEADER_AUTH_NAME: config.settings.FIRST_ADMIN_USER_EMAIL},
+    ) as client:
+        yield client
+
+
 @pytest.mark.patch_settings({"USE_COOKIE_AUTH": False, "COOKIE_AUTH_NAME": COOKIE_AUTH_TEST_NAME})
 def test_read_me_cookie_client_not_working(
     client_cookie_test_user_1: TestClient, reseed_tables, patch_settings
@@ -49,6 +60,22 @@ def test_read_me_cookie_client_not_working(
     response = client_cookie_test_user_1.get("/users/me")
     assert response.status_code == 401
     assert response.json() == {"detail": "Cannot authenticate."}
+
+
+@pytest.mark.patch_settings({"USE_COOKIE_AUTH": True, "COOKIE_AUTH_NAME": COOKIE_AUTH_TEST_NAME})
+def test_read_me_header_client_not_working(
+    client_header_and_cookie: TestClient, reseed_tables, patch_settings
+) -> None:
+    """Test authorization users/me with a header and cookie.
+
+    The header should take precedence over cookie.
+    """
+    response = client_header_and_cookie.get("/users/me")
+    assert response.status_code == 200
+    user = response.json()
+
+    assert user["email"] == config.settings.FIRST_ADMIN_USER_EMAIL
+    assert user["display_name"] == config.settings.FIRST_ADMIN_USER_DISPLAY_NAME
 
 
 @pytest.mark.patch_settings({"USE_COOKIE_AUTH": True, "COOKIE_AUTH_NAME": COOKIE_AUTH_TEST_NAME})
