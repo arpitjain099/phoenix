@@ -33,6 +33,16 @@ def client(test_app) -> Generator[TestClient, None, None]:
         yield client
 
 
+@pytest.fixture(scope="session")
+def client_first_admin_user(test_app) -> Generator[TestClient, None, None]:
+    """Client for testing authenticated with first admin user."""
+    with TestClient(
+        test_app,
+        headers={config.settings.HEADER_AUTH_NAME: config.settings.FIRST_ADMIN_USER_EMAIL},
+    ) as client:
+        yield client
+
+
 @pytest.fixture(scope="session", autouse=True)
 def test_engine():
     """Create a test engine for the database."""
