@@ -40,3 +40,23 @@ To learn more about **Refine**, please check out the [Documentation](https://ref
 - **REST Data Provider** [Docs](https://refine.dev/docs/core/providers/data-provider/#overview)
 - **Mantine** [Docs](#)
 - **Inferencer** [Docs](https://refine.dev/docs/packages/documentation/inferencer)
+
+## Authentication for dev:
+
+The default api that is configured in `phiphi/python/projects/phiphi` uses cookie based
+authentication. This means that you can run the following code in the browser console to
+authenticate as a user:
+
+```
+# Set the user email admin@admin.com is added by default.
+document.cookie = "phiphi-user-email=admin@admin.com";
+
+## Check have the correct users
+fetch('http://localhost:8080/users/me', {
+ method: 'GET',
+ credentials: 'include'
+})
+.then(response => response.json())
+.then(data => console.log(data))
+.catch(error => console.error('Error:', error));
+```
