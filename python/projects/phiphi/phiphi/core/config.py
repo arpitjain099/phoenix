@@ -1,6 +1,7 @@
 """Configuration of phiphi application."""
 import logging
 import os
+from typing import Optional
 
 import pydantic
 from pydantic import networks
@@ -42,6 +43,11 @@ class Settings(BaseSettings):
     # This is the header that will be used to get the user email
     # x-auth-request-email is the one set for oauth2-proxy
     HEADER_AUTH_NAME: str = "x-auth-request-email"
+    # For Development Use Only!!
+    # For cookie AUTH to be active both USE_COOKIE_AUTH and COOKIE_AUTH_NAME must be set
+    USE_COOKIE_AUTH: bool = False
+    # Name of the cookie that holds the email of the user
+    COOKIE_AUTH_NAME: Optional[str] = None
 
 
 if os.environ.get("SETTINGS_ENV_FILE"):
