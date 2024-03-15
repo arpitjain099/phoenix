@@ -38,6 +38,11 @@ class Settings(BaseSettings):
     FIRST_ADMIN_USER_EMAIL: pydantic.EmailStr = "admin@admin.com"
     FIRST_ADMIN_USER_DISPLAY_NAME: str = "admin"
 
+    # Authorization
+    # This is the header that will be used to get the user email
+    # x-auth-request-email is the one set for oauth2-proxy
+    HEADER_AUTH_NAME: str = "x-auth-request-email"
+
 
 if os.environ.get("SETTINGS_ENV_FILE"):
     logger.warning(
