@@ -1,0 +1,2 @@
+USE_COOKIE_AUTH = "true"
+COOKIE_AUTH_NAME = "phiphi-user-email"

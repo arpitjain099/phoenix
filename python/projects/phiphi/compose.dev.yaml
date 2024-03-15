@@ -1,0 +1,10 @@
+# This file is used to override the default compose.yaml file to use the
+# development environment. This is useful for local development with the
+# frontend and backend services. It is also means that the CI does not have
+# USE_COOKIE_AUTH set to true and matches closer the production environment.
+
+services:
+  api:
+    env_file:
+      - docker_env
+      - docker_env.dev
