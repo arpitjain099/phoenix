@@ -7,6 +7,14 @@ from phiphi.users import crud, schemas
 router = fastapi.APIRouter()
 
 
+# It is important that this route is defined before the /users/{user_id} route or me will be
+# interpreted as a user id
+@router.get("/users/me", response_model=schemas.User)
+def read_me(current_user: api.CurrentUser) -> schemas.User:
+    """Get the current users."""
+    return current_user
+
+
 @router.post("/users/", response_model=schemas.User)
 def create_user(user: schemas.UserCreate, session: api.SessionDep) -> schemas.User:
     """Create a new user."""
