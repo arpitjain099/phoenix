@@ -8,3 +8,4 @@ services:
     env_file:
       - docker_env
       - docker_env.dev
+    command: ["uvicorn", "phiphi.main:app", "--reload", "--host", "0.0.0.0", "--port", "80"]
