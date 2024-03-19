@@ -36,7 +36,7 @@ fix_local_permissions:
 # We are using an extra docker compose file to run alembic commands
 # because there are a few differences in the environment setup
 # when running an alembic command.
-ALEMBIC_DOCKER_COMPOSE_COMMAND=docker compose -f docker-compose.yaml -f docker-compose.alembic.yaml run api
+ALEMBIC_DOCKER_COMPOSE_COMMAND=docker compose -f compose.yaml -f compose.alembic.yaml run api
 
 alembic_revision:
 	@if [ -z "$(message)" ]; then \
