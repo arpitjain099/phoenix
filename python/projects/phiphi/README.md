@@ -50,7 +50,7 @@ source set_host_uid_unix.sh
 
 ### Database migrations
 
-If you have created a new file with a new model, you will need to all this to
+If you have created a new file with a new model, you will need to add this to
 `phiphi/all_models.py` so that alembic has it in the table metadata.
 
 Use make commands to create a revision. Be aware that by default the revision will be created with
