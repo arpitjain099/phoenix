@@ -1,7 +1,7 @@
 """Configuration of phiphi application."""
 import logging
 import os
-from typing import Optional
+from typing import Any, Optional
 
 import pydantic
 from pydantic import networks
@@ -25,11 +25,28 @@ SqliteDsn = Annotated[
 ]
 
 
+def parse_cors(v: Any) -> list[str] | str:
+    """Parse cors origins into a list or str.
+
+    Taken from:
+    https://github.com/tiangolo/full-stack-fastapi-template/blob/master/backend/app/core/config.py#L18C1-L23C24
+    """
+    if isinstance(v, str) and not v.startswith("["):
+        return [i.strip() for i in v.split(",")]
+    elif isinstance(v, list | str):
+        return v
+    raise ValueError(v)
+
+
 class Settings(BaseSettings):
     """Settings of the app taken from environment variables."""
 
     TITLE: str = "phiphi"
     VERSION: str = "v0.0.1"
+
+    # Cors
+    # From https://github.com/tiangolo/full-stack-fastapi-template/blob/master/backend/app/core/config.py#L45
+    CORS_ORIGINS: Annotated[list[pydantic.AnyUrl] | str, pydantic.BeforeValidator(parse_cors)] = []
 
     # DB ENVIRONMENT
     SQLALCHEMY_DATABASE_URI: SqliteDsn | pydantic.PostgresDsn
