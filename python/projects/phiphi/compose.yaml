@@ -1,0 +1,20 @@
+version: "3.8"
+x-phoenix-bind:
+  &default-bind
+  type: bind
+  source: ../../
+  target: /app
+  consistency: cached
+
+services:
+  api:
+    image: "phiphi"
+    build:
+      context: ../../
+      args:
+        PROJECT: phiphi
+    volumes:
+      - *default-bind
+    command: ["uvicorn", "phiphi.main:app", "--host", "0.0.0.0", "--port", "80"]
+    ports:
+      - "8080:80"

@@ -39,3 +39,11 @@ python_ci_libs:
   parallel:
     matrix:
       - LIB: [example_lib_1]
+
+python_projects_phiphi_ci:
+  image: docker:latest
+  stage: test
+  script:
+    - apk update && apk add make
+    - cd python/projects/phiphi/
+    - make all

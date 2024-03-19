@@ -1,0 +1,6 @@
+# Development requirements - all projects need these.
+# Note: for `-r` option the path should be relative to this file.
+-r ../../dev-requirements.txt
+
+# Third party deps
+fastapi[all]
