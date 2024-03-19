@@ -64,8 +64,8 @@ named with a time stamp and a description of the migration.
 
 Check and edit the migration file as needed and fixing any linting issues.
 
-The migrations will be applied when you do `make up` and the `api` service is started.
-If you want to run the migration then you can do:
+The migrations will be applied when you do `make up` and the `api` service is started. However, if
+you want to explicitly run migrations you can do:
 ```bash
 make alembic_upgrade
 ```
