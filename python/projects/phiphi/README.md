@@ -43,7 +43,7 @@ make fix_local_permissions
 ```
 
 It is also possible to run the commands in the container as the current user. For Unix systems
-you can run before you run a `make` or `docker compose` command:
+you can you can run the following before running a `make` or `docker compose` command:
 ```bash
 source set_host_uid_unix.sh
 ```
