@@ -45,16 +45,16 @@ alembic_revision:
 	fi
 	$(ALEMBIC_DOCKER_COMPOSE_COMMAND) alembic revision --autogenerate -m "$(message)"
 
-# Usage: make alembic_upgrade REVISION=base
+UPGRADE_REVISION ?= head 
+# Usage: make alembic_upgrade UPGRADE_REVISION=base
 # Default is head
 alembic_upgrade:
-	REVISION="${REVISION:-head}"
-	$(ALEMBIC_DOCKER_COMPOSE_COMMAND) alembic upgrade $(REVISION)
+	$(ALEMBIC_DOCKER_COMPOSE_COMMAND) alembic upgrade $(UPGRADE_REVISION)
 
-# Usage: make alembic_downgrade REVISION=base
+DOWNGRADE_REVISION ?= -1
+# Usage: make alembic_downgrade DOWNGRADE_REVISION=base
 # or
-# make alembic_downgrade REVISION=-1
+# make alembic_downgrade DOWNGRADE_REVISION=-1
 # Default is -1
 alembic_downgrade:
-	REVISION="${REVISION:--1}"
-	$(ALEMBIC_DOCKER_COMPOSE_COMMAND) alembic downgrade $(REVISION)
+	$(ALEMBIC_DOCKER_COMPOSE_COMMAND) alembic downgrade $(DOWNGRADE_REVISION)
