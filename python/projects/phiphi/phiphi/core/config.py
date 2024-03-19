@@ -10,7 +10,7 @@ from typing_extensions import Annotated
 
 logger = logging.getLogger(__name__)
 
-# Validation of a sqlite:///database.db URL
+# Validate sqlite URLs: sqlite://, sqlite+aiosqlite://
 SqliteDsn = Annotated[
     MultiHostUrl,
     networks.UrlConstraints(
