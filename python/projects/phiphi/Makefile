@@ -45,7 +45,7 @@ alembic_revision:
 	fi
 	$(ALEMBIC_DOCKER_COMPOSE_COMMAND) alembic revision --autogenerate -m "$(message)"
 
-UPGRADE_REVISION ?= head 
+UPGRADE_REVISION ?= heads
 # Usage: make alembic_upgrade UPGRADE_REVISION=base
 # Default is head
 alembic_upgrade:
