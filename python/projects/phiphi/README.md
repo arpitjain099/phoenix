@@ -59,8 +59,8 @@ the user `root`. See "Problems with files created in the container" for more inf
 message="<revision description>" make alembic_revision
 ```
 
-This will create a new migration file in `phiphi/migrations/versions` directory. The file will be
-named with a time stamp and a description of the migration.
+This will create a new migration file in `phiphi/migrations/versions/platform` directory. The file
+will be named with a time stamp and a description of the migration.
 
 Check and edit the migration file as needed and fixing any linting issues.
 
@@ -69,5 +69,8 @@ you want to explicitly run migrations you can do:
 ```bash
 make alembic_upgrade
 ```
+
+Note: When we have the use case to add another alembic branch this should be done making an addition
+to `version_locations` in `alembic.ini`
 
 See the `Makefile` for more commands.
