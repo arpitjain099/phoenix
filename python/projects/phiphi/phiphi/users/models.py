@@ -4,7 +4,7 @@ from typing import Optional
 from sqlalchemy import orm
 
 from phiphi import platform_db
-from phiphi.core import models
+from phiphi.api import general_models
 
 
 class UserBase(platform_db.Base):
@@ -17,7 +17,7 @@ class UserBase(platform_db.Base):
     display_name: orm.Mapped[Optional[str]]
 
 
-class User(UserBase, models.TimestampModel):
+class User(UserBase, general_models.TimestampModel):
     """User model that can inherit from multiple models."""
 
     __tablename__ = "users"
