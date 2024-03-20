@@ -5,7 +5,7 @@ import fastapi
 import pytest
 from fastapi.testclient import TestClient
 
-from phiphi import main
+from phiphi.api import main
 from phiphi.core import api, config
 from phiphi.seed import users as seed_users
 
