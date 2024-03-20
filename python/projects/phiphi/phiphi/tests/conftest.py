@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from phiphi import main
 from phiphi.core import config, db
+from phiphi.seed import main as seed_main
 
 
 @pytest.fixture(scope="session")
@@ -48,4 +49,16 @@ def recreate_tables(session):
     """
     db.Base.metadata.drop_all(bind=session.get_bind())
     db.Base.metadata.create_all(bind=session.get_bind())
+    yield session
+
+
+@pytest.fixture(scope="function")
+def reseed_tables(session):
+    """Reseed the tables.
+
+    Use this fixture to reset the data for a test.
+    """
+    db.Base.metadata.drop_all(bind=session.get_bind())
+    db.Base.metadata.create_all(bind=session.get_bind())
+    seed_main.main(session, testing=True)
     yield session

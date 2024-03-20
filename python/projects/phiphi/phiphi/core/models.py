@@ -11,7 +11,11 @@ class TimestampModel(db.Base):
 
     __abstract__ = True
 
-    created_at: orm.Mapped[datetime.datetime] = orm.mapped_column(default=datetime.datetime.now)
+    created_at: orm.Mapped[datetime.datetime] = orm.mapped_column(
+        # When we want to test the created_at we have to use the lambda
+        # https://github.com/spulec/freezegun/issues/306
+        default=lambda: datetime.datetime.now()
+    )
     updated_at: orm.Mapped[datetime.datetime] = orm.mapped_column(
-        default=datetime.datetime.now, onupdate=datetime.datetime.now
+        default=lambda: datetime.datetime.now(), onupdate=lambda: datetime.datetime.now()
     )
