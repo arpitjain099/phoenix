@@ -16,7 +16,8 @@ make up
 ```
 
 Visit the API at [`http://localhost:8080/`](http://localhost:8080/) and the docs at
-[`http://localhost:8080/docs/`](http://localhost:8080/docs/).
+[`http://localhost:8080/docs/`](http://localhost:8080/docs/). By default you should be able to
+change the user by setting the cookie `phiphi-user-email` to the email of the user you want to use.
 
 See the [`Makefile`](Makefile) for more commands.
 

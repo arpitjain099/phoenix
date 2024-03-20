@@ -1,16 +1,18 @@
 
 default_path = projects/phiphi/
 
+DEV_COMPOSE_COMMAND=docker compose -f compose.yaml -f compose.dev.yaml
+
 up:
 	@echo "Starting up the development environment..."
-	docker compose up
+	$(DEV_COMPOSE_COMMAND) up
 
 down:
 	@echo "Shutting down the development environment..."
-	docker compose down
+	$(DEV_COMPOSE_COMMAND) down
 
 build:
-	@echo "Building the development environment..."
+	@echo "Building the development and CI environment..."
 	docker compose build
 
 clean:
@@ -18,16 +20,19 @@ clean:
 	docker compose down -v --remove-orphans
 
 bash_in_api:
-	@echo "Starting a bash into the api container..."
-	docker compose exec api bash
+	@echo "Starting bash in the dev api environment"
+	$(DEV_COMPOSE_COMMAND) exec api bash
 
 all:
+	@echo "Running `all` in ci environment"
 	docker compose run api make all path=$(default_path)
 
 test:
+	@echo "Running `format` in ci environment"
 	docker compose run api make test path=$(default_path)
 
 format:
+	@echo "Running `format` in ci environment"
 	docker compose run api make format path=$(default_path)
 
 fix_local_permissions:
