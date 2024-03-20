@@ -9,8 +9,7 @@ import logging
 
 from sqlalchemy.orm import Session
 
-from phiphi import config, platform_db
-from phiphi.api.users import crud, schemas
+from phiphi import platform_db
 from phiphi.seed import users
 
 main_logger = logging.getLogger("phiphi.seed.main::" + __name__)
@@ -23,21 +22,9 @@ ch.setFormatter(formatter)
 main_logger.addHandler(ch)
 
 
-def init_first_admin_user(session: Session) -> schemas.User:
-    """Create the first admin."""
-    user = crud.read_user(session, 1)
-    if not user:
-        user_in = schemas.UserCreate(
-            email=config.settings.FIRST_ADMIN_USER_EMAIL,
-            display_name=config.settings.FIRST_ADMIN_USER_DISPLAY_NAME,
-        )
-        user = crud.create_user(session=session, user=user_in)
-    return user
-
-
 def main(session: Session, testing: bool = False) -> None:
     """Seed the database."""
-    init_first_admin_user(session)
+    users.init_first_admin_user(session)
     if testing:
         users.seed_test_users(session)
 
