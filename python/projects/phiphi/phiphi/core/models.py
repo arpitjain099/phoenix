@@ -3,10 +3,10 @@ import datetime
 
 from sqlalchemy import orm
 
-from phiphi.core import db
+from phiphi import platform_db
 
 
-class TimestampModel(db.Base):
+class TimestampModel(platform_db.Base):
     """Generalised TimestampModel."""
 
     __abstract__ = True

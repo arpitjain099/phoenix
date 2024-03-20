@@ -9,8 +9,7 @@ import logging
 
 from sqlalchemy.orm import Session
 
-from phiphi import config
-from phiphi.core import db
+from phiphi import config, platform_db
 from phiphi.seed import users
 from phiphi.users import crud, schemas
 
@@ -45,6 +44,6 @@ def main(session: Session, testing: bool = False) -> None:
 
 if __name__ == "__main__":
     main_logger.info("Seeding the database")
-    with Session(db.engine) as session:
+    with Session(platform_db.engine) as session:
         main(session)
     main_logger.info("Finished seeding the database")

@@ -3,10 +3,11 @@ from typing import Optional
 
 from sqlalchemy import orm
 
-from phiphi.core import db, models
+from phiphi import platform_db
+from phiphi.core import models
 
 
-class UserBase(db.Base):
+class UserBase(platform_db.Base):
     """User model."""
 
     __abstract__ = True

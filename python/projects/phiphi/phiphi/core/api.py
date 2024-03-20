@@ -4,12 +4,11 @@ from typing import Annotated, Callable
 import fastapi
 from sqlalchemy.orm import Session
 
-from phiphi import config
-from phiphi.core import db
+from phiphi import config, platform_db
 from phiphi.users import crud as user_crud
 from phiphi.users import schemas as user_schemas
 
-SessionDep = Annotated[Session, fastapi.Depends(db.get_session)]
+SessionDep = Annotated[Session, fastapi.Depends(platform_db.get_session)]
 
 USER_NOT_FOUND = fastapi.HTTPException(
     status_code=fastapi.status.HTTP_401_UNAUTHORIZED,
