@@ -25,6 +25,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      postgres_test:
+        condition: service_healthy
   postgres:
     image: postgres:15-alpine
     restart: always
@@ -43,6 +45,25 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+  postgres_test:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: test_db
+    ports:
+      - 5433:5432
+    expose:
+      - "5433"
+    volumes:
+      - test-db-data:/var/lib/postgresql/data:cached
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   db-data:
+  test-db-data:
