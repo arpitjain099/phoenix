@@ -2,7 +2,7 @@
 import logging
 from typing import Generator
 
-from sqlalchemy import MetaData, create_engine
+from sqlalchemy import DDL, MetaData, create_engine, event
 from sqlalchemy.orm import DeclarativeBase, Session
 
 from phiphi.core import config
@@ -19,6 +19,10 @@ class Base(DeclarativeBase):
     """
 
     metadata = MetaData(schema=SCHEMA)
+
+
+# This is needed so that create_all will also create the schema
+event.listen(Base.metadata, "before_create", DDL("CREATE SCHEMA IF NOT EXISTS " + SCHEMA))
 
 
 engine = create_engine(str(config.settings.SQLALCHEMY_DATABASE_URI))
