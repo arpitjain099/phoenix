@@ -1,4 +1,4 @@
-"""Core api functionality."""
+"""Api Dependencies."""
 from typing import Annotated, Callable
 
 import fastapi
