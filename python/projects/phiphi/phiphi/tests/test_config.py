@@ -7,7 +7,7 @@ import pytest
 
 from phiphi import config
 
-TEST_ENV_FILE = "tests/core/test_config.environment"
+TEST_ENV_FILE = "tests/test_config.environment"
 
 
 # Need to clear the environment or the values will be overwritten in the envfile
