@@ -2,18 +2,23 @@
 import logging
 from typing import Generator
 
-from sqlalchemy import create_engine
+from sqlalchemy import MetaData, create_engine
 from sqlalchemy.orm import DeclarativeBase, Session
 
 from phiphi.core import config
 
 logger = logging.getLogger(__name__)
 
+SCHEMA = "platform"
+
 
 class Base(DeclarativeBase):
-    """Base model."""
+    """Base model.
 
-    pass
+    This will create all models in the schema `platform`.
+    """
+
+    metadata = MetaData(schema=SCHEMA)
 
 
 engine = create_engine(str(config.settings.SQLALCHEMY_DATABASE_URI))
