@@ -1,7 +1,7 @@
 """Seed the users."""
 from sqlalchemy.orm import Session
 
-from phiphi.users import crud, schemas
+from phiphi.api.users import crud, schemas
 
 # Quick way of allowing tests to check this user.
 # If more objects are added like this it Might be a good idea to refactor this so that all seeded

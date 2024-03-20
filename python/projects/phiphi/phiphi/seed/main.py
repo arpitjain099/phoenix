@@ -10,8 +10,8 @@ import logging
 from sqlalchemy.orm import Session
 
 from phiphi import config, platform_db
+from phiphi.api.users import crud, schemas
 from phiphi.seed import users
-from phiphi.users import crud, schemas
 
 main_logger = logging.getLogger("phiphi.seed.main::" + __name__)
 main_logger.setLevel(logging.INFO)

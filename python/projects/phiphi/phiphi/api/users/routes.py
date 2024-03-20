@@ -2,7 +2,7 @@
 import fastapi
 
 from phiphi.api import deps
-from phiphi.users import crud, schemas
+from phiphi.api.users import crud, schemas
 
 router = fastapi.APIRouter()
 

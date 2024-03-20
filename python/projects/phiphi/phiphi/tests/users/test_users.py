@@ -3,7 +3,7 @@ import pytest
 import sqlalchemy
 from fastapi.testclient import TestClient
 
-from phiphi.users import crud, models
+from phiphi.api.users import crud, models
 
 
 def test_user(session: sqlalchemy.orm.Session, recreate_tables) -> None:

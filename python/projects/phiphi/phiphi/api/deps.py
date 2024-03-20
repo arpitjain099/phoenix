@@ -5,8 +5,8 @@ import fastapi
 from sqlalchemy.orm import Session
 
 from phiphi import config, platform_db
-from phiphi.users import crud as user_crud
-from phiphi.users import schemas as user_schemas
+from phiphi.api.users import crud as user_crud
+from phiphi.api.users import schemas as user_schemas
 
 SessionDep = Annotated[Session, fastapi.Depends(platform_db.get_session)]
 

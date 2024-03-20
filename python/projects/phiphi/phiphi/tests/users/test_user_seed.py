@@ -1,8 +1,8 @@
 """Test the user seed."""
 import sqlalchemy.orm
 
+from phiphi.api.users import crud
 from phiphi.seed import main as seed_main
-from phiphi.users import crud
 
 
 def test_user_seed(session: sqlalchemy.orm.Session, recreate_tables) -> None:

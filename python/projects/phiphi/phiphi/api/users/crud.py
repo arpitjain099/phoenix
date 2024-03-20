@@ -1,7 +1,7 @@
 """User crud functionality."""
 import sqlalchemy.orm
 
-from phiphi.users import models, schemas
+from phiphi.api.users import models, schemas
 
 
 def create_user(session: sqlalchemy.orm.Session, user: schemas.UserCreate) -> schemas.User:
