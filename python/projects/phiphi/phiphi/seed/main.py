@@ -9,7 +9,8 @@ import logging
 
 from sqlalchemy.orm import Session
 
-from phiphi.core import config, db
+from phiphi import config
+from phiphi.core import db
 from phiphi.seed import users
 from phiphi.users import crud, schemas
 

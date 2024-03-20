@@ -4,7 +4,8 @@ from typing import Annotated, Callable
 import fastapi
 from sqlalchemy.orm import Session
 
-from phiphi.core import config, db
+from phiphi import config
+from phiphi.core import db
 from phiphi.users import crud as user_crud
 from phiphi.users import schemas as user_schemas
 

@@ -2,7 +2,7 @@
 import pydantic
 from fastapi import APIRouter
 
-from phiphi.core import config
+from phiphi import config
 
 router = APIRouter()
 

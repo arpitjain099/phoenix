@@ -5,7 +5,7 @@ from unittest import mock
 import dotenv
 import pytest
 
-from phiphi.core import config
+from phiphi import config
 
 TEST_ENV_FILE = "tests/core/test_config.environment"
 

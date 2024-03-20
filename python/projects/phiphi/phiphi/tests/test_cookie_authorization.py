@@ -5,8 +5,9 @@ import fastapi
 import pytest
 from fastapi.testclient import TestClient
 
+from phiphi import config
 from phiphi.api import main
-from phiphi.core import api, config
+from phiphi.core import api
 from phiphi.seed import users as seed_users
 
 COOKIE_AUTH_TEST_NAME = "test_cookie_auth"

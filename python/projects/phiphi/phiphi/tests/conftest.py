@@ -7,8 +7,9 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
+from phiphi import config
 from phiphi.api import main
-from phiphi.core import config, db
+from phiphi.core import db
 from phiphi.seed import main as seed_main
 
 

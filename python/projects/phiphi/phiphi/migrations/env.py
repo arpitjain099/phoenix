@@ -6,7 +6,7 @@ from sqlalchemy import engine_from_config, pool
 
 # Please add the models you want to use in the migrations to all_models.py
 from phiphi import all_models
-from phiphi.core import config as phiphi_config
+from phiphi import config as phiphi_config
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
