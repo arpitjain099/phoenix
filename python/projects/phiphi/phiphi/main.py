@@ -1,17 +1,9 @@
 """Main for phiphi."""
 from fastapi import FastAPI
-from pydantic import BaseModel
 
-app = FastAPI(title="phiphi")
+from phiphi import health_check
+from phiphi.core import config
 
+app = FastAPI(title=config.settings.TITLE)
 
-class HelloWorldMessage(BaseModel):
-    """HelloWorldMessage type."""
-
-    message: str
-
-
-@app.get("/")
-async def root() -> HelloWorldMessage:
-    """Return the hello world message."""
-    return HelloWorldMessage(message="Hello World")
+app.include_router(health_check.router)

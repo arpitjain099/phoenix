@@ -4,3 +4,5 @@
 
 # Third party deps
 fastapi[all]
+sqlalchemy
+psycopg
