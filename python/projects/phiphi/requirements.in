@@ -6,3 +6,4 @@
 fastapi[all]
 sqlalchemy
 psycopg
+alembic

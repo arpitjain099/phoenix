@@ -32,3 +32,42 @@ make format
 Be aware that these commands use the `make` in the parent directory, but inside the container. This
 is to ensure that the commands are run in the same environment as the API and to simplify the setup
 of the development environment.
+
+## Problems with files created in the container
+
+If a file is created in the container, for instance using `make alembic_revision`, it could have a
+different owner then your default shell user. To fix the local permissions if a file is created in
+the container, run. This command will ask for you password:
+```bash
+make fix_local_permissions
+```
+
+It is also possible to run the commands in the container as the current user. For Unix systems
+you can you can run the following before running a `make` or `docker compose` command:
+```bash
+source set_host_uid_unix.sh
+```
+
+### Database migrations
+
+If you have created a new file with a new model, you will need to add this to
+`phiphi/all_models.py` so that alembic has it in the table metadata.
+
+Use make commands to create a revision. Be aware that by default the revision will be created with
+the user `root`. See "Problems with files created in the container" for more information.
+```bash
+message="<revision description>" make alembic_revision
+```
+
+This will create a new migration file in `phiphi/migrations/versions` directory. The file will be
+named with a time stamp and a description of the migration.
+
+Check and edit the migration file as needed and fixing any linting issues.
+
+The migrations will be applied when you do `make up` and the `api` service is started. However, if
+you want to explicitly run migrations you can do:
+```bash
+make alembic_upgrade
+```
+
+See the `Makefile` for more commands.
