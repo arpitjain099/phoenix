@@ -100,3 +100,15 @@ e.g: en ==> de
   }
 }
 ```
+
+### Vercel documentation
+
+```
+1). Login to Vercel: Go to the Vercel website (vercel.com) and log in to your account.
+2). Import Your Next.js Project: Once logged in, you'll see a button labeled "Import Project" on the dashboard. Click on it.
+3). Choose The Git Repository: Select your Next.js project's Git repository from the list of available options.
+4). Configure Deployment Settings: After selecting your repository, Vercel will present you with deployment settings. Choose the branch you want to deploy from, and configure any other settings you require, such as environment variables or build commands.
+5). Deploy The Project: Once you've configured the settings, click on the "Deploy" button. Vercel will start the deployment process.
+6). Monitor Deployment Progress: While your project is deploying, Vercel will show you the deployment progress in real-time. You can see which step of the deployment process it's currently on.
+7). Access Your Deployed Next.js Application: Once the deployment is complete, Vercel will provide you with a unique URL where your Next.js application is hosted. You can click on this URL to access your deployed application.
+```
