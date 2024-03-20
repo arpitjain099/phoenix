@@ -60,10 +60,11 @@ fetch('http://localhost:8080/users/me', {
 .then(data => console.log(data))
 .catch(error => console.error('Error:', error));
 ```
+
 ### Easy steps for Translation:
 
 ```
-Simple way to translate: 
+Simple way to translate:
 Get required items to be translated in the proper json format and simply ask ChatGPT to translate the values(not the keys) to what ever language is required.
 
 e.g: en ==> de
