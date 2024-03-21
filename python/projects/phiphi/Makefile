@@ -63,3 +63,14 @@ DOWNGRADE_REVISION ?= -1
 # Default is -1
 alembic_downgrade:
 	$(ALEMBIC_DOCKER_COMPOSE_COMMAND) alembic downgrade $(DOWNGRADE_REVISION)
+
+
+psql_dev:
+	@echo "Connecting to the development database..."
+	@echo "default password is 'password'"
+	psql -h localhost -p 5432 -U postgres -d test_db
+
+psql_test:
+	@echo "Connecting to the test database..."
+	@echo "default password is 'password'"
+	psql -h localhost -p 5433 -U postgres -d test_db

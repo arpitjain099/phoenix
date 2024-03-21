@@ -69,6 +69,9 @@ def recreate_tables(session):
     db.Base.metadata.drop_all(bind=session.get_bind())
     db.Base.metadata.create_all(bind=session.get_bind())
     yield session
+    # Need to close the session or will not release the lock on the database
+    # and next command in an other connection will hang.
+    session.close()
 
 
 @pytest.fixture(scope="function")
@@ -81,6 +84,9 @@ def reseed_tables(session):
     db.Base.metadata.create_all(bind=session.get_bind())
     seed_main.main(session, testing=True)
     yield session
+    # Need to close the session or will not release the lock on the database
+    # and next command in an other connection will hang.
+    session.close()
 
 
 @pytest.fixture(scope="function")
