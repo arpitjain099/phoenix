@@ -14,8 +14,8 @@ i18next
 	)
 	.init({
 		lng: undefined,
-		supportedLngs: ["en", "de", "fr", "ar"],
-		fallbackLng: ["en", "de", "fr", "ar"],
+		supportedLngs: ["en", "es", "fr", "ar"],
+		fallbackLng: ["en", "es", "fr", "ar"],
 		defaultNS: "common",
 		detection: {
 			order: ["cookie"],
