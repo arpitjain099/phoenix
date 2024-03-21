@@ -88,6 +88,7 @@
 		"clone": "نسخ",
 		"notAccessTitle": "ليس لديك إذن للوصول"
 	},
+	"note": "مذكرة",
 	"warnWhenUnsavedChanges": "هل أنت متأكد أنك تريد المغادرة؟ لديك تغييرات غير محفوظة.",
 	"notifications": {
 		"success": "نجاح",

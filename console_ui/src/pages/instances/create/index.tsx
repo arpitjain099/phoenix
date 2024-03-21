@@ -141,7 +141,7 @@ export const InstanceCreate: React.FC<IResourceComponentsProps> = () => {
 				label={translate("instances.fields.description")}
 				{...getInputProps("description")}
 			/>
-			<Alert mt="lg" title="Note!" color="gray">
+			<Alert mt="lg" title={translate("note")} color="gray">
 				{translate("instances.warnings.create")}
 			</Alert>
 		</Create>

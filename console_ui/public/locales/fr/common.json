@@ -88,6 +88,7 @@
 		"clone": "Cloner",
 		"notAccessTitle": "Vous n'avez pas la permission d'accéder"
 	},
+	"note": "Remarque!",
 	"warnWhenUnsavedChanges": "Êtes-vous sûr de vouloir quitter ? Vous avez des modifications non enregistrées.",
 	"notifications": {
 		"success": "Succès",
