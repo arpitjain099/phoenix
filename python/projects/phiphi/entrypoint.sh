@@ -3,7 +3,7 @@
 cd /app/projects/phiphi/
 
 # Run alembic migrations
-alembic upgrade head
+alembic upgrade heads
 
 # Seed the database
 python phiphi/seed/main.py

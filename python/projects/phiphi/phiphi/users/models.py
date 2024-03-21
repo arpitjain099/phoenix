@@ -12,7 +12,7 @@ class UserBase(db.Base):
     __abstract__ = True
 
     id: orm.Mapped[int] = orm.mapped_column(primary_key=True)
-    email: orm.Mapped[str] = orm.mapped_column(index=True)
+    email: orm.Mapped[str] = orm.mapped_column(index=True, unique=True)
     display_name: orm.Mapped[Optional[str]]
 
 
