@@ -3,11 +3,14 @@ services:
 
 stages:
   - test
+  - helm
 
 # GLOBAL VARIABLES
 variables:
   DOCKER_DRIVER: overlay2
   DOCKER_HOST: tcp://docker:2375
+  PHOENIX_CHART_MAIN_DIR: charts/main
+  PHOENIX_CHART_MAIN_PACKAGE_PATH: phoenix_chart_main
 
 # Run linting for console_ui
 console_ui_linting:
@@ -48,3 +51,18 @@ python_projects_phiphi_ci:
     - apk update && apk add make
     - cd python/projects/phiphi/
     - make all
+
+package_phoenix_chart_main:
+  stage: helm
+  image:
+    name: alpine/helm:3.11.1
+    # This is needed or will get an error that helm cannot be run
+    entrypoint: [""]
+  needs: [] # Allows to run this job without waiting for the previous ones
+  script:
+    - helm package $PHOENIX_CHART_MAIN_DIR -d $PHOENIX_CHART_MAIN_PACKAGE_PATH
+  artifacts:
+    paths:
+      - $PHOENIX_CHART_MAIN_PACKAGE_PATH/*.tgz
+    # Going to pushed to package registry so it is fine to expire
+    expire_in: 1 hour
