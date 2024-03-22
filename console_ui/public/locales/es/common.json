@@ -1,0 +1,151 @@
+{
+	"pages": {
+		"login": {
+			"title": "Inicie sesión en su cuenta",
+			"signin": "Iniciar sesión",
+			"signup": "Registrarse",
+			"divider": "o",
+			"fields": {
+				"email": "Correo electrónico",
+				"password": "Contraseña"
+			},
+			"errors": {
+				"validEmail": "Dirección de correo electrónico no válida"
+			},
+			"buttons": {
+				"submit": "Iniciar sesión",
+				"forgotPassword": "¿Olvidó la contraseña?",
+				"noAccount": "¿No tiene una cuenta?",
+				"rememberMe": "Recuérdame"
+			}
+		},
+		"forgotPassword": {
+			"title": "¿Olvidó su contraseña?",
+			"fields": {
+				"email": "Correo electrónico"
+			},
+			"errors": {
+				"validEmail": "Dirección de correo electrónico no válida"
+			},
+			"buttons": {
+				"submit": "Enviar instrucciones de reinicio"
+			}
+		},
+		"register": {
+			"title": "Regístrese para su cuenta",
+			"fields": {
+				"email": "Correo electrónico",
+				"password": "Contraseña"
+			},
+			"errors": {
+				"validEmail": "Dirección de correo electrónico no válida"
+			},
+			"buttons": {
+				"submit": "Registrarse",
+				"haveAccount": "¿Tiene una cuenta?"
+			}
+		},
+		"updatePassword": {
+			"title": "Actualizar contraseña",
+			"fields": {
+				"password": "Nueva contraseña",
+				"confirmPassword": "Confirmar nueva contraseña"
+			},
+			"errors": {
+				"confirmPasswordNotMatch": "Las contraseñas no coinciden"
+			},
+			"buttons": {
+				"submit": "Actualizar"
+			}
+		},
+		"error": {
+			"info": "Puede que haya olvidado agregar el componente {{action}} al recurso {{resource}}.",
+			"404": "Lo sentimos, la página que visitó no existe.",
+			"resource404": "¿Está seguro de que ha creado el recurso {{resource}}?",
+			"backHome": "Volver a inicio"
+		}
+	},
+	"actions": {
+		"list": "Lista",
+		"create": "Crear",
+		"edit": "Editar",
+		"show": "Mostrar"
+	},
+	"buttons": {
+		"create": "Crear",
+		"save": "Guardar",
+		"logout": "Cerrar sesión",
+		"delete": "Eliminar",
+		"edit": "Editar",
+		"cancel": "Cancelar",
+		"confirm": "¿Está seguro?",
+		"filter": "Filtrar",
+		"clear": "Limpiar",
+		"refresh": "Actualizar",
+		"show": "Mostrar",
+		"undo": "Deshacer",
+		"import": "Importar",
+		"clone": "Clonar",
+		"notAccessTitle": "No tiene permiso para acceder"
+	},
+	"inputs": {
+		"select": "Seleccionar"
+	},
+	"note": "¡Nota!",
+	"warnWhenUnsavedChanges": "¿Está seguro de que desea salir? Tiene cambios sin guardar.",
+	"notifications": {
+		"success": "Exitoso",
+		"error": "Error (código de estado: {{statusCode}})",
+		"undoable": "Tiene {{seconds}} segundos para deshacer",
+		"createSuccess": "{{resource}} creado correctamente",
+		"createError": "Hubo un error al crear {{resource}} (código de estado: {{statusCode}})",
+		"deleteSuccess": "{{resource}} eliminado correctamente",
+		"deleteError": "Error al eliminar {{resource}} (código de estado: {{statusCode}})",
+		"editSuccess": "{{resource}} editado correctamente",
+		"editError": "Error al editar {{resource}} (código de estado: {{statusCode}})",
+		"importProgress": "Importando: {{processed}}/{{total}}"
+	},
+	"loading": "Cargando",
+	"tags": {
+		"clone": "Clonar"
+	},
+	"instances": {
+		"instances": "Instancias",
+		"fields": {
+			"id": "ID único",
+			"name": "Nombre",
+			"description": "Descripción",
+			"environment_id": "Entorno",
+			"days_until_pi_expiration": "La información personal se eliminará después de (días)",
+			"days_until_all_data_expiration": "Todos los datos se eliminarán después de (días)",
+			"lookup_frequency": "¿Con qué frecuencia consultará su tablero de control?",
+			"status": "Estado",
+			"created_at": "Creado en"
+		},
+		"titles": {
+			"create": "Crear instancia",
+			"edit": "Editar instancia",
+			"list": "Instancias",
+			"show": "Mostrar instancia"
+		},
+		"warnings": {
+			"create": "¡Para extender los días de 'La información personal se eliminará después' o 'Todos los datos se eliminarán después' más allá de 365, por favor, contacte con soporte!",
+			"days_until_pi_expiration": "El valor mínimo es 183 y el valor máximo es 365",
+			"days_until_all_data_expiration": "El valor mínimo es 183 y el valor máximo es 365"
+		}
+	},
+	"documentTitle": {
+		"default": "Interfaz de consola",
+		"suffix": " | phiphi",
+		"instances": {
+			"list": "Instancias | phiphi",
+			"show": "#{{id}} Mostrar instancia | phiphi",
+			"edit": "#{{id}} Editar instancia | phiphi",
+			"create": "Crear nueva instancia | phiphi",
+			"clone": "#{{id}} Clonar instancia | phiphi"
+		}
+	},
+	"table": {
+		"actions": "Acciones"
+	}
+}

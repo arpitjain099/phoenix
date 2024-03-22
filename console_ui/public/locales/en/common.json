@@ -88,6 +88,10 @@
 		"clone": "Clone",
 		"notAccessTitle": "You don't have permission to access"
 	},
+	"inputs": {
+		"select": "Select"
+	},
+	"note": "Note!",
 	"warnWhenUnsavedChanges": "Are you sure you want to leave? You have unsaved changes.",
 	"notifications": {
 		"success": "Successful",

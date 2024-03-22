@@ -78,7 +78,7 @@ export const InstanceCreate: React.FC<IResourceComponentsProps> = () => {
 				label={translate("instances.fields.environment_id")}
 				{...getInputProps("environment_id")}
 				data={[
-					{ label: "Select", value: "" },
+					{ label: translate("inputs.select"), value: "" },
 					{ label: "Environment 1", value: "env1" },
 					{ label: "Environment 2", value: "env2" },
 					{ label: "Environment 3", value: "env3", disabled: true },
@@ -129,7 +129,7 @@ export const InstanceCreate: React.FC<IResourceComponentsProps> = () => {
 				mt="sm"
 				label={translate("instances.fields.lookup_frequency")}
 				data={[
-					{ label: "Select", value: "" },
+					{ label: translate("inputs.select"), value: "" },
 					{ label: "One off analysis", value: "env1" },
 					{ label: "Monthly", value: "env2" },
 					{ label: "Weekly", value: "env3" },
@@ -141,7 +141,7 @@ export const InstanceCreate: React.FC<IResourceComponentsProps> = () => {
 				label={translate("instances.fields.description")}
 				{...getInputProps("description")}
 			/>
-			<Alert mt="lg" title="Note!" color="gray">
+			<Alert mt="lg" title={translate("note")} color="gray">
 				{translate("instances.warnings.create")}
 			</Alert>
 		</Create>
