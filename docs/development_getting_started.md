@@ -20,8 +20,11 @@ tilt, see below. To get up and running follow the steps:
 2. Make `kubectl` command to use the mircok8s see bellow
 3. `microk8s enable ingress`. First check that you don't have anything else running on port 80 of
   your local machine
-4. (optional) add `127.0.0.1       phoenix.local` to `/etc/hosts` if you want to be able use host
-   names for the cluster
+4. If you want superset and oauth to work you also have to add these to `/etc/hosts`
+```
+127.0.0.1       superset.phoenix.local
+127.0.0.1       oauth.phoenix.local
+```
 
 ### `kubectl` setup
 
@@ -79,6 +82,23 @@ asdf reshim
 # Check the helm version
 helm version
 ```
+
+## Setting secretes
+
+To allow for the secrets to not be in the charts you can add the secrets as a Kubernetes SECRET.
+
+```bash
+cp clusters/local/.example_secrets.yaml clusters/local/secret.yaml
+```
+
+Fill in the required values of clusters/local/secret.yaml
+
+```bash
+kubectl apply -f clusters/local/secret.yaml
+```
+
+This needs to be done before `tilt up` is run otherwise passwords and secrets will be created in
+correctly.
 
 ## Running the Development Environment with tilt up
 

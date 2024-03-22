@@ -1,0 +1,9 @@
+dependencies:
+- name: superset
+  repository: https://apache.github.io/superset
+  version: 0.12.6
+- name: oauth2-proxy
+  repository: https://oauth2-proxy.github.io/manifests
+  version: 6.24.1
+digest: sha256:15106dcbee97e998d676728f4e9282c41fe1b38fa39c13ec765b26779781d27c
+generated: "2024-02-27T16:48:43.580125804+01:00"

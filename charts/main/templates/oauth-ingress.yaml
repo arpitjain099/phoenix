@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: oauth-proxy
+  annotations:
+    kubernetes.io/ingress.class: public
+spec:
+  ingressClassName: public
+  rules:
+  - host: oauth.phoenix.local
+    http:
+      paths:
+      - backend:
+          service:
+            name: phoenixchartmain-oauth2-proxy
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
