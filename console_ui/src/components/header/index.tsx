@@ -89,7 +89,7 @@ const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({ sticky }) => {
 										}
 									>
 										{lang === "en" && "English"}
-										{lang === "es" && "Spanish"}
+										{lang === "es" && "Española"}
 										{lang === "fr" && "Français"}
 										{lang === "ar" && "عربي"}
 									</Menu.Item>
