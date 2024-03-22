@@ -66,3 +66,20 @@ package_phoenix_chart_main:
       - $PHOENIX_CHART_MAIN_PACKAGE_PATH/*.tgz
     # Going to pushed to package registry so it is fine to expire
     expire_in: 1 hour
+
+publish_phoenix_chart_main:
+  stage: helm
+  image: curlimages/curl:7.70.0
+  script:
+    # There should only be one file in the PACKAGE_PATH directory
+    # This command gets the file name
+    - PACKAGE_FILE="$(ls -tr ${PHOENIX_CHART_MAIN_PACKAGE_PATH}/*.tgz | tail -1)"
+    - echo "Publishing $PACKAGE_FILE"
+    # Publish the package to the GitLab package registry
+    # https://docs.gitlab.com/ee/user/packages/helm_repository/#use-cicd-to-publish-a-helm-package
+    - curl --request POST --user gitlab-ci-token:$CI_JOB_TOKEN --form "chart=@${PACKAGE_FILE}" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/helm/api/stable/charts"
+    - echo "Package published successfully. Use command"
+    - echo "helm repo add phoenix_chart_main ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/helm/stable"
+  needs:
+    - job: package_phoenix_chart_main
+      artifacts: true
