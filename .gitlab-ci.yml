@@ -66,9 +66,6 @@ package_phoenix_chart_main:
       - $PHOENIX_CHART_MAIN_PACKAGE_PATH/*.tgz
     # Going to pushed to package registry so it is fine to expire
     expire_in: 1 hour
-  rules:
-    # Only run on `main` branch
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 publish_phoenix_chart_main:
   stage: helm
