@@ -136,13 +136,13 @@
 	},
 	"documentTitle": {
 		"default": "Console UI",
-		"suffix": " | phiphi",
+		"suffix": " | Phoenix",
 		"instances": {
-			"list": "Instances | phiphi",
-			"show": "#{{id}} Show Instance | phiphi",
-			"edit": "#{{id}} Edit Instance | phiphi",
-			"create": "Create new Instance | phiphi",
-			"clone": "#{{id}} Clone Instance | phiphi"
+			"list": "Instances | Phoenix",
+			"show": "#{{id}} Show Instance | Phoenix",
+			"edit": "#{{id}} Edit Instance | Phoenix",
+			"create": "Create new Instance | Phoenix",
+			"clone": "#{{id}} Clone Instance | Phoenix"
 		}
 	},
 	"table": {

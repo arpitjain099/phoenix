@@ -1,6 +1,7 @@
 # Console User interface
 
-This folder contains the web user interface for the console of phiphi. The console allows users to configure a specific social media analyses.
+This folder contains the web user interface for the console of Phoenix. The console allows users to
+configure a specific social media analyses.
 
 ## Available Scripts
 
@@ -43,7 +44,7 @@ To learn more about **Refine**, please check out the [Documentation](https://ref
 
 ## Authentication for dev:
 
-The default api that is configured in `phiphi/python/projects/phiphi` uses cookie based
+The default api that is configured in `phoenix/python/projects/phiphi` uses cookie based
 authentication. This means that you can run the following code in the browser console to
 authenticate as a user:
 

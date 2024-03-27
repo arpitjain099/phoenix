@@ -1,8 +1,6 @@
-# phiphi
+# Phoenix
 
-A social media analysis platform for peacebuilders. The repo will be moved to
-[`phoenix`](https://gitlab.com/howtobuildup/phoenix) once the v1 of the
-platform is complete.
+An open-source social media analysis platform for peacebuilders.
 
 ## Run
 
@@ -32,3 +30,7 @@ If nothing happens then have a look at [docs/development_getting_started.md](doc
 ## License
 
 [GNU AGPLv3](/COPYING)
+
+## v1
+
+If you are looking for the old version it is [here](https://gitlab.com/howtobuildup/phoenix_v1). 

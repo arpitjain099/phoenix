@@ -1,4 +1,4 @@
-# phiphi Python monorepo
+# Phoenix Python monorepo
 
 ## Monorepo overview
 
