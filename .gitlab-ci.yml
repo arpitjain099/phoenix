@@ -3,7 +3,8 @@ services:
 
 stages:
   - test
-  - helm
+  - build
+  - publish
 
 # GLOBAL VARIABLES
 variables:
@@ -63,7 +64,7 @@ lint_phoenix_chart_main:
     - helm lint $PHOENIX_CHART_MAIN_DIR
 
 package_phoenix_chart_main:
-  stage: helm
+  stage: build
   image:
     name: alpine/helm:3.11.1
     # This is needed or will get an error that helm cannot be run
@@ -78,7 +79,7 @@ package_phoenix_chart_main:
     expire_in: 1 hour
 
 publish_phoenix_chart_main:
-  stage: helm
+  stage: publish
   image: curlimages/curl:7.70.0
   script:
     # There should only be one file in the PACKAGE_PATH directory
