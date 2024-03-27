@@ -12,7 +12,8 @@
 		"refine": "refine",
 		"prepare": "cd .. && husky install console_ui/.husky",
 		"lint": "eslint '*.{js,ts,jsx,tsx}' && prettier . --check",
-		"lint:staged": "lint-staged"
+		"lint:staged": "lint-staged",
+		"format": "prettier . --write"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.8.2",
