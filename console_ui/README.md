@@ -42,11 +42,20 @@ To learn more about **Refine**, please check out the [Documentation](https://ref
 - **Mantine** [Docs](#)
 - **Inferencer** [Docs](https://refine.dev/docs/packages/documentation/inferencer)
 
-## Authentication for dev:
+## API for development
 
-The default api that is configured in `phoenix/python/projects/phiphi` uses cookie based
-authentication. This means that you can run the following code in the browser console to
-authenticate as a user:
+To get the API (backend) for development you can use the local environment in
+`phoenix/python/projects/phiphi/`. To do this:
+
+- start a new shell (terminal)
+- follow the commands in `phoenix/python/projects/phiphi/README.md` to start the development
+  environment
+
+### Authentication for development API
+
+Once the development API is running you can authenticate as a user to the API by setting the
+correct cookie to the email address of a user. By default `admin@admin.com` is created in the
+backend as such you can authenticate by running the following code in the browser console:
 
 ```
 # Set the user email admin@admin.com is added by default.
@@ -61,6 +70,8 @@ fetch('http://localhost:8080/users/me', {
 .then(data => console.log(data))
 .catch(error => console.error('Error:', error));
 ```
+
+You should see a JSON object of the returned user in the browser console if it worked.
 
 ## Easy steps for Translation:
 
