@@ -2,13 +2,13 @@
 
 ## Welcome
 
-Thank you for considering contributing to the `phiphi` project! We welcome contributions from
+Thank you for considering contributing to the `phoenix` project! We welcome contributions from
 everyone, and are grateful for any help, big or small. This document is a guide to help you
 understand how you can contribute.
 
 ## How to Contribute
 
-Contributions to `phiphi` can come in various forms. Here are some ways you can help:
+Contributions to `phoenix` can come in various forms. Here are some ways you can help:
 
 * **Bug Reports**: If you find a bug, please open an issue in our GitLab repository. Include a
   detailed description of the bug, steps to reproduce it, and, if possible, a suggestion for how it
@@ -60,7 +60,7 @@ the main branch.
 4. Make your changes. Be sure to follow the coding standards and guidelines of the project.
 5. Test your changes. Ensure that your code does not break any existing functionality and meets the
 project's quality standards.
-6. Submit a Merge Request. Go to the original phiphi repository on GitLab and click on "Merge
+6. Submit a Merge Request. Go to the original Phoenix repository on GitLab and click on "Merge
 Requests". Click "New Merge Request", and select your fork and branch as the source. Fill in the
 details, explaining your changes and why they should be included.
 
