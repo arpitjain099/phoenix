@@ -5,7 +5,7 @@ from typing import Generator
 from sqlalchemy import DDL, MetaData, create_engine, event
 from sqlalchemy.orm import DeclarativeBase, Session
 
-from phiphi.core import config
+from phiphi import config
 
 logger = logging.getLogger(__name__)
 

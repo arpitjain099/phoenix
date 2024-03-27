@@ -7,8 +7,8 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
-from phiphi import main
-from phiphi.core import config, db
+from phiphi import config, platform_db
+from phiphi.api import main
 from phiphi.seed import main as seed_main
 
 
@@ -25,7 +25,7 @@ def test_app(session) -> Generator[main.FastAPI, None, None]:
     def override_get_session():
         yield session
 
-    main.app.dependency_overrides[db.get_session] = override_get_session
+    main.app.dependency_overrides[platform_db.get_session] = override_get_session
     yield main.app
 
 
@@ -66,8 +66,8 @@ def recreate_tables(session):
 
     Use this fixture to reset the data for a test.
     """
-    db.Base.metadata.drop_all(bind=session.get_bind())
-    db.Base.metadata.create_all(bind=session.get_bind())
+    platform_db.Base.metadata.drop_all(bind=session.get_bind())
+    platform_db.Base.metadata.create_all(bind=session.get_bind())
     yield session
     # Need to close the session or will not release the lock on the database
     # and next command in an other connection will hang.
@@ -80,8 +80,8 @@ def reseed_tables(session):
 
     Use this fixture to reset the data for a test.
     """
-    db.Base.metadata.drop_all(bind=session.get_bind())
-    db.Base.metadata.create_all(bind=session.get_bind())
+    platform_db.Base.metadata.drop_all(bind=session.get_bind())
+    platform_db.Base.metadata.create_all(bind=session.get_bind())
     seed_main.main(session, testing=True)
     yield session
     # Need to close the session or will not release the lock on the database

@@ -2,9 +2,9 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from phiphi import health_check
-from phiphi.core import config
-from phiphi.users import routes as user_routes
+from phiphi import config
+from phiphi.api import health_check
+from phiphi.api.users import routes as user_routes
 
 app = FastAPI(title=config.settings.TITLE)
 

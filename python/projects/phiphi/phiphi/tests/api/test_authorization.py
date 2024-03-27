@@ -2,7 +2,7 @@
 import pytest
 from fastapi.testclient import TestClient
 
-from phiphi.core import config
+from phiphi import config
 
 
 # Making sure that the settings are not using cookie auth so is consistent with a production env

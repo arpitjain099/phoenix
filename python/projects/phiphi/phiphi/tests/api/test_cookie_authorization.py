@@ -5,8 +5,8 @@ import fastapi
 import pytest
 from fastapi.testclient import TestClient
 
-from phiphi import main
-from phiphi.core import api, config
+from phiphi import config
+from phiphi.api import deps, main
 from phiphi.seed import users as seed_users
 
 COOKIE_AUTH_TEST_NAME = "test_cookie_auth"
@@ -24,11 +24,11 @@ def test_app_with_cookie(session, test_app) -> Generator[main.FastAPI, None, Non
         name=COOKIE_AUTH_TEST_NAME, auto_error=False
     )
 
-    main.app.dependency_overrides[api.email_cookie_scheme] = email_cookie_scheme_override
+    main.app.dependency_overrides[deps.email_cookie_scheme] = email_cookie_scheme_override
     yield main.app
     # Reset the dependency override because I am scared that this could be run in a production
     # environment and the override could be left in place.
-    main.app.dependency_overrides[api.email_cookie_scheme] = api.email_cookie_scheme
+    main.app.dependency_overrides[deps.email_cookie_scheme] = deps.email_cookie_scheme
 
 
 @pytest.fixture(scope="session")

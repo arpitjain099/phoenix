@@ -2,7 +2,7 @@
 import sqlalchemy
 from fastapi.testclient import TestClient
 
-from phiphi.core import config
+from phiphi import config
 
 
 def test_get_root(client: TestClient) -> None:
