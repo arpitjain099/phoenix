@@ -136,13 +136,13 @@
 	},
 	"documentTitle": {
 		"default": "Interfaz de consola",
-		"suffix": " | phiphi",
+		"suffix": " | Phoenix",
 		"instances": {
-			"list": "Instancias | phiphi",
-			"show": "#{{id}} Mostrar instancia | phiphi",
-			"edit": "#{{id}} Editar instancia | phiphi",
-			"create": "Crear nueva instancia | phiphi",
-			"clone": "#{{id}} Clonar instancia | phiphi"
+			"list": "Instancias | Phoenix",
+			"show": "#{{id}} Mostrar instancia | Phoenix",
+			"edit": "#{{id}} Editar instancia | Phoenix",
+			"create": "Crear nueva instancia | Phoenix",
+			"clone": "#{{id}} Clonar instancia | Phoenix"
 		}
 	},
 	"table": {
