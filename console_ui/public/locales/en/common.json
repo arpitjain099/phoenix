@@ -58,6 +58,16 @@
 				"submit": "Update"
 			}
 		},
+		"profile": {
+			"title": "Profile Settings",
+			"email": "Email",
+			"created_at": "Created At",
+			"fields": {
+				"name": "Full Name",
+				"email": "Email",
+				"role": "Role"
+			}
+		},
 		"error": {
 			"info": "You may have forgotten to add the {{action}} component to {{resource}} resource.",
 			"404": "Sorry, the page you visited does not exist.",
