@@ -53,25 +53,27 @@ To get the API (backend) for development you can use the local environment in
 
 ### Authentication for development API
 
-Once the development API is running you can authenticate as a user to the API by setting the
-correct cookie to the email address of a user. By default `admin@admin.com` is created in the
-backend as such you can authenticate by running the following code in the browser console:
+After running the development API, you can authenticate as a user by setting the appropriate cookie
+(phiphi-user-email) with the user's email address. The default email admin@admin.com is
+automatically generated in the backend. To authenticate, execute the following JavaScript code in
+your browser's console:
 
 ```
 # Set the user email admin@admin.com is added by default.
 document.cookie = "phiphi-user-email=admin@admin.com";
 
-## Check have the correct users
+# Check if the correct user is authenticated.
 fetch('http://localhost:8080/users/me', {
- method: 'GET',
- credentials: 'include'
+  method: 'GET',
+  credentials: 'include'
 })
-.then(response => response.json())
-.then(data => console.log(data))
-.catch(error => console.error('Error:', error));
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
 ```
 
-You should see a JSON object of the returned user in the browser console if it worked.
+The first line of the code sets the user's email in the cookie, while the second line verifies the
+authentication status by fetching the user data from the API using the previously set cookie.
 
 ## Easy steps for Translation:
 
