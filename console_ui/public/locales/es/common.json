@@ -58,6 +58,16 @@
 				"submit": "Actualizar"
 			}
 		},
+		"profile": {
+			"title": "Configuración del Perfil",
+			"email": "Correo Electrónico",
+			"created_at": "Creado en",
+			"fields": {
+				"name": "Nombre Completo",
+				"email": "Correo Electrónico",
+				"role": "Rol"
+			}
+		},
 		"error": {
 			"info": "Puede que haya olvidado agregar el componente {{action}} al recurso {{resource}}.",
 			"404": "Lo sentimos, la página que visitó no existe.",
