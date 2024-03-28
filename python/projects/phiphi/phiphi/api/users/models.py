@@ -15,6 +15,7 @@ class UserBase(platform_db.Base):
     id: orm.Mapped[int] = orm.mapped_column(primary_key=True)
     email: orm.Mapped[str] = orm.mapped_column(index=True, unique=True)
     display_name: orm.Mapped[Optional[str]]
+    app_role: orm.Mapped[Optional[str]]
 
 
 class User(UserBase, base_models.TimestampModel):
