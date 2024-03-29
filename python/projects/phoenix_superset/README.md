@@ -2,6 +2,12 @@
 
 This project contains the customization of the Apache Superset for Phoenix.
 
+## Superset Version
+
+It is important that the version of the superset is the same in both:
+- Dockerfile
+- requirements.in
+
 ## Development
 
 Use the development tools generic python development tools in [/python](../../).
