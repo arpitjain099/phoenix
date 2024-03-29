@@ -55,22 +55,32 @@ class AutheRemoteUserViewCustom(AuthView):  # type: ignore[no-any-unimported]
     def login(self) -> WerkzeugResponse:
         """Login view for remote user authentication.
 
-        Currently the same as parent.
+        If logged in will redirect to the next URL, if not will redirect to the
+        login URL if configured, otherwise will raise an exception.
         """
-        username = request.environ.get(self.appbuilder.sm.auth_remote_user_env_var)
         if g.user is not None and g.user.is_authenticated:
             next_url = request.args.get("next", "")
             return redirect(get_safe_redirect(next_url))
-        if username:
-            user = self.appbuilder.sm.auth_user_remote_user(username)
-            if user is None:
-                flash(as_unicode(self.invalid_login_message), "warning")
-            else:
+        header = self.appbuilder.sm.auth_remote_user_env_var
+        email = request.environ.get(header)
+        logger.debug("Header: %s", header)
+        logger.debug("Email: %s", email)
+        logger.debug(request.environ)
+        if email:
+            user = self.appbuilder.sm.auth_user_remote_user(email)
+            if user:
                 login_user(user)
-        else:
-            flash(as_unicode(self.invalid_login_message), "warning")
-        next_url = request.args.get("next", "")
-        return redirect(get_safe_redirect(next_url))
+                next_url = request.args.get("next", "")
+                return redirect(get_safe_redirect(next_url))
+        # Redirect it if has been configured
+        login_url = self.appbuilder.app.config.get("LOGIN_REDIRECT_URL")
+        if login_url:
+            return redirect(login_url)
+        # As a fallback 500 error as the system is not well configured
+        raise Exception(
+            f"The {header} header is not set and no login URL is set. "
+            "Please configure the {header} header or set a login URL."
+        )
 
 
 class PhoenixCustomSsoSecurityManager(SupersetSecurityManager):  # type: ignore[no-any-unimported]
