@@ -75,9 +75,31 @@ class PhoenixCustomSsoSecurityManager(SupersetSecurityManager):
 
     Based on:
     https://github.com/dpgaspar/Flask-AppBuilder/blob/master/flask_appbuilder/security/manager.py#L1340-L1368
+
+    The auth_remote_user_env_var has been added as the flask_appbuilder version that superset is
+    currently using does not have this functionality.
     """
 
     authremoteuserview = AutheRemoteUserViewCustom
+
+    def __init__(self, appbuilder):
+        """Create a custom SSO security manager.
+
+        Taken from:
+        https://github.com/dpgaspar/Flask-AppBuilder/blob/master/flask_appbuilder/security/manager.py#L261-L262
+        """
+        super().__init__(appbuilder)
+        app = self.appbuilder.get_app
+        app.config.setdefault("AUTH_REMOTE_USER_ENV_VAR", "REMOTE_USER")
+
+    @property
+    def auth_remote_user_env_var(self) -> str:
+        """Get the remote user environment variable.
+
+        Taken from:
+        https://github.com/dpgaspar/Flask-AppBuilder/blob/master/flask_appbuilder/security/manager.py#L426-L428
+        """
+        return str(self.appbuilder.get_app.config["AUTH_REMOTE_USER_ENV_VAR"])
 
     def auth_user_remote_user(self, username):
         """REMOTE_USER user Authentication.
