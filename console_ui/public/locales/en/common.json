@@ -59,13 +59,16 @@
 			}
 		},
 		"profile": {
-			"title": "Profile Settings",
 			"email": "Email",
 			"created_at": "Created At",
 			"fields": {
 				"name": "Display Name",
 				"email": "Email",
 				"role": "Role"
+			},
+			"settings": {
+				"title": "Profile Settings",
+				"description": "This information will appear on your profile."
 			}
 		},
 		"error": {

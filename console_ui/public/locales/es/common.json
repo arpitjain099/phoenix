@@ -59,13 +59,16 @@
 			}
 		},
 		"profile": {
-			"title": "Configuración del Perfil",
 			"email": "Correo Electrónico",
 			"created_at": "Creado en",
 			"fields": {
 				"name": "Nombre de visualización",
 				"email": "Correo Electrónico",
 				"role": "Rol"
+			},
+			"settings": {
+				"title": "Configuración del Perfil",
+				"description": "Esta información aparecerá en tu perfil."
 			}
 		},
 		"error": {
