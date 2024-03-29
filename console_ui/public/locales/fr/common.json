@@ -58,6 +58,19 @@
 				"submit": "Mettre à jour"
 			}
 		},
+		"profile": {
+			"email": "Email",
+			"created_at": "Créé à",
+			"fields": {
+				"name": "Nom D'affichage",
+				"email": "Email",
+				"role": "Rôle"
+			},
+			"settings": {
+				"title": "Paramètres du Profil",
+				"description": "Cette information apparaîtra sur votre profil."
+			}
+		},
 		"error": {
 			"info": "Vous avez peut-être oublié d'ajouter le composant {{action}} à la ressource {{resource}}.",
 			"404": "Désolé, la page que vous avez visitée n'existe pas.",

@@ -30,6 +30,7 @@ import { appWithTranslation, useTranslation } from "next-i18next";
 
 // initialize i18n
 import "../providers/i18n";
+import { IconUser } from "@tabler/icons";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
 	noLayout?: boolean;
@@ -101,6 +102,14 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
 										show: "/instances/show/:id",
 										meta: {
 											canDelete: true,
+										},
+									},
+									{
+										name: "profile",
+										list: "/profile",
+										meta: {
+											label: "Profile",
+											icon: <IconUser size="16" />,
 										},
 									},
 								]}
