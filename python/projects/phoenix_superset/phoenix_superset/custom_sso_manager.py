@@ -25,21 +25,24 @@ manager defined in this module.
 
 """
 import logging
+from typing import Union
 
-from flask import flash, g, redirect, request
-from flask_appbuilder._compat import as_unicode
-from flask_appbuilder.security.const import LOGMSG_WAR_SEC_LOGIN_FAILED
-from flask_appbuilder.security.views import AuthView
-from flask_appbuilder.utils.base import get_safe_redirect
-from flask_appbuilder.views import expose
-from flask_login import login_user
-from superset.security import SupersetSecurityManager
+from flask import g, redirect, request
+from flask_appbuilder.const import (  # type: ignore[import-untyped]
+    LOGMSG_WAR_SEC_LOGIN_FAILED,
+)
+from flask_appbuilder.security.sqla.models import User  # type: ignore[import-untyped]
+from flask_appbuilder.security.views import AuthView  # type: ignore[import-untyped]
+from flask_appbuilder.utils.base import get_safe_redirect  # type: ignore[import-untyped]
+from flask_appbuilder.views import expose  # type: ignore[import-untyped]
+from flask_login import login_user  # type: ignore[import-untyped]
+from superset.security import SupersetSecurityManager  # type: ignore[import-untyped]
 from werkzeug.wrappers import Response as WerkzeugResponse
 
 logger = logging.getLogger(__name__)
 
 
-class AutheRemoteUserViewCustom(AuthView):
+class AutheRemoteUserViewCustom(AuthView):  # type: ignore[no-any-unimported]
     """Custom view for remote user authentication.
 
     Based on taken from:
@@ -70,7 +73,7 @@ class AutheRemoteUserViewCustom(AuthView):
         return redirect(get_safe_redirect(next_url))
 
 
-class PhoenixCustomSsoSecurityManager(SupersetSecurityManager):
+class PhoenixCustomSsoSecurityManager(SupersetSecurityManager):  # type: ignore[no-any-unimported]
     """Custom SSO Security Manager for Superset.
 
     Based on:
@@ -82,7 +85,7 @@ class PhoenixCustomSsoSecurityManager(SupersetSecurityManager):
 
     authremoteuserview = AutheRemoteUserViewCustom
 
-    def __init__(self, appbuilder):
+    def __init__(self, appbuilder) -> None:  # type: ignore[no-untyped-def]
         """Create a custom SSO security manager.
 
         Taken from:
