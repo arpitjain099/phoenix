@@ -16,3 +16,17 @@ Use the development tools generic python development tools in [/python](../../).
 
 Both libraries `superset` and `flask_appbuilder` don't have stubs :( so we have to use ignore for
 `no-untyped-def` and `import-untyped` errors.
+
+## Testing
+
+In general when developing python tests should be made however to manually test can be done by
+running the following command:
+
+```bash
+make up
+# In a different terminal
+make init
+```
+
+You can then visit `localhost:8089`, open the browser console and set the cookie as instructed in
+the output of `make init`. You should then be able to see the superset welcome page.
