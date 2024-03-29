@@ -23,7 +23,6 @@ class UserCreate(UserBase):
 
     email: pydantic.EmailStr
     display_name: str
-    app_role: str
 
 
 class User(UserBase):
