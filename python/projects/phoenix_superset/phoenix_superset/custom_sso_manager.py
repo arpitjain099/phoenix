@@ -41,6 +41,10 @@ from werkzeug.wrappers import Response as WerkzeugResponse
 
 logger = logging.getLogger(__name__)
 
+######
+### Uncomment to see logs in the superset server output
+# logger.setLevel(logging.DEBUG)
+
 
 class AutheRemoteUserViewCustom(AuthView):  # type: ignore[no-any-unimported]
     """Custom view for remote user authentication.
