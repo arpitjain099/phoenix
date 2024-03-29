@@ -53,7 +53,7 @@ const ProfilePage: React.FC = () => {
 						mt="sm"
 						withAsterisk
 						label={translate("pages.profile.fields.name")}
-						{...getInputProps("name")}
+						{...getInputProps("display_name")}
 					/>
 				</div>
 				<div className="flex gap-4 items-center mt-4">

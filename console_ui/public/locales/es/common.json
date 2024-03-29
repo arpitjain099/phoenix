@@ -63,7 +63,7 @@
 			"email": "Correo Electrónico",
 			"created_at": "Creado en",
 			"fields": {
-				"name": "Nombre Completo",
+				"name": "Nombre de visualización",
 				"email": "Correo Electrónico",
 				"role": "Rol"
 			}

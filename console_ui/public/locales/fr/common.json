@@ -63,7 +63,7 @@
 			"email": "Email",
 			"created_at": "Créé à",
 			"fields": {
-				"name": "Nom Complet",
+				"name": "Nom D'affichage",
 				"email": "Email",
 				"role": "Rôle"
 			}
