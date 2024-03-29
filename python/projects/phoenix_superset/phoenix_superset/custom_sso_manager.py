@@ -104,29 +104,32 @@ class PhoenixCustomSsoSecurityManager(SupersetSecurityManager):  # type: ignore[
         """
         return str(self.appbuilder.get_app.config["AUTH_REMOTE_USER_ENV_VAR"])
 
-    def auth_user_remote_user(self, username):
+    def auth_user_remote_user(self, email: str) -> Union[User, None]:  # type: ignore[no-any-unimported]
         """REMOTE_USER user Authentication.
 
-        Currently the same as parent.
+        Custom version that users email to find the user rather then username.
         """
-        user = self.find_user(username=username)
+        if not email:
+            return None
+        user = self.find_user(email=email)
+        logger.debug("Found user:")
+        logger.debug(user)
 
         # User does not exist, create one if auto user registration.
         if user is None and self.auth_user_registration:
+            logger.debug(f"CREATING USER with email {email}")
             user = self.add_user(
-                # All we have is REMOTE_USER, so we set
-                # the other fields to blank.
-                username=username,
-                first_name=username,
+                username=email,
+                first_name="remote_user",
                 last_name="-",
-                email=username + "@email.notfound",
+                email=email,
                 role=self.find_role(self.auth_user_registration_role),
             )
 
         # If user does not exist on the DB and not auto user registration,
         # or user is inactive, go away.
-        elif user is None or (not user.is_active):
-            logger.info(LOGMSG_WAR_SEC_LOGIN_FAILED, username)
+        if user is None or (not user.is_active):
+            logger.info(LOGMSG_WAR_SEC_LOGIN_FAILED, email)
             return None
 
         self.update_user_auth_stat(user)
