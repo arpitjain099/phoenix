@@ -1,0 +1,18 @@
+services:
+  phoenix_superset:
+    image: "phoenix_superset:latest"
+    build:
+      context: .
+    environment:
+      - SUPERSET_SECRET_KEY="TESTING_SECRET_KEY"
+      # Development environment stuff
+      - TALISMAN_ENABLED=False
+      - ENABLE_PROXY_FIX=True
+      - SESSION_COOKIE_SAMESITE=None
+      - SESSION_COOKIE_SECURE=False
+      - SESSION_COOKIE_HTTPONLY=False
+      - WTF_CSRF_ENABLED=False
+      - FLASK_DEBUG=True
+      - SUPERSET_ENV=development
+    ports:
+      - "8088:8088"
