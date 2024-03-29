@@ -5,7 +5,6 @@ import {
 	Container,
 	Text,
 	TextInput,
-	Select,
 	Divider,
 } from "@mantine/core";
 import { useTranslate } from "@refinedev/core";
@@ -16,8 +15,6 @@ const ProfilePage: React.FC = () => {
 	const { getInputProps } = useForm({
 		initialValues: {
 			name: "",
-			email: "",
-			role: "",
 		},
 		validate: {},
 	});
@@ -57,23 +54,6 @@ const ProfilePage: React.FC = () => {
 						withAsterisk
 						label={translate("pages.profile.fields.name")}
 						{...getInputProps("name")}
-					/>
-					<TextInput
-						mt="sm"
-						withAsterisk
-						label={translate("pages.profile.fields.email")}
-						{...getInputProps("email")}
-					/>
-					<Select
-						mt="sm"
-						withAsterisk
-						label={translate("pages.profile.fields.role")}
-						{...getInputProps("role")}
-						data={[
-							{ label: translate("inputs.select"), value: "" },
-							{ label: "Admin", value: "admin" },
-							{ label: "User", value: "user" },
-						]}
 					/>
 				</div>
 				<div className="flex gap-4 items-center mt-4">
