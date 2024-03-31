@@ -100,9 +100,10 @@ build_phoenix_superset_image:
     - docker push $PHOENIX_SUPERSET_LATEST_IMAGE
   needs:
     - job: python_projects_phiphi_ci
-      parallel:
-        matrix:
-          - PROJECT: phoenix_superset
+      # When this is include the pipelines doesn't run for some unknown reason
+      # parallel:
+        # matrix:
+          # - PROJECT: phoenix_superset
 
 publish_phoenix_chart_main:
   stage: publish
