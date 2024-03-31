@@ -22,6 +22,7 @@ variables:
   PHOENIX_SUPERSET_REGISTRY_IMAGE: $CI_REGISTRY_IMAGE/phoenix_superset
   PHOENIX_SUPERSET_TEST_IMAGE: $PHOENIX_SUPERSET_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
   PHOENIX_SUPERSET_LATEST_IMAGE: $PHOENIX_SUPERSET_REGISTRY_IMAGE:latest
+  PHOENIX_SUPERSET_RELEASE_IMAGE: $PHOENIX_SUPERSET_REGISTRY_IMAGE:main
 
 # Run linting for console_ui
 console_ui_linting:
@@ -121,6 +122,19 @@ publish_phoenix_chart_main:
   needs:
     - job: package_phoenix_chart_main
       artifacts: true
+  rules:
+    # Only run on `main` branch
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+publish_phoenix_superset_image:
+  stage: publish
+  extends: .docker_template
+  script:
+    - docker pull $PHOENIX_SUPERSET_TEST_IMAGE
+    - docker tag $PHOENIX_SUPERSET_TEST_IMAGE $PHOENIX_SUPERSET_RELEASE_IMAGE
+    - docker push $PHOENIX_SUPERSET_RELEASE_IMAGE
+  needs:
+    - job: build_phoenix_superset_image
   rules:
     # Only run on `main` branch
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
