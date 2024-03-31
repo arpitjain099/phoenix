@@ -138,3 +138,15 @@ publish_phoenix_superset_image:
   rules:
     # Only run on `main` branch
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+publish_phoenix_superset_image_tags:
+  stage: publish
+  extends: .docker_template
+  script:
+    - docker pull $PHOENIX_SUPERSET_TEST_IMAGE
+    - docker tag $PHOENIX_SUPERSET_TEST_IMAGE $PHOENIX_SUPERSET_REGISTRY_IMAGE:$CI_COMMIT_TAG
+    - docker push $PHOENIX_SUPERSET_REGISTRY_IMAGE:$CI_COMMIT_TAG
+  needs:
+    - job: build_phoenix_superset_image
+  rules:
+    - if: $CI_COMMIT_TAG
