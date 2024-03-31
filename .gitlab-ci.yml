@@ -1,3 +1,10 @@
+.docker_template:
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
 services:
   - docker:dind
 
@@ -22,9 +29,8 @@ console_ui_linting:
     - npm install
     - npm run lint
 
-
 python_build_and_ci_projects:
-  image: docker:latest
+  extends: .docker_template
   stage: test
   script:
     - cd python
@@ -46,7 +52,7 @@ python_ci_libs:
       - LIB: [example_lib_1]
 
 python_projects_phiphi_ci:
-  image: docker:latest
+  extends: .docker_template
   stage: test
   script:
     - apk update && apk add make
