@@ -19,6 +19,9 @@ variables:
   DOCKER_HOST: tcp://docker:2375
   PHOENIX_CHART_MAIN_DIR: charts/main
   PHOENIX_CHART_MAIN_PACKAGE_PATH: phoenix_chart_main
+  PHOENIX_SUPERSET_REGISTRY_IMAGE: $CI_REGISTRY_IMAGE/phoenix_superset
+  PHOENIX_SUPERSET_TEST_IMAGE: $PHOENIX_SUPERSET_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+  PHOENIX_SUPERSET_LATEST_IMAGE: $PHOENIX_SUPERSET_REGISTRY_IMAGE:latest
 
 # Run linting for console_ui
 console_ui_linting:
@@ -83,6 +86,21 @@ package_phoenix_chart_main:
       - $PHOENIX_CHART_MAIN_PACKAGE_PATH/*.tgz
     # Going to pushed to package registry so it is fine to expire
     expire_in: 1 hour
+
+build_phoenix_superset_image:
+  extends: .docker_template
+  stage: build
+  script:
+    - cd python/projects/phoenix_superset
+    - docker build --pull -t $PHOENIX_SUPERSET_TEST_IMAGE .
+    - docker tag $PHOENIX_SUPERSET_TEST_IMAGE $PHOENIX_SUPERSET_LATEST_IMAGE
+    - docker push $PHOENIX_SUPERSET_TEST_IMAGE
+    - docker push $PHOENIX_SUPERSET_LATEST_IMAGE
+  needs:
+    - job: python_projects_phiphi_ci
+      parallel:
+        matrix:
+          - PROJECT: phoenix_superset
 
 publish_phoenix_chart_main:
   stage: publish
