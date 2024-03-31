@@ -17,29 +17,9 @@ We recommend that you use [mircok8s](https://microk8s.io/) but you can use any a
 tilt, see below. To get up and running follow the steps:
 
 1. [Install mircok8s](https://microk8s.io/docs/install-alternatives)
-2. Make `kubectl` command to use the mircok8s see bellow
-3. `microk8s enable ingress`. First check that you don't have anything else running on port 80 of
-  your local machine
-4. If you want superset and oauth to work you also have to add these to `/etc/hosts`
-```
-127.0.0.1       superset.phoenix.local
-127.0.0.1       oauth.phoenix.local
-```
-
-### `kubectl` setup
-
-For `tilt` to work you need to have `kubectl` access to the `mircok8s` cluster. There are a number
-of ways to do this but here is the one we found to be the best:
-
-* `sudo microk8s config > ~/.kube/microk8s-config`
-* `export KUBECONFIG=~/.kube/microk8s-config:~/.kube/config` You can also add this to you
-  `.bashrc/.bash_profile`
-  so the config is always included. Or run you will need to run it before you set the context.
-* `kubectl config use-context microk8s`. Do this command before `tilt` commands are run to setup
-  the correct cluster.
-
-If you recreate your cluster you can recreate the config: `sudo microk8s config >
-~/.kube/microk8s-config` to set up `kubectl` again.
+3. Check that you don't have anything else running on port 80 of your local machine
+4. Run `source setup_microk8s.sh` to set up the cluster and `kubectl`
+5. The command will output instructions on setting up your `/etc/hosts` file
 
 ### Using another local cluster
 

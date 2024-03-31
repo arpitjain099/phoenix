@@ -5,6 +5,7 @@ An open-source social media analysis platform for peacebuilders.
 ## Run
 
 ```bash
+source setup_microk8s.sh
 tilt up
 ```
 
