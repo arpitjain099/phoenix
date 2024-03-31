@@ -42,25 +42,10 @@ You can also use a different version management system and see
 Install `asdf`: Follow the instructions on the `asdf`, see
 [docs](https://asdf-vm.com/guide/getting-started.html)
 
-### `asdf` install tools
-
-To install correct tool versions run this command in the root directory:
+To setup `asdf` with the correct plugins and  versions of the tools, run the following command:
 
 ```bash
-asdf install
-```
-
-You may need to add Plugins to `asdf` to install all the tools, see
-[docs](https://asdf-vm.com/manage/plugins.html)
-
-### `asdf` usage
-
-Run a shim/command:
-
-```bash
-asdf reshim
-# Check the helm version
-helm version
+make setup_asdf
 ```
 
 ## Setting secretes

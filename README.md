@@ -6,6 +6,7 @@ An open-source social media analysis platform for peacebuilders.
 
 ```bash
 source setup_microk8s.sh
+make setup_asdf
 tilt up
 ```
 
