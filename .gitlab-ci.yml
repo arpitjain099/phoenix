@@ -41,7 +41,9 @@ python_build_and_ci_projects:
     - docker run $PROJECT make all path=projects/$PROJECT
   parallel:
     matrix:
-      - PROJECT: [example_project_1, phoenix_superset]
+      - PROJECT:
+          - example_project_1
+          - phoenix_superset
 
 python_ci_libs:
   stage: test
