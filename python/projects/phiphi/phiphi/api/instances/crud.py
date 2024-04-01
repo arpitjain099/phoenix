@@ -1,5 +1,6 @@
 """Instance crud functionality."""
 import sqlalchemy.orm
+
 from phiphi.api.instances import models, schemas
 
 
@@ -36,3 +37,14 @@ def get_instance(session: sqlalchemy.orm.Session, instance_id: int) -> schemas.I
     if db_instance is None:
         return None
     return schemas.Instance.model_validate(db_instance)
+
+
+def get_instances(
+    session: sqlalchemy.orm.Session, start: int = 0, end: int = 100
+) -> list[schemas.Instance]:
+    """Get instances."""
+    query = sqlalchemy.select(models.Instance).offset(start).limit(end)
+    instances = session.scalars(query).all()
+    if not instances:
+        return []
+    return [schemas.Instance.model_validate(instance) for instance in instances]

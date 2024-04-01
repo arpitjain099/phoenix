@@ -1,5 +1,6 @@
 """Routes for the instances."""
 import fastapi
+
 from phiphi.api import deps
 from phiphi.api.instances import crud, schemas
 
@@ -32,3 +33,11 @@ def get_instance(instance_id: int, session: deps.SessionDep) -> schemas.Instance
     if instance is None:
         raise fastapi.HTTPException(status_code=404, detail="Instance not found")
     return instance
+
+
+@router.get("/instances/", response_model=list[schemas.Instance])
+def get_instances(
+    session: deps.SessionDep, start: int = 0, end: int = 100
+) -> list[schemas.Instance]:
+    """Get Instances."""
+    return crud.get_instances(session, start, end)

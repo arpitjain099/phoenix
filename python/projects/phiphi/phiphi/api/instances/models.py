@@ -1,9 +1,10 @@
 """Instance Models."""
 from typing import Optional
 
+from sqlalchemy import orm
+
 from phiphi import platform_db
 from phiphi.api import base_models
-from sqlalchemy import orm
 
 
 class InstanceBase(platform_db.Base):
