@@ -2,6 +2,10 @@
 import datetime
 
 import pydantic
+import fastapi
+
+Path = fastapi.Path
+Field = pydantic.Field
 
 
 class InstanceBase(pydantic.BaseModel):
@@ -24,12 +28,12 @@ class InstanceCreate(InstanceBase):
     Properties to receive via API on creation.
     """
 
-    name: str | None = None
-    description: str | None = None
-    pi_deleted_after: int | None = None
-    deleted_after: int | None = None
-    expected_usage: str | None = None
-    environment_key: str | None = None
+    name: str 
+    description: str 
+    pi_deleted_after: int = Field(gt=0,lt=365)
+    deleted_after: int = Field(gt=0, lt=365)
+    expected_usage: str
+    environment_key: str 
 
 
 class Instance(InstanceBase):
