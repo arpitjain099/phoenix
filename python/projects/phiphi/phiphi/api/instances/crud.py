@@ -14,3 +14,17 @@ def create_instance(
     session.commit()
     session.refresh(db_instance)
     return schemas.Instance.model_validate(db_instance)
+
+
+def update_instance(
+    session: sqlalchemy.orm.Session, instance_id: int, instance: schemas.InstanceUpdate
+) -> schemas.Instance | None:
+    """Update an instance."""
+    db_instance = session.get(models.Instance, instance_id)
+    if db_instance is None:
+        return None
+    for field, value in instance.dict(exclude_unset=True).items():
+        setattr(db_instance, field, value)
+    session.commit()
+    session.refresh(db_instance)
+    return schemas.Instance.model_validate(db_instance)

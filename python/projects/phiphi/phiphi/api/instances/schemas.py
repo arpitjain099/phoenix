@@ -1,8 +1,8 @@
 """Schemas for the instances."""
 import datetime
 
-import pydantic
 import fastapi
+import pydantic
 
 Path = fastapi.Path
 Field = pydantic.Field
@@ -28,12 +28,12 @@ class InstanceCreate(InstanceBase):
     Properties to receive via API on creation.
     """
 
-    name: str 
-    description: str 
-    pi_deleted_after: int = Field(gt=0,lt=365)
+    name: str
+    description: str
+    pi_deleted_after: int = Field(gt=0, lt=365)
     deleted_after: int = Field(gt=0, lt=365)
     expected_usage: str
-    environment_key: str 
+    environment_key: str
 
 
 class Instance(InstanceBase):
