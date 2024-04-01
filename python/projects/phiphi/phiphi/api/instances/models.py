@@ -17,7 +17,7 @@ class InstanceBase(platform_db.Base):
     environment_key: orm.Mapped[Optional[str]]
     pi_deleted_after: orm.Mapped[Optional[int]]
     deleted_after: orm.Mapped[Optional[int]]
-    expected_usage: orm.Mapped[Optional[int]]
+    expected_usage: orm.Mapped[Optional[str]]
 
 
 class Instance(InstanceBase, base_models.TimestampModel):
