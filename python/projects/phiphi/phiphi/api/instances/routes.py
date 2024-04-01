@@ -23,3 +23,12 @@ def update_instance(
     if updated_instance is None:
         raise fastapi.HTTPException(status_code=404, detail="Instance not found")
     return updated_instance
+
+
+@router.get("/instance/{instance_id}", response_model=schemas.Instance)
+def get_instance(instance_id: int, session: deps.SessionDep) -> schemas.Instance:
+    """Get an Instance."""
+    instance = crud.get_instance(session, instance_id)
+    if instance is None:
+        raise fastapi.HTTPException(status_code=404, detail="Instance not found")
+    return instance
