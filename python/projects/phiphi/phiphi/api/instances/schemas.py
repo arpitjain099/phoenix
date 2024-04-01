@@ -29,6 +29,7 @@ class InstanceCreate(InstanceBase):
     pi_deleted_after: int | None = None
     deleted_after: int | None = None
     expected_usage: str | None = None
+    environment_key: str | None = None
 
 
 class Instance(InstanceBase):
