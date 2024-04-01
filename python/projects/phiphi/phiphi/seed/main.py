@@ -10,7 +10,7 @@ import logging
 from sqlalchemy.orm import Session
 
 from phiphi import platform_db
-from phiphi.seed import users
+from phiphi.seed import instances, users
 
 main_logger = logging.getLogger("phiphi.seed.main::" + __name__)
 main_logger.setLevel(logging.INFO)
@@ -27,6 +27,7 @@ def main(session: Session, testing: bool = False) -> None:
     users.init_first_admin_user(session)
     if testing:
         users.seed_test_users(session)
+        instances.seed_test_instance(session)
 
 
 if __name__ == "__main__":

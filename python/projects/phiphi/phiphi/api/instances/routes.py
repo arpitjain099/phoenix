@@ -26,7 +26,7 @@ def update_instance(
     return updated_instance
 
 
-@router.get("/instance/{instance_id}", response_model=schemas.Instance)
+@router.get("/instances/{instance_id}", response_model=schemas.Instance)
 def get_instance(instance_id: int, session: deps.SessionDep) -> schemas.Instance:
     """Get an Instance."""
     instance = crud.get_instance(session, instance_id)
