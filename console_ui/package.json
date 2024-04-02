@@ -33,6 +33,7 @@
 		"@refinedev/simple-rest": "^5.0.1",
 		"@tabler/icons": "^1.1.0",
 		"@tanstack/react-table": "^8.13.0",
+		"env-cmd": "^10.1.0",
 		"i18next": "^20.1.0",
 		"i18next-browser-languagedetector": "^6.1.1",
 		"i18next-resources-to-backend": "^1.2.0",
