@@ -7,5 +7,12 @@ setup_asdf:
 	asdf reshim
 
 up:
-	kubectl apply -f clusters/local/secret.yaml
-	tilt up
+	if [ -f clusters/local/secret.yaml ]; then \
+		kubectl apply -f clusters/local/secret.yaml; \
+		tilt up; \
+	else \
+		echo "File clusters/local/secret.yaml does not exist."; \
+		echo "Copying the example file"; \
+		cp clusters/local/.example_secrets.yaml clusters/local/secret.yaml; \
+		echo "Please fill in the clusters/local/secret.yaml file and run 'make up' again"; \
+	fi
