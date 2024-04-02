@@ -2,13 +2,20 @@
 
 An open-source social media analysis platform for peacebuilders.
 
-## Run
+## Quick start
+
+### Requirements
+
+- [asdf](https://asdf-vm.com/guide/getting-started.html)
+- [microk8s](https://microk8s.io/docs/install-alternatives)
 
 ```bash
-tilt up
+make setup_asdf
+source setup_microk8s.sh
+make up
 ```
 
-If nothing happens then have a look at [docs/development_getting_started.md](docs/development_getting_started.md).
+More detailed documentation at [docs/development_getting_started.md](docs/development_getting_started.md).
 
 ## Organizations
 

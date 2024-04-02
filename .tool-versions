@@ -1,2 +1,4 @@
 helm 3.14.0
 tilt 0.33.10
+nodejs 21.7.1
+kubectl 1.29.2
