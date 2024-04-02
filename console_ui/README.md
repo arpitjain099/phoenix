@@ -23,6 +23,25 @@ configure a specific social media analyses.
     npm run start
 ```
 
+## Environment Variables:
+
+The console UI uses `.env.<environment>` file to initialise the application with the correct config.
+
+Currently there are 4 `.env.<environment>` files in use:
+
+- `.env.example` and example file that can be used as a template for others
+- `.env.local`
+- `.env.development`
+- `.env.production`
+
+### Setup Environment Variables for Local Environment.
+
+To set up environment variables, copy the .env.example file to create a new .env.local file:
+
+```bash
+    cp .env.example .env.local
+```
+
 ### Linting
 
 We have linting that works with pre commit and lint-staged. If you run `npm install` the pre
