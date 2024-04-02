@@ -2,6 +2,7 @@ echo "Setting up cluster"
 microk8s enable ingress
 microk8s enable dns
 microk8s enable registry
+microk8s enable hostpath-storage
 microk8s config > ~/.kube/microk8s-config
 export KUBECONFIG=~/.kube/config:~/.kube/microk8s-config
 kubectl config use-context microk8s
