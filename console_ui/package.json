@@ -8,6 +8,7 @@
 	"scripts": {
 		"dev": "cross-env NODE_OPTIONS=--max_old_space_size=4096 refine dev",
 		"build": "refine build",
+    "build:prod": "env-cmd -f .env.production refine build",
 		"start": "refine start",
 		"refine": "refine",
 		"prepare": "cd .. && husky install console_ui/.husky",
