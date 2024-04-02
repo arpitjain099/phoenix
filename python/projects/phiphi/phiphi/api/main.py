@@ -4,8 +4,8 @@ from starlette.middleware.cors import CORSMiddleware
 
 from phiphi import config
 from phiphi.api import health_check
-from phiphi.api.users import routes as user_routes
 from phiphi.api.instances import routes as instance_routes
+from phiphi.api.users import routes as user_routes
 
 app = FastAPI(title=config.settings.TITLE)
 
