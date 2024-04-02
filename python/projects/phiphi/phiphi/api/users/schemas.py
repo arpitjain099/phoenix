@@ -1,7 +1,15 @@
 """Schemas for the users."""
 import datetime
+from enum import Enum
 
 import pydantic
+
+
+class AppRole(str, Enum):
+    """App role enum."""
+
+    admin = "admin"
+    user = "user"
 
 
 class UserBase(pydantic.BaseModel):
@@ -12,6 +20,7 @@ class UserBase(pydantic.BaseModel):
 
     email: pydantic.EmailStr | None = None
     display_name: str | None = None
+    app_role: AppRole | None = None
 
 
 class UserCreate(UserBase):

@@ -27,6 +27,7 @@ def init_first_admin_user(session: Session) -> schemas.User:
         user_in = schemas.UserCreate(
             email=config.settings.FIRST_ADMIN_USER_EMAIL,
             display_name=config.settings.FIRST_ADMIN_USER_DISPLAY_NAME,
+            app_role=schemas.AppRole.admin,
         )
         user = crud.create_user(session=session, user=user_in)
     return user
