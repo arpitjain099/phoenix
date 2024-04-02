@@ -111,3 +111,36 @@ Please translate the values in this JSON from English to <other language>. Check
 8. **Automatic Deployment:** - Vercel automatically deploys the application whenever changes are detected in the connected Git repository.
 
 For more detailed instructions, refer to [Vercel's documentation](https://vercel.com/docs).
+
+## Deploying Your Next.js Project on AWS Amplify:
+
+1. **Sign in to AWS Amplify Console:**
+
+- Navigate to the [AWS Amplify Console](https://console.aws.amazon.com/amplify/) and sign in to your AWS account.
+
+2. **Create a New Deployment:**
+
+- Click on the "Connect App" button on the AWS Amplify Console dashboard.
+- Choose your Git provider and repository where your Next.js project is hosted.
+- Follow the on-screen instructions to connect your repository to AWS Amplify.
+
+3. **Configure Build Settings:**
+
+- AWS Amplify Console will automatically detect your project settings. you can customize the build settings such as the build command:
+
+```bash
+    commands:
+        - if [ "${AWS_BRANCH}" = "master" ]; then npm run build:prod; fi
+```
+
+- Review and confirm the build settings.
+
+4. **Deploy Your Application:**
+
+- Once the build settings are configured, AWS Amplify Console will start the deployment process automatically.
+- Monitor the deployment progress on the AWS Amplify Console dashboard.
+
+5. **Access Your Deployed Application:**
+
+- Once the deployment is complete, AWS Amplify Console will provide you with a unique URL where your Next.js application is hosted.
+- Click on the provided URL to access your deployed Next.js application.
