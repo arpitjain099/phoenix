@@ -1,8 +1,8 @@
-"""User Init.
+"""Create users table.
 
-Revision ID: 72a14c8862d1
-Revises: fc14296708b6
-Create Date: 2024-03-20 16:08:08.432579
+Revision ID: 476d06370a9c
+Revises:
+Create Date: 2024-03-29 10:38:47.711702
 
 """
 from typing import Sequence, Union
@@ -10,17 +10,17 @@ from typing import Sequence, Union
 import sqlalchemy as sa
 from alembic import op
 
-revision: str = "72a14c8862d1"
-down_revision: Union[str, None] = "fc14296708b6"
+# revision identifiers, used by Alembic.
+revision: str = "476d06370a9c"
+down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
-TABLE_NAME = "users"
-SCHEMA = "platform"
+TABLE_NAME: str = "users"
 
 
 def upgrade() -> None:
-    """Upgrade for 72a14c8862d1."""
+    """Upgrade for 476d06370a9c."""
     op.create_table(
         TABLE_NAME,
         sa.Column("id", sa.Integer(), nullable=False),
@@ -29,14 +29,11 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(), nullable=False),
         sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
-        schema=SCHEMA,
     )
-    op.create_index(
-        op.f("ix_platform_users_email"), TABLE_NAME, ["email"], unique=True, schema=SCHEMA
-    )
+    op.create_index(op.f("ix_users_email"), TABLE_NAME, ["email"], unique=True)
 
 
 def downgrade() -> None:
-    """Downgrade for 72a14c8862d1."""
-    op.drop_index(op.f("ix_platform_users_email"), table_name=TABLE_NAME, schema=SCHEMA)
-    op.drop_table(TABLE_NAME, schema=SCHEMA)
+    """Downgrade for 476d06370a9c."""
+    op.drop_index(op.f("ix_users_email"), table_name=TABLE_NAME)
+    op.drop_table(TABLE_NAME)
