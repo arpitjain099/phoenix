@@ -11,6 +11,26 @@ development tasks. See sub folders for more information on this.
 
 Thank you for contributing to our project, and happy coding!
 
+## Using `asdf` for Version Management
+
+We use `asdf` as our tool of choice for managing multiple runtime versions for different languages
+and tools. `asdf` allows you to easily switch between different versions of tools like Node.js,
+helm, Python, and more, ensuring consistency across our development environments.
+
+You can also use a different version management system and see
+[.tool-versions](./../.tool-versions) for the configuration of versions.
+
+Install `asdf`: Follow the instructions on the `asdf`, see
+[docs](https://asdf-vm.com/guide/getting-started.html)
+
+To setup `asdf` with the correct plugins and  versions of the tools, run the following command:
+
+```bash
+make setup_asdf
+```
+
+This will also install `kubectl` that is needed for working with the local cluster.
+
 ## Set up a local cluster
 
 We recommend that you use [mircok8s](https://microk8s.io/) but you can use any as documented by
@@ -29,24 +49,6 @@ that tilt works with, see [tilt docs on clusters](https://docs.tilt.dev/choosing
 If you do this the set up of the ingress/host name and the `kubctl` setup might be different. For
 instance when using `k3s` you will need to add `<traefik-serivce-ip> phoenix.local` to your
 `/etc/hosts` and [follow cluster access](https://docs.k3s.io/cluster-access)
-
-## Using `asdf` for Version Management
-
-We use `asdf` as our tool of choice for managing multiple runtime versions for different languages
-and tools. `asdf` allows you to easily switch between different versions of tools like Node.js,
-helm, Python, and more, ensuring consistency across our development environments.
-
-You can also use a different version management system and see
-[.tool-versions](./../.tool-versions) for the configuration of versions.
-
-Install `asdf`: Follow the instructions on the `asdf`, see
-[docs](https://asdf-vm.com/guide/getting-started.html)
-
-To setup `asdf` with the correct plugins and  versions of the tools, run the following command:
-
-```bash
-make setup_asdf
-```
 
 ## Setting secrets for local cluster
 

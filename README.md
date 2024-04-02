@@ -6,12 +6,12 @@ An open-source social media analysis platform for peacebuilders.
 
 ### Requirements
 
-- [microk8s](https://microk8s.io/docs/install-alternatives)
 - [asdf](https://asdf-vm.com/guide/getting-started.html)
+- [microk8s](https://microk8s.io/docs/install-alternatives)
 
 ```bash
-source setup_microk8s.sh
 make setup_asdf
+source setup_microk8s.sh
 make up
 ```
 
