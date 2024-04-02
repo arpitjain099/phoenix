@@ -56,14 +56,8 @@ To allow for the secrets to not be in the charts you can add the secrets as a Ku
 cp clusters/local/.example_secrets.yaml clusters/local/secret.yaml
 ```
 
-Fill in the required values of clusters/local/secret.yaml
+The secrets will be applied when the command `make up` is run.
 
-```bash
-kubectl apply -f clusters/local/secret.yaml
-```
-
-This needs to be done before `tilt up` is run otherwise passwords and secrets will be created in
-correctly.
 
 ## Running the Development Environment with tilt up
 
@@ -73,10 +67,13 @@ running services in the local Kubernetes cluster.
 Once you have you local cluster up and running you can do:
 
 ```bash
-tilt up
+make up
 ```
 
 In the browser you will be able to see the `tilt` UI via the URL that `tilt up` prints.
+
+You can also use the `tilt` cli if needs be. Such as `tilt down` to bring down the resources in the
+cluster.
 
 ## Hello world
 

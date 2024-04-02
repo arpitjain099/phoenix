@@ -5,3 +5,7 @@ setup_asdf:
 	asdf plugin list | grep -q nodejs || asdf plugin add nodejs
 	asdf install
 	asdf reshim
+
+up:
+	kubectl apply -f clusters/local/secret.yaml
+	tilt up

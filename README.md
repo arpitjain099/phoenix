@@ -7,7 +7,7 @@ An open-source social media analysis platform for peacebuilders.
 ```bash
 source setup_microk8s.sh
 make setup_asdf
-tilt up
+make up
 ```
 
 If nothing happens then have a look at [docs/development_getting_started.md](docs/development_getting_started.md).
