@@ -48,7 +48,7 @@ To setup `asdf` with the correct plugins and  versions of the tools, run the fol
 make setup_asdf
 ```
 
-## Setting secretes
+## Setting secrets for local cluster
 
 To allow for the secrets to not be in the charts you can add the secrets as a Kubernetes SECRET.
 
