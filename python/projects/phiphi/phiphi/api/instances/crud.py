@@ -7,9 +7,7 @@ from phiphi.api.instances import models, schemas
 def create_instance(
     session: sqlalchemy.orm.Session, instance: schemas.InstanceCreate
 ) -> schemas.Instance:
-    """Create a new user."""
-    if not instance.environment_key:
-        instance.environment_key = "main"
+    """Create a new instance."""
     db_instance = models.Instance(**instance.dict())
     session.add(db_instance)
     session.commit()

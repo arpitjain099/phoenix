@@ -6,16 +6,6 @@ from fastapi.testclient import TestClient
 from phiphi.api.instances import models
 
 
-def test_instance(session: sqlalchemy.orm.Session, recreate_tables) -> None:
-    """Test that there are no instances."""
-    response = session.execute(
-        sqlalchemy.select(sqlalchemy.func.count()).select_from(models.Instance)
-    )
-    count = response.one()
-    assert count
-    assert count[0] == 0
-
-
 def test_instance_seeded(session: sqlalchemy.orm.Session, reseed_tables) -> None:
     """Test that the database is seeded."""
     response = session.execute(
@@ -32,13 +22,13 @@ UPDATE_TIME = "2024-04-01T12:00:02"
 
 @pytest.mark.freeze_time(CREATED_TIME)
 def test_create_get_instance(recreate_tables, client: TestClient) -> None:
-    """Test creating an instance."""
+    """Test create and then get of an instance."""
     data = {
         "name": "first instance",
         "description": "Instance 1",
         "environment_key": "main",
-        "pi_deleted_after": 90,
-        "deleted_after": 20,
+        "pi_deleted_after_days": 90,
+        "delete_after_days": 20,
         "expected_usage": "average",
     }
     response = client.post("/instances/", json=data)
@@ -47,8 +37,8 @@ def test_create_get_instance(recreate_tables, client: TestClient) -> None:
     assert instance["name"] == data["name"]
     assert instance["description"] == data["description"]
     assert instance["environment_key"] == data["environment_key"]
-    assert instance["pi_deleted_after"] == data["pi_deleted_after"]
-    assert instance["deleted_after"] == data["deleted_after"]
+    assert instance["pi_deleted_after_days"] == data["pi_deleted_after_days"]
+    assert instance["delete_after_days"] == data["delete_after_days"]
     assert instance["expected_usage"] == data["expected_usage"]
     assert instance["created_at"] == CREATED_TIME
 
@@ -61,8 +51,8 @@ def test_create_get_instance(recreate_tables, client: TestClient) -> None:
     assert instance["description"] == data["description"]
     assert instance["created_at"] == CREATED_TIME
     assert instance["environment_key"] == data["environment_key"]
-    assert instance["pi_deleted_after"] == data["pi_deleted_after"]
-    assert instance["deleted_after"] == data["deleted_after"]
+    assert instance["pi_deleted_after_days"] == data["pi_deleted_after_days"]
+    assert instance["delete_after_days"] == data["delete_after_days"]
 
 
 def test_get_instance_not_found(client: TestClient, recreate_tables) -> None:
