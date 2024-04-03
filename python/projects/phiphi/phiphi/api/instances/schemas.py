@@ -1,7 +1,15 @@
 """Schemas for the instances."""
 import datetime
+from enum import Enum
+from typing import Annotated
 
 import pydantic
+
+
+class EnvironmentKey(str, Enum):
+    """Environment key enum."""
+
+    main = "main"
 
 
 class InstanceBase(pydantic.BaseModel):
@@ -10,12 +18,28 @@ class InstanceBase(pydantic.BaseModel):
     Shared properties of all instances.
     """
 
-    name: str
-    description: str
-    environment_key: str | None = "main"
-    pi_deleted_after_days: int | None = 183
-    delete_after_days: int | None = 183
-    expected_usage: str | None = None
+    name: Annotated[str, pydantic.Field(description="The name of the instance")]
+    description: Annotated[str, pydantic.Field(description="The description of the instance")]
+    environment_key: Annotated[
+        EnvironmentKey,
+        pydantic.Field(default="main", description="The environment key of the instance"),
+    ]
+
+    pi_deleted_after_days: Annotated[
+        int,
+        pydantic.Field(
+            default=183, description="PI deletion time in days, min 1, max 365", gt=1, lt=365
+        ),
+    ]
+    delete_after_days: Annotated[
+        int,
+        pydantic.Field(
+            default=183, description="Deletion time in days, min 1, max 365", gt=1, lt=365
+        ),
+    ]
+    expected_usage: Annotated[
+        str, pydantic.Field(description="The environment expected usage of the instance")
+    ]
 
 
 class InstanceCreate(InstanceBase):
@@ -43,6 +67,7 @@ class InstanceUpdate(pydantic.BaseModel):
 
     name: str | None = None
     description: str | None = None
-    pi_deleted_after: int | None = None
-    deleted_after: int | None = None
+    pi_deleted_after_days: int | None = None
+    delete_after_days: int | None = None
     expected_usage: str | None = None
+    environment_key: str | None = None

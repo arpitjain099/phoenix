@@ -102,3 +102,18 @@ def test_update_instance_not_found(client: TestClient, recreate_tables) -> None:
     response = client.put("/instances/100", json=data)
     assert response.status_code == 404
     assert response.json() == {"detail": "Instance not found"}
+
+
+def test_environment_defaults_main(client: TestClient, recreate_tables) -> None:
+    """Test that environment defaults to main, when nothing is passed as parameter."""
+    data = {
+        "name": "first instance",
+        "description": "Instance 1",
+        "pi_deleted_after_days": 90,
+        "delete_after_days": 20,
+        "expected_usage": "average",
+    }
+    response = client.post("/instances/", json=data)
+    assert response.status_code == 200
+    instance = response.json()
+    assert instance["environment_key"] == "main"
