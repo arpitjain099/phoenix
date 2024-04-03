@@ -12,9 +12,9 @@ const ENV = process.env.NEXT_PUBLIC_ENV!;
 const DEV_LOGIN_EMAIL = process.env.NEXT_PUBLIC_DEV_ADMIN_EMAIL!;
 
 const redirectToLoginPage = () => {
-  if (ENV !== "dev" && LOGIN_URL) {
-    window.location.href = LOGIN_URL;
-  }
+	if (ENV !== "dev" && LOGIN_URL) {
+		window.location.href = LOGIN_URL;
+	}
 };
 
 const redirectToLogoutPage = () => {
@@ -24,18 +24,18 @@ const redirectToLogoutPage = () => {
 };
 
 const fetchUserInfo = async (): Promise<UserInfo | null> => {
-  try {
-    const response = await fetch(`${API_URL}/users/me`, {
-      method: "GET",
-      credentials: "include",
-    });
-    const userData: UserInfo = await response.json();
-    storageService.set(USER_INFO_COOKIE_NAME, JSON.stringify(userData));
-    return userData;
-  } catch (error) {
-    redirectToLoginPage();
-    return null;
-  }
+	try {
+		const response = await fetch(`${API_URL}/users/me`, {
+			method: "GET",
+			credentials: "include",
+		});
+		const userData: UserInfo = await response.json();
+		storageService.set(USER_INFO_COOKIE_NAME, JSON.stringify(userData));
+		return userData;
+	} catch (error) {
+		redirectToLoginPage();
+		return null;
+	}
 };
 
 const authProvider: AuthProvider = {
