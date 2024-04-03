@@ -1,19 +1,20 @@
+/* eslint-disable class-methods-use-this */
 import cookies from "js-cookie";
 
 const isBrowser = typeof window !== "undefined";
 
 class StorageService {
-  static get(key: string) {
+  get(key: string) {
     return isBrowser ? cookies.get(key) : null;
   }
 
-  static set(key: string, value: any, expiresAt?: any) {
+  set(key: string, value: any, expiresAt?: any) {
     if (isBrowser) {
       cookies.set(key, value, { expires: expiresAt, sameSite: "lax" });
     }
   }
 
-  static remove(key: string) {
+  remove(key: string) {
     if (isBrowser) {
       cookies.remove(key);
     }
