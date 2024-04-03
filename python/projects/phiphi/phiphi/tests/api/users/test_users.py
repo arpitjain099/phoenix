@@ -98,3 +98,27 @@ def test_update_user_not_found(client: TestClient, recreate_tables) -> None:
     response = client.put("/users/1", json=data)
     assert response.status_code == 404
     assert response.json() == {"detail": "User not found"}
+
+
+def test_app_role_post(client: TestClient, recreate_tables) -> None:
+    """Test if app_role is set in users on creation."""
+    data = {"email": "test@phoenix.com", "display_name": "test", "app_role": "admin"}
+    response = client.post("/users/", json=data)
+    assert response.status_code == 200
+    user = response.json()
+    assert user["email"] == data["email"]
+    assert user["display_name"] == data["display_name"]
+    assert user["app_role"] == data["app_role"]
+
+
+def test_app_role_put(client: TestClient, reseed_tables, session: sqlalchemy.orm.Session) -> None:
+    """Test if app_role is set in users on update."""
+    data = {"app_role": "user"}
+    user_id = 1
+    response = client.put(f"/users/{user_id}", json=data)
+    assert response.status_code == 200
+    user = response.json()
+    assert user["app_role"] == data["app_role"]
+    db_user = session.get(models.User, user_id)
+    assert db_user
+    assert db_user.app_role == data["app_role"]

@@ -49,3 +49,4 @@ class UserUpdate(pydantic.BaseModel):
     """User update schema."""
 
     display_name: str | None = None
+    app_role: str | None = None
