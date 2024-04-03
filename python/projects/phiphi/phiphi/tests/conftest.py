@@ -12,8 +12,9 @@ from phiphi.api import main
 from phiphi.seed import main as seed_main
 
 
-#  If this fixture is not in a test it can lead to unexpected errors as the app will use the
-#  production database rather then the test.
+#  This fixture has to be used in all tests otherwise database queries will not be done on the
+#  testing database (`settings.TESTING_SQLALCHEMY_DATABASE_URI`) but on the one configured for the
+#  app (`settings.SQLALCHEMY_DATABASE_URI`).
 @pytest.fixture(scope="session", autouse=True)
 def test_app(session) -> Generator[main.FastAPI, None, None]:
     """Initialise the test app.

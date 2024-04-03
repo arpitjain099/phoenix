@@ -42,25 +42,38 @@ To learn more about **Refine**, please check out the [Documentation](https://ref
 - **Mantine** [Docs](#)
 - **Inferencer** [Docs](https://refine.dev/docs/packages/documentation/inferencer)
 
-## Authentication for dev:
+## API for development
 
-The default api that is configured in `phoenix/python/projects/phiphi` uses cookie based
-authentication. This means that you can run the following code in the browser console to
-authenticate as a user:
+To get the API (backend) for development you can use the local environment in
+`phoenix/python/projects/phiphi/`. To do this:
+
+- start a new shell (terminal)
+- follow the commands in `phoenix/python/projects/phiphi/README.md` to start the development
+  environment
+
+### Authentication for development API
+
+After running the development API, you can authenticate as a user by setting the appropriate cookie
+(phiphi-user-email) with the user's email address. The default email admin@admin.com is
+automatically generated in the backend. To authenticate, execute the following JavaScript code in
+your browser's console:
 
 ```
 # Set the user email admin@admin.com is added by default.
 document.cookie = "phiphi-user-email=admin@admin.com";
 
-## Check have the correct users
+# Check if the correct user is authenticated.
 fetch('http://localhost:8080/users/me', {
- method: 'GET',
- credentials: 'include'
+  method: 'GET',
+  credentials: 'include'
 })
-.then(response => response.json())
-.then(data => console.log(data))
-.catch(error => console.error('Error:', error));
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
 ```
+
+The first line of the code sets the user's email in the cookie, while the second line verifies the
+authentication status by fetching the user data from the API using the previously set cookie.
 
 ## Easy steps for Translation:
 
