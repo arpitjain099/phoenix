@@ -13,11 +13,11 @@ class InstanceBase(platform_db.Base):
     __abstract__ = True
 
     id: orm.Mapped[int] = orm.mapped_column(primary_key=True)
-    name: orm.Mapped[str] = orm.mapped_column(index=True, unique=True)
-    description: orm.Mapped[Optional[str]]
-    environment_key: orm.Mapped[Optional[str]]
-    pi_deleted_after: orm.Mapped[Optional[int]]
-    deleted_after: orm.Mapped[Optional[int]]
+    name: orm.Mapped[str]
+    description: orm.Mapped[str]
+    environment_key: orm.Mapped[str]
+    pi_deleted_after_days: orm.Mapped[int]
+    delete_after_days: orm.Mapped[int]
     expected_usage: orm.Mapped[Optional[str]]
 
 

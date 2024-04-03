@@ -1,11 +1,7 @@
 """Schemas for the instances."""
 import datetime
 
-import fastapi
 import pydantic
-
-Path = fastapi.Path
-Field = pydantic.Field
 
 
 class InstanceBase(pydantic.BaseModel):
@@ -14,11 +10,11 @@ class InstanceBase(pydantic.BaseModel):
     Shared properties of all instances.
     """
 
-    name: str | None = None
-    description: str | None = None
-    environment_key: str | None = None
-    pi_deleted_after: int | None = None
-    deleted_after: int | None = None
+    name: str
+    description: str
+    environment_key: str | None = "main"
+    pi_deleted_after_days: int | None = 183
+    delete_after_days: int | None = 183
     expected_usage: str | None = None
 
 
@@ -27,13 +23,6 @@ class InstanceCreate(InstanceBase):
 
     Properties to receive via API on creation.
     """
-
-    name: str
-    description: str
-    pi_deleted_after: int = Field(gt=0, lt=365)
-    deleted_after: int = Field(gt=0, lt=365)
-    expected_usage: str
-    environment_key: str
 
 
 class Instance(InstanceBase):
@@ -46,6 +35,7 @@ class Instance(InstanceBase):
 
     id: int
     created_at: datetime.datetime
+    updated_at: datetime.datetime
 
 
 class InstanceUpdate(pydantic.BaseModel):
