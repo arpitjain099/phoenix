@@ -26,7 +26,7 @@ def test_create_get_instance(recreate_tables, client: TestClient) -> None:
     data = {
         "name": "first instance",
         "description": "Instance 1",
-        "environment_key": "main",
+        "environment_id": "main",
         "pi_deleted_after_days": 90,
         "delete_after_days": 20,
         "expected_usage": "average",
@@ -36,7 +36,7 @@ def test_create_get_instance(recreate_tables, client: TestClient) -> None:
     instance = response.json()
     assert instance["name"] == data["name"]
     assert instance["description"] == data["description"]
-    assert instance["environment_key"] == data["environment_key"]
+    assert instance["environment_id"] == data["environment_id"]
     assert instance["pi_deleted_after_days"] == data["pi_deleted_after_days"]
     assert instance["delete_after_days"] == data["delete_after_days"]
     assert instance["expected_usage"] == data["expected_usage"]
@@ -50,7 +50,7 @@ def test_create_get_instance(recreate_tables, client: TestClient) -> None:
     assert instance["name"] == data["name"]
     assert instance["description"] == data["description"]
     assert instance["created_at"] == CREATED_TIME
-    assert instance["environment_key"] == data["environment_key"]
+    assert instance["environment_id"] == data["environment_id"]
     assert instance["pi_deleted_after_days"] == data["pi_deleted_after_days"]
     assert instance["delete_after_days"] == data["delete_after_days"]
 
@@ -116,4 +116,4 @@ def test_environment_defaults_main(client: TestClient, recreate_tables) -> None:
     response = client.post("/instances/", json=data)
     assert response.status_code == 200
     instance = response.json()
-    assert instance["environment_key"] == "main"
+    assert instance["environment_id"] == "main"
