@@ -20,5 +20,7 @@ init:
               --password admin
 	docker compose exec phoenix_superset superset db upgrade
 	docker compose exec phoenix_superset superset init
+	@echo ""
+	@echo "###############################################"
 	@echo "The superset is initialised with the user admin@admin.com"
-	@echo "use: 'document.cookie = "phiphi-user-email=admin@admin.com";' in browser console to set the cookie."
+	@echo "Use: 'document.cookie = \"phiphi-user-email=admin@admin.com\";' in browser console to set the cookie."

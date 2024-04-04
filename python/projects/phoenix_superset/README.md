@@ -29,4 +29,5 @@ make init
 ```
 
 You can then visit `localhost:8089`, open the browser console and set the cookie as instructed in
-the output of `make init`. You should then be able to see the superset welcome page.
+the output of `make init`: `document.cookie = "phiphi-user-email=admin@admin.com";` and refresh .
+You should then be able to see the superset welcome page.
