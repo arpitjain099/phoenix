@@ -49,7 +49,7 @@ logger = logging.getLogger(__name__)
 class AutheRemoteUserViewCustom(AuthView):  # type: ignore[no-any-unimported]
     """Custom view for remote user authentication.
 
-    Based on taken from:
+    Based on:
     https://github.com/dpgaspar/Flask-AppBuilder/blob/master/flask_appbuilder/security/views.py#L729-L747
     """
 
@@ -121,7 +121,7 @@ class PhoenixCustomSSOSecurityManager(SupersetSecurityManager):  # type: ignore[
     def auth_user_remote_user(self, email: str) -> Union[User, None]:  # type: ignore[no-any-unimported]
         """REMOTE_USER user Authentication.
 
-        Custom version that users email to find the user rather then username.
+        Custom version that uses the email to find the user rather than the username.
         """
         if not email:
             return None
