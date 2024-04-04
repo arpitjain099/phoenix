@@ -50,7 +50,7 @@ class AuthRemoteUserTestCase(unittest.TestCase):
         return AppBuilder(
             self.app,
             self.db.session,
-            security_manager_class=custom_sso_manager.PhoenixCustomSsoSecurityManager,
+            security_manager_class=custom_sso_manager.PhoenixCustomSSOSecurityManager,
         )
 
     def test_login_error_with_debug(self):

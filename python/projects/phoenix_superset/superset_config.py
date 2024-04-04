@@ -12,4 +12,4 @@ AUTH_REMOTE_USER_ENV_VAR = os.getenv("AUTH_REMOTE_USER_ENV_VAR", "x-auth-request
 # This is needed to test the system without the authentication layer
 LOGIN_REDIRECT_URL = os.getenv("LOGIN_REDIRECT_URL")
 
-CUSTOM_SECURITY_MANAGER = custom_sso_manager.PhoenixCustomSsoSecurityManager
+CUSTOM_SECURITY_MANAGER = custom_sso_manager.PhoenixCustomSSOSecurityManager

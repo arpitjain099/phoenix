@@ -8,7 +8,7 @@ To use this custom SSO manager, set the following configuration in your
 Superset configuration file:
 
 ```python
-from custom_sso_manager import PhoenixCustomSsoSecurityManager
+from custom_sso_manager import PhoenixCustomSSOSecurityManager
 
 AUTH_TYPE = AUTH_REMOTE_USER
 AUTH_REMOTE_USER_ENV_VAR = "x-auth-request-email"
@@ -17,7 +17,7 @@ AUTH_USER_REGISTRATION = True
 # The default user self registration role
 AUTH_USER_REGISTRATION_ROLE = "Admin"
 
-CUSTOM_SECURITY_MANAGER = PhoenixCustomSsoSecurityManager
+CUSTOM_SECURITY_MANAGER = PhoenixCustomSSOSecurityManager
 ```
 
 This will override the default Superset security manager with the custom SSO
@@ -87,7 +87,7 @@ class AutheRemoteUserViewCustom(AuthView):  # type: ignore[no-any-unimported]
         )
 
 
-class PhoenixCustomSsoSecurityManager(SupersetSecurityManager):  # type: ignore[no-any-unimported]
+class PhoenixCustomSSOSecurityManager(SupersetSecurityManager):  # type: ignore[no-any-unimported]
     """Custom SSO Security Manager for Superset.
 
     Based on:

@@ -1,4 +1,4 @@
-"""Test PhoenixCustomSsoSecurityManager.
+"""Test PhoenixCustomSSOSecurityManager.
 
 Based on:
 https://github.com/dpgaspar/Flask-AppBuilder/blob/c65e067f09e741c00322221263c8599b8e8811d5/tests/security/test_auth_remote_user.py
@@ -14,7 +14,7 @@ from phoenix_superset import custom_sso_manager
 
 
 class AuthRemoteUserTestCase(unittest.TestCase):
-    """Test PhoenixCustomSsoSecurityManager."""
+    """Test PhoenixCustomSSOSecurityManager."""
 
     def setUp(self):
         """Set up the test."""
@@ -48,7 +48,7 @@ class AuthRemoteUserTestCase(unittest.TestCase):
         return AppBuilder(
             self.app,
             self.db.session,
-            security_manager_class=custom_sso_manager.PhoenixCustomSsoSecurityManager,
+            security_manager_class=custom_sso_manager.PhoenixCustomSSOSecurityManager,
         )
 
     def test_unset_remote_user_env_var(self):
