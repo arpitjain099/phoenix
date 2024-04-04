@@ -6,8 +6,8 @@ from typing import Annotated
 import pydantic
 
 
-class EnvironmentKey(str, Enum):
-    """Environment key enum."""
+class EnvironmentId(str, Enum):
+    """Environment id enum."""
 
     main = "main"
 
@@ -29,8 +29,8 @@ class InstanceBase(pydantic.BaseModel):
     name: Annotated[str, pydantic.Field(description="The name of the instance")]
     description: Annotated[str, pydantic.Field(description="The description of the instance")]
     environment_id: Annotated[
-        EnvironmentKey,
-        pydantic.Field(default="main", description="The environment key of the instance"),
+        EnvironmentId,
+        pydantic.Field(default="main", description="The environment id of the instance"),
     ]
 
     pi_deleted_after_days: Annotated[
