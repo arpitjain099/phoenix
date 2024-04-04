@@ -20,7 +20,7 @@ class InstanceBase(pydantic.BaseModel):
 
     name: Annotated[str, pydantic.Field(description="The name of the instance")]
     description: Annotated[str, pydantic.Field(description="The description of the instance")]
-    environment_key: Annotated[
+    environment_id: Annotated[
         EnvironmentKey,
         pydantic.Field(default="main", description="The environment key of the instance"),
     ]
@@ -70,4 +70,4 @@ class InstanceUpdate(pydantic.BaseModel):
     pi_deleted_after_days: int | None = None
     delete_after_days: int | None = None
     expected_usage: str | None = None
-    environment_key: str | None = None
+    environment_id: str | None = None

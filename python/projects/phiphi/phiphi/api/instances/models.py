@@ -15,7 +15,7 @@ class InstanceBase(platform_db.Base):
     id: orm.Mapped[int] = orm.mapped_column(primary_key=True)
     name: orm.Mapped[str]
     description: orm.Mapped[str]
-    environment_key: orm.Mapped[str]
+    environment_id: orm.Mapped[str]
     pi_deleted_after_days: orm.Mapped[int]
     delete_after_days: orm.Mapped[int]
     expected_usage: orm.Mapped[Optional[str]]
