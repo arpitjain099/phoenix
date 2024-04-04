@@ -1,0 +1,31 @@
+services:
+  phoenix_superset_auth:
+    image: "phoenix_local_auth:latest"
+    build:
+      context: ../../../nginx
+      args:
+        - NGINX_CONF=local_phoenix_superset.conf
+    links:
+      # rewrite the proxy pass app_service to the service name phoenix_superset
+      - "phoenix_superset:app_service"
+    ports:
+      - "8089:80"
+
+  phoenix_superset:
+    image: "phoenix_superset:latest"
+    build:
+      context: .
+    environment:
+      - SUPERSET_SECRET_KEY="TESTING_SECRET_KEY"
+      # Development environment stuff
+      - TALISMAN_ENABLED=False
+      - ENABLE_PROXY_FIX=True
+      - SESSION_COOKIE_SAMESITE=None
+      - SESSION_COOKIE_SECURE=False
+      - SESSION_COOKIE_HTTPONLY=False
+      - WTF_CSRF_ENABLED=False
+      - FLASK_DEBUG=True
+      - SUPERSET_ENV=development
+      - AUTH_REMOTE_USER_ENV_VAR=HTTP_X_AUTH_REQUEST_EMAIL
+    ports:
+      - "8088:8088"
