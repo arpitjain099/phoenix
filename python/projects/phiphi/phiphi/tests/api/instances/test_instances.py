@@ -29,7 +29,7 @@ def test_create_get_instance(recreate_tables, client: TestClient) -> None:
         "environment_id": "main",
         "pi_deleted_after_days": 90,
         "delete_after_days": 20,
-        "expected_usage": "average",
+        "expected_usage": "weekly",
     }
     response = client.post("/instances/", json=data)
     assert response.status_code == 200
@@ -111,7 +111,7 @@ def test_environment_defaults_main(client: TestClient, recreate_tables) -> None:
         "description": "Instance 1",
         "pi_deleted_after_days": 90,
         "delete_after_days": 20,
-        "expected_usage": "average",
+        "expected_usage": "one_off",
     }
     response = client.post("/instances/", json=data)
     assert response.status_code == 200

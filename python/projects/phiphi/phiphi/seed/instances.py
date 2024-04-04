@@ -9,7 +9,7 @@ TEST_INSTANCE_CREATE = schemas.InstanceCreate(
     environment_id=schemas.EnvironmentKey.main,
     pi_deleted_after_days=90,
     delete_after_days=20,
-    expected_usage="average",
+    expected_usage=schemas.ExpectedUsage.weekly,
 )
 
 TEST_INSTANCE_CREATE_2 = schemas.InstanceCreate(
@@ -18,7 +18,7 @@ TEST_INSTANCE_CREATE_2 = schemas.InstanceCreate(
     environment_id=schemas.EnvironmentKey.main,
     pi_deleted_after_days=90,
     delete_after_days=20,
-    expected_usage="average",
+    expected_usage=schemas.ExpectedUsage.one_off,
 )
 
 

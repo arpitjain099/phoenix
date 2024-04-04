@@ -12,6 +12,14 @@ class EnvironmentKey(str, Enum):
     main = "main"
 
 
+class ExpectedUsage(str, Enum):
+    """Expected usage enum."""
+
+    one_off = "one_off"
+    weekly = "weekly"
+    monthly = "monthly"
+
+
 class InstanceBase(pydantic.BaseModel):
     """Instance base schema.
 
@@ -38,7 +46,7 @@ class InstanceBase(pydantic.BaseModel):
         ),
     ]
     expected_usage: Annotated[
-        str, pydantic.Field(description="The environment expected usage of the instance")
+        ExpectedUsage, pydantic.Field(description="The environment expected usage of the instance")
     ]
 
 
@@ -69,5 +77,5 @@ class InstanceUpdate(pydantic.BaseModel):
     description: str | None = None
     pi_deleted_after_days: int | None = None
     delete_after_days: int | None = None
-    expected_usage: str | None = None
+    expected_usage: ExpectedUsage | None = None
     environment_id: str | None = None
