@@ -1,3 +1,10 @@
+.docker_template:
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
 services:
   - docker:dind
 
@@ -12,6 +19,10 @@ variables:
   DOCKER_HOST: tcp://docker:2375
   PHOENIX_CHART_MAIN_DIR: charts/main
   PHOENIX_CHART_MAIN_PACKAGE_PATH: phoenix_chart_main
+  PHOENIX_SUPERSET_REGISTRY_IMAGE: $CI_REGISTRY_IMAGE/phoenix_superset
+  PHOENIX_SUPERSET_TEST_IMAGE: $PHOENIX_SUPERSET_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+  PHOENIX_SUPERSET_LATEST_IMAGE: $PHOENIX_SUPERSET_REGISTRY_IMAGE:latest
+  PHOENIX_SUPERSET_RELEASE_IMAGE: $PHOENIX_SUPERSET_REGISTRY_IMAGE:stable
 
 # Run linting for console_ui
 console_ui_linting:
@@ -22,9 +33,8 @@ console_ui_linting:
     - npm install
     - npm run lint
 
-
 python_build_and_ci_projects:
-  image: docker:latest
+  extends: .docker_template
   stage: test
   script:
     - cd python
@@ -32,7 +42,9 @@ python_build_and_ci_projects:
     - docker run $PROJECT make all path=projects/$PROJECT
   parallel:
     matrix:
-      - PROJECT: [example_project_1, phoenix_superset]
+      - PROJECT:
+          - example_project_1
+          - phoenix_superset
 
 python_ci_libs:
   stage: test
@@ -46,7 +58,7 @@ python_ci_libs:
       - LIB: [example_lib_1]
 
 python_projects_phiphi_ci:
-  image: docker:latest
+  extends: .docker_template
   stage: test
   script:
     - apk update && apk add make
@@ -78,6 +90,22 @@ package_phoenix_chart_main:
     # Going to pushed to package registry so it is fine to expire
     expire_in: 1 hour
 
+build_phoenix_superset_image:
+  extends: .docker_template
+  stage: build
+  script:
+    - cd python/projects/phoenix_superset
+    - docker build --pull -t $PHOENIX_SUPERSET_TEST_IMAGE .
+    - docker tag $PHOENIX_SUPERSET_TEST_IMAGE $PHOENIX_SUPERSET_LATEST_IMAGE
+    - docker push $PHOENIX_SUPERSET_TEST_IMAGE
+    - docker push $PHOENIX_SUPERSET_LATEST_IMAGE
+  needs:
+    - job: python_projects_phiphi_ci
+      # When this is include the pipelines doesn't run for some unknown reason
+      # parallel:
+        # matrix:
+          # - PROJECT: phoenix_superset
+
 publish_phoenix_chart_main:
   stage: publish
   image: curlimages/curl:7.70.0
@@ -97,3 +125,28 @@ publish_phoenix_chart_main:
   rules:
     # Only run on `main` branch
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+publish_phoenix_superset_image:
+  stage: publish
+  extends: .docker_template
+  script:
+    - docker pull $PHOENIX_SUPERSET_TEST_IMAGE
+    - docker tag $PHOENIX_SUPERSET_TEST_IMAGE $PHOENIX_SUPERSET_RELEASE_IMAGE
+    - docker push $PHOENIX_SUPERSET_RELEASE_IMAGE
+  needs:
+    - job: build_phoenix_superset_image
+  rules:
+    # Only run on `main` branch
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+publish_phoenix_superset_image_tags:
+  stage: publish
+  extends: .docker_template
+  script:
+    - docker pull $PHOENIX_SUPERSET_TEST_IMAGE
+    - docker tag $PHOENIX_SUPERSET_TEST_IMAGE $PHOENIX_SUPERSET_REGISTRY_IMAGE:$CI_COMMIT_TAG
+    - docker push $PHOENIX_SUPERSET_REGISTRY_IMAGE:$CI_COMMIT_TAG
+  needs:
+    - job: build_phoenix_superset_image
+  rules:
+    - if: $CI_COMMIT_TAG
