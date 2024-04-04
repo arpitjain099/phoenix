@@ -77,6 +77,8 @@ In the browser you will be able to see the `tilt` UI via the URL that `tilt up` 
 You can also use the `tilt` cli if needs be. Such as `tilt down` to bring down the resources in the
 cluster.
 
+You can also use `make clean` to remove all the tilt resources and default volumes in the cluster.
+
 ## Hello world
 
 Once your set up is complete you should be able to see an hello world at:

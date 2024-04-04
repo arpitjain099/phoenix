@@ -16,3 +16,9 @@ up:
 		cp clusters/.example_secrets.yaml clusters/local/secrets.yaml; \
 		echo "Please fill in the clusters/local/secrets.yaml file and run 'make up' again"; \
 	fi
+
+clean:
+	tilt down
+	kubectl delete pvc data-phoenixchartmain-postgresql-0
+	@echo "Default expected PVCs deleted."
+	@echo "If there are more pvcs to delete, please run 'kubectl get pvc' and 'kubectl delete pvc <pvc-name>'"
