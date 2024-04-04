@@ -28,6 +28,9 @@ superset:
   enabled: true
   # These secrets must be created before the first apply of the chart
   envFromSecret: phoenixchartmain-superset-env-override
+  init:
+    adminUser:
+      email: buildup@datavaluepeople.com
   image:
     repository: phoenix_superset
     tag: latest
