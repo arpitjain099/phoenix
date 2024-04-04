@@ -7,6 +7,5 @@ FROM apache/superset:3.1.1
 # in the superset_config.py file
 COPY phoenix_superset/ /app/pythonpath/phoenix_superset/
 
-# Copy and set the superset_config.py file
-COPY superset_config.py /app/superset_config.py
-ENV SUPERSET_CONFIG_PATH=/app/superset_config.py
+# Copy and phoenix_superset/config.py file
+COPY ./config.py /app/phoenix_superset/config.py

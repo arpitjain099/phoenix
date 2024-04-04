@@ -27,5 +27,6 @@ services:
       - FLASK_DEBUG=True
       - SUPERSET_ENV=development
       - AUTH_REMOTE_USER_ENV_VAR=HTTP_X_AUTH_REQUEST_EMAIL
+      - SUPERSET_CONFIG_PATH=/app/phoenix_superset_config.py
     ports:
       - "8088:8088"
