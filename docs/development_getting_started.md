@@ -99,3 +99,8 @@ You will then need to create a `.dev.env` that does the following:
 - if needs be update the kube config with the cloud context.
 
 See `.example_aws.dev.env` for how we did this with EKS.
+
+Then run:
+```bash
+source setup_dev.sh
+```
