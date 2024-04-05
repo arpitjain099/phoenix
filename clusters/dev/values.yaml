@@ -1,4 +1,4 @@
-base_host: "dev.phoenixplatformdev.xyz"
+base_host: "phoenixplatformdev.xyz"
 ingressClassName: "nginx"
 oauth2-proxy:
   config:
@@ -35,7 +35,7 @@ superset:
       email: buildup@datavaluepeople.com
   image:
     repository: registry.gitlab.com/howtobuildup/phoenix/phoenix_superset
-    tag: stable
+    tag: phoenix_superset_helm
   postgresql:
     auth:
       # This is needed to override the postgresql passwords
