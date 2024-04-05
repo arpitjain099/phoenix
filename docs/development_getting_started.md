@@ -105,3 +105,5 @@ Then run:
 source setup_dev.sh
 make dev_up
 ```
+
+To clean up the resources including `pvcs` run `make dev_clean`.

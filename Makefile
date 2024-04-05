@@ -31,3 +31,8 @@ dev_up:
 		cp clusters/.example_secrets.yaml clusters/dev/secrets.yaml; \
 		echo "Please fill in the clusters/dev/secrets.yaml file and run 'make dev_up' again"; \
 	fi
+
+dev_clean:
+	tilt down -f Tiltfile.dev
+	@echo "Deleting all `pvc` in mircok8s cluster default namespace."
+	kubectl delete pvc --all -n ${DEV_NAMESPACE}
