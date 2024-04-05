@@ -1,11 +1,13 @@
 # Tilefile for phoenix
 print("Phoenix TiltFile is being evaluated")
-load('ext://namespace', 'namespace_create')
+load('ext://namespace', 'namespace_create', 'namespace_inject')
 
 allow_k8s_contexts(os.getenv('KUBE_DEV_CONTEXT'))
 namespace_create(os.getenv('DEV_NAMESPACE'))
 
-k8s_yaml('clusters/dev/secrets.yaml')
+k8s_yaml(
+  namespace_inject('clusters/dev/secrets.yaml', os.getenv('DEV_NAMESPACE')),
+)
 
 set_base_host = 'base_host=%s' % os.getenv('DEV_BASE_HOST')
 
