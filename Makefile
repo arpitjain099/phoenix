@@ -21,3 +21,13 @@ clean:
 	tilt down
 	@echo "Deleting all `pvc` in mircok8s cluster default namespace."
 	kubectl delete pvc --all -n default --context microk8s
+
+dev_up:
+	if [ -f clusters/dev/secrets.yaml ]; then \
+		tilt up -f Tiltfile.dev; \
+	else \
+		echo "File clusters/dev/secrets.yaml does not exist."; \
+		echo "Copying the example file"; \
+		cp clusters/.example_secrets.yaml clusters/dev/secrets.yaml; \
+		echo "Please fill in the clusters/dev/secrets.yaml file and run 'make dev_up' again"; \
+	fi

@@ -103,4 +103,5 @@ See `.example_aws.dev.env` for how we did this with EKS.
 Then run:
 ```bash
 source setup_dev.sh
+make dev_up
 ```
