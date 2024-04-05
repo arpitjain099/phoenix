@@ -7,9 +7,12 @@ namespace_create(os.getenv('DEV_NAMESPACE'))
 
 k8s_yaml('clusters/dev/secrets.yaml')
 
+set_base_host = 'base_host=%s' % os.getenv('DEV_BASE_HOST')
+
 k8s_yaml(helm(
   './charts/main/',
   name='phoenixchartmain',
+  set=[set_base_host],
   namespace=os.getenv('DEV_NAMESPACE'),
   values='./clusters/dev/values.yaml',
 ))

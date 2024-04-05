@@ -96,6 +96,7 @@ First you will need to create a cluster. We used EKS but gcloud might be better.
 You will then need to create a `.dev.env` that does the following:
 - define a `KUBE_CONTEXT` variable of the context of the cluster
 - define a `DEV_NAMESPACE` variable of the namespace to use
+- define a `DEV_BASE_HOST` variable of the base host name to use
 - if needs be update the kube config with the cloud context.
 
 See `.example_aws.dev.env` for how we did this with EKS.
