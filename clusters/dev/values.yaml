@@ -1,0 +1,57 @@
+oauth2-proxy:
+  config:
+    existingSecret: phoenixchartmain-oauth2-secrets
+    configFile: |
+      # Settings for Auth0
+      provider="oidc"
+      provider_display_name="Auth0"
+      oidc_issuer_url="https://dev-2ii4bfcaymdes14b.uk.auth0.com/"
+      code_challenge_method="S256"
+      http_address="0.0.0.0:4180"
+      upstreams="file:///dev/null"
+      email_domains="*"
+      # Important that this machtes the domain being used for the cluster
+      cookie_domains=".phoenix.local"
+      whitelist_domains=["*.phoenix.local:*", "dev-2ii4bfcaymdes14b.uk.auth0.com"]
+      # email is needed as is not in default openid scrop
+      scope="openid email"
+      pass_access_token = true
+      pass_authorization_header = true
+      pass_user_headers = true
+      set_xauthrequest = true
+      # To remove when secure version is used
+      show_debug_on_error = true
+      insecure_oidc_allow_unverified_email = true
+      ssl_insecure_skip_verify=true
+      cookie_secure="false"
+superset:
+  enabled: true
+  # These secrets must be created before the first apply of the chart
+  envFromSecret: phoenixchartmain-superset-env-override
+  init:
+    adminUser:
+      email: buildup@datavaluepeople.com
+  postgresql:
+    auth:
+      # This is needed to override the postgresql passwords
+      existingSecret: phoenixchartmain-superset-env-override
+  # This doesn't seem to work but I don't know why?
+  # configOverridesFiles:
+    # auth_override: /app/phoenix_superset/config.py
+  configOverrides:
+    proxy_override: |
+      # This will make sure the redirect_uri is properly computed, even with SSL offloading
+      ENABLE_PROXY_FIX = True
+    auth_override: |
+      from flask_appbuilder.security.manager import AUTH_REMOTE_USER  # type: ignore[import-untyped]
+      from phoenix_superset import custom_sso_manager
+
+      AUTH_TYPE = AUTH_REMOTE_USER
+
+      AUTH_REMOTE_USER_ENV_VAR = "HTTP_X_AUTH_REQUEST_EMAIL"
+
+      # This is needed to test the system without the authentication layer
+      # Should throw error is can't log in
+      LOGIN_REDIRECT_URL = False
+
+      CUSTOM_SECURITY_MANAGER = custom_sso_manager.PhoenixCustomSSOSecurityManager
