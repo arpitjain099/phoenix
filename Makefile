@@ -14,6 +14,6 @@ up:
 	else \
 		echo "File clusters/local/secrets.yaml does not exist."; \
 		echo "Copying the example file"; \
-		cp clusters/local/.example_secrets.yaml clusters/local/secrets.yaml; \
+		cp clusters/.example_secrets.yaml clusters/local/secrets.yaml; \
 		echo "Please fill in the clusters/local/secrets.yaml file and run 'make up' again"; \
 	fi

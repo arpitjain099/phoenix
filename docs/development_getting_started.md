@@ -55,7 +55,7 @@ instance when using `k3s` you will need to add `<traefik-serivce-ip> phoenix.loc
 To allow for the secrets to not be in the charts you can add the secrets as a Kubernetes SECRET.
 
 ```bash
-cp clusters/local/.example_secrets.yaml clusters/local/secrets.yaml
+cp clusters/.example_secrets.yaml clusters/local/secrets.yaml
 ```
 
 The secrets will be applied when the command `make up` is run.
