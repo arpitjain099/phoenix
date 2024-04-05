@@ -9,7 +9,6 @@ setup_asdf:
 
 up:
 	if [ -f clusters/local/secrets.yaml ]; then \
-		kubectl apply -f clusters/local/secrets.yaml; \
 		tilt up; \
 	else \
 		echo "File clusters/local/secrets.yaml does not exist."; \
