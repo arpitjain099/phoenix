@@ -7,7 +7,7 @@ metadata:
 spec:
   ingressClassName: public
   rules:
-  - host: oauth.phoenix.local
+  - host: oauth.{{ .Values.base_host }}
     http:
       paths:
       - backend:
