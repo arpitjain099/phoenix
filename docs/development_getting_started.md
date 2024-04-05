@@ -85,3 +85,10 @@ Once your set up is complete you should be able to see an hello world at:
 
 * [http://localhost/](http://localhost/)
 * [http://phoenix.local/](http://phoenix.local/)
+
+## Dev cluster in the cloud
+
+It is possible have a development cluster in the cloud. This is useful for testing the deployment
+process and for testing the system in a more production like environment.
+
+First you will need to create a cluster. We used EKS but gcloud might be better.
