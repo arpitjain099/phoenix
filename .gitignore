@@ -1,2 +1,4 @@
 clusters/local/secrets.yaml
 clusters/dev/secrets.yaml
+
+.dev.env
