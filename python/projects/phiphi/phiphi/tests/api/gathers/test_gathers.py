@@ -52,7 +52,7 @@ def test_create_get_gather(recreate_tables, client: TestClient) -> None:
             "limit_messages": 1000,
             "limit_replies": 100,
             "nested_replies": False,
-            "config_input": "author_url_list",
+            "config_input": {"input_type": "author_url_list", "data": ""},
         },
     }
     response = client.post("/gathers/", json=data)

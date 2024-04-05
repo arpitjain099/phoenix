@@ -18,10 +18,19 @@ class GatherConfigInputType(str, Enum):
     author_url_list = "author_url_list"
 
 
+class GatherConfigInput(pydantic.BaseModel):
+    """Gather config input."""
+
+    input_type: Annotated[
+        GatherConfigInputType, pydantic.Field(description="The input type of gather config input")
+    ]
+    data: Annotated[str, pydantic.Field(description="This is dependent on the input type")]
+
+
 class GatherConfig(pydantic.BaseModel):
     """Gather config schema."""
 
-    config_input: Annotated[GatherConfigInputType, pydantic.Field(description="")]
+    config_input: Annotated[GatherConfigInput, pydantic.Field(description="")]
     start_date: Annotated[datetime.datetime, pydantic.Field(description="Gather start date")]
     end_date: Annotated[datetime.datetime, pydantic.Field(description="Gather end date")]
     limit_messages: Annotated[
@@ -50,15 +59,6 @@ class GatherBase(pydantic.BaseModel):
     description: Annotated[str, pydantic.Field(description="The description of the gather")]
     config_type: Annotated[GatherType, pydantic.Field(description="The gather type")]
     config: Annotated[GatherConfig, pydantic.Field(description="Gather configurations")]
-
-
-class GatherConfigInput(pydantic.BaseModel):
-    """Gather config input."""
-
-    input_type: Annotated[
-        GatherConfigInputType, pydantic.Field(description="The input type of gather config input")
-    ]
-    data: Annotated[str, pydantic.Field(description="This is dependent on the input type")]
 
 
 class Gather(GatherBase):
