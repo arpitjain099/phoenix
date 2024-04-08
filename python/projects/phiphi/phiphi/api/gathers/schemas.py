@@ -12,25 +12,35 @@ class GatherType(str, Enum):
     apify_facebook_messages = "apify_facebook_messages"
 
 
-class GatherConfigInputType(str, Enum):
+class ApifyGatherInputType(str, Enum):
     """Gather config input type."""
 
     author_url_list = "author_url_list"
 
 
-class GatherConfigInput(pydantic.BaseModel):
-    """Gather config input."""
+class GatherBase(pydantic.BaseModel):
+    """Gather base schema.
 
-    input_type: Annotated[
-        GatherConfigInputType, pydantic.Field(description="The input type of gather config input")
+    Shared properties of all gathers.
+    """
+
+    description: Annotated[str, pydantic.Field(description="The description of the gather")]
+    config_type: Annotated[GatherType, pydantic.Field(description="The gather type")]
+    instance_id: Annotated[
+        int,
+        pydantic.Field(
+            description="",
+        ),
     ]
-    data: Annotated[str, pydantic.Field(description="This is dependent on the input type")]
 
 
-class GatherConfig(pydantic.BaseModel):
+class ApifyGatherBase(GatherBase):
     """Gather config schema."""
 
-    config_input: Annotated[GatherConfigInput, pydantic.Field(description="")]
+    input_type: Annotated[
+        ApifyGatherInputType, pydantic.Field(description="The input type of gather config input")
+    ]
+    input_data: Annotated[str, pydantic.Field(description="This is dependent on the input type")]
     start_date: Annotated[datetime.datetime, pydantic.Field(description="Gather start date")]
     end_date: Annotated[datetime.datetime, pydantic.Field(description="Gather end date")]
     limit_messages: Annotated[
@@ -50,19 +60,23 @@ class GatherConfig(pydantic.BaseModel):
     nested_replies: Annotated[bool, pydantic.Field(default=False, description="")]
 
 
-class GatherBase(pydantic.BaseModel):
-    """Gather base schema.
+class GatherResponse(GatherBase):
+    """Gather schema.
 
-    Shared properties of all gathers.
+    Properties to return to client.
     """
 
-    description: Annotated[str, pydantic.Field(description="The description of the gather")]
-    config_type: Annotated[GatherType, pydantic.Field(description="The gather type")]
-    config: Annotated[GatherConfig, pydantic.Field(description="Gather configurations")]
+    model_config = pydantic.ConfigDict(from_attributes=True)
+    id: int
+    created_at: datetime.datetime
+    updated_at: datetime.datetime
+    mark_to_delete: bool | None = None
+    deleted_at: datetime.datetime | None = None
+    last_run_at: datetime.datetime | None = None
 
 
-class Gather(GatherBase):
-    """Gather schema.
+class ApifyGatherResponse(GatherResponse, ApifyGatherBase):
+    """Apify Gather schema.
 
     Properties to return to client.
     """
@@ -77,5 +91,18 @@ class GatherCreate(GatherBase):
     """
 
 
+class ApifyGatherCreate(ApifyGatherBase):
+    """Apify Gather create schema.
+
+    Properties to receive via API on creation.
+    """
+
+
 class GatherUpdate(pydantic.BaseModel):
     """Gather update schema."""
+
+    mark_to_delete: bool
+
+
+class ApifyGatherUpdate(GatherUpdate):
+    """Apify Gather update schema."""
