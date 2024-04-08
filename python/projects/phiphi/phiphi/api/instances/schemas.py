@@ -57,7 +57,7 @@ class InstanceCreate(InstanceBase):
     """
 
 
-class Instance(InstanceBase):
+class InstanceResponse(InstanceBase):
     """Instance schema.
 
     Properties to return to client.
