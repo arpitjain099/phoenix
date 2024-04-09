@@ -85,3 +85,26 @@ Once your set up is complete you should be able to see an hello world at:
 
 * [http://localhost/](http://localhost/)
 * [http://phoenix.local/](http://phoenix.local/)
+
+## Dev cluster in the cloud
+
+It is possible have a development cluster in the cloud. This is useful for testing the deployment
+process and for testing the system in a more production like environment.
+
+First you will need to create a cluster. We used EKS but gcloud might be better.
+
+You will then need to create a `.dev.env` that does the following:
+- define a `KUBE_DEV_CONTEXT` variable of the context of the cluster
+- define a `DEV_NAMESPACE` variable of the namespace to use
+- define a `DEV_BASE_HOST` variable of the base host name to use
+- if needs be update the kube config with the cloud context.
+
+See `.example_aws.dev.env` for how we did this with EKS.
+
+Then run:
+```bash
+source setup_dev.sh
+make dev_up
+```
+
+To clean up the resources including `pvcs` run `make dev_clean`.
