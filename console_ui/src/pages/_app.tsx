@@ -11,7 +11,7 @@ import routerProvider, {
 	DocumentTitleHandler,
 	UnsavedChangesNotifier,
 } from "@refinedev/nextjs-router";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import type { NextPage } from "next";
 import { AppProps } from "next/app";
 import "@styles/global.css";
@@ -22,6 +22,7 @@ import {
 	ColorSchemeProvider,
 	Global,
 	MantineProvider,
+	Skeleton,
 } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import { NotificationsProvider } from "@mantine/notifications";
@@ -31,6 +32,8 @@ import { appWithTranslation, useTranslation } from "next-i18next";
 // initialize i18n
 import "../providers/i18n";
 import { IconUser } from "@tabler/icons";
+import { useRouter } from "next/router";
+import authProvider from "@providers/auth-provider";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
 	noLayout?: boolean;
@@ -41,6 +44,8 @@ type AppPropsWithLayout = AppProps & {
 };
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
+	const router = useRouter();
+	const [loading, setLoading] = useState(true);
 	const renderComponent = () => {
 		if (Component.noLayout) {
 			return <Component {...pageProps} />;
@@ -73,6 +78,22 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
 	});
 	const toggleColorScheme = (value?: ColorScheme) =>
 		setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+
+	useEffect(() => {
+		const checkAuth = async () => {
+			const { authenticated } = await authProvider.check();
+			if (!authenticated) {
+				await authProvider.login({});
+			}
+			setLoading(false);
+		};
+		checkAuth();
+	}, [router]);
+
+	if (loading) {
+		return <Skeleton />; // Show a loading indicator while checking authentication
+	}
+
 	return (
 		<RefineKbarProvider>
 			<ColorSchemeProvider
@@ -93,6 +114,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
 								dataProvider={dataProvider}
 								notificationProvider={notificationProvider}
 								i18nProvider={i18nProvider}
+								authProvider={authProvider}
 								resources={[
 									{
 										name: "instances",
