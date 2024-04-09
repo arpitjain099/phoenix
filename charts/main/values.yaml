@@ -9,6 +9,9 @@ base_host: "phoenix.local"
 # Public is the one needed for microk8s
 ingressClassName: "public"
 
+# Cert Manager
+cert-manager:
+  enabled: false
 
 superset:
 

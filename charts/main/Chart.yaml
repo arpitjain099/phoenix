@@ -23,3 +23,8 @@ dependencies:
   condition: oauth2-proxy.enabled
   version: "6.24.1"
   repository: "https://oauth2-proxy.github.io/manifests"
+- name: cert-manager
+  version: v1.14.4
+  repository: https://charts.jetstack.io
+  alias: cert-manager
+  condition: cert-manager.enabled

@@ -1,5 +1,7 @@
 base_host: "phoenixplatformdev.xyz"
 ingressClassName: "nginx"
+cert-manager:
+  enabled: true
 oauth2-proxy:
   config:
     existingSecret: phoenixchartmain-oauth2-secrets
