@@ -16,8 +16,12 @@ class GatherBase(platform_db.Base):
     description: orm.Mapped[str]
     mark_to_delete: orm.Mapped[Optional[bool]]
     last_run_at: orm.Mapped[Optional[datetime.datetime]]
-    gather_type: orm.Mapped[str]
     instance_id: orm.Mapped[int]
+    source: orm.Mapped[Optional[str]]
+    platform: orm.Mapped[Optional[str]]
+    data_type: orm.Mapped[Optional[str]]
+    start_date: orm.Mapped[Optional[datetime.datetime]]
+    end_date: orm.Mapped[Optional[datetime.datetime]]
 
 
 class Gather(GatherBase, base_models.TimestampModel):
@@ -26,7 +30,7 @@ class Gather(GatherBase, base_models.TimestampModel):
     __tablename__ = "gathers"
     __mapper_args__ = {
         "polymorphic_identity": "gather",
-        "polymorphic_on": "gather_type",
+        "polymorphic_on": "source",
     }
 
     apify_gather = orm.relationship("ApifyGather", back_populates="gather", uselist=False)
@@ -37,16 +41,11 @@ class ApifyGather(Gather):
 
     __tablename__ = "apify_gathers"
     __mapper_args__ = {
-        "polymorphic_identity": "apify_gathers",
+        "polymorphic_identity": "apify",
         # "inherit_condition": (id == Gather.id)
     }
 
     id: orm.Mapped[int] = orm.mapped_column(ForeignKey("gathers.id"), primary_key=True)
-    source: orm.Mapped[Optional[str]]
-    platform: orm.Mapped[Optional[str]]
-    data_type: orm.Mapped[Optional[str]]
-    start_date: orm.Mapped[Optional[datetime.datetime]]
-    end_date: orm.Mapped[Optional[datetime.datetime]]
     limit_messages: orm.Mapped[int]
     limit_replies: orm.Mapped[int]
     nested_replies: orm.Mapped[bool]

@@ -12,6 +12,18 @@ class ApifyGatherInputType(str, Enum):
     author_url_list = "author_url_list"
 
 
+class Platform(str, Enum):
+    """Platform enum."""
+
+    facebook = "facebook"
+
+
+class DataType(str, Enum):
+    """data type enum."""
+
+    messages = "messages"
+
+
 class GatherBase(pydantic.BaseModel):
     """Gather base schema.
 
@@ -19,6 +31,12 @@ class GatherBase(pydantic.BaseModel):
     """
 
     description: Annotated[str, pydantic.Field(description="The description of the gather")]
+    start_date: Annotated[datetime.datetime, pydantic.Field(description="Gather start date")]
+    end_date: Annotated[datetime.datetime, pydantic.Field(description="Gather end date")]
+    platform: Annotated[Platform | None, pydantic.Field(description="The platform of the gather")]
+    data_type: Annotated[
+        DataType | None, pydantic.Field(description="The data type of the gather")
+    ]
     instance_id: Annotated[
         int,
         pydantic.Field(
@@ -34,8 +52,6 @@ class ApifyGatherBase(GatherBase):
         ApifyGatherInputType, pydantic.Field(description="The input type of gather config input")
     ]
     input_data: Annotated[str, pydantic.Field(description="This is dependent on the input type")]
-    start_date: Annotated[datetime.datetime, pydantic.Field(description="Gather start date")]
-    end_date: Annotated[datetime.datetime, pydantic.Field(description="Gather end date")]
     limit_messages: Annotated[
         int,
         pydantic.Field(

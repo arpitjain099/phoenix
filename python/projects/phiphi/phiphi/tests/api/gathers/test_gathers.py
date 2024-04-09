@@ -50,6 +50,8 @@ def test_create_get_apify_gather(recreate_tables, client: TestClient) -> None:
         "instance_id": 1,
         "input_type": "author_url_list",
         "input_data": "lorem ipsum",
+        "platform": "facebook",
+        "data_type": "messages",
         "start_date": "2024-04-08T08:41:05",
         "end_date": "2024-04-08T08:41:05",
         "limit_messages": 1000,
