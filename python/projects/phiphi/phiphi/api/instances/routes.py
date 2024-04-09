@@ -7,18 +7,18 @@ from phiphi.api.instances import crud, schemas
 router = fastapi.APIRouter()
 
 
-@router.post("/instances/", response_model=schemas.Instance)
+@router.post("/instances/", response_model=schemas.InstanceResponse)
 def create_instance(
     instance: schemas.InstanceCreate, session: deps.SessionDep
-) -> schemas.Instance:
+) -> schemas.InstanceResponse:
     """Create a new instance."""
     return crud.create_instance(session, instance)
 
 
-@router.put("/instances/{instance_id}", response_model=schemas.Instance)
+@router.put("/instances/{instance_id}", response_model=schemas.InstanceResponse)
 def update_instance(
     instance_id: int, instance: schemas.InstanceUpdate, session: deps.SessionDep
-) -> schemas.Instance:
+) -> schemas.InstanceResponse:
     """Update an instance."""
     updated_instance = crud.update_instance(session, instance_id, instance)
     if updated_instance is None:
@@ -26,8 +26,8 @@ def update_instance(
     return updated_instance
 
 
-@router.get("/instances/{instance_id}", response_model=schemas.Instance)
-def get_instance(instance_id: int, session: deps.SessionDep) -> schemas.Instance:
+@router.get("/instances/{instance_id}", response_model=schemas.InstanceResponse)
+def get_instance(instance_id: int, session: deps.SessionDep) -> schemas.InstanceResponse:
     """Get an Instance."""
     instance = crud.get_instance(session, instance_id)
     if instance is None:
@@ -35,9 +35,9 @@ def get_instance(instance_id: int, session: deps.SessionDep) -> schemas.Instance
     return instance
 
 
-@router.get("/instances/", response_model=list[schemas.Instance])
+@router.get("/instances/", response_model=list[schemas.InstanceResponse])
 def get_instances(
     session: deps.SessionDep, start: int = 0, end: int = 100
-) -> list[schemas.Instance]:
+) -> list[schemas.InstanceResponse]:
     """Get Instances."""
     return crud.get_instances(session, start, end)

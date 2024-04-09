@@ -20,7 +20,7 @@ def seed_test_users(session: Session) -> None:
         crud.create_user(session=session, user=user)
 
 
-def init_first_admin_user(session: Session) -> schemas.User:
+def init_first_admin_user(session: Session) -> schemas.UserResponse:
     """Create the first admin."""
     user = crud.read_user(session, 1)
     if not user:

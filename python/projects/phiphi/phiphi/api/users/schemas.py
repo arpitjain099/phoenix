@@ -33,7 +33,7 @@ class UserCreate(UserBase):
     display_name: str
 
 
-class User(UserBase):
+class UserResponse(UserBase):
     """User schema.
 
     Properties to return to client.

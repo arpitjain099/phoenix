@@ -46,7 +46,7 @@ def get_current_user(
     session: SessionDep,
     email_cookie: EmailCookieDep,
     request: fastapi.Request,
-) -> user_schemas.User:
+) -> user_schemas.UserResponse:
     """Get the current user."""
     # Header takes precedence over cookie
     if email is None and config.settings.USE_COOKIE_AUTH:
@@ -62,4 +62,4 @@ def get_current_user(
     return user
 
 
-CurrentUser = Annotated[user_schemas.User, fastapi.Depends(get_current_user)]
+CurrentUser = Annotated[user_schemas.UserResponse, fastapi.Depends(get_current_user)]
