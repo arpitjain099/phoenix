@@ -12,6 +12,10 @@ ingressClassName: "public"
 # Cert Manager
 cert-manager:
   enabled: false
+  # This is needed to install the CRDs
+  # Default is true to make the quick start installation easier
+  # https://cert-manager.io/docs/installation/helm/#3-install-customresourcedefinitions
+  installCRDs: true
 
 superset:
 
