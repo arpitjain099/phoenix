@@ -1,12 +1,15 @@
 # Superset version must be the same as in `requirements.in`
 FROM apache/superset:3.1.1
 
-# /app/pythonpath is the directory where the pythonpath is set to
-# for superset and allows use to use:
-# from phoenix_superset import custom_sso_manager
-# in the superset_config.py file
-COPY phoenix_superset/ /app/pythonpath/phoenix_superset/
+# We are not using the default /app/pythonpath directory
+# as in superset helm everything is overwritten there.
+# Using /app/phoenix_superset/ as a pythonpath.
+# Usage:
+# `from phoenix_superset import custom_sso_manager`
+# `CUSTOM_SSO_MANAGER = custom_sso_manager.PhoenixCustomSSOSecurityManager`
+# in the config.py file or config override.
+COPY ./phoenix_superset/ /app/phoenix_superset/phoenix_superset/
+ENV PYTHONPATH=/app/phoenix_superset/:$PYTHONPATH
 
-# Copy and set the superset_config.py file
-COPY superset_config.py /app/superset_config.py
-ENV SUPERSET_CONFIG_PATH=/app/superset_config.py
+# Copy and phoenix_superset/config.py file
+COPY ./config.py /app/phoenix_superset/config.py

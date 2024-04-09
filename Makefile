@@ -16,3 +16,8 @@ up:
 		cp clusters/.example_secrets.yaml clusters/local/secrets.yaml; \
 		echo "Please fill in the clusters/local/secrets.yaml file and run 'make up' again"; \
 	fi
+
+clean:
+	tilt down
+	@echo "Deleting all `pvc` in mircok8s cluster default namespace."
+	kubectl delete pvc --all -n default --context microk8s

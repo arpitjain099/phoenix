@@ -1,6 +1,16 @@
 # Tilefile for phoenix
 print("Phoenix TiltFile is being evaluated")
 
+# Microk8s registry
+default_registry('localhost:32000')
+
+sync_config = sync('./python/projects/phoenix_superset/config.py', '/app/phoenix_superset/config.py')
+sync_phoenix = sync('./python/projects/phoenix_superset/phoenix_superset/', '/app/phoenix_superset/phoenix_superset/')
+docker_build('phoenix_superset', './python/projects/phoenix_superset/', live_update=[
+    sync_config,
+    sync_phoenix,
+])
+
 # Apply the secrets
 k8s_yaml('./clusters/local/secrets.yaml')
 
