@@ -3,11 +3,11 @@ kind: Ingress
 metadata:
   name: oauth-proxy
   annotations:
-    kubernetes.io/ingress.class: public
+    kubernetes.io/ingress.class: {{ .Values.ingressClassName }}
 spec:
-  ingressClassName: public
+  ingressClassName: {{ .Values.ingressClassName }}
   rules:
-  - host: oauth.phoenix.local
+  - host: oauth.{{ .Values.base_host }}
     http:
       paths:
       - backend:

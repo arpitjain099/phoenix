@@ -1,3 +1,10 @@
 # Superset
 superset:
   enabled: true
+
+# This is the base host that will be used for all ingress resources
+base_host: "phoenix.local"
+
+# The ingress class to use
+# Public is the one needed for microk8s
+ingressClassName: "public"
