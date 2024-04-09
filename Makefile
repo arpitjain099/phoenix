@@ -19,6 +19,5 @@ up:
 
 clean:
 	tilt down
-	kubectl delete pvc data-phoenixchartmain-postgresql-0
-	@echo "Default expected PVCs deleted."
-	@echo "If there are more pvcs to delete, please run 'kubectl get pvc' and 'kubectl delete pvc <pvc-name>'"
+	@echo "Deleting all `pvc` in mircok8s cluster default namespace."
+	kubectl delete pvc --all -n default --context microk8s
