@@ -6,12 +6,6 @@ from typing import Annotated
 import pydantic
 
 
-class GatherType(str, Enum):
-    """Gather type enum."""
-
-    apify_facebook_messages = "apify_facebook_messages"
-
-
 class ApifyGatherInputType(str, Enum):
     """Gather config input type."""
 
@@ -25,7 +19,6 @@ class GatherBase(pydantic.BaseModel):
     """
 
     description: Annotated[str, pydantic.Field(description="The description of the gather")]
-    config_type: Annotated[GatherType, pydantic.Field(description="The gather type")]
     instance_id: Annotated[
         int,
         pydantic.Field(

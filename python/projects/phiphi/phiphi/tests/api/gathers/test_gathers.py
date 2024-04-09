@@ -47,7 +47,6 @@ def test_create_get_apify_gather(recreate_tables, client: TestClient) -> None:
     """Test create and then get of a gather."""
     data = {
         "description": "Firt apify gather",
-        "config_type": "apify_facebook_messages",
         "instance_id": 1,
         "input_type": "author_url_list",
         "input_data": "lorem ipsum",
@@ -61,7 +60,6 @@ def test_create_get_apify_gather(recreate_tables, client: TestClient) -> None:
     assert response.status_code == 200
     gather = response.json()
     assert gather["description"] == data["description"]
-    assert gather["config_type"] == data["config_type"]
     assert gather["input_type"] == data["input_type"]
     assert gather["instance_id"] == data["instance_id"]
     assert gather["input_data"] == data["input_data"]
@@ -77,7 +75,6 @@ def test_create_get_apify_gather(recreate_tables, client: TestClient) -> None:
     gather = response.json()
 
     assert gather["description"] == data["description"]
-    assert gather["config_type"] == data["config_type"]
     assert gather["input_type"] == data["input_type"]
     assert gather["instance_id"] == data["instance_id"]
     assert gather["input_data"] == data["input_data"]

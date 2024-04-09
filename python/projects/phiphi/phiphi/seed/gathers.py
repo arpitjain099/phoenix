@@ -7,7 +7,6 @@ from phiphi.api.gathers import crud, schemas
 
 TEST_APIFY_GATHER_CREATE = schemas.ApifyGatherCreate(
     description="Phoenix Apify Gather",
-    config_type=schemas.GatherType.apify_facebook_messages,
     instance_id=1,
     input_type=schemas.ApifyGatherInputType.author_url_list,
     input_data="lorem ipsum",
@@ -20,7 +19,6 @@ TEST_APIFY_GATHER_CREATE = schemas.ApifyGatherCreate(
 
 TEST_APIFY_GATHER_CREATE_2 = schemas.ApifyGatherCreate(
     description="Phoenix Apify Gather 2",
-    config_type=schemas.GatherType.apify_facebook_messages,
     instance_id=1,
     input_type=schemas.ApifyGatherInputType.author_url_list,
     input_data="lorem ipsum",

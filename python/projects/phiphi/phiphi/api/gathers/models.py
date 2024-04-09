@@ -18,7 +18,6 @@ class GatherBase(platform_db.Base):
     last_run_at: orm.Mapped[Optional[datetime.datetime]]
     gather_type: orm.Mapped[str]
     instance_id: orm.Mapped[int]
-    config_type: orm.Mapped[str]
 
 
 class Gather(GatherBase, base_models.TimestampModel):
