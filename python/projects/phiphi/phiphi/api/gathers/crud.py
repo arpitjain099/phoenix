@@ -57,7 +57,7 @@ def get_gathers(
     gathers = (
         session.query(models.Gather)
         .options(
-            # sqlalchemy.orm.joinedload(models.Gather.apify_gather)
+            sqlalchemy.orm.joinedload(models.Gather.apify_gather)
             # Add additional relationships to be eagerly loaded here
             # Example: joinedload(Gather.other_related_model),
         )

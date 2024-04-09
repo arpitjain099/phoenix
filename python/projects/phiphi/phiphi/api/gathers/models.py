@@ -30,6 +30,8 @@ class Gather(GatherBase, base_models.TimestampModel):
         "polymorphic_on": "gather_type",
     }
 
+    apify_gather = orm.relationship("ApifyGather", back_populates="gather", uselist=False)
+
 
 class ApifyGather(Gather):
     """Apify Gather model."""
@@ -52,4 +54,4 @@ class ApifyGather(Gather):
     input_data: orm.Mapped[str]
     input_type: orm.Mapped[str]
 
-    gather = orm.relationship("Gather", backref="apify_gather")
+    gather = orm.relationship("Gather", back_populates="apify_gather")
