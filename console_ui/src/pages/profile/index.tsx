@@ -10,8 +10,10 @@ import {
 	Badge,
 	Group,
 } from "@mantine/core";
-import { useTranslate } from "@refinedev/core";
+import { useGetIdentity, useTranslate } from "@refinedev/core";
 import { useForm } from "@refinedev/mantine";
+import { UserInfo } from "src/interfaces/user";
+import { filterDate } from "src/utils";
 
 interface AccordionLabelProps {
 	label: string;
@@ -33,6 +35,7 @@ function AccordionLabel({ label, description }: AccordionLabelProps) {
 
 const ProfilePage: React.FC = () => {
 	const translate = useTranslate();
+	const { data: user } = useGetIdentity<UserInfo>();
 	const { getInputProps } = useForm({
 		initialValues: {
 			name: "",
@@ -52,14 +55,19 @@ const ProfilePage: React.FC = () => {
 							className="rounded-full"
 						/>
 					</div> */}
-				<h2 className="text-xxl font-bold my-0">John Doe</h2>
+				<h2 className="text-xxl font-bold capitalize my-0">
+					{user?.display_name}
+				</h2>
 				<Badge className="w-max">Admin</Badge>
 				<Text size="sm" className="mt-4">
-					{translate("pages.profile.email")}: <strong>john@example.com</strong>
+					{translate("pages.profile.email")}: <strong>{user?.email}</strong>
 				</Text>
-				<Text size="sm">
-					{translate("pages.profile.created_at")}: <strong>22/02/2024</strong>
-				</Text>
+				{user?.created_at && (
+					<Text size="sm">
+						{translate("pages.profile.created_at")}:{" "}
+						<strong>{filterDate(user.created_at)}</strong>
+					</Text>
+				)}
 			</div>
 			<Divider my="sm" />
 			<Accordion
