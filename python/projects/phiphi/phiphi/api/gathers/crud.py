@@ -1,17 +1,30 @@
 """Gather crud functionality."""
+import json
+
 import sqlalchemy.orm
 from phiphi.api.gathers import models, schemas
+
+
+def apify_map_from_model_to_schema(
+    db_apify_gather: models.ApifyGather,
+) -> schemas.ApifyGatherResponse:
+    """Map an apify gather from model to schema."""
+    dict_model = db_apify_gather.__dict__
+    dict_model["input_data"] = json.loads(dict_model["input_data"])
+    return schemas.ApifyGatherResponse.model_validate(dict_model)
 
 
 def create_apify_gather(
     session: sqlalchemy.orm.Session, gather_data: schemas.ApifyGatherCreate
 ) -> schemas.ApifyGatherResponse:
     """Create a new apify gather."""
-    db_apify_gather = models.ApifyGather(**gather_data.dict())
+    dict_gather = gather_data.dict()
+    dict_gather["input_data"] = json.dumps(dict_gather["input_data"])
+    db_apify_gather = models.ApifyGather(**dict_gather)
     session.add(db_apify_gather)
     session.commit()
     session.refresh(db_apify_gather)
-    return schemas.ApifyGatherResponse.model_validate(db_apify_gather)
+    return apify_map_from_model_to_schema(db_apify_gather)
 
 
 def get_apify_gather(
@@ -21,7 +34,7 @@ def get_apify_gather(
     db_gather = session.get(models.ApifyGather, gather_id)
     if db_gather is None:
         return None
-    return schemas.ApifyGatherResponse.model_validate(db_gather)
+    return apify_map_from_model_to_schema(db_gather)
 
 
 def get_apify_gathers(
@@ -36,7 +49,7 @@ def get_apify_gathers(
     apify_gathers = session.scalars(query).all()
     if not apify_gathers:
         return []
-    return [schemas.ApifyGatherResponse.model_validate(gather) for gather in apify_gathers]
+    return [apify_map_from_model_to_schema(gather) for gather in apify_gathers]
 
 
 def update_apify_gather(
@@ -50,7 +63,7 @@ def update_apify_gather(
         setattr(db_gather, field, value)
     session.commit()
     session.refresh(db_gather)
-    return schemas.ApifyGatherResponse.model_validate(db_gather)
+    return apify_map_from_model_to_schema(db_gather)
 
 
 ## Issues with this implementation
@@ -73,7 +86,6 @@ def get_gathers(
         .all()
     )
 
-    print(gathers)
     if not gathers:
         return []
-    return [schemas.ApifyGatherResponse.model_validate(gather) for gather in gathers]
+    return [apify_map_from_model_to_schema(gather) for gather in gathers]

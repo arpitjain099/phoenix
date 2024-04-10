@@ -3,10 +3,9 @@ import datetime
 from typing import Optional
 
 from phiphi import platform_db
-from phiphi.api import base_models, list_annotation
+from phiphi.api import base_models
 from sqlalchemy import ForeignKey, orm
 
-ListStringType = list_annotation.ListString()
 
 class GatherBase(platform_db.Base):
     """Gather model."""
@@ -49,7 +48,7 @@ class ApifyGather(Gather):
     limit_messages: orm.Mapped[int]
     limit_replies: orm.Mapped[int]
     nested_replies: orm.Mapped[bool]
-    input_data: orm.Mapped[ListStringType]
+    input_data: orm.Mapped[str]
     input_type: orm.Mapped[str]
 
     gather = orm.relationship("Gather", back_populates="apify_gather")
