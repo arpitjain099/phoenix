@@ -14,7 +14,6 @@ def test_get_apify_gathers(client: TestClient, reseed_tables) -> None:
     assert len(gathers) == 2
 
 
-
 @pytest.mark.freeze_time(CREATED_TIME)
 def test_create_get_apify_gather(recreate_tables, client: TestClient) -> None:
     """Test create and then get of a gather."""
