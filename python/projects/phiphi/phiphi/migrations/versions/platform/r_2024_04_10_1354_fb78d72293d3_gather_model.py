@@ -1,8 +1,8 @@
-"""Gather model.
+"""gather_model.
 
-Revision ID: ad334bb258c4
+Revision ID: fb78d72293d3
 Revises: f766ea48c9d1
-Create Date: 2024-04-09 08:55:29.163130
+Create Date: 2024-04-10 13:54:04.665531
 
 """
 from typing import Sequence, Union
@@ -10,8 +10,10 @@ from typing import Sequence, Union
 import sqlalchemy as sa
 from alembic import op
 
+from phiphi.api import base_models
+
 # revision identifiers, used by Alembic.
-revision: str = "ad334bb258c4"
+revision: str = "fb78d72293d3"
 down_revision: Union[str, None] = "f766ea48c9d1"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -21,7 +23,7 @@ APIFY_TABLE_NAME = "apify_gathers"
 
 
 def upgrade() -> None:
-    """Upgrade for ad334bb258c4."""
+    """Upgrade for fb78d72293d3."""
     op.create_table(
         TABLE_NAME,
         sa.Column("id", sa.Integer(), nullable=False),
@@ -44,8 +46,7 @@ def upgrade() -> None:
         sa.Column("limit_messages", sa.Integer(), nullable=False),
         sa.Column("limit_replies", sa.Integer(), nullable=False),
         sa.Column("nested_replies", sa.Boolean(), nullable=False),
-        sa.Column("input_data", sa.String(), nullable=False),
-        sa.Column("input_type", sa.String(), nullable=False),
+        sa.Column("input", base_models.JSONEncodedValue(), nullable=False),
         sa.ForeignKeyConstraint(
             ["id"],
             ["gathers.id"],
@@ -55,6 +56,6 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    """Downgrade for ad334bb258c4."""
+    """Downgrade for fb78d72293d3."""
     op.drop_table(APIFY_TABLE_NAME)
     op.drop_table(TABLE_NAME)

@@ -12,6 +12,15 @@ class ApifyGatherInputType(str, Enum):
     author_url_list = "author_url_list"
 
 
+class InputAuthorList(pydantic.BaseModel):
+    """Input type and data type of gather."""
+
+    type: Annotated[
+        ApifyGatherInputType, pydantic.Field(description="The data type of the gather")
+    ]
+    data: Annotated[list[str], pydantic.Field(description="The data type of the gather")]
+
+
 class Platform(str, Enum):
     """Platform enum."""
 
@@ -48,12 +57,10 @@ class GatherBase(pydantic.BaseModel):
 class ApifyGatherBase(GatherBase):
     """Gather config schema."""
 
-    input_type: Annotated[
-        ApifyGatherInputType, pydantic.Field(description="The input type of gather config input")
+    input: Annotated[
+        InputAuthorList, pydantic.Field(description="The input type of gather config input")
     ]
-    input_data: Annotated[
-        list[str], pydantic.Field(description="This is dependent on the input type")
-    ]
+
     limit_messages: Annotated[
         int,
         pydantic.Field(
