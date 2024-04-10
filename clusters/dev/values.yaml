@@ -29,6 +29,8 @@ oauth2-proxy:
       set_xauthrequest = true
       # Currently no email set up on auth0
       insecure_oidc_allow_unverified_email = true
+      cookie_secure=true
+      reverse_proxy=true
 superset:
   enabled: true
   # These secrets must be created before the first apply of the chart
