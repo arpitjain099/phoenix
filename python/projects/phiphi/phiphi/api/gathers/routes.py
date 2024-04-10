@@ -14,10 +14,12 @@ def create_apify_gather(
     return crud.create_apify_gather(session, gather)
 
 
-@router.get("/gathers/", response_model=schemas.GatherResponse)
+# REFACTORABLE: IF there are other gather subclasses, this should be refactored
+# to support polymorphic models and multiple return types
+@router.get("/gathers/", response_model=schemas.ApifyGatherResponse)
 def get_gathers(
     session: deps.SessionDep, start: int = 0, end: int = 100
-) -> list[schemas.GatherResponse]:
+) -> list[schemas.ApifyGatherResponse]:
     """Get gathers."""
     return crud.get_gathers(session, start, end)
 
