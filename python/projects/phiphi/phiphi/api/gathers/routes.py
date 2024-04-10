@@ -41,14 +41,3 @@ def get_apify_gathers(
 ) -> list[schemas.ApifyGatherResponse]:
     """Get apify gathers."""
     return crud.get_apify_gathers(session, start, end)
-
-
-@router.put("/gathers/apify/{gather_id}", response_model=schemas.ApifyGatherResponse)
-def update_gather(
-    gather_id: int, gather: schemas.ApifyGatherUpdate, session: deps.SessionDep
-) -> schemas.ApifyGatherResponse:
-    """Update an instance."""
-    updated_gather = crud.update_apify_gather(session, gather_id, gather)
-    if updated_gather is None:
-        raise fastapi.HTTPException(status_code=404, detail="Gather not found")
-    return updated_gather

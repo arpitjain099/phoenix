@@ -39,20 +39,6 @@ def get_apify_gathers(
     return [schemas.ApifyGatherResponse.model_validate(gather) for gather in apify_gathers]
 
 
-def update_apify_gather(
-    session: sqlalchemy.orm.Session, gather_id: int, gather: schemas.ApifyGatherUpdate
-) -> schemas.ApifyGatherResponse | None:
-    """Update an apify gather."""
-    db_gather = session.get(models.ApifyGather, gather_id)
-    if db_gather is None:
-        return None
-    for field, value in gather.dict(exclude_unset=True).items():
-        setattr(db_gather, field, value)
-    session.commit()
-    session.refresh(db_gather)
-    return schemas.ApifyGatherResponse.model_validate(db_gather)
-
-
 ## Issues with this implementation
 def get_gathers(
     session: sqlalchemy.orm.Session, start: int = 0, end: int = 100
@@ -65,7 +51,6 @@ def get_gathers(
     gathers = (
         session.query(models.Gather)
         .options(
-            sqlalchemy.orm.joinedload(models.Gather.apify_gather)
             # Add additional relationships to be eagerly loaded here
             # Example: joinedload(Gather.other_related_model),
         )

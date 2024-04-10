@@ -1,9 +1,6 @@
 """Test Gathers."""
 import pytest
-import sqlalchemy
 from fastapi.testclient import TestClient
-
-from phiphi.api.gathers import models
 
 CREATED_TIME = "2024-04-01T12:00:01"
 UPDATE_TIME = "2024-04-01T12:00:02"
@@ -16,30 +13,6 @@ def test_get_apify_gathers(client: TestClient, reseed_tables) -> None:
     gathers = response.json()
     assert len(gathers) == 2
 
-
-@pytest.mark.freeze_time(UPDATE_TIME)
-def test_update_apify_gather(
-    client: TestClient, reseed_tables, session: sqlalchemy.orm.Session
-) -> None:
-    """Test updating a gather."""
-    data = {"mark_to_delete": True}
-    gather_id = 1
-    response = client.put(f"/gathers/apify/{gather_id}", json=data)
-    assert response.status_code == 200
-    gather = response.json()
-    assert gather["mark_to_delete"] == data["mark_to_delete"]
-    db_gather = session.get(models.Gather, gather_id)
-    assert db_gather
-    assert db_gather.mark_to_delete == data["mark_to_delete"]
-    assert db_gather.updated_at.isoformat() == UPDATE_TIME
-
-
-def test_update_gather_not_found(client: TestClient, recreate_tables) -> None:
-    """Test updating a gather that does not exist."""
-    data = {"mark_to_delete": True}
-    response = client.put("/gathers/apify/100", json=data)
-    assert response.status_code == 404
-    assert response.json() == {"detail": "Gather not found"}
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
