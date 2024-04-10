@@ -13,7 +13,7 @@ class EnvironmentBase(platform_db.Base):
     id: orm.Mapped[int] = orm.mapped_column(primary_key=True)
     name: orm.Mapped[str]
     description: orm.Mapped[str]
-    unique_id: orm.Mapped[str]
+    slug: orm.Mapped[str] = orm.mapped_column(index=True, unique=True)
 
 
 class Environment(EnvironmentBase, base_models.TimestampModel):

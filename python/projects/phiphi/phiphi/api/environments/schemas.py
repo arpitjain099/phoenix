@@ -13,6 +13,7 @@ class EnvironmentBase(pydantic.BaseModel):
 
     description: Annotated[str, pydantic.Field(description="The description of the Environment")]
     name: Annotated[str, pydantic.Field(description="The name of the Environment")]
+    slug: Annotated[str, pydantic.Field(description="The slug of the Environment")]
 
 
 class EnvironmentCreate(EnvironmentBase):
@@ -31,7 +32,7 @@ class EnvironmentResponse(EnvironmentBase):
     model_config = pydantic.ConfigDict(from_attributes=True)
 
     id: int
-    unique_id: str
+    slug: str
     created_at: datetime.datetime
     updated_at: datetime.datetime
 
@@ -39,4 +40,12 @@ class EnvironmentResponse(EnvironmentBase):
 class EnvironmentUpdate(pydantic.BaseModel):
     """Environment update schema."""
 
+    name: str | None = None
     description: str | None = None
+    slug: str | None = None
+
+
+class SlugResponse(pydantic.BaseModel):
+    """Environment unique slug."""
+
+    slug: str
