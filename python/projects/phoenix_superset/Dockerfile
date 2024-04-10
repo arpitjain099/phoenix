@@ -13,3 +13,11 @@ ENV PYTHONPATH=/app/phoenix_superset/:$PYTHONPATH
 
 # Copy and phoenix_superset/config.py file
 COPY ./config.py /app/phoenix_superset/config.py
+
+# Install the driver requirements.
+# Using an .in file rather than a .txt file as
+# this is what is documented in the docker image:
+# https://hub.docker.com/r/apache/superset
+COPY ./docker.requirements.in /app/phoenix_superset/docker.requirements.in
+RUN pip install --no-cache-dir -r /app/phoenix_superset/docker.requirements.in
+
