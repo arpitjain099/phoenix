@@ -27,11 +27,8 @@ oauth2-proxy:
       pass_authorization_header = true
       pass_user_headers = true
       set_xauthrequest = true
-      # To remove when secure version is used
-      show_debug_on_error = true
+      # Currently no email set up on auth0
       insecure_oidc_allow_unverified_email = true
-      ssl_insecure_skip_verify=true
-      cookie_secure="false"
 superset:
   enabled: true
   # These secrets must be created before the first apply of the chart
