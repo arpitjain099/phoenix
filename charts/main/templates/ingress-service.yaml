@@ -9,8 +9,13 @@ metadata:
     nginx.ingress.kubernetes.io/auth-url: http://phoenixchartmain-oauth2-proxy.{{ .Release.Namespace }}.svc.cluster.local/oauth2/auth
     nginx.ingress.kubernetes.io/proxy-buffer-size: 512k
     nginx.ingress.kubernetes.io/auth-response-headers: "x-auth-request-user, x-auth-request-groups, x-auth-request-email"
+    cert-manager.io/issuer: {{ .Values.cert_issuer.issuer_name }}
 spec:
   ingressClassName: {{ .Values.ingressClassName }}
+  tls:
+  - hosts:
+      - superset.{{ .Values.base_host }}
+    secretName: superset-phoenix-tls
   rules:
     - host: superset.{{ .Values.base_host }}
       http:

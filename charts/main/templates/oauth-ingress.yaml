@@ -4,8 +4,13 @@ metadata:
   name: oauth-proxy
   annotations:
     kubernetes.io/ingress.class: {{ .Values.ingressClassName }}
+    cert-manager.io/issuer: {{ .Values.cert_issuer.issuer_name }}
 spec:
   ingressClassName: {{ .Values.ingressClassName }}
+  tls:
+  - hosts:
+      - oauth.{{ .Values.base_host }}
+    secretName: oauth-phoenix-tls
   rules:
   - host: oauth.{{ .Values.base_host }}
     http:
