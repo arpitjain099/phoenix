@@ -8,3 +8,4 @@ sqlalchemy
 psycopg
 alembic
 pytest-freezegun
+python-slugify
