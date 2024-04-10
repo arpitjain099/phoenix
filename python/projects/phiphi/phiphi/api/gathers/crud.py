@@ -27,7 +27,11 @@ def get_apify_gather(
 def get_apify_gathers(
     session: sqlalchemy.orm.Session, start: int = 0, end: int = 100
 ) -> list[schemas.ApifyGatherResponse]:
-    """Retrieve apify gathers."""
+    """Retrieve apify gathers.
+
+    Currently this implementation only supports ApifyGathers.
+    When new polymorphic model are needed this should be refactored.
+    """
     query = sqlalchemy.select(models.ApifyGather).offset(start).limit(end)
     apify_gathers = session.scalars(query).all()
     if not apify_gathers:
@@ -52,8 +56,12 @@ def update_apify_gather(
 ## Issues with this implementation
 def get_gathers(
     session: sqlalchemy.orm.Session, start: int = 0, end: int = 100
-) -> list[schemas.GatherResponse]:
-    """Retrieve all gathers and relations."""
+) -> list[schemas.ApifyGatherResponse]:
+    """Retrieve all gathers and relations.
+
+    Currently this implementation only supports ApifyGathers.
+    When new polymorphic model are needed this should be refactored.
+    """
     gathers = (
         session.query(models.Gather)
         .options(
@@ -68,4 +76,4 @@ def get_gathers(
     print(gathers)
     if not gathers:
         return []
-    return [schemas.GatherResponse.model_validate(gather) for gather in gathers]
+    return [schemas.ApifyGatherResponse.model_validate(gather) for gather in gathers]

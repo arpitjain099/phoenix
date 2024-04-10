@@ -51,7 +51,9 @@ class ApifyGatherBase(GatherBase):
     input_type: Annotated[
         ApifyGatherInputType, pydantic.Field(description="The input type of gather config input")
     ]
-    input_data: Annotated[str, pydantic.Field(description="This is dependent on the input type")]
+    input_data: Annotated[
+        list[str], pydantic.Field(description="This is dependent on the input type")
+    ]
     limit_messages: Annotated[
         int,
         pydantic.Field(

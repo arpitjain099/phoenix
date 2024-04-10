@@ -49,7 +49,7 @@ def test_create_get_apify_gather(recreate_tables, client: TestClient) -> None:
         "description": "Firt apify gather",
         "instance_id": 1,
         "input_type": "author_url_list",
-        "input_data": "lorem ipsum",
+        "input_data": ["Author_1"],
         "platform": "facebook",
         "data_type": "messages",
         "start_date": "2024-04-08T08:41:05",
