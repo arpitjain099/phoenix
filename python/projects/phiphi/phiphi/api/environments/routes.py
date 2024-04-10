@@ -11,7 +11,10 @@ def create_environment(
     environment: schemas.EnvironmentCreate, session: deps.SessionDep
 ) -> schemas.EnvironmentResponse:
     """Create a new environment."""
-    return crud.create_environment(session, environment)
+    try:
+        return crud.create_environment(session, environment)
+    except Exception as e:
+        raise fastapi.HTTPException(status_code=400, detail=str(e))
 
 
 @router.put("/environments/{environment_id}", response_model=schemas.EnvironmentResponse)
@@ -25,21 +28,10 @@ def update_environment(
     return updated_environment
 
 
-@router.get("/environments/{environment_id}", response_model=schemas.EnvironmentResponse)
-def get_environment(environment_id: int, session: deps.SessionDep) -> schemas.EnvironmentResponse:
+@router.get("/environments/{slug}", response_model=schemas.EnvironmentResponse)
+def get_environment(slug: str, session: deps.SessionDep) -> schemas.EnvironmentResponse:
     """Get an environment."""
-    environment = crud.get_environment(session, environment_id)
-    if environment is None:
-        raise fastapi.HTTPException(status_code=404, detail="Environment not found")
-    return environment
-
-
-@router.get("/environments/unique_id/{unique_id}", response_model=schemas.EnvironmentResponse)
-def get_environment_by_unique_id(
-    unique_id: str, session: deps.SessionDep
-) -> schemas.EnvironmentResponse:
-    """Get an environment by unique id."""
-    environment = crud.get_environment_by_unique_id(session, unique_id)
+    environment = crud.get_environment(session, slug)
     if environment is None:
         raise fastapi.HTTPException(status_code=404, detail="Environment not found")
     return environment
@@ -53,10 +45,7 @@ def get_environments(
     return crud.get_environments(session, start, end)
 
 
-@router.delete("/environments/{environment_id}")
-def delete_environment(environment_id: int, session: deps.SessionDep) -> object:
-    """Delete an environment."""
-    environment = crud.delete_environment(session, environment_id)
-    if environment is None:
-        raise fastapi.HTTPException(status_code=404, detail="Environment not found")
-    return environment
+@router.get("/environments/slug/{environment_name}", response_model=schemas.SlugResponse)
+def get_unique_slug(environment_name: str, session: deps.SessionDep) -> schemas.SlugResponse:
+    """Get unique slug."""
+    return crud.get_unique_slug(session, environment_name)
