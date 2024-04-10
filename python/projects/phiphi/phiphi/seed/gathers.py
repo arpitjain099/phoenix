@@ -8,8 +8,9 @@ from phiphi.api.gathers import crud, schemas
 TEST_APIFY_GATHER_CREATE = schemas.ApifyGatherCreate(
     description="Phoenix Apify Gather",
     instance_id=1,
-    input_type=schemas.ApifyGatherInputType.author_url_list,
-    input_data=["author_1", "author_2"],
+    input=schemas.InputAuthorList(
+        type=schemas.ApifyGatherInputType.author_url_list, data=["author_1", "author_2"]
+    ),
     platform=schemas.Platform.facebook,
     data_type=schemas.DataType.messages,
     start_date=datetime.datetime.now() - datetime.timedelta(days=7),
@@ -22,8 +23,9 @@ TEST_APIFY_GATHER_CREATE = schemas.ApifyGatherCreate(
 TEST_APIFY_GATHER_CREATE_2 = schemas.ApifyGatherCreate(
     description="Phoenix Apify Gather 2",
     instance_id=1,
-    input_type=schemas.ApifyGatherInputType.author_url_list,
-    input_data=["author_1"],
+    input=schemas.InputAuthorList(
+        type=schemas.ApifyGatherInputType.author_url_list, data=["author_1", "author_2"]
+    ),
     platform=schemas.Platform.facebook,
     data_type=schemas.DataType.messages,
     start_date=datetime.datetime.now() - datetime.timedelta(days=7),

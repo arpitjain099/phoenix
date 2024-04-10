@@ -20,8 +20,7 @@ def test_create_get_apify_gather(recreate_tables, client: TestClient) -> None:
     data = {
         "description": "Firt apify gather",
         "instance_id": 1,
-        "input_type": "author_url_list",
-        "input_data": ["Author_1"],
+        "input": {"type": "author_url_list", "data": ["Author_1"]},
         "platform": "facebook",
         "data_type": "messages",
         "start_date": "2024-04-08T08:41:05",
@@ -34,9 +33,8 @@ def test_create_get_apify_gather(recreate_tables, client: TestClient) -> None:
     assert response.status_code == 200
     gather = response.json()
     assert gather["description"] == data["description"]
-    assert gather["input_type"] == data["input_type"]
+    assert gather["input"] == data["input"]
     assert gather["instance_id"] == data["instance_id"]
-    assert gather["input_data"] == data["input_data"]
     assert gather["start_date"] == data["start_date"]
     assert gather["end_date"] == data["end_date"]
     assert gather["limit_messages"] == data["limit_messages"]
@@ -49,9 +47,8 @@ def test_create_get_apify_gather(recreate_tables, client: TestClient) -> None:
     gather = response.json()
 
     assert gather["description"] == data["description"]
-    assert gather["input_type"] == data["input_type"]
+    assert gather["input"] == data["input"]
     assert gather["instance_id"] == data["instance_id"]
-    assert gather["input_data"] == data["input_data"]
     assert gather["start_date"] == data["start_date"]
     assert gather["end_date"] == data["end_date"]
     assert gather["limit_messages"] == data["limit_messages"]
