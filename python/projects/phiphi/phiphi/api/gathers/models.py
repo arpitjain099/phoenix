@@ -48,7 +48,7 @@ class ApifyGather(Gather):
     limit_messages: orm.Mapped[int]
     limit_replies: orm.Mapped[int]
     nested_replies: orm.Mapped[bool]
-    input_data: orm.Mapped[str]
+    input_data: orm.Mapped[str] = orm.mapped_column(base_models.JSONEncodedValue)
     input_type: orm.Mapped[str]
 
     gather = orm.relationship("Gather", back_populates="apify_gather")
