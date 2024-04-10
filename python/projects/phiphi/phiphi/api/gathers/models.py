@@ -22,6 +22,7 @@ class GatherBase(platform_db.Base):
     data_type: orm.Mapped[Optional[str]]
     start_date: orm.Mapped[Optional[datetime.datetime]]
     end_date: orm.Mapped[Optional[datetime.datetime]]
+    deleted_at: orm.Mapped[Optional[datetime.datetime]]
 
 
 class Gather(GatherBase, base_models.TimestampModel):

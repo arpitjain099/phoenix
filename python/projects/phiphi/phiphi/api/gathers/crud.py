@@ -18,7 +18,9 @@ def get_apify_gather(
     session: sqlalchemy.orm.Session, gather_id: int
 ) -> schemas.ApifyGatherResponse | None:
     """Get an apify gather."""
-    db_gather = session.get(models.ApifyGather, gather_id)
+    db_gather = (
+        session.query(models.ApifyGather).filter(models.ApifyGather.deleted_at.is_(None)).first()
+    )
     if db_gather is None:
         return None
     return schemas.ApifyGatherResponse.model_validate(db_gather)
@@ -32,7 +34,12 @@ def get_apify_gathers(
     Currently this implementation only supports ApifyGathers.
     When new polymorphic model are needed this should be refactored.
     """
-    query = sqlalchemy.select(models.ApifyGather).offset(start).limit(end)
+    query = (
+        sqlalchemy.select(models.ApifyGather)
+        .filter(models.ApifyGather.deleted_at.is_(None))
+        .offset(start)
+        .limit(end)
+    )
     apify_gathers = session.scalars(query).all()
     if not apify_gathers:
         return []

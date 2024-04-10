@@ -1,8 +1,8 @@
 """gather_model.
 
-Revision ID: fb78d72293d3
+Revision ID: df23bee88382
 Revises: f766ea48c9d1
-Create Date: 2024-04-10 13:54:04.665531
+Create Date: 2024-04-10 14:17:06.824744
 
 """
 from typing import Sequence, Union
@@ -13,7 +13,7 @@ from alembic import op
 from phiphi.api import base_models
 
 # revision identifiers, used by Alembic.
-revision: str = "fb78d72293d3"
+revision: str = "df23bee88382"
 down_revision: Union[str, None] = "f766ea48c9d1"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -23,7 +23,7 @@ APIFY_TABLE_NAME = "apify_gathers"
 
 
 def upgrade() -> None:
-    """Upgrade for fb78d72293d3."""
+    """Upgrade for df23bee88382."""
     op.create_table(
         TABLE_NAME,
         sa.Column("id", sa.Integer(), nullable=False),
@@ -36,6 +36,7 @@ def upgrade() -> None:
         sa.Column("data_type", sa.String(), nullable=True),
         sa.Column("start_date", sa.DateTime(), nullable=True),
         sa.Column("end_date", sa.DateTime(), nullable=True),
+        sa.Column("deleted_at", sa.DateTime(), nullable=True),
         sa.Column("created_at", sa.DateTime(), nullable=False),
         sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
@@ -56,6 +57,6 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    """Downgrade for fb78d72293d3."""
+    """Downgrade for df23bee88382."""
     op.drop_table(APIFY_TABLE_NAME)
     op.drop_table(TABLE_NAME)
