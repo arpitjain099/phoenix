@@ -17,6 +17,14 @@ cert-manager:
   # https://cert-manager.io/docs/installation/helm/#3-install-customresourcedefinitions
   installCRDs: true
 
+# Cert Issuer
+# Needs a cert-manager to be installed either the subchart or a custom one
+cert_issuer:
+  enabled: false
+  # Currently letsencrypt-staging is the only issuer supported
+  issuer_name: "letsencrypt-staging"
+  issuer_email: ""
+
 superset:
 
 
