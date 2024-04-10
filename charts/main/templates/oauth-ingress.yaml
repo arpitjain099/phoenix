@@ -7,10 +7,12 @@ metadata:
     cert-manager.io/issuer: {{ .Values.cert_issuer.issuer_name }}
 spec:
   ingressClassName: {{ .Values.ingressClassName }}
+  {{- if .Values.cert_issuer.enabled }}
   tls:
   - hosts:
       - oauth.{{ .Values.base_host }}
     secretName: oauth-phoenix-tls
+  {{- end }}
   rules:
   - host: oauth.{{ .Values.base_host }}
     http:

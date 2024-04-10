@@ -12,10 +12,12 @@ metadata:
     cert-manager.io/issuer: {{ .Values.cert_issuer.issuer_name }}
 spec:
   ingressClassName: {{ .Values.ingressClassName }}
+  {{- if .Values.cert_issuer.enabled }}
   tls:
   - hosts:
       - superset.{{ .Values.base_host }}
     secretName: superset-phoenix-tls
+  {{- end }}
   rules:
     - host: superset.{{ .Values.base_host }}
       http:
