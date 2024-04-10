@@ -26,3 +26,16 @@ To set up the certifications for a deployment:
 * If they are ready you can use `cert_config.issuer_name` to `letsencrypt-prod` to get the production
   certificates
 * You can then visit the https://<domain> and see the certificates are valid
+
+## Gotchas
+
+Be aware that you can only that in the docs of the [helm
+chart](https://cert-manager.io/docs/installation/helm/):
+
+> Be sure never to embed cert-manager as a sub-chart of other Helm charts; cert-manager manages
+> non-namespaced resources in your cluster and care must be taken to ensure that it is installed
+> exactly once.
+
+This means that if you should be careful when using `cert-manager.enabled: true` as there should
+only be on cert-manager in the cluster. If you have more complex setups you should install
+`cert-manager` as a separate helm chart.

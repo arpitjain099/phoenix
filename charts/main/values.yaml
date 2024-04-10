@@ -10,6 +10,8 @@ base_host: "phoenix.local"
 ingressClassName: "public"
 
 # Cert Manager
+# Be aware that only one cert-manager can be installed in a cluster
+# If you have one already installed, set this to false
 cert-manager:
   enabled: false
   # This is needed to install the CRDs
