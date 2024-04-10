@@ -2,7 +2,7 @@ base_host: "phoenixplatformdev.xyz"
 ingressClassName: "nginx"
 cert_issuer:
   enabled: true
-  issuer_name: "letsencrypt-staging"
+  issuer_name: "letsencrypt-prod"
   issuer_email: "buildup@datavaluepeople.com"
 cert-manager:
   enabled: true

@@ -21,8 +21,9 @@ cert-manager:
 # Needs a cert-manager to be installed either the subchart or a custom one
 cert_issuer:
   enabled: false
-  # Currently letsencrypt-staging is the only issuer supported
-  issuer_name: "letsencrypt-staging"
+  # Use `letsencrypt-staging` for testing
+  # Use `letsencrypt-prod` for production/working certificates
+  issuer: "letsencrypt-staging"
   issuer_email: ""
 
 superset:
