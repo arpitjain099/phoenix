@@ -99,3 +99,14 @@ def test_slug_with_name(recreate_tables, client: TestClient) -> None:
     assert response.status_code == 200
     slug = response.json()
     assert slug["slug"] == "my-slug"
+
+
+def test_slug_get_with_name_exsists(reseed_tables, client: TestClient) -> None:
+    """Test that slug can be gotten from given name and generates a new slug."""
+    response = client.get("/environments/slug/?environment_name=phoenix")
+    assert response.status_code == 200
+    slug = response.json()
+    assert slug["slug"] != "phoenix"
+    slug_parts = slug["slug"].split("-")
+    assert slug_parts[0] == "phoenix"
+    assert len(slug_parts[1]) == 4
