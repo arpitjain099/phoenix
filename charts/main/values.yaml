@@ -12,10 +12,15 @@ ingressClassName: "public"
 
 superset:
   configOverrides:
+    # General override includes the configurations that will most likely be changed for each chart
+    # use
+    general: |
+      APP_NAME = "Visual - Phoenix"
+
+
     # This will configure the branding of the application
     brand: |
       # White label settings
-      APP_NAME = "Visual - Phoenix"
       APP_ICON = "/static/assets/images/logo_buildup_short_200.png"
       APP_ICON_WIDTH = 200
       FAVICONS = [
