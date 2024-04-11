@@ -8,7 +8,7 @@ import {
 	Alert,
 	Tooltip,
 } from "@mantine/core";
-import React, { useEffect } from "react";
+import React from "react";
 import { IconInfoCircle } from "@tabler/icons";
 
 export const InstanceCreate: React.FC<IResourceComponentsProps> = () => {
@@ -16,12 +16,9 @@ export const InstanceCreate: React.FC<IResourceComponentsProps> = () => {
 	const {
 		getInputProps,
 		saveButtonProps,
-		setFieldValue,
-		values,
 		refineCore: { formLoading },
 	} = useForm({
 		initialValues: {
-			id: "",
 			name: "",
 			description: "",
 			environment_id: "",
@@ -29,12 +26,6 @@ export const InstanceCreate: React.FC<IResourceComponentsProps> = () => {
 			days_until_all_data_expiration: 183,
 		},
 		validate: {
-			id: (value) =>
-				value.length <= 0
-					? "ID is required"
-					: value.length < 2
-						? "ID is too short"
-						: null,
 			name: (value) => (value.length <= 0 ? "Name is required" : null),
 			environment_id: (value) =>
 				value.length <= 0 ? "Environment is required" : null,
@@ -53,10 +44,6 @@ export const InstanceCreate: React.FC<IResourceComponentsProps> = () => {
 		},
 	});
 
-	useEffect(() => {
-		setFieldValue("id", values.name);
-	}, [setFieldValue, values.name]);
-
 	return (
 		<Create isLoading={formLoading} saveButtonProps={saveButtonProps}>
 			<TextInput
@@ -64,13 +51,6 @@ export const InstanceCreate: React.FC<IResourceComponentsProps> = () => {
 				withAsterisk
 				label={translate("instances.fields.name")}
 				{...getInputProps("name")}
-			/>
-			<TextInput
-				mt="sm"
-				withAsterisk
-				disabled
-				label={translate("instances.fields.id")}
-				{...getInputProps("id")}
 			/>
 			<Select
 				mt="sm"
