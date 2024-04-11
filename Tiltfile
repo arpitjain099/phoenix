@@ -11,6 +11,12 @@ docker_build('phoenix_superset', './python/projects/phoenix_superset/', live_upd
     sync_phoenix,
 ])
 
+docker_build(
+  'phiphi',
+  './python/',
+  build_args={'PROJECT': 'phiphi'},
+)
+
 # Apply the secrets
 k8s_yaml('./clusters/local/secrets.yaml')
 
