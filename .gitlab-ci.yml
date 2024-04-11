@@ -34,6 +34,7 @@ variables:
   PHOENIX_SUPERSET_LATEST_IMAGE: $PHOENIX_SUPERSET_REGISTRY_IMAGE:latest
   PHOENIX_SUPERSET_RELEASE_IMAGE: $PHOENIX_SUPERSET_REGISTRY_IMAGE:stable
   PRE_BUILD_IMAGE_FOLDER: pre_build_images
+  PYTHON_IMAGE_REGISTRY: $CI_REGISTRY_IMAGE/python
 
 # Run linting for console_ui
 console_ui_linting:
@@ -152,6 +153,38 @@ build_phoenix_superset_image:
       # parallel:
         # matrix:
           # - PROJECT: phoenix_superset
+
+
+#######################
+# Build the python images
+#######################
+build_python_images:
+  extends:
+    - .docker_template
+  stage: build
+  script:
+    - docker load -i $PRE_BUILD_IMAGE_FOLDER/$PROJECT.tar
+    - docker tag $PROJECT $PYTHON_IMAGE_REGISTRY/$PROJECT:$CI_COMMIT_REF_SLUG
+    - docker tag $PROJECT $PYTHON_IMAGE_REGISTRY/$PROJECT:latest
+    - docker push $PYTHON_IMAGE_REGISTRY/$PROJECT:$CI_COMMIT_REF_SLUG
+    - docker push $PYTHON_IMAGE_REGISTRY/$PROJECT:latest
+  parallel:
+    matrix:
+      - PROJECT:
+          - phiphi
+          # Add to show how to use
+          - example_project_1
+          # phoenix_superset is built in a separate job as it doesn't use the default python image
+          # for the release
+  needs:
+    - job: pre_build_python_images
+      artifacts: true
+    - job: python_build_and_ci_projects
+      parallel:
+        matrix:
+          # If an other generic python project is added it should be added here
+          - PROJECT: example_project_1
+    - job: python_projects_phiphi_ci
 
 publish_phoenix_chart_main:
   stage: publish
