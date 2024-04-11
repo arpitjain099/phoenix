@@ -102,7 +102,13 @@ python_ci_libs:
       - LIB: [example_lib_1]
   needs: []
 
-python_projects_phiphi_ci:
+#######################
+# Test the phiphi project
+#
+# This is not in the generic python_ci_test job
+# as it needs a database and other things to run correctly
+#######################
+python_phiphi_ci_test:
   extends: .docker_template
   stage: test
   script:
@@ -184,7 +190,7 @@ build_python_images:
         matrix:
           # If an other generic python project is added it should be added here
           - PROJECT: example_project_1
-    - job: python_projects_phiphi_ci
+    - job: python_phiphi_ci_test
 
 publish_phoenix_chart_main:
   stage: publish
