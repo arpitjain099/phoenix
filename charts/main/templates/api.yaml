@@ -38,7 +38,7 @@ spec:
           - name: HEADER_AUTH_NAME
             value: {{ .Values.api.header_auth_name | quote}}
         command: ["/app/projects/phiphi/entrypoint.sh"]
-        args: ["uvicorn", "phiphi.api.main:app", "--host", "0.0.0.0", "--port", "80"]
+        args: ["uvicorn", "phiphi.api.main:app", {{- if .Values.api.reload }} "--reload", {{- end }} "--host", "0.0.0.0", "--port", "80"]
 ---
 apiVersion: v1
 kind: Service

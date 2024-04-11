@@ -11,10 +11,14 @@ docker_build('phoenix_superset', './python/projects/phoenix_superset/', live_upd
     sync_phoenix,
 ])
 
+sync_phiphi = sync('./python/projects/phiphi/phiphi/', '/app/projects/phiphi/phiphi/')
 docker_build(
   'phiphi',
   './python/',
   build_args={'PROJECT': 'phiphi'},
+  live_update=[
+    sync_phiphi,
+  ],
 )
 
 # Apply the secrets
