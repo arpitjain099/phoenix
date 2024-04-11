@@ -94,7 +94,7 @@ def get_unique_slug(
     )
 
     name = slugify.slugify(environment_name)
-    print(name)
+
     if slug_exist:
         random_str = utility.generate_random_string(4)
         slug = "{}-{}".format(name, random_str)
