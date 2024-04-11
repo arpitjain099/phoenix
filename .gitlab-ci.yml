@@ -252,6 +252,8 @@ publish_python_images:
     - job: pre_build_python_images
       artifacts: true
     - job: build_python_images
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 publish_python_images_tags:
   extends: .docker_template
