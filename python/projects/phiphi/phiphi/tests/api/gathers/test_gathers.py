@@ -8,7 +8,7 @@ UPDATE_TIME = "2024-04-01T12:00:02"
 
 def test_get_apify_gathers(client: TestClient, reseed_tables) -> None:
     """Test getting gathers."""
-    response = client.get("/gathers/apify")
+    response = client.get("/instances/1/gathers/apify")
     assert response.status_code == 200
     gathers = response.json()
     assert len(gathers) == 2
@@ -16,7 +16,7 @@ def test_get_apify_gathers(client: TestClient, reseed_tables) -> None:
 
 def test_get_gathers(client: TestClient, reseed_tables) -> None:
     """Test getting gathers."""
-    response = client.get("/gathers/")
+    response = client.get("/instances/1/gathers/")
     assert response.status_code == 200
     gathers = response.json()
     assert len(gathers) == 2
@@ -37,7 +37,7 @@ def test_create_get_apify_gather(recreate_tables, client: TestClient) -> None:
         "limit_replies": 100,
         "nested_replies": False,
     }
-    response = client.post("/gathers/apify", json=data)
+    response = client.post("/instances/1/gathers/apify", json=data)
     assert response.status_code == 200
     gather = response.json()
     assert gather["description"] == data["description"]
@@ -49,7 +49,7 @@ def test_create_get_apify_gather(recreate_tables, client: TestClient) -> None:
     assert gather["limit_replies"] == data["limit_replies"]
     assert gather["created_at"] == CREATED_TIME
 
-    response = client.get(f"/gathers/apify/{gather['id']}")
+    response = client.get(f"/instances/1/gathers/apify/{gather['id']}")
     assert response.status_code == 200
 
     gather = response.json()
