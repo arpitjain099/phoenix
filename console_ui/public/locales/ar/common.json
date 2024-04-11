@@ -131,7 +131,7 @@
 			"environment_id": "البيئة",
 			"days_until_pi_expiration": "تُحذف المعلومات الشخصية بعد (أيام)",
 			"days_until_all_data_expiration": "تُحذف جميع البيانات بعد (أيام)",
-			"lookup_frequency": "كم مرة ستطلع على لوحة المعلومات الخاصة بك",
+			"expected_usage": "كم مرة ستطلع على لوحة المعلومات الخاصة بك",
 			"status": "الحالة",
 			"created_at": "تاريخ الإنشاء"
 		},

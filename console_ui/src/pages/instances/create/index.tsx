@@ -104,7 +104,7 @@ export const InstanceCreate: React.FC<IResourceComponentsProps> = () => {
 			/>
 			<Select
 				mt="sm"
-				label={translate("instances.fields.lookup_frequency")}
+				label={translate("instances.fields.expected_usage")}
 				data={[
 					{ label: translate("inputs.select"), value: "" },
 					{ label: "One off analysis", value: "env1" },

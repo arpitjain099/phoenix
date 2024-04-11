@@ -131,7 +131,7 @@
 			"environment_id": "Environment",
 			"days_until_pi_expiration": "Personal Information is deleted after (days)",
 			"days_until_all_data_expiration": "All data is deleted after (days)",
-			"lookup_frequency": "How often will you look at your dashboard",
+			"expected_usage": "How often will you look at your dashboard",
 			"status": "Status",
 			"created_at": "Created At"
 		},

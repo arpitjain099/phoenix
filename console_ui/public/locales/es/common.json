@@ -131,7 +131,7 @@
 			"environment_id": "Entorno",
 			"days_until_pi_expiration": "La información personal se eliminará después de (días)",
 			"days_until_all_data_expiration": "Todos los datos se eliminarán después de (días)",
-			"lookup_frequency": "¿Con qué frecuencia consultará su tablero de control?",
+			"expected_usage": "¿Con qué frecuencia consultará su tablero de control?",
 			"status": "Estado",
 			"created_at": "Creado en"
 		},
