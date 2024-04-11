@@ -229,3 +229,26 @@ publish_phoenix_superset_image_tags:
     - job: build_phoenix_superset_image
   rules:
     - if: $CI_COMMIT_TAG
+
+#######################
+# Publish the python images
+#######################
+publish_python_images:
+  extends: .docker_template
+  stage: publish
+  script:
+    - docker load -i $PRE_BUILD_IMAGE_FOLDER/$PROJECT.tar
+    - docker tag $PROJECT $PYTHON_IMAGE_REGISTRY/$PROJECT:stable
+    - docker push $PYTHON_IMAGE_REGISTRY/$PROJECT:stable
+  parallel:
+    matrix:
+      - PROJECT:
+          - phiphi
+          # Add to show how to use
+          - example_project_1
+          # phoenix_superset is built in a separate job as it doesn't use the default python image
+          # for the release
+  needs:
+    - job: pre_build_python_images
+      artifacts: true
+    - job: build_python_images
