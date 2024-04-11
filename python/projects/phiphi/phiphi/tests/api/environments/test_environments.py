@@ -73,7 +73,7 @@ def test_update_environment_not_found(client: TestClient, recreate_tables) -> No
 
 
 def test_slug_already_exists(recreate_tables, client: TestClient) -> None:
-    """Test that the unique Id will be different for environments with the same name."""
+    """Test that slug already exists."""
     data = {"description": "test env", "name": "test", "slug": "test"}
     response = client.post("/environments/", json=data)
     assert response.status_code == 200
@@ -85,3 +85,11 @@ def test_slug_already_exists(recreate_tables, client: TestClient) -> None:
     data_2 = {"description": "test env 2", "name": "test", "slug": "test"}
     response = client.post("/environments/", json=data_2)
     assert response.status_code == 400
+
+
+def test_slug_with_name(recreate_tables, client: TestClient) -> None:
+    """Test that slug can be gotten from given name."""
+    response = client.get("/environments/slug/?environment_name=my slug")
+    assert response.status_code == 200
+    slug = response.json()
+    assert slug["slug"] == "my-slug"
