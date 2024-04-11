@@ -79,10 +79,7 @@ export const InstanceCreate: React.FC<IResourceComponentsProps> = () => {
 				{...getInputProps("environment_id")}
 				data={[
 					{ label: translate("inputs.select"), value: "" },
-					{ label: "Environment 1", value: "env1" },
-					{ label: "Environment 2", value: "env2" },
-					{ label: "Environment 3", value: "env3", disabled: true },
-					{ label: "Environment 4", value: "env4" },
+					{ label: "Main", value: "main" },
 				]}
 			/>
 			<NumberInput
