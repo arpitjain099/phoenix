@@ -133,7 +133,8 @@
 			"days_until_all_data_expiration": "All data is deleted after (days)",
 			"expected_usage": "How often will you look at your dashboard",
 			"status": "Status",
-			"created_at": "Created At"
+			"created_at": "Created At",
+			"updated_at": "Updated At"
 		},
 		"titles": {
 			"create": "Create Instance",

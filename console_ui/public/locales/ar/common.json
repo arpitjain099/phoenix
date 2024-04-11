@@ -133,7 +133,8 @@
 			"days_until_all_data_expiration": "تُحذف جميع البيانات بعد (أيام)",
 			"expected_usage": "كم مرة ستطلع على لوحة المعلومات الخاصة بك",
 			"status": "الحالة",
-			"created_at": "تاريخ الإنشاء"
+			"created_at": "تاريخ الإنشاء",
+			"updated_at": "تم التحديث في"
 		},
 		"titles": {
 			"create": "إنشاء حالة",
