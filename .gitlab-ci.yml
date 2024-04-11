@@ -75,8 +75,7 @@ python_images_pre_build:
           - phoenix_superset
           - example_project_1
 
-
-python_build_and_ci_projects:
+python_ci_test:
   extends: .docker_template
   stage: test
   script:
@@ -150,7 +149,7 @@ build_phoenix_superset_image:
     - docker push $PHOENIX_SUPERSET_TEST_IMAGE
     - docker push $PHOENIX_SUPERSET_LATEST_IMAGE
   needs:
-    - job: python_build_and_ci_projects
+    - job: python_ci_test
       parallel:
         matrix:
           - PROJECT: phoenix_superset
@@ -180,7 +179,7 @@ build_python_images:
   needs:
     - job: python_images_pre_build
       artifacts: true
-    - job: python_build_and_ci_projects
+    - job: python_ci_test
       parallel:
         matrix:
           # If an other generic python project is added it should be added here
