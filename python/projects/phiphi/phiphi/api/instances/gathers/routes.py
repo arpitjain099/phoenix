@@ -31,14 +31,10 @@ def get_gathers(
     response_model=schemas.ApifyGatherResponse,
 )
 def get_apify_gather(
-    apify_gather_id: int,
-    instance_id: int,
-    session: deps.SessionDep,
-    start: int = 0,
-    end: int = 100,
+    instance_id: int, apify_gather_id: int, session: deps.SessionDep
 ) -> schemas.ApifyGatherResponse:
     """Get an apify gather."""
-    apify_gather = crud.get_apify_gather(session, apify_gather_id, instance_id)
+    apify_gather = crud.get_apify_gather(session, instance_id, apify_gather_id)
     if apify_gather is None:
         raise fastapi.HTTPException(status_code=404, detail="Gather not found")
     return apify_gather

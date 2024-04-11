@@ -46,12 +46,6 @@ class GatherBase(pydantic.BaseModel):
     data_type: Annotated[
         DataType | None, pydantic.Field(description="The data type of the gather")
     ]
-    # instance_id: Annotated[
-    #     int,
-    #     pydantic.Field(
-    #         description="",
-    #     ),
-    # ]
 
 
 class ApifyGatherBase(GatherBase):

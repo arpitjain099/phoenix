@@ -15,14 +15,14 @@ def create_apify_gather(
 
 
 def get_apify_gather(
-    session: sqlalchemy.orm.Session, gather_id: int, instance_id: int
+    session: sqlalchemy.orm.Session, instance_id: int, gather_id: int
 ) -> schemas.ApifyGatherResponse | None:
     """Get an apify gather."""
     db_gather = (
         session.query(models.ApifyGather)
         .filter(
             models.ApifyGather.deleted_at.is_(None),
-            models.ApifyGather.instance_id == gather_id and models.ApifyGather.id == gather_id,
+            models.ApifyGather.instance_id == instance_id and models.ApifyGather.id == gather_id,
         )
         .first()
     )
