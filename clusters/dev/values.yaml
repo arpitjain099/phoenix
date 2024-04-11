@@ -40,20 +40,3 @@ superset:
     auth:
       # This is needed to override the postgresql passwords
       existingSecret: phoenixchartmain-superset-env-override
-  # This doesn't seem to work but I don't know why?
-  # configOverridesFiles:
-    # auth_override: /app/phoenix_superset/config.py
-  configOverrides:
-    auth_override: |
-      from flask_appbuilder.security.manager import AUTH_REMOTE_USER  # type: ignore[import-untyped]
-      from phoenix_superset import custom_sso_manager
-
-      AUTH_TYPE = AUTH_REMOTE_USER
-
-      AUTH_REMOTE_USER_ENV_VAR = "HTTP_X_AUTH_REQUEST_EMAIL"
-
-      # This is needed to test the system without the authentication layer
-      # Should throw error is can't log in
-      LOGIN_REDIRECT_URL = False
-
-      CUSTOM_SECURITY_MANAGER = custom_sso_manager.PhoenixCustomSSOSecurityManager

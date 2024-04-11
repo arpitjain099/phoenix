@@ -17,6 +17,12 @@ superset:
     general: |
       APP_NAME = "Visual - Phoenix"
 
+      AUTH_REMOTE_USER_ENV_VAR = "HTTP_X_AUTH_REQUEST_EMAIL"
+
+      # This is needed to test the system without the authentication layer
+      # With false superset is configured to throw error if user can't log in
+      LOGIN_REDIRECT_URL = False
+
 
     # This will configure the branding of the application
     brand: |
@@ -38,3 +44,14 @@ superset:
     # This configures the redirect_uri correctly, even with SSL offloading
     proxy: |
       ENABLE_PROXY_FIX = True
+
+
+    # Auth override
+    # Configures the application to use the Phoenix custom SSO manager
+    auth: |
+      from flask_appbuilder.security.manager import AUTH_REMOTE_USER  # type: ignore[import-untyped]
+      from phoenix_superset import custom_sso_manager
+
+      AUTH_TYPE = AUTH_REMOTE_USER
+
+      CUSTOM_SECURITY_MANAGER = custom_sso_manager.PhoenixCustomSSOSecurityManager
