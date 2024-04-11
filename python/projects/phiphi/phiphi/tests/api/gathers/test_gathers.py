@@ -18,6 +18,8 @@ def test_get_gathers(client: TestClient, reseed_tables) -> None:
     """Test getting gathers."""
     response = client.get("/gathers/")
     assert response.status_code == 200
+    gathers = response.json()
+    assert len(gathers) == 2
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
