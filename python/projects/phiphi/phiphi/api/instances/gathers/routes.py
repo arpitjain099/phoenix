@@ -13,7 +13,10 @@ def create_apify_gather(
     session: deps.SessionDep,
 ) -> schemas.ApifyGatherResponse:
     """Create a new gather."""
-    return crud.create_apify_gather(session, instance_id, gather)
+    try:
+        return crud.create_apify_gather(session, instance_id, gather)
+    except Exception as e:
+        raise fastapi.HTTPException(status_code=400, detail=str(e))
 
 
 # REFACTORABLE: IF there are other gather subclasses, this should be refactored
@@ -23,7 +26,10 @@ def get_gathers(
     session: deps.SessionDep, instance_id: int, start: int = 0, end: int = 100
 ) -> list[schemas.ApifyGatherResponse]:
     """Get gathers."""
-    return crud.get_gathers(session, instance_id, start, end)
+    try:
+        return crud.get_gathers(session, instance_id, start, end)
+    except Exception as e:
+        raise fastapi.HTTPException(status_code=400, detail=str(e))
 
 
 @router.get(
@@ -34,10 +40,13 @@ def get_apify_gather(
     instance_id: int, apify_gather_id: int, session: deps.SessionDep
 ) -> schemas.ApifyGatherResponse:
     """Get an apify gather."""
-    apify_gather = crud.get_apify_gather(session, instance_id, apify_gather_id)
-    if apify_gather is None:
-        raise fastapi.HTTPException(status_code=404, detail="Gather not found")
-    return apify_gather
+    try:
+        apify_gather = crud.get_apify_gather(session, instance_id, apify_gather_id)
+        if apify_gather is None:
+            raise fastapi.HTTPException(status_code=404, detail="Gather not found")
+        return apify_gather
+    except Exception as e:
+        raise fastapi.HTTPException(status_code=400, detail=str(e))
 
 
 @router.get(
@@ -47,4 +56,7 @@ def get_apify_gathers(
     session: deps.SessionDep, instance_id: int, start: int = 0, end: int = 100
 ) -> list[schemas.ApifyGatherResponse]:
     """Get apify gathers."""
-    return crud.get_apify_gathers(session, instance_id, start, end)
+    try:
+        return crud.get_apify_gathers(session, instance_id, start, end)
+    except Exception as e:
+        raise fastapi.HTTPException(status_code=400, detail=str(e))
