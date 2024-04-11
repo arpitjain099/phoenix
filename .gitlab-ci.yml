@@ -44,6 +44,7 @@ console_ui_linting:
     - cd console_ui/
     - npm install
     - npm run lint
+  needs: []
 
 
 #######################
@@ -100,6 +101,7 @@ python_ci_libs:
   parallel:
     matrix:
       - LIB: [example_lib_1]
+  needs: []
 
 python_projects_phiphi_ci:
   extends: .docker_template
