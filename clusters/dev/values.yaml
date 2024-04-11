@@ -44,9 +44,6 @@ superset:
   # configOverridesFiles:
     # auth_override: /app/phoenix_superset/config.py
   configOverrides:
-    proxy_override: |
-      # This will make sure the redirect_uri is properly computed, even with SSL offloading
-      ENABLE_PROXY_FIX = True
     auth_override: |
       from flask_appbuilder.security.manager import AUTH_REMOTE_USER  # type: ignore[import-untyped]
       from phoenix_superset import custom_sso_manager
