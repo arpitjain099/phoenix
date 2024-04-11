@@ -11,9 +11,28 @@ ingressClassName: "public"
 
 
 superset:
+
+
+
+  #########################################
+  # Phoenix Superset specific configurations
+  #
+  # A number of default overrides has been setup for the chart. These will
+  # configure superset to work with the Phoenix platform.
+  #
+  # It is recommended that the `general` override is configured in each use of the chart and the
+  # other overrides are configured as needed. Copy the `general` override in to
+  # custom values and change as needed.
+  #
+  # This aims to avoid unpredictable behaviour when the different overrides are used together. Due
+  # to the fact there is no certainty of the order in which the overrides are applied.
+  # #########################################
   configOverrides:
+
+
     # General override includes the configurations that will most likely be changed for each chart
-    # use
+    # use.
+    # Copy and change as needed
     general: |
       APP_NAME = "Visual - Phoenix"
 
