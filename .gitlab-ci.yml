@@ -78,9 +78,11 @@ python_build_and_ci_projects:
   extends: .docker_template
   stage: test
   script:
-    - cd python
-    - docker build --build-arg PROJECT=$PROJECT -t $PROJECT .
+    - docker load -i $PRE_BUILD_IMAGE_FOLDER/$PROJECT.tar
     - docker run $PROJECT make all path=projects/$PROJECT
+  needs:
+    - job: pre_build_python_images
+      artifacts: true
   parallel:
     matrix:
       - PROJECT:
