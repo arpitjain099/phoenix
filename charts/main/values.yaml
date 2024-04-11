@@ -9,6 +9,18 @@ base_host: "phoenix.local"
 # Public is the one needed for microk8s
 ingressClassName: "public"
 
+api:
+  enabled: true
+  replicas: 1
+  image:
+    # This is the dev image that is created by tilt
+    repository: phiphi
+    tag: latest
+  cors_origins: ["http://*"]
+  first_admin_user_email: "buildup@datavaluepeople.com"
+  first_admin_user_display_name: "Buildup"
+  header_auth_name: "HTTP_X_AUTH_REQUEST_EMAIL"
+
 #######################
 # Platform DB
 #

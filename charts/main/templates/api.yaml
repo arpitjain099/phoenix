@@ -1,0 +1,54 @@
+{{- if .Values.api.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phoenix-api
+spec:
+  replicas: {{ .Values.api.replicas }}
+  selector:
+    matchLabels:
+      app: phoenix-api
+  template:
+    metadata:
+      labels:
+        app: phoenix-api
+    spec:
+      containers:
+      - name: phiphi
+        image: {{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}
+        ports:
+          - containerPort: 80
+        env:
+          - name: SQLALCHEMY_DATABASE_URI
+            valueFrom:
+              secretKeyRef:
+                name: phoenix-api-secret
+                key: SQLALCHEMY_DATABASE_URI
+          - name: TESTING_SQLALCHEMY_DATABASE_URI
+            valueFrom:
+              secretKeyRef:
+                name: phoenix-api-secret
+                key: TESTING_SQLALCHEMY_DATABASE_URI
+          - name: CORS_ORIGINS
+            value: {{ .Values.api.cors_origins | quote }}
+          - name: FIRST_ADMIN_USER_EMAIL
+            value: {{ .Values.api.first_admin_user_email | quote }}
+          - name: FIRST_ADMIN_USER_DISPLAY_NAME
+            value: {{ .Values.api.first_admin_user_display_name | quote }}
+          - name: HEADER_AUTH_NAME
+            value: {{ .Values.api.header_auth_name | quote}}
+        command: ["/app/projects/phiphi/entrypoint.sh"]
+        args: ["uvicorn", "phiphi.api.main:app", "--host", "0.0.0.0", "--port", "80"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: phoenix-api-service
+spec:
+  type: NodePort
+  selector:
+    app: phoenix-api
+  ports:
+    - port: 80
+      targetPort: 80
+{{- end -}}
