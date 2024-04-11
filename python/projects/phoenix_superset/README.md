@@ -31,3 +31,22 @@ make init
 You can then visit [`localhost:8089`](http://localhost:8089), open the browser console and set the cookie as instructed in
 the output of `make init`: `document.cookie = "phiphi-user-email=admin@admin.com";` and refresh .
 You should then be able to see the superset welcome page.
+
+
+## Adding drivers
+
+To add drivers to the superset image you can add the driver to the `requirements.in` file and run
+the following commands:
+
+- Check the list of available drivers for superset,
+  [here](https://superset.apache.org/docs/databases/installing-database-drivers).
+- Update the `requirements.in` file with the new driver package. Include the version, see below.
+- Build the image using `make build`.
+- Compile the requirements using using python development tools (python/Makefile) `make
+  compile_requirements path=projects/phoenix-superset`. See the [python development
+  tools](../../python/README.md) for more information.
+
+A note about pinning the version of the driver. It is important to pin the version of the driver to
+avoid breaking changes. The version should be pinned to the latest version that is compatible with
+the superset version. However, we are not using a compiled requirements.txt as this causes problems
+with the build and local install.
