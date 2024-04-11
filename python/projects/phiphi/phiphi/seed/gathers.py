@@ -22,7 +22,7 @@ TEST_APIFY_GATHER_CREATE = schemas.ApifyGatherCreate(
 TEST_APIFY_GATHER_CREATE_2 = schemas.ApifyGatherCreate(
     description="Phoenix Apify Gather 2",
     input=schemas.InputAuthorList(
-        type=schemas.ApifyGatherInputType.author_url_list, data=["author_1", "author_2"]
+        type=schemas.ApifyGatherInputType.author_url_list, data=["author_1"]
     ),
     platform=schemas.Platform.facebook,
     data_type=schemas.DataType.messages,
@@ -55,9 +55,6 @@ def seed_test_apify_gathers(session: Session) -> None:
     for apify_gather in apify_gathers:
         crud.create_apify_gather(session=session, instance_id=1, gather_data=apify_gather)
 
-
-def seed_test_additional_apify_gather(session: Session) -> None:
-    """Seed the gathers."""
     crud.create_apify_gather(
         session=session, instance_id=2, gather_data=TEST_APIFY_GATHER_CREATE_3
     )

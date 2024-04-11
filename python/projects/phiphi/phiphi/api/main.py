@@ -15,7 +15,7 @@ app.include_router(health_check.router)
 app.include_router(user_routes.router, tags=["User"])
 app.include_router(environment_routes.router, tags=["Environment"])
 app.include_router(instance_routes.router, tags=["Instance"])
-app.include_router(gather_routes.router, tags=["Instance"])
+app.include_router(gather_routes.router, tags=["Instance Gathers"])
 
 if config.settings.CORS_ORIGINS:
     app.add_middleware(
