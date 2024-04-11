@@ -13,7 +13,7 @@ import {
 import { useGetIdentity, useTranslate } from "@refinedev/core";
 import { useForm } from "@refinedev/mantine";
 import { UserInfo } from "src/interfaces/user";
-import { filterDate } from "src/utils";
+import { toReadableDate } from "src/utils";
 
 interface AccordionLabelProps {
 	label: string;
@@ -65,7 +65,7 @@ const ProfilePage: React.FC = () => {
 				{user?.created_at && (
 					<Text size="sm">
 						{translate("pages.profile.created_at")}:{" "}
-						<strong>{filterDate(user.created_at)}</strong>
+						<strong>{toReadableDate(user.created_at)}</strong>
 					</Text>
 				)}
 			</div>
