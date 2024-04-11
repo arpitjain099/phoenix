@@ -24,6 +24,7 @@ export const InstanceCreate: React.FC<IResourceComponentsProps> = () => {
 			environment_id: "",
 			days_until_pi_expiration: 183,
 			days_until_all_data_expiration: 183,
+			expected_usage: "",
 		},
 		validate: {
 			name: (value) => (value.length <= 0 ? "Name is required" : null),
@@ -107,11 +108,12 @@ export const InstanceCreate: React.FC<IResourceComponentsProps> = () => {
 				label={translate("instances.fields.expected_usage")}
 				data={[
 					{ label: translate("inputs.select"), value: "" },
-					{ label: "One off analysis", value: "env1" },
-					{ label: "Monthly", value: "env2" },
-					{ label: "Weekly", value: "env3" },
-					{ label: "Daily", value: "env4" },
+					{ label: "One off analysis", value: "one_off" },
+					{ label: "Monthly", value: "monthly" },
+					{ label: "Weekly", value: "weekly" },
+					{ label: "Daily", value: "daily" },
 				]}
+				{...getInputProps("expected_usage")}
 			/>
 			<Textarea
 				mt="sm"
