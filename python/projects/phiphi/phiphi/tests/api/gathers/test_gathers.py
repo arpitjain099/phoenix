@@ -14,6 +14,23 @@ def test_get_apify_gathers(client: TestClient, reseed_tables) -> None:
     assert len(gathers) == 2
 
 
+def test_get_apify_gather(client: TestClient, reseed_tables) -> None:
+    """Test getting gathers."""
+    response = client.get("/instances/1/gathers/apify/1")
+    assert response.status_code == 200
+    gather_1 = response.json()
+
+    response_2 = client.get("/instances/2/gathers/apify/1")
+    gather_2 = response_2.json()
+    assert gather_1["description"] != gather_2["description"]
+    assert gather_1["input"] != gather_2["input"]
+    assert gather_1["instance_id"] != gather_2["instance_id"]
+    assert gather_1["start_date"] != gather_2["start_date"]
+    assert gather_1["end_date"] != gather_2["end_date"]
+    assert gather_1["limit_messages"] != gather_2["limit_messages"]
+    assert gather_1["limit_replies"] != gather_2["limit_replies"]
+
+
 def test_get_gathers(client: TestClient, reseed_tables) -> None:
     """Test getting gathers."""
     response = client.get("/instances/1/gathers/")
