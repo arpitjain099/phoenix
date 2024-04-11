@@ -46,12 +46,12 @@ class GatherBase(pydantic.BaseModel):
     data_type: Annotated[
         DataType | None, pydantic.Field(description="The data type of the gather")
     ]
-    instance_id: Annotated[
-        int,
-        pydantic.Field(
-            description="",
-        ),
-    ]
+    # instance_id: Annotated[
+    #     int,
+    #     pydantic.Field(
+    #         description="",
+    #     ),
+    # ]
 
 
 class ApifyGatherBase(GatherBase):
@@ -88,6 +88,7 @@ class GatherResponse(GatherBase):
     id: int
     created_at: datetime.datetime
     updated_at: datetime.datetime
+    instance_id: int
     mark_to_delete: bool | None = None
     deleted_at: datetime.datetime | None = None
     last_run_at: datetime.datetime | None = None

@@ -1,13 +1,13 @@
 """Gather crud functionality."""
 import sqlalchemy.orm
-from phiphi.api.gathers import models, schemas
+from phiphi.api.instances.gathers import models, schemas
 
 
 def create_apify_gather(
-    session: sqlalchemy.orm.Session, gather_data: schemas.ApifyGatherCreate
+    session: sqlalchemy.orm.Session, instance_id: int, gather_data: schemas.ApifyGatherCreate
 ) -> schemas.ApifyGatherResponse:
     """Create a new apify gather."""
-    db_apify_gather = models.ApifyGather(**gather_data.dict())
+    db_apify_gather = models.ApifyGather(**gather_data.dict(), instance_id=instance_id)
     session.add(db_apify_gather)
     session.commit()
     session.refresh(db_apify_gather)
@@ -15,11 +15,16 @@ def create_apify_gather(
 
 
 def get_apify_gather(
-    session: sqlalchemy.orm.Session, gather_id: int
+    session: sqlalchemy.orm.Session, gather_id: int, instance_id: int
 ) -> schemas.ApifyGatherResponse | None:
     """Get an apify gather."""
     db_gather = (
-        session.query(models.ApifyGather).filter(models.ApifyGather.deleted_at.is_(None)).first()
+        session.query(models.ApifyGather)
+        .filter(
+            models.ApifyGather.deleted_at.is_(None),
+            models.ApifyGather.instance_id == gather_id and models.ApifyGather.id == gather_id,
+        )
+        .first()
     )
     if db_gather is None:
         return None
@@ -27,7 +32,7 @@ def get_apify_gather(
 
 
 def get_apify_gathers(
-    session: sqlalchemy.orm.Session, start: int = 0, end: int = 100
+    session: sqlalchemy.orm.Session, instance_id: int, start: int = 0, end: int = 100
 ) -> list[schemas.ApifyGatherResponse]:
     """Retrieve apify gathers.
 
@@ -36,7 +41,9 @@ def get_apify_gathers(
     """
     query = (
         sqlalchemy.select(models.ApifyGather)
-        .filter(models.ApifyGather.deleted_at.is_(None))
+        .filter(
+            models.ApifyGather.deleted_at.is_(None), models.ApifyGather.instance_id == instance_id
+        )
         .offset(start)
         .limit(end)
     )
@@ -48,7 +55,7 @@ def get_apify_gathers(
 
 ## Issues with this implementation
 def get_gathers(
-    session: sqlalchemy.orm.Session, start: int = 0, end: int = 100
+    session: sqlalchemy.orm.Session, instance_id: int, start: int = 0, end: int = 100
 ) -> list[schemas.ApifyGatherResponse]:
     """Retrieve all gathers and relations.
 
@@ -57,6 +64,7 @@ def get_gathers(
     """
     gathers = (
         session.query(models.Gather)
+        .filter(models.Gather.instance_id == instance_id)
         .options(
             # Add additional relationships to be eagerly loaded here
             # Example: joinedload(Gather.other_related_model),
