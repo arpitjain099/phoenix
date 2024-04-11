@@ -18,6 +18,7 @@ services:
   - docker:dind
 
 stages:
+  - pre_build
   - test
   - build
   - publish
@@ -32,6 +33,7 @@ variables:
   PHOENIX_SUPERSET_TEST_IMAGE: $PHOENIX_SUPERSET_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
   PHOENIX_SUPERSET_LATEST_IMAGE: $PHOENIX_SUPERSET_REGISTRY_IMAGE:latest
   PHOENIX_SUPERSET_RELEASE_IMAGE: $PHOENIX_SUPERSET_REGISTRY_IMAGE:stable
+  PRE_BUILD_IMAGE_FOLDER: pre_build_images
 
 # Run linting for console_ui
 console_ui_linting:
@@ -41,6 +43,36 @@ console_ui_linting:
     - cd console_ui/
     - npm install
     - npm run lint
+
+
+#######################
+# Pre Build of the images for the python projects
+#
+# This speeds up the build process by building the images
+# before the actual build and test process
+#######################
+pre_build_python_images:
+  extends: .docker_template
+  stage: pre_build
+  script:
+    - cd python
+    # Refactor this to use the stable image as cache
+    - docker build --build-arg PROJECT=$PROJECT -t $PROJECT .
+    # Need to be in the correct folder for the artifacts to work
+    - cd ..
+    - mkdir -p $PRE_BUILD_IMAGE_FOLDER
+    - docker save $PROJECT -o $PRE_BUILD_IMAGE_FOLDER/$PROJECT.tar
+  artifacts:
+    paths:
+      - $PRE_BUILD_IMAGE_FOLDER/*.tar
+    expire_in: 1 hour
+  parallel:
+    matrix:
+      - PROJECT:
+          - phiphi
+          - phoenix_superset
+          - example_project_1
+
 
 python_build_and_ci_projects:
   extends: .docker_template
