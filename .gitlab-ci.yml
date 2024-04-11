@@ -104,9 +104,13 @@ python_projects_phiphi_ci:
   extends: .docker_template
   stage: test
   script:
+    - docker load -i $PRE_BUILD_IMAGE_FOLDER/phiphi.tar
     - apk update && apk add make
     - cd python/projects/phiphi/
     - make all
+  needs:
+    - job: pre_build_python_images
+      artifacts: true
 
 lint_phoenix_chart_main:
   stage: test
