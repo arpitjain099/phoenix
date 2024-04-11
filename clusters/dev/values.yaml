@@ -40,3 +40,12 @@ superset:
     auth:
       # This is needed to override the postgresql passwords
       existingSecret: phoenixchartmain-superset-env-override
+  configOverrides:
+    general: |
+      APP_NAME = "Visual - Phoenix"
+
+      # This must be change in conjunction with the ingress auth-response-headers
+      AUTH_REMOTE_USER_ENV_VAR = "HTTP_X_AUTH_REQUEST_EMAIL"
+
+      # Throw error if got past the auth layer
+      LOGIN_REDIRECT_URL = False
