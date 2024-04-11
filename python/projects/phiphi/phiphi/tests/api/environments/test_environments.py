@@ -86,6 +86,12 @@ def test_slug_already_exists(recreate_tables, client: TestClient) -> None:
     response = client.post("/environments/", json=data_2)
     assert response.status_code == 400
 
+    ##check if slug changes with an already existing slug
+    response = client.get("/environments/slug/?environment_name=test")
+    assert response.status_code == 200
+    slug = response.json()
+    assert slug["slug"] != "test"
+
 
 def test_slug_with_name(recreate_tables, client: TestClient) -> None:
     """Test that slug can be gotten from given name."""
