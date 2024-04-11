@@ -45,7 +45,10 @@ def get_environments(
     return crud.get_environments(session, start, end)
 
 
-@router.get("/environments/slug/{environment_name}", response_model=schemas.SlugResponse)
+@router.get("/environments/slug/", response_model=schemas.SlugResponse)
 def get_unique_slug(environment_name: str, session: deps.SessionDep) -> schemas.SlugResponse:
     """Get unique slug."""
-    return crud.get_unique_slug(session, environment_name)
+    try:
+        return crud.get_unique_slug(session, environment_name)
+    except Exception as e:
+        raise fastapi.HTTPException(status_code=400, detail=str(e))

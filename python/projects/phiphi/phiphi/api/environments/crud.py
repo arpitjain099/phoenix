@@ -79,21 +79,14 @@ def update_environment(
     return schemas.EnvironmentResponse.model_validate(db_environment)
 
 
-def delete_environment(session: sqlalchemy.orm.Session, environment_id: int) -> object:
-    """Delete an environment."""
-    db_environment = session.get(models.Environment, environment_id)
-    if db_environment is None:
-        return None
-    session.delete(db_environment)
-    session.commit()
-    ## since there's no generic response, I'm returning an object
-    return {"ok": True}
-
-
 def get_unique_slug(
     session: sqlalchemy.orm.Session, environment_name: str
 ) -> schemas.SlugResponse:
     """Get unique slug."""
+    # validation for empty string
+    if not environment_name.strip():
+        raise Exception("Please enter a valid string")
+
     slug_exist = (
         session.query(models.Environment)
         .filter(models.Environment.slug == environment_name)
@@ -111,5 +104,4 @@ def get_unique_slug(
 
     response = schemas.SlugResponse(slug=slug)
 
-    print(response)
     return schemas.SlugResponse.model_validate(response)
