@@ -53,7 +53,7 @@ console_ui_linting:
 # This speeds up the build process by building the images
 # before the actual build and test process
 #######################
-pre_build_python_images:
+python_images_pre_build:
   extends: .docker_template
   stage: pre_build
   script:
@@ -83,7 +83,7 @@ python_build_and_ci_projects:
     - docker load -i $PRE_BUILD_IMAGE_FOLDER/$PROJECT.tar
     - docker run $PROJECT make all path=projects/$PROJECT
   needs:
-    - job: pre_build_python_images
+    - job: python_images_pre_build
       artifacts: true
   parallel:
     matrix:
@@ -112,7 +112,7 @@ python_projects_phiphi_ci:
     - cd python/projects/phiphi/
     - make all
   needs:
-    - job: pre_build_python_images
+    - job: python_images_pre_build
       artifacts: true
 
 lint_phoenix_chart_main:
@@ -178,7 +178,7 @@ build_python_images:
           # phoenix_superset is built in a separate job as it doesn't use the default python image
           # for the release
   needs:
-    - job: pre_build_python_images
+    - job: python_images_pre_build
       artifacts: true
     - job: python_build_and_ci_projects
       parallel:
@@ -251,7 +251,7 @@ publish_python_images:
           # phoenix_superset is built in a separate job as it doesn't use the default python image
           # for the release
   needs:
-    - job: pre_build_python_images
+    - job: python_images_pre_build
       artifacts: true
     - job: build_python_images
   rules:
@@ -273,7 +273,7 @@ publish_python_images_tags:
           # phoenix_superset is built in a separate job as it doesn't use the default python image
           # for the release
   needs:
-    - job: pre_build_python_images
+    - job: python_images_pre_build
       artifacts: true
     - job: build_python_images
   rules:
