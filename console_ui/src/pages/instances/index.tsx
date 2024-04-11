@@ -1,8 +1,9 @@
 import React from "react";
 import { IResourceComponentsProps, useTranslate } from "@refinedev/core";
 import { ColumnDef } from "@tanstack/react-table";
-import { Group } from "@mantine/core";
-import { EditButton, ShowButton, DateField } from "@refinedev/mantine";
+import { Group, Pagination, ScrollArea } from "@mantine/core";
+import { EditButton, ShowButton, DateField, List } from "@refinedev/mantine";
+import { useTable } from "@refinedev/react-table";
 import TableComponent from "../../components/table";
 
 export const InstanceList: React.FC<IResourceComponentsProps> = () => {
@@ -44,7 +45,40 @@ export const InstanceList: React.FC<IResourceComponentsProps> = () => {
 		[translate]
 	);
 
-	return <TableComponent columns={columns} />;
+	const {
+		getHeaderGroups,
+		getRowModel,
+		setOptions,
+		refineCore: { setCurrent, pageCount, current, tableQueryResult },
+	} = useTable({
+		columns,
+	});
+
+	setOptions((prev) => ({
+		...prev,
+		meta: {
+			...prev.meta,
+		},
+	}));
+
+	return (
+		<List>
+			<ScrollArea>
+				<TableComponent
+					headerGroups={getHeaderGroups}
+					rowModel={getRowModel}
+					data={tableQueryResult}
+				/>
+			</ScrollArea>
+			<br />
+			<Pagination
+				position="right"
+				total={pageCount}
+				page={current}
+				onChange={setCurrent}
+			/>
+		</List>
+	);
 };
 
 export default InstanceList;
