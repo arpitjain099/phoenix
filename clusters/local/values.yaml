@@ -1,6 +1,8 @@
 use_local_insecure_auth: true
 cert_issuer:
   enabled: false
+console:
+  enabled: true
 cert-manager:
   enabled: false
 oauth2-proxy:

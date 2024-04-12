@@ -98,7 +98,9 @@ platformdb:
 # The console is a web application that is used to manage the platform
 #######################
 console:
-  enabled: true
+  # In general the console should be deployment a third party service with edge servers
+  # Amplify, Netlify, Vercel, etc
+  enabled: false
   replicas: 1
   image:
     repository: phoenix_console
