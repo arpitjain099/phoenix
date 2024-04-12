@@ -9,6 +9,31 @@ base_host: "phoenix.local"
 # Public is the one needed for microk8s
 ingressClassName: "public"
 
+api:
+  enabled: true
+  replicas: 1
+  image:
+    # This is the dev image that is created by tilt
+    repository: phiphi
+    tag: latest
+  # If you want unicorn to reload for development
+  reload: true
+  cors_origins: ["http://*"]
+  first_admin_user_email: "buildup@datavaluepeople.com"
+  first_admin_user_display_name: "Buildup"
+  header_auth_name: "HTTP_X_AUTH_REQUEST_EMAIL"
+
+#######################
+# Platform DB
+#
+# Development database for the platform. It is recommended to use a more reliable db for production.
+#######################
+platform_db:
+  enabled: true
+  postgres_image:
+    tag: 15-alpine
+  storageSize: 1Gi
+
 # Cert Manager
 # Be aware that only one cert-manager can be installed in a cluster
 # If you have one already installed, set this to false
