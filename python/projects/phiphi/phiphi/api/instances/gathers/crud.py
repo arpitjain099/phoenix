@@ -2,6 +2,7 @@
 import sqlalchemy.orm
 from phiphi.api.instances import models as instance_models
 from phiphi.api.instances.gathers import models, schemas
+from phiphi.errors import instance_not_found
 
 
 def create_apify_gather(
@@ -14,7 +15,7 @@ def create_apify_gather(
         .first()
     )
     if db_instance is None:
-        raise Exception("Instance does not exist")
+        raise instance_not_found.InstanceNotFound()
 
     db_apify_gather = models.ApifyGather(**gather_data.dict(), instance_id=instance_id)
     session.add(db_apify_gather)
@@ -33,7 +34,7 @@ def get_apify_gather(
         .first()
     )
     if db_instance is None:
-        raise Exception("Instance does not exist")
+        raise instance_not_found.InstanceNotFound()
 
     db_gather = (
         session.query(models.ApifyGather)
@@ -63,7 +64,7 @@ def get_apify_gathers(
         .first()
     )
     if db_instance is None:
-        raise Exception("Instance does not exist")
+        raise instance_not_found.InstanceNotFound()
 
     query = (
         sqlalchemy.select(models.ApifyGather)
@@ -94,7 +95,7 @@ def get_gathers(
         .first()
     )
     if db_instance is None:
-        raise Exception("Instance does not exist")
+        raise instance_not_found.InstanceNotFound()
 
     gathers = (
         session.query(models.Gather)
