@@ -21,3 +21,6 @@ COPY ./config.py /app/phoenix_superset/config.py
 COPY ./docker.requirements.in /app/phoenix_superset/docker.requirements.in
 RUN pip install --no-cache-dir -r /app/phoenix_superset/docker.requirements.in
 
+## Assets
+# Copy the assets to the /app/assets directory
+COPY ./assets/* /app/superset/static/assets/images/
