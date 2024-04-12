@@ -34,6 +34,6 @@ dev_up:
 
 dev_clean:
 	tilt down -f Tiltfile.dev
-	@echo "Deleting all `pvc` in ${KUBE_DEV_CONTEXT} cluster ${DEV_NAMESPACE} namespace."
+	@echo "Deleting all pvc in ${KUBE_DEV_CONTEXT} cluster ${DEV_NAMESPACE} namespace."
 
 	kubectl delete pvc --all -n ${DEV_NAMESPACE} --context ${KUBE_DEV_CONTEXT}
