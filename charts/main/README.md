@@ -29,13 +29,13 @@ To set up the certifications for a deployment:
 
 ## Gotchas
 
-Be aware that you can only that in the docs of the [helm
-chart](https://cert-manager.io/docs/installation/helm/):
+Be aware that you can only have one cert manager in the cluster. Quote from the cert manager [helm
+chart docs](https://cert-manager.io/docs/installation/helm/):
 
 > Be sure never to embed cert-manager as a sub-chart of other Helm charts; cert-manager manages
 > non-namespaced resources in your cluster and care must be taken to ensure that it is installed
 > exactly once.
 
 This means that if you should be careful when using `cert-manager.enabled: true` as there should
-only be on cert-manager in the cluster. If you have more complex setups you should install
+only be one cert-manager in the cluster. If you have a more complex setup you should install
 `cert-manager` as a separate helm chart.
