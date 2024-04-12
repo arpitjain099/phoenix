@@ -1,5 +1,11 @@
 base_host: "phoenixplatformdev.xyz"
 ingressClassName: "nginx"
+cert_issuer:
+  enabled: true
+  issuer_name: "letsencrypt-prod"
+  issuer_email: "buildup@datavaluepeople.com"
+cert-manager:
+  enabled: true
 oauth2-proxy:
   config:
     existingSecret: phoenixchartmain-oauth2-secrets

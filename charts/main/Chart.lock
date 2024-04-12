@@ -5,5 +5,8 @@ dependencies:
 - name: oauth2-proxy
   repository: https://oauth2-proxy.github.io/manifests
   version: 6.24.1
-digest: sha256:15106dcbee97e998d676728f4e9282c41fe1b38fa39c13ec765b26779781d27c
-generated: "2024-02-27T16:48:43.580125804+01:00"
+- name: cert-manager
+  repository: https://charts.jetstack.io
+  version: v1.14.4
+digest: sha256:e8c1784fed573db9dfc1cfec0c5317c2e195e8000ceb067aece86179c80903ee
+generated: "2024-04-09T17:04:44.92924862+02:00"
