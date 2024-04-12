@@ -21,6 +21,8 @@ docker_build(
   ],
 )
 
+docker_build('phoenix_console', './console_ui/')
+
 k8s_yaml(helm(
   './charts/main/',
   name='phoenix',
