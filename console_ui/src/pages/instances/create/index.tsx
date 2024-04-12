@@ -105,13 +105,25 @@ export const InstanceCreate: React.FC<IResourceComponentsProps> = () => {
 			/>
 			<Select
 				mt="sm"
-				label={translate("instances.fields.expected_usage")}
+				label={translate("instances.fields.expected_usage.title")}
 				data={[
 					{ label: translate("inputs.select"), value: "" },
-					{ label: "One off analysis", value: "one_off" },
-					{ label: "Monthly", value: "monthly" },
-					{ label: "Weekly", value: "weekly" },
-					{ label: "Daily", value: "daily" },
+					{
+						label: translate("instances.fields.expected_usage.options.one_off"),
+						value: "one_off",
+					},
+					{
+						label: translate("instances.fields.expected_usage.options.monthly"),
+						value: "monthly",
+					},
+					{
+						label: translate("instances.fields.expected_usage.options.weekly"),
+						value: "weekly",
+					},
+					{
+						label: translate("instances.fields.expected_usage.options.daily"),
+						value: "daily",
+					},
 				]}
 				{...getInputProps("expected_usage")}
 			/>

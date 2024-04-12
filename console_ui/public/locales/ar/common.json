@@ -131,7 +131,15 @@
 			"environment_id": "البيئة",
 			"days_until_pi_expiration": "تُحذف المعلومات الشخصية بعد (أيام)",
 			"days_until_all_data_expiration": "تُحذف جميع البيانات بعد (أيام)",
-			"expected_usage": "كم مرة ستطلع على لوحة المعلومات الخاصة بك",
+			"expected_usage": {
+				"title": "كم مرة ستقوم بالنظر إلى لوحة التحكم الخاصة بك",
+				"options": {
+					"one_off": "تحليل مرة واحدة",
+					"monthly": "شهرياً",
+					"weekly": "أسبوعياً",
+					"daily": "يومياً"
+				}
+			},
 			"status": "الحالة",
 			"created_at": "تاريخ الإنشاء",
 			"updated_at": "تم التحديث في"
