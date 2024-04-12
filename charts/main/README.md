@@ -8,6 +8,14 @@ This is the main helm chart for Phoenix. It is a collection of subcharts that ar
 - [Oauth2 Proxy](https://github.com/oauth2-proxy/manifests/tree/main/helm/oauth2-proxy)
 - [cert-manager](https://artifacthub.io/packages/helm/cert-manager/cert-manager)
 
+## Secrets
+
+Currently secrets for the chart are not stored in the chart. The expectations is that Secret
+resource should be created in the cluster. The secrets should be created in the namespace that the
+chart is deployed in.
+
+See the [example_secrets.yaml](example_secrets.yaml) for the secrets that are expected.
+
 
 ## SSL Certificates
 
