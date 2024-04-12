@@ -1,4 +1,4 @@
-"""Instance custom exception."""
+"""Phiphi API custom exception."""
 
 import fastapi
 

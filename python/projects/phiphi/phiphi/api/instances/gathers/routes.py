@@ -1,8 +1,7 @@
 """Routes for gathers."""
 import fastapi
-from phiphi.api import deps
+from phiphi.api import deps, exceptions
 from phiphi.api.instances.gathers import crud, schemas
-from phiphi.exceptions import instance_not_found
 
 router = fastapi.APIRouter()
 
@@ -16,8 +15,8 @@ def create_apify_gather(
     """Create a new gather."""
     try:
         return crud.create_apify_gather(session, instance_id, gather)
-    except instance_not_found.InstanceNotFound:
-        raise instance_not_found.InstanceNotFound
+    except exceptions.InstanceNotFound:
+        raise exceptions.InstanceNotFound
 
 
 # REFACTORABLE: IF there are other gather subclasses, this should be refactored
@@ -29,8 +28,8 @@ def get_gathers(
     """Get gathers."""
     try:
         return crud.get_gathers(session, instance_id, start, end)
-    except instance_not_found.InstanceNotFound:
-        raise instance_not_found.InstanceNotFound
+    except exceptions.InstanceNotFound:
+        raise exceptions.InstanceNotFound
 
 
 @router.get(
@@ -46,8 +45,8 @@ def get_apify_gather(
         if apify_gather is None:
             raise fastapi.HTTPException(status_code=404, detail="Gather not found")
         return apify_gather
-    except instance_not_found.InstanceNotFound:
-        raise instance_not_found.InstanceNotFound
+    except exceptions.InstanceNotFound:
+        raise exceptions.InstanceNotFound
 
 
 @router.get(
@@ -59,5 +58,5 @@ def get_apify_gathers(
     """Get apify gathers."""
     try:
         return crud.get_apify_gathers(session, instance_id, start, end)
-    except instance_not_found.InstanceNotFound:
-        raise instance_not_found.InstanceNotFound
+    except exceptions.InstanceNotFound:
+        raise exceptions.InstanceNotFound
