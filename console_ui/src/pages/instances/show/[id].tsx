@@ -1,9 +1,7 @@
 import {
 	IResourceComponentsProps,
-	useGo,
 	useResource,
 	useShow,
-	useToPath,
 	useTranslate,
 } from "@refinedev/core";
 import {
@@ -12,27 +10,19 @@ import {
 	NumberField,
 	DateField,
 	EditButtonProps,
-	DeleteButtonProps,
 	EditButton,
-	DeleteButton,
 } from "@refinedev/mantine";
 import { Button, Group, Title } from "@mantine/core";
 import { IconEye } from "@tabler/icons";
 
 export const InstanceShow: React.FC<IResourceComponentsProps> = () => {
-	const go = useGo();
 	const translate = useTranslate();
 	const { queryResult } = useShow();
 	const { data, isLoading } = queryResult;
 
 	const record = data?.data;
 
-	const { resource, id: idFromParams, identifier } = useResource("instances");
-
-	const goListPath = useToPath({
-		resource,
-		action: "list",
-	});
+	const { id: idFromParams, identifier } = useResource("instances");
 
 	const editButtonProps: EditButtonProps = {
 		...(isLoading ? { disabled: true } : {}),
@@ -40,12 +30,6 @@ export const InstanceShow: React.FC<IResourceComponentsProps> = () => {
 		variant: "filled",
 		resource: identifier,
 		recordItemId: idFromParams,
-	};
-	const deleteButtonProps: DeleteButtonProps = {
-		...(isLoading ? { disabled: true } : {}),
-		resource: identifier,
-		recordItemId: idFromParams,
-		onSuccess: () => go({ to: goListPath }),
 	};
 
 	return (
@@ -109,9 +93,6 @@ export const InstanceShow: React.FC<IResourceComponentsProps> = () => {
 					<Button leftIcon={<IconEye />}>Go to Visualisation</Button>
 				)}
 				{record?.status !== "pending" && <EditButton {...editButtonProps} />}
-				{record?.status !== "pending" && (
-					<DeleteButton {...deleteButtonProps} />
-				)}
 			</Group>
 		</Show>
 	);

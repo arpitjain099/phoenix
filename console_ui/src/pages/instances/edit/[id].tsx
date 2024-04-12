@@ -49,7 +49,10 @@ export const InstanceEdit: React.FC<IResourceComponentsProps> = () => {
 	};
 
 	return (
-		<Edit saveButtonProps={{ ...saveButtonProps, onClick: handleSave }}>
+		<Edit
+			saveButtonProps={{ ...saveButtonProps, onClick: handleSave }}
+			canDelete={false}
+		>
 			<TextInput
 				mt="sm"
 				withAsterisk

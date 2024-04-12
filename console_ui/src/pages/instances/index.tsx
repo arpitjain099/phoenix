@@ -41,7 +41,6 @@ export const InstanceList: React.FC<IResourceComponentsProps> = () => {
 						<Group spacing="xs" noWrap>
 							<ShowButton hideText recordItemId={getValue() as string} />
 							<EditButton hideText recordItemId={getValue() as string} />
-							<DeleteButton hideText recordItemId={getValue() as string} />
 						</Group>
 					);
 				},
