@@ -35,8 +35,7 @@ You should then be able to see the superset welcome page.
 
 ## Adding drivers
 
-To add drivers to the superset image you can add the driver to the `requirements.in` file and run
-the following commands:
+To add drivers to the superset image you can add the driver to the `requirements.in` file and follow the below steps:
 
 - Check the list of available drivers for superset,
   [here](https://superset.apache.org/docs/databases/installing-database-drivers).
