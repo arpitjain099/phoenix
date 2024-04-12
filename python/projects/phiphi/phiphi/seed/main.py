@@ -28,8 +28,8 @@ def main(session: Session, testing: bool = False) -> None:
     if testing:
         users.seed_test_users(session)
         instances.seed_test_instance(session)
-        gathers.seed_test_apify_gathers(session)
         environments.seed_test_environment(session)
+        gathers.seed_test_apify_gathers(session)
 
 
 if __name__ == "__main__":
