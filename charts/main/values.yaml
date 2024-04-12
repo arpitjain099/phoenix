@@ -92,6 +92,18 @@ platformdb:
       ports:
         postgresql: "5432"
 
+#######################
+# Console
+#
+# The console is a web application that is used to manage the platform
+#######################
+console:
+  enabled: true
+  replicas: 1
+  image:
+    repository: phoenix_console
+    tag: latest
+
 # Cert Manager
 #
 # !!!!!!!!!!!!!!!!!!!!!!!!
