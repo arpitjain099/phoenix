@@ -11,11 +11,42 @@ ingressClassName: "public"
 
 
 superset:
+
+
+
+  #########################################
+  # Phoenix Superset specific configurations
+  #
+  # A number of default overrides has been setup for the chart. These will
+  # configure superset to work with the Phoenix platform.
+  #
+  # It is recommended that the `general` override is configured in each use of the chart and the
+  # other overrides are configured as needed. Copy the `general` override in to
+  # custom values and change as needed.
+  #
+  # This aims to avoid unpredictable behaviour when the different overrides are used together. Due
+  # to the fact there is no certainty of the order in which the overrides are applied.
+  # #########################################
   configOverrides:
+
+
+    # General override includes the configurations that will most likely be changed for each chart
+    # use.
+    # Copy and change as needed
+    general: |
+      APP_NAME = "Visual - Phoenix"
+
+      # This must be change in conjunction with the ingress auth-response-headers
+      AUTH_REMOTE_USER_ENV_VAR = "HTTP_X_AUTH_REQUEST_EMAIL"
+
+      # This is needed to test the system without the authentication layer
+      # With false superset is configured to throw error if user can't log in
+      LOGIN_REDIRECT_URL = False
+
+
     # This will configure the branding of the application
     brand: |
       # White label settings
-      APP_NAME = "Visual - Phoenix"
       APP_ICON = "/static/assets/images/logo_buildup_short_200.png"
       APP_ICON_WIDTH = 200
       FAVICONS = [
@@ -27,3 +58,20 @@ superset:
           {"rel": "icon", "sizes": "32x32", "href": "/static/assets/images/favicon-32x32.png"},
           {"rel": "icon", "sizes": "16x16", "href": "/static/assets/images/favicon-16x16.png"},
       ]
+
+
+    # Proxy override
+    # This configures the redirect_uri correctly, even with SSL offloading
+    proxy: |
+      ENABLE_PROXY_FIX = True
+
+
+    # Auth override
+    # Configures the application to use the Phoenix custom SSO manager
+    auth: |
+      from flask_appbuilder.security.manager import AUTH_REMOTE_USER  # type: ignore[import-untyped]
+      from phoenix_superset import custom_sso_manager
+
+      AUTH_TYPE = AUTH_REMOTE_USER
+
+      CUSTOM_SECURITY_MANAGER = custom_sso_manager.PhoenixCustomSSOSecurityManager
