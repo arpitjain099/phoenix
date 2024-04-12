@@ -2,7 +2,7 @@
 import sqlalchemy.orm
 from phiphi.api.instances import models as instance_models
 from phiphi.api.instances.gathers import models, schemas
-from phiphi.errors import instance_not_found
+from phiphi.exceptions import instance_not_found
 
 
 def create_apify_gather(

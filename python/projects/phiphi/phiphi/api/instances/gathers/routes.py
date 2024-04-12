@@ -2,7 +2,7 @@
 import fastapi
 from phiphi.api import deps
 from phiphi.api.instances.gathers import crud, schemas
-from phiphi.errors import instance_not_found
+from phiphi.exceptions import instance_not_found
 
 router = fastapi.APIRouter()
 
