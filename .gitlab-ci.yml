@@ -18,6 +18,7 @@ services:
   - docker:dind
 
 stages:
+  - pre_build
   - test
   - build
   - publish
@@ -32,6 +33,8 @@ variables:
   PHOENIX_SUPERSET_TEST_IMAGE: $PHOENIX_SUPERSET_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
   PHOENIX_SUPERSET_LATEST_IMAGE: $PHOENIX_SUPERSET_REGISTRY_IMAGE:latest
   PHOENIX_SUPERSET_RELEASE_IMAGE: $PHOENIX_SUPERSET_REGISTRY_IMAGE:stable
+  PRE_BUILD_IMAGE_FOLDER: pre_build_images
+  PYTHON_IMAGE_REGISTRY: $CI_REGISTRY_IMAGE/python
 
 # Run linting for console_ui
 console_ui_linting:
@@ -41,14 +44,46 @@ console_ui_linting:
     - cd console_ui/
     - npm install
     - npm run lint
+  needs: []
 
-python_build_and_ci_projects:
+
+#######################
+# Pre Build of the images for the python projects
+#
+# This speeds up the build process by building the images
+# before the actual build and test process
+#######################
+python_images_pre_build:
+  extends: .docker_template
+  stage: pre_build
+  script:
+    - cd python
+    # Refactor this to use the stable image as cache
+    - docker build --build-arg PROJECT=$PROJECT -t $PROJECT .
+    # Need to be in the correct folder for the artifacts to work
+    - cd ..
+    - mkdir -p $PRE_BUILD_IMAGE_FOLDER
+    - docker save $PROJECT -o $PRE_BUILD_IMAGE_FOLDER/$PROJECT.tar
+  artifacts:
+    paths:
+      - $PRE_BUILD_IMAGE_FOLDER/*.tar
+    expire_in: 1 hour
+  parallel:
+    matrix:
+      - PROJECT:
+          - phiphi
+          - phoenix_superset
+          - example_project_1
+
+python_ci_test:
   extends: .docker_template
   stage: test
   script:
-    - cd python
-    - docker build --build-arg PROJECT=$PROJECT -t $PROJECT .
+    - docker load -i $PRE_BUILD_IMAGE_FOLDER/$PROJECT.tar
     - docker run $PROJECT make all path=projects/$PROJECT
+  needs:
+    - job: python_images_pre_build
+      artifacts: true
   parallel:
     matrix:
       - PROJECT:
@@ -65,14 +100,25 @@ python_ci_libs:
   parallel:
     matrix:
       - LIB: [example_lib_1]
+  needs: []
 
-python_projects_phiphi_ci:
+#######################
+# Test the phiphi project
+#
+# This is not in the generic python_ci_test job
+# as it needs a database and other things to run correctly
+#######################
+python_phiphi_ci_test:
   extends: .docker_template
   stage: test
   script:
+    - docker load -i $PRE_BUILD_IMAGE_FOLDER/phiphi.tar
     - apk update && apk add make
     - cd python/projects/phiphi/
     - make all
+  needs:
+    - job: python_images_pre_build
+      artifacts: true
 
 lint_phoenix_chart_main:
   stage: test
@@ -109,11 +155,42 @@ build_phoenix_superset_image:
     - docker push $PHOENIX_SUPERSET_TEST_IMAGE
     - docker push $PHOENIX_SUPERSET_LATEST_IMAGE
   needs:
-    - job: python_projects_phiphi_ci
-      # When this is include the pipelines doesn't run for some unknown reason
-      # parallel:
-        # matrix:
-          # - PROJECT: phoenix_superset
+    - job: python_ci_test
+      parallel:
+        matrix:
+          - PROJECT: phoenix_superset
+
+
+#######################
+# Build the python images
+#######################
+python_images_build:
+  extends:
+    - .docker_template
+  stage: build
+  script:
+    - docker load -i $PRE_BUILD_IMAGE_FOLDER/$PROJECT.tar
+    - docker tag $PROJECT $PYTHON_IMAGE_REGISTRY/$PROJECT:$CI_COMMIT_REF_SLUG
+    - docker tag $PROJECT $PYTHON_IMAGE_REGISTRY/$PROJECT:latest
+    - docker push $PYTHON_IMAGE_REGISTRY/$PROJECT:$CI_COMMIT_REF_SLUG
+    - docker push $PYTHON_IMAGE_REGISTRY/$PROJECT:latest
+  parallel:
+    matrix:
+      - PROJECT:
+          - phiphi
+          # Add to show how to use
+          - example_project_1
+          # phoenix_superset is built in a separate job as it doesn't use the default python image
+          # for the release
+  needs:
+    - job: python_images_pre_build
+      artifacts: true
+    - job: python_ci_test
+      parallel:
+        matrix:
+          # If an other generic python project is added it should be added here
+          - PROJECT: example_project_1
+    - job: python_phiphi_ci_test
 
 publish_phoenix_chart_main:
   stage: publish
@@ -157,5 +234,52 @@ publish_phoenix_superset_image_tags:
     - docker push $PHOENIX_SUPERSET_REGISTRY_IMAGE:$CI_COMMIT_TAG
   needs:
     - job: build_phoenix_superset_image
+  rules:
+    - if: $CI_COMMIT_TAG
+
+#######################
+# Publish the python images
+#######################
+publish_python_images:
+  extends: .docker_template
+  stage: publish
+  script:
+    - docker load -i $PRE_BUILD_IMAGE_FOLDER/$PROJECT.tar
+    - docker tag $PROJECT $PYTHON_IMAGE_REGISTRY/$PROJECT:stable
+    - docker push $PYTHON_IMAGE_REGISTRY/$PROJECT:stable
+  parallel:
+    matrix:
+      - PROJECT:
+          - phiphi
+          # Add to show how to use
+          - example_project_1
+          # phoenix_superset is built in a separate job as it doesn't use the default python image
+          # for the release
+  needs:
+    - job: python_images_pre_build
+      artifacts: true
+    - job: python_images_build
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+publish_python_images_tags:
+  extends: .docker_template
+  stage: publish
+  script:
+    - docker load -i $PRE_BUILD_IMAGE_FOLDER/$PROJECT.tar
+    - docker tag $PROJECT $PYTHON_IMAGE_REGISTRY/$PROJECT:$CI_COMMIT_TAG
+    - docker push $PYTHON_IMAGE_REGISTRY/$PROJECT:$CI_COMMIT_TAG
+  parallel:
+    matrix:
+      - PROJECT:
+          - phiphi
+          # Add to show how to use
+          - example_project_1
+          # phoenix_superset is built in a separate job as it doesn't use the default python image
+          # for the release
+  needs:
+    - job: python_images_pre_build
+      artifacts: true
+    - job: python_images_build
   rules:
     - if: $CI_COMMIT_TAG
