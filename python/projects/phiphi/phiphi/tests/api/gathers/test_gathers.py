@@ -30,6 +30,17 @@ def test_get_apify_gather(client: TestClient, reseed_tables) -> None:
     assert gather_1["limit_messages"] != gather_2["limit_messages"]
     assert gather_1["limit_replies"] != gather_2["limit_replies"]
 
+    assert gather_1["id"] == 1
+    assert gather_1["instance_id"] == 1
+    assert gather_2["id"] == 3
+    assert gather_2["instance_id"] == 2
+
+    # Check that it is not always the first gather that is gotten
+    response_3 = client.get("/instances/1/gathers/apify/2")
+    gather_3 = response_3.json()
+    assert gather_3["id"] == 2
+    assert gather_3["instance_id"] == 1
+
 
 def test_get_gathers(client: TestClient, reseed_tables) -> None:
     """Test getting gathers."""
@@ -37,6 +48,11 @@ def test_get_gathers(client: TestClient, reseed_tables) -> None:
     assert response.status_code == 200
     gathers = response.json()
     assert len(gathers) == 2
+
+    response = client.get("/instances/2/gathers/")
+    assert response.status_code == 200
+    gathers = response.json()
+    assert len(gathers) == 1
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
