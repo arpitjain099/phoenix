@@ -30,4 +30,31 @@ spec:
   ports:
     - port: 80
       targetPort: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-console
+  annotations:
+    kubernetes.io/ingress.class: {{ .Values.ingressClassName }}
+    cert-manager.io/issuer: {{ .Values.cert_issuer.issuer_name }}
+spec:
+  ingressClassName: {{ .Values.ingressClassName }}
+  {{- if .Values.cert_issuer.enabled }}
+  tls:
+  - hosts:
+      - console.{{ .Values.base_host }}
+    secretName: oauth-phoenix-tls
+  {{- end }}
+  rules:
+  - host: console.{{ .Values.base_host }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: {{.Release.Name }}-console-service
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
 {{- end -}}
