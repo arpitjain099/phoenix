@@ -44,7 +44,7 @@ def test_get_environments(client: TestClient, reseed_tables) -> None:
     response = client.get("/environments/")
     assert response.status_code == 200
     environments = response.json()
-    assert len(environments) == 2
+    assert len(environments) == 3
 
 
 @pytest.mark.freeze_time(UPDATE_TIME)

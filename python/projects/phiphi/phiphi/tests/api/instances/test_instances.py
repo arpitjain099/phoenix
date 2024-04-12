@@ -13,7 +13,7 @@ def test_instance_seeded(session: sqlalchemy.orm.Session, reseed_tables) -> None
     )
     count = response.one()
     assert count
-    assert count[0] == 2
+    assert count[0] == 3
 
 
 CREATED_TIME = "2024-04-01T12:00:01"
@@ -21,12 +21,12 @@ UPDATE_TIME = "2024-04-01T12:00:02"
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
-def test_create_get_instance(recreate_tables, client: TestClient) -> None:
+def test_create_get_instance(reseed_tables, client: TestClient) -> None:
     """Test create and then get of an instance."""
     data = {
         "name": "first instance",
         "description": "Instance 1",
-        "environment_id": "main",
+        "environment_slug": "main",
         "pi_deleted_after_days": 90,
         "delete_after_days": 20,
         "expected_usage": "weekly",
@@ -36,7 +36,7 @@ def test_create_get_instance(recreate_tables, client: TestClient) -> None:
     instance = response.json()
     assert instance["name"] == data["name"]
     assert instance["description"] == data["description"]
-    assert instance["environment_id"] == data["environment_id"]
+    assert instance["environment_slug"] == data["environment_slug"]
     assert instance["pi_deleted_after_days"] == data["pi_deleted_after_days"]
     assert instance["delete_after_days"] == data["delete_after_days"]
     assert instance["expected_usage"] == data["expected_usage"]
@@ -50,7 +50,7 @@ def test_create_get_instance(recreate_tables, client: TestClient) -> None:
     assert instance["name"] == data["name"]
     assert instance["description"] == data["description"]
     assert instance["created_at"] == CREATED_TIME
-    assert instance["environment_id"] == data["environment_id"]
+    assert instance["environment_slug"] == data["environment_slug"]
     assert instance["pi_deleted_after_days"] == data["pi_deleted_after_days"]
     assert instance["delete_after_days"] == data["delete_after_days"]
 
@@ -67,7 +67,7 @@ def test_get_instances(client: TestClient, reseed_tables) -> None:
     response = client.get("/instances/")
     assert response.status_code == 200
     instances = response.json()
-    assert len(instances) == 2
+    assert len(instances) == 3
 
 
 def test_get_instances_pagination(client: TestClient, reseed_tables) -> None:
@@ -104,7 +104,7 @@ def test_update_instance_not_found(client: TestClient, recreate_tables) -> None:
     assert response.json() == {"detail": "Instance not found"}
 
 
-def test_environment_defaults_main(client: TestClient, recreate_tables) -> None:
+def test_environment_defaults_main(client: TestClient, reseed_tables) -> None:
     """Test that environment defaults to main, when nothing is passed as parameter."""
     data = {
         "name": "first instance",
@@ -116,4 +116,4 @@ def test_environment_defaults_main(client: TestClient, recreate_tables) -> None:
     response = client.post("/instances/", json=data)
     assert response.status_code == 200
     instance = response.json()
-    assert instance["environment_id"] == "main"
+    assert instance["environment_slug"] == "main"
