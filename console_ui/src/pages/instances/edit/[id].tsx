@@ -1,7 +1,7 @@
 import React from "react";
 import { IResourceComponentsProps, useUpdate } from "@refinedev/core";
 import { Edit, useForm } from "@refinedev/mantine";
-import CreateEditInstanceForm from "@components/forms/create_edit_instance";
+import CreateEditInstanceForm from "@components/forms/create-edit-instance";
 
 export const InstanceEdit: React.FC<IResourceComponentsProps> = () => {
 	const { mutate } = useUpdate();

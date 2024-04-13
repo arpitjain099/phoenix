@@ -16,7 +16,7 @@ interface Props {
 	getInputProps: GetInputProps<InstanceSchema>;
 }
 
-export const CreateEditInstanceForm: React.FC<Props> = ({ getInputProps }) => {
+const CreateEditInstanceForm: React.FC<Props> = ({ getInputProps }) => {
 	const translate = useTranslate();
 	return (
 		<>

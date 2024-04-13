@@ -1,4 +1,4 @@
-import CreateEditInstanceForm from "@components/forms/create_edit_instance";
+import CreateEditInstanceForm from "@components/forms/create-edit-instance";
 import { IResourceComponentsProps } from "@refinedev/core";
 import { Create, useForm } from "@refinedev/mantine";
 import React from "react";
