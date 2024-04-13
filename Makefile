@@ -9,6 +9,11 @@ setup_asdf:
 
 up:
 	if [ -f clusters/local/secrets.yaml ]; then \
+		echo ""; \
+		echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"; \
+		echo "YOU NEED TO RESTART phonenix-api in the tilt dashboard once platformdb is health";  \
+		echo "There is no wait for db functionality implemented";  \
+		echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"; \
 		tilt up; \
 	else \
 		echo "File clusters/local/secrets.yaml does not exist."; \
@@ -24,6 +29,12 @@ clean:
 
 dev_up:
 	if [ -f clusters/dev/secrets.yaml ]; then \
+		echo "Starting tilt with dev context"; \
+		echo ""; \
+		echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"; \
+		echo "YOU NEED TO RESTART phonenix-api in the tilt dashboard once platformdb is health";  \
+		echo "There is no wait for db functionality implemented";  \
+		echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"; \
 		tilt up -f Tiltfile.dev; \
 	else \
 		echo "File clusters/dev/secrets.yaml does not exist."; \
