@@ -6,13 +6,6 @@ from typing import Annotated
 import pydantic
 
 
-class EnvironmentId(str, Enum):
-    """Environment id enum."""
-
-    main = "main"
-    test = "test"
-
-
 class ExpectedUsage(str, Enum):
     """Expected usage enum."""
 
@@ -30,7 +23,7 @@ class InstanceBase(pydantic.BaseModel):
     name: Annotated[str, pydantic.Field(description="The name of the instance")]
     description: Annotated[str, pydantic.Field(description="The description of the instance")]
     environment_slug: Annotated[
-        EnvironmentId,
+        str,
         pydantic.Field(default="main", description="The environment id of the instance"),
     ]
 

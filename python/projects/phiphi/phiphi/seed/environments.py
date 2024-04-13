@@ -9,7 +9,7 @@ TEST_ENVIRONMENT_CREATE = schemas.EnvironmentCreate(
 )
 
 TEST_ENVIRONMENT_CREATE_2 = schemas.EnvironmentCreate(
-    name="Test", description="Seed test", slug="test"
+    name="Test", description="Testing seed", slug="test"
 )
 
 
