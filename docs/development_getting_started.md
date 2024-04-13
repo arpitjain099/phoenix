@@ -86,10 +86,11 @@ You can also use `make clean` to remove all the tilt resources and default volum
 
 ## Hello world
 
-Once your set up is complete you should be able to see an hello world at:
+Once your set up is complete you should be able to see an hello world at. Beaware you will need to
+log in to the configured authentication provider.
 
-* [http://localhost/](http://localhost/)
-* [http://phoenix.local/](http://phoenix.local/)
+* [http://api.phoenix.local/](http://api.phoenix.local/)
+* [http://superset.phoenix.local/](http://superset.phoenix.local/)
 
 ## Dev cluster in the cloud
 
