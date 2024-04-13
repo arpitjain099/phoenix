@@ -28,11 +28,6 @@ api:
 #
 # Development database for the platform. It is recommended to use a more reliable db for production.
 #######################
-platform_db:
-  enabled: true
-  postgres_image:
-    tag: 15-alpine
-  storageSize: 1Gi
 
 # Cert Manager
 # Be aware that only one cert-manager can be installed in a cluster
