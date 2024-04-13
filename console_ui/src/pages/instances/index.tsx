@@ -2,12 +2,7 @@ import React from "react";
 import { IResourceComponentsProps, useTranslate } from "@refinedev/core";
 import { ColumnDef } from "@tanstack/react-table";
 import { Group } from "@mantine/core";
-import {
-	EditButton,
-	ShowButton,
-	DeleteButton,
-	DateField,
-} from "@refinedev/mantine";
+import { EditButton, ShowButton, DateField } from "@refinedev/mantine";
 import TableComponent from "../../components/table";
 
 export const InstanceList: React.FC<IResourceComponentsProps> = () => {
@@ -41,7 +36,6 @@ export const InstanceList: React.FC<IResourceComponentsProps> = () => {
 						<Group spacing="xs" noWrap>
 							<ShowButton hideText recordItemId={getValue() as string} />
 							<EditButton hideText recordItemId={getValue() as string} />
-							<DeleteButton hideText recordItemId={getValue() as string} />
 						</Group>
 					);
 				},
