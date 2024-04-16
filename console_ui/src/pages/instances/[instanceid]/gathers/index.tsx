@@ -123,7 +123,7 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 	}));
 
 	return (
-		<List canCreate>
+		<List>
 			<ScrollArea>
 				<TableComponent
 					headerGroups={getHeaderGroups}

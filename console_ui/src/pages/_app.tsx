@@ -127,6 +127,15 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
 										},
 									},
 									{
+										name: "",
+										list: "/instances/:instanceid/gathers",
+										create: "/instances/:instanceid/gathers/create",
+										meta: {
+											label: "Gathers",
+											hide: true,
+										},
+									},
+									{
 										name: "profile",
 										list: "/profile",
 										meta: {
