@@ -117,3 +117,19 @@ def test_environment_defaults_main(client: TestClient, reseed_tables) -> None:
     assert response.status_code == 200
     instance = response.json()
     assert instance["environment_slug"] == "main"
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
+def test_create_instance_with_non_existing_env(recreate_tables, client: TestClient) -> None:
+    """Test create and then get of an instance."""
+    data = {
+        "name": "first instance",
+        "description": "Instance 1",
+        "environment_slug": "non-existing",
+        "pi_deleted_after_days": 90,
+        "delete_after_days": 20,
+        "expected_usage": "weekly",
+    }
+    response = client.post("/instances/", json=data)
+    assert response.status_code == 400
+    assert response.json() == {"detail": "Environment not found"}

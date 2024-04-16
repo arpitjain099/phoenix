@@ -1,6 +1,8 @@
 """Instance crud functionality."""
 import sqlalchemy.orm
 
+from phiphi.api import exceptions
+from phiphi.api.environments import models as env_models
 from phiphi.api.instances import models, schemas
 
 
@@ -8,6 +10,15 @@ def create_instance(
     session: sqlalchemy.orm.Session, instance: schemas.InstanceCreate
 ) -> schemas.InstanceResponse:
     """Create a new instance."""
+    db_environment = (
+        session.query(env_models.Environment)
+        .filter(env_models.Environment.slug == instance.environment_slug)
+        .first()
+    )
+
+    if db_environment is None:
+        raise exceptions.EnvironmentNotFound()
+
     db_instance = models.Instance(**instance.dict())
     session.add(db_instance)
     session.commit()

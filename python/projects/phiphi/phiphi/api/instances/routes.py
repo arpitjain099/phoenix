@@ -1,7 +1,7 @@
 """Routes for the instances."""
 import fastapi
 
-from phiphi.api import deps
+from phiphi.api import deps, exceptions
 from phiphi.api.instances import crud, schemas
 
 router = fastapi.APIRouter()
@@ -12,7 +12,10 @@ def create_instance(
     instance: schemas.InstanceCreate, session: deps.SessionDep
 ) -> schemas.InstanceResponse:
     """Create a new instance."""
-    return crud.create_instance(session, instance)
+    try:
+        return crud.create_instance(session, instance)
+    except exceptions.EnvironmentNotFound:
+        raise exceptions.EnvironmentNotFound
 
 
 @router.put("/instances/{instance_id}", response_model=schemas.InstanceResponse)
