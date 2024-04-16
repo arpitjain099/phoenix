@@ -55,6 +55,9 @@ class Settings(BaseSettings):
     # Seed data
     FIRST_ADMIN_USER_EMAIL: pydantic.EmailStr = "admin@admin.com"
     FIRST_ADMIN_USER_DISPLAY_NAME: str = "admin"
+    FIRST_ENVIRONMENT_SLUG: str = "main"
+    FIRST_ENVIRONMENT_NAME: str = "Main environment"
+    FIRST_ENVIRONMENT_DESCRIPTION: str = "Main default environment of phoenix"
 
     # Authorization
     # This is the header that will be used to get the user email

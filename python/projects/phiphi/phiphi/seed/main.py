@@ -25,10 +25,11 @@ main_logger.addHandler(ch)
 def main(session: Session, testing: bool = False) -> None:
     """Seed the database."""
     users.init_first_admin_user(session)
+    environments.init_main_environment(session)
     if testing:
         users.seed_test_users(session)
-        instances.seed_test_instance(session)
         environments.seed_test_environment(session)
+        instances.seed_test_instance(session)
         gathers.seed_test_apify_gathers(session)
 
 
