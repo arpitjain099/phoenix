@@ -27,6 +27,9 @@ api:
 # Platform DB
 #
 # Development database for the platform. It is recommended to use a more reliable db for production.
+#
+# Be aware the name is platformdb as we can't use an _ or a - in the name to to a number of
+# different complex reasons: helm can't process - and _ can be used for a Service annotation
 #######################
 # Based on superset values:
 # https://github.com/apache/superset/blob/master/helm/superset/values.yaml#L771-L811
