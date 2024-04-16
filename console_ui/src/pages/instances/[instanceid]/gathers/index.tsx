@@ -9,7 +9,7 @@ import {
 import { useTable } from "@refinedev/react-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { ScrollArea, Pagination } from "@mantine/core";
-import { List, DateField, BooleanField } from "@refinedev/mantine";
+import { List, DateField } from "@refinedev/mantine";
 import TableComponent from "@components/table";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -20,12 +20,22 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 	const { instanceid } = router.query;
 
 	const apiResponse = useList({
-		resource: `instances/${instanceid}/gathers/apify`,
+		resource: `instances/${instanceid}/gathers`,
 	});
 	const listResponse = apiResponse?.data?.data || [];
 
 	const columns = React.useMemo<ColumnDef<any>[]>(
 		() => [
+			{
+				id: "platform",
+				accessorKey: "platform",
+				header: translate("gathers.fields.platform"),
+			},
+			{
+				id: "data_type",
+				accessorKey: "data_type",
+				header: translate("gathers.fields.data_type"),
+			},
 			{
 				id: "description",
 				accessorKey: "description",
@@ -46,16 +56,6 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 				cell: function render({ getValue }) {
 					return <DateField value={getValue<any>()} />;
 				},
-			},
-			{
-				id: "platform",
-				accessorKey: "platform",
-				header: translate("gathers.fields.platform"),
-			},
-			{
-				id: "data_type",
-				accessorKey: "data_type",
-				header: translate("gathers.fields.data_type"),
 			},
 			{
 				id: "instance_id",
@@ -85,40 +85,9 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 				},
 			},
 			{
-				id: "limit_messages",
-				accessorKey: "limit_messages",
-				header: translate("gathers.fields.limit_messages"),
-			},
-			{
-				id: "limit_replies",
-				accessorKey: "limit_replies",
-				header: translate("gathers.fields.limit_replies"),
-			},
-			{
-				id: "nested_replies",
-				accessorKey: "nested_replies",
-				header: translate("gathers.fields.nested_replies"),
-				cell: function render({ getValue }) {
-					return <BooleanField value={getValue<any>()} />;
-				},
-			},
-			{
-				id: "id",
-				accessorKey: "id",
-				header: translate("gathers.fields.id"),
-			},
-			{
 				id: "created_at",
 				accessorKey: "created_at",
 				header: translate("gathers.fields.created_at"),
-				cell: function render({ getValue }) {
-					return <DateField value={getValue<any>()} />;
-				},
-			},
-			{
-				id: "updated_at",
-				accessorKey: "updated_at",
-				header: translate("gathers.fields.updated_at"),
 				cell: function render({ getValue }) {
 					return <DateField value={getValue<any>()} />;
 				},
@@ -154,7 +123,7 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 	}));
 
 	return (
-		<List>
+		<List canCreate>
 			<ScrollArea>
 				<TableComponent
 					headerGroups={getHeaderGroups}
