@@ -16,7 +16,8 @@ spec:
   tls:
   - hosts:
       - superset.{{ .Values.base_host }}
-    secretName: superset-phoenix-tls
+      - api.{{ .Values.base_host }}
+    secretName: main-ingress-phoenix-tls
   {{- end }}
   rules:
     - host: superset.{{ .Values.base_host }}

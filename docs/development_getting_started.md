@@ -72,6 +72,11 @@ Once you have you local cluster up and running you can do:
 make up
 ```
 
+GOTCHA:
+Currently the `phoenix-api` deployment does not wait for the `platformdb` to be ready. This means
+that the `phoenix-api` will fail to start. To fix this restart the `phoenix-api` deployment in the
+tilt dashboard.
+
 In the browser you will be able to see the `tilt` UI via the URL that `tilt up` prints.
 
 You can also use the `tilt` cli if needs be. Such as `tilt down` to bring down the resources in the
@@ -79,12 +84,27 @@ cluster.
 
 You can also use `make clean` to remove all the tilt resources and default volumes in the cluster.
 
+## Authentication
+
+The local development system uses a third-party authentication provider to authenticate users. This
+can be done on any providers such as auth0. You will have to configure the `oauth2-proxy.config`.
+To do this:
+- create an account with auth0
+- create an application
+- create a user in the application
+- set the callback URL to `http://oauth.phoenix.local/oauth2/callback`
+- copy the client id and secret to the cluster/local/secrets.yaml file
+- update the `oidc_issuer_url` and `whitelist_domains` in cluster/local/values.yaml
+- once the local cluster is up you should be redirected to the auth0 login page if you go to
+  `http://api.phoenix.local/`
+
 ## Hello world
 
-Once your set up is complete you should be able to see an hello world at:
+Once your set up is complete you should be able to see an hello world at. Beaware you will need to
+log in to the configured authentication provider.
 
-* [http://localhost/](http://localhost/)
-* [http://phoenix.local/](http://phoenix.local/)
+* [http://api.phoenix.local/](http://api.phoenix.local/)
+* [http://superset.phoenix.local/](http://superset.phoenix.local/)
 
 ## Dev cluster in the cloud
 

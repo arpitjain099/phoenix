@@ -27,12 +27,52 @@ api:
 # Platform DB
 #
 # Development database for the platform. It is recommended to use a more reliable db for production.
+#
+# Be aware the name is platformdb as we can't use an _ or a - in the name to to a number of
+# different complex reasons: helm can't process - and _ can be used for a Service annotation
 #######################
-platform_db:
+# Based on superset values:
+# https://github.com/apache/superset/blob/master/helm/superset/values.yaml#L771-L811
+# ref: https://github.com/bitnami/charts/tree/main/bitnami/postgresql
+platformdb:
+  ##
+  ## Use the PostgreSQL chart dependency.
+  ## Set to false if bringing your own PostgreSQL.
   enabled: true
-  postgres_image:
-    tag: 15-alpine
-  storageSize: 1Gi
+
+  ## Authentication parameters
+  auth:
+    ## The name of an existing secret that contains the postgres password.
+    existingSecret: phoenix-platform-db-secret
+    ## PostgreSQL name for a custom user to create
+    username: phiphi
+    ## PostgreSQL password for the custom user to create. Ignored if `auth.existingSecret` with key `password` is provided
+    password: password
+    ## PostgreSQL name for a custom database to create
+    database: platform
+    image:
+      tag: "16.2.0-debian"
+
+  ## PostgreSQL Primary parameters
+  primary:
+    ##
+    ## Persistent Volume Storage configuration.
+    ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes
+    persistence:
+      ##
+      ## Enable PostgreSQL persistence using Persistent Volume Claims.
+      enabled: true
+      ##
+      ## Persistent class
+      # storageClass: classname
+      ##
+      ## Access modes:
+      accessModes:
+        - ReadWriteOnce
+    ## PostgreSQL port
+    service:
+      ports:
+        postgresql: "5432"
 
 # Cert Manager
 # Be aware that only one cert-manager can be installed in a cluster

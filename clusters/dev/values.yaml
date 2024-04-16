@@ -1,5 +1,12 @@
 base_host: "phoenixplatformdev.xyz"
 ingressClassName: "nginx"
+api:
+  enabled: true
+  replicas: 1
+  image:
+    # This is the stable image created by the gitlab ci
+    repository: registry.gitlab.com/howtobuildup/phoenix/python/phiphi
+    tag: stable
 cert_issuer:
   enabled: true
   issuer_name: "letsencrypt-prod"

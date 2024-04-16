@@ -8,5 +8,8 @@ dependencies:
 - name: cert-manager
   repository: https://charts.jetstack.io
   version: v1.14.4
-digest: sha256:e8c1784fed573db9dfc1cfec0c5317c2e195e8000ceb067aece86179c80903ee
-generated: "2024-04-09T17:04:44.92924862+02:00"
+- name: postgresql
+  repository: https://charts.bitnami.com/bitnami
+  version: 15.0.0
+digest: sha256:e851cef67b189f21d5d7e7883b724f252cb5bd60db5be4f8ffb630c44c3d5b9f
+generated: "2024-04-12T23:10:46.341351087+02:00"
