@@ -111,8 +111,7 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 				{...getInputProps("data_type")}
 				data={[
 					{ label: translate("inputs.select"), value: "" },
-					{ label: "Posts", value: "posts" },
-					{ label: "Messages", value: "messages" },
+					{ label: "Posts", value: "posts" }
 				]}
 			/>
 			<GatherInputs
