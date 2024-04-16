@@ -1,7 +1,8 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable react/require-default-props */
 import { Tooltip } from "@mantine/core";
 import { IconInfoCircle, IconX } from "@tabler/icons";
-import React, { useState, ChangeEvent, FormEvent, KeyboardEvent } from "react";
+import React, { useState, ChangeEvent, KeyboardEvent } from "react";
 
 interface Props {
 	required?: boolean;
@@ -24,11 +25,10 @@ const GatherInputs: React.FC<Props> = ({
 		setInputValue(e.target.value);
 	};
 
-	const handleInputSubmit = (e: FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
+	const handleInputSubmit = () => {
 		if (inputValue.trim() !== "") {
 			const inputs = inputValue
-				.split(",")
+				.split(/[,\s]+/) // Split by commas and spaces
 				.map((input) => input.trim())
 				.filter((input) => input !== "");
 			setData((prevInputs) => [...prevInputs, ...inputs]);
@@ -41,11 +41,13 @@ const GatherInputs: React.FC<Props> = ({
 	};
 
 	const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === "Enter") {
-			handleInputSubmit(e as any);
-		} else if (e.key === " ") {
-			handleInputSubmit(e as any);
+		if (e.key === "Enter" || e.key === " ") {
+			handleInputSubmit();
 		}
+	};
+
+	const handleBlur = () => {
+		handleInputSubmit();
 	};
 
 	return (
@@ -67,9 +69,9 @@ const GatherInputs: React.FC<Props> = ({
 						<div
 							className={`flex flex-wrap gap-1 ${data.length > 0 && "mb-3"}`}
 						>
-							{data.map((input: string) => (
+							{data.map((input: string, idx: number) => (
 								<div
-									key={input}
+									key={idx}
 									className="flex items-center gap-3 bg-neutral-100 rounded-lg py-1 px-2 text-neutral-800 font-medium text-sm"
 								>
 									<span>{input}</span>
@@ -86,6 +88,7 @@ const GatherInputs: React.FC<Props> = ({
 							value={inputValue}
 							onChange={handleInputChange}
 							onKeyDown={handleKeyDown}
+							onBlur={handleBlur}
 							placeholder={placeholder}
 							className="w-full text-sm font-normal border-0 rounded-lg focus:outline-none text-neutral-700"
 						/>
