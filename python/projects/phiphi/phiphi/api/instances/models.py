@@ -21,6 +21,7 @@ class InstanceBase(platform_db.Base):
     pi_deleted_after_days: orm.Mapped[int]
     delete_after_days: orm.Mapped[int]
     expected_usage: orm.Mapped[Optional[str]]
+    run_status: orm.Mapped[Optional[str]]
 
 
 class Instance(InstanceBase, base_models.TimestampModel):
