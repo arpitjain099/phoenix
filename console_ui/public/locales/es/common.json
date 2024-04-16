@@ -156,6 +156,26 @@
 			"days_until_all_data_expiration": "El valor mínimo es 183 y el valor máximo es 365"
 		}
 	},
+	"gathers": {
+		"fields": {
+			"id": "ID",
+			"start_date": "Fecha de inicio",
+			"end_date": "Fecha de fin",
+			"platform": "Plataforma",
+			"instance_id": "Instancia",
+			"limit_messages": "Límite de mensajes",
+			"limit_replies": "Límite de respuestas",
+			"nested_replies": "Respuestas anidadas",
+			"data_type": "Tipo de datos",
+			"description": "Descripción",
+			"created_at": "Creado en",
+			"updated_at": "Actualizado en",
+			"inputs": {
+				"title": "Entradas",
+				"placeholder": "Escriba/pegue las entradas separadas por ',' y presione enter"
+			}
+		}
+	},
 	"documentTitle": {
 		"default": "Interfaz de consola",
 		"suffix": " | Phoenix",

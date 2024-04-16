@@ -156,6 +156,26 @@
 			"days_until_all_data_expiration": "القيمة الدنيا هي 183 والقيمة العظمى هي 365"
 		}
 	},
+	"gathers": {
+		"fields": {
+			"id": "المعرف",
+			"start_date": "تاريخ البدء",
+			"end_date": "تاريخ الانتهاء",
+			"platform": "المنصة",
+			"instance_id": "المثال",
+			"limit_messages": "حد الرسائل",
+			"limit_replies": "حد الردود",
+			"nested_replies": "الردود المتداخلة",
+			"data_type": "نوع البيانات",
+			"description": "الوصف",
+			"created_at": "تم الإنشاء في",
+			"updated_at": "تم التحديث في",
+			"inputs": {
+				"title": "المدخلات",
+				"placeholder": "اكتب/الصق المدخلات مفصولة ب ',' واضغط على Enter"
+			}
+		}
+	},
 	"documentTitle": {
 		"default": "واجهة المستخدم للوحة التحكم",
 		"suffix": " | في في",
