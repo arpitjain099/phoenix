@@ -44,8 +44,24 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 		validate: {
 			data_type: (value) => (value.length <= 0 ? "Required" : null),
 			platform: (value) => (value.length <= 0 ? "Required" : null),
-			start_date: (value) => (value.length <= 0 ? "Required" : null),
-			end_date: (value) => (value.length <= 0 ? "Required" : null),
+			start_date: (value) => {
+				if (!value) return "Start date is required";
+				const startDate = new Date(value);
+				const endDate = new Date(values.end_date);
+				const today = new Date();
+				if (startDate > today) return "Start date cannot be in the future";
+				if (startDate > endDate) return "Start date cannot be after end date";
+				return null;
+			},
+			end_date: (value) => {
+				if (!value) return "End date is required";
+				const endDate = new Date(value);
+				const startDate = new Date(values.start_date);
+				const today = new Date();
+				if (endDate > today) return "End date cannot be in the future";
+				if (endDate < startDate) return "End date cannot be before start date";
+				return null;
+			},
 			limit_messages: (value) => (value === undefined ? "Required" : null),
 			limit_replies: (value) => (value === undefined ? "Required" : null),
 			input: {
@@ -132,12 +148,14 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 			<DatePicker
 				mt="sm"
 				withAsterisk
+				maxDate={new Date()}
 				label={translate("gathers.fields.start_date")}
 				{...getInputProps("start_date")}
 			/>
 			<DatePicker
 				mt="sm"
 				withAsterisk
+				minDate={new Date()}
 				label={translate("gathers.fields.end_date")}
 				{...getInputProps("end_date")}
 			/>
