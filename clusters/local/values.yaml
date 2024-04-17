@@ -1,3 +1,5 @@
+cert_issuer:
+  enabled: false
 cert-manager:
   enabled: false
 oauth2-proxy:
