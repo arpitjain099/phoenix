@@ -95,6 +95,41 @@ cert_issuer:
 
 superset:
 
+##############
+# Example secrets
+#
+# Please replace the values with your own
+###################
+  # DEFAULTS:
+  # supersetNode:
+    # connections:
+      # https://github.com/apache/superset/blob/master/helm/superset/values.yaml#L280-L284
+      # db_host: '{{ .Release.Name }}-postgresql'
+      # db_port: "5432"
+      # db_user: superset
+      # db_pass: superset
+      # db_name: superset
+  extraSecretEnv:
+    # Generate with:
+    # openssl rand -base64 42
+
+    SUPERSET_SECRET_KEY: "<SET>"
+
+  # If you have enabled postgres
+  # Using defaults for superset
+  # postgresql:
+    # auth:
+      # These need to match supersetNode.connections:
+      # - db_user: postgresql.auth.username
+      # - db_pass: postgresql.auth.password
+      # - db_name: postgresql.auth.database
+      # DEFAULTS
+      # https://github.com/apache/superset/blob/master/helm/superset/values.yaml#L778-L786
+      # username: "superset"
+      # password: "superset"
+      # database: "superset"
+      # Set the postgres password
+      # postgresPassword: "postgres_pass"
 
 
   #########################################
