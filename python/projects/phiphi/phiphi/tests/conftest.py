@@ -50,6 +50,8 @@ def client_first_admin_user(test_app) -> Generator[TestClient, None, None]:
 @pytest.fixture(scope="session", autouse=True)
 def test_engine():
     """Create a test engine for the database."""
+    if config.settings.TESTING_SQLALCHEMY_DATABASE_URI is None:
+        raise ValueError("Tests cannot be run as TESTING_SQLALCHEMY_DATABASE_URI is not set.")
     engine = create_engine(str(config.settings.TESTING_SQLALCHEMY_DATABASE_URI))
     return engine
 
