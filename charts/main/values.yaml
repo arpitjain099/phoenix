@@ -86,6 +86,10 @@ platformdb:
         postgresql: "5432"
 
 # Cert Manager
+#
+# !!!!!!!!!!!!!!!!!!!!!!!!
+# It is highly recommended to have the cert manager be installed separately and not part of this chart
+# !!!!!!!!!!!!!!!!!!!!!!!!
 # Be aware that only one cert-manager can be installed in a cluster
 # If you have one already installed, set this to false
 cert-manager:
