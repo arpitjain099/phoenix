@@ -50,7 +50,7 @@ class Settings(BaseSettings):
 
     # DB ENVIRONMENT
     SQLALCHEMY_DATABASE_URI: SqliteDsn | pydantic.PostgresDsn
-    TESTING_SQLALCHEMY_DATABASE_URI: SqliteDsn | pydantic.PostgresDsn
+    TESTING_SQLALCHEMY_DATABASE_URI: SqliteDsn | pydantic.PostgresDsn | None = None
 
     # Seed data
     FIRST_ADMIN_USER_EMAIL: pydantic.EmailStr = "admin@admin.com"

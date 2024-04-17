@@ -1,7 +1,3 @@
-# Superset
-superset:
-  enabled: true
-
 # This is the base host that will be used for all ingress resources
 base_host: "phoenix.local"
 
@@ -23,6 +19,23 @@ api:
   first_admin_user_display_name: "Buildup"
   header_auth_name: "HTTP_X_AUTH_REQUEST_EMAIL"
 
+  ###################
+  # Example secrets
+  #
+  # Please replace the values with your own
+  # If you are using platformdb they need to match the auth there
+  ################
+  # Use your own secrets see the secrets.yaml template for required data
+  secretKey: "{{ .Release.Name }}-api-secrets"
+  db_auth:
+    host: "{{ .Release.Name }}-platformdb"
+    port: "5432"
+    # If using the platformdb these need to match the platformdb.auth variables with the same name
+    username: "phiphi"
+    password: "phiphi_password"
+    database: "platform"
+
+
 #######################
 # Platform DB
 #
@@ -42,16 +55,13 @@ platformdb:
 
   ## Authentication parameters
   auth:
-    ## The name of an existing secret that contains the postgres password.
-    existingSecret: phoenix-platform-db-secret
     ## PostgreSQL name for a custom user to create
     username: phiphi
     ## PostgreSQL password for the custom user to create. Ignored if `auth.existingSecret` with key `password` is provided
     password: password
     ## PostgreSQL name for a custom database to create
     database: platform
-    image:
-      tag: "16.2.0-debian"
+    postgresqlPassword: postgres_pass
 
   ## PostgreSQL Primary parameters
   primary:
@@ -75,6 +85,10 @@ platformdb:
         postgresql: "5432"
 
 # Cert Manager
+#
+# !!!!!!!!!!!!!!!!!!!!!!!!
+# It is highly recommended to have the cert manager be installed separately and not part of this chart
+# !!!!!!!!!!!!!!!!!!!!!!!!
 # Be aware that only one cert-manager can be installed in a cluster
 # If you have one already installed, set this to false
 cert-manager:
@@ -93,8 +107,45 @@ cert_issuer:
   issuer: "letsencrypt-staging"
   issuer_email: ""
 
+# Superset
 superset:
+  enabled: true
 
+##############
+# Example secrets
+#
+# Please replace the values with your own
+###################
+  # DEFAULTS:
+  # supersetNode:
+    # connections:
+      # https://github.com/apache/superset/blob/master/helm/superset/values.yaml#L280-L284
+      # db_host: '{{ .Release.Name }}-postgresql'
+      # db_port: "5432"
+      # db_user: superset
+      # db_pass: superset
+      # db_name: superset
+  extraSecretEnv:
+    # Generate with:
+    # openssl rand -base64 42
+
+    SUPERSET_SECRET_KEY: "<SET>"
+
+  # If you have enabled postgres
+  # Using defaults for superset
+  # postgresql:
+    # auth:
+      # These need to match supersetNode.connections:
+      # - db_user: postgresql.auth.username
+      # - db_pass: postgresql.auth.password
+      # - db_name: postgresql.auth.database
+      # DEFAULTS
+      # https://github.com/apache/superset/blob/master/helm/superset/values.yaml#L778-L786
+      # username: "superset"
+      # password: "superset"
+      # database: "superset"
+      # Set the postgres password
+      # postgresPassword: "postgres_pass"
 
 
   #########################################
@@ -158,3 +209,16 @@ superset:
       AUTH_TYPE = AUTH_REMOTE_USER
 
       CUSTOM_SECURITY_MANAGER = custom_sso_manager.PhoenixCustomSSOSecurityManager
+
+
+oauth2-proxy:
+  enabled: true
+  ###################
+  # Example secrets
+  #
+  # Please replace the values with your own
+  # ###################
+  config:
+    cookieSecret: "<SET>"
+    clientID: "<SET>"
+    clientSecret: "<SET>"

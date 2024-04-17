@@ -4,7 +4,9 @@ metadata:
   name: oauth-proxy
   annotations:
     kubernetes.io/ingress.class: {{ .Values.ingressClassName }}
+    {{- if .Values.cert_issuer.enabled }}
     cert-manager.io/issuer: {{ .Values.cert_issuer.issuer_name }}
+    {{- end }}
 spec:
   ingressClassName: {{ .Values.ingressClassName }}
   {{- if .Values.cert_issuer.enabled }}
@@ -19,7 +21,7 @@ spec:
       paths:
       - backend:
           service:
-            name: phoenixchartmain-oauth2-proxy
+            name: {{ .Release.Name }}-oauth2-proxy
             port:
               number: 80
         path: /

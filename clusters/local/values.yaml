@@ -1,8 +1,9 @@
+cert_issuer:
+  enabled: false
 cert-manager:
   enabled: false
 oauth2-proxy:
   config:
-    existingSecret: phoenixchartmain-oauth2-secrets
     configFile: |
       # Settings for Auth0
       provider="oidc"
@@ -29,17 +30,12 @@ oauth2-proxy:
 superset:
   enabled: true
   # These secrets must be created before the first apply of the chart
-  envFromSecret: phoenixchartmain-superset-env-override
   init:
     adminUser:
       email: buildup@datavaluepeople.com
   image:
     repository: phoenix_superset
     tag: latest
-  postgresql:
-    auth:
-      # This is needed to override the postgresql passwords
-      existingSecret: phoenixchartmain-superset-env-override
   configOverrides:
     general: |
       APP_NAME = "Visual - Phoenix"
