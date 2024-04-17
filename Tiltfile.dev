@@ -5,16 +5,12 @@ load('ext://namespace', 'namespace_create', 'namespace_inject')
 allow_k8s_contexts(os.getenv('KUBE_DEV_CONTEXT'))
 namespace_create(os.getenv('DEV_NAMESPACE'))
 
-k8s_yaml(
-  namespace_inject('clusters/dev/secrets.yaml', os.getenv('DEV_NAMESPACE')),
-)
-
 set_base_host = 'base_host=%s' % os.getenv('DEV_BASE_HOST')
 
 k8s_yaml(helm(
   './charts/main/',
-  name='phoenixchartmain',
+  name='phoenix',
   set=[set_base_host],
   namespace=os.getenv('DEV_NAMESPACE'),
-  values='./clusters/dev/values.yaml',
+  values=['./clusters/dev/values.yaml', './clusters/dev/secrets.yaml'],
 ))
