@@ -38,14 +38,13 @@ platformdb:
 
   ## Authentication parameters
   auth:
-    ## The name of an existing secret that contains the postgres password.
-    existingSecret: phoenix-platform-db-secret
     ## PostgreSQL name for a custom user to create
     username: phiphi
     ## PostgreSQL password for the custom user to create. Ignored if `auth.existingSecret` with key `password` is provided
     password: password
     ## PostgreSQL name for a custom database to create
     database: platform
+    postgresqlPassword: postgres_pass
     image:
       tag: "16.2.0-debian"
 
