@@ -30,7 +30,7 @@ class Platform(str, Enum):
 class DataType(str, Enum):
     """data type enum."""
 
-    messages = "messages"
+    posts = "posts"
 
 
 class GatherBase(pydantic.BaseModel):

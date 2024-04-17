@@ -63,7 +63,7 @@ def test_create_get_apify_gather(reseed_tables, client: TestClient) -> None:
         "instance_id": 1,
         "input": {"type": "author_url_list", "data": ["Author_1"]},
         "platform": "facebook",
-        "data_type": "messages",
+        "data_type": "posts",
         "start_date": "2024-04-08T08:41:05",
         "end_date": "2024-04-08T08:41:05",
         "limit_messages": 1000,
