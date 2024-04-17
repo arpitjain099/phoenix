@@ -24,7 +24,7 @@ up:
 
 clean:
 	tilt down
-	@echo "Deleting all `pvc` in mircok8s cluster default namespace."
+	@echo "Deleting all pvc in mircok8s cluster default namespace."
 	kubectl delete pvc --all -n default --context microk8s
 
 dev_up:
