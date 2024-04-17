@@ -14,15 +14,6 @@ class ExpectedUsage(str, Enum):
     monthly = "monthly"
 
 
-class RunStatus(str, Enum):
-    """Instance run status."""
-
-    in_queue = "in_queue"
-    processing = "processing"
-    completed = "completed"
-    failed = "failed"
-
-
 class InstanceBase(pydantic.BaseModel):
     """Instance base schema.
 

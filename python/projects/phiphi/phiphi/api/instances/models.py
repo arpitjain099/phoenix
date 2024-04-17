@@ -6,7 +6,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 
 from phiphi import platform_db
 from phiphi.api import base_models
-from phiphi.api.instances.instance_runs import models
+from phiphi.api.instances.instance_runs import models, schemas
 
 
 class InstanceBase(platform_db.Base):
@@ -39,9 +39,12 @@ class Instance(InstanceBase, base_models.TimestampModel):
     )
 
     @hybrid_property
-    def last_run(self) -> models.InstanceRuns:
+    def last_run(self) -> models.InstanceRuns | None:
         """Property to get the most recent InstanceRun."""
         last_run = self.instance_runs.first()
+
+        if last_run is None:
+            return None
 
         return cast(models.InstanceRuns, last_run)
 
@@ -49,5 +52,8 @@ class Instance(InstanceBase, base_models.TimestampModel):
     def run_status(self) -> str:
         """Run status hybrid property."""
         # Check if there are any running instance runs
-        status = self.last_run.run_status
-        return str(status)
+
+        if self.last_run is None:
+            return schemas.RunStatus.yet_to_run
+
+        return self.last_run.run_status

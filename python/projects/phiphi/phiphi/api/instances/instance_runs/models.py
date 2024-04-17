@@ -3,6 +3,7 @@ import datetime
 from typing import Optional
 
 from phiphi import platform_db
+from phiphi.api.instances.instance_runs import schemas
 from sqlalchemy import ForeignKey, orm
 from sqlalchemy.ext.hybrid import hybrid_property
 
@@ -26,5 +27,11 @@ class InstanceRuns(platform_db.Base):
     def run_status(self) -> str:
         """Run status hybrid property."""
         # Check if there are any running instance runs
-        running = self.completed_at is None
-        return "running" if running else "completed"
+        if self.failed_at:
+            return schemas.RunStatus.failed
+        elif self.completed_at:
+            return schemas.RunStatus.completed
+        elif self.started_processing_at:
+            return schemas.RunStatus.processing
+        else:
+            return schemas.RunStatus.in_queue
