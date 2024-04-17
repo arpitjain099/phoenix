@@ -59,3 +59,10 @@ def get_instances(
     if not instances:
         return []
     return [schemas.InstanceResponse.model_validate(instance) for instance in instances]
+
+
+def get_db_instance_with_guard(session: sqlalchemy.orm.Session, instance_id: int) -> None:
+    """Guard for null instnaces."""
+    db_instance = session.query(models.Instance).filter(models.Instance.id == instance_id).first()
+    if db_instance is None:
+        raise exceptions.InstanceNotFound()

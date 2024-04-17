@@ -22,7 +22,7 @@ def create_instance_runs(
 def get_instance_runs(
     session: deps.SessionDep, instance_id: int, start: int = 0, end: int = 100
 ) -> list[schemas.InstanceRunsResponse]:
-    """Get gathers."""
+    """Get instance runs."""
     try:
         return crud.get_instance_runs(session, instance_id, start, end)
     except exceptions.InstanceNotFound:
@@ -40,7 +40,7 @@ def get_instance_last_run(
     try:
         instance_runs = crud.get_instance_last_run(session, instance_id)
         if instance_runs is None:
-            raise fastapi.HTTPException(status_code=404, detail="Instance run not found")
+            raise fastapi.HTTPException(status_code=404, detail="Instance has no previous runs")
         return instance_runs
     except exceptions.InstanceNotFound:
         raise exceptions.InstanceNotFound
