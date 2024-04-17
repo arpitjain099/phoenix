@@ -14,7 +14,6 @@ api:
     tag: latest
   # If you want unicorn to reload for development
   reload: true
-  checkDBReady: true
   cors_origins: ["http://*"]
   first_admin_user_email: "buildup@datavaluepeople.com"
   first_admin_user_display_name: "Buildup"
