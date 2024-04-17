@@ -6,7 +6,7 @@ metadata:
     kubernetes.io/ingress.class: {{ .Values.ingressClassName }}
     nginx.ingress.kubernetes.io/rewrite-target: /
     {{- include "phoenixmain.authSignin" . | nindent 4 }}
-    nginx.ingress.kubernetes.io/auth-url: http://phoenixchartmain-oauth2-proxy.{{ .Release.Namespace }}.svc.cluster.local/oauth2/auth
+    nginx.ingress.kubernetes.io/auth-url: http://{{ .Release.Name }}-oauth2-proxy.{{ .Release.Namespace }}.svc.cluster.local/oauth2/auth
     nginx.ingress.kubernetes.io/proxy-buffer-size: 512k
     nginx.ingress.kubernetes.io/auth-response-headers: "x-auth-request-user, x-auth-request-groups, x-auth-request-email"
     cert-manager.io/issuer: {{ .Values.cert_issuer.issuer_name }}
@@ -27,7 +27,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: phoenixchartmain-superset
+                name: {{ .Release.Name }}-superset
                 port:
                   number: 8088
     - host: api.{{ .Values.base_host }}
@@ -37,6 +37,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: phoenix-api-service
+                name: {{ .Release.Name }}-api-service
                 port:
                   number: 80
