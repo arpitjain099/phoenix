@@ -1,7 +1,7 @@
 """gather_model.
 
 Revision ID: df23bee88382
-Revises: f766ea48c9d1
+Revises: 7cb955da8fb9
 Create Date: 2024-04-10 14:17:06.824744
 
 """
@@ -14,7 +14,7 @@ from phiphi.api import base_models
 
 # revision identifiers, used by Alembic.
 revision: str = "df23bee88382"
-down_revision: Union[str, None] = "f766ea48c9d1"
+down_revision: Union[str, None] = "7cb955da8fb9"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -57,6 +57,6 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    """Downgrade for df23bee88382."""
+    """Downgrade for 7cb955da8fb9."""
     op.drop_table(APIFY_TABLE_NAME)
     op.drop_table(TABLE_NAME)
