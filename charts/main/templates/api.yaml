@@ -13,6 +13,14 @@ spec:
       labels:
         app: {{ .Release.Name }}-api
     spec:
+      {{- if .Values.api.checkDBReady}}
+      initContainers:
+      - name: check-db-ready
+        image: postgres:9.6.5
+        command: ['sh', '-c',
+          'until pg_isready -h {{ tpl ( .Values.api.db_auth.host ) . }} -p {{ .Values.api.db_auth.port }} -U {{ .Values.api.db_auth.username }} -d {{ .Values.api.db_auth.database }}; 
+          do echo waiting for database; sleep 2; done;']
+      {{- end}}
       containers:
       - name: phiphi
         image: {{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}
