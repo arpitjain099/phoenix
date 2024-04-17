@@ -9,7 +9,9 @@ metadata:
     nginx.ingress.kubernetes.io/auth-url: http://{{ .Release.Name }}-oauth2-proxy.{{ .Release.Namespace }}.svc.cluster.local/oauth2/auth
     nginx.ingress.kubernetes.io/proxy-buffer-size: 512k
     nginx.ingress.kubernetes.io/auth-response-headers: "x-auth-request-user, x-auth-request-groups, x-auth-request-email"
+    {{- if .Values.cert_issuer.enabled }}
     cert-manager.io/issuer: {{ .Values.cert_issuer.issuer_name }}
+    {{- end }}
 spec:
   ingressClassName: {{ .Values.ingressClassName }}
   {{- if .Values.cert_issuer.enabled }}
