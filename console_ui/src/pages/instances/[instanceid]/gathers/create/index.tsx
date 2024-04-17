@@ -11,6 +11,9 @@ import { useEffect, useState } from "react";
 import GatherInputs from "@components/gather-inputs";
 
 export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
+	const today = new Date();
+	const tomorrow = new Date(today);
+	tomorrow.setDate(tomorrow.getDate() + 1);
 	const { mutate } = useCreate();
 	const translate = useTranslate();
 	const router = useRouter();
@@ -28,8 +31,8 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 	} = useForm({
 		initialValues: {
 			description: "",
-			start_date: "",
-			end_date: "",
+			start_date: today,
+			end_date: tomorrow,
 			platform: "facebook",
 			data_type: "",
 			input: {
@@ -48,7 +51,6 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 				if (!value) return "Start date is required";
 				const startDate = new Date(value);
 				const endDate = new Date(values.end_date);
-				const today = new Date();
 				if (startDate > today) return "Start date cannot be in the future";
 				if (startDate > endDate) return "Start date cannot be after end date";
 				return null;
@@ -57,14 +59,13 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 				if (!value) return "End date is required";
 				const endDate = new Date(value);
 				const startDate = new Date(values.start_date);
-				const today = new Date();
-				if (endDate > today) return "End date cannot be in the future";
 				if (endDate < startDate) return "End date cannot be before start date";
 				return null;
 			},
 			limit_messages: (value) => (value === undefined ? "Required" : null),
 			limit_replies: (value) => (value === undefined ? "Required" : null),
 			input: {
+				type: (value) => (value.length <= 0 ? "Required" : null),
 				data: (value) => (value.length <= 0 ? "Required" : null),
 			},
 		},
@@ -98,11 +99,7 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 	};
 
 	useEffect(() => {
-		const input = {
-			type: "author_url_list",
-			data: inputList,
-		};
-		setFieldValue("input", input);
+		setFieldValue("input.data", inputList);
 	}, [inputList, setFieldValue]);
 
 	return (
@@ -130,12 +127,23 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 					{ label: "Posts", value: "posts" },
 				]}
 			/>
+			<Select
+				mt="sm"
+				withAsterisk
+				label={translate("gathers.fields.inputs.type")}
+				data={[
+					{ label: translate("inputs.select"), value: "" },
+					{ label: "Accounts List", value: "author_url_list" },
+				]}
+				{...getInputProps("input.type")}
+			/>
 			<GatherInputs
 				required
-				label={translate("gathers.fields.inputs.title")}
-				placeholder={translate("gathers.fields.inputs.placeholder")}
+				label={translate("gathers.fields.inputs.data")}
+				placeholder={translate("gathers.fields.inputs.data_placeholder")}
 				data={inputList}
 				setData={setInputList}
+				{...getInputProps("input.data")}
 			/>
 			<Select
 				mt="sm"
@@ -148,14 +156,12 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 			<DatePicker
 				mt="sm"
 				withAsterisk
-				maxDate={new Date()}
 				label={translate("gathers.fields.start_date")}
 				{...getInputProps("start_date")}
 			/>
 			<DatePicker
 				mt="sm"
 				withAsterisk
-				minDate={new Date()}
 				label={translate("gathers.fields.end_date")}
 				{...getInputProps("end_date")}
 			/>

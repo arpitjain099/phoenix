@@ -171,8 +171,9 @@
 			"created_at": "Créé le",
 			"updated_at": "Mis à jour le",
 			"inputs": {
-				"title": "Entrées",
-				"placeholder": "Tapez/collez les entrées séparées par ',' et appuyez sur Entrée"
+				"data": "Données d'entrée de collecte",
+				"type": "Type d'entrée de collecte",
+				"data_placeholder": "Tapez / collez les entrées séparées par `,` et appuyez sur Entrée"
 			}
 		}
 	},

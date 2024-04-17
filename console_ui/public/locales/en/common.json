@@ -171,8 +171,9 @@
 			"created_at": "Created At",
 			"updated_at": "Updated At",
 			"inputs": {
-				"title": "Inputs",
-				"placeholder": "Type/paste inputs seperated by `,` and press enter"
+				"data": "Gather Input Data",
+				"type": "Gather Input Type",
+				"data_placeholder": "Type/paste inputs seperated by `,` and press enter"
 			}
 		}
 	},

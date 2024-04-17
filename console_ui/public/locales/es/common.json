@@ -171,8 +171,9 @@
 			"created_at": "Creado en",
 			"updated_at": "Actualizado en",
 			"inputs": {
-				"title": "Entradas",
-				"placeholder": "Escriba/pegue las entradas separadas por ',' y presione enter"
+				"data": "Datos de entrada de la recolección",
+				"type": "Tipo de entrada de la recolección",
+				"data_placeholder": "Escriba/pegue las entradas separadas por `,` y presione Enter"
 			}
 		}
 	},
