@@ -45,8 +45,6 @@ platformdb:
     ## PostgreSQL name for a custom database to create
     database: platform
     postgresqlPassword: postgres_pass
-    image:
-      tag: "16.2.0-debian"
 
   ## PostgreSQL Primary parameters
   primary:
