@@ -29,7 +29,7 @@ dependencies:
   alias: cert-manager
   condition: cert-manager.enabled
 - name: postgresql
-  version: 15.0.0
+  version: 15.2.5
   repository: https://charts.bitnami.com/bitnami
   # This is needed or will have name duplication with the postgresql chart in
   # superset
