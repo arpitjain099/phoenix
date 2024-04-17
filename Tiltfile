@@ -21,11 +21,8 @@ docker_build(
   ],
 )
 
-# Apply the secrets
-k8s_yaml('./clusters/local/secrets.yaml')
-
 k8s_yaml(helm(
   './charts/main/',
   name='phoenix',
-  values='./clusters/local/values.yaml',
+  values=['./clusters/local/values.yaml', './clusters/local/secrets.yaml'],
 ))
