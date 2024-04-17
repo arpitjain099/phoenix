@@ -28,3 +28,33 @@ def test_get_instance_runs(client: TestClient, reseed_tables) -> None:
     assert response.status_code == 200
     instances = response.json()
     assert len(instances) == 1
+
+
+def test_completed_run_status(reseed_tables, client: TestClient) -> None:
+    """Test completed run status."""
+    data = {"completed_at": CREATED_TIME}
+    response = client.put("/instances/runs/1/", json=data)
+    assert response.status_code == 200
+    instance = response.json()
+
+    assert instance["run_status"] == "completed"
+
+
+def test_failed_run_status(reseed_tables, client: TestClient) -> None:
+    """Test completed run status."""
+    data = {"failed_at": CREATED_TIME}
+    response = client.put("/instances/runs/2/", json=data)
+    assert response.status_code == 200
+    instance = response.json()
+
+    assert instance["run_status"] == "failed"
+
+
+def test_processing_run_status(reseed_tables, client: TestClient) -> None:
+    """Test completed run status."""
+    data = {"started_processing_at": CREATED_TIME}
+    response = client.put("/instances/runs/1/", json=data)
+    assert response.status_code == 200
+    instance = response.json()
+
+    assert instance["run_status"] == "processing"
