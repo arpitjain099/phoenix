@@ -12,14 +12,14 @@ export const InstanceCreate: React.FC<IResourceComponentsProps> = () => {
 		initialValues: {
 			name: "",
 			description: "",
-			environment_id: "",
+			environment_slug: "",
 			pi_deleted_after_days: 183,
 			delete_after_days: 183,
 			expected_usage: "",
 		},
 		validate: {
 			name: (value) => (value.length <= 0 ? "Name is required" : null),
-			environment_id: (value) =>
+			environment_slug: (value) =>
 				value.length <= 0 ? "Environment is required" : null,
 			pi_deleted_after_days: (value) =>
 				value === undefined

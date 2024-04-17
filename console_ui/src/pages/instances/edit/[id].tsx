@@ -13,7 +13,7 @@ export const InstanceEdit: React.FC<IResourceComponentsProps> = () => {
 	} = useForm({
 		initialValues: {
 			name: "",
-			environment_id: "",
+			environment_slug: "",
 			description: "",
 			pi_deleted_after_days: "",
 			delete_after_days: "",

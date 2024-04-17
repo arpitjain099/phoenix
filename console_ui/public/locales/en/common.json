@@ -128,7 +128,7 @@
 			"id": "Unique ID",
 			"name": "Name",
 			"description": "Description",
-			"environment_id": "Environment",
+			"environment_slug": "Environment",
 			"days_until_pi_expiration": "Personal Information is deleted after (days)",
 			"days_until_all_data_expiration": "All data is deleted after (days)",
 			"expected_usage": {

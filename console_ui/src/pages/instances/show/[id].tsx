@@ -49,9 +49,9 @@ export const InstanceShow: React.FC<IResourceComponentsProps> = () => {
 			</Group>
 			<Group>
 				<Title my="xs" order={5}>
-					{translate("instances.fields.environment_id")}:
+					{translate("instances.fields.environment_slug")}:
 				</Title>
-				<TextField value={record?.environment_id} />
+				<TextField value={record?.environment_slug} />
 			</Group>
 			<Group>
 				<Title my="xs" order={5}>
