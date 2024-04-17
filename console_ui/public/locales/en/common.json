@@ -163,17 +163,28 @@
 			"end_date": "End Date",
 			"platform": "Platform",
 			"instance_id": "Instance",
-			"limit_messages": "Limit Messages",
+			"limit_messages": "Limit Posts Per Account",
 			"limit_replies": "Limit Replies",
 			"nested_replies": "Nested Replies",
 			"data_type": "Data Type",
 			"description": "Description",
 			"created_at": "Created At",
 			"updated_at": "Updated At",
-			"inputs": {
+			"input": {
 				"data": "Gather Input Data",
 				"type": "Gather Input Type",
-				"data_placeholder": "Type/paste inputs seperated by `,` and press enter"
+				"data_placeholder": "Type/paste inputs seperated by ` ` or press enter"
+			},
+			"info": {
+				"start_date": "The date to gather data from. This will be 0:00 of the day configured.",
+				"end_date": "The date to gather data till. This will be 0:00 of the day configured.",
+				"description": "Short description so that you know what the goal of the gather was.",
+				"limit_messages": "Limit the number of posts that are collected for each account.",
+				"data_type": "Type of data you would like to gather",
+				"input": {
+					"type": "The type of input data that you want to gather on. See manual for more information.",
+					"data": "Add the input data you would like to gather. Type/paste iput separated by ` ` (space) or press enter"
+				}
 			}
 		}
 	},

@@ -8,11 +8,28 @@ import {
 } from "@refinedev/core";
 import { useTable } from "@refinedev/react-table";
 import { ColumnDef } from "@tanstack/react-table";
-import { ScrollArea, Pagination } from "@mantine/core";
+import {
+	ScrollArea,
+	Pagination,
+	Anchor,
+	Breadcrumbs,
+	Group,
+} from "@mantine/core";
 import { List, DateField } from "@refinedev/mantine";
 import TableComponent from "@components/table";
 import Link from "next/link";
 import { useRouter } from "next/router";
+
+const breadcrumbs = [
+	{ title: "Instances", href: "/instances" },
+	{ title: "Gathers", href: "#" },
+].map((item) => (
+	<Group key={item.title}>
+		<Anchor color="gray" size="sm" href={item.href}>
+			{item.title}
+		</Anchor>
+	</Group>
+));
 
 export const GatherList: React.FC<IResourceComponentsProps> = () => {
 	const translate = useTranslate();
@@ -121,9 +138,8 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 			instanceData,
 		},
 	}));
-
 	return (
-		<List>
+		<List breadcrumb={<Breadcrumbs>{breadcrumbs}</Breadcrumbs>}>
 			<ScrollArea>
 				<TableComponent
 					headerGroups={getHeaderGroups}

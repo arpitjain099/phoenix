@@ -4,11 +4,32 @@ import {
 	useTranslate,
 } from "@refinedev/core";
 import { Create, useForm, useSelect } from "@refinedev/mantine";
-import { Select, NumberInput, Checkbox, Textarea } from "@mantine/core";
+import {
+	Select,
+	NumberInput,
+	Textarea,
+	Tooltip,
+	Group,
+	Anchor,
+	Breadcrumbs,
+} from "@mantine/core";
 import { DatePicker } from "@mantine/dates";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import GatherInputs from "@components/gather-inputs";
+import { IconInfoCircle } from "@tabler/icons";
+
+const breadcrumbs = [
+	{ title: "Instances", href: "/instances" },
+	{ title: "Gathers", href: "../gathers" },
+	{ title: "Create", href: "create" },
+].map((item) => (
+	<Group key={item.title}>
+		<Anchor color="gray" size="sm" href={item.href}>
+			{item.title}
+		</Anchor>
+	</Group>
+));
 
 export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 	const today = new Date();
@@ -41,8 +62,6 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 			},
 			instance_id: Number(instanceid),
 			limit_messages: 1000,
-			limit_replies: 100,
-			nested_replies: false,
 		},
 		validate: {
 			data_type: (value) => (value.length <= 0 ? "Required" : null),
@@ -63,7 +82,6 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 				return null;
 			},
 			limit_messages: (value) => (value === undefined ? "Required" : null),
-			limit_replies: (value) => (value === undefined ? "Required" : null),
 			input: {
 				type: (value) => (value.length <= 0 ? "Required" : null),
 				data: (value) => (value.length <= 0 ? "Required" : null),
@@ -87,8 +105,11 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 						values,
 					},
 					{
-						onSuccess: () => {
-							reset();
+						onSuccess: async () => {
+							await Promise.all([setInputList([]), reset()]);
+							setTimeout(() => {
+								router.push(`/instances/${values.instance_id}/gathers`);
+							}, 2000);
 						},
 					}
 				);
@@ -104,6 +125,7 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 
 	return (
 		<Create
+			breadcrumb={<Breadcrumbs>{breadcrumbs}</Breadcrumbs>}
 			isLoading={formLoading}
 			saveButtonProps={{ ...saveButtonProps, onClick: handleSave }}
 		>
@@ -111,16 +133,25 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 				mt="sm"
 				withAsterisk
 				label={translate("gathers.fields.platform")}
-				{...getInputProps("platform")}
 				data={[
 					{ label: translate("inputs.select"), value: "" },
 					{ label: "Facebook", value: "facebook" },
 				]}
+				{...getInputProps("platform")}
 			/>
 			<Select
 				mt="sm"
-				withAsterisk
-				label={translate("gathers.fields.data_type")}
+				label={
+					<div className="flex items-center">
+						<Tooltip label={translate("gathers.fields.info.data_type")}>
+							<span className="flex">
+								<IconInfoCircle size={12} />
+							</span>
+						</Tooltip>
+						{translate("gathers.fields.data_type")}
+						<span className="text-red-500 ml-1">*</span>
+					</div>
+				}
 				{...getInputProps("data_type")}
 				data={[
 					{ label: translate("inputs.select"), value: "" },
@@ -129,8 +160,17 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 			/>
 			<Select
 				mt="sm"
-				withAsterisk
-				label={translate("gathers.fields.inputs.type")}
+				label={
+					<div className="flex items-center">
+						<Tooltip label={translate("gathers.fields.info.input.type")}>
+							<span className="flex">
+								<IconInfoCircle size={12} />
+							</span>
+						</Tooltip>
+						{translate("gathers.fields.input.type")}
+						<span className="text-red-500 ml-1">*</span>
+					</div>
+				}
 				data={[
 					{ label: translate("inputs.select"), value: "" },
 					{ label: "Accounts List", value: "author_url_list" },
@@ -139,8 +179,8 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 			/>
 			<GatherInputs
 				required
-				label={translate("gathers.fields.inputs.data")}
-				placeholder={translate("gathers.fields.inputs.data_placeholder")}
+				label={translate("gathers.fields.input.data")}
+				placeholder={translate("gathers.fields.input.data_placeholder")}
 				data={inputList}
 				setData={setInputList}
 				{...getInputProps("input.data")}
@@ -155,35 +195,62 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 			/>
 			<DatePicker
 				mt="sm"
-				withAsterisk
-				label={translate("gathers.fields.start_date")}
+				label={
+					<div className="flex items-center">
+						<Tooltip label={translate("gathers.fields.info.start_date")}>
+							<span className="flex">
+								<IconInfoCircle size={12} />
+							</span>
+						</Tooltip>
+						{translate("gathers.fields.start_date")}
+						<span className="text-red-500 ml-1">*</span>
+					</div>
+				}
 				{...getInputProps("start_date")}
 			/>
 			<DatePicker
 				mt="sm"
-				withAsterisk
-				label={translate("gathers.fields.end_date")}
+				label={
+					<div className="flex items-center">
+						<Tooltip label={translate("gathers.fields.info.end_date")}>
+							<span className="flex">
+								<IconInfoCircle size={12} />
+							</span>
+						</Tooltip>
+						{translate("gathers.fields.end_date")}
+						<span className="text-red-500 ml-1">*</span>
+					</div>
+				}
 				{...getInputProps("end_date")}
+			/>
+			<NumberInput
+				mt="sm"
+				label={
+					<div className="flex items-center">
+						<Tooltip label={translate("gathers.fields.info.limit_messages")}>
+							<span className="flex">
+								<IconInfoCircle size={12} />
+							</span>
+						</Tooltip>
+						{translate("gathers.fields.limit_messages")}
+						<span className="text-red-500 ml-1">*</span>
+					</div>
+				}
+				{...getInputProps("limit_messages")}
 			/>
 			<Textarea
 				mt="sm"
-				label={translate("gathers.fields.description")}
+				label={
+					<div className="flex items-center">
+						<Tooltip label={translate("gathers.fields.info.description")}>
+							<span className="flex">
+								<IconInfoCircle size={12} />
+							</span>
+						</Tooltip>
+						{translate("gathers.fields.description")}
+					</div>
+				}
 				{...getInputProps("description")}
-			/>
-			<NumberInput
-				mt="sm"
-				label={translate("gathers.fields.limit_messages")}
-				{...getInputProps("limit_messages")}
-			/>
-			<NumberInput
-				mt="sm"
-				label={translate("gathers.fields.limit_replies")}
-				{...getInputProps("limit_replies")}
-			/>
-			<Checkbox
-				mt="sm"
-				label={translate("gathers.fields.nested_replies")}
-				{...getInputProps("nested_replies", { type: "checkbox" })}
 			/>
 		</Create>
 	);

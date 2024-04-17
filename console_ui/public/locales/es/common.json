@@ -159,21 +159,32 @@
 	"gathers": {
 		"fields": {
 			"id": "ID",
-			"start_date": "Fecha de inicio",
-			"end_date": "Fecha de fin",
+			"start_date": "Fecha de Inicio",
+			"end_date": "Fecha de Finalización",
 			"platform": "Plataforma",
 			"instance_id": "Instancia",
-			"limit_messages": "Límite de mensajes",
-			"limit_replies": "Límite de respuestas",
-			"nested_replies": "Respuestas anidadas",
-			"data_type": "Tipo de datos",
+			"limit_messages": "Límite de Publicaciones Por Cuenta",
+			"limit_replies": "Límite de Respuestas",
+			"nested_replies": "Respuestas Anidadas",
+			"data_type": "Tipo de Datos",
 			"description": "Descripción",
 			"created_at": "Creado en",
 			"updated_at": "Actualizado en",
-			"inputs": {
-				"data": "Datos de entrada de la recolección",
-				"type": "Tipo de entrada de la recolección",
-				"data_placeholder": "Escriba/pegue las entradas separadas por `,` y presione Enter"
+			"input": {
+				"data": "Datos de Entrada de Recopilación",
+				"type": "Tipo de Datos de Entrada de Recopilación",
+				"data_placeholder": "Escribe/pega los datos de entrada separados por ` ` o presiona Enter"
+			},
+			"info": {
+				"start_date": "La fecha para recopilar datos desde. Esto será 0:00 del día configurado.",
+				"end_date": "La fecha para recopilar datos hasta. Esto será 0:00 del día configurado.",
+				"description": "Breve descripción para que sepas cuál fue el objetivo de la recopilación.",
+				"limit_messages": "Limita el número de publicaciones que se recopilan para cada cuenta.",
+				"data_type": "Tipo de datos que te gustaría recopilar",
+				"input": {
+					"type": "El tipo de datos de entrada que deseas recopilar. Consulta el manual para obtener más información.",
+					"data": "Agrega los datos de entrada que te gustaría recopilar. Escribe/pega los datos de entrada separados por ` ` (espacio) o presiona Enter"
+				}
 			}
 		}
 	},
