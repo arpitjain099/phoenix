@@ -191,3 +191,16 @@ superset:
       AUTH_TYPE = AUTH_REMOTE_USER
 
       CUSTOM_SECURITY_MANAGER = custom_sso_manager.PhoenixCustomSSOSecurityManager
+
+
+oauth2-proxy:
+  enabled: true
+  ###################
+  # Example secrets
+  #
+  # Please replace the values with your own
+  # ###################
+  config:
+    cookieSecret: "<SET>"
+    clientID: "<SET>"
+    clientSecret: "<SET>"

@@ -4,7 +4,6 @@ cert-manager:
   enabled: false
 oauth2-proxy:
   config:
-    existingSecret: phoenixchartmain-oauth2-secrets
     configFile: |
       # Settings for Auth0
       provider="oidc"
