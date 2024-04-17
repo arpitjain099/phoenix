@@ -19,6 +19,23 @@ api:
   first_admin_user_display_name: "Buildup"
   header_auth_name: "HTTP_X_AUTH_REQUEST_EMAIL"
 
+  ###################
+  # Example secrets
+  #
+  # Please replace the values with your own
+  # If you are using platformdb they need to match the auth there
+  ################
+  # Use your own secrets see the secrets.yaml template for required data
+  secretKey: "{{ .Release.Name }}-api-secrets"
+  db_auth:
+    host: "{{ .Release.Name }}-platformdb"
+    port: "5432"
+    # If using the platformdb these need to match the platformdb.auth variables with the same name
+    username: "phiphi"
+    password: "phiphi_password"
+    database: "platform"
+
+
 #######################
 # Platform DB
 #

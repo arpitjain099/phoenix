@@ -22,13 +22,8 @@ spec:
           - name: SQLALCHEMY_DATABASE_URI
             valueFrom:
               secretKeyRef:
-                name: phoenix-api-secret
+                name: {{ tpl ( .Values.api.secretKey ) . }}
                 key: SQLALCHEMY_DATABASE_URI
-          - name: TESTING_SQLALCHEMY_DATABASE_URI
-            valueFrom:
-              secretKeyRef:
-                name: phoenix-api-secret
-                key: TESTING_SQLALCHEMY_DATABASE_URI
           - name: CORS_ORIGINS
             value: {{ .Values.api.cors_origins | quote }}
           - name: FIRST_ADMIN_USER_EMAIL
