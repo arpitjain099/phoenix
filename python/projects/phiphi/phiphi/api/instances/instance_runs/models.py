@@ -3,24 +3,28 @@ import datetime
 from typing import Optional
 
 from phiphi import platform_db
-from phiphi.api import base_models
-from sqlalchemy import orm
+from sqlalchemy import ForeignKey, orm
+from sqlalchemy.ext.hybrid import hybrid_property
 
 
-class InstanceRunsBase(platform_db.Base):
+class InstanceRuns(platform_db.Base):
     """Instance Runs Model."""
 
-    __abstract__ = True
+    __tablename__ = "instance_runs"
 
     id: orm.Mapped[int] = orm.mapped_column(primary_key=True)
-    instance_id: orm.Mapped[int]
+    instance_id: orm.Mapped[int] = orm.mapped_column(ForeignKey("instances.id"))
     started_processing_at: orm.Mapped[Optional[datetime.datetime]]
     environment_slug: orm.Mapped[str]
     completed_at: orm.Mapped[Optional[datetime.datetime]]
     failed_at: orm.Mapped[Optional[datetime.datetime]]
+    created_at: orm.Mapped[datetime.datetime] = orm.mapped_column(
+        default=lambda: datetime.datetime.now()
+    )
 
-
-class InstanceRuns(InstanceRunsBase, base_models.TimestampModel):
-    """Instance runs model that can inherit from multiple models."""
-
-    __tablename__ = "instance_runs"
+    @hybrid_property
+    def run_status(self) -> str:
+        """Run status hybrid property."""
+        # Check if there are any running instance runs
+        running = self.completed_at is None
+        return "running" if running else "completed"

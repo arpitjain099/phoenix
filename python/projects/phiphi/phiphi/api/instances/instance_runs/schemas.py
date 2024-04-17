@@ -20,9 +20,9 @@ class InstanceRunsResponse(InstanceRunsBase):
     model_config = pydantic.ConfigDict(from_attributes=True)
     id: int
     created_at: datetime.datetime
-    updated_at: datetime.datetime
     instance_id: int
     start_processing_at: datetime.datetime | None = None
     completed_at: datetime.datetime | None = None
     failed_at: datetime.datetime | None = None
     environment_slug: str
+    run_status: str
