@@ -22,7 +22,7 @@ See the [example_secrets.yaml](example_secrets.yaml) for the secrets that are ex
 The chart uses [cert-manager](https://cert-manager.io/docs/) for SSL certification creation. It is
 disabled by default.
 
-Although this chart container a cert-manager as a subchart it is not enabled by default. This is
+Although this chart contains a cert-manager as a subchart it is not enabled by default. This is
 recommended that you DO NOT install the cert-manager as a subchart. Instead you should install
 cert-manager as a separate helm chart. See [cert-manager
 docs](https://cert-manager.io/docs/installation/helm/).
