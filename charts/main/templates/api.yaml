@@ -2,16 +2,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: phoenix-api
+  name: {{ .Release.Name }}-api
 spec:
   replicas: {{ .Values.api.replicas }}
   selector:
     matchLabels:
-      app: phoenix-api
+      app: {{ .Release.Name }}-api
   template:
     metadata:
       labels:
-        app: phoenix-api
+        app: {{ .Release.Name }}-api
     spec:
       containers:
       - name: phiphi
@@ -43,11 +43,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: phoenix-api-service
+  name: {{ .Release.Name }}-api-service
 spec:
   type: NodePort
   selector:
-    app: phoenix-api
+    app: {{ .Release.Name }}-api
   ports:
     - port: 80
       targetPort: 80
