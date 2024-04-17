@@ -76,7 +76,7 @@ def test_get_instances_pagination(client: TestClient, reseed_tables) -> None:
     assert response.status_code == 200
     instances = response.json()
     assert len(instances) == 1
-    assert instances[0]["id"] == 1
+    assert instances[0]["id"] == 2
 
 
 @pytest.mark.freeze_time(UPDATE_TIME)

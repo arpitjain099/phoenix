@@ -8,7 +8,7 @@ UPDATE_TIME = "2024-04-01T12:00:02"
 
 @pytest.mark.freeze_time(CREATED_TIME)
 def test_create_get_instance_runs(reseed_tables, client: TestClient) -> None:
-    """Test create and then get of an instance."""
+    """Test create and then get of an instance run."""
     response = client.post("/instances/1/runs/")
     assert response.status_code == 200
     instance_runs = response.json()
@@ -19,6 +19,7 @@ def test_create_get_instance_runs(reseed_tables, client: TestClient) -> None:
     instance = response.json()
 
     assert instance["environment_slug"] == instance_runs["environment_slug"]
+    assert instance_runs["created_at"] == CREATED_TIME
 
 
 def test_get_instance_runs(client: TestClient, reseed_tables) -> None:
