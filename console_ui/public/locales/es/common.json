@@ -122,8 +122,8 @@
 	"tags": {
 		"clone": "Clonar"
 	},
-	"instances": {
-		"instances": "Instancias",
+	"projects": {
+		"projects": "Instancias",
 		"fields": {
 			"id": "ID único",
 			"name": "Nombre",
@@ -162,7 +162,7 @@
 			"start_date": "Fecha de Inicio",
 			"end_date": "Fecha de Finalización",
 			"platform": "Plataforma",
-			"instance_id": "Instancia",
+			"project_id": "Instancia",
 			"limit_messages": "Límite de Publicaciones Por Cuenta",
 			"limit_replies": "Límite de Respuestas",
 			"nested_replies": "Respuestas Anidadas",
@@ -191,7 +191,7 @@
 	"documentTitle": {
 		"default": "Interfaz de consola",
 		"suffix": " | Phoenix",
-		"instances": {
+		"projects": {
 			"list": "Instancias | Phoenix",
 			"show": "#{{id}} Mostrar instancia | Phoenix",
 			"edit": "#{{id}} Editar instancia | Phoenix",

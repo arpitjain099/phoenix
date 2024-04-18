@@ -122,8 +122,8 @@
 	"tags": {
 		"clone": "Clone"
 	},
-	"instances": {
-		"instances": "Instances",
+	"projects": {
+		"projects": "Instances",
 		"fields": {
 			"id": "Unique ID",
 			"name": "Name",
@@ -162,7 +162,7 @@
 			"start_date": "Start Date",
 			"end_date": "End Date",
 			"platform": "Platform",
-			"instance_id": "Instance",
+			"project_id": "Instance",
 			"limit_messages": "Limit Posts Per Account",
 			"limit_replies": "Limit Replies",
 			"nested_replies": "Nested Replies",
@@ -191,7 +191,7 @@
 	"documentTitle": {
 		"default": "Console UI",
 		"suffix": " | Phoenix",
-		"instances": {
+		"projects": {
 			"list": "Instances | Phoenix",
 			"show": "#{{id}} Show Instance | Phoenix",
 			"edit": "#{{id}} Edit Instance | Phoenix",

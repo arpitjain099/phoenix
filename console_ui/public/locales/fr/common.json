@@ -122,8 +122,8 @@
 	"tags": {
 		"clone": "Cloner"
 	},
-	"instances": {
-		"instances": "Instances",
+	"projects": {
+		"projects": "Instances",
 		"fields": {
 			"id": "Identifiant unique",
 			"name": "Nom",
@@ -145,10 +145,10 @@
 			"updated_at": "Mis à jour le"
 		},
 		"titles": {
-			"create": "Créer une instance",
-			"edit": "Modifier l'instance",
+			"create": "Créer une project",
+			"edit": "Modifier l'project",
 			"list": "Instances",
-			"show": "Afficher l'instance"
+			"show": "Afficher l'project"
 		},
 		"warnings": {
 			"create": "Pour étendre 'Les informations personnelles sont supprimées après' ou 'Toutes les données sont supprimées après' jours au-delà de 365, veuillez contacter le support !",
@@ -162,7 +162,7 @@
 			"start_date": "Date de début",
 			"end_date": "Date de fin",
 			"platform": "Plateforme",
-			"instance_id": "Instance",
+			"project_id": "Instance",
 			"limit_messages": "Limite de publications par compte",
 			"limit_replies": "Limite de réponses",
 			"nested_replies": "Réponses imbriquées",
@@ -191,12 +191,12 @@
 	"documentTitle": {
 		"default": "Console UI",
 		"suffix": " | Phoenix",
-		"instances": {
+		"projects": {
 			"list": "Instances | Phoenix",
-			"show": "#{{id}} Afficher l'instance | Phoenix",
-			"edit": "#{{id}} Modifier l'instance | Phoenix",
-			"create": "Créer une nouvelle instance | Phoenix",
-			"clone": "#{{id}} Cloner l'instance | Phoenix"
+			"show": "#{{id}} Afficher l'project | Phoenix",
+			"edit": "#{{id}} Modifier l'project | Phoenix",
+			"create": "Créer une nouvelle project | Phoenix",
+			"clone": "#{{id}} Cloner l'project | Phoenix"
 		}
 	},
 	"table": {
