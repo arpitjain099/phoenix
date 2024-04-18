@@ -22,31 +22,19 @@ def create_instance_runs(
 def get_instance_runs(
     session: deps.SessionDep,
     instance_id: int,
+    run_status: schemas.RunStatus | None = None,
     start: int = 0,
     end: int = 100,
 ) -> list[schemas.InstanceRunsResponse]:
     """Get instance runs."""
     try:
-        return crud.get_instance_runs(session, instance_id, start, end)
-    except exceptions.InstanceNotFound:
-        raise exceptions.InstanceNotFound
+        if run_status is None:
+            return crud.get_instance_runs(session, instance_id, start, end)
+        else:
+            return crud.get_instance_runs_by_run_status_filter(
+                session, instance_id, run_status, start, end
+            )
 
-
-@router.get(
-    "/instances/{instance_id}/runs/filter/", response_model=list[schemas.InstanceRunsResponse]
-)
-def get_instance_runs_filter_by_run_statu(
-    session: deps.SessionDep,
-    instance_id: int,
-    run_status: schemas.RunStatus,
-    start: int = 0,
-    end: int = 100,
-) -> list[schemas.InstanceRunsResponse]:
-    """Get instance runs."""
-    try:
-        return crud.get_instance_runs_by_run_status_filter(
-            session, instance_id, run_status, start, end
-        )
     except exceptions.InstanceNotFound:
         raise exceptions.InstanceNotFound
 
@@ -66,14 +54,3 @@ def get_instance_last_run(
         return instance_runs
     except exceptions.InstanceNotFound:
         raise exceptions.InstanceNotFound
-
-
-@router.put("/instances/runs/{instance_runs_id}/", response_model=schemas.InstanceRunsResponse)
-def update_instance(
-    instance_runs_id: int, instance_runs: schemas.InstanceRunsUpdate, session: deps.SessionDep
-) -> schemas.InstanceRunsResponse:
-    """Update an instance run."""
-    updated_instance = crud.update_instance_runs(session, instance_runs_id, instance_runs)
-    if updated_instance is None:
-        raise fastapi.HTTPException(status_code=404, detail="Instance runs not found")
-    return updated_instance

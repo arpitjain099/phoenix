@@ -1,6 +1,11 @@
 """Test Instance Runs."""
+import datetime
+
 import pytest
+import sqlalchemy
 from fastapi.testclient import TestClient
+
+from phiphi.api.instances.instance_runs import crud, schemas
 
 CREATED_TIME = "2024-04-01T12:00:01"
 UPDATE_TIME = "2024-04-01T12:00:02"
@@ -30,31 +35,43 @@ def test_get_instance_runs(client: TestClient, reseed_tables) -> None:
     assert len(instances) == 1
 
 
-def test_completed_run_status(reseed_tables, client: TestClient) -> None:
+def test_completed_run_status(
+    session: sqlalchemy.orm.Session, reseed_tables, client: TestClient
+) -> None:
     """Test completed run status."""
-    data = {"completed_at": CREATED_TIME}
-    response = client.put("/instances/runs/1/", json=data)
+    response = crud.update_instance_runs(
+        session, 1, schemas.InstanceRunsUpdate(completed_at=datetime.datetime.now())
+    )
+    assert response
+    assert response.run_status == "completed"
+
+
+def test_failed_run_status(
+    session: sqlalchemy.orm.Session, reseed_tables, client: TestClient
+) -> None:
+    """Test failed run status."""
+    response = crud.update_instance_runs(
+        session, 2, schemas.InstanceRunsUpdate(failed_at=datetime.datetime.now())
+    )
+    assert response
+    assert response.run_status == "failed"
+
+
+def test_processing_run_status(
+    session: sqlalchemy.orm.Session, reseed_tables, client: TestClient
+) -> None:
+    """Test prorcessing run status."""
+    response = crud.update_instance_runs(
+        session, 1, schemas.InstanceRunsUpdate(started_processing_at=datetime.datetime.now())
+    )
+    assert response
+    assert response.run_status == "processing"
+
+
+def test_in_queue_run_status(reseed_tables, client: TestClient) -> None:
+    """Test in_queue run status."""
+    response = client.get("/instances/1/runs/?run_status=in_queue")
     assert response.status_code == 200
     instance = response.json()
 
-    assert instance["run_status"] == "completed"
-
-
-def test_failed_run_status(reseed_tables, client: TestClient) -> None:
-    """Test completed run status."""
-    data = {"failed_at": CREATED_TIME}
-    response = client.put("/instances/runs/2/", json=data)
-    assert response.status_code == 200
-    instance = response.json()
-
-    assert instance["run_status"] == "failed"
-
-
-def test_processing_run_status(reseed_tables, client: TestClient) -> None:
-    """Test completed run status."""
-    data = {"started_processing_at": CREATED_TIME}
-    response = client.put("/instances/runs/1/", json=data)
-    assert response.status_code == 200
-    instance = response.json()
-
-    assert instance["run_status"] == "processing"
+    assert instance[0]["run_status"] == "in_queue"

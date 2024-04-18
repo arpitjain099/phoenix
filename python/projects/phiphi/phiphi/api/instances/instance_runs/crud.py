@@ -34,14 +34,16 @@ def create_instance_runs(
 def get_instance_runs_by_run_status_filter(
     session: sqlalchemy.orm.Session,
     instance_id: int,
-    run_status: schemas.RunStatus,
+    run_status: schemas.RunStatus | None,
     start: int = 0,
     end: int = 100,
 ) -> list[schemas.InstanceRunsResponse]:
     """Get all instance runs."""
     instance_crud.get_db_instance_with_guard(session, instance_id)
 
-    query = session.query(models.InstanceRuns)
+    query = session.query(models.InstanceRuns).filter(
+        models.InstanceRuns.instance_id == instance_id
+    )
 
     if run_status == schemas.RunStatus.failed:
         query = query.filter(models.InstanceRuns.failed_at.isnot(None))
@@ -61,6 +63,7 @@ def get_instance_runs_by_run_status_filter(
             models.InstanceRuns.completed_at.is_(None),
             models.InstanceRuns.started_processing_at.is_(None),
         )
+    query = query.offset(start).limit(end)
 
     db_instance_runs = session.scalars(query).all()
 
