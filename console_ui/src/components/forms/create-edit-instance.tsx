@@ -29,8 +29,8 @@ const CreateEditInstanceForm: React.FC<Props> = ({ getInputProps }) => {
 			<Select
 				mt="sm"
 				withAsterisk
-				label={translate("instances.fields.environment_id")}
-				{...getInputProps("environment_id")}
+				label={translate("instances.fields.environment_slug")}
+				{...getInputProps("environment_slug")}
 				data={[
 					{ label: translate("inputs.select"), value: "" },
 					{ label: "Main", value: "main" },

@@ -12,22 +12,22 @@ export const InstanceCreate: React.FC<IResourceComponentsProps> = () => {
 		initialValues: {
 			name: "",
 			description: "",
-			environment_id: "",
-			days_until_pi_expiration: 183,
-			days_until_all_data_expiration: 183,
+			environment_slug: "",
+			pi_deleted_after_days: 183,
+			delete_after_days: 183,
 			expected_usage: "",
 		},
 		validate: {
 			name: (value) => (value.length <= 0 ? "Name is required" : null),
-			environment_id: (value) =>
+			environment_slug: (value) =>
 				value.length <= 0 ? "Environment is required" : null,
-			days_until_pi_expiration: (value) =>
+			pi_deleted_after_days: (value) =>
 				value === undefined
 					? "Required"
 					: value < 183 || value > 365
 						? "Value needs to fall between 183 - 365 days"
 						: null,
-			days_until_all_data_expiration: (value) =>
+			delete_after_days: (value) =>
 				value === undefined
 					? "Required"
 					: value < 183 || value > 365

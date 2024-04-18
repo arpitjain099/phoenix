@@ -128,7 +128,7 @@
 			"id": "Unique ID",
 			"name": "Name",
 			"description": "Description",
-			"environment_id": "Environment",
+			"environment_slug": "Environment",
 			"days_until_pi_expiration": "Personal Information is deleted after (days)",
 			"days_until_all_data_expiration": "All data is deleted after (days)",
 			"expected_usage": {
@@ -154,6 +154,38 @@
 			"create": "To extend 'Personal Information is deleted after' or 'All data is deleted after' days beyond 365, please contact support!",
 			"days_until_pi_expiration": "Minimum value is 183 and Maximum value is 365",
 			"days_until_all_data_expiration": "Minimum value is 183 and Maximum value is 365"
+		}
+	},
+	"gathers": {
+		"fields": {
+			"id": "ID",
+			"start_date": "Start Date",
+			"end_date": "End Date",
+			"platform": "Platform",
+			"instance_id": "Instance",
+			"limit_messages": "Limit Posts Per Account",
+			"limit_replies": "Limit Replies",
+			"nested_replies": "Nested Replies",
+			"data_type": "Data Type",
+			"description": "Description",
+			"created_at": "Created At",
+			"updated_at": "Updated At",
+			"input": {
+				"data": "Gather Input Data",
+				"type": "Gather Input Type",
+				"data_placeholder": "Type/paste inputs seperated by ` ` or press enter"
+			},
+			"info": {
+				"start_date": "The date to gather data from. This will be 0:00 of the day configured.",
+				"end_date": "The date to gather data till. This will be 0:00 of the day configured.",
+				"description": "Short description so that you know what the goal of the gather was.",
+				"limit_messages": "Limit the number of posts that are collected for each account.",
+				"data_type": "Type of data you would like to gather",
+				"input": {
+					"type": "The type of input data that you want to gather on. See manual for more information.",
+					"data": "Add the input data you would like to gather. Type/paste iput separated by ` ` (space) or press enter"
+				}
+			}
 		}
 	},
 	"documentTitle": {

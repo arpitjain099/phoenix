@@ -128,7 +128,7 @@
 			"id": "Identifiant unique",
 			"name": "Nom",
 			"description": "Description",
-			"environment_id": "Environnement",
+			"environment_slug": "Environnement",
 			"days_until_pi_expiration": "Les informations personnelles sont supprimées après (jours)",
 			"days_until_all_data_expiration": "Toutes les données sont supprimées après (jours)",
 			"expected_usage": {
@@ -154,6 +154,38 @@
 			"create": "Pour étendre 'Les informations personnelles sont supprimées après' ou 'Toutes les données sont supprimées après' jours au-delà de 365, veuillez contacter le support !",
 			"days_until_pi_expiration": "La valeur minimale est 183 et la valeur maximale est 365",
 			"days_until_all_data_expiration": "La valeur minimale est 183 et la valeur maximale est 365"
+		}
+	},
+	"gathers": {
+		"fields": {
+			"id": "ID",
+			"start_date": "Date de début",
+			"end_date": "Date de fin",
+			"platform": "Plateforme",
+			"instance_id": "Instance",
+			"limit_messages": "Limite de publications par compte",
+			"limit_replies": "Limite de réponses",
+			"nested_replies": "Réponses imbriquées",
+			"data_type": "Type de données",
+			"description": "Description",
+			"created_at": "Créé le",
+			"updated_at": "Mis à jour le",
+			"input": {
+				"data": "Données d'entrée de collecte",
+				"type": "Type de données d'entrée de collecte",
+				"data_placeholder": "Tapez/collez les données d'entrée séparées par ` ` ou appuyez sur Entrée"
+			},
+			"info": {
+				"start_date": "La date à partir de laquelle collecter des données. Ce sera 00:00 du jour configuré.",
+				"end_date": "La date jusqu'à laquelle collecter des données. Ce sera 00:00 du jour configuré.",
+				"description": "Brève description pour que vous sachiez quel est l'objectif de la collecte.",
+				"limit_messages": "Limite du nombre de publications collectées pour chaque compte.",
+				"data_type": "Type de données que vous souhaitez collecter",
+				"input": {
+					"type": "Le type de données d'entrée que vous souhaitez collecter. Voir le manuel pour plus d'informations.",
+					"data": "Ajoutez les données d'entrée que vous souhaitez collecter. Tapez/collez les données d'entrée séparées par ` ` (espace) ou appuyez sur Entrée"
+				}
+			}
 		}
 	},
 	"documentTitle": {

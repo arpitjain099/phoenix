@@ -128,7 +128,7 @@
 			"id": "ID único",
 			"name": "Nombre",
 			"description": "Descripción",
-			"environment_id": "Entorno",
+			"environment_slug": "Entorno",
 			"days_until_pi_expiration": "La información personal se eliminará después de (días)",
 			"days_until_all_data_expiration": "Todos los datos se eliminarán después de (días)",
 			"expected_usage": {
@@ -154,6 +154,38 @@
 			"create": "¡Para extender los días de 'La información personal se eliminará después' o 'Todos los datos se eliminarán después' más allá de 365, por favor, contacte con soporte!",
 			"days_until_pi_expiration": "El valor mínimo es 183 y el valor máximo es 365",
 			"days_until_all_data_expiration": "El valor mínimo es 183 y el valor máximo es 365"
+		}
+	},
+	"gathers": {
+		"fields": {
+			"id": "ID",
+			"start_date": "Fecha de Inicio",
+			"end_date": "Fecha de Finalización",
+			"platform": "Plataforma",
+			"instance_id": "Instancia",
+			"limit_messages": "Límite de Publicaciones Por Cuenta",
+			"limit_replies": "Límite de Respuestas",
+			"nested_replies": "Respuestas Anidadas",
+			"data_type": "Tipo de Datos",
+			"description": "Descripción",
+			"created_at": "Creado en",
+			"updated_at": "Actualizado en",
+			"input": {
+				"data": "Datos de Entrada de Recopilación",
+				"type": "Tipo de Datos de Entrada de Recopilación",
+				"data_placeholder": "Escribe/pega los datos de entrada separados por ` ` o presiona Enter"
+			},
+			"info": {
+				"start_date": "La fecha para recopilar datos desde. Esto será 0:00 del día configurado.",
+				"end_date": "La fecha para recopilar datos hasta. Esto será 0:00 del día configurado.",
+				"description": "Breve descripción para que sepas cuál fue el objetivo de la recopilación.",
+				"limit_messages": "Limita el número de publicaciones que se recopilan para cada cuenta.",
+				"data_type": "Tipo de datos que te gustaría recopilar",
+				"input": {
+					"type": "El tipo de datos de entrada que deseas recopilar. Consulta el manual para obtener más información.",
+					"data": "Agrega los datos de entrada que te gustaría recopilar. Escribe/pega los datos de entrada separados por ` ` (espacio) o presiona Enter"
+				}
+			}
 		}
 	},
 	"documentTitle": {
