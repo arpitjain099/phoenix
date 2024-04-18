@@ -20,7 +20,7 @@ import GatherInputs from "@components/gather-inputs";
 import { IconInfoCircle } from "@tabler/icons";
 
 const breadcrumbs = [
-	{ title: "Instances", href: "/instances" },
+	{ title: "Projects", href: "/projects" },
 	{ title: "Gathers", href: "../gathers" },
 	{ title: "Create", href: "create" },
 ].map((item) => (
@@ -38,7 +38,7 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 	const { mutate } = useCreate();
 	const translate = useTranslate();
 	const router = useRouter();
-	const { instanceid } = router.query;
+	const { projectid } = router.query;
 	const [inputList, setInputList] = useState<string[]>([]);
 	const {
 		getInputProps,
@@ -60,7 +60,7 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 				type: "author_url_list",
 				data: [] as string[],
 			},
-			instance_id: Number(instanceid),
+			project_id: Number(projectid),
 			limit_messages: 1000,
 		},
 		validate: {
@@ -89,26 +89,26 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 		},
 	});
 
-	const { selectProps: instanceSelectProps } = useSelect({
-		resource: "instances",
+	const { selectProps: projectSelectProps } = useSelect({
+		resource: "projects",
 		optionLabel: "name",
 		optionValue: "id",
-		defaultValue: Number(instanceid),
+		defaultValue: Number(projectid),
 	});
 
 	const handleSave = async () => {
 		if (isValid()) {
-			if (values.instance_id) {
+			if (values.project_id) {
 				mutate(
 					{
-						resource: `instances/${values.instance_id}/gathers/apify`,
+						resource: `projects/${values.project_id}/gathers/apify`,
 						values,
 					},
 					{
 						onSuccess: async () => {
 							await Promise.all([setInputList([]), reset()]);
 							setTimeout(() => {
-								router.push(`/instances/${values.instance_id}/gathers`);
+								router.push(`/projects/${values.project_id}/gathers`);
 							}, 2000);
 						},
 					}
@@ -189,9 +189,9 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 				mt="sm"
 				disabled
 				withAsterisk
-				label={translate("gathers.fields.instance_id")}
-				{...getInputProps("instance_id")}
-				{...instanceSelectProps}
+				label={translate("gathers.fields.project_id")}
+				{...getInputProps("project_id")}
+				{...projectSelectProps}
 			/>
 			<DatePicker
 				mt="sm"

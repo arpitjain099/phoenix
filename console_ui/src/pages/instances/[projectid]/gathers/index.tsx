@@ -21,7 +21,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 const breadcrumbs = [
-	{ title: "Instances", href: "/instances" },
+	{ title: "Projects", href: "/projects" },
 	{ title: "Gathers", href: "#" },
 ].map((item) => (
 	<Group key={item.title}>
@@ -34,10 +34,10 @@ const breadcrumbs = [
 export const GatherList: React.FC<IResourceComponentsProps> = () => {
 	const translate = useTranslate();
 	const router = useRouter();
-	const { instanceid } = router.query;
+	const { projectid } = router.query;
 
 	const apiResponse = useList({
-		resource: `instances/${instanceid}/gathers`,
+		resource: `projects/${projectid}/gathers`,
 	});
 	const listResponse = apiResponse?.data?.data || [];
 
@@ -75,26 +75,26 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 				},
 			},
 			{
-				id: "instance_id",
-				header: translate("gathers.fields.instance_id"),
-				accessorKey: "instance_id",
+				id: "project_id",
+				header: translate("gathers.fields.project_id"),
+				accessorKey: "project_id",
 				cell: function render({ getValue, table }) {
 					const meta = table.options.meta as {
-						instanceData: GetManyResponse;
+						projectData: GetManyResponse;
 					};
 
-					const instance = meta.instanceData?.data?.find(
+					const project = meta.projectData?.data?.find(
 						(item) => item.id === getValue<any>()
 					);
 
-					return instance ? (
+					return project ? (
 						<Link
 							href={{
-								pathname: "/instances/show/[instanceid]",
-								query: { instanceid: instance?.id },
+								pathname: "/projects/show/[projectid]",
+								query: { projectid: project?.id },
 							}}
 						>
-							{instance?.name}
+							{project?.name}
 						</Link>
 					) : (
 						"Loading..."
@@ -123,9 +123,9 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 	});
 
 	const { data: tableData } = apiResponse;
-	const { data: instanceData } = useMany({
-		resource: "instances",
-		ids: tableData?.data?.map((item) => item?.instance_id) ?? [],
+	const { data: projectData } = useMany({
+		resource: "projects",
+		ids: tableData?.data?.map((item) => item?.project_id) ?? [],
 		queryOptions: {
 			enabled: !!tableData?.data,
 		},
@@ -135,7 +135,7 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 		...prev,
 		meta: {
 			...prev.meta,
-			instanceData,
+			projectData,
 		},
 	}));
 	return (
