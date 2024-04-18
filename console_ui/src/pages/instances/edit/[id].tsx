@@ -1,9 +1,9 @@
 import React from "react";
 import { IResourceComponentsProps, useUpdate } from "@refinedev/core";
 import { Edit, useForm } from "@refinedev/mantine";
-import CreateEditInstanceForm from "@components/forms/create-edit-instance";
+import CreateEditProjectForm from "@components/forms/create-edit-project";
 
-export const InstanceEdit: React.FC<IResourceComponentsProps> = () => {
+export const ProjectEdit: React.FC<IResourceComponentsProps> = () => {
 	const { mutate } = useUpdate();
 	const {
 		getInputProps,
@@ -21,13 +21,13 @@ export const InstanceEdit: React.FC<IResourceComponentsProps> = () => {
 		},
 	});
 
-	const instancesData = queryResult?.data?.data;
+	const projectsData = queryResult?.data?.data;
 
 	const handleSave = async () => {
-		if (instancesData?.id)
+		if (projectsData?.id)
 			mutate({
-				resource: "instances",
-				id: instancesData.id,
+				resource: "projects",
+				id: projectsData.id,
 				values,
 				meta: {
 					method: "put",
@@ -40,9 +40,9 @@ export const InstanceEdit: React.FC<IResourceComponentsProps> = () => {
 			saveButtonProps={{ ...saveButtonProps, onClick: handleSave }}
 			canDelete={false}
 		>
-			<CreateEditInstanceForm getInputProps={getInputProps} />
+			<CreateEditProjectForm getInputProps={getInputProps} />
 		</Edit>
 	);
 };
 
-export default InstanceEdit;
+export default ProjectEdit;
