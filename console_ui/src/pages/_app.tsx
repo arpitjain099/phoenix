@@ -117,22 +117,22 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
 								authProvider={authProvider}
 								resources={[
 									{
-										name: "instances",
-										list: "/instances",
-										create: "/instances/create",
-										edit: "/instances/edit/:id",
-										show: "/instances/show/:id",
+										name: "projects",
+										list: "/projects",
+										create: "/projects/create",
+										edit: "/projects/edit/:id",
+										show: "/projects/show/:id",
 										meta: {
 											canDelete: true,
 										},
 									},
 									{
 										name: "",
-										list: "/instances/:instanceid/gathers",
-										create: "/instances/:instanceid/gathers/create",
+										list: "/projects/:projectid/gathers",
+										create: "/projects/:projectid/gathers/create",
 										meta: {
 											label: "Gathers",
-											parent: "instances",
+											parent: "projects",
 											hide: true,
 										},
 									},
