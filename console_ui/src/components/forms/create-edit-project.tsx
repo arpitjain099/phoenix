@@ -10,13 +10,13 @@ import {
 import { useTranslate } from "@refinedev/core";
 import { IconInfoCircle } from "@tabler/icons";
 import { GetInputProps } from "@mantine/form/lib/types";
-import { InstanceSchema } from "src/interfaces/interface";
+import { ProjectSchema } from "src/interfaces/interface";
 
 interface Props {
-	getInputProps: GetInputProps<InstanceSchema>;
+	getInputProps: GetInputProps<ProjectSchema>;
 }
 
-const CreateEditInstanceForm: React.FC<Props> = ({ getInputProps }) => {
+const CreateEditProjectForm: React.FC<Props> = ({ getInputProps }) => {
 	const translate = useTranslate();
 	return (
 		<>
@@ -112,4 +112,4 @@ const CreateEditInstanceForm: React.FC<Props> = ({ getInputProps }) => {
 	);
 };
 
-export default CreateEditInstanceForm;
+export default CreateEditProjectForm;
