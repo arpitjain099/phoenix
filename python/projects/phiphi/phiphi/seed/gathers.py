@@ -3,7 +3,7 @@ import datetime
 
 from sqlalchemy.orm import Session
 
-from phiphi.api.instances.gathers import crud, schemas
+from phiphi.api.projects.gathers import crud, schemas
 
 TEST_APIFY_GATHER_CREATE = schemas.ApifyGatherCreate(
     description="Phoenix Apify Gather",
@@ -53,8 +53,6 @@ def seed_test_apify_gathers(session: Session) -> None:
     apify_gathers = [TEST_APIFY_GATHER_CREATE, TEST_APIFY_GATHER_CREATE_2]
 
     for apify_gather in apify_gathers:
-        crud.create_apify_gather(session=session, instance_id=1, gather_data=apify_gather)
+        crud.create_apify_gather(session=session, project_id=1, gather_data=apify_gather)
 
-    crud.create_apify_gather(
-        session=session, instance_id=2, gather_data=TEST_APIFY_GATHER_CREATE_3
-    )
+    crud.create_apify_gather(session=session, project_id=2, gather_data=TEST_APIFY_GATHER_CREATE_3)

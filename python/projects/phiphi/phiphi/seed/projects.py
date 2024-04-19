@@ -1,29 +1,29 @@
-"""Seed the instances."""
+"""Seed the projects."""
 from sqlalchemy.orm import Session
 
-from phiphi.api.instances import crud, schemas
+from phiphi.api.projects import crud, schemas
 
-TEST_INSTANCE_CREATE = schemas.InstanceCreate(
-    name="Phoenix Instance 1",
-    description="Instance 1",
+TEST_PROJECT_CREATE = schemas.ProjectCreate(
+    name="Phoenix Project 1",
+    description="Project 1",
     environment_slug="main",
     pi_deleted_after_days=90,
     delete_after_days=20,
     expected_usage=schemas.ExpectedUsage.weekly,
 )
 
-TEST_INSTANCE_CREATE_2 = schemas.InstanceCreate(
-    name="Phoenix Instance 2",
-    description="Instance 2",
+TEST_PROJECT_CREATE_2 = schemas.ProjectCreate(
+    name="Phoenix Project 2",
+    description="Project 2",
     environment_slug="main",
     pi_deleted_after_days=90,
     delete_after_days=20,
     expected_usage=schemas.ExpectedUsage.monthly,
 )
 
-TEST_INSTANCE_CREATE_3 = schemas.InstanceCreate(
-    name="Phoenix Instance 3",
-    description="Instance 3",
+TEST_PROJECT_CREATE_3 = schemas.ProjectCreate(
+    name="Phoenix Project 3",
+    description="Project 3",
     environment_slug="test",
     pi_deleted_after_days=90,
     delete_after_days=20,
@@ -31,9 +31,9 @@ TEST_INSTANCE_CREATE_3 = schemas.InstanceCreate(
 )
 
 
-def seed_test_instance(session: Session) -> None:
-    """Seed the instance."""
-    instances = [TEST_INSTANCE_CREATE, TEST_INSTANCE_CREATE_2, TEST_INSTANCE_CREATE_3]
+def seed_test_project(session: Session) -> None:
+    """Seed the project."""
+    projects = [TEST_PROJECT_CREATE, TEST_PROJECT_CREATE_2, TEST_PROJECT_CREATE_3]
 
-    for instance in instances:
-        crud.create_instance(session=session, instance=instance)
+    for project in projects:
+        crud.create_project(session=session, project=project)
