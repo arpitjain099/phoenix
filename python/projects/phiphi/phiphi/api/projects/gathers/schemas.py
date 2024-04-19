@@ -82,7 +82,7 @@ class GatherResponse(GatherBase):
     id: int
     created_at: datetime.datetime
     updated_at: datetime.datetime
-    instance_id: int
+    project_id: int
     mark_to_delete: bool | None = None
     deleted_at: datetime.datetime | None = None
     last_run_at: datetime.datetime | None = None
