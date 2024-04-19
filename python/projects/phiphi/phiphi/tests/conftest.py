@@ -83,6 +83,7 @@ def reseed_tables(session):
 
     Use this fixture to reset the data for a test.
     """
+    ## this drops and recreates the test database
     platform_db.Base.metadata.drop_all(bind=session.get_bind())
     platform_db.Base.metadata.create_all(bind=session.get_bind())
     seed_main.main(session, testing=True)

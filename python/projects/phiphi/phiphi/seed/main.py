@@ -5,6 +5,7 @@ This module is used to seed the database with initial data.
 Usage (from the projects/phiphi/):
     python phiphi/seed/main.py
 """
+import argparse
 import logging
 
 from sqlalchemy.orm import Session
@@ -24,8 +25,15 @@ main_logger.addHandler(ch)
 
 def main(session: Session, testing: bool = False) -> None:
     """Seed the database."""
+    if testing:
+        #This drops and recreates the main database
+        platform_db.Base.metadata.drop_all(
+            bind=platform_db.engine
+        )  # Drop all tables if --testing flag is provided
+        platform_db.Base.metadata.create_all(bind=platform_db.engine)  # Create all tables again
     users.init_first_admin_user(session)
     environments.init_main_environment(session)
+
     if testing:
         users.seed_test_users(session)
         environments.seed_test_environment(session)
@@ -35,7 +43,16 @@ def main(session: Session, testing: bool = False) -> None:
 
 
 if __name__ == "__main__":
-    main_logger.info("Seeding the database")
+    parser = argparse.ArgumentParser(description="Seed the database", prog="main")
+    parser.add_argument(
+        "--testing", action="store_true", help="Drop and recreate the database for testing"
+    )
+    args = parser.parse_args()
+
+    if args.testing:
+        main_logger.info("Seeding the database --testing")
+    else:
+        main_logger.info("Seeding the database")
     with Session(platform_db.engine) as session:
-        main(session)
+        main(session, args.testing)
     main_logger.info("Finished seeding the database")
