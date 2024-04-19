@@ -21,7 +21,7 @@ delete_after_days_field = pydantic.Field(
     default=183, description="Deletion time in days, min 1, max 365", gt=1, lt=365
 )
 environment_slug_field = pydantic.Field(
-    default="main", description="The environment id of the project"
+    default="main", description="The environment slug of the project"
 )
 
 
