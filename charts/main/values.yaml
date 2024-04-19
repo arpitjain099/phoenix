@@ -12,6 +12,7 @@ api:
     # This is the dev image that is created by tilt
     repository: phiphi
     tag: latest
+    pullPolicy: Always
   # If you want unicorn to reload for development
   reload: true
   cors_origins: ["http://*"]

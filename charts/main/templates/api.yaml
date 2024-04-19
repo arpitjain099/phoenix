@@ -22,6 +22,7 @@ spec:
       containers:
       - name: phiphi
         image: {{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}
+        imagePullPolicy: {{ .Values.api.image.pullPolicy }}
         ports:
           - containerPort: 80
         env:
