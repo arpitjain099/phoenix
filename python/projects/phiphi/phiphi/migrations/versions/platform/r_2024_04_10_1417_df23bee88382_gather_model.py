@@ -30,7 +30,7 @@ def upgrade() -> None:
         sa.Column("description", sa.String(), nullable=False),
         sa.Column("mark_to_delete", sa.Boolean(), nullable=True),
         sa.Column("last_run_at", sa.DateTime(), nullable=True),
-        sa.Column("instance_id", sa.Integer(), nullable=False),
+        sa.Column("project_id", sa.Integer(), nullable=False),
         sa.Column("source", sa.String(), nullable=True),
         sa.Column("platform", sa.String(), nullable=True),
         sa.Column("data_type", sa.String(), nullable=True),

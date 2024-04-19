@@ -1,4 +1,4 @@
-"""environment_instance_relationship.
+"""environment_project_relationship.
 
 Revision ID: 6d4b2c6a304c
 Revises: df23bee88382
@@ -16,7 +16,7 @@ down_revision: Union[str, None] = "df23bee88382"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
-TABLE_NAME = "instances"
+TABLE_NAME = "projects"
 
 
 def upgrade() -> None:

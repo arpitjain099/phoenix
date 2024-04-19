@@ -16,7 +16,7 @@ class GatherBase(platform_db.Base):
     description: orm.Mapped[str]
     mark_to_delete: orm.Mapped[Optional[bool]]
     last_run_at: orm.Mapped[Optional[datetime.datetime]]
-    instance_id: orm.Mapped[int]
+    project_id: orm.Mapped[int]
     source: orm.Mapped[Optional[str]]
     platform: orm.Mapped[Optional[str]]
     data_type: orm.Mapped[Optional[str]]

@@ -1,4 +1,4 @@
-"""Instance Models."""
+"""Project Models."""
 from typing import Optional, cast
 
 from sqlalchemy import ForeignKey, orm
@@ -6,11 +6,11 @@ from sqlalchemy.ext.hybrid import hybrid_property
 
 from phiphi import platform_db
 from phiphi.api import base_models
-from phiphi.api.instances.instance_runs import models, schemas
+from phiphi.api.projects.project_runs import models, schemas
 
 
-class InstanceBase(platform_db.Base):
-    """Instance Model."""
+class ProjectBase(platform_db.Base):
+    """Project Model."""
 
     __abstract__ = True
 
@@ -25,33 +25,33 @@ class InstanceBase(platform_db.Base):
     expected_usage: orm.Mapped[Optional[str]]
 
 
-class Instance(InstanceBase, base_models.TimestampModel):
-    """Instance model that can inherit from multiple models."""
+class Project(ProjectBase, base_models.TimestampModel):
+    """Project model that can inherit from multiple models."""
 
-    __tablename__ = "instances"
+    __tablename__ = "projects"
 
-    # Relationship to get all related InstanceRuns, ordered by created_at descending
-    instance_runs = orm.relationship(
-        "InstanceRuns",
-        order_by="desc(InstanceRuns.created_at)",
-        primaryjoin="Instance.id == InstanceRuns.instance_id",
+    # Relationship to get all related ProjectRuns, ordered by created_at descending
+    project_runs = orm.relationship(
+        "ProjectRuns",
+        order_by="desc(ProjectRuns.created_at)",
+        primaryjoin="Project.id == ProjectRuns.project_id",
         lazy="dynamic",
     )
 
     @hybrid_property
-    def last_run(self) -> models.InstanceRuns | None:
-        """Property to get the most recent InstanceRun."""
-        last_run = self.instance_runs.first()
+    def last_run(self) -> models.ProjectRuns | None:
+        """Property to get the most recent ProjectRun."""
+        last_run = self.project_runs.first()
 
         if last_run is None:
             return None
 
-        return cast(models.InstanceRuns, last_run)
+        return cast(models.ProjectRuns, last_run)
 
     @hybrid_property
     def run_status(self) -> str:
         """Run status hybrid property."""
-        # Check if there are any running instance runs
+        # Check if there are any running project runs
 
         if self.last_run is None:
             return schemas.RunStatus.yet_to_run

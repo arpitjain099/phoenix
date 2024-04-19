@@ -1,4 +1,4 @@
-"""instance_runs_model.
+"""project_runs_model.
 
 Revision ID: df1988f5395d
 Revises: 6d4b2c6a304c
@@ -16,7 +16,7 @@ down_revision: Union[str, None] = "6d4b2c6a304c"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
-TABLE_NAME = "instance_runs"
+TABLE_NAME = "project_runs"
 
 
 def upgrade() -> None:
@@ -24,15 +24,15 @@ def upgrade() -> None:
     op.create_table(
         TABLE_NAME,
         sa.Column("id", sa.Integer(), nullable=False),
-        sa.Column("instance_id", sa.Integer(), nullable=False),
+        sa.Column("project_id", sa.Integer(), nullable=False),
         sa.Column("started_processing_at", sa.DateTime(), nullable=True),
         sa.Column("environment_slug", sa.String(), nullable=False),
         sa.Column("completed_at", sa.DateTime(), nullable=True),
         sa.Column("failed_at", sa.DateTime(), nullable=True),
         sa.Column("created_at", sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(
-            ["instance_id"],
-            ["instances.id"],
+            ["project_id"],
+            ["projects.id"],
         ),
         sa.PrimaryKeyConstraint("id"),
     )

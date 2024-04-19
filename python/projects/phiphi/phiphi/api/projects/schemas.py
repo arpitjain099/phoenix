@@ -1,4 +1,4 @@
-"""Schemas for the instances."""
+"""Schemas for the projects."""
 import datetime
 from enum import Enum
 from typing import Annotated
@@ -14,17 +14,17 @@ class ExpectedUsage(str, Enum):
     monthly = "monthly"
 
 
-class InstanceBase(pydantic.BaseModel):
-    """Instance base schema.
+class ProjectBase(pydantic.BaseModel):
+    """Project base schema.
 
-    Shared properties of all instances.
+    Shared properties of all projects.
     """
 
-    name: Annotated[str, pydantic.Field(description="The name of the instance")]
-    description: Annotated[str, pydantic.Field(description="The description of the instance")]
+    name: Annotated[str, pydantic.Field(description="The name of the project")]
+    description: Annotated[str, pydantic.Field(description="The description of the project")]
     environment_slug: Annotated[
         str,
-        pydantic.Field(default="main", description="The environment id of the instance"),
+        pydantic.Field(default="main", description="The environment id of the project"),
     ]
 
     pi_deleted_after_days: Annotated[
@@ -40,19 +40,19 @@ class InstanceBase(pydantic.BaseModel):
         ),
     ]
     expected_usage: Annotated[
-        ExpectedUsage, pydantic.Field(description="The environment expected usage of the instance")
+        ExpectedUsage, pydantic.Field(description="The environment expected usage of the project")
     ]
 
 
-class InstanceCreate(InstanceBase):
-    """Instance create schema.
+class ProjectCreate(ProjectBase):
+    """Project create schema.
 
     Properties to receive via API on creation.
     """
 
 
-class InstanceResponse(InstanceBase):
-    """Instance schema.
+class ProjectResponse(ProjectBase):
+    """Project schema.
 
     Properties to return to client.
     """
@@ -65,8 +65,8 @@ class InstanceResponse(InstanceBase):
     run_status: str | None = None
 
 
-class InstanceUpdate(pydantic.BaseModel):
-    """Instance update schema."""
+class ProjectUpdate(pydantic.BaseModel):
+    """Project update schema."""
 
     name: str | None = None
     description: str | None = None
