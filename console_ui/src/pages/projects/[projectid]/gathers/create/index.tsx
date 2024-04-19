@@ -61,7 +61,7 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 				data: [] as string[],
 			},
 			project_id: Number(projectid),
-			limit_messages: 1000,
+			limit_posts_per_account: 1000,
 		},
 		validate: {
 			data_type: (value) => (value.length <= 0 ? "Required" : null),
@@ -81,7 +81,8 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 				if (endDate < startDate) return "End date cannot be before start date";
 				return null;
 			},
-			limit_messages: (value) => (value === undefined ? "Required" : null),
+			limit_posts_per_account: (value) =>
+				value === undefined ? "Required" : null,
 			input: {
 				type: (value) => (value.length <= 0 ? "Required" : null),
 				data: (value) => (value.length <= 0 ? "Required" : null),
@@ -227,16 +228,18 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 				mt="sm"
 				label={
 					<div className="flex items-center">
-						<Tooltip label={translate("gathers.fields.info.limit_messages")}>
+						<Tooltip
+							label={translate("gathers.fields.info.limit_posts_per_account")}
+						>
 							<span className="flex">
 								<IconInfoCircle size={12} />
 							</span>
 						</Tooltip>
-						{translate("gathers.fields.limit_messages")}
+						{translate("gathers.fields.limit_posts_per_account")}
 						<span className="text-red-500 ml-1">*</span>
 					</div>
 				}
-				{...getInputProps("limit_messages")}
+				{...getInputProps("limit_posts_per_account")}
 			/>
 			<Textarea
 				mt="sm"
