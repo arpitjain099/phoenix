@@ -43,7 +43,6 @@ def get_environment_by_slug(
     session: sqlalchemy.orm.Session, slug: str
 ) -> schemas.EnvironmentResponse | None:
     """Get an environment."""
-    print("started")
     db_environment = (
         session.query(models.Environment).filter(models.Environment.slug == slug).first()
     )

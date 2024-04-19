@@ -70,7 +70,20 @@ class ProjectUpdate(pydantic.BaseModel):
 
     name: str | None = None
     description: str | None = None
-    pi_deleted_after_days: int | None = None
-    delete_after_days: int | None = None
+    pi_deleted_after_days: Annotated[
+        int | None,
+        pydantic.Field(
+            default=183, description="PI deletion time in days, min 1, max 365", gt=1, lt=365
+        ),
+    ]
+    delete_after_days: Annotated[
+        int | None,
+        pydantic.Field(
+            default=183, description="Deletion time in days, min 1, max 365", gt=1, lt=365
+        ),
+    ]
     expected_usage: ExpectedUsage | None = None
-    environment_id: str | None = None
+    environment_slug: Annotated[
+        str | None,
+        pydantic.Field(default="main", description="The environment id of the instance"),
+    ]
