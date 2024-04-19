@@ -1,127 +1,125 @@
-"""Instance runs crud functionality."""
+"""Project runs crud functionality."""
 
 import sqlalchemy.orm
 from phiphi.api import exceptions
-from phiphi.api.instances import crud as instance_crud
-from phiphi.api.instances import models as instance_models
-from phiphi.api.instances.instance_runs import models, schemas
+from phiphi.api.projects import crud as project_crud
+from phiphi.api.projects import models as project_models
+from phiphi.api.projects.project_runs import models, schemas
 
 
-def create_instance_runs(
-    session: sqlalchemy.orm.Session, instance_id: int
-) -> schemas.InstanceRunsResponse:
-    """Create a new instance run."""
-    db_instance = (
-        session.query(instance_models.Instance)
-        .filter(instance_models.Instance.id == instance_id)
+def create_project_runs(
+    session: sqlalchemy.orm.Session, project_id: int
+) -> schemas.ProjectRunsResponse:
+    """Create a new project run."""
+    db_project = (
+        session.query(project_models.Project)
+        .filter(project_models.Project.id == project_id)
         .first()
     )
 
-    if db_instance is None:
-        raise exceptions.InstanceNotFound()
+    if db_project is None:
+        raise exceptions.ProjectNotFound()
 
-    db_instance_runs = models.InstanceRuns(
-        environment_slug=db_instance.environment_slug, instance_id=instance_id
+    db_project_runs = models.ProjectRuns(
+        environment_slug=db_project.environment_slug, project_id=project_id
     )
 
-    session.add(db_instance_runs)
+    session.add(db_project_runs)
 
     session.commit()
-    session.refresh(db_instance_runs)
-    return schemas.InstanceRunsResponse.model_validate(db_instance_runs)
+    session.refresh(db_project_runs)
+    return schemas.ProjectRunsResponse.model_validate(db_project_runs)
 
 
-def get_instance_runs_by_run_status_filter(
+def get_project_runs_by_run_status_filter(
     session: sqlalchemy.orm.Session,
-    instance_id: int,
+    project_id: int,
     run_status: schemas.RunStatus | None,
     start: int = 0,
     end: int = 100,
-) -> list[schemas.InstanceRunsResponse]:
-    """Get all instance runs."""
-    instance_crud.get_db_instance_with_guard(session, instance_id)
+) -> list[schemas.ProjectRunsResponse]:
+    """Get all project runs."""
+    project_crud.get_db_project_with_guard(session, project_id)
 
-    query = session.query(models.InstanceRuns).filter(
-        models.InstanceRuns.instance_id == instance_id
-    )
+    query = session.query(models.ProjectRuns).filter(models.ProjectRuns.project_id == project_id)
 
     if run_status == schemas.RunStatus.failed:
-        query = query.filter(models.InstanceRuns.failed_at.isnot(None))
+        query = query.filter(models.ProjectRuns.failed_at.isnot(None))
     elif run_status == schemas.RunStatus.completed:
-        query = query.filter(models.InstanceRuns.completed_at.isnot(None))
+        query = query.filter(models.ProjectRuns.completed_at.isnot(None))
     elif run_status == schemas.RunStatus.processing:
-        query = query.filter(models.InstanceRuns.started_processing_at.isnot(None))
+        query = query.filter(models.ProjectRuns.started_processing_at.isnot(None))
     elif run_status == schemas.RunStatus.in_queue:
         query = query.filter(
-            models.InstanceRuns.failed_at.is_(None),
-            models.InstanceRuns.completed_at.is_(None),
-            models.InstanceRuns.started_processing_at.is_(None),
+            models.ProjectRuns.failed_at.is_(None),
+            models.ProjectRuns.completed_at.is_(None),
+            models.ProjectRuns.started_processing_at.is_(None),
         )
     elif run_status == schemas.RunStatus.yet_to_run:
         query = query.filter(
-            models.InstanceRuns.failed_at.is_(None),
-            models.InstanceRuns.completed_at.is_(None),
-            models.InstanceRuns.started_processing_at.is_(None),
+            models.ProjectRuns.failed_at.is_(None),
+            models.ProjectRuns.completed_at.is_(None),
+            models.ProjectRuns.started_processing_at.is_(None),
         )
     query = query.offset(start).limit(end)
 
-    db_instance_runs = session.scalars(query).all()
+    db_project_runs = session.scalars(query).all()
 
-    if not db_instance_runs:
+    if not db_project_runs:
         return []
-    return [schemas.InstanceRunsResponse.model_validate(runs) for runs in db_instance_runs]
+    return [schemas.ProjectRunsResponse.model_validate(runs) for runs in db_project_runs]
 
 
-def get_instance_runs(
+def get_project_runs(
     session: sqlalchemy.orm.Session,
-    instance_id: int,
+    project_id: int,
     start: int = 0,
     end: int = 100,
-) -> list[schemas.InstanceRunsResponse]:
-    """Get all instance runs."""
-    instance_crud.get_db_instance_with_guard(session, instance_id)
+) -> list[schemas.ProjectRunsResponse]:
+    """Get all project runs."""
+    project_crud.get_db_project_with_guard(session, project_id)
 
     query = (
-        sqlalchemy.select(models.InstanceRuns)
-        .filter(models.InstanceRuns.instance_id == instance_id)
+        sqlalchemy.select(models.ProjectRuns)
+        .filter(models.ProjectRuns.project_id == project_id)
         .offset(start)
         .limit(end)
     )
 
-    db_instance_runs = session.scalars(query).all()
+    db_project_runs = session.scalars(query).all()
 
-    if not db_instance_runs:
+    if not db_project_runs:
         return []
-    return [schemas.InstanceRunsResponse.model_validate(runs) for runs in db_instance_runs]
+    return [schemas.ProjectRunsResponse.model_validate(runs) for runs in db_project_runs]
 
 
-def get_instance_last_run(
-    session: sqlalchemy.orm.Session, instance_id: int
-) -> schemas.InstanceRunsResponse | None:
-    """Get last instance run."""
-    instance_crud.get_db_instance_with_guard(session, instance_id)
+def get_project_last_run(
+    session: sqlalchemy.orm.Session, project_id: int
+) -> schemas.ProjectRunsResponse | None:
+    """Get last project run."""
+    project_crud.get_db_project_with_guard(session, project_id)
 
-    db_instance_run = (
-        session.query(models.InstanceRuns)
-        .filter(models.InstanceRuns.instance_id == instance_id)
-        .order_by(models.InstanceRuns.created_at.desc())
+    db_project_run = (
+        session.query(models.ProjectRuns)
+        .filter(models.ProjectRuns.project_id == project_id)
+        .order_by(models.ProjectRuns.created_at.desc())
         .first()
     )
 
-    if db_instance_run is None:
+    if db_project_run is None:
         return None
-    return schemas.InstanceRunsResponse.model_validate(db_instance_run)
+    return schemas.ProjectRunsResponse.model_validate(db_project_run)
 
 
-def update_instance_runs(
-    session: sqlalchemy.orm.Session, instance_run_id: int, instance_run: schemas.InstanceRunsUpdate
-) -> schemas.InstanceRunsResponse | None:
-    """Update an instance run."""
-    db_instance_run = session.get(models.InstanceRuns, instance_run_id)
-    if db_instance_run is None:
+def update_project_runs(
+    session: sqlalchemy.orm.Session, project_run_id: int, project_run: schemas.ProjectRunsUpdate
+) -> schemas.ProjectRunsResponse | None:
+    """Update an project run."""
+    db_project_run = session.get(models.ProjectRuns, project_run_id)
+    if db_project_run is None:
         return None
-    for field, value in instance_run.dict(exclude_unset=True).items():
-        setattr(db_instance_run, field, value)
+    for field, value in project_run.dict(exclude_unset=True).items():
+        setattr(db_project_run, field, value)
     session.commit()
-    session.refresh(db_instance_run)
-    return schemas.InstanceRunsResponse.model_validate(db_instance_run)
+    session.refresh(db_project_run)
+    return schemas.ProjectRunsResponse.model_validate(db_project_run)
