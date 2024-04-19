@@ -26,7 +26,7 @@ main_logger.addHandler(ch)
 def main(session: Session, testing: bool = False) -> None:
     """Seed the database."""
     if testing:
-        #This drops and recreates the main database
+        # This drops and recreates the main database
         platform_db.Base.metadata.drop_all(
             bind=platform_db.engine
         )  # Drop all tables if --testing flag is provided
