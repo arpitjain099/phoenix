@@ -1,6 +1,6 @@
 """Routes for gathers."""
 import fastapi
-from phiphi.api import deps, exceptions
+from phiphi.api import deps
 from phiphi.api.projects.gathers import crud, schemas
 
 router = fastapi.APIRouter()
