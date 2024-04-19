@@ -13,10 +13,7 @@ def create_apify_gather(
     session: deps.SessionDep,
 ) -> schemas.ApifyGatherResponse:
     """Create a new gather."""
-    try:
-        return crud.create_apify_gather(session, project_id, gather)
-    except exceptions.ProjectNotFound:
-        raise exceptions.ProjectNotFound
+    return crud.create_apify_gather(session, project_id, gather)
 
 
 # REFACTORABLE: IF there are other gather subclasses, this should be refactored
@@ -26,10 +23,7 @@ def get_gathers(
     session: deps.SessionDep, project_id: int, start: int = 0, end: int = 100
 ) -> list[schemas.ApifyGatherResponse]:
     """Get gathers."""
-    try:
-        return crud.get_gathers(session, project_id, start, end)
-    except exceptions.ProjectNotFound:
-        raise exceptions.ProjectNotFound
+    return crud.get_gathers(session, project_id, start, end)
 
 
 @router.get(
@@ -40,13 +34,10 @@ def get_apify_gather(
     project_id: int, apify_gather_id: int, session: deps.SessionDep
 ) -> schemas.ApifyGatherResponse:
     """Get an apify gather."""
-    try:
-        apify_gather = crud.get_apify_gather(session, project_id, apify_gather_id)
-        if apify_gather is None:
-            raise fastapi.HTTPException(status_code=404, detail="Gather not found")
-        return apify_gather
-    except exceptions.ProjectNotFound:
-        raise exceptions.ProjectNotFound
+    apify_gather = crud.get_apify_gather(session, project_id, apify_gather_id)
+    if apify_gather is None:
+        raise fastapi.HTTPException(status_code=404, detail="Gather not found")
+    return apify_gather
 
 
 @router.get(
@@ -56,7 +47,4 @@ def get_apify_gathers(
     session: deps.SessionDep, project_id: int, start: int = 0, end: int = 100
 ) -> list[schemas.ApifyGatherResponse]:
     """Get apify gathers."""
-    try:
-        return crud.get_apify_gathers(session, project_id, start, end)
-    except exceptions.ProjectNotFound:
-        raise exceptions.ProjectNotFound
+    return crud.get_apify_gathers(session, project_id, start, end)
