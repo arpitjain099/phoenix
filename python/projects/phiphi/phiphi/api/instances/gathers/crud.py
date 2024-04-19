@@ -1,7 +1,6 @@
 """Gather crud functionality."""
 import sqlalchemy.orm
-from phiphi.api import exceptions
-from phiphi.api.instances import models as instance_models
+from phiphi.api.instances import crud as instance_crud
 from phiphi.api.instances.gathers import models, schemas
 
 
@@ -9,13 +8,7 @@ def create_apify_gather(
     session: sqlalchemy.orm.Session, instance_id: int, gather_data: schemas.ApifyGatherCreate
 ) -> schemas.ApifyGatherResponse:
     """Create a new apify gather."""
-    db_instance = (
-        session.query(instance_models.Instance)
-        .filter(instance_models.Instance.id == instance_id)
-        .first()
-    )
-    if db_instance is None:
-        raise exceptions.InstanceNotFound()
+    instance_crud.get_db_instance_with_guard(session, instance_id)
 
     db_apify_gather = models.ApifyGather(**gather_data.dict(), instance_id=instance_id)
     session.add(db_apify_gather)
@@ -28,13 +21,7 @@ def get_apify_gather(
     session: sqlalchemy.orm.Session, instance_id: int, gather_id: int
 ) -> schemas.ApifyGatherResponse | None:
     """Get an apify gather."""
-    db_instance = (
-        session.query(instance_models.Instance)
-        .filter(instance_models.Instance.id == instance_id)
-        .first()
-    )
-    if db_instance is None:
-        raise exceptions.InstanceNotFound()
+    instance_crud.get_db_instance_with_guard(session, instance_id)
 
     db_gather = (
         session.query(models.ApifyGather)
@@ -58,13 +45,7 @@ def get_apify_gathers(
     Currently this implementation only supports ApifyGathers.
     When new polymorphic model are needed this should be refactored.
     """
-    db_instance = (
-        session.query(instance_models.Instance)
-        .filter(instance_models.Instance.id == instance_id)
-        .first()
-    )
-    if db_instance is None:
-        raise exceptions.InstanceNotFound()
+    instance_crud.get_db_instance_with_guard(session, instance_id)
 
     query = (
         sqlalchemy.select(models.ApifyGather)
@@ -89,13 +70,7 @@ def get_gathers(
     Currently this implementation only supports ApifyGathers.
     When new polymorphic model are needed this should be refactored.
     """
-    db_instance = (
-        session.query(instance_models.Instance)
-        .filter(instance_models.Instance.id == instance_id)
-        .first()
-    )
-    if db_instance is None:
-        raise exceptions.InstanceNotFound()
+    instance_crud.get_db_instance_with_guard(session, instance_id)
 
     gathers = (
         session.query(models.Gather)

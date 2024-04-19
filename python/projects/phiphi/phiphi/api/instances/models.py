@@ -1,10 +1,12 @@
 """Instance Models."""
-from typing import Optional
+from typing import Optional, cast
 
 from sqlalchemy import ForeignKey, orm
+from sqlalchemy.ext.hybrid import hybrid_property
 
 from phiphi import platform_db
 from phiphi.api import base_models
+from phiphi.api.instances.instance_runs import models, schemas
 
 
 class InstanceBase(platform_db.Base):
@@ -27,3 +29,31 @@ class Instance(InstanceBase, base_models.TimestampModel):
     """Instance model that can inherit from multiple models."""
 
     __tablename__ = "instances"
+
+    # Relationship to get all related InstanceRuns, ordered by created_at descending
+    instance_runs = orm.relationship(
+        "InstanceRuns",
+        order_by="desc(InstanceRuns.created_at)",
+        primaryjoin="Instance.id == InstanceRuns.instance_id",
+        lazy="dynamic",
+    )
+
+    @hybrid_property
+    def last_run(self) -> models.InstanceRuns | None:
+        """Property to get the most recent InstanceRun."""
+        last_run = self.instance_runs.first()
+
+        if last_run is None:
+            return None
+
+        return cast(models.InstanceRuns, last_run)
+
+    @hybrid_property
+    def run_status(self) -> str:
+        """Run status hybrid property."""
+        # Check if there are any running instance runs
+
+        if self.last_run is None:
+            return schemas.RunStatus.yet_to_run
+
+        return self.last_run.run_status

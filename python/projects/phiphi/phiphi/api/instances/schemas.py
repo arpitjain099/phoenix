@@ -62,6 +62,7 @@ class InstanceResponse(InstanceBase):
     id: int
     created_at: datetime.datetime
     updated_at: datetime.datetime
+    run_status: str | None = None
 
 
 class InstanceUpdate(pydantic.BaseModel):

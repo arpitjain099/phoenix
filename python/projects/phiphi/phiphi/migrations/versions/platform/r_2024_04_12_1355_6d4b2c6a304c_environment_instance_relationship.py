@@ -1,7 +1,7 @@
 """environment_instance_relationship.
 
 Revision ID: 6d4b2c6a304c
-Revises: 7cb955da8fb9
+Revises: df23bee88382
 Create Date: 2024-04-12 13:55:26.167391
 
 """
@@ -12,7 +12,7 @@ from alembic import op
 
 # revision identifiers, used by Alembic.
 revision: str = "6d4b2c6a304c"
-down_revision: Union[str, None] = "7cb955da8fb9"
+down_revision: Union[str, None] = "df23bee88382"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -32,7 +32,7 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    """Downgrade for 6d4b2c6a304c."""
+    """Downgrade for df23bee88382."""
     op.add_column(
         TABLE_NAME, sa.Column("environment_id", sa.VARCHAR(), autoincrement=False, nullable=False)
     )
