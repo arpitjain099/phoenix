@@ -1,46 +1,46 @@
-"""Routes for the instances."""
+"""Routes for the projects."""
 import fastapi
 
 from phiphi.api import deps, exceptions
-from phiphi.api.instances import crud, schemas
+from phiphi.api.projects import crud, schemas
 
 router = fastapi.APIRouter()
 
 
-@router.post("/instances/", response_model=schemas.InstanceResponse)
-def create_instance(
-    instance: schemas.InstanceCreate, session: deps.SessionDep
-) -> schemas.InstanceResponse:
-    """Create a new instance."""
+@router.post("/projects/", response_model=schemas.ProjectResponse)
+def create_project(
+    project: schemas.ProjectCreate, session: deps.SessionDep
+) -> schemas.ProjectResponse:
+    """Create a new project."""
     try:
-        return crud.create_instance(session, instance)
+        return crud.create_project(session, project)
     except exceptions.EnvironmentNotFound:
         raise exceptions.EnvironmentNotFound
 
 
-@router.put("/instances/{instance_id}", response_model=schemas.InstanceResponse)
-def update_instance(
-    instance_id: int, instance: schemas.InstanceUpdate, session: deps.SessionDep
-) -> schemas.InstanceResponse:
-    """Update an instance."""
-    updated_instance = crud.update_instance(session, instance_id, instance)
-    if updated_instance is None:
-        raise fastapi.HTTPException(status_code=404, detail="Instance not found")
-    return updated_instance
+@router.put("/projects/{project_id}", response_model=schemas.ProjectResponse)
+def update_project(
+    project_id: int, project: schemas.ProjectUpdate, session: deps.SessionDep
+) -> schemas.ProjectResponse:
+    """Update an project."""
+    updated_project = crud.update_project(session, project_id, project)
+    if updated_project is None:
+        raise fastapi.HTTPException(status_code=404, detail="Project not found")
+    return updated_project
 
 
-@router.get("/instances/{instance_id}", response_model=schemas.InstanceResponse)
-def get_instance(instance_id: int, session: deps.SessionDep) -> schemas.InstanceResponse:
-    """Get an Instance."""
-    instance = crud.get_instance(session, instance_id)
-    if instance is None:
-        raise fastapi.HTTPException(status_code=404, detail="Instance not found")
-    return instance
+@router.get("/projects/{project_id}", response_model=schemas.ProjectResponse)
+def get_project(project_id: int, session: deps.SessionDep) -> schemas.ProjectResponse:
+    """Get an Project."""
+    project = crud.get_project(session, project_id)
+    if project is None:
+        raise fastapi.HTTPException(status_code=404, detail="Project not found")
+    return project
 
 
-@router.get("/instances/", response_model=list[schemas.InstanceResponse])
-def get_instances(
+@router.get("/projects/", response_model=list[schemas.ProjectResponse])
+def get_projects(
     session: deps.SessionDep, start: int = 0, end: int = 100
-) -> list[schemas.InstanceResponse]:
-    """Get Instances."""
-    return crud.get_instances(session, start, end)
+) -> list[schemas.ProjectResponse]:
+    """Get Projects."""
+    return crud.get_projects(session, start, end)
