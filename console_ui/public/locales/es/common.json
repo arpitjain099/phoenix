@@ -123,7 +123,7 @@
 		"clone": "Clonar"
 	},
 	"projects": {
-		"projects": "Instancias",
+		"projects": "Proyectos",
 		"fields": {
 			"id": "ID único",
 			"name": "Nombre",
@@ -145,10 +145,10 @@
 			"updated_at": "Actualizado en"
 		},
 		"titles": {
-			"create": "Crear instancia",
-			"edit": "Editar instancia",
-			"list": "Instancias",
-			"show": "Mostrar instancia"
+			"create": "Crear proyecto",
+			"edit": "Editar proyecto",
+			"list": "Proyectos",
+			"show": "Mostrar proyecto"
 		},
 		"warnings": {
 			"create": "¡Para extender los días de 'La información personal se eliminará después' o 'Todos los datos se eliminarán después' más allá de 365, por favor, contacte con soporte!",
@@ -162,7 +162,7 @@
 			"start_date": "Fecha de Inicio",
 			"end_date": "Fecha de Finalización",
 			"platform": "Plataforma",
-			"project_id": "Instancia",
+			"project_id": "Proyecto",
 			"limit_messages": "Límite de Publicaciones Por Cuenta",
 			"limit_replies": "Límite de Respuestas",
 			"nested_replies": "Respuestas Anidadas",
@@ -192,11 +192,11 @@
 		"default": "Interfaz de consola",
 		"suffix": " | Phoenix",
 		"projects": {
-			"list": "Instancias | Phoenix",
-			"show": "#{{id}} Mostrar instancia | Phoenix",
-			"edit": "#{{id}} Editar instancia | Phoenix",
-			"create": "Crear nueva instancia | Phoenix",
-			"clone": "#{{id}} Clonar instancia | Phoenix"
+			"list": "Proyectos | Phoenix",
+			"show": "#{{id}} Mostrar proyecto | Phoenix",
+			"edit": "#{{id}} Editar proyecto | Phoenix",
+			"create": "Crear nuevo proyecto | Phoenix",
+			"clone": "#{{id}} Clonar proyecto | Phoenix"
 		}
 	},
 	"table": {

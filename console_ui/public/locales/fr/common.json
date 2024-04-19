@@ -123,7 +123,7 @@
 		"clone": "Cloner"
 	},
 	"projects": {
-		"projects": "Projects",
+		"projects": "Projets",
 		"fields": {
 			"id": "Identifiant unique",
 			"name": "Nom",
@@ -162,7 +162,7 @@
 			"start_date": "Date de début",
 			"end_date": "Date de fin",
 			"platform": "Plateforme",
-			"project_id": "Project",
+			"project_id": "Projet",
 			"limit_messages": "Limite de publications par compte",
 			"limit_replies": "Limite de réponses",
 			"nested_replies": "Réponses imbriquées",
@@ -189,14 +189,14 @@
 		}
 	},
 	"documentTitle": {
-		"default": "Console UI",
+		"default": "Interface de la console",
 		"suffix": " | Phoenix",
 		"projects": {
-			"list": "Projects | Phoenix",
-			"show": "#{{id}} Afficher l'project | Phoenix",
-			"edit": "#{{id}} Modifier l'project | Phoenix",
-			"create": "Créer une nouvelle project | Phoenix",
-			"clone": "#{{id}} Cloner l'project | Phoenix"
+			"list": "Projets | Phoenix",
+			"show": "#{{id}} Afficher le projet | Phoenix",
+			"edit": "#{{id}} Modifier le projet | Phoenix",
+			"create": "Créer un nouveau projet | Phoenix",
+			"clone": "#{{id}} Cloner le projet | Phoenix"
 		}
 	},
 	"table": {
