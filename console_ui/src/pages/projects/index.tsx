@@ -6,24 +6,24 @@ import { EditButton, ShowButton, DateField, List } from "@refinedev/mantine";
 import { useTable } from "@refinedev/react-table";
 import TableComponent from "../../components/table";
 
-export const InstanceList: React.FC<IResourceComponentsProps> = () => {
+export const ProjectList: React.FC<IResourceComponentsProps> = () => {
 	const translate = useTranslate();
 	const columns = React.useMemo<ColumnDef<any>[]>(
 		() => [
 			{
 				id: "name",
 				accessorKey: "name",
-				header: translate("instances.fields.name"),
+				header: translate("projects.fields.name"),
 			},
 			{
 				id: "status",
 				accessorKey: "status",
-				header: translate("instances.fields.status"),
+				header: translate("projects.fields.status"),
 			},
 			{
 				id: "created_at",
 				accessorKey: "created_at",
-				header: translate("instances.fields.created_at"),
+				header: translate("projects.fields.created_at"),
 				cell: function render({ getValue }) {
 					return <DateField value={getValue<any>()} />;
 				},
@@ -81,4 +81,4 @@ export const InstanceList: React.FC<IResourceComponentsProps> = () => {
 	);
 };
 
-export default InstanceList;
+export default ProjectList;

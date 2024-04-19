@@ -1,9 +1,9 @@
-import CreateEditInstanceForm from "@components/forms/create-edit-instance";
+import CreateEditProjectForm from "@components/forms/create-edit-project";
 import { IResourceComponentsProps } from "@refinedev/core";
 import { Create, useForm } from "@refinedev/mantine";
 import React from "react";
 
-export const InstanceCreate: React.FC<IResourceComponentsProps> = () => {
+export const ProjectCreate: React.FC<IResourceComponentsProps> = () => {
 	const {
 		getInputProps,
 		saveButtonProps,
@@ -38,9 +38,9 @@ export const InstanceCreate: React.FC<IResourceComponentsProps> = () => {
 
 	return (
 		<Create isLoading={formLoading} saveButtonProps={saveButtonProps}>
-			<CreateEditInstanceForm getInputProps={getInputProps} />
+			<CreateEditProjectForm getInputProps={getInputProps} />
 		</Create>
 	);
 };
 
-export default InstanceCreate;
+export default ProjectCreate;

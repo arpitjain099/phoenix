@@ -1,4 +1,4 @@
-export type InstanceSchema = {
+export type ProjectSchema = {
 	name: string;
 	description: string;
 	environment_slug: string;

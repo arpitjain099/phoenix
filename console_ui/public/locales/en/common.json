@@ -122,8 +122,8 @@
 	"tags": {
 		"clone": "Clone"
 	},
-	"instances": {
-		"instances": "Instances",
+	"projects": {
+		"projects": "Projects",
 		"fields": {
 			"id": "Unique ID",
 			"name": "Name",
@@ -145,10 +145,10 @@
 			"updated_at": "Updated At"
 		},
 		"titles": {
-			"create": "Create Instance",
-			"edit": "Edit Instance",
-			"list": "Instances",
-			"show": "Show Instance"
+			"create": "Create Project",
+			"edit": "Edit Project",
+			"list": "Projects",
+			"show": "Show Project"
 		},
 		"warnings": {
 			"create": "To extend 'Personal Information is deleted after' or 'All data is deleted after' days beyond 365, please contact support!",
@@ -162,7 +162,7 @@
 			"start_date": "Start Date",
 			"end_date": "End Date",
 			"platform": "Platform",
-			"instance_id": "Instance",
+			"project_id": "Project",
 			"limit_messages": "Limit Posts Per Account",
 			"limit_replies": "Limit Replies",
 			"nested_replies": "Nested Replies",
@@ -191,12 +191,12 @@
 	"documentTitle": {
 		"default": "Console UI",
 		"suffix": " | Phoenix",
-		"instances": {
-			"list": "Instances | Phoenix",
-			"show": "#{{id}} Show Instance | Phoenix",
-			"edit": "#{{id}} Edit Instance | Phoenix",
-			"create": "Create new Instance | Phoenix",
-			"clone": "#{{id}} Clone Instance | Phoenix"
+		"projects": {
+			"list": "Projects | Phoenix",
+			"show": "#{{id}} Show Project | Phoenix",
+			"edit": "#{{id}} Edit Project | Phoenix",
+			"create": "Create new Project | Phoenix",
+			"clone": "#{{id}} Clone Project | Phoenix"
 		}
 	},
 	"table": {

@@ -122,8 +122,8 @@
 	"tags": {
 		"clone": "نسخ"
 	},
-	"instances": {
-		"instances": "الحالات",
+	"projects": {
+		"projects": "الحالات",
 		"fields": {
 			"id": "المعرف الفريد",
 			"name": "الاسم",
@@ -162,7 +162,7 @@
 			"start_date": "تاريخ البدء",
 			"end_date": "تاريخ الانتهاء",
 			"platform": "المنصة",
-			"instance_id": "المثال",
+			"project_id": "المثال",
 			"limit_messages": "الحد الأقصى للمنشورات لكل حساب",
 			"limit_replies": "الحد الأقصى للردود",
 			"nested_replies": "الردود المتداخلة",
@@ -191,7 +191,7 @@
 	"documentTitle": {
 		"default": "واجهة المستخدم للوحة التحكم",
 		"suffix": " | في في",
-		"instances": {
+		"projects": {
 			"list": "الحالات | في في",
 			"show": "#{{id}} عرض الحالة | في في",
 			"edit": "#{{id}} تعديل الحالة | في في",
