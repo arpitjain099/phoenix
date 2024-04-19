@@ -1,4 +1,4 @@
-"""Seed the instances."""
+"""Seed the environments."""
 from sqlalchemy.orm import Session
 
 from phiphi import config

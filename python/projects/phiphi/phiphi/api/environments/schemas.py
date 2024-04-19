@@ -8,7 +8,7 @@ import pydantic
 class EnvironmentBase(pydantic.BaseModel):
     """Environment base schema.
 
-    Shared properties of all instances.
+    Shared properties of all environment schemas.
     """
 
     description: Annotated[str, pydantic.Field(description="The description of the Environment")]
