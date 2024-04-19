@@ -1,4 +1,4 @@
-import { Refine } from "@refinedev/core";
+import { CanAccess, Refine } from "@refinedev/core";
 import { DevtoolsProvider } from "@refinedev/devtools";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 import {
@@ -34,6 +34,7 @@ import "../providers/i18n";
 import { IconUser } from "@tabler/icons";
 import { useRouter } from "next/router";
 import authProvider from "@providers/auth-provider";
+import accessControlProvider from "@providers/access-provider";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
 	noLayout?: boolean;
@@ -115,6 +116,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
 								notificationProvider={notificationProvider}
 								i18nProvider={i18nProvider}
 								authProvider={authProvider}
+								accessControlProvider={accessControlProvider}
 								resources={[
 									{
 										name: "projects",
@@ -152,7 +154,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
 									projectId: "nMl5vA-MzwgF4-ONcYky",
 								}}
 							>
-								{renderComponent()}
+								<CanAccess>{renderComponent()}</CanAccess>
 								<RefineKbar />
 								<UnsavedChangesNotifier />
 								<DocumentTitleHandler />

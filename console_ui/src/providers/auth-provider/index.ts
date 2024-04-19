@@ -38,6 +38,11 @@ const fetchUserInfo = async (): Promise<UserInfo | null> => {
 	}
 };
 
+export const getUserRole = async (): Promise<string | null> => {
+	const userInfo = storageService.get(USER_INFO_COOKIE_NAME);
+	return userInfo ? JSON.parse(userInfo).app_role : null;
+};
+
 const authProvider: AuthProvider = {
 	login: async () => {
 		if (ENV === "dev") {
