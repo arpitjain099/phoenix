@@ -189,7 +189,7 @@
 					"data": "Agregue los datos de entrada que le gustaría recopilar. Escriba/pegue las entradas separadas por ` ` (espacio)"
 				}
 			}
-		}
+		}	
 	},
 	"documentTitle": {
 		"default": "Interfaz de consola",
