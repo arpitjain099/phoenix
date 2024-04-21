@@ -173,7 +173,10 @@
 			"input": {
 				"data": "Gather Input Data",
 				"type": "Gather Input Type",
-				"data_placeholder": "Type/paste inputs seperated by ` ` or press enter"
+				"data_placeholder": "Type/paste inputs seperated by ` ` (space)",
+				"button_text": "Add to inputs",
+				"search_placeholder": "Search for an input",
+				"edit_input_label": "Edit Item..."
 			},
 			"info": {
 				"start_date": "The date to gather data from. This will be 0:00 of the day configured.",
@@ -183,7 +186,7 @@
 				"data_type": "Type of data you would like to gather",
 				"input": {
 					"type": "The type of input data that you want to gather on. See manual for more information.",
-					"data": "Add the input data you would like to gather. Type/paste iput separated by ` ` (space) or press enter"
+					"data": "Add the input data you would like to gather. Type/paste inputs separated by ` ` (space)"
 				}
 			}
 		}

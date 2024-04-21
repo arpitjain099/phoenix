@@ -162,18 +162,21 @@
 			"start_date": "Date de début",
 			"end_date": "Date de fin",
 			"platform": "Plateforme",
-			"project_id": "Project",
+			"project_id": "Projet",
 			"limit_posts_per_account": "Limite de publications par compte",
 			"limit_replies": "Limite de réponses",
 			"nested_replies": "Réponses imbriquées",
 			"data_type": "Type de données",
 			"description": "Description",
-			"created_at": "Créé le",
-			"updated_at": "Mis à jour le",
+			"created_at": "Créé à",
+			"updated_at": "Mis à jour à",
 			"input": {
-				"data": "Données d'entrée de collecte",
-				"type": "Type de données d'entrée de collecte",
-				"data_placeholder": "Tapez/collez les données d'entrée séparées par ` ` ou appuyez sur Entrée"
+				"data": "Collecter les données d'entrée",
+				"type": "Type de données d'entrée",
+				"data_placeholder": "Tapez/collez les entrées séparées par ` ` (espace)",
+				"button_text": "Ajouter aux entrées",
+				"search_placeholder": "Rechercher une entrée",
+				"edit_input_label": "Modifier l'élément..."
 			},
 			"info": {
 				"start_date": "La date à partir de laquelle collecter des données. Ce sera 00:00 du jour configuré.",
@@ -183,7 +186,7 @@
 				"data_type": "Type de données que vous souhaitez collecter",
 				"input": {
 					"type": "Le type de données d'entrée que vous souhaitez collecter. Voir le manuel pour plus d'informations.",
-					"data": "Ajoutez les données d'entrée que vous souhaitez collecter. Tapez/collez les données d'entrée séparées par ` ` (espace) ou appuyez sur Entrée"
+					"data": "Ajoutez les données d'entrée que vous souhaitez collecter. Tapez / collez les entrées séparées par ` ` (espace)"
 				}
 			}
 		}
