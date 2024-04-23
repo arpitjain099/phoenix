@@ -24,13 +24,14 @@ main_logger.addHandler(ch)
 
 
 def main(session: Session, testing: bool = False) -> None:
-    """Seed the database."""
+    """Seed the database.
+    If testing is true the databased will be dropped and recreated.
+    """
     if testing:
-        # This drops and recreates the main database
         platform_db.Base.metadata.drop_all(
-            bind=platform_db.engine
+            bind=session.get_bind()
         )  # Drop all tables if --testing flag is provided
-        platform_db.Base.metadata.create_all(bind=platform_db.engine)  # Create all tables again
+        platform_db.Base.metadata.create_all(session.get_bind())  # Create all tables again
     users.init_first_admin_user(session)
     environments.init_main_environment(session)
 
