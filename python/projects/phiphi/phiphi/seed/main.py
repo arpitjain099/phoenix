@@ -25,6 +25,7 @@ main_logger.addHandler(ch)
 
 def main(session: Session, testing: bool = False) -> None:
     """Seed the database.
+
     If testing is true the databased will be dropped and recreated.
     """
     if testing:
