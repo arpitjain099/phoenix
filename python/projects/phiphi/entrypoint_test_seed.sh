@@ -8,7 +8,7 @@ cd /app/projects/phiphi/
 alembic upgrade heads
 
 # Seed the database
-python phiphi/seed/main.py
+python phiphi/seed/main.py --testing
 
 # Important to move back to working directory
 cd -

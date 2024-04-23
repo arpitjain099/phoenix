@@ -74,3 +74,8 @@ psql_test:
 	@echo "Connecting to the test database..."
 	@echo "default password is 'password'"
 	psql -h localhost -p 5433 -U postgres -d test_db
+
+reseed_testing:
+	@echo "Reseeding the database with test data"
+	docker compose run api python projects/phiphi/phiphi/seed/main.py --testing
+
