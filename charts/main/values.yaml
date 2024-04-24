@@ -18,7 +18,7 @@ api:
   cors_origins: ["http://*"]
   first_admin_user_email: "buildup@datavaluepeople.com"
   first_admin_user_display_name: "Buildup"
-  header_auth_name: "HTTP_X_AUTH_REQUEST_EMAIL"
+  header_auth_name: "x-auth-request-email"
 
   ###################
   # Example secrets
@@ -172,6 +172,7 @@ superset:
       APP_NAME = "Visual - Phoenix"
 
       # This must be change in conjunction with the ingress auth-response-headers
+      # Something in superset rewrites the header to uppercase and adds HTTP_ to the front and replaces - with _
       AUTH_REMOTE_USER_ENV_VAR = "HTTP_X_AUTH_REQUEST_EMAIL"
 
       # This is needed to test the system without the authentication layer
