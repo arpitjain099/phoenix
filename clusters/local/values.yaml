@@ -1,0 +1,27 @@
+use_local_insecure_auth: true
+cert_issuer:
+  enabled: false
+cert-manager:
+  enabled: false
+oauth2-proxy:
+  enabled: false
+superset:
+  enabled: true
+  # These secrets must be created before the first apply of the chart
+  init:
+    adminUser:
+      email: buildup@datavaluepeople.com
+  image:
+    repository: phoenix_superset
+    tag: latest
+  configOverrides:
+    general: |
+      APP_NAME = "Dashboard - Phoenix"
+
+      # This must be change in conjunction with the ingress auth-response-headers
+      AUTH_REMOTE_USER_ENV_VAR = "HTTP_X_AUTH_REQUEST_EMAIL"
+
+      # Throw error if got past the auth layer
+      LOGIN_REDIRECT_URL = False
+  extraSecretEnv:
+    SUPERSET_SECRET_KEY: "this_is_an_in_secure_secret_key"
