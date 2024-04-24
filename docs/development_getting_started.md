@@ -99,7 +99,7 @@ Once your set up is complete you should be able to see an hello world at. Beawar
 log in to the configured authentication provider.
 
 * [http://api.phoenix.local/](http://api.phoenix.local/)
-* [http://superset.phoenix.local/](http://superset.phoenix.local/)
+* [http://dashboard.main.phoenix.local/](http://dashboard.main.phoenix.local/)
 
 ## Dev cluster in the cloud
 
