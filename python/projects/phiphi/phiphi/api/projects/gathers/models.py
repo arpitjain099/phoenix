@@ -46,7 +46,7 @@ class ApifyGather(Gather):
     }
 
     id: orm.Mapped[int] = orm.mapped_column(ForeignKey("gathers.id"), primary_key=True)
-    limit_messages: orm.Mapped[int]
+    limit_posts_per_account: orm.Mapped[int]
     limit_replies: orm.Mapped[int]
     nested_replies: orm.Mapped[bool]
     input: orm.Mapped[str] = orm.mapped_column(base_models.JSONEncodedValue)

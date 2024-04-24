@@ -55,7 +55,7 @@ class ApifyGatherBase(GatherBase):
         InputAuthorList, pydantic.Field(description="The input type of gather config input")
     ]
 
-    limit_messages: Annotated[
+    limit_posts_per_account: Annotated[
         int,
         pydantic.Field(
             default=1000,
