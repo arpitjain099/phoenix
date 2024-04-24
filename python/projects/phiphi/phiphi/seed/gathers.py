@@ -14,7 +14,7 @@ TEST_APIFY_GATHER_CREATE = schemas.ApifyGatherCreate(
     data_type=schemas.DataType.posts,
     start_date=datetime.datetime.now() - datetime.timedelta(days=7),
     end_date=datetime.datetime.now(),
-    limit_messages=1000,
+    limit_posts_per_account=1000,
     limit_replies=100,
     nested_replies=False,
 )
@@ -28,7 +28,7 @@ TEST_APIFY_GATHER_CREATE_2 = schemas.ApifyGatherCreate(
     data_type=schemas.DataType.posts,
     start_date=datetime.datetime.now() - datetime.timedelta(days=7),
     end_date=datetime.datetime.now() + datetime.timedelta(days=1),
-    limit_messages=1000,
+    limit_posts_per_account=1000,
     limit_replies=100,
     nested_replies=False,
 )
@@ -42,7 +42,7 @@ TEST_APIFY_GATHER_CREATE_3 = schemas.ApifyGatherCreate(
     data_type=schemas.DataType.posts,
     start_date=datetime.datetime.now() - datetime.timedelta(days=5),
     end_date=datetime.datetime.now() + datetime.timedelta(days=2),
-    limit_messages=150,
+    limit_posts_per_account=150,
     limit_replies=10,
     nested_replies=True,
 )
