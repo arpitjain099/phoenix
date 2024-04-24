@@ -44,7 +44,7 @@ def upgrade() -> None:
     op.create_table(
         APIFY_TABLE_NAME,
         sa.Column("id", sa.Integer(), nullable=False),
-        sa.Column("limit_messages", sa.Integer(), nullable=False),
+        sa.Column("limit_posts_per_account", sa.Integer(), nullable=False),
         sa.Column("limit_replies", sa.Integer(), nullable=False),
         sa.Column("nested_replies", sa.Boolean(), nullable=False),
         sa.Column("input", base_models.JSONEncodedValue(), nullable=False),
