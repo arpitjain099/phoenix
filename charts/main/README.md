@@ -39,3 +39,13 @@ To set up the certifications for a deployment:
 * If they are ready you can use `cert_config.issuer_name` to `letsencrypt-prod` to get the production
   certificates
 * You can then visit the https://<domain> and see the certificates are valid
+
+## Authentication
+
+The chart uses [oauth2-proxy](https://oauth2-proxy.github.io/oauth2-proxy/) for authentication. It
+can be configured to use a variety of authentication providers.
+
+### Insecure authentication for local testing
+
+The chart can be configured to use an insecure authentication. This is useful for testing and
+should not be used for production. See the [./values.yaml](./values.yaml) for the options.
