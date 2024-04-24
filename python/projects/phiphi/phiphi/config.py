@@ -68,6 +68,8 @@ class Settings(BaseSettings):
     USE_COOKIE_AUTH: bool = False
     # Name of the cookie that holds the email of the user
     COOKIE_AUTH_NAME: Optional[str] = None
+    # For a local cluster to be run without oauth2 implement.
+    INCLUDE_IN_SECURE_AUTH: bool = False
 
 
 if os.environ.get("SETTINGS_ENV_FILE"):
