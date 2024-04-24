@@ -1,3 +1,4 @@
+clusters/local_with_auth/secrets.yaml
 clusters/local/secrets.yaml
 clusters/dev/secrets.yaml
 
