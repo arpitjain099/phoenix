@@ -13,7 +13,8 @@ from phiphi.api.users import routes as user_routes
 app = FastAPI(title=config.settings.TITLE)
 
 app.include_router(health_check.router)
-app.include_router(in_secure_auth.router)
+if config.settings.INCLUDE_IN_SECURE_AUTH:
+    app.include_router(in_secure_auth.router)
 app.include_router(user_routes.router, tags=["User"])
 app.include_router(environment_routes.router, tags=["Environment"])
 app.include_router(project_routes.router, tags=["Project"])
