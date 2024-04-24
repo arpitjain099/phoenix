@@ -41,6 +41,9 @@ tilt, see below. To get up and running follow the steps:
 4. Run `source setup_microk8s.sh` to set up the cluster and `kubectl`
 5. The command will output instructions on setting up your `/etc/hosts` file
 
+On non linux systems we have had problems with the ingress of microk8s and are still working on a
+solution.
+
 ### Using another local cluster
 
 If is possible to use a different cluster
@@ -123,3 +126,11 @@ make dev_up
 ```
 
 To clean up the resources including `pvcs` run `make dev_clean`.
+
+## Local cluster troubleshooting
+
+We are still looking for solutions to these problems:
+- ingress not working on mac for microk8s
+- running the postgresql bitnami image on mac's with m1 chips:
+-- A quick solution is to change the `superset.postgresql.image.image` to `postgres` and
+`superset.postgresql.image.tag` to something like `16.2` in the `charts/local/values.yaml` file.
