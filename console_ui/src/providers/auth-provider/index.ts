@@ -30,6 +30,9 @@ const fetchUserInfo = async (): Promise<UserInfo | null> => {
 			method: "GET",
 			credentials: "include",
 		});
+		if (!response.ok) {
+			throw new Error(`HTTP error! Status: ${response.status}`);
+		}
 		const userData: UserInfo = await response.json();
 		storageService.set(USER_INFO_COOKIE_NAME, JSON.stringify(userData));
 		return userData;
@@ -48,7 +51,7 @@ const authProvider: AuthProvider = {
 	login: async () => {
 		if (ENV === "dev") {
 			storageService.set(DEV_AUTH_COOKIE, DEV_LOGIN_EMAIL);
-		} else if (!storageService.get(AUTH_COOKIE)) {
+		} else if (AUTH_COOKIE && !storageService.get(AUTH_COOKIE)) {
 			redirectToLoginPage();
 		}
 		await fetchUserInfo();
