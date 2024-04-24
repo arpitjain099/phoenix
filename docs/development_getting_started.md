@@ -72,11 +72,6 @@ Once you have you local cluster up and running you can do:
 make up
 ```
 
-GOTCHA:
-Currently the `phoenix-api` deployment does not wait for the `platformdb` to be ready. This means
-that the `phoenix-api` will fail to start. To fix this restart the `phoenix-api` deployment in the
-tilt dashboard.
-
 In the browser you will be able to see the `tilt` UI via the URL that `tilt up` prints.
 
 You can also use the `tilt` cli if needs be. Such as `tilt down` to bring down the resources in the
