@@ -38,7 +38,7 @@ superset:
     tag: latest
   configOverrides:
     general: |
-      APP_NAME = "Visual - Phoenix"
+      APP_NAME = "Dashboard - Phoenix"
 
       # This must be change in conjunction with the ingress auth-response-headers
       AUTH_REMOTE_USER_ENV_VAR = "HTTP_X_AUTH_REQUEST_EMAIL"

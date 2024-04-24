@@ -16,7 +16,7 @@ AUTH_USER_REGISTRATION = True
 CUSTOM_SECURITY_MANAGER = custom_sso_manager.PhoenixCustomSSOSecurityManager
 
 # White label settings
-APP_NAME = "Visual - Phoenix"
+APP_NAME = "Dashboard - Phoenix"
 APP_ICON = "/static/assets/images/logo_buildup_short_200.png"
 APP_ICON_WIDTH = 200
 FAVICONS = [

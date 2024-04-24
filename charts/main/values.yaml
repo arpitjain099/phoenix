@@ -169,7 +169,7 @@ superset:
     # use.
     # Copy and change as needed
     general: |
-      APP_NAME = "Visual - Phoenix"
+      APP_NAME = "Dashboard - Phoenix"
 
       # This must be change in conjunction with the ingress auth-response-headers
       # Something in superset rewrites the header to uppercase and adds HTTP_ to the front and replaces - with _
