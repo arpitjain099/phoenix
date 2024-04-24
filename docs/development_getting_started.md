@@ -55,14 +55,9 @@ instance when using `k3s` you will need to add `<traefik-serivce-ip> phoenix.loc
 
 ## Setting secrets for local cluster
 
-To allow for the secrets to not be in the charts you can add the secrets as a Kubernetes SECRET.
-
-```bash
-cp charts/main/example_secrets.yaml clusters/local/secrets.yaml
-```
-
-The secrets will be applied when the command `make up` is run.
-
+There are no secrets needed for the default local cluster but other clusters need secrets to be
+set. The outputs of make commands for these other cluster should indicate where secrets should be
+set.
 
 ## Running the Development Environment with tilt up
 
