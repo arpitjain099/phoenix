@@ -39,6 +39,12 @@ spec:
             value: {{ .Values.api.first_admin_user_display_name | quote }}
           - name: HEADER_AUTH_NAME
             value: {{ .Values.api.header_auth_name | quote}}
+          - name: INCLUDE_INSECURE_AUTH
+          {{- if .Values.use_local_insecure_auth }}
+            value: "true"
+          {{- else }}
+            value: "false"
+          {{- end }}
         command: ["/app/projects/phiphi/entrypoint.sh"]
         args: ["uvicorn", "phiphi.api.main:app", {{- if .Values.api.reload }} "--reload", {{- end }} "--host", "0.0.0.0", "--port", "80"]
 ---
