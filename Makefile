@@ -8,17 +8,25 @@ setup_asdf:
 	asdf reshim
 
 up:
-	if [ -f clusters/local/secrets.yaml ]; then \
-		tilt up; \
-	else \
-		echo "File clusters/local/secrets.yaml does not exist."; \
-		echo "Copying the example file"; \
-		cp charts/main/example_secrets.yaml clusters/local/secrets.yaml; \
-		echo "Please fill in the clusters/local/secrets.yaml file and run 'make up' again"; \
-	fi
+	tilt up
 
 clean:
 	tilt down
+	@echo "Deleting all pvc in mircok8s cluster default namespace."
+	kubectl delete pvc --all -n default --context microk8s
+
+local_auth_up:
+	if [ -f clusters/local_with_auth/secrets.yaml ]; then \
+		tilt up -f Tiltfile.local_with_auth; \
+	else \
+		echo "File clusters/local_with_auth/secrets.yaml does not exist."; \
+		echo "Copying the example file"; \
+		cp charts/main/example_secrets.yaml clusters/local_with_auth/secrets.yaml; \
+		echo "Please fill in the clusters/local/secrets.yaml file and run 'make up' again"; \
+	fi
+
+local_auth_clean:
+	tilt down -f Tiltfile.local_with_auth;
 	@echo "Deleting all pvc in mircok8s cluster default namespace."
 	kubectl delete pvc --all -n default --context microk8s
 
