@@ -24,5 +24,5 @@ docker_build(
 k8s_yaml(helm(
   './charts/main/',
   name='phoenix',
-  values=['./clusters/local/values.yaml', './clusters/local/secrets.yaml'],
+  values=['./clusters/local/values.yaml'],
 ))
