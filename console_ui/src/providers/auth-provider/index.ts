@@ -7,14 +7,14 @@ const AUTH_COOKIE = process.env.NEXT_PUBLIC_AUTH_COOKIE!;
 const USER_INFO_COOKIE_NAME = process.env.NEXT_PUBLIC_USER_INFO_COOKIE_NAME!;
 const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 const LOGIN_URL = process.env.NEXT_PUBLIC_ENV_LOGIN_URL!;
-const LOGIN_REDIRECT_URL = process.env.NEXT_PUBLIC_ENV_LOGIN_REDIRECT_URL!;
 const LOGOUT_URL = process.env.NEXT_PUBLIC_ENV_LOGOUT_URL!;
 const ENV = process.env.NEXT_PUBLIC_ENV!;
 const DEV_LOGIN_EMAIL = process.env.NEXT_PUBLIC_DEV_ADMIN_EMAIL!;
 
 const redirectToLoginPage = () => {
-	if (ENV !== "dev" && LOGIN_URL && LOGIN_REDIRECT_URL) {
-		window.location.href = `${LOGIN_URL}?rd=${LOGIN_REDIRECT_URL}`;
+	if (ENV !== "dev" && LOGIN_URL) {
+		const current_url = window.location.href;
+		window.location.href = `${LOGIN_URL}?rd=${current_url}`;
 	}
 };
 
