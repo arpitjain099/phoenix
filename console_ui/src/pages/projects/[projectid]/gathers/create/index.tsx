@@ -7,19 +7,18 @@ import {
 import { Create, useForm, useSelect } from "@refinedev/mantine";
 import {
 	Select,
-	NumberInput,
 	Textarea,
 	Tooltip,
 	Group,
 	Anchor,
 	Breadcrumbs,
-	Checkbox,
 } from "@mantine/core";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { IconInfoCircle } from "@tabler/icons";
 import GatherInputs from "@components/inputs/gather-inputs";
-import { DatePicker } from "@mantine/dates";
+import CreateCommentsGatherForm from "@components/forms/gather/create-comments-gather";
+import CreatePostsGatherForm from "@components/forms/gather/create-posts-gather";
 
 const breadcrumbs = [
 	{ title: "Projects", href: "/projects" },
@@ -77,23 +76,40 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 				type: (value) => (value.length <= 0 ? "Required" : null),
 				data: (value) => (value.length <= 0 ? "Required" : null),
 			},
-			// start_date: (value) => {
-			// 	if (!value) return "Start date is required";
-			// 	const startDate = new Date(value);
-			// 	const endDate = new Date(values.end_date);
-			// 	if (startDate > today) return "Start date cannot be in the future";
-			// 	if (startDate > endDate) return "Start date cannot be after end date";
-			// 	return null;
-			// },
-			// end_date: (value) => {
-			// 	if (!value) return "End date is required";
-			// 	const endDate = new Date(value);
-			// 	const startDate = new Date(values.start_date);
-			// 	if (endDate < startDate) return "End date cannot be before start date";
-			// 	return null;
-			// },
-			// limit_posts_per_account: (value) =>
-			// 	value === undefined ? "Required" : null,
+			start_date: (value) => {
+				if (values.data_type === "posts" && !value) return "Required";
+				if (values.data_type === "posts") {
+					const startDate = new Date(value);
+					const endDate = new Date(values.end_date);
+					if (startDate > today) return "Start date cannot be in the future";
+					if (startDate > endDate) return "Start date cannot be after end date";
+				}
+				return null;
+			},
+			end_date: (value) => {
+				if (values.data_type === "posts" && !value) return "Required";
+				if (values.data_type === "posts") {
+					const endDate = new Date(value);
+					const startDate = new Date(values.start_date);
+					if (endDate < startDate)
+						return "End date cannot be before start date";
+				}
+				return null;
+			},
+			limit_posts_per_account: (value) => {
+				if (values.data_type === "posts" && value === undefined)
+					return "Required";
+				return null;
+			},
+			limit_comments_per_post: (value) => {
+				if (values.data_type === "comments" && value === undefined)
+					return "Required";
+				return null;
+			},
+			sort_comments_by: (value) => {
+				if (values.data_type === "posts" && !value) return "Required";
+				return null;
+			},
 		},
 	});
 
@@ -214,109 +230,10 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 				{...projectSelectProps}
 			/>
 			{values.data_type === "posts" && (
-				<>
-					<DatePicker
-						mt="lg"
-						label={
-							<div className="flex items-center">
-								<Tooltip label={translate("gathers.fields.info.start_date")}>
-									<span className="flex">
-										<IconInfoCircle size={12} />
-									</span>
-								</Tooltip>
-								{translate("gathers.fields.start_date")}
-								<span className="text-red-500 ml-1">*</span>
-							</div>
-						}
-						{...getInputProps("start_date")}
-					/>
-					<DatePicker
-						mt="lg"
-						label={
-							<div className="flex items-center">
-								<Tooltip label={translate("gathers.fields.info.end_date")}>
-									<span className="flex">
-										<IconInfoCircle size={12} />
-									</span>
-								</Tooltip>
-								{translate("gathers.fields.end_date")}
-								<span className="text-red-500 ml-1">*</span>
-							</div>
-						}
-						{...getInputProps("end_date")}
-					/>
-					<NumberInput
-						mt="lg"
-						label={
-							<div className="flex items-center">
-								<Tooltip
-									label={translate(
-										"gathers.fields.info.limit_posts_per_account"
-									)}
-								>
-									<span className="flex">
-										<IconInfoCircle size={12} />
-									</span>
-								</Tooltip>
-								{translate("gathers.fields.limit_posts_per_account")}
-								<span className="text-red-500 ml-1">*</span>
-							</div>
-						}
-						{...getInputProps("limit_posts_per_account")}
-					/>
-				</>
+				<CreatePostsGatherForm getInputProps={getInputProps} />
 			)}
 			{values.data_type === "comments" && (
-				<>
-					<NumberInput
-						mt="lg"
-						label={
-							<div className="flex items-center">
-								<Tooltip
-									label={translate(
-										"gathers.fields.info.limit_comments_per_post"
-									)}
-								>
-									<span className="flex">
-										<IconInfoCircle size={12} />
-									</span>
-								</Tooltip>
-								{translate("gathers.fields.limit_comments_per_post")}
-								<span className="text-red-500 ml-1">*</span>
-							</div>
-						}
-						{...getInputProps("limit_comments_per_post")}
-					/>
-					<Checkbox
-						mt="sm"
-						label={translate("gathers.fields.comment_replies")}
-						{...getInputProps("comment_replies", { type: "checkbox" })}
-					/>
-					<Select
-						mt="lg"
-						label={
-							<div className="flex items-center">
-								<Tooltip
-									label={translate("gathers.fields.info.sort_comments_by")}
-								>
-									<span className="flex">
-										<IconInfoCircle size={12} />
-									</span>
-								</Tooltip>
-								{translate("gathers.fields.sort_comments_by")}
-								<span className="text-red-500 ml-1">*</span>
-							</div>
-						}
-						{...getInputProps("sort_comments_by")}
-						data={[
-							{ label: translate("inputs.select"), value: "" },
-							{ label: "Facebook Defaults", value: "facebook_defaults" },
-							{ label: "Most Relevant", value: "most_relevant" },
-							{ label: "Newest First", value: "newest_first" },
-							{ label: "None-filtered", value: "none_filtered" },
-						]}
-					/>
-				</>
+				<CreateCommentsGatherForm getInputProps={getInputProps} />
 			)}
 			<Textarea
 				mt="lg"
