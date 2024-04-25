@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
 	IResourceComponentsProps,
 	useCreate,
@@ -12,12 +13,13 @@ import {
 	Group,
 	Anchor,
 	Breadcrumbs,
+	Checkbox,
 } from "@mantine/core";
-import { DatePicker } from "@mantine/dates";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { IconInfoCircle } from "@tabler/icons";
 import GatherInputs from "@components/inputs/gather-inputs";
+import { DatePicker } from "@mantine/dates";
 
 const breadcrumbs = [
 	{ title: "Projects", href: "/projects" },
@@ -51,42 +53,47 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 		refineCore: { formLoading },
 	} = useForm({
 		initialValues: {
-			description: "",
-			start_date: today,
-			end_date: tomorrow,
+			source: "apify",
 			platform: "facebook",
+			project_id: Number(projectid),
 			data_type: "",
+			description: "",
 			input: {
 				type: "author_url_list",
 				data: [] as string[],
 			},
-			project_id: Number(projectid),
+			start_date: today,
+			end_date: tomorrow,
 			limit_posts_per_account: 1000,
+			limit_comments_per_post: 1000,
+			comment_replies: false,
+			sort_comments_by: "facebook_defaults",
 		},
 		validate: {
-			data_type: (value) => (value.length <= 0 ? "Required" : null),
+			source: (value) => (value.length <= 0 ? "Required" : null),
 			platform: (value) => (value.length <= 0 ? "Required" : null),
-			start_date: (value) => {
-				if (!value) return "Start date is required";
-				const startDate = new Date(value);
-				const endDate = new Date(values.end_date);
-				if (startDate > today) return "Start date cannot be in the future";
-				if (startDate > endDate) return "Start date cannot be after end date";
-				return null;
-			},
-			end_date: (value) => {
-				if (!value) return "End date is required";
-				const endDate = new Date(value);
-				const startDate = new Date(values.start_date);
-				if (endDate < startDate) return "End date cannot be before start date";
-				return null;
-			},
-			limit_posts_per_account: (value) =>
-				value === undefined ? "Required" : null,
+			data_type: (value) => (value.length <= 0 ? "Required" : null),
 			input: {
 				type: (value) => (value.length <= 0 ? "Required" : null),
 				data: (value) => (value.length <= 0 ? "Required" : null),
 			},
+			// start_date: (value) => {
+			// 	if (!value) return "Start date is required";
+			// 	const startDate = new Date(value);
+			// 	const endDate = new Date(values.end_date);
+			// 	if (startDate > today) return "Start date cannot be in the future";
+			// 	if (startDate > endDate) return "Start date cannot be after end date";
+			// 	return null;
+			// },
+			// end_date: (value) => {
+			// 	if (!value) return "End date is required";
+			// 	const endDate = new Date(value);
+			// 	const startDate = new Date(values.start_date);
+			// 	if (endDate < startDate) return "End date cannot be before start date";
+			// 	return null;
+			// },
+			// limit_posts_per_account: (value) =>
+			// 	value === undefined ? "Required" : null,
 		},
 	});
 
@@ -100,20 +107,48 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 	const handleSave = async () => {
 		if (isValid()) {
 			if (values.project_id) {
-				mutate(
-					{
-						resource: `projects/${values.project_id}/gathers/apify`,
-						values,
-					},
-					{
-						onSuccess: async () => {
-							await Promise.all([setInputList([]), reset()]);
-							setTimeout(() => {
-								router.push(`/projects/${values.project_id}/gathers`);
-							}, 2000);
-						},
+				const { source, ...filteredValues } = values; // Exclude 'source' from values
+				if (source === "apify") {
+					if (values.data_type === "posts") {
+						const {
+							limit_comments_per_post,
+							comment_replies,
+							sort_comments_by,
+							...data
+						} = filteredValues; // Exclude attributes for data_type=comment from values
+						mutate(
+							{
+								resource: `projects/${values.project_id}/gathers/apify`,
+								values: data,
+							},
+							{
+								onSuccess: async () => {
+									await Promise.all([setInputList([]), reset()]);
+									setTimeout(() => {
+										router.push(`/projects/${values.project_id}/gathers`);
+									}, 2000);
+								},
+							}
+						);
+					} else if (values.data_type === "comments") {
+						const { start_date, end_date, limit_posts_per_account, ...data } =
+							filteredValues; // Exclude attributes for data_type=posts from values
+						mutate(
+							{
+								resource: `projects/${values.project_id}/gathers/apify`,
+								values: data,
+							},
+							{
+								onSuccess: async () => {
+									await Promise.all([setInputList([]), reset()]);
+									setTimeout(() => {
+										router.push(`/projects/${values.project_id}/gathers`);
+									}, 2000);
+								},
+							}
+						);
 					}
-				);
+				}
 			}
 		} else {
 			validate();
@@ -130,6 +165,16 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 			isLoading={formLoading}
 			saveButtonProps={{ ...saveButtonProps, onClick: handleSave }}
 		>
+			<Select
+				mt="lg"
+				withAsterisk
+				label={translate("gathers.fields.source")}
+				data={[
+					{ label: translate("inputs.select"), value: "" },
+					{ label: "Apify", value: "apify" },
+				]}
+				{...getInputProps("source")}
+			/>
 			<Select
 				mt="lg"
 				withAsterisk
@@ -157,6 +202,7 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 				data={[
 					{ label: translate("inputs.select"), value: "" },
 					{ label: "Posts", value: "posts" },
+					{ label: "Comments", value: "comments" },
 				]}
 			/>
 			<Select
@@ -167,53 +213,111 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 				{...getInputProps("project_id")}
 				{...projectSelectProps}
 			/>
-			<DatePicker
-				mt="lg"
-				label={
-					<div className="flex items-center">
-						<Tooltip label={translate("gathers.fields.info.start_date")}>
-							<span className="flex">
-								<IconInfoCircle size={12} />
-							</span>
-						</Tooltip>
-						{translate("gathers.fields.start_date")}
-						<span className="text-red-500 ml-1">*</span>
-					</div>
-				}
-				{...getInputProps("start_date")}
-			/>
-			<DatePicker
-				mt="lg"
-				label={
-					<div className="flex items-center">
-						<Tooltip label={translate("gathers.fields.info.end_date")}>
-							<span className="flex">
-								<IconInfoCircle size={12} />
-							</span>
-						</Tooltip>
-						{translate("gathers.fields.end_date")}
-						<span className="text-red-500 ml-1">*</span>
-					</div>
-				}
-				{...getInputProps("end_date")}
-			/>
-			<NumberInput
-				mt="lg"
-				label={
-					<div className="flex items-center">
-						<Tooltip
-							label={translate("gathers.fields.info.limit_posts_per_account")}
-						>
-							<span className="flex">
-								<IconInfoCircle size={12} />
-							</span>
-						</Tooltip>
-						{translate("gathers.fields.limit_posts_per_account")}
-						<span className="text-red-500 ml-1">*</span>
-					</div>
-				}
-				{...getInputProps("limit_posts_per_account")}
-			/>
+			{values.data_type === "posts" && (
+				<>
+					<DatePicker
+						mt="lg"
+						label={
+							<div className="flex items-center">
+								<Tooltip label={translate("gathers.fields.info.start_date")}>
+									<span className="flex">
+										<IconInfoCircle size={12} />
+									</span>
+								</Tooltip>
+								{translate("gathers.fields.start_date")}
+								<span className="text-red-500 ml-1">*</span>
+							</div>
+						}
+						{...getInputProps("start_date")}
+					/>
+					<DatePicker
+						mt="lg"
+						label={
+							<div className="flex items-center">
+								<Tooltip label={translate("gathers.fields.info.end_date")}>
+									<span className="flex">
+										<IconInfoCircle size={12} />
+									</span>
+								</Tooltip>
+								{translate("gathers.fields.end_date")}
+								<span className="text-red-500 ml-1">*</span>
+							</div>
+						}
+						{...getInputProps("end_date")}
+					/>
+					<NumberInput
+						mt="lg"
+						label={
+							<div className="flex items-center">
+								<Tooltip
+									label={translate(
+										"gathers.fields.info.limit_posts_per_account"
+									)}
+								>
+									<span className="flex">
+										<IconInfoCircle size={12} />
+									</span>
+								</Tooltip>
+								{translate("gathers.fields.limit_posts_per_account")}
+								<span className="text-red-500 ml-1">*</span>
+							</div>
+						}
+						{...getInputProps("limit_posts_per_account")}
+					/>
+				</>
+			)}
+			{values.data_type === "comments" && (
+				<>
+					<NumberInput
+						mt="lg"
+						label={
+							<div className="flex items-center">
+								<Tooltip
+									label={translate(
+										"gathers.fields.info.limit_comments_per_post"
+									)}
+								>
+									<span className="flex">
+										<IconInfoCircle size={12} />
+									</span>
+								</Tooltip>
+								{translate("gathers.fields.limit_comments_per_post")}
+								<span className="text-red-500 ml-1">*</span>
+							</div>
+						}
+						{...getInputProps("limit_comments_per_post")}
+					/>
+					<Checkbox
+						mt="sm"
+						label={translate("gathers.fields.comment_replies")}
+						{...getInputProps("comment_replies", { type: "checkbox" })}
+					/>
+					<Select
+						mt="lg"
+						label={
+							<div className="flex items-center">
+								<Tooltip
+									label={translate("gathers.fields.info.sort_comments_by")}
+								>
+									<span className="flex">
+										<IconInfoCircle size={12} />
+									</span>
+								</Tooltip>
+								{translate("gathers.fields.sort_comments_by")}
+								<span className="text-red-500 ml-1">*</span>
+							</div>
+						}
+						{...getInputProps("sort_comments_by")}
+						data={[
+							{ label: translate("inputs.select"), value: "" },
+							{ label: "Facebook Defaults", value: "facebook_defaults" },
+							{ label: "Most Relevant", value: "most_relevant" },
+							{ label: "Newest First", value: "newest_first" },
+							{ label: "None-filtered", value: "none_filtered" },
+						]}
+					/>
+				</>
+			)}
 			<Textarea
 				mt="lg"
 				label={
