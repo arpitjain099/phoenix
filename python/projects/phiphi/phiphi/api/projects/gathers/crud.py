@@ -64,7 +64,7 @@ def get_apify_gathers(
 ## Issues with this implementation
 def get_gathers(
     session: sqlalchemy.orm.Session, project_id: int, start: int = 0, end: int = 100
-) -> list[schemas.ApifyGatherResponse]:
+) -> list[schemas.GatherResponse]:
     """Retrieve all gathers and relations.
 
     Currently this implementation only supports ApifyGathers.
@@ -85,4 +85,4 @@ def get_gathers(
 
     if not gathers:
         return []
-    return [schemas.ApifyGatherResponse.model_validate(gather) for gather in gathers]
+    return [schemas.GatherResponse.model_validate(gather) for gather in gathers]
