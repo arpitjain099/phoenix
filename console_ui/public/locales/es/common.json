@@ -157,8 +157,16 @@
 		}
 	},
 	"gathers": {
+		"gathers": "Reuniones",
+		"titles": {
+			"create": "Crear reunión",
+			"edit": "Editar reunión",
+			"list": "Reuniones",
+			"show": "Mostrar reunión"
+		},
 		"fields": {
 			"id": "ID",
+			"source": "Fuente",
 			"start_date": "Fecha de Inicio",
 			"end_date": "Fecha de Finalización",
 			"platform": "Plataforma",
@@ -166,6 +174,9 @@
 			"limit_posts_per_account": "Límite de Publicaciones por Cuenta",
 			"limit_replies": "Límite de Respuestas",
 			"nested_replies": "Respuestas Anidadas",
+			"limit_comments_per_post": "Limitar comentarios por publicación",
+			"comment_replies": "Respuestas a comentarios",
+			"sort_comments_by": "Ordenar comentarios por",
 			"data_type": "Tipo de Datos",
 			"description": "Descripción",
 			"created_at": "Creado En",
@@ -183,13 +194,15 @@
 				"end_date": "La fecha hasta la cual recopilar datos. Esto será a las 0:00 del día configurado.",
 				"description": "Breve descripción para que sepas cuál era el objetivo de la recopilación.",
 				"limit_posts_per_account": "Limita el número de publicaciones que se recopilan para cada cuenta.",
+				"limit_comments_per_post": "Limitar el número de comentarios recopilados por cada publicación.",
+				"sort_comments_by": "Ordenar comentarios por",
 				"data_type": "Tipo de datos que le gustaría recopilar",
 				"input": {
 					"type": "El tipo de datos de entrada que desea recopilar. Consulte el manual para obtener más información.",
 					"data": "Agregue los datos de entrada que le gustaría recopilar. Escriba/pegue las entradas separadas por ` ` (espacio)"
 				}
 			}
-		}	
+		}
 	},
 	"documentTitle": {
 		"default": "Interfaz de consola",
@@ -200,6 +213,13 @@
 			"edit": "#{{id}} Editar proyecto | Phoenix",
 			"create": "Crear nuevo proyecto | Phoenix",
 			"clone": "#{{id}} Clonar proyecto | Phoenix"
+		},
+		"gathers": {
+			"list": "Reuniones | Phoenix",
+			"show": "#{{id}} Mostrar reunion | Phoenix",
+			"edit": "#{{id}} Editar reunion | Phoenix",
+			"create": "Crear nuevo reunion | Phoenix",
+			"clone": "#{{id}} Clonar reunion | Phoenix"
 		}
 	},
 	"table": {

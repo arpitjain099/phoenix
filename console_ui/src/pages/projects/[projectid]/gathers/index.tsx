@@ -8,33 +8,22 @@ import {
 } from "@refinedev/core";
 import { useTable } from "@refinedev/react-table";
 import { ColumnDef } from "@tanstack/react-table";
-import {
-	ScrollArea,
-	Pagination,
-	Anchor,
-	Breadcrumbs,
-	Group,
-} from "@mantine/core";
+import { ScrollArea, Pagination } from "@mantine/core";
 import { List, DateField } from "@refinedev/mantine";
 import TableComponent from "@components/table";
 import Link from "next/link";
 import { useRouter } from "next/router";
-
-const breadcrumbs = [
-	{ title: "Projects", href: "/projects" },
-	{ title: "Gathers", href: "#" },
-].map((item) => (
-	<Group key={item.title}>
-		<Anchor color="gray" size="sm" href={item.href}>
-			{item.title}
-		</Anchor>
-	</Group>
-));
+import BreadcrumbsComponent from "@components/breadcrumbs";
 
 export const GatherList: React.FC<IResourceComponentsProps> = () => {
 	const translate = useTranslate();
 	const router = useRouter();
 	const { projectid } = router.query;
+
+	const breadcrumbs = [
+		{ title: translate("projects.projects"), href: "/projects" },
+		{ title: translate("gathers.gathers"), href: "#" },
+	];
 
 	const apiResponse = useList({
 		resource: `projects/${projectid}/gathers`,
@@ -139,7 +128,7 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 		},
 	}));
 	return (
-		<List breadcrumb={<Breadcrumbs>{breadcrumbs}</Breadcrumbs>}>
+		<List breadcrumb={<BreadcrumbsComponent breadcrumbs={breadcrumbs} />}>
 			<ScrollArea>
 				<TableComponent
 					headerGroups={getHeaderGroups}

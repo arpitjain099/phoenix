@@ -5,32 +5,14 @@ import {
 	useTranslate,
 } from "@refinedev/core";
 import { Create, useForm, useSelect } from "@refinedev/mantine";
-import {
-	Select,
-	Textarea,
-	Tooltip,
-	Group,
-	Anchor,
-	Breadcrumbs,
-} from "@mantine/core";
+import { Select, Textarea, Tooltip } from "@mantine/core";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { IconInfoCircle } from "@tabler/icons";
 import GatherInputs from "@components/inputs/gather-inputs";
 import CreateCommentsGatherForm from "@components/forms/gather/create-comments-gather";
 import CreatePostsGatherForm from "@components/forms/gather/create-posts-gather";
-
-const breadcrumbs = [
-	{ title: "Projects", href: "/projects" },
-	{ title: "Gathers", href: "../gathers" },
-	{ title: "Create", href: "create" },
-].map((item) => (
-	<Group key={item.title}>
-		<Anchor color="gray" size="sm" href={item.href}>
-			{item.title}
-		</Anchor>
-	</Group>
-));
+import BreadcrumbsComponent from "@components/breadcrumbs";
 
 export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 	const today = new Date();
@@ -41,6 +23,13 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 	const router = useRouter();
 	const { projectid } = router.query;
 	const [inputList, setInputList] = useState<string[]>([]);
+
+	const breadcrumbs = [
+		{ title: translate("projects.projects"), href: "/projects" },
+		{ title: translate("gathers.gathers"), href: "../gathers" },
+		{ title: translate("actions.create"), href: "create" },
+	];
+
 	const {
 		getInputProps,
 		saveButtonProps,
@@ -177,7 +166,7 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 
 	return (
 		<Create
-			breadcrumb={<Breadcrumbs>{breadcrumbs}</Breadcrumbs>}
+			breadcrumb={<BreadcrumbsComponent breadcrumbs={breadcrumbs} />}
 			isLoading={formLoading}
 			saveButtonProps={{ ...saveButtonProps, onClick: handleSave }}
 		>
