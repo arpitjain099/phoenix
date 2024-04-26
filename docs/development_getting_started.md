@@ -131,6 +131,6 @@ To clean up the resources including `pvcs` run `make dev_clean`.
 
 We are still looking for solutions to these problems:
 - ingress not working on mac for microk8s
-- running the postgresql bitnami image on mac's with m1 chips:
+- running the postgresql bitnami image on MACs on apple silicon / arm64 architecture:
 -- A quick solution is to change the `superset.postgresql.image.image` to `postgres` and
 `superset.postgresql.image.tag` to something like `16.2` in the `charts/local/values.yaml` file.
