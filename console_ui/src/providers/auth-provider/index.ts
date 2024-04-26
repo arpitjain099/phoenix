@@ -1,3 +1,4 @@
+import { showNotification } from "@mantine/notifications";
 import { AuthProvider } from "@refinedev/core";
 import { UserInfo } from "src/interfaces/user";
 import { storageService } from "src/services";
@@ -30,6 +31,11 @@ const fetchUserInfo = async (): Promise<UserInfo | null> => {
 			method: "GET",
 			credentials: "include",
 		});
+		if (response.status === 302) {
+			// Redirect status (302) indicates the user is not logged in
+			redirectToLoginPage();
+			return null;
+		}
 		if (!response.ok) {
 			throw new Error(`HTTP error! Status: ${response.status}`);
 		}
@@ -37,7 +43,12 @@ const fetchUserInfo = async (): Promise<UserInfo | null> => {
 		storageService.set(USER_INFO_COOKIE_NAME, JSON.stringify(userData));
 		return userData;
 	} catch (error) {
-		redirectToLoginPage();
+		// Handle any other errors, including network errors
+		showNotification({
+			title: "Error",
+			message: "An error occurred while fetching user data.",
+			color: "red",
+		});
 		return null;
 	}
 };
