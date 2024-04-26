@@ -41,6 +41,9 @@ tilt, see below. To get up and running follow the steps:
 4. Run `source setup_microk8s.sh` to set up the cluster and `kubectl`
 5. The command will output instructions on setting up your `/etc/hosts` file
 
+On non linux systems we have had problems with the ingress of microk8s and are still working on a
+solution.
+
 ### Using another local cluster
 
 If is possible to use a different cluster
@@ -72,11 +75,6 @@ Once you have you local cluster up and running you can do:
 make up
 ```
 
-GOTCHA:
-Currently the `phoenix-api` deployment does not wait for the `platformdb` to be ready. This means
-that the `phoenix-api` will fail to start. To fix this restart the `phoenix-api` deployment in the
-tilt dashboard.
-
 In the browser you will be able to see the `tilt` UI via the URL that `tilt up` prints.
 
 You can also use the `tilt` cli if needs be. Such as `tilt down` to bring down the resources in the
@@ -104,7 +102,7 @@ Once your set up is complete you should be able to see an hello world at. Beawar
 log in to the configured authentication provider.
 
 * [http://api.phoenix.local/](http://api.phoenix.local/)
-* [http://superset.phoenix.local/](http://superset.phoenix.local/)
+* [http://dashboard.main.phoenix.local/](http://dashboard.main.phoenix.local/)
 
 ## Dev cluster in the cloud
 
@@ -128,3 +126,11 @@ make dev_up
 ```
 
 To clean up the resources including `pvcs` run `make dev_clean`.
+
+## Local cluster troubleshooting
+
+We are still looking for solutions to these problems:
+- ingress not working on mac for microk8s
+- running the postgresql bitnami image on MACs on apple silicon / arm64 architecture:
+-- A quick solution is to change the `superset.postgresql.image.image` to `postgres` and
+`superset.postgresql.image.tag` to something like `16.2` in the `charts/local/values.yaml` file.
