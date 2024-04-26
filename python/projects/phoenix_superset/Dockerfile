@@ -19,7 +19,11 @@ COPY ./config.py /app/phoenix_superset/config.py
 # this is what is documented in the docker image:
 # https://hub.docker.com/r/apache/superset
 COPY ./docker.requirements.in /app/phoenix_superset/docker.requirements.in
+USER root
+
 RUN pip install --no-cache-dir -r /app/phoenix_superset/docker.requirements.in
+
+USER superset
 
 ## Assets
 # Copy the assets to the /app/assets directory
