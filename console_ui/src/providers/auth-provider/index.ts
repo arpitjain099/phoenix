@@ -4,7 +4,6 @@ import { UserInfo } from "src/interfaces/user";
 import { storageService } from "src/services";
 
 const DEV_AUTH_COOKIE = "phiphi-user-email";
-const AUTH_COOKIE = process.env.NEXT_PUBLIC_AUTH_COOKIE!;
 const USER_INFO_COOKIE_NAME = process.env.NEXT_PUBLIC_USER_INFO_COOKIE_NAME!;
 const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 const AUTH_URL = process.env.NEXT_PUBLIC_ENV_AUTH_URL!;
@@ -70,7 +69,11 @@ export const getUserRole = async (): Promise<string | null> => {
 
 const authProvider: AuthProvider = {
 	login: async () => {
-		redirectToLoginPage();
+		if (ENV === "dev") {
+			storageService.set(DEV_AUTH_COOKIE, DEV_LOGIN_EMAIL);
+		} else {
+			redirectToLoginPage();
+		}
 		return {
 			success: false,
 			error: new Error("Login failed"),
@@ -82,6 +85,9 @@ const authProvider: AuthProvider = {
 		return { success: true };
 	},
 	check: async () => {
+		if (ENV === "dev" && storageService.get(DEV_AUTH_COOKIE)) {
+			return { authenticated: true };
+		}
 		if (AUTH_URL && (await checkAuthUrl(AUTH_URL))) {
 			return { authenticated: true };
 		}
