@@ -11,7 +11,7 @@ import logging
 from sqlalchemy.orm import Session
 
 from phiphi import platform_db
-from phiphi.seed import environments, gathers, project_runs, projects, users
+from phiphi.seed import environments, project_runs, projects, users
 
 main_logger = logging.getLogger("phiphi.seed.main::" + __name__)
 main_logger.setLevel(logging.INFO)
@@ -40,7 +40,6 @@ def main(session: Session, testing: bool = False) -> None:
         users.seed_test_users(session)
         environments.seed_test_environment(session)
         projects.seed_test_project(session)
-        gathers.seed_test_apify_gathers(session)
         project_runs.seed_test_project_runs(session)
 
 
