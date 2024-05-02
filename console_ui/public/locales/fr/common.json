@@ -176,7 +176,7 @@
 				"data_placeholder": "Tapez/collez les entrées séparées par ` ` (espace)",
 				"button_text": "Ajouter aux entrées",
 				"search_placeholder": "Rechercher une entrée",
-				"edit_input_label": "Modifier l'élément..."
+				"edit_input_label": "Modifier l'élément"
 			},
 			"info": {
 				"start_date": "La date à partir de laquelle collecter des données. Ce sera 00:00 du jour configuré.",

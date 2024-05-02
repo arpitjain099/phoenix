@@ -228,25 +228,6 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 				}
 				{...getInputProps("description")}
 			/>
-			<Select
-				mt="lg"
-				label={
-					<div className="flex items-center">
-						<Tooltip label={translate("gathers.fields.info.input.type")}>
-							<span className="flex">
-								<IconInfoCircle size={12} />
-							</span>
-						</Tooltip>
-						{translate("gathers.fields.input.type")}
-						<span className="text-red-500 ml-1">*</span>
-					</div>
-				}
-				data={[
-					{ label: translate("inputs.select"), value: "" },
-					{ label: "Accounts List", value: "author_url_list" },
-				]}
-				{...getInputProps("input.type")}
-			/>
 			<GatherInputs
 				label={
 					<div className="flex items-center">

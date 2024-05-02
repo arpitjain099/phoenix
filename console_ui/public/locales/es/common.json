@@ -176,7 +176,7 @@
 				"data_placeholder": "Escriba/pegue las entradas separadas por ` ` (espacio)",
 				"button_text": "Agregar a las entradas",
 				"search_placeholder": "Buscar una entrada",
-				"edit_input_label": "Editar Elemento..."
+				"edit_input_label": "Editar Elemento"
 			},
 			"info": {
 				"start_date": "La fecha desde la cual recopilar datos. Esto será a las 0:00 del día configurado.",

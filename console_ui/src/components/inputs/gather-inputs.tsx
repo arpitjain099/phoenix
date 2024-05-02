@@ -7,7 +7,15 @@ import React, {
 	useEffect,
 	useState,
 } from "react";
-import { Button, Text, TextInput, List, Group } from "@mantine/core";
+import {
+	Button,
+	Text,
+	TextInput,
+	Group,
+	Textarea,
+	Box,
+	Divider,
+} from "@mantine/core";
 import {
 	IconCircleCheck,
 	IconExternalLink,
@@ -39,7 +47,7 @@ const GatherInputs: React.FC<Props> = ({
 	const [editIndex, setEditIndex] = useState<number | null>(null);
 	const [editedValue, setEditedValue] = useState<string>("");
 
-	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+	const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
 		setInputValue(e.target.value);
 	};
 
@@ -60,7 +68,7 @@ const GatherInputs: React.FC<Props> = ({
 		}
 	};
 
-	const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+	const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
 		if (e.key === "Enter") {
 			handleAddInput();
 		}
@@ -96,7 +104,7 @@ const GatherInputs: React.FC<Props> = ({
 
 	return (
 		<div>
-			<TextInput
+			<Textarea
 				mt="lg"
 				mb="sm"
 				label={label}
@@ -110,8 +118,14 @@ const GatherInputs: React.FC<Props> = ({
 				{translate("gathers.fields.input.button_text")}
 			</Button>
 			{data.length > 0 && (
-				<>
-					<div className="flex items-center">
+				<Box
+					py={16}
+					sx={{
+						border: "1px solid rgba(0, 0, 0, 0.1)",
+						maxWidth: "fit-content",
+					}}
+				>
+					<div className="flex items-center p-4">
 						<TextInput
 							mb="sm"
 							value={searchQuery}
@@ -127,29 +141,30 @@ const GatherInputs: React.FC<Props> = ({
 							}
 						/>
 					</div>
-					<List spacing="md">
-						{filteredItems.map((item: string, idx: number) => (
-							<List.Item key={item}>
-								{editIndex === idx ? (
-									<TextInput
-										label="Edit item"
-										value={editedValue}
-										onChange={(e) => setEditedValue(e.currentTarget.value)}
-										rightSection={
-											<IconCircleCheck
-												color="green"
-												className="cursor-pointer"
-												onClick={handleSaveItem}
-											/>
-										}
-										placeholder={translate(
-											"gathers.fields.input.edit_input_label"
-										)}
-										autoFocus
-									/>
-								) : (
-									<Group position="left" align="center">
-										<Text>{item}</Text>
+					{filteredItems.map((item: string, idx: number) => (
+						<div key={item} className="pt-2">
+							{editIndex === idx ? (
+								<TextInput
+									mx={16}
+									label={translate("gathers.fields.input.edit_input_label")}
+									value={editedValue}
+									onChange={(e) => setEditedValue(e.currentTarget.value)}
+									rightSection={
+										<IconCircleCheck
+											color="green"
+											className="cursor-pointer"
+											onClick={handleSaveItem}
+										/>
+									}
+									placeholder={translate(
+										"gathers.fields.input.edit_input_label"
+									)}
+									autoFocus
+								/>
+							) : (
+								<div className="flex items-center justify-between gap-10 px-4">
+									<Text>{item}</Text>
+									<Group>
 										<Button
 											p={0}
 											variant="subtle"
@@ -180,11 +195,12 @@ const GatherInputs: React.FC<Props> = ({
 											/>
 										</Button>
 									</Group>
-								)}
-							</List.Item>
-						))}
-					</List>
-				</>
+								</div>
+							)}
+							{idx < filteredItems.length - 1 && <Divider className="mt-2" />}
+						</div>
+					))}
+				</Box>
 			)}
 		</div>
 	);
