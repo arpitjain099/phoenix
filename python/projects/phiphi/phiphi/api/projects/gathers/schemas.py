@@ -40,11 +40,8 @@ class GatherBase(pydantic.BaseModel):
     """
 
     description: Annotated[str, pydantic.Field(description="The description of the gather")]
-    start_date: Annotated[datetime.datetime, pydantic.Field(description="Gather start date")]
-    end_date: Annotated[datetime.datetime, pydantic.Field(description="Gather end date")]
-    platform: Annotated[Platform | None, pydantic.Field(description="The platform of the gather")]
-    data_type: Annotated[
-        DataType | None, pydantic.Field(description="The data type of the gather")
+    deleted_at: Annotated[
+        datetime.date | None, pydantic.Field(description="The deleted time of the gather")
     ]
 
 
@@ -83,9 +80,9 @@ class GatherResponse(GatherBase):
     created_at: datetime.datetime
     updated_at: datetime.datetime
     project_id: int
-    mark_to_delete: bool | None = None
     deleted_at: datetime.datetime | None = None
-    last_run_at: datetime.datetime | None = None
+    date_type: str
+    child_type: str
 
 
 class ApifyGatherResponse(GatherResponse, ApifyGatherBase):
