@@ -22,7 +22,7 @@ api:
     pullPolicy: Always
   # If you want unicorn to reload for development
   reload: true
-  cors_origins: ["http://*"]
+  cors_origins: "http://console.{{ .Values.base_host }}"
   first_admin_user_email: "buildup@datavaluepeople.com"
   first_admin_user_display_name: "Buildup"
   header_auth_name: "x-auth-request-email"
