@@ -5,6 +5,13 @@ base_host: "phoenix.local"
 # Public is the one needed for microk8s
 ingressClassName: "public"
 
+
+# LOCAL NON AUTHENCIATED
+# This is the local insecure authenticated version of the platform
+# This is used for testing and development
+# It uses the api /oauth2/insecure_auth endpoint
+use_local_insecure_auth: false
+
 api:
   enabled: true
   replicas: 1

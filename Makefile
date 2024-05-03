@@ -7,34 +7,48 @@ setup_asdf:
 	asdf install
 	asdf reshim
 
-up:
-	if [ -f clusters/local/secrets.yaml ]; then \
-		tilt up; \
+# Variables to define paths and contexts
+LOCAL_DIR := clusters/local_with_auth
+LOCAL_WITH_AUTH_DIR := clusters/local_with_auth
+DEV_DIR := clusters/dev
+EXAMPLE_SECRETS := charts/main/example_secrets.yaml
+TILT := tilt
+
+# Helper command to start tilt
+define tilt_up
+	@echo "Checking if $(1)/secrets.yaml exists"
+	if [ -f $(1)/secrets.yaml ]; then \
+		$(TILT) up -f $(2); \
 	else \
-		echo "File clusters/local/secrets.yaml does not exist."; \
+		echo "File $(1)/secrets.yaml does not exist."; \
 		echo "Copying the example file"; \
-		cp charts/main/example_secrets.yaml clusters/local/secrets.yaml; \
-		echo "Please fill in the clusters/local/secrets.yaml file and run 'make up' again"; \
+		cp $(EXAMPLE_SECRETS) $(1)/secrets.yaml; \
+		echo "Please fill in the $(1)/secrets.yaml file and run 'make $(3)' again"; \
 	fi
+endef
+
+# Helper command to clean up resources
+define tilt_clean
+	$(TILT) down -f $(1);
+	@echo "Deleting all PVCs in the $(2) namespace of the $(3) cluster."
+	kubectl delete pvc --all -n $(2) --context $(3)
+endef
+
+up:
+	$(TILT) up
 
 clean:
-	tilt down
-	@echo "Deleting all pvc in mircok8s cluster default namespace."
-	kubectl delete pvc --all -n default --context microk8s
+	$(call tilt_clean,Tiltfile,default,microk8s)
+
+# Define specific targets using the helper commands
+local_with_auth_up:
+	$(call tilt_up,$(LOCAL_WITH_AUTH_DIR),Tiltfile.local_with_auth,up)
+
+local_with_auth_clean:
+	$(call tilt_clean,Tiltfile.local_with_auth,default,microk8s)
 
 dev_up:
-	if [ -f clusters/dev/secrets.yaml ]; then \
-		echo "Starting tilt with dev context"; \
-		tilt up -f Tiltfile.dev; \
-	else \
-		echo "File clusters/dev/secrets.yaml does not exist."; \
-		echo "Copying the example file"; \
-		cp charts/main/example_secrets.yaml clusters/dev/secrets.yaml; \
-		echo "Please fill in the clusters/dev/secrets.yaml file and run 'make dev_up' again"; \
-	fi
+	$(call tilt_up,$(DEV_DIR),Tiltfile.dev,dev_up)
 
 dev_clean:
-	tilt down -f Tiltfile.dev
-	@echo "Deleting all pvc in ${KUBE_DEV_CONTEXT} cluster ${DEV_NAMESPACE} namespace."
-
-	kubectl delete pvc --all -n ${DEV_NAMESPACE} --context ${KUBE_DEV_CONTEXT}
+	$(call tilt_clean,Tiltfile.dev,$(DEV_NAMESPACE),$(KUBE_DEV_CONTEXT))

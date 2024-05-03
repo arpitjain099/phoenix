@@ -55,14 +55,9 @@ instance when using `k3s` you will need to add `<traefik-serivce-ip> phoenix.loc
 
 ## Setting secrets for local cluster
 
-To allow for the secrets to not be in the charts you can add the secrets as a Kubernetes SECRET.
-
-```bash
-cp charts/main/example_secrets.yaml clusters/local/secrets.yaml
-```
-
-The secrets will be applied when the command `make up` is run.
-
+There are no secrets needed for the default local cluster but other clusters need secrets to be
+set. The outputs of make commands for these other cluster should indicate where secrets should be
+set.
 
 ## Running the Development Environment with tilt up
 
@@ -84,15 +79,21 @@ You can also use `make clean` to remove all the tilt resources and default volum
 
 ## Authentication
 
-The local development system uses a third-party authentication provider to authenticate users. This
-can be done on any providers such as auth0. You will have to configure the `oauth2-proxy.config`.
+The default local cluster uses the insecure authentication via the api and does not require any
+setup.
+
+### Third-party authentication
+
+The `make local_with_auth_up` cluster uses a third-party authentication provider to authenticate users.
+This can be done on any providers such as auth0. You will have to configure the
+`oauth2-proxy.config`.
 To do this:
 - create an account with auth0
 - create an application
 - create a user in the application
 - set the callback URL to `http://oauth.phoenix.local/oauth2/callback`
-- copy the client id and secret to the cluster/local/secrets.yaml file
-- update the `oidc_issuer_url` and `whitelist_domains` in cluster/local/values.yaml
+- copy the client id and secret to the cluster/local_with_auth/secrets.yaml file
+- update the `oidc_issuer_url` and `whitelist_domains` in cluster/local_with_auth/values.yaml
 - once the local cluster is up you should be redirected to the auth0 login page if you go to
   `http://api.phoenix.local/`
 

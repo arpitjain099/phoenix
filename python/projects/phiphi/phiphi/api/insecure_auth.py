@@ -8,11 +8,11 @@ router = APIRouter()
 
 
 @router.get(
-    "/oauth2/in_secure_auth",
+    "/oauth2/insecure_auth",
     tags=["oauth"],
     status_code=status.HTTP_202_ACCEPTED,
 )
-async def in_secure_auth(response: Response) -> None:
+async def insecure_auth(response: Response) -> None:
     """This route will be used for a local cluster to be run without oauth2 implement."""
     response.headers["Gap-Auth"] = config.settings.FIRST_ADMIN_USER_EMAIL
     response.headers["X-Auth-Request-Email"] = config.settings.FIRST_ADMIN_USER_EMAIL
