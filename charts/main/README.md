@@ -57,3 +57,10 @@ Be aware that the configuration of the cookie can be some what complex. For inst
 
 The chart can be configured to use an insecure authentication. This is useful for testing and
 should not be used for production. See the [./values.yaml](./values.yaml) for the options.
+
+## CORS
+
+Their are a number of complexties with CORS. In that for the console to work the CORS for the
+ingress (oauth and general) and the API need to be set up so that the site URL that the console is
+served from is an allowed origin for the ingress and the API. See [./values.yaml](./values.yaml)
+for the options.
