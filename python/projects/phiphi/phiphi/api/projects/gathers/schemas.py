@@ -43,8 +43,6 @@ class GatherBase(pydantic.BaseModel):
     deleted_at: Annotated[
         datetime.date | None, pydantic.Field(description="The deleted time of the gather")
     ]
-    start_date: Annotated[datetime.datetime, pydantic.Field(description="Gather start date")]
-    end_date: Annotated[datetime.datetime, pydantic.Field(description="Gather end date")]
     platform: Annotated[Platform | None, pydantic.Field(description="The platform of the gather")]
     source: Annotated[str | None, pydantic.Field(description="The platform of the gather")]
     data_type: Annotated[
