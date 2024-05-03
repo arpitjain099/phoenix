@@ -14,15 +14,12 @@ class GatherBase(platform_db.Base):
 
     id: orm.Mapped[int] = orm.mapped_column(primary_key=True)
     description: orm.Mapped[str]
-    mark_to_delete: orm.Mapped[Optional[bool]]
-    last_run_at: orm.Mapped[Optional[datetime.datetime]]
     project_id: orm.Mapped[int]
     source: orm.Mapped[Optional[str]]
     platform: orm.Mapped[Optional[str]]
     data_type: orm.Mapped[Optional[str]]
-    start_date: orm.Mapped[Optional[datetime.datetime]]
-    end_date: orm.Mapped[Optional[datetime.datetime]]
     deleted_at: orm.Mapped[Optional[datetime.datetime]]
+    child_type: orm.Mapped[Optional[str]]
 
 
 class Gather(GatherBase, base_models.TimestampModel):
@@ -31,7 +28,7 @@ class Gather(GatherBase, base_models.TimestampModel):
     __tablename__ = "gathers"
     __mapper_args__ = {
         "polymorphic_identity": "gather",
-        "polymorphic_on": "source",
+        "polymorphic_on": "child_type",
     }
 
     apify_gather = orm.relationship("ApifyGather", back_populates="gather", uselist=False)
@@ -42,7 +39,7 @@ class ApifyGather(Gather):
 
     __tablename__ = "apify_gathers"
     __mapper_args__ = {
-        "polymorphic_identity": "apify",
+        "polymorphic_identity": "apify_facebook_posts",
     }
 
     id: orm.Mapped[int] = orm.mapped_column(ForeignKey("gathers.id"), primary_key=True)
