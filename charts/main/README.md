@@ -45,6 +45,14 @@ To set up the certifications for a deployment:
 The chart uses [oauth2-proxy](https://oauth2-proxy.github.io/oauth2-proxy/) for authentication. It
 can be configured to use a variety of authentication providers.
 
+Be aware that the configuration of the cookie can be some what complex. For instance:
+- http-only cookies can not be seen by javascript
+- secure means that the cookie can only be sent over https
+- same-site "strict" and "lax" cookies can mean that a console on a different domain will not have
+  the cookies
+- same-site "none" cookies can be used for cross-site cookies but require the secure flag to be set
+  on the cookie
+
 ### Insecure authentication for local testing
 
 The chart can be configured to use an insecure authentication. This is useful for testing and
