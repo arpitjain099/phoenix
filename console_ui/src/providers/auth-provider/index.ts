@@ -4,9 +4,9 @@ import { UserInfo } from "src/interfaces/user";
 import { storageService } from "src/services";
 
 const DEV_AUTH_COOKIE = "phiphi-user-email";
-const AUTH_COOKIE = process.env.NEXT_PUBLIC_AUTH_COOKIE!;
 const USER_INFO_COOKIE_NAME = process.env.NEXT_PUBLIC_USER_INFO_COOKIE_NAME!;
 const API_URL = process.env.NEXT_PUBLIC_API_URL!;
+const AUTH_URL = process.env.NEXT_PUBLIC_ENV_AUTH_URL!;
 const LOGIN_URL = process.env.NEXT_PUBLIC_ENV_LOGIN_URL!;
 const LOGOUT_URL = process.env.NEXT_PUBLIC_ENV_LOGOUT_URL!;
 const ENV = process.env.NEXT_PUBLIC_ENV!;
@@ -31,16 +31,10 @@ const fetchUserInfo = async (): Promise<UserInfo | null> => {
 			method: "GET",
 			credentials: "include",
 		});
-		if (response.status === 302) {
-			// Redirect status (302) indicates the user is not logged in
-			redirectToLoginPage();
-			return null;
-		}
 		if (!response.ok) {
 			throw new Error(`HTTP error! Status: ${response.status}`);
 		}
 		const userData: UserInfo = await response.json();
-		storageService.set(USER_INFO_COOKIE_NAME, JSON.stringify(userData));
 		return userData;
 	} catch (error) {
 		// Handle any other errors, including network errors
@@ -53,6 +47,21 @@ const fetchUserInfo = async (): Promise<UserInfo | null> => {
 	}
 };
 
+const checkAuthUrl = async (url: string): Promise<boolean> => {
+	try {
+		const response = await fetch(url, {
+			method: "GET",
+			credentials: "include",
+		});
+		if (response.status === 200) {
+			return true;
+		}
+		return false;
+	} catch (error) {
+		return false;
+	}
+};
+
 export const getUserRole = async (): Promise<string | null> => {
 	const userInfo = storageService.get(USER_INFO_COOKIE_NAME);
 	return userInfo ? JSON.parse(userInfo).app_role : null;
@@ -62,24 +71,38 @@ const authProvider: AuthProvider = {
 	login: async () => {
 		if (ENV === "dev") {
 			storageService.set(DEV_AUTH_COOKIE, DEV_LOGIN_EMAIL);
-		} else if (AUTH_COOKIE && !storageService.get(AUTH_COOKIE)) {
+		} else {
 			redirectToLoginPage();
 		}
-		await fetchUserInfo();
-		return { success: true, redirectTo: "/" };
+		return {
+			success: false,
+			error: new Error("Login failed"),
+		};
 	},
 	logout: async () => {
 		storageService.remove(USER_INFO_COOKIE_NAME);
 		redirectToLogoutPage();
 		return { success: true };
 	},
-	check: async () =>
-		storageService.get(AUTH_COOKIE)
-			? { authenticated: true }
-			: { authenticated: false, logout: true },
+	check: async () => {
+		if (ENV === "dev" && storageService.get(DEV_AUTH_COOKIE)) {
+			return { authenticated: true };
+		}
+		if (AUTH_URL && (await checkAuthUrl(AUTH_URL))) {
+			return { authenticated: true };
+		}
+		return { authenticated: false };
+	},
 	getIdentity: async () => {
-		const auth = storageService.get(USER_INFO_COOKIE_NAME);
-		return auth ? JSON.parse(auth) : null;
+		const userInfoFromCookie = storageService.get(USER_INFO_COOKIE_NAME);
+		let userInfo = null;
+		if (!userInfoFromCookie) {
+			userInfo = await fetchUserInfo();
+			storageService.set(USER_INFO_COOKIE_NAME, JSON.stringify(userInfo));
+		} else {
+			userInfo = JSON.parse(userInfoFromCookie);
+		}
+		return userInfo;
 	},
 	onError: async (error) => {
 		if (error.response?.status === 401) {
