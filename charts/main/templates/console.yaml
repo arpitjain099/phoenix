@@ -21,6 +21,18 @@ spec:
         env:
           - name: NEXT_PUBLIC_API_URL
             value: {{ tpl (.Values.console.api_url) . }}
+          - name: NEXT_PUBLIC_ENV
+            value: {{ .Values.console.env | quote }}
+          - name: NEXT_PUBLIC_DEV_ADMIN_EMAIL
+            value: {{ .Values.console.dev_admin_email | quote }}
+          - name: NEXT_PUBLIC_USER_INFO_COOKIE_NAME
+            value: {{ .Values.console.user_info_cookie_name | quote }}
+          - name: NEXT_PUBLIC_ENV_AUTH_URL
+            value: {{ tpl (.Values.console.env_auth_url) . }}
+          - name: NEXT_PUBLIC_ENV_LOGIN_URL
+            value: {{ tpl (.Values.console.env_login_url) . }}
+          - name: NEXT_PUBLIC_ENV_LOGOUT_URL
+            value: {{ tpl (.Values.console.env_logout_url) . }}
 ---
 apiVersion: v1
 kind: Service

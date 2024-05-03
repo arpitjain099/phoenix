@@ -108,6 +108,14 @@ console:
   # Make sure that the schema (http/https) matches the ingress
   # Ie. if you have cert_issuer to true set to https
   api_url: "http://api.{{ .Values.base_host }}"
+  # If set to `dev` the console will use in secure cookie auth
+  env: "local_cluster"
+  # Should be the same as the first_admin_user_email for api
+  dev_admin_email: "buildup@datavaluepeople"
+  user_info_cookie_name: "phoenix_user_info"
+  env_auth_url: "http://oauth.{{ .Values.base_host }}/oauth2/auth"
+  env_login_url: "http://oauth.{{ .Values.base_host }}/oauth2/start"
+  env_logout_url: "http://oauth.{{ .Values.base_host }}/oauth2/sign_out"
 
 # Cert Manager
 #
