@@ -162,28 +162,31 @@
 			"start_date": "Fecha de Inicio",
 			"end_date": "Fecha de Finalización",
 			"platform": "Plataforma",
-			"project_id": "Instancia",
-			"limit_posts_per_account": "Límite de Publicaciones Por Cuenta",
+			"project_id": "Proyecto",
+			"limit_posts_per_account": "Límite de Publicaciones por Cuenta",
 			"limit_replies": "Límite de Respuestas",
 			"nested_replies": "Respuestas Anidadas",
 			"data_type": "Tipo de Datos",
 			"description": "Descripción",
-			"created_at": "Creado en",
-			"updated_at": "Actualizado en",
+			"created_at": "Creado En",
+			"updated_at": "Actualizado En",
 			"input": {
-				"data": "Datos de Entrada de Recopilación",
-				"type": "Tipo de Datos de Entrada de Recopilación",
-				"data_placeholder": "Escribe/pega los datos de entrada separados por ` ` o presiona Enter"
+				"data": "Recopilar Datos de Entrada",
+				"type": "Tipo de Datos de Entrada",
+				"data_placeholder": "Escriba/pegue las entradas separadas por ` ` (espacio)",
+				"button_text": "Agregar a las entradas",
+				"search_placeholder": "Buscar una entrada",
+				"edit_input_label": "Editar Elemento"
 			},
 			"info": {
-				"start_date": "La fecha para recopilar datos desde. Esto será 0:00 del día configurado.",
-				"end_date": "La fecha para recopilar datos hasta. Esto será 0:00 del día configurado.",
-				"description": "Breve descripción para que sepas cuál fue el objetivo de la recopilación.",
+				"start_date": "La fecha desde la cual recopilar datos. Esto será a las 0:00 del día configurado.",
+				"end_date": "La fecha hasta la cual recopilar datos. Esto será a las 0:00 del día configurado.",
+				"description": "Breve descripción para que sepas cuál era el objetivo de la recopilación.",
 				"limit_posts_per_account": "Limita el número de publicaciones que se recopilan para cada cuenta.",
-				"data_type": "Tipo de datos que te gustaría recopilar",
+				"data_type": "Tipo de datos que le gustaría recopilar",
 				"input": {
-					"type": "El tipo de datos de entrada que deseas recopilar. Consulta el manual para obtener más información.",
-					"data": "Agrega los datos de entrada que te gustaría recopilar. Escribe/pega los datos de entrada separados por ` ` (espacio) o presiona Enter"
+					"type": "El tipo de datos de entrada que desea recopilar. Consulte el manual para obtener más información.",
+					"data": "Agregue los datos de entrada que le gustaría recopilar. Escriba/pegue las entradas separadas por ` ` (espacio)"
 				}
 			}
 		}
