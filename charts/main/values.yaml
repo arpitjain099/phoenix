@@ -5,6 +5,13 @@ base_host: "phoenix.local"
 # Public is the one needed for microk8s
 ingressClassName: "public"
 
+ingress_cors:
+  enabled: true
+  # This is the allowed origin for the cors
+  # This should be the same as the console api_url
+  # Ie. if you have cert_issuer to true set to https
+  allow_origin: "http://console.{{ .Values.base_host }}"
+
 
 # LOCAL NON AUTHENCIATED
 # This is the local insecure authenticated version of the platform
