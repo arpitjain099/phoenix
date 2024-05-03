@@ -18,13 +18,13 @@ def get_gathers(
 
 @router.get(
     "/projects/{project_id}/gathers/{gather_id}",
-    response_model=schemas.ApifyGatherResponse,
+    response_model=schemas.GatherResponse,
 )
 def get_gather(
-    project_id: int, apify_gather_id: int, session: deps.SessionDep
+    project_id: int, gather_id: int, session: deps.SessionDep
 ) -> schemas.GatherResponse:
     """Get an apify gather."""
-    apify_gather = crud.get_gather(session, project_id, apify_gather_id)
-    if apify_gather is None:
+    gather = crud.get_gather(session, project_id, gather_id)
+    if gather is None:
         raise fastapi.HTTPException(status_code=404, detail="Gather not found")
-    return apify_gather
+    return gather
