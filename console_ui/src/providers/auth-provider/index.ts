@@ -73,6 +73,8 @@ export const getUserRole = async (): Promise<string | null> => {
 
 const authProvider: AuthProvider = {
 	login: async () => {
+		// Remove user info cookie so it can be refreshed after login
+		storageService.remove(USER_INFO_COOKIE_NAME);
 		if (ENV === "dev") {
 			storageService.set(DEV_AUTH_COOKIE, DEV_LOGIN_EMAIL);
 		} else {
