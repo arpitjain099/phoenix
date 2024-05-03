@@ -15,11 +15,11 @@ class GatherBase(platform_db.Base):
     id: orm.Mapped[int] = orm.mapped_column(primary_key=True)
     description: orm.Mapped[str]
     project_id: orm.Mapped[int]
-    source: orm.Mapped[Optional[str]]
-    platform: orm.Mapped[Optional[str]]
-    data_type: orm.Mapped[Optional[str]]
+    source: orm.Mapped[str]
+    platform: orm.Mapped[str]
+    data_type: orm.Mapped[str]
     deleted_at: orm.Mapped[Optional[datetime.datetime]]
-    child_type: orm.Mapped[Optional[str]]
+    child_type: orm.Mapped[str]
 
 
 class Gather(GatherBase, base_models.TimestampModel):

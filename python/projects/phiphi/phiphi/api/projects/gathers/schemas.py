@@ -31,11 +31,9 @@ class GatherBase(pydantic.BaseModel):
     """
 
     description: Annotated[str, pydantic.Field(description="The description of the gather")]
-    platform: Annotated[Platform | None, pydantic.Field(description="The platform of the gather")]
-    data_type: Annotated[
-        DataType | None, pydantic.Field(description="The data type of the gather")
-    ]
-    source: Annotated[Source | None, pydantic.Field(description="The data type of the gather")]
+    platform: Annotated[Platform, pydantic.Field(description="The platform of the gather")]
+    data_type: Annotated[DataType, pydantic.Field(description="The data type of the gather")]
+    source: Annotated[Source, pydantic.Field(description="The data type of the gather")]
 
 
 class GatherResponse(GatherBase):
