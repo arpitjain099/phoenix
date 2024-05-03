@@ -30,7 +30,3 @@ class Gather(GatherBase, base_models.TimestampModel):
         "polymorphic_identity": "gather",
         "polymorphic_on": "child_type",
     }
-
-    apify_facebook_post_gather = orm.relationship(
-        "ApifyFacebookPostGather", back_populates="gather", uselist=False
-    )

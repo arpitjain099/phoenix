@@ -19,5 +19,3 @@ class ApifyFacebookPostGather(gather_models.Gather):
     author_url_list: orm.Mapped[str] = orm.mapped_column(base_models.JSONEncodedValue)
     only_posts_older_than: orm.Mapped[Optional[str]]
     only_posts_newer_than: orm.Mapped[Optional[str]]
-
-    gather = orm.relationship("Gather", back_populates="apify_facebook_post_gather")
