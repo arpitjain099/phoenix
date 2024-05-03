@@ -2,8 +2,10 @@
 import fastapi
 from phiphi.api import deps
 from phiphi.api.projects.gathers import crud, schemas
+from phiphi.api.projects.gathers.apify_facebook_posts import routes as apify_facebook_posts_routes
 
 router = fastapi.APIRouter()
+router.include_router(apify_facebook_posts_routes.router)
 
 
 # REFACTORABLE: IF there are other gather subclasses, this should be refactored

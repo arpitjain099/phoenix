@@ -14,8 +14,7 @@ def create_apify_facebook_post_gather(
 
     source, platform, data_type = (gather_data.source, gather_data.platform, gather_data.data_type)
 
-    if source and platform and data_type:
-        child_type = f"{source.value}_{platform.value}_{data_type.value}"
+    child_type = f"{source.value}_{platform.value}_{data_type.value}"
 
     db_apify_facebook_post_gather = models.ApifyFacebookPostGather(
         **gather_data.dict(),

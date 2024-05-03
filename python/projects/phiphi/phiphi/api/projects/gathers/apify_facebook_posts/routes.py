@@ -7,7 +7,8 @@ router = fastapi.APIRouter()
 
 
 @router.post(
-    "/projects/{project_id}/gathers/apify", response_model=schemas.ApifyFacebookPostGatherResponse
+    "/projects/{project_id}/gathers/apify_facebook_posts",
+    response_model=schemas.ApifyFacebookPostGatherResponse,
 )
 def create_apify_facebook_post_gather(
     gather: schemas.ApifyFacebookPostGatherCreate,
