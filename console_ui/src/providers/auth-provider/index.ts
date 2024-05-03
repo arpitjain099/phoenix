@@ -53,7 +53,7 @@ const checkAuthUrl = async (url: string): Promise<boolean> => {
 			method: "GET",
 			credentials: "include",
 		});
-		if (response.status === 200) {
+		if (response.ok) {
 			return true;
 		}
 		return false;
@@ -63,8 +63,12 @@ const checkAuthUrl = async (url: string): Promise<boolean> => {
 };
 
 export const getUserRole = async (): Promise<string | null> => {
-	const userInfo = storageService.get(USER_INFO_COOKIE_NAME);
-	return userInfo ? JSON.parse(userInfo).app_role : null;
+	const userInfoFromCookie = storageService.get(USER_INFO_COOKIE_NAME);
+	const userInfo = userInfoFromCookie ? JSON.parse(userInfoFromCookie) : null;
+	if (userInfo && Object.hasOwn(userInfo, "app_role")) {
+		return userInfo.app_role;
+	}
+	return null;
 };
 
 const authProvider: AuthProvider = {
