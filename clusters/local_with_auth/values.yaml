@@ -1,3 +1,5 @@
+console:
+  enabled: true
 cert_issuer:
   enabled: false
 cert-manager:
