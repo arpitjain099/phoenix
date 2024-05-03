@@ -18,6 +18,9 @@ spec:
         image: {{ .Values.console.image.repository }}:{{ .Values.console.image.tag }}
         ports:
           - containerPort: 3000
+        env:
+          - name: NEXT_PUBLIC_API_URL
+            value: {{ tpl (.Values.console.api_url) . }}
 ---
 apiVersion: v1
 kind: Service

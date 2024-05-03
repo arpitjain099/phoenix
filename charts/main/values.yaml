@@ -105,6 +105,9 @@ console:
   image:
     repository: phoenix_console
     tag: latest
+  # Make sure that the schema (http/https) matches the ingress
+  # Ie. if you have cert_issuer to true set to https
+  api_url: "http://api.{{ .Values.base_host }}"
 
 # Cert Manager
 #
