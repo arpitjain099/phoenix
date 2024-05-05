@@ -15,7 +15,9 @@ source setup_microk8s.sh
 make up
 ```
 
-Visit [http://api.phoenix.local/docs](http://api.phoenix.local/docs) in your browser.
+Visit in your browser:
+- [http://console.phoenix.local](http://console.phoenix.local)
+- [http://api.phoenix.local/docs](http://api.phoenix.local/docs)
 
 More detailed documentation at [docs/development_getting_started.md](docs/development_getting_started.md).
 

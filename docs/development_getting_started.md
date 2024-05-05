@@ -114,6 +114,7 @@ prefect flow and the prefect worker. To do this:
 Once your set up is complete you should be able to see an hello world at. Beaware you will need to
 log in to the configured authentication provider.
 
+* [http://console.phoenix.local/](http://console.phoenix.local/)
 * [http://api.phoenix.local/](http://api.phoenix.local/)
 * [http://dashboard.main.phoenix.local/](http://dashboard.main.phoenix.local/)
 
