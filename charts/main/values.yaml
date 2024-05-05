@@ -5,6 +5,15 @@ base_host: "phoenix.local"
 # Public is the one needed for microk8s
 ingressClassName: "public"
 
+ingress_cors:
+  enabled: true
+  # This is the allowed origin for the cors for the ingress
+  # This should be the same as the console api_url and the api cors_origins
+  # should also be the same
+  # Ie. if you have cert_issuer to true set to https
+  # You can have multiple origins separated by a ", "
+  allow_origin: "http://console.{{ .Values.base_host }}"
+
 
 # LOCAL NON AUTHENCIATED
 # This is the local insecure authenticated version of the platform
@@ -22,7 +31,8 @@ api:
     pullPolicy: Always
   # If you want unicorn to reload for development
   reload: true
-  cors_origins: ["http://*"]
+  # You can have multiple origins separated by a ", "
+  cors_origins: "http://console.{{ .Values.base_host }}"
   first_admin_user_email: "buildup@datavaluepeople.com"
   first_admin_user_display_name: "Buildup"
   header_auth_name: "x-auth-request-email"
@@ -91,6 +101,31 @@ platformdb:
     service:
       ports:
         postgresql: "5432"
+
+#######################
+# Console
+#
+# The console is a web application that is used to manage the platform
+#######################
+console:
+  # In general the console should be deployed by a third-party service with edge servers
+  # Amplify, Netlify, Vercel, etc
+  enabled: false
+  replicas: 1
+  image:
+    repository: phoenix_console
+    tag: latest
+  # Make sure that the schema (http/https) matches the ingress
+  # Ie. if you have cert_issuer to true set to https
+  api_url: "http://api.{{ .Values.base_host }}"
+  # If set to `dev` the console will use in secure cookie auth
+  env: "local_cluster"
+  # Should be the same as the first_admin_user_email for api
+  dev_admin_email: "buildup@datavaluepeople"
+  user_info_cookie_name: "phoenix_user_info"
+  env_auth_url: "http://oauth.{{ .Values.base_host }}/oauth2/auth"
+  env_login_url: "http://oauth.{{ .Values.base_host }}/oauth2/start"
+  env_logout_url: "http://oauth.{{ .Values.base_host }}/oauth2/sign_out"
 
 # Cert Manager
 #

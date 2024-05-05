@@ -32,7 +32,7 @@ spec:
                 name: {{ tpl ( .Values.api.secretKey ) . }}
                 key: SQLALCHEMY_DATABASE_URI
           - name: CORS_ORIGINS
-            value: {{ .Values.api.cors_origins | quote }}
+            value: {{ tpl ( .Values.api.cors_origins ) .}}
           - name: FIRST_ADMIN_USER_EMAIL
             value: {{ .Values.api.first_admin_user_email | quote }}
           - name: FIRST_ADMIN_USER_DISPLAY_NAME

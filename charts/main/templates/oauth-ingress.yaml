@@ -8,6 +8,7 @@ metadata:
     {{- if .Values.cert_issuer.enabled }}
     cert-manager.io/issuer: {{ .Values.cert_issuer.issuer_name }}
     {{- end }}
+    {{- include "phoenixmain.ingress_cors" . | nindent 4 }}
 spec:
   ingressClassName: {{ .Values.ingressClassName }}
   {{- if .Values.cert_issuer.enabled }}

@@ -45,7 +45,22 @@ To set up the certifications for a deployment:
 The chart uses [oauth2-proxy](https://oauth2-proxy.github.io/oauth2-proxy/) for authentication. It
 can be configured to use a variety of authentication providers.
 
+Be aware that the configuration of the cookie can be some what complex. For instance:
+- http-only cookies can not be seen by javascript
+- secure means that the cookie can only be sent over https
+- same-site "strict" and "lax" cookies can mean that a console on a different domain will not have
+  the cookies
+- same-site "none" cookies can be used for cross-site cookies but require the secure flag to be set
+  on the cookie
+
 ### Insecure authentication for local testing
 
 The chart can be configured to use an insecure authentication. This is useful for testing and
 should not be used for production. See the [./values.yaml](./values.yaml) for the options.
+
+## CORS
+
+Their are a number of complexities with CORS. In that for the console to work the CORS for the
+ingress (oauth and general) and the API need to be set up so that the site URL that the console is
+served from is an allowed origin for the ingress and the API. Be careful to use the correct schema
+(http|https). See [./values.yaml](./values.yaml) for the options.

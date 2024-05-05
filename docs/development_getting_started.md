@@ -135,3 +135,10 @@ We are still looking for solutions to these problems:
 - running the postgresql bitnami image on MACs on apple silicon / arm64 architecture:
 -- A quick solution is to change the `superset.postgresql.image.image` to `postgres` and
 `superset.postgresql.image.tag` to something like `16.2` in the `charts/local/values.yaml` file.
+- If you get "Unable to connect to the server: x509: certificate is valid for <internal IPs>, not
+  <external IP>" in the logs of all pods:
+```bash
+sudo microk8s refresh-certs -e ca.crt
+rm ~/.kube/microk8s-config
+source setup_microk8s.sh
+```
