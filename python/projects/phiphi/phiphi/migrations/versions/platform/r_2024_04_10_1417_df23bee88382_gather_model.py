@@ -19,7 +19,7 @@ branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
 TABLE_NAME = "gathers"
-APIFY_TABLE_NAME = "apify_gathers"
+APIFY_TABLE_NAME = "apify_facebook_post_gathers"
 
 
 def upgrade() -> None:
@@ -29,10 +29,10 @@ def upgrade() -> None:
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("description", sa.String(), nullable=False),
         sa.Column("project_id", sa.Integer(), nullable=False),
-        sa.Column("source", sa.String(), nullable=True),
-        sa.Column("platform", sa.String(), nullable=True),
-        sa.Column("data_type", sa.String(), nullable=True),
-        sa.Column("child_type", sa.String(), nullable=True),
+        sa.Column("source", sa.String(), nullable=False),
+        sa.Column("platform", sa.String(), nullable=False),
+        sa.Column("data_type", sa.String(), nullable=False),
+        sa.Column("child_type", sa.String(), nullable=False),
         sa.Column("deleted_at", sa.DateTime(), nullable=True),
         sa.Column("created_at", sa.DateTime(), nullable=False),
         sa.Column("updated_at", sa.DateTime(), nullable=False),
@@ -42,9 +42,9 @@ def upgrade() -> None:
         APIFY_TABLE_NAME,
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("limit_posts_per_account", sa.Integer(), nullable=False),
-        sa.Column("limit_replies", sa.Integer(), nullable=False),
-        sa.Column("nested_replies", sa.Boolean(), nullable=False),
-        sa.Column("input", base_models.JSONEncodedValue(), nullable=False),
+        sa.Column("only_posts_older_than", sa.String(), nullable=True),
+        sa.Column("only_posts_newer_than", sa.String(), nullable=True),
+        sa.Column("author_url_list", base_models.JSONEncodedValue(), nullable=True),
         sa.ForeignKeyConstraint(
             ["id"],
             ["gathers.id"],
