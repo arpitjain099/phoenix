@@ -108,7 +108,7 @@ platformdb:
 # The console is a web application that is used to manage the platform
 #######################
 console:
-  # In general the console should be deployment a third party service with edge servers
+  # In general the console should be deployed by a third-party service with edge servers
   # Amplify, Netlify, Vercel, etc
   enabled: false
   replicas: 1
