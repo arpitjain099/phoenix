@@ -3,6 +3,7 @@ cert_issuer:
   enabled: false
 console:
   enabled: true
+  env: "dev"
 cert-manager:
   enabled: false
 oauth2-proxy:
