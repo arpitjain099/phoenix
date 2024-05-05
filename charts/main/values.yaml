@@ -76,7 +76,7 @@ platformdb:
     ## PostgreSQL name for a custom user to create
     username: phiphi
     ## PostgreSQL password for the custom user to create. Ignored if `auth.existingSecret` with key `password` is provided
-    password: password
+    password: phiphi_password
     ## PostgreSQL name for a custom database to create
     database: platform
     postgresqlPassword: postgres_pass
