@@ -7,9 +7,11 @@ ingressClassName: "public"
 
 ingress_cors:
   enabled: true
-  # This is the allowed origin for the cors
-  # This should be the same as the console api_url
+  # This is the allowed origin for the cors for the ingress
+  # This should be the same as the console api_url and the api cors_origins
+  # should also be the same
   # Ie. if you have cert_issuer to true set to https
+  # You can have multiple origins separated by a ", "
   allow_origin: "http://console.{{ .Values.base_host }}"
 
 
@@ -29,6 +31,7 @@ api:
     pullPolicy: Always
   # If you want unicorn to reload for development
   reload: true
+  # You can have multiple origins separated by a ", "
   cors_origins: "http://console.{{ .Values.base_host }}"
   first_admin_user_email: "buildup@datavaluepeople.com"
   first_admin_user_display_name: "Buildup"

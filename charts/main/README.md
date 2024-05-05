@@ -60,7 +60,7 @@ should not be used for production. See the [./values.yaml](./values.yaml) for th
 
 ## CORS
 
-Their are a number of complexties with CORS. In that for the console to work the CORS for the
+Their are a number of complexities with CORS. In that for the console to work the CORS for the
 ingress (oauth and general) and the API need to be set up so that the site URL that the console is
-served from is an allowed origin for the ingress and the API. See [./values.yaml](./values.yaml)
-for the options.
+served from is an allowed origin for the ingress and the API. Be careful to use the correct schema
+(http|https). See [./values.yaml](./values.yaml) for the options.
