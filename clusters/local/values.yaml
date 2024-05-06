@@ -33,4 +33,8 @@ prefect:
   apiKey: "<secret_to_set>"
 
 prefect-worker:
-  enabled: false
+  enabled: true
+  worker:
+    ## Account and workspace ID in secrets
+    config:
+      workPool: "phoenix-local-worker-pool"
