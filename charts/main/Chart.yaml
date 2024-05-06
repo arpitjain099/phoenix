@@ -35,3 +35,7 @@ dependencies:
   # superset
   alias: platformdb
   condition: platformdb.enabled
+- name: prefect-worker
+  repository: https://prefecthq.github.io/prefect-helm
+  version: 2024.5.2224951
+  condition: prefect-worker.enabled

@@ -27,3 +27,6 @@ superset:
       LOGIN_REDIRECT_URL = False
   extraSecretEnv:
     SUPERSET_SECRET_KEY: "this_is_an_in_secure_secret_key"
+
+prefect-worker:
+  enabled: false
