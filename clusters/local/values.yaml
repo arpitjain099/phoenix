@@ -51,3 +51,11 @@ prefect-worker:
     ## Account and workspace ID in secrets
     config:
       workPool: "phoenix-local-worker-pool"
+
+######### WITH SELF SIGNED CERTIFICATES #########
+# cert_issuer:
+#  enabled: true
+#  issuer_name: "selfsigned-issuer"
+#  issuer_email: "buildup@datavaluepeople.com"
+# cert-manager:
+  # enabled: true
