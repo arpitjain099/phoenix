@@ -27,5 +27,5 @@ docker_build('phoenix_console', './console_ui/', live_update=[sync_console_ui])
 k8s_yaml(helm(
   './charts/main/',
   name='phoenix',
-  values=['./clusters/local/values.yaml'],
+  values=['./clusters/local/values.yaml', './clusters/local/secrets.yaml'],
 ))
