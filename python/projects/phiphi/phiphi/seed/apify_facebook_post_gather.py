@@ -47,15 +47,15 @@ def seed_test_apify_facebook_post_gathers(session: Session) -> None:
     ]
 
     for apify_facebook_gather in apify_facebook_gathers:
-        gather_child_crud.create_child_gather(
+        gather_child_crud.create_child_gather(  # type: ignore[type-var]
             session=session,
-            project_id=2,
+            project_id=1,
             request_schema=apify_facebook_gather,
             child_model=models.ApifyFacebookPostGather,
             response_schema=schemas.ApifyFacebookPostGatherResponse,
         )
 
-    gather_child_crud.create_child_gather(
+    gather_child_crud.create_child_gather(  # type: ignore[type-var]
         session=session,
         project_id=2,
         request_schema=TEST_APIFY_FACEBOOK_POST_GATHER_CREATE_3,
