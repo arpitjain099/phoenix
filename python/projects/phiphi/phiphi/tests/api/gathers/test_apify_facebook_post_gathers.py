@@ -7,7 +7,7 @@ UPDATE_TIME = "2024-04-01T12:00:02"
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
-def test_create_apify_facebook_gather(reseed_tables, client: TestClient) -> None:
+def test_create_apify_facebook_post_gather(reseed_tables, client: TestClient) -> None:
     """Test create apify facebook gather."""
     data = {
         "description": "First apify gather",
@@ -20,7 +20,7 @@ def test_create_apify_facebook_gather(reseed_tables, client: TestClient) -> None
         "data_type": "posts",
     }
     project_id = 1
-    response = client.post(f"/projects/{project_id}/gathers/apify_facebook_posts", json=data)
+    response = client.post(f"/projects/{project_id}/gathers/apify_facebook_post", json=data)
     assert response.status_code == 200
     gather = response.json()
     assert gather["description"] == data["description"]
