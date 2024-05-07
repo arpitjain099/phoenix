@@ -30,6 +30,8 @@ def create_child_gather(
 
     child_type = f"{source.value}_{platform.value}_{data_type.value}"
 
+    print(child_model)
+
     db_apify_facebook_post_gather = child_model(
         **request_schema.dict(),
         project_id=project_id,

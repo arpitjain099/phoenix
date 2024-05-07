@@ -1,6 +1,6 @@
 """Routes for gathers."""
 # from functools import partial
-from typing import Type
+from typing import Type, Callable
 from functools import partial
 
 import fastapi
@@ -22,33 +22,40 @@ from phiphi.api.projects.gathers.apify_facebook_posts import (
 router = fastapi.APIRouter()
 
 list_of_child_gather_routes = {
-    "apify_facebook_post": (
-        facebook_post_schema.ApifyFacebookPostGatherCreate,
-        facebook_post_schema.ApifyFacebookPostGatherResponse,
-        facebook_post_model.ApifyFacebookPostGather,
-    ),
     "apify_facebook_comment": (
         facebook_comment_schema.ApifyFacebookCommentGatherCreate,
         facebook_comment_schema.ApifyFacebookCommentGatherResponse,
         facebook_comment_model.ApifyFacebookCommentGather,
     ),
+    "apify_facebook_post": (
+        facebook_post_schema.ApifyFacebookPostGatherCreate,
+        facebook_post_schema.ApifyFacebookPostGatherResponse,
+        facebook_post_model.ApifyFacebookPostGather,
+    ),
     # Add more routes as needed
 }
 
-for key, (request_schema, response_schema, child_model) in list_of_child_gather_routes.items():
-    crud_func = partial(child_crud.create_child_gather,  response_schema=response_schema,
-            request_schema=request_schema,
-            child_model=child_model)
-    @router.post(
-        f"/projects/{{project_id}}/gathers/{key}",
-    )
+def make_create_child_gather_route(request_schema, response_schema, child_model) -> Callable:
+    """Returns a route function that creates a child gather using specific models."""
     def create_child_gather(
         project_id: int,
-        request_schema: request_schema,  # type: ignore[valid-type]
-        deps: deps.SessionDep,
-    ) -> response_schema:  # type: ignore[valid-type]
-        """Generic routes for child gather."""
-        return crud_func(
+        request: request_schema,  # The input schema class instance
+        session: deps.SessionDep,
+    ) -> response_schema:  # The response schema class instance
+        """Generic route for child gather creation."""
+        return child_crud.create_child_gather(
+            response_schema=response_schema,
+            request_schema=request,
+            child_model=child_model,
             project_id=project_id,
-            session=deps,
+            session=session,
         )
+    return create_child_gather
+
+# Register all routes
+for key, (request_schema, response_schema, child_model) in list_of_child_gather_routes.items():
+    router.post(
+        f"/projects/{{project_id}}/gathers/{key}",
+        response_model=response_schema,  # The FastAPI route response model
+    )(make_create_child_gather_route(request_schema, response_schema, child_model))
+
