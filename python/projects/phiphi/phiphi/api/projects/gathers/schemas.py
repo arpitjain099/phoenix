@@ -16,6 +16,7 @@ class DataType(str, Enum):
     """data type enum."""
 
     posts = "posts"
+    comments = "comments"
 
 
 class Source(str, Enum):
