@@ -30,9 +30,9 @@ def test_get_gathers(client: TestClient, reseed_tables) -> None:
     response = client.get("/projects/1/gathers/")
     assert response.status_code == 200
     gathers = response.json()
-    assert len(gathers) == 2
+    assert len(gathers) == 3
 
     response = client.get("/projects/2/gathers/")
     assert response.status_code == 200
     gathers = response.json()
-    assert len(gathers) == 1
+    assert len(gathers) == 3
