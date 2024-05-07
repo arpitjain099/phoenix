@@ -1,8 +1,9 @@
 """Seed the apify facebook post gathers."""
 from sqlalchemy.orm import Session
 
+from phiphi.api.projects.gathers import child_crud as gather_child_crud
 from phiphi.api.projects.gathers import schemas as gather_schemas
-from phiphi.api.projects.gathers.apify_facebook_posts import crud, schemas
+from phiphi.api.projects.gathers.apify_facebook_posts import models, schemas
 
 TEST_APIFY_FACEBOOK_POST_GATHER_CREATE = schemas.ApifyFacebookPostGatherCreate(
     description="Phoenix Apify Facebook Post Gather",
@@ -46,10 +47,18 @@ def seed_test_apify_facebook_post_gathers(session: Session) -> None:
     ]
 
     for apify_facebook_gather in apify_facebook_gathers:
-        crud.create_apify_facebook_post_gather(
-            session=session, project_id=1, gather_data=apify_facebook_gather
+        gather_child_crud.create_child_gather(
+            session=session,
+            project_id=2,
+            request_schema=apify_facebook_gather,
+            child_model=models.ApifyFacebookPostGather,
+            response_schema=schemas.ApifyFacebookPostGatherResponse,
         )
 
-    crud.create_apify_facebook_post_gather(
-        session=session, project_id=2, gather_data=TEST_APIFY_FACEBOOK_POST_GATHER_CREATE_3
+    gather_child_crud.create_child_gather(
+        session=session,
+        project_id=2,
+        request_schema=TEST_APIFY_FACEBOOK_POST_GATHER_CREATE_3,
+        child_model=models.ApifyFacebookPostGather,
+        response_schema=schemas.ApifyFacebookPostGatherResponse,
     )

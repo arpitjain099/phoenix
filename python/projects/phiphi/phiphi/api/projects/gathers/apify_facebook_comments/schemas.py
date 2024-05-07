@@ -54,7 +54,7 @@ class ApifyFacebookCommentGatherResponse(
     model_config = pydantic.ConfigDict(from_attributes=True)
 
 
-class ApifyFacebookCommentGatherCreate(ApifyFacebookCommentGatherBase):
+class ApifyFacebookCommentGatherCreate(ApifyFacebookCommentGatherBase, gather_schemas.GatherCreate):
     """Apify Facebook Comments  Gather create schema.
 
     Properties to receive via API on creation.

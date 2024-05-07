@@ -44,7 +44,7 @@ class ApifyFacebookPostGatherResponse(gather_schemas.GatherResponse, ApifyFacebo
     model_config = pydantic.ConfigDict(from_attributes=True)
 
 
-class ApifyFacebookPostGatherCreate(ApifyFacebookPostGatherBase):
+class ApifyFacebookPostGatherCreate(gather_schemas.GatherCreate, ApifyFacebookPostGatherBase):
     """Apify Gather create schema.
 
     Properties to receive via API on creation.
