@@ -39,6 +39,10 @@ spec:
             value: {{ .Values.api.first_admin_user_display_name | quote }}
           - name: HEADER_AUTH_NAME
             value: {{ .Values.api.header_auth_name | quote}}
+          # There are alot of problems with setting the forwarded allow ips when used in the cli command.
+          # For instances you have to do `--forwarded-allow-ips=*` with no quotes (double or single) around the *
+          - name: FORWARDED_ALLOW_IPS
+            value: {{ .Values.api.forwarded_allow_ips | quote}}
           - name: INCLUDE_INSECURE_AUTH
           {{- if .Values.use_local_insecure_auth }}
             value: "true"

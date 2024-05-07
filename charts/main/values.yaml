@@ -36,6 +36,9 @@ api:
   first_admin_user_email: "buildup@datavaluepeople.com"
   first_admin_user_display_name: "Buildup"
   header_auth_name: "x-auth-request-email"
+  # Using * as since it is not possible to reach the api not via the
+  # ingress it is not a security risk
+  forwarded_allow_ips: "*"
 
   ###################
   # Example secrets
