@@ -4,51 +4,97 @@
 #
 #    pip-compile projects/phiphi//requirements.in
 #
+aiosqlite==0.20.0
+    # via prefect
 alembic==1.13.1
-    # via -r projects/phiphi//requirements.in
+    # via
+    #   -r projects/phiphi//requirements.in
+    #   prefect
 annotated-types==0.6.0
     # via pydantic
-anyio==4.3.0
+anyio==3.7.1
     # via
     #   httpx
+    #   prefect
     #   starlette
     #   watchfiles
+apprise==1.7.6
+    # via prefect
+asgi-lifespan==2.1.0
+    # via prefect
+async-timeout==4.0.3
+    # via asyncpg
+asyncpg==0.29.0
+    # via prefect
+attrs==23.2.0
+    # via
+    #   jsonschema
+    #   referencing
 build==1.0.3
     # via
     #   -r projects/phiphi/../../dev-requirements.txt
     #   pip-tools
+cachetools==5.3.3
+    # via
+    #   google-auth
+    #   prefect
 certifi==2024.2.2
     # via
+    #   apprise
     #   httpcore
     #   httpx
+    #   kubernetes
+    #   requests
+cffi==1.16.0
+    # via cryptography
 cfgv==3.4.0
     # via
     #   -r projects/phiphi/../../dev-requirements.txt
     #   pre-commit
+charset-normalizer==3.3.2
+    # via requests
 click==8.1.7
     # via
     #   -r projects/phiphi/../../dev-requirements.txt
+    #   apprise
     #   pip-tools
+    #   prefect
     #   typer
     #   uvicorn
+cloudpickle==3.0.0
+    # via prefect
+colorama==0.4.6
+    # via griffe
+coolname==2.2.0
+    # via prefect
 coverage[toml]==7.4.1
     # via
     #   -r projects/phiphi/../../dev-requirements.txt
     #   coverage
     #   pytest-cov
+croniter==2.0.5
+    # via prefect
+cryptography==42.0.7
+    # via prefect
+dateparser==1.2.0
+    # via prefect
 distlib==0.3.8
     # via
     #   -r projects/phiphi/../../dev-requirements.txt
     #   virtualenv
 dnspython==2.6.1
     # via email-validator
+docker==6.1.3
+    # via prefect
 email-validator==2.1.1
-    # via fastapi
+    # via
+    #   fastapi
+    #   pydantic
 fastapi[all]==0.111.0
     # via
     #   -r projects/phiphi//requirements.in
     #   fastapi-cli
-fastapi-cli==0.0.2
+fastapi-cli==0.0.3
     # via fastapi
 filelock==3.13.1
     # via
@@ -56,18 +102,40 @@ filelock==3.13.1
     #   virtualenv
 freezegun==1.5.0
     # via pytest-freezegun
+fsspec==2024.3.1
+    # via prefect
+google-auth==2.29.0
+    # via kubernetes
+graphviz==0.20.3
+    # via prefect
 greenlet==3.0.3
     # via sqlalchemy
+griffe==0.44.0
+    # via prefect
 h11==0.14.0
     # via
     #   httpcore
     #   uvicorn
-httpcore==1.0.5
+h2==4.1.0
     # via httpx
+hpack==4.0.0
+    # via h2
+httpcore==1.0.5
+    # via
+    #   httpx
+    #   prefect
 httptools==0.6.1
     # via uvicorn
-httpx==0.27.0
-    # via fastapi
+httpx[http2]==0.27.0
+    # via
+    #   fastapi
+    #   prefect
+humanize==4.9.0
+    # via
+    #   jinja2-humanize-extension
+    #   prefect
+hyperframe==6.0.1
+    # via h2
 identify==2.5.33
     # via
     #   -r projects/phiphi/../../dev-requirements.txt
@@ -77,16 +145,38 @@ idna==3.7
     #   anyio
     #   email-validator
     #   httpx
+    #   requests
+importlib-resources==6.1.3
+    # via prefect
 iniconfig==2.0.0
     # via
     #   -r projects/phiphi/../../dev-requirements.txt
     #   pytest
 itsdangerous==2.2.0
-    # via fastapi
+    # via
+    #   fastapi
+    #   prefect
 jinja2==3.1.4
-    # via fastapi
+    # via
+    #   fastapi
+    #   jinja2-humanize-extension
+    #   prefect
+jinja2-humanize-extension==0.4.0
+    # via prefect
+jsonpatch==1.33
+    # via prefect
+jsonpointer==2.4
+    # via jsonpatch
+jsonschema==4.22.0
+    # via prefect
+jsonschema-specifications==2023.12.1
+    # via jsonschema
+kubernetes==29.0.0
+    # via prefect
 mako==1.3.3
     # via alembic
+markdown==3.6
+    # via apprise
 markdown-it-py==3.0.0
     # via rich
 markupsafe==2.1.5
@@ -105,13 +195,25 @@ nodeenv==1.8.0
     # via
     #   -r projects/phiphi/../../dev-requirements.txt
     #   pre-commit
+oauthlib==3.2.2
+    # via
+    #   kubernetes
+    #   requests-oauthlib
 orjson==3.10.3
-    # via fastapi
+    # via
+    #   fastapi
+    #   prefect
 packaging==23.2
     # via
     #   -r projects/phiphi/../../dev-requirements.txt
     #   build
+    #   docker
+    #   prefect
     #   pytest
+pathspec==0.12.1
+    # via prefect
+pendulum==2.1.2
+    # via prefect
 pip-tools==7.3.0
     # via -r projects/phiphi/../../dev-requirements.txt
 platformdirs==4.2.0
@@ -124,15 +226,28 @@ pluggy==1.4.0
     #   pytest
 pre-commit==3.6.0
     # via -r projects/phiphi/../../dev-requirements.txt
+prefect==2.18.3
+    # via -r projects/phiphi//requirements.in
 psycopg==3.1.18
     # via -r projects/phiphi//requirements.in
-pydantic==2.7.1
+pyasn1==0.6.0
+    # via
+    #   pyasn1-modules
+    #   rsa
+pyasn1-modules==0.4.0
+    # via google-auth
+pycparser==2.22
+    # via cffi
+pydantic[email]==2.7.1
     # via
     #   fastapi
+    #   prefect
     #   pydantic-extra-types
     #   pydantic-settings
 pydantic-core==2.18.2
-    # via pydantic
+    # via
+    #   prefect
+    #   pydantic
 pydantic-extra-types==2.7.0
     # via fastapi
 pydantic-settings==2.2.1
@@ -153,60 +268,134 @@ pytest-cov==4.1.0
 pytest-freezegun==0.4.2
     # via -r projects/phiphi//requirements.in
 python-dateutil==2.9.0.post0
-    # via freezegun
+    # via
+    #   croniter
+    #   dateparser
+    #   freezegun
+    #   kubernetes
+    #   pendulum
+    #   prefect
 python-dotenv==1.0.1
     # via
     #   pydantic-settings
     #   uvicorn
 python-multipart==0.0.9
-    # via fastapi
+    # via
+    #   fastapi
+    #   prefect
 python-slugify==8.0.4
-    # via -r projects/phiphi//requirements.in
+    # via
+    #   -r projects/phiphi//requirements.in
+    #   prefect
+pytz==2024.1
+    # via
+    #   croniter
+    #   dateparser
+    #   prefect
+pytzdata==2020.1
+    # via pendulum
 pyyaml==6.0.1
     # via
     #   -r projects/phiphi/../../dev-requirements.txt
+    #   apprise
     #   fastapi
+    #   kubernetes
     #   pre-commit
+    #   prefect
     #   uvicorn
+readchar==4.0.6
+    # via prefect
+referencing==0.35.1
+    # via
+    #   jsonschema
+    #   jsonschema-specifications
+regex==2024.4.28
+    # via dateparser
+requests==2.31.0
+    # via
+    #   apprise
+    #   docker
+    #   kubernetes
+    #   requests-oauthlib
+requests-oauthlib==2.0.0
+    # via
+    #   apprise
+    #   kubernetes
+rfc3339-validator==0.1.4
+    # via prefect
 rich==13.7.1
-    # via typer
+    # via
+    #   prefect
+    #   typer
+rpds-py==0.18.1
+    # via
+    #   jsonschema
+    #   referencing
+rsa==4.9
+    # via google-auth
+ruamel-yaml==0.18.6
+    # via prefect
+ruamel-yaml-clib==0.2.8
+    # via ruamel-yaml
 ruff==0.2.1
     # via -r projects/phiphi/../../dev-requirements.txt
 shellingham==1.5.4
     # via typer
 six==1.16.0
-    # via python-dateutil
+    # via
+    #   kubernetes
+    #   python-dateutil
+    #   rfc3339-validator
 sniffio==1.3.1
     # via
     #   anyio
+    #   asgi-lifespan
     #   httpx
-sqlalchemy==2.0.30
+    #   prefect
+sqlalchemy[asyncio]==2.0.30
     # via
     #   -r projects/phiphi//requirements.in
     #   alembic
+    #   prefect
 starlette==0.37.2
     # via fastapi
 text-unidecode==1.3
     # via python-slugify
+toml==0.10.2
+    # via prefect
 typer==0.12.3
-    # via fastapi-cli
+    # via
+    #   fastapi-cli
+    #   prefect
 typing-extensions==4.9.0
     # via
     #   -r projects/phiphi/../../dev-requirements.txt
+    #   aiosqlite
     #   alembic
     #   fastapi
     #   mypy
+    #   prefect
     #   psycopg
     #   pydantic
     #   pydantic-core
     #   sqlalchemy
     #   typer
+tzlocal==5.2
+    # via dateparser
 ujson==5.9.0
-    # via fastapi
-uvicorn[standard]==0.29.0
+    # via
+    #   fastapi
+    #   prefect
+urllib3==2.2.1
+    # via
+    #   docker
+    #   kubernetes
+    #   requests
+uvicorn[standard]==0.28.1
     # via
     #   fastapi
     #   fastapi-cli
+    #   prefect
     #   uvicorn
 uvloop==0.19.0
     # via uvicorn
@@ -216,8 +405,14 @@ virtualenv==20.25.0
     #   pre-commit
 watchfiles==0.21.0
     # via uvicorn
+websocket-client==1.8.0
+    # via
+    #   docker
+    #   kubernetes
 websockets==12.0
-    # via uvicorn
+    # via
+    #   prefect
+    #   uvicorn
 wheel==0.42.0
     # via
     #   -r projects/phiphi/../../dev-requirements.txt
