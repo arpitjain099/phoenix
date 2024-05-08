@@ -48,17 +48,17 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 				header: translate("gathers.fields.description"),
 			},
 			{
-				id: "start_date",
-				accessorKey: "start_date",
-				header: translate("gathers.fields.start_date"),
+				id: "only_posts_older_than",
+				accessorKey: "only_posts_older_than",
+				header: translate("gathers.fields.only_posts_older_than"),
 				cell: function render({ getValue }) {
 					return <DateField value={getValue<any>()} />;
 				},
 			},
 			{
-				id: "end_date",
-				accessorKey: "end_date",
-				header: translate("gathers.fields.end_date"),
+				id: "only_posts_newer_than",
+				accessorKey: "only_posts_newer_than",
+				header: translate("gathers.fields.only_posts_newer_than"),
 				cell: function render({ getValue }) {
 					return <DateField value={getValue<any>()} />;
 				},

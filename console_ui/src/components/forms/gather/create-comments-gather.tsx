@@ -4,11 +4,13 @@ import { useTranslate } from "@refinedev/core";
 import { IconInfoCircle } from "@tabler/icons";
 import { GetInputProps } from "@mantine/form/lib/types";
 import { ProjectSchema } from "src/interfaces/project";
+import GatherInputs from "@components/inputs/gather-inputs";
 
 // Define separate validation rules for comments
 export function getCommentValidationRules(data: any) {
 	if (data.data_type === "comments") {
 		return {
+			post_url_list: data.post_url_list.length <= 0 ? "Required" : null,
 			limit_comments_per_post:
 				data.limit_comments_per_post === undefined ? "Required" : null,
 			sort_comments_by: !data.sort_comments_by ? "Required" : null,
@@ -19,9 +21,15 @@ export function getCommentValidationRules(data: any) {
 
 interface Props {
 	getInputProps: GetInputProps<ProjectSchema>;
+	inputList: string[];
+	setInputList: any;
 }
 
-const CreateCommentsGatherForm: React.FC<Props> = ({ getInputProps }) => {
+const CreateCommentsGatherForm: React.FC<Props> = ({
+	getInputProps,
+	inputList,
+	setInputList,
+}) => {
 	const translate = useTranslate();
 	return (
 		<>
@@ -44,8 +52,8 @@ const CreateCommentsGatherForm: React.FC<Props> = ({ getInputProps }) => {
 			/>
 			<Checkbox
 				mt="sm"
-				label={translate("gathers.fields.comment_replies")}
-				{...getInputProps("comment_replies", { type: "checkbox" })}
+				label={translate("gathers.fields.include_comment_replies")}
+				{...getInputProps("include_comment_replies", { type: "checkbox" })}
 			/>
 			<Select
 				mt="lg"
@@ -68,6 +76,28 @@ const CreateCommentsGatherForm: React.FC<Props> = ({ getInputProps }) => {
 					{ label: "Newest First", value: "newest_first" },
 					{ label: "None-filtered", value: "none_filtered" },
 				]}
+			/>
+			<GatherInputs
+				label={
+					<div className="flex items-center">
+						<Tooltip label={translate("gathers.fields.input.data_placeholder")}>
+							<span className="flex">
+								<IconInfoCircle size={12} />
+							</span>
+						</Tooltip>
+						{translate("gathers.fields.input.data")}
+						<span className="text-red-500 ml-1">*</span>
+						{inputList.length > 0 && (
+							<span className="italic ml-10">
+								{inputList.length} input value{inputList.length > 1 && "s"}
+							</span>
+						)}
+					</div>
+				}
+				placeholder={translate("gathers.fields.input.data_placeholder")}
+				data={inputList}
+				setData={setInputList}
+				{...getInputProps("post_url_list")}
 			/>
 		</>
 	);

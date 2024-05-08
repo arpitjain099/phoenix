@@ -42,16 +42,14 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 		project_id: Number(projectid),
 		data_type: "",
 		description: "",
-		input: {
-			type: "",
-			data: [] as string[],
-		},
-		start_date: today,
-		end_date: tomorrow,
+		account_url_list: [] as string[],
+		only_posts_older_than: today,
+		only_posts_newer_than: tomorrow,
 		limit_posts_per_account: 1000,
 		limit_comments_per_post: 1000,
-		comment_replies: false,
+		include_comment_replies: false,
 		sort_comments_by: "facebook_defaults",
+		post_url_list: [] as string[],
 	};
 
 	const {
@@ -61,7 +59,6 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 		setFieldValue,
 		validate,
 		isValid,
-		errors,
 		reset,
 		refineCore: { formLoading },
 	} = useForm({
@@ -76,13 +73,6 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 			source: values.source.length <= 0 ? "Required" : null,
 			platform: values.platform.length <= 0 ? "Required" : null,
 			data_type: values.data_type.length <= 0 ? "Required" : null,
-			input:
-				values.input.type.length > 0 && values.input.data.length > 0
-					? null
-					: {
-							type: values.input.type.length <= 0 ? "Required" : null,
-							data: values.input.data.length <= 0 ? "Required" : null,
-						},
 		};
 		if (values && values.data_type === "posts") {
 			return {
@@ -113,8 +103,9 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 				if (source === "apify") {
 					if (formValues.data_type === "posts") {
 						const {
+							post_url_list,
 							limit_comments_per_post,
-							comment_replies,
+							include_comment_replies,
 							sort_comments_by,
 							...data
 						} = filteredValues; // Exclude attributes for data_type=comment from values
@@ -133,8 +124,13 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 							}
 						);
 					} else if (formValues.data_type === "comments") {
-						const { start_date, end_date, limit_posts_per_account, ...data } =
-							filteredValues; // Exclude attributes for data_type=posts from values
+						const {
+							account_url_list,
+							only_posts_older_than,
+							only_posts_newer_than,
+							limit_posts_per_account,
+							...data
+						} = filteredValues; // Exclude attributes for data_type=posts from values
 						mutate(
 							{
 								resource: `projects/${formValues.project_id}/gathers/apify`,
@@ -159,16 +155,12 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 
 	useEffect(() => {
 		if (formValues.data_type === "posts") {
-			setFieldValue("input.type", "account_url_list");
+			setFieldValue("account_url_list", inputList);
 		}
 		if (formValues.data_type === "comments") {
-			setFieldValue("input.type", "post_url_list");
+			setFieldValue("post_url_list", inputList);
 		}
-	}, [formValues.data_type, setFieldValue]);
-
-	useEffect(() => {
-		setFieldValue("input.data", inputList);
-	}, [inputList, setFieldValue]);
+	}, [formValues.data_type, inputList, setFieldValue]);
 
 	useEffect(() => {
 		setFieldValue("project_id", Number(projectid));
@@ -228,12 +220,6 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 				{...getInputProps("project_id")}
 				{...projectSelectProps}
 			/>
-			{formValues.data_type === "posts" && (
-				<CreatePostsGatherForm getInputProps={getInputProps} />
-			)}
-			{formValues.data_type === "comments" && (
-				<CreateCommentsGatherForm getInputProps={getInputProps} />
-			)}
 			<Textarea
 				mt="lg"
 				label={
@@ -248,29 +234,20 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 				}
 				{...getInputProps("description")}
 			/>
-			<GatherInputs
-				label={
-					<div className="flex items-center">
-						<Tooltip label={translate("gathers.fields.input.data_placeholder")}>
-							<span className="flex">
-								<IconInfoCircle size={12} />
-							</span>
-						</Tooltip>
-						{translate("gathers.fields.input.data")}
-						<span className="text-red-500 ml-1">*</span>
-						{inputList.length > 0 && (
-							<span className="italic ml-10">
-								{inputList.length} input value{inputList.length > 1 && "s"}
-							</span>
-						)}
-					</div>
-				}
-				placeholder={translate("gathers.fields.input.data_placeholder")}
-				data={inputList}
-				setData={setInputList}
-				{...getInputProps("input.data")}
-				error={(errors?.input as { data?: string })?.data}
-			/>
+			{formValues.data_type === "posts" && (
+				<CreatePostsGatherForm
+					getInputProps={getInputProps}
+					inputList={inputList}
+					setInputList={setInputList}
+				/>
+			)}
+			{formValues.data_type === "comments" && (
+				<CreateCommentsGatherForm
+					getInputProps={getInputProps}
+					inputList={inputList}
+					setInputList={setInputList}
+				/>
+			)}
 		</Create>
 	);
 };
