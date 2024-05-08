@@ -31,6 +31,7 @@ typecheck: check_path_exists
 			mypy_cmd="mypy $(path)"; \
 		fi; \
 	fi; \
+	mypy_cmd="$${mypy_cmd} --no-incremental"; \
 	echo "Running mypy command: $$mypy_cmd"; \
 	eval $$mypy_cmd
 
