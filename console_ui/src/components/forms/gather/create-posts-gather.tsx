@@ -3,8 +3,36 @@ import { NumberInput, Tooltip } from "@mantine/core";
 import { useTranslate } from "@refinedev/core";
 import { IconInfoCircle } from "@tabler/icons";
 import { GetInputProps } from "@mantine/form/lib/types";
-import { ProjectSchema } from "src/interfaces/interface";
+import { ProjectSchema } from "src/interfaces/project";
 import { DatePicker } from "@mantine/dates";
+
+// Define separate validation rules for posts
+export function getPostValidationRules(data: any, today: Date) {
+	if (data.data_type === "posts") {
+		const validationRules: any = {};
+
+		validationRules.start_date = !data.start_date ? "Required" : null;
+		validationRules.end_date = !data.end_date ? "Required" : null;
+		validationRules.limit_posts_per_account =
+			data.limit_posts_per_account === undefined ? "Required" : null;
+
+		if (data.start_date && data.end_date) {
+			const startDate = new Date(data.start_date);
+			const endDate = new Date(data.end_date);
+
+			if (startDate > today) {
+				validationRules.start_date = "Start date cannot be in the future";
+			}
+			if (startDate > endDate) {
+				validationRules.start_date = "Start date cannot be after end date";
+				validationRules.end_date = "End date cannot be before start date";
+			}
+		}
+
+		return validationRules;
+	}
+	return {};
+}
 
 interface Props {
 	getInputProps: GetInputProps<ProjectSchema>;

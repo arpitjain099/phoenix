@@ -3,7 +3,19 @@ import { Checkbox, NumberInput, Select, Tooltip } from "@mantine/core";
 import { useTranslate } from "@refinedev/core";
 import { IconInfoCircle } from "@tabler/icons";
 import { GetInputProps } from "@mantine/form/lib/types";
-import { ProjectSchema } from "src/interfaces/interface";
+import { ProjectSchema } from "src/interfaces/project";
+
+// Define separate validation rules for comments
+export function getCommentValidationRules(data: any) {
+	if (data.data_type === "comments") {
+		return {
+			limit_comments_per_post:
+				data.limit_comments_per_post === undefined ? "Required" : null,
+			sort_comments_by: !data.sort_comments_by ? "Required" : null,
+		};
+	}
+	return {};
+}
 
 interface Props {
 	getInputProps: GetInputProps<ProjectSchema>;

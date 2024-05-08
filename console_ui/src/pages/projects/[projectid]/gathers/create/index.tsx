@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
 	IResourceComponentsProps,
@@ -10,8 +11,12 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { IconInfoCircle } from "@tabler/icons";
 import GatherInputs from "@components/inputs/gather-inputs";
-import CreateCommentsGatherForm from "@components/forms/gather/create-comments-gather";
-import CreatePostsGatherForm from "@components/forms/gather/create-posts-gather";
+import CreateCommentsGatherForm, {
+	getCommentValidationRules,
+} from "@components/forms/gather/create-comments-gather";
+import CreatePostsGatherForm, {
+	getPostValidationRules,
+} from "@components/forms/gather/create-posts-gather";
 import BreadcrumbsComponent from "@components/breadcrumbs";
 
 export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
@@ -30,77 +35,69 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 		{ title: translate("actions.create"), href: "create" },
 	];
 
+	// Define initial values for useForm hook
+	const initialFormValues = {
+		source: "apify",
+		platform: "facebook",
+		project_id: Number(projectid),
+		data_type: "",
+		description: "",
+		input: {
+			type: "",
+			data: [] as string[],
+		},
+		start_date: today,
+		end_date: tomorrow,
+		limit_posts_per_account: 1000,
+		limit_comments_per_post: 1000,
+		comment_replies: false,
+		sort_comments_by: "facebook_defaults",
+	};
+
 	const {
 		getInputProps,
 		saveButtonProps,
-		values,
+		values: formValues,
 		setFieldValue,
 		validate,
 		isValid,
+		errors,
 		reset,
 		refineCore: { formLoading },
 	} = useForm({
-		initialValues: {
-			source: "apify",
-			platform: "facebook",
-			project_id: Number(projectid),
-			data_type: "",
-			description: "",
-			input: {
-				type: "author_url_list",
-				data: [] as string[],
-			},
-			start_date: today,
-			end_date: tomorrow,
-			limit_posts_per_account: 1000,
-			limit_comments_per_post: 1000,
-			comment_replies: false,
-			sort_comments_by: "facebook_defaults",
-		},
-		validate: {
-			source: (value) => (value.length <= 0 ? "Required" : null),
-			platform: (value) => (value.length <= 0 ? "Required" : null),
-			data_type: (value) => (value.length <= 0 ? "Required" : null),
-			input: {
-				type: (value) => (value.length <= 0 ? "Required" : null),
-				data: (value) => (value.length <= 0 ? "Required" : null),
-			},
-			start_date: (value) => {
-				if (values.data_type === "posts" && !value) return "Required";
-				if (values.data_type === "posts") {
-					const startDate = new Date(value);
-					const endDate = new Date(values.end_date);
-					if (startDate > today) return "Start date cannot be in the future";
-					if (startDate > endDate) return "Start date cannot be after end date";
-				}
-				return null;
-			},
-			end_date: (value) => {
-				if (values.data_type === "posts" && !value) return "Required";
-				if (values.data_type === "posts") {
-					const endDate = new Date(value);
-					const startDate = new Date(values.start_date);
-					if (endDate < startDate)
-						return "End date cannot be before start date";
-				}
-				return null;
-			},
-			limit_posts_per_account: (value) => {
-				if (values.data_type === "posts" && value === undefined)
-					return "Required";
-				return null;
-			},
-			limit_comments_per_post: (value) => {
-				if (values.data_type === "comments" && value === undefined)
-					return "Required";
-				return null;
-			},
-			sort_comments_by: (value) => {
-				if (values.data_type === "posts" && !value) return "Required";
-				return null;
-			},
-		},
+		clearInputErrorOnChange: true,
+		initialValues: initialFormValues,
+		validate: (values) => getValidationRules(values),
 	});
+
+	// Define separate validation rules based on data type
+	function getValidationRules(values: any): any {
+		const commonRules = {
+			source: values.source.length <= 0 ? "Required" : null,
+			platform: values.platform.length <= 0 ? "Required" : null,
+			data_type: values.data_type.length <= 0 ? "Required" : null,
+			input:
+				values.input.type.length > 0 && values.input.data.length > 0
+					? null
+					: {
+							type: values.input.type.length <= 0 ? "Required" : null,
+							data: values.input.data.length <= 0 ? "Required" : null,
+						},
+		};
+		if (values && values.data_type === "posts") {
+			return {
+				...commonRules,
+				...getPostValidationRules(values, today),
+			};
+		}
+		if (values && values.data_type === "comments") {
+			return {
+				...commonRules,
+				...getCommentValidationRules(values),
+			};
+		}
+		return commonRules;
+	}
 
 	const { selectProps: projectSelectProps } = useSelect({
 		resource: "projects",
@@ -111,10 +108,10 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 
 	const handleSave = async () => {
 		if (isValid()) {
-			if (values.project_id) {
-				const { source, ...filteredValues } = values; // Exclude 'source' from values
+			if (formValues.project_id) {
+				const { source, ...filteredValues } = formValues; // Exclude 'source' from values
 				if (source === "apify") {
-					if (values.data_type === "posts") {
+					if (formValues.data_type === "posts") {
 						const {
 							limit_comments_per_post,
 							comment_replies,
@@ -123,31 +120,31 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 						} = filteredValues; // Exclude attributes for data_type=comment from values
 						mutate(
 							{
-								resource: `projects/${values.project_id}/gathers/apify`,
+								resource: `projects/${formValues.project_id}/gathers/apify`,
 								values: data,
 							},
 							{
 								onSuccess: async () => {
 									await Promise.all([setInputList([]), reset()]);
 									setTimeout(() => {
-										router.push(`/projects/${values.project_id}/gathers`);
+										router.push(`/projects/${formValues.project_id}/gathers`);
 									}, 2000);
 								},
 							}
 						);
-					} else if (values.data_type === "comments") {
+					} else if (formValues.data_type === "comments") {
 						const { start_date, end_date, limit_posts_per_account, ...data } =
 							filteredValues; // Exclude attributes for data_type=posts from values
 						mutate(
 							{
-								resource: `projects/${values.project_id}/gathers/apify`,
+								resource: `projects/${formValues.project_id}/gathers/apify`,
 								values: data,
 							},
 							{
 								onSuccess: async () => {
 									await Promise.all([setInputList([]), reset()]);
 									setTimeout(() => {
-										router.push(`/projects/${values.project_id}/gathers`);
+										router.push(`/projects/${formValues.project_id}/gathers`);
 									}, 2000);
 								},
 							}
@@ -161,8 +158,21 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 	};
 
 	useEffect(() => {
+		if (formValues.data_type === "posts") {
+			setFieldValue("input.type", "account_url_list");
+		}
+		if (formValues.data_type === "comments") {
+			setFieldValue("input.type", "post_url_list");
+		}
+	}, [formValues.data_type, setFieldValue]);
+
+	useEffect(() => {
 		setFieldValue("input.data", inputList);
 	}, [inputList, setFieldValue]);
+
+	useEffect(() => {
+		setFieldValue("project_id", Number(projectid));
+	}, [projectid, setFieldValue]);
 
 	return (
 		<Create
@@ -218,10 +228,10 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 				{...getInputProps("project_id")}
 				{...projectSelectProps}
 			/>
-			{values.data_type === "posts" && (
+			{formValues.data_type === "posts" && (
 				<CreatePostsGatherForm getInputProps={getInputProps} />
 			)}
-			{values.data_type === "comments" && (
+			{formValues.data_type === "comments" && (
 				<CreateCommentsGatherForm getInputProps={getInputProps} />
 			)}
 			<Textarea
@@ -259,6 +269,7 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 				data={inputList}
 				setData={setInputList}
 				{...getInputProps("input.data")}
+				error={(errors?.input as { data?: string })?.data}
 			/>
 		</Create>
 	);

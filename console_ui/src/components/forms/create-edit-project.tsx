@@ -10,7 +10,7 @@ import {
 import { useTranslate } from "@refinedev/core";
 import { IconInfoCircle } from "@tabler/icons";
 import { GetInputProps } from "@mantine/form/lib/types";
-import { ProjectSchema } from "src/interfaces/interface";
+import { ProjectSchema } from "src/interfaces/project";
 
 interface Props {
 	getInputProps: GetInputProps<ProjectSchema>;
