@@ -18,6 +18,10 @@ anyio==3.7.1
     #   prefect
     #   starlette
     #   watchfiles
+apify-client==1.6.4
+    # via -r projects/phiphi//requirements.in
+apify-shared==1.1.1
+    # via apify-client
 apprise==1.7.6
     # via prefect
 asgi-lifespan==2.1.0
@@ -128,6 +132,7 @@ httptools==0.6.1
     # via uvicorn
 httpx[http2]==0.27.0
     # via
+    #   apify-client
     #   fastapi
     #   prefect
 humanize==4.9.0
