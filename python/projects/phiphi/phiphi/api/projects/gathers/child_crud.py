@@ -13,7 +13,7 @@ U = TypeVar("U", bound=gather_model.Gather)  # child model
 
 
 def create_child_gather(
-    response_schema: T,
+    response_schema: Type[T],
     session: sqlalchemy.orm.Session,
     project_id: int,
     request_schema: Z,
