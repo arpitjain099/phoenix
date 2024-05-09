@@ -1,7 +1,7 @@
 """Schemas for apify facebook comments gathers."""
 
 from enum import Enum
-from typing import Annotated
+from typing import Annotated, Literal
 
 import pydantic
 from phiphi.api.projects.gathers import schemas as gather_schemas
@@ -28,18 +28,27 @@ class ApifyFacebookCommentGatherBase(gather_schemas.GatherBase):
         int,
         pydantic.Field(
             default=1000,
-            description="",
+            description="Limit the number of comments per post",
         ),
     ]
     sort_comments_by: Annotated[
         SortComment,
-        pydantic.Field(description="", default=SortComment.facebook_default),
+        pydantic.Field(
+            description="Sort the comments to gather. Can be used with `limit-comments_per_posts` "
+            "to reduce costs and increase the relevance of the comments gathered.",
+            default=SortComment.facebook_default,
+        ),
     ]
     include_comment_replies: Annotated[
         bool,
         pydantic.Field(
-            description="",
+            description="Includes the nested replies of comments.",
         ),
+    ]
+
+    data_type: Annotated[
+        Literal[gather_schemas.DataType.comments],
+        pydantic.Field(description="The data type of the gather"),
     ]
 
 
