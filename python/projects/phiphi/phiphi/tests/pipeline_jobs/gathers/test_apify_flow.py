@@ -1,6 +1,6 @@
 """Tests for Apify gathers."""
 
-from phiphi.pipeline_jobs.gathers import apify_flow, schemas
+from phiphi.pipeline_jobs.gathers import apify_flow, apify_input_schemas
 
 
 def manual_test_trigger_apify_scrape_and_batch_download():
@@ -11,7 +11,7 @@ def manual_test_trigger_apify_scrape_and_batch_download():
     To use this test, replace "MY_APIFY_TOKEN" with your own Apify API token, and then function
     manually.
     """
-    run_input = schemas.ApifyFacebookPostsInput(
+    run_input = apify_input_schemas.ApifyFacebookPostsInput(
         only_posts_older_than="2024-04-04",
         only_posts_newer_than="2024-01-03",
         results_per_url_limit=4,

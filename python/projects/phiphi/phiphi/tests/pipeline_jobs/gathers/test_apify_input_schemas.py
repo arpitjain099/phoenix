@@ -1,6 +1,6 @@
 """Tests for the Apify gather schemas."""
 
-from phiphi.pipeline_jobs.gathers import schemas
+from phiphi.pipeline_jobs.gathers import apify_input_schemas as schemas
 
 
 def test_facebook_posts_scraper_input_to_dict():

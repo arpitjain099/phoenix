@@ -7,14 +7,14 @@ from typing import Dict, List, Literal, Union
 
 import prefect
 from apify_client import ApifyClient
-from phiphi.pipeline_jobs.gathers import schemas
+from phiphi.pipeline_jobs.gathers import apify_input_schemas
 
 
 @prefect.task
 def trigger_apify_scrape_and_batch_download_results(
     apify_token: str,
     data_type: Literal["posts", "comments"],
-    run_input: Union[schemas.ApifyFacebookPostsInput],
+    run_input: Union[apify_input_schemas.ApifyFacebookPostsInput],
     batch_size: int = 100,
 ) -> None:
     """Scrape data using the Apify API and save them to JSON blobs in batches."""
