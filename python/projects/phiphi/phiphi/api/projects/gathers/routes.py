@@ -7,8 +7,6 @@ router = fastapi.APIRouter()
 router.include_router(child_routes.router)
 
 
-# REFACTORABLE: IF there are other gather subclasses, this should be refactored
-# to support polymorphic models and multiple return types
 @router.get("/projects/{project_id}/gathers/", response_model=list[schemas.GatherResponse])
 def get_gathers(
     session: deps.SessionDep, project_id: int, start: int = 0, end: int = 100

@@ -7,18 +7,22 @@ from phiphi.api.projects.gathers import models as gather_model
 from phiphi.api.projects.gathers import schemas as gather_schema
 
 # Define a generic type T
-T = TypeVar("T", bound=gather_schema.GatherResponse)  # Response schema
-Z = TypeVar("Z", bound=gather_schema.GatherCreate)  # Create schema
-U = TypeVar("U", bound=gather_model.Gather)  # child model
+response_schema_type = TypeVar(
+    "response_schema_type", bound=gather_schema.GatherResponse
+)  # Response schema
+create_schema_type = TypeVar(
+    "create_schema_type", bound=gather_schema.GatherCreate
+)  # Create schema
+child_model_type = TypeVar("child_model_type", bound=gather_model.Gather)  # child model
 
 
 def create_child_gather(
-    response_schema: Type[T],
+    response_schema: Type[response_schema_type],
     session: sqlalchemy.orm.Session,
     project_id: int,
-    request_schema: Z,
-    child_model: Type[U],
-) -> T:
+    request_schema: create_schema_type,
+    child_model: Type[child_model_type],
+) -> response_schema_type:
     """Create child gather."""
     project_crud.get_db_project_with_guard(session, project_id)
 
@@ -29,8 +33,6 @@ def create_child_gather(
     )
 
     child_type = f"{source.value}_{platform.value}_{data_type.value}"
-
-    print(child_model)
 
     db_apify_facebook_post_gather = child_model(
         **request_schema.dict(),
