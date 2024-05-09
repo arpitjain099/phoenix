@@ -20,7 +20,7 @@ def test_create_apify_facebook_comment_gather(reseed_tables, client: TestClient)
         "data_type": "comments",
     }
     project_id = 1
-    response = client.post(f"/projects/{project_id}/gathers/apify_facebook_comment", json=data)
+    response = client.post(f"/projects/{project_id}/gathers/apify_facebook_comments", json=data)
     assert response.status_code == 200
     gather = response.json()
     assert gather["description"] == data["description"]
