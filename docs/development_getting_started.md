@@ -96,7 +96,7 @@ To do this:
 - once the local cluster is up you should be redirected to the auth0 login page if you go to
   `http://api.phoenix.local/`
 
-## Prefect worker
+## Prefect worker [OPTIONAL]
 
 It is possible to have a prefect worker in the local cluster. This is useful for testing the
 prefect flow and the prefect worker. To do this:
