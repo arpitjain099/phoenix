@@ -32,3 +32,21 @@ def test_create_apify_facebook_comment_gather(reseed_tables, client: TestClient)
     assert gather["platform"] == "facebook"
     assert gather["data_type"] == "comments"
     assert gather["created_at"] == CREATED_TIME
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
+def test_data_type_apify_facebook_comment(reseed_tables, client: TestClient) -> None:
+    """Test create apify facebook comment gather."""
+    data = {
+        "description": "First apify gather",
+        "limit_comments_per_post": 1000,
+        "sort_comments_by": "facebook_default",
+        "post_url_list": ["https://buildup.org"],
+        "include_comment_replies": True,
+        "source": "apify",
+        "platform": "facebook",
+        "data_type": "posts",
+    }
+    project_id = 1
+    response = client.post(f"/projects/{project_id}/gathers/apify_facebook_comments", json=data)
+    assert response.status_code == 422
