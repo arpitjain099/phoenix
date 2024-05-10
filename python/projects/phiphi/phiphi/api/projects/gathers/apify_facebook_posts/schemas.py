@@ -1,6 +1,6 @@
 """Schemas for apify facebook post gathers."""
 
-from typing import Annotated, Literal
+from typing import Annotated
 
 import pydantic
 from phiphi.api.projects.gathers import schemas as gather_schemas
@@ -32,10 +32,6 @@ class ApifyFacebookPostGatherBase(gather_schemas.GatherBase):
         pydantic.Field(
             description="YYYY-MM-DD format",
         ),
-    ]
-    data_type: Annotated[
-        Literal[gather_schemas.DataType.posts],
-        pydantic.Field(description="The data type of the gather"),
     ]
 
 

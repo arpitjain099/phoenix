@@ -56,6 +56,7 @@ def make_create_child_gather_route(
     request_schema: Type[create_schema_type],
     response_schema: Type[response_schema_type],
     child_model: Type[child_model_type],
+    child_type: str,
 ) -> Callable[[int, create_schema_type, deps.SessionDep], response_schema_type]:
     """Returns a route function that creates a child gather using specific models."""
 
@@ -72,6 +73,7 @@ def make_create_child_gather_route(
             child_model=child_model,
             project_id=project_id,
             session=session,
+            child_type=child_type,
         )
 
     return create_child_gather
@@ -82,4 +84,4 @@ for key, (request_schema, response_schema, child_model) in list_of_child_gather_
     router.post(
         f"/projects/{{project_id}}/gathers/{key}",
         response_model=response_schema,  # The FastAPI route response model
-    )(make_create_child_gather_route(request_schema, response_schema, child_model))
+    )(make_create_child_gather_route(request_schema, response_schema, child_model, key))

@@ -1,7 +1,7 @@
 """Schemas for apify facebook comments gathers."""
 
 from enum import Enum
-from typing import Annotated, Literal
+from typing import Annotated
 
 import pydantic
 from phiphi.api.projects.gathers import schemas as gather_schemas
@@ -44,11 +44,6 @@ class ApifyFacebookCommentGatherBase(gather_schemas.GatherBase):
         pydantic.Field(
             description="Includes the nested replies of comments.",
         ),
-    ]
-
-    data_type: Annotated[
-        Literal[gather_schemas.DataType.comments],
-        pydantic.Field(description="The data type of the gather"),
     ]
 
 

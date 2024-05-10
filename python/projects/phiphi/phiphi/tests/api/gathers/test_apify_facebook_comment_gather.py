@@ -49,4 +49,6 @@ def test_data_type_apify_facebook_comment(reseed_tables, client: TestClient) -> 
     }
     project_id = 1
     response = client.post(f"/projects/{project_id}/gathers/apify_facebook_comments", json=data)
-    assert response.status_code == 422
+    json_response = response.json()
+    assert response.status_code == 200
+    assert json_response["data_type"] == "comments"

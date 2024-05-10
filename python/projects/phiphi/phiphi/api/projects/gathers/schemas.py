@@ -32,9 +32,6 @@ class GatherBase(pydantic.BaseModel):
     """
 
     description: Annotated[str, pydantic.Field(description="The description of the gather")]
-    platform: Annotated[Platform, pydantic.Field(description="The platform of the gather")]
-    data_type: Annotated[DataType, pydantic.Field(description="The data type of the gather")]
-    source: Annotated[Source, pydantic.Field(description="The data type of the gather")]
 
 
 class GatherResponse(GatherBase):
@@ -45,6 +42,9 @@ class GatherResponse(GatherBase):
 
     model_config = pydantic.ConfigDict(from_attributes=True)
     id: int
+    platform: Annotated[Platform, pydantic.Field(description="The platform of the gather")]
+    data_type: Annotated[DataType, pydantic.Field(description="The data type of the gather")]
+    source: Annotated[Source, pydantic.Field(description="The data type of the gather")]
     created_at: datetime.datetime
     updated_at: datetime.datetime
     project_id: int

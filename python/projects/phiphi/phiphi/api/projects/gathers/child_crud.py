@@ -22,20 +22,21 @@ def create_child_gather(
     project_id: int,
     request_schema: create_schema_type,
     child_model: Type[child_model_type],
+    child_type: str,
 ) -> response_schema_type:
     """Create child gather."""
     project_crud.get_db_project_with_guard(session, project_id)
 
-    source, platform, data_type = (
-        request_schema.source,
-        request_schema.platform,
-        request_schema.data_type,
-    )
-
-    child_type = f"{source.value}_{platform.value}_{data_type.value}"
+    split_child_type = child_type.split("_")
+    source = split_child_type[0]
+    platform = split_child_type[1]
+    data_type = split_child_type[2]
 
     db_apify_facebook_post_gather = child_model(
         **request_schema.dict(),
+        platform=platform,
+        data_type=data_type,
+        source=source,
         project_id=project_id,
         child_type=child_type,
     )
