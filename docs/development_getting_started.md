@@ -56,8 +56,7 @@ instance when using `k3s` you will need to add `<traefik-serivce-ip> phoenix.loc
 ## Setting secrets for local cluster
 
 There are no secrets needed for the default local cluster but other clusters need secrets to be
-set. The outputs of make commands for these other cluster should indicate where secrets should be
-set.
+set. If you are using the prefect-worker you will need to set the secrets for this.
 
 ## Running the Development Environment with tilt up
 
@@ -96,6 +95,19 @@ To do this:
 - update the `oidc_issuer_url` and `whitelist_domains` in cluster/local_with_auth/values.yaml
 - once the local cluster is up you should be redirected to the auth0 login page if you go to
   `http://api.phoenix.local/`
+
+## Prefect worker
+
+It is possible to have a prefect worker in the local cluster. This is useful for testing the
+prefect flow and the prefect worker. To do this:
+
+- Make a work pool and an API key in your prefect cloud app
+- set the prefect secrets in the `cluster/local/secrets.yaml` file, `prefect.apiKey` and
+  `prefect-worker.worker.cloudApiConfig`.
+- set the `prefect-worker.enabled` to `true` and `prefect-worker.worker.config.workPool` the
+  `cluster/local/values.yaml` file.
+- you can then create the deployments and run as needed. [Prefect
+  tutorial](https://docs.prefect.io/latest/guides/deployment/kubernetes/#define-a-flow)
 
 ## Hello world
 

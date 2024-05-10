@@ -8,7 +8,7 @@ setup_asdf:
 	asdf reshim
 
 # Variables to define paths and contexts
-LOCAL_DIR := clusters/local_with_auth
+LOCAL_DIR := clusters/local
 LOCAL_WITH_AUTH_DIR := clusters/local_with_auth
 DEV_DIR := clusters/dev
 EXAMPLE_SECRETS := charts/main/example_secrets.yaml
@@ -35,7 +35,7 @@ define tilt_clean
 endef
 
 up:
-	$(TILT) up
+	$(call tilt_up,$(LOCAL_DIR),Tiltfile,up)
 
 clean:
 	$(call tilt_clean,Tiltfile,default,microk8s)

@@ -266,3 +266,6 @@ oauth2-proxy:
     cookieSecret: "<SET>"
     clientID: "<SET>"
     clientSecret: "<SET>"
+
+prefect-worker:
+  enabled: false

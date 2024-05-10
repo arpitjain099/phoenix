@@ -27,3 +27,14 @@ superset:
       LOGIN_REDIRECT_URL = False
   extraSecretEnv:
     SUPERSET_SECRET_KEY: "this_is_an_in_secure_secret_key"
+
+prefect:
+  ## Get this from you api
+  apiKey: "<secret_to_set>"
+
+prefect-worker:
+  enabled: true
+  worker:
+    ## Account and workspace ID in secrets
+    config:
+      workPool: "phoenix-local-worker-pool"
