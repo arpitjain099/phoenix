@@ -3,9 +3,15 @@
 -r ../../dev-requirements.txt
 
 # Third party deps
+
+## Dev deps
+pytest-freezegun
+
+## DB management deps
+alembic
+
+## App deps
 fastapi[all]
 sqlalchemy
 psycopg
-alembic
-pytest-freezegun
 python-slugify
