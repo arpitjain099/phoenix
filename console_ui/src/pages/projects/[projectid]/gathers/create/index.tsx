@@ -12,10 +12,12 @@ import { useEffect, useState } from "react";
 import { IconInfoCircle } from "@tabler/icons";
 import GatherInputs from "@components/inputs/gather-inputs";
 import CreateCommentsGatherForm, {
+	commentFieldsToKeep,
 	getCommentValidationRules,
 } from "@components/forms/gather/create-comments-gather";
 import CreatePostsGatherForm, {
 	getPostValidationRules,
+	postFieldsToKeep,
 } from "@components/forms/gather/create-posts-gather";
 import BreadcrumbsComponent from "@components/breadcrumbs";
 
@@ -101,51 +103,33 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 			if (formValues.project_id) {
 				const { source, ...filteredValues } = formValues; // Exclude 'source' from values
 				if (source === "apify") {
+					// Define the list of fields to keep based on data_type
+					let fieldsToKeep: string[] = [];
 					if (formValues.data_type === "posts") {
-						const {
-							post_url_list,
-							limit_comments_per_post,
-							include_comment_replies,
-							sort_comments_by,
-							...data
-						} = filteredValues; // Exclude attributes for data_type=comment from values
-						mutate(
-							{
-								resource: `projects/${formValues.project_id}/gathers/apify`,
-								values: data,
-							},
-							{
-								onSuccess: async () => {
-									await Promise.all([setInputList([]), reset()]);
-									setTimeout(() => {
-										router.push(`/projects/${formValues.project_id}/gathers`);
-									}, 2000);
-								},
-							}
-						);
+						fieldsToKeep = [...postFieldsToKeep];
 					} else if (formValues.data_type === "comments") {
-						const {
-							account_url_list,
-							only_posts_older_than,
-							only_posts_newer_than,
-							limit_posts_per_account,
-							...data
-						} = filteredValues; // Exclude attributes for data_type=posts from values
-						mutate(
-							{
-								resource: `projects/${formValues.project_id}/gathers/apify`,
-								values: data,
-							},
-							{
-								onSuccess: async () => {
-									await Promise.all([setInputList([]), reset()]);
-									setTimeout(() => {
-										router.push(`/projects/${formValues.project_id}/gathers`);
-									}, 2000);
-								},
-							}
-						);
+						fieldsToKeep = [...commentFieldsToKeep];
 					}
+					// Filter out unnecessary fields
+					const filteredRequiredFields = Object.fromEntries(
+						Object.entries(formValues).filter(([key, _]) =>
+							fieldsToKeep.includes(key)
+						)
+					);
+					mutate(
+						{
+							resource: `projects/${formValues.project_id}/gathers/apify`,
+							values: filteredRequiredFields,
+						},
+						{
+							onSuccess: async () => {
+								await Promise.all([setInputList([]), reset()]);
+								setTimeout(() => {
+									router.push(`/projects/${formValues.project_id}/gathers`);
+								}, 2000);
+							},
+						}
+					);
 				}
 			}
 		} else {

@@ -6,6 +6,19 @@ import { GetInputProps } from "@mantine/form/lib/types";
 import { ProjectSchema } from "src/interfaces/project";
 import GatherInputs from "@components/inputs/gather-inputs";
 
+// Define form fields for submit
+export const commentFieldsToKeep = [
+	"source",
+	"platform",
+	"project_id",
+	"data_type",
+	"description",
+	"post_url_list",
+	"limit_comments_per_post",
+	"sort_comments_by",
+	"include_comment_replies",
+];
+
 // Define separate validation rules for comments
 export function getCommentValidationRules(data: any) {
 	if (data.data_type === "comments") {

@@ -7,6 +7,19 @@ import { ProjectSchema } from "src/interfaces/project";
 import { DatePicker } from "@mantine/dates";
 import GatherInputs from "@components/inputs/gather-inputs";
 
+// Define form fields for submit
+export const postFieldsToKeep = [
+	"source",
+	"platform",
+	"project_id",
+	"data_type",
+	"description",
+	"account_url_list",
+	"only_posts_older_than",
+	"only_posts_newer_than",
+	"limit_posts_per_account",
+];
+
 // Define separate validation rules for posts
 export function getPostValidationRules(data: any, today: Date) {
 	if (data.data_type === "posts") {
