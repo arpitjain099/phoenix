@@ -66,8 +66,8 @@ def create_job_run_row(job_type: PhiphiJobType, job_source_id: int) -> int:
 
 
 @task
-def trigger_job_flow_run(job_type: PhiphiJobType, job_params: dict) -> objects.FlowRun:
-    """Task to trigger the inner flow for the job.
+def start_flow_run(job_type: PhiphiJobType, job_params: dict) -> objects.FlowRun:
+    """Task to start the (inner) flow for the job.
 
     Args:
         job_type: Type of job to run.
@@ -121,8 +121,8 @@ def update_job_row_with_end_result(job_run_id: int, job_run_flow_result: objects
     # Update row in job_runs table for `job_run_id`
 
 
-@flow(name="flow_deployment_runner_flow")
-def job_runner_flow(job_type: PhiphiJobType, job_source_id: int) -> None:
+@flow(name="flow_runner_flow")
+def flow_runner_flow(job_type: PhiphiJobType, job_source_id: int) -> None:
     """Flow which runs flow deployments and records their status.
 
     Args:
@@ -132,7 +132,7 @@ def job_runner_flow(job_type: PhiphiJobType, job_source_id: int) -> None:
     """
     job_params = read_job_params(job_type=job_type, job_source_id=job_source_id)
     job_run_id = create_job_run_row(job_type=job_type, job_source_id=job_source_id)
-    job_run_flow = trigger_job_flow_run(job_type=job_type, job_params=job_params)
+    job_run_flow = start_flow_run(job_type=job_type, job_params=job_params)
     update_job_row_to_started(job_run_id=job_run_id, job_run_flow=job_run_flow)
     job_run_flow_result = wait_for_job_flow_run(job_run_flow=job_run_flow)
     update_job_row_with_end_result(job_run_id=job_run_id, job_run_flow_result=job_run_flow_result)
@@ -140,7 +140,7 @@ def job_runner_flow(job_type: PhiphiJobType, job_source_id: int) -> None:
 
 if __name__ == "__main__":
     asyncio.run(
-        job_runner_flow.deploy(
+        flow_runner_flow.deploy(
             name="main_deployment",
             work_pool_name="TODO",  # this should be the work pool on k8s ye?
             image="TODO",  # this should be the phiphi image!
