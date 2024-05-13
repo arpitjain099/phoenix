@@ -11,8 +11,9 @@ Likely this will become a module with sub-modules.
 """
 import asyncio
 from datetime import datetime
-from typing import Any, Literal
+from typing import Any
 
+from phiphi.typing import PhiphiJobType
 from prefect import flow, runtime, task
 from prefect.client.schemas import objects
 from prefect.deployments import deployments
@@ -20,9 +21,7 @@ from prefect.flow_runs import wait_for_flow_run
 
 
 @task
-def read_job_params(
-    job_type: Literal["gather", "classify", "tabulate"], job_source_id: int
-) -> dict:
+def read_job_params(job_type: PhiphiJobType, job_source_id: int) -> dict:
     """Task to read job params from the database.
 
     Args:
@@ -49,9 +48,7 @@ def read_job_params(
 
 
 @task
-def create_job_run_row(
-    job_type: Literal["gather", "classify", "tabulate"], job_source_id: int
-) -> int:
+def create_job_run_row(job_type: PhiphiJobType, job_source_id: int) -> int:
     """Task to create a row in the job_runs table.
 
     Returns:
@@ -69,9 +66,7 @@ def create_job_run_row(
 
 
 @task
-def trigger_job_flow_run(
-    job_type: Literal["gather", "classify", "tabulate"], job_params: dict
-) -> objects.FlowRun:
+def trigger_job_flow_run(job_type: PhiphiJobType, job_params: dict) -> objects.FlowRun:
     """Task to trigger the inner flow for the job.
 
     Args:
@@ -127,9 +122,7 @@ def update_job_row_with_end_result(job_run_id: int, job_run_flow_result: objects
 
 
 @flow(name="flow_deployment_runner_flow")
-def job_runner_flow(
-    job_type: Literal["gather", "classify", "tabulate"], job_source_id: int
-) -> None:
+def job_runner_flow(job_type: PhiphiJobType, job_source_id: int) -> None:
     """Flow which runs flow deployments and records their status.
 
     Args:
