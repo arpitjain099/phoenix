@@ -27,6 +27,8 @@ oauth2-proxy:
       # Important that this machtes the domain being used for the cluster
       cookie_domains=".phoenixplatformdev.xyz"
       whitelist_domains=["*.phoenixplatformdev.xyz:*", "dev-2ii4bfcaymdes14b.uk.auth0.com"]
+      cookie_httponly=false
+      cookie_samesite="lax"
       # email is needed as is not in default openid scrop
       scope="openid email"
       pass_access_token = true
