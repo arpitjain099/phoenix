@@ -118,7 +118,7 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 					);
 					mutate(
 						{
-							resource: `projects/${formValues.project_id}/gathers/apify`,
+							resource: `projects/${formValues.project_id}/gathers/${formValues.source}_${formValues.platform}_${formValues.data_type}`,
 							values: filteredRequiredFields,
 						},
 						{
