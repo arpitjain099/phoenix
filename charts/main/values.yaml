@@ -126,6 +126,8 @@ console:
   # Should be the same as the first_admin_user_email for api
   dev_admin_email: "buildup@datavaluepeople"
   user_info_cookie_name: "phoenix_user_info"
+  # If you set cookie_httponly to false you can use the cookie in the console
+  # env_auth_cookie = "_oauth2_proxy"
   env_auth_url: "http://oauth.{{ .Values.base_host }}/oauth2/auth"
   env_login_url: "http://oauth.{{ .Values.base_host }}/oauth2/start"
   env_logout_url: "http://oauth.{{ .Values.base_host }}/oauth2/sign_out"
