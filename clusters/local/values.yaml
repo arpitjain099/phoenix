@@ -17,7 +17,7 @@ console:
   user_info_cookie_name: "phoenix_user_info"
   # Using the insecure auth for the console
   env_auth_url: "http://api.{{ .Values.base_host }}/oauth2/insecure_auth"
-  # So there is no redirect for the local if there is an error
+  # So there is no redirect for the local cluster if there is an error
   env_login_url: "http://console.{{ .Values.base_host }}/oauth2/start"
   env_logout_url: "http://console.{{ .Values.base_host }}/oauth2/sign_out"
 cert-manager:
