@@ -6,12 +6,10 @@ from phiphi.api.projects import crud as project_crud
 from phiphi.api.projects.gathers import models as gather_model
 from phiphi.api.projects.gathers import schemas as gather_schema
 
-response_schema_type = TypeVar(
-    "response_schema_type", bound=gather_schema.GatherResponse
-)
-create_schema_type = TypeVar(
-    "create_schema_type", bound=gather_schema.GatherCreate
-)
+# Although these are the same as child_route types we need to redefine them here
+# otherwise we get strange errors
+response_schema_type = TypeVar("response_schema_type", bound=gather_schema.GatherResponse)
+create_schema_type = TypeVar("create_schema_type", bound=gather_schema.GatherCreate)
 child_model_type = TypeVar("child_model_type", bound=gather_model.Gather)
 
 

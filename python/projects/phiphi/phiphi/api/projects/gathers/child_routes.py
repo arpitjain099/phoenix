@@ -1,4 +1,17 @@
-"""Routes for child gathers."""
+"""Routes for child gathers.
+
+This module contains generalised functionality for creating child gathers. This is used to create
+child gathers for different platforms and data types, so we don't repeat the same code for each
+child gather type.
+
+To add a new child gather route, add a new entry to `list_of_child_gather_routes` with the request
+schema, response schema, and child model for the new child gather route. Then add a new call to
+`router.post` with the route path and response model for the new child gather route.
+
+Please note that there are a number of complexity issues with mypy and making a generic route. As
+such there are a number of `# type: ignore[valid-type]` comments in this file. This is because the
+typing was getting complex and we decided to ignore the typing errors.
+"""
 from typing import Callable, Type, TypeVar
 
 import fastapi
@@ -21,14 +34,11 @@ from phiphi.api.projects.gathers.apify_facebook_posts import (
 
 router = fastapi.APIRouter()
 
-# Define a generic type T
-response_schema_type = TypeVar(
-    "response_schema_type", bound=gather_schema.GatherResponse
-)  # Response schema
-create_schema_type = TypeVar(
-    "create_schema_type", bound=gather_schema.GatherCreate
-)  # Create schema
-child_model_type = TypeVar("child_model_type", bound=gather_model.Gather)  # child model
+# Although these are the same as child_crud types we need to redefine them here
+# otherwise we get strange errors
+response_schema_type = TypeVar("response_schema_type", bound=gather_schema.GatherResponse)
+create_schema_type = TypeVar("create_schema_type", bound=gather_schema.GatherCreate)
+child_model_type = TypeVar("child_model_type", bound=gather_model.Gather)
 
 list_of_child_gather_routes: dict[
     str,
@@ -58,7 +68,12 @@ def make_create_child_gather_route(
     child_model: Type[child_model_type],
     child_type: str,
 ) -> Callable[[int, create_schema_type, deps.SessionDep], response_schema_type]:
-    """Returns a route function that creates a child gather using specific models."""
+    """Returns a route function that creates a child gather using specific models.
+
+    This function is used so that the given types for the route can be passed in as arguments to
+    the function. If we don't use this wrapper function we the types of the last item in
+    list_of_child_gather_routes will be used for all routes.
+    """
 
     # We decided to do type ignore here, because the typing was getting complex
     def create_child_gather(
@@ -79,9 +94,9 @@ def make_create_child_gather_route(
     return create_child_gather
 
 
-# Register all routes
+# Register all routes in list_of_child_gather_routes so we don't have to rewrite the same code
 for key, (request_schema, response_schema, child_model) in list_of_child_gather_routes.items():
     router.post(
         f"/projects/{{project_id}}/gathers/{key}",
-        response_model=response_schema,  # The FastAPI route response model
+        response_model=response_schema,
     )(make_create_child_gather_route(request_schema, response_schema, child_model, key))
