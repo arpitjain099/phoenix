@@ -74,6 +74,7 @@ export const getUserRole = async (): Promise<string | null> => {
 
 const checkAuth = async (): Promise<boolean> => {
 	// For this to work the cookie must not be http only
+	// In oauth2-proxy use cookie_httponly=false
 	if (AUTH_COOKIE && storageService.get(AUTH_COOKIE)) {
 		return true;
 	}
