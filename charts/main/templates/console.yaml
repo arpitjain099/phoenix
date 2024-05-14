@@ -27,6 +27,10 @@ spec:
             value: {{ .Values.console.dev_admin_email | quote }}
           - name: NEXT_PUBLIC_USER_INFO_COOKIE_NAME
             value: {{ .Values.console.user_info_cookie_name | quote }}
+          {{ if .Values.console.env_auth_cookie }}
+          - name: NEXT_PUBLIC_ENV_AUTH_COOKIE
+            value: {{ tpl (.Values.console.env_auth_cookie) . }}
+          {{ end }}
           - name: NEXT_PUBLIC_ENV_AUTH_URL
             value: {{ tpl (.Values.console.env_auth_url) . }}
           - name: NEXT_PUBLIC_ENV_LOGIN_URL

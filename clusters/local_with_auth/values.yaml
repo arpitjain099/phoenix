@@ -1,5 +1,8 @@
 console:
   enabled: true
+  # Default oauth2 cookie name
+  # Has to have cookie_httponly false
+  env_auth_cookie: "_oauth2_proxy"
 cert_issuer:
   enabled: false
 cert-manager:
@@ -15,6 +18,7 @@ oauth2-proxy:
       http_address="0.0.0.0:4180"
       upstreams="file:///dev/null"
       email_domains="*"
+      cookie_httponly=false
       # Important that this machtes the domain being used for the cluster
       cookie_domains=".phoenix.local"
       whitelist_domains=["*.phoenix.local:*", "dev-2ii4bfcaymdes14b.uk.auth0.com"]
