@@ -24,7 +24,22 @@ def create_child_gather(
     child_model: Type[child_model_type],
     child_type: str,
 ) -> response_schema_type:
-    """Create child gather."""
+    """Create child gather.
+
+    A generalised function to create a child gather. This function is used to create
+    child gathers for different platforms and data types.
+
+    Args:
+        response_schema (Type[response_schema_type]): Response schema
+        session (sqlalchemy.orm.Session): Database session
+        project_id (int): Project id
+        request_schema (create_schema_type): Request schema
+        child_model (Type[child_model_type]): Child model
+        child_type (str): Child type
+
+    Returns:
+        response_schema_type: Response schema
+    """
     project_crud.get_db_project_with_guard(session, project_id)
 
     split_child_type = child_type.split("_")
