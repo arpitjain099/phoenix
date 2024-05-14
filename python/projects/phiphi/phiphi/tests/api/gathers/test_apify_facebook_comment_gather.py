@@ -36,7 +36,11 @@ def test_create_apify_facebook_comment_gather(reseed_tables, client: TestClient)
 
 @pytest.mark.freeze_time(CREATED_TIME)
 def test_data_type_apify_facebook_comment(reseed_tables, client: TestClient) -> None:
-    """Test create apify facebook comment gather."""
+    """Test create apify facebook comment gather.
+
+    This test checks that if the source, platform and data type of the child gather are taken from
+    the route and not the payload.
+    """
     data = {
         "description": "First apify gather",
         "limit_comments_per_post": 1000,
