@@ -29,6 +29,10 @@ class GatherBase(pydantic.BaseModel):
     """Gather base schema.
 
     Shared properties of all gathers.
+
+    Please note that the source, platform and data type are not included in this schema as they are
+    taken from the route that creates the child gather. This is because the source, platform and
+    data type are part of the child type and are not user defined.
     """
 
     description: Annotated[str, pydantic.Field(description="The description of the gather")]
