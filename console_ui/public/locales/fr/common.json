@@ -157,15 +157,26 @@
 		}
 	},
 	"gathers": {
+		"gathers": "Regroupements",
+		"titles": {
+			"create": "Créer un regroupement",
+			"edit": "Modifier le regroupement",
+			"list": "Regroupements",
+			"show": "Afficher le regroupement"
+		},
 		"fields": {
 			"id": "ID",
-			"start_date": "Date de début",
-			"end_date": "Date de fin",
+			"source": "Source",
+			"only_posts_older_than": "Date de début",
+			"only_posts_newer_than": "Date de fin",
 			"platform": "Plateforme",
 			"project_id": "Projet",
 			"limit_posts_per_account": "Limite de publications par compte",
 			"limit_replies": "Limite de réponses",
 			"nested_replies": "Réponses imbriquées",
+			"limit_comments_per_post": "Limite de commentaires par publication",
+			"include_comment_replies": "Réponses aux commentaires",
+			"sort_comments_by": "Trier les commentaires par",
 			"data_type": "Type de données",
 			"description": "Description",
 			"created_at": "Créé à",
@@ -179,10 +190,12 @@
 				"edit_input_label": "Modifier l'élément"
 			},
 			"info": {
-				"start_date": "La date à partir de laquelle collecter des données. Ce sera 00:00 du jour configuré.",
-				"end_date": "La date jusqu'à laquelle collecter des données. Ce sera 00:00 du jour configuré.",
+				"only_posts_older_than": "La date à partir de laquelle collecter des données. Ce sera 00:00 du jour configuré.",
+				"only_posts_newer_than": "La date jusqu'à laquelle collecter des données. Ce sera 00:00 du jour configuré.",
 				"description": "Brève description pour que vous sachiez quel est l'objectif de la collecte.",
 				"limit_posts_per_account": "Limite du nombre de publications collectées pour chaque compte.",
+				"limit_comments_per_post": "Limitez le nombre de commentaires collectés pour chaque publication.",
+				"sort_comments_by": "Trier les commentaires par",
 				"data_type": "Type de données que vous souhaitez collecter",
 				"input": {
 					"type": "Le type de données d'entrée que vous souhaitez collecter. Voir le manuel pour plus d'informations.",
@@ -200,6 +213,13 @@
 			"edit": "#{{id}} Modifier le projet | Phoenix",
 			"create": "Créer un nouveau projet | Phoenix",
 			"clone": "#{{id}} Cloner le projet | Phoenix"
+		},
+		"gathers": {
+			"list": "Regroupements | Phoenix",
+			"show": "#{{id}} Afficher le regroupement | Phoenix",
+			"edit": "#{{id}} Modifier le regroupement | Phoenix",
+			"create": "Créer un nouveau regroupement | Phoenix",
+			"clone": "#{{id}} Cloner le regroupement | Phoenix"
 		}
 	},
 	"table": {

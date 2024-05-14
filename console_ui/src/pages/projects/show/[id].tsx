@@ -106,7 +106,7 @@ export const ProjectShow: React.FC<IResourceComponentsProps> = () => {
 						query: { projectid: idFromParams },
 					}}
 				>
-					<Button>Gathers</Button>
+					<Button>{translate("gathers.gathers")}</Button>
 				</Link>
 				{record?.status !== "pending" && (
 					<Button leftIcon={<IconEye />}>Go to Visualisation</Button>

@@ -1,35 +1,25 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
 	IResourceComponentsProps,
 	useCreate,
 	useTranslate,
 } from "@refinedev/core";
 import { Create, useForm, useSelect } from "@refinedev/mantine";
-import {
-	Select,
-	NumberInput,
-	Textarea,
-	Tooltip,
-	Group,
-	Anchor,
-	Breadcrumbs,
-} from "@mantine/core";
-import { DatePicker } from "@mantine/dates";
+import { Select, Textarea, Tooltip } from "@mantine/core";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { IconInfoCircle } from "@tabler/icons";
 import GatherInputs from "@components/inputs/gather-inputs";
-
-const breadcrumbs = [
-	{ title: "Projects", href: "/projects" },
-	{ title: "Gathers", href: "../gathers" },
-	{ title: "Create", href: "create" },
-].map((item) => (
-	<Group key={item.title}>
-		<Anchor color="gray" size="sm" href={item.href}>
-			{item.title}
-		</Anchor>
-	</Group>
-));
+import CreateCommentsGatherForm, {
+	commentFieldsToKeep,
+	getCommentValidationRules,
+} from "@components/forms/gather/create-comments-gather";
+import CreatePostsGatherForm, {
+	getPostValidationRules,
+	postFieldsToKeep,
+} from "@components/forms/gather/create-posts-gather";
+import BreadcrumbsComponent from "@components/breadcrumbs";
 
 export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 	const today = new Date();
@@ -40,55 +30,66 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 	const router = useRouter();
 	const { projectid } = router.query;
 	const [inputList, setInputList] = useState<string[]>([]);
+
+	const breadcrumbs = [
+		{ title: translate("projects.projects"), href: "/projects" },
+		{ title: translate("gathers.gathers"), href: "../gathers" },
+		{ title: translate("actions.create"), href: "create" },
+	];
+
+	// Define initial values for useForm hook
+	const initialFormValues = {
+		source: "apify",
+		platform: "facebook",
+		project_id: Number(projectid),
+		data_type: "",
+		description: "",
+		account_url_list: [] as string[],
+		only_posts_older_than: today,
+		only_posts_newer_than: tomorrow,
+		limit_posts_per_account: 1000,
+		limit_comments_per_post: 1000,
+		include_comment_replies: false,
+		sort_comments_by: "facebook_defaults",
+		post_url_list: [] as string[],
+	};
+
 	const {
 		getInputProps,
 		saveButtonProps,
-		values,
+		values: formValues,
 		setFieldValue,
 		validate,
 		isValid,
 		reset,
 		refineCore: { formLoading },
 	} = useForm({
-		initialValues: {
-			description: "",
-			start_date: today,
-			end_date: tomorrow,
-			platform: "facebook",
-			data_type: "",
-			input: {
-				type: "author_url_list",
-				data: [] as string[],
-			},
-			project_id: Number(projectid),
-			limit_posts_per_account: 1000,
-		},
-		validate: {
-			data_type: (value) => (value.length <= 0 ? "Required" : null),
-			platform: (value) => (value.length <= 0 ? "Required" : null),
-			start_date: (value) => {
-				if (!value) return "Start date is required";
-				const startDate = new Date(value);
-				const endDate = new Date(values.end_date);
-				if (startDate > today) return "Start date cannot be in the future";
-				if (startDate > endDate) return "Start date cannot be after end date";
-				return null;
-			},
-			end_date: (value) => {
-				if (!value) return "End date is required";
-				const endDate = new Date(value);
-				const startDate = new Date(values.start_date);
-				if (endDate < startDate) return "End date cannot be before start date";
-				return null;
-			},
-			limit_posts_per_account: (value) =>
-				value === undefined ? "Required" : null,
-			input: {
-				type: (value) => (value.length <= 0 ? "Required" : null),
-				data: (value) => (value.length <= 0 ? "Required" : null),
-			},
-		},
+		clearInputErrorOnChange: true,
+		initialValues: initialFormValues,
+		validate: (values) => getValidationRules(values),
 	});
+
+	// Define separate validation rules based on data type
+	function getValidationRules(values: any): any {
+		const commonRules = {
+			source: values.source.length <= 0 ? "Required" : null,
+			platform: values.platform.length <= 0 ? "Required" : null,
+			data_type: values.data_type.length <= 0 ? "Required" : null,
+		};
+		if (values && values.data_type === "posts") {
+			return {
+				...commonRules,
+				...getPostValidationRules(values, today),
+			};
+		}
+		if (values && values.data_type === "comments") {
+			return {
+				...commonRules,
+				...getCommentValidationRules(values),
+			};
+		}
+		return commonRules;
+	}
 
 	const { selectProps: projectSelectProps } = useSelect({
 		resource: "projects",
@@ -99,21 +100,37 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 
 	const handleSave = async () => {
 		if (isValid()) {
-			if (values.project_id) {
-				mutate(
-					{
-						resource: `projects/${values.project_id}/gathers/apify`,
-						values,
-					},
-					{
-						onSuccess: async () => {
-							await Promise.all([setInputList([]), reset()]);
-							setTimeout(() => {
-								router.push(`/projects/${values.project_id}/gathers`);
-							}, 2000);
-						},
+			if (formValues.project_id) {
+				const { source, ...filteredValues } = formValues; // Exclude 'source' from values
+				if (source === "apify") {
+					// Define the list of fields to keep based on data_type
+					let fieldsToKeep: string[] = [];
+					if (formValues.data_type === "posts") {
+						fieldsToKeep = [...postFieldsToKeep];
+					} else if (formValues.data_type === "comments") {
+						fieldsToKeep = [...commentFieldsToKeep];
 					}
-				);
+					// Filter out unnecessary fields
+					const filteredRequiredFields = Object.fromEntries(
+						Object.entries(formValues).filter(([key, _]) =>
+							fieldsToKeep.includes(key)
+						)
+					);
+					mutate(
+						{
+							resource: `projects/${formValues.project_id}/gathers/${formValues.source}_${formValues.platform}_${formValues.data_type}`,
+							values: filteredRequiredFields,
+						},
+						{
+							onSuccess: async () => {
+								await Promise.all([setInputList([]), reset()]);
+								setTimeout(() => {
+									router.push(`/projects/${formValues.project_id}/gathers`);
+								}, 2000);
+							},
+						}
+					);
+				}
 			}
 		} else {
 			validate();
@@ -121,15 +138,34 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 	};
 
 	useEffect(() => {
-		setFieldValue("input.data", inputList);
-	}, [inputList, setFieldValue]);
+		if (formValues.data_type === "posts") {
+			setFieldValue("account_url_list", inputList);
+		}
+		if (formValues.data_type === "comments") {
+			setFieldValue("post_url_list", inputList);
+		}
+	}, [formValues.data_type, inputList, setFieldValue]);
+
+	useEffect(() => {
+		setFieldValue("project_id", Number(projectid));
+	}, [projectid, setFieldValue]);
 
 	return (
 		<Create
-			breadcrumb={<Breadcrumbs>{breadcrumbs}</Breadcrumbs>}
+			breadcrumb={<BreadcrumbsComponent breadcrumbs={breadcrumbs} />}
 			isLoading={formLoading}
 			saveButtonProps={{ ...saveButtonProps, onClick: handleSave }}
 		>
+			<Select
+				mt="lg"
+				withAsterisk
+				label={translate("gathers.fields.source")}
+				data={[
+					{ label: translate("inputs.select"), value: "" },
+					{ label: "Apify", value: "apify" },
+				]}
+				{...getInputProps("source")}
+			/>
 			<Select
 				mt="lg"
 				withAsterisk
@@ -157,6 +193,7 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 				data={[
 					{ label: translate("inputs.select"), value: "" },
 					{ label: "Posts", value: "posts" },
+					{ label: "Comments", value: "comments" },
 				]}
 			/>
 			<Select
@@ -166,53 +203,6 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 				label={translate("gathers.fields.project_id")}
 				{...getInputProps("project_id")}
 				{...projectSelectProps}
-			/>
-			<DatePicker
-				mt="lg"
-				label={
-					<div className="flex items-center">
-						<Tooltip label={translate("gathers.fields.info.start_date")}>
-							<span className="flex">
-								<IconInfoCircle size={12} />
-							</span>
-						</Tooltip>
-						{translate("gathers.fields.start_date")}
-						<span className="text-red-500 ml-1">*</span>
-					</div>
-				}
-				{...getInputProps("start_date")}
-			/>
-			<DatePicker
-				mt="lg"
-				label={
-					<div className="flex items-center">
-						<Tooltip label={translate("gathers.fields.info.end_date")}>
-							<span className="flex">
-								<IconInfoCircle size={12} />
-							</span>
-						</Tooltip>
-						{translate("gathers.fields.end_date")}
-						<span className="text-red-500 ml-1">*</span>
-					</div>
-				}
-				{...getInputProps("end_date")}
-			/>
-			<NumberInput
-				mt="lg"
-				label={
-					<div className="flex items-center">
-						<Tooltip
-							label={translate("gathers.fields.info.limit_posts_per_account")}
-						>
-							<span className="flex">
-								<IconInfoCircle size={12} />
-							</span>
-						</Tooltip>
-						{translate("gathers.fields.limit_posts_per_account")}
-						<span className="text-red-500 ml-1">*</span>
-					</div>
-				}
-				{...getInputProps("limit_posts_per_account")}
 			/>
 			<Textarea
 				mt="lg"
@@ -228,28 +218,20 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 				}
 				{...getInputProps("description")}
 			/>
-			<GatherInputs
-				label={
-					<div className="flex items-center">
-						<Tooltip label={translate("gathers.fields.input.data_placeholder")}>
-							<span className="flex">
-								<IconInfoCircle size={12} />
-							</span>
-						</Tooltip>
-						{translate("gathers.fields.input.data")}
-						<span className="text-red-500 ml-1">*</span>
-						{inputList.length > 0 && (
-							<span className="italic ml-10">
-								{inputList.length} input value{inputList.length > 1 && "s"}
-							</span>
-						)}
-					</div>
-				}
-				placeholder={translate("gathers.fields.input.data_placeholder")}
-				data={inputList}
-				setData={setInputList}
-				{...getInputProps("input.data")}
-			/>
+			{formValues.data_type === "posts" && (
+				<CreatePostsGatherForm
+					getInputProps={getInputProps}
+					inputList={inputList}
+					setInputList={setInputList}
+				/>
+			)}
+			{formValues.data_type === "comments" && (
+				<CreateCommentsGatherForm
+					getInputProps={getInputProps}
+					inputList={inputList}
+					setInputList={setInputList}
+				/>
+			)}
 		</Create>
 	);
 };
