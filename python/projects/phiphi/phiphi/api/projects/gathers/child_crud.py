@@ -6,14 +6,13 @@ from phiphi.api.projects import crud as project_crud
 from phiphi.api.projects.gathers import models as gather_model
 from phiphi.api.projects.gathers import schemas as gather_schema
 
-# Define a generic type T
 response_schema_type = TypeVar(
     "response_schema_type", bound=gather_schema.GatherResponse
-)  # Response schema
+)
 create_schema_type = TypeVar(
     "create_schema_type", bound=gather_schema.GatherCreate
-)  # Create schema
-child_model_type = TypeVar("child_model_type", bound=gather_model.Gather)  # child model
+)
+child_model_type = TypeVar("child_model_type", bound=gather_model.Gather)
 
 
 def create_child_gather(
