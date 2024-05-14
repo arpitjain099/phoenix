@@ -1,8 +1,25 @@
+ingress_cors:
+  enabled: true
+  allow_origin: "http://console.{{ .Values.base_host }}"
 use_local_insecure_auth: true
+api:
+  cors_origins: "http://console.{{ .Values.base_host }}"
 cert_issuer:
   enabled: false
 console:
   enabled: true
+  # Set env to local_cluster for local testing of the integration with the auth api endpoint
+  # env: "local_cluster"
+  env: "dev"
+  api_url: "http://api.{{ .Values.base_host }}"
+  # Should be the same as the first_admin_user_email for api
+  dev_admin_email: "buildup@datavaluepeople"
+  user_info_cookie_name: "phoenix_user_info"
+  # Using the insecure auth for the console
+  env_auth_url: "http://api.{{ .Values.base_host }}/oauth2/insecure_auth"
+  # So there is no redirect for the local cluster if there is an error
+  env_login_url: "http://console.{{ .Values.base_host }}/oauth2/start"
+  env_logout_url: "http://console.{{ .Values.base_host }}/oauth2/sign_out"
 cert-manager:
   enabled: false
 oauth2-proxy:
@@ -28,13 +45,17 @@ superset:
   extraSecretEnv:
     SUPERSET_SECRET_KEY: "this_is_an_in_secure_secret_key"
 
-prefect:
-  ## Get this from you api
-  apiKey: "<secret_to_set>"
-
 prefect-worker:
   enabled: true
   worker:
     ## Account and workspace ID in secrets
     config:
       workPool: "phoenix-local-worker-pool"
+
+######### WITH SELF SIGNED CERTIFICATES #########
+# cert_issuer:
+#  enabled: true
+#  issuer_name: "selfsigned-issuer"
+#  issuer_email: "buildup@datavaluepeople.com"
+# cert-manager:
+  # enabled: true

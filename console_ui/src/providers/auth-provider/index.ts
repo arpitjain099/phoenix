@@ -7,6 +7,7 @@ const DEV_AUTH_COOKIE = "phiphi-user-email";
 const USER_INFO_COOKIE_NAME = process.env.NEXT_PUBLIC_USER_INFO_COOKIE_NAME!;
 const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 const AUTH_URL = process.env.NEXT_PUBLIC_ENV_AUTH_URL!;
+const AUTH_COOKIE = process.env.NEXT_PUBLIC_ENV_AUTH_COOKIE!;
 const LOGIN_URL = process.env.NEXT_PUBLIC_ENV_LOGIN_URL!;
 const LOGOUT_URL = process.env.NEXT_PUBLIC_ENV_LOGOUT_URL!;
 const ENV = process.env.NEXT_PUBLIC_ENV!;
@@ -71,6 +72,18 @@ export const getUserRole = async (): Promise<string | null> => {
 	return null;
 };
 
+const checkAuth = async (): Promise<boolean> => {
+	// For this to work the cookie must not be http only
+	// In oauth2-proxy use cookie_httponly=false
+	if (AUTH_COOKIE && storageService.get(AUTH_COOKIE)) {
+		return true;
+	}
+	if (AUTH_URL && (await checkAuthUrl(AUTH_URL))) {
+		return true;
+	}
+	return false;
+};
+
 const authProvider: AuthProvider = {
 	login: async () => {
 		// Remove user info cookie so it can be refreshed after login
@@ -94,7 +107,7 @@ const authProvider: AuthProvider = {
 		if (ENV === "dev" && storageService.get(DEV_AUTH_COOKIE)) {
 			return { authenticated: true };
 		}
-		if (AUTH_URL && (await checkAuthUrl(AUTH_URL))) {
+		if (await checkAuth()) {
 			return { authenticated: true };
 		}
 		return { authenticated: false };

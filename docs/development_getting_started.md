@@ -96,7 +96,7 @@ To do this:
 - once the local cluster is up you should be redirected to the auth0 login page if you go to
   `http://api.phoenix.local/`
 
-## Prefect worker
+## Prefect worker [OPTIONAL]
 
 It is possible to have a prefect worker in the local cluster. This is useful for testing the
 prefect flow and the prefect worker. To do this:
@@ -109,11 +109,30 @@ prefect flow and the prefect worker. To do this:
 - you can then create the deployments and run as needed. [Prefect
   tutorial](https://docs.prefect.io/latest/guides/deployment/kubernetes/#define-a-flow)
 
+## Running local with SSL [Optional]
+
+It is possible to run the local cluster with SSL. This is useful for testing the system with SSL
+locally. In general this should not be done.
+
+- Uncomment "WITH SELF SIGNED CERTIFICATES" in `local/values.yaml`
+- Replace all `http://` with `https://` in the `local/values.yaml` file
+- `make up`
+- in a different terminal (check the context) run: `kubectl apply -f clusters/local/selfsigned.yaml`
+- go to `api.phoenix.local` `dashboard.main.phoenix.local` in your browser and proceed with the
+  insecure certificate
+- go to `console.phoenix.local` in your browser and proceed with the insecure certificate
+- You should now be able to use the platform locally with SSL
+
+Note: it might also be possible to add the created certificate to as a trusted certificate in your
+browser. But you will need to do this for each browser you use and allowing your browser to proceed
+to insecure sites is easier.
+
 ## Hello world
 
 Once your set up is complete you should be able to see an hello world at. Beaware you will need to
 log in to the configured authentication provider.
 
+* [http://console.phoenix.local/](http://console.phoenix.local/)
 * [http://api.phoenix.local/](http://api.phoenix.local/)
 * [http://dashboard.main.phoenix.local/](http://dashboard.main.phoenix.local/)
 

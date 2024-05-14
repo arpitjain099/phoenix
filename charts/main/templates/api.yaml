@@ -39,6 +39,10 @@ spec:
             value: {{ .Values.api.first_admin_user_display_name | quote }}
           - name: HEADER_AUTH_NAME
             value: {{ .Values.api.header_auth_name | quote}}
+          # There are alot of problems with setting the forwarded allow ips when used in the cli command.
+          # For instances you have to do `--forwarded-allow-ips=*` with no quotes (double or single) around the *
+          - name: FORWARDED_ALLOW_IPS
+            value: {{ .Values.api.forwarded_allow_ips | quote}}
           - name: INCLUDE_INSECURE_AUTH
           {{- if .Values.use_local_insecure_auth }}
             value: "true"
@@ -46,7 +50,16 @@ spec:
             value: "false"
           {{- end }}
         command: ["/app/projects/phiphi/entrypoint.sh"]
-        args: ["uvicorn", "phiphi.api.main:app", {{- if .Values.api.reload }} "--reload", {{- end }} "--host", "0.0.0.0", "--port", "80"]
+        args: [
+          "uvicorn",
+          "phiphi.api.main:app",
+          {{- if .Values.api.reload }} "--reload", {{- end }}
+          "--host", "0.0.0.0",
+          "--port", "80",
+          # Proxy headers are needed so that the redirects from the API have the correct
+          # scheme and host. This is needed for the console to work correctly.
+          "--proxy-headers"
+        ]
 ---
 apiVersion: v1
 kind: Service

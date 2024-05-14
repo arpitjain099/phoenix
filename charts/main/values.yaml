@@ -36,6 +36,9 @@ api:
   first_admin_user_email: "buildup@datavaluepeople.com"
   first_admin_user_display_name: "Buildup"
   header_auth_name: "x-auth-request-email"
+  # Using * as since it is not possible to reach the api not via the
+  # ingress it is not a security risk
+  forwarded_allow_ips: "*"
 
   ###################
   # Example secrets
@@ -76,7 +79,7 @@ platformdb:
     ## PostgreSQL name for a custom user to create
     username: phiphi
     ## PostgreSQL password for the custom user to create. Ignored if `auth.existingSecret` with key `password` is provided
-    password: password
+    password: phiphi_password
     ## PostgreSQL name for a custom database to create
     database: platform
     postgresqlPassword: postgres_pass
@@ -123,6 +126,8 @@ console:
   # Should be the same as the first_admin_user_email for api
   dev_admin_email: "buildup@datavaluepeople"
   user_info_cookie_name: "phoenix_user_info"
+  # If you set cookie_httponly to false you can use the cookie in the console
+  # env_auth_cookie = "_oauth2_proxy"
   env_auth_url: "http://oauth.{{ .Values.base_host }}/oauth2/auth"
   env_login_url: "http://oauth.{{ .Values.base_host }}/oauth2/start"
   env_logout_url: "http://oauth.{{ .Values.base_host }}/oauth2/sign_out"
