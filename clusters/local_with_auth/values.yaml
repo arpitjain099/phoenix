@@ -28,6 +28,7 @@ oauth2-proxy:
       pass_authorization_header = true
       pass_user_headers = true
       set_xauthrequest = true
+      cookie_samesite="lax"
       # To remove when secure version is used
       show_debug_on_error = true
       insecure_oidc_allow_unverified_email = true
