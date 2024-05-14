@@ -8,10 +8,10 @@ cert_issuer:
   enabled: false
 console:
   enabled: true
+  # Set env to local_cluster for local testing of the integration with the auth api endpoint
+  # env: "local_cluster"
   env: "dev"
   api_url: "http://api.{{ .Values.base_host }}"
-  # If set to `dev` the console will use in secure cookie auth
-  env: "local_cluster"
   # Should be the same as the first_admin_user_email for api
   dev_admin_email: "buildup@datavaluepeople"
   user_info_cookie_name: "phoenix_user_info"
