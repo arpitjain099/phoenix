@@ -15,7 +15,7 @@ def create_job_run(db: Session, job_run_data: schemas.JobRunCreate) -> int:
 
 
 def update_job_run(
-    db: Session, job_run_data: Union[schemas.JobRunStarted, schemas.JobRunCompleted]
+    db: Session, job_run_data: Union[schemas.JobRunUpdateStarted, schemas.JobRunUpdateCompleted]
 ) -> None:
     """Update a job run.
 
