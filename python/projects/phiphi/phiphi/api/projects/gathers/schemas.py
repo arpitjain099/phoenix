@@ -4,6 +4,7 @@ from enum import Enum
 from typing import Annotated
 
 import pydantic
+from phiphi.api import base_schemas
 
 
 class Platform(str, Enum):
@@ -53,6 +54,7 @@ class GatherResponse(GatherBase):
     updated_at: datetime.datetime
     project_id: int
     deleted_at: datetime.datetime | None = None
+    run_status: base_schemas.RunStatus = base_schemas.RunStatus.yet_to_run
 
 
 class GatherCreate(GatherBase):

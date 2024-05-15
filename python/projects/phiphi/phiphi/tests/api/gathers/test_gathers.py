@@ -15,14 +15,17 @@ def test_get_gather(client: TestClient, reseed_tables) -> None:
 
     assert gather_1["id"] == 1
     assert gather_1["project_id"] == 1
+    assert gather_1["run_status"] == "yet_to_run"
     assert gather_2["id"] == 3
     assert gather_2["project_id"] == 2
+    assert gather_2["run_status"] == "yet_to_run"
 
     # Check that it is not always the first gather that is gotten
     response_3 = client.get("/projects/1/gathers/2")
     gather_3 = response_3.json()
     assert gather_3["id"] == 2
     assert gather_3["project_id"] == 1
+    assert gather_3["run_status"] == "yet_to_run"
 
 
 def test_get_gathers(client: TestClient, reseed_tables) -> None:
