@@ -13,7 +13,7 @@ import asyncio
 from datetime import datetime
 from typing import Any
 
-from phiphi.typing import PhiphiJobType
+from phiphi.types import PhiphiJobType
 from prefect import flow, runtime, task
 from prefect.client.schemas import objects
 from prefect.deployments import deployments
