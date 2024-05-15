@@ -20,11 +20,9 @@ class JobRuns(platform_db.Base):
     row_created_at: orm.Mapped[datetime.datetime]
     foreign_id: orm.Mapped[int]
     foreign_job_type: orm.Mapped[str]
-    prefect_inner_flow_run_id: orm.Mapped[Optional[str]]
+    status: orm.Mapped[Optional[str]]
+    flow_run_id: orm.Mapped[Optional[str]]
     # Note: name of the _flow run_, not the flow. Useful for searching in Prefect UI.
-    prefect_inner_flow_run_name: orm.Mapped[Optional[str]]
-    prefect_inner_flow_run_started_at: orm.Mapped[Optional[datetime.datetime]]
-    prefect_inner_flow_run_completed_at: orm.Mapped[Optional[datetime.datetime]]
-    prefect_inner_flow_run_status: orm.Mapped[Optional[str]]
-    prefect_outer_flow_run_id: orm.Mapped[str]
-    prefect_outer_flow_run_name: orm.Mapped[str]  # Note: name of the _flow run_, not the flow
+    flow_run_name: orm.Mapped[Optional[str]]
+    started_processing_at: orm.Mapped[Optional[datetime.datetime]]
+    completed_at: orm.Mapped[Optional[datetime.datetime]]
