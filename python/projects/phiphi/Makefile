@@ -3,6 +3,8 @@ default_path = projects/phiphi/
 phiphi_gitlab_repo = registry.gitlab.com/howtobuildup/phoenix/python/phiphi
 tag ?= latest
 image ?= "$(phiphi_gitlab_repo):$(tag)"
+override_work_pool_name = local-work-pool
+group_name = local
 
 DEV_COMPOSE_COMMAND=docker compose -f compose.yaml -f compose.dev.yaml
 
@@ -54,6 +56,14 @@ push_phiphi_image:
 create_prefect_deployments:
 	@echo "Create prefect deployments"
 	$(DEV_COMPOSE_COMMAND) run api python projects/phiphi/phiphi/prefect_deployments.py --image $(image)
+
+create_prefect_grouped_deployments:
+	@echo "Create grouped deployments for development and testing"
+	$(DEV_COMPOSE_COMMAND) run api python projects/phiphi/phiphi/prefect_grouped_deployments.py \
+			--override_work_pool_name $(override_work_pool_name) \
+			--group_name $(group_name)
+	make build
+	tag=$(group_name) make push_phiphi_image
 
 fix_local_permissions:
 	sudo chown -R $(USER):$(USER) phiphi/
