@@ -16,7 +16,10 @@ UrlStr = Annotated[
 
 
 class ApifyFacebookPostsInput(pydantic.BaseModel):
-    """Input schema for the Apify Facebook posts scraper."""
+    """Input schema for the Apify Facebook posts scraper.
+
+    Ref to relevant Apify actor docs: https://apify.com/apify/facebook-posts-scraper/input-schema
+    """
 
     only_posts_older_than: str = pydantic.Field(
         None,
