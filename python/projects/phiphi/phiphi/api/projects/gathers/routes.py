@@ -43,7 +43,6 @@ def get_gather_estimate(
     return schemas.GatherEstimate(
         id=gather_id,
         estimated_credit_cost=100,
-        estimated_credit_cumulative_cost=200,
         estimated_duration_minutes=30,
     )
 

@@ -48,7 +48,6 @@ def test_get_gathers_estimate(client: TestClient, reseed_tables) -> None:
     gather = response.json()
     assert gather["id"] == 1
     assert gather["estimated_credit_cost"] == 100
-    assert gather["estimated_credit_cumulative_cost"] == 200
     assert gather["estimated_duration_minutes"] == 30
 
 

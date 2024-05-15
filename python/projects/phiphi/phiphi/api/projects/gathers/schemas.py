@@ -73,5 +73,4 @@ class GatherEstimate(pydantic.BaseModel):
 
     id: int
     estimated_credit_cost: int
-    estimated_credit_cumulative_cost: int
     estimated_duration_minutes: int
