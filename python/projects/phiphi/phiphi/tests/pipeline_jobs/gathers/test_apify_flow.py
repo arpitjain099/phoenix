@@ -3,8 +3,8 @@
 from phiphi.pipeline_jobs.gathers import apify_flow, apify_input_schemas
 
 
-def manual_test_trigger_apify_scrape_and_batch_download():
-    """Manually test the trigger_apify_scrape_and_batch_download_results flow.
+def manual_test_apify_scrape_and_batch_download():
+    """Manually test the apify_scrape_and_batch_download_results flow.
 
     WARNING: this will incur costs on Apify.
 
@@ -21,7 +21,7 @@ def manual_test_trigger_apify_scrape_and_batch_download():
         ],
     )
 
-    apify_flow.trigger_apify_scrape_and_batch_download_results(
+    apify_flow.apify_scrape_and_batch_download_results(
         apify_token="MY_APIFY_TOKEN",
         data_type="posts",
         run_input=run_input,
