@@ -77,3 +77,19 @@ addition to `version_locations` in `alembic.ini` separating new additions with t
 `version_path_separator`.
 
 See the `Makefile` for more commands.
+
+## Running deployments locally for testing full flow runs
+
+If you are developing flows and want to test the full flow run, you can run the flow locally.
+
+This is done by:
+
+- Start the local cluster, see the `phoenix` root README for more information.
+- Set up and log in to prefect cloud: `prefect cloud login_with_browser`.
+- Run: `group_name=<dev_id> make create_prefect_grouped_deployments`. `dev_id` the something
+  to indicate that you create the flows. This could be the branch name.
+- You should see a number of `prefect deployment run` commands that you can use to run the flows.
+- You should be able to see the logs in the cluster and in the prefect cloud/server.
+
+Be aware that if more then one developer use the same `dev_id` the flows and images will overwrite
+each other.
