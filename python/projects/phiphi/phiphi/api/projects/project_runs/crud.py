@@ -1,7 +1,7 @@
 """Project runs crud functionality."""
 
 import sqlalchemy.orm
-from phiphi.api import exceptions
+from phiphi.api import base_schemas, exceptions
 from phiphi.api.projects import crud as project_crud
 from phiphi.api.projects import models as project_models
 from phiphi.api.projects.project_runs import models, schemas
@@ -34,7 +34,7 @@ def create_project_runs(
 def get_project_runs_by_run_status_filter(
     session: sqlalchemy.orm.Session,
     project_id: int,
-    run_status: schemas.RunStatus | None,
+    run_status: base_schemas.RunStatus | None,
     start: int = 0,
     end: int = 100,
 ) -> list[schemas.ProjectRunsResponse]:
@@ -43,19 +43,19 @@ def get_project_runs_by_run_status_filter(
 
     query = session.query(models.ProjectRuns).filter(models.ProjectRuns.project_id == project_id)
 
-    if run_status == schemas.RunStatus.failed:
+    if run_status == base_schemas.RunStatus.failed:
         query = query.filter(models.ProjectRuns.failed_at.isnot(None))
-    elif run_status == schemas.RunStatus.completed:
+    elif run_status == base_schemas.RunStatus.completed:
         query = query.filter(models.ProjectRuns.completed_at.isnot(None))
-    elif run_status == schemas.RunStatus.processing:
+    elif run_status == base_schemas.RunStatus.processing:
         query = query.filter(models.ProjectRuns.started_processing_at.isnot(None))
-    elif run_status == schemas.RunStatus.in_queue:
+    elif run_status == base_schemas.RunStatus.in_queue:
         query = query.filter(
             models.ProjectRuns.failed_at.is_(None),
             models.ProjectRuns.completed_at.is_(None),
             models.ProjectRuns.started_processing_at.is_(None),
         )
-    elif run_status == schemas.RunStatus.yet_to_run:
+    elif run_status == base_schemas.RunStatus.yet_to_run:
         query = query.filter(
             models.ProjectRuns.failed_at.is_(None),
             models.ProjectRuns.completed_at.is_(None),
