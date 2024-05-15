@@ -99,6 +99,7 @@
 		"undo": "Annuler",
 		"import": "Importer",
 		"clone": "Cloner",
+		"start_run": "Démarrer l'exécution",
 		"notAccessTitle": "Vous n'avez pas la permission d'accéder"
 	},
 	"inputs": {
@@ -158,6 +159,7 @@
 	},
 	"gathers": {
 		"gathers": "Regroupements",
+		"details": "Détails",
 		"titles": {
 			"create": "Créer un regroupement",
 			"edit": "Modifier le regroupement",
@@ -202,6 +204,12 @@
 					"data": "Ajoutez les données d'entrée que vous souhaitez collecter. Tapez / collez les entrées séparées par ` ` (espace)"
 				}
 			}
+		},
+		"run_estimate": {
+			"title": "Êtes-vous sûr de vouloir exécuter cette collecte ?",
+			"estimated_credit_cost": "Crédits estimés pour cette exécution",
+			"estimated_duration_minutes": "Temps estimé",
+			"cost": "Coût estimé"
 		}
 	},
 	"documentTitle": {

@@ -99,6 +99,7 @@
 		"undo": "Deshacer",
 		"import": "Importar",
 		"clone": "Clonar",
+		"start_run": "Iniciar ejecución",
 		"notAccessTitle": "No tiene permiso para acceder"
 	},
 	"inputs": {
@@ -158,6 +159,7 @@
 	},
 	"gathers": {
 		"gathers": "Reuniones",
+		"details": "Detalles",
 		"titles": {
 			"create": "Crear reunión",
 			"edit": "Editar reunión",
@@ -202,6 +204,12 @@
 					"data": "Agregue los datos de entrada que le gustaría recopilar. Escriba/pegue las entradas separadas por ` ` (espacio)"
 				}
 			}
+		},
+		"run_estimate": {
+			"title": "¿Estás seguro de querer ejecutar esta recopilación?",
+			"estimated_credit_cost": "Créditos estimados para esta ejecución",
+			"estimated_duration_minutes": "Tiempo estimado",
+			"cost": "Costo estimado"
 		}
 	},
 	"documentTitle": {
