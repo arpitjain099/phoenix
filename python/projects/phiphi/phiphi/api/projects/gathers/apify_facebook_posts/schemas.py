@@ -9,7 +9,7 @@ from phiphi.api.projects.gathers import schemas as gather_schemas
 class ApifyFacebookPostGatherBase(gather_schemas.GatherBase):
     """Gather config schema."""
 
-    author_url_list: Annotated[
+    account_url_list: Annotated[
         list[str],
         pydantic.Field(description="The author url list, should be the full url including https"),
     ]

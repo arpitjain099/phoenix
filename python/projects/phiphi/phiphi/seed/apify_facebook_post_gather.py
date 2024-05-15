@@ -8,7 +8,7 @@ CHILD_TYPE = "apify_facebook_posts"
 
 TEST_APIFY_FACEBOOK_POST_GATHER_CREATE = schemas.ApifyFacebookPostGatherCreate(
     description="Phoenix Apify Facebook Post Gather",
-    author_url_list=["https://phoenix.com", "https://buildup.org"],
+    account_url_list=["https://phoenix.com", "https://buildup.org"],
     limit_posts_per_account=1000,
     only_posts_older_than="2024-04-25",
     only_posts_newer_than="2024-05-02",
@@ -16,7 +16,7 @@ TEST_APIFY_FACEBOOK_POST_GATHER_CREATE = schemas.ApifyFacebookPostGatherCreate(
 
 TEST_APIFY_FACEBOOK_POST_GATHER_CREATE_2 = schemas.ApifyFacebookPostGatherCreate(
     description="Phoenix Apify Facebook Post Gather 2",
-    author_url_list=["https://phoenix.com", "https://buildup.org"],
+    account_url_list=["https://phoenix.com", "https://buildup.org"],
     limit_posts_per_account=1000,
     only_posts_older_than="2024-03-12",
     only_posts_newer_than="2024-05-01",
@@ -24,7 +24,7 @@ TEST_APIFY_FACEBOOK_POST_GATHER_CREATE_2 = schemas.ApifyFacebookPostGatherCreate
 
 TEST_APIFY_FACEBOOK_POST_GATHER_CREATE_3 = schemas.ApifyFacebookPostGatherCreate(
     description="Phoenix Apify Facebook Post Gather 3",
-    author_url_list=["https://phoenix.com"],
+    account_url_list=["https://phoenix.com"],
     limit_posts_per_account=1000,
     only_posts_older_than="2024-02-25",
     only_posts_newer_than="2024-05-03",

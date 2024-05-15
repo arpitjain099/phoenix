@@ -14,7 +14,7 @@ def test_create_apify_facebook_post_gather(reseed_tables, client: TestClient) ->
         "limit_posts_per_account": 1000,
         "only_posts_older_than": "2022-3-5",
         "only_posts_newer_than": "2021-4-8",
-        "author_url_list": ["https://buildup.org"],
+        "account_url_list": ["https://buildup.org"],
         "source": "apify",
         "platform": "facebook",
         "data_type": "posts",
@@ -25,7 +25,7 @@ def test_create_apify_facebook_post_gather(reseed_tables, client: TestClient) ->
     gather = response.json()
     assert gather["description"] == data["description"]
     assert gather["project_id"] == project_id
-    assert gather["author_url_list"] == data["author_url_list"]
+    assert gather["account_url_list"] == data["account_url_list"]
     assert gather["limit_posts_per_account"] == data["limit_posts_per_account"]
     assert gather["only_posts_older_than"] == data["only_posts_older_than"]
     assert gather["only_posts_newer_than"] == data["only_posts_newer_than"]
@@ -42,7 +42,7 @@ def test_data_type_apify_facebook_post(reseed_tables, client: TestClient) -> Non
         "limit_posts_per_account": 1000,
         "only_posts_older_than": "2022-3-5",
         "only_posts_newer_than": "2021-4-8",
-        "author_url_list": ["https://buildup.org"],
+        "account_url_list": ["https://buildup.org"],
         "source": "apify",
         "platform": "facebook",
         "data_type": "comments",

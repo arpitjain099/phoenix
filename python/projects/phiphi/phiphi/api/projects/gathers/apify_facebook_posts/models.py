@@ -16,6 +16,6 @@ class ApifyFacebookPostGather(gather_models.Gather):
 
     id: orm.Mapped[int] = orm.mapped_column(ForeignKey("gathers.id"), primary_key=True)
     limit_posts_per_account: orm.Mapped[int]
-    author_url_list: orm.Mapped[str] = orm.mapped_column(base_models.JSONEncodedValue)
+    account_url_list: orm.Mapped[str] = orm.mapped_column(base_models.JSONEncodedValue)
     only_posts_older_than: orm.Mapped[Optional[str]]
     only_posts_newer_than: orm.Mapped[Optional[str]]
