@@ -101,10 +101,8 @@ export const ProjectShow: React.FC<IResourceComponentsProps> = () => {
 			<Group className="mt-4 flex flex-col items-start gap-4">
 				<Button onClick={runInstance}>Run</Button>
 				<Link
-					href={{
-						pathname: `/projects/[projectid]/gathers`,
-						query: { projectid: idFromParams },
-					}}
+					href="/projects/[projectid]/gathers"
+					as={`/projects/${idFromParams}/gathers`}
 				>
 					<Button>{translate("gathers.gathers")}</Button>
 				</Link>
