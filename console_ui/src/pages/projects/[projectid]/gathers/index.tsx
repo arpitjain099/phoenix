@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
 	IResourceComponentsProps,
 	useTranslate,
@@ -14,11 +14,14 @@ import { useRouter } from "next/router";
 import BreadcrumbsComponent from "@components/breadcrumbs";
 import { statusTextStyle } from "src/utils";
 import { IconPlayerPlay, IconRefresh, IconTrash } from "@tabler/icons";
+import GatherRunModal from "@components/modals/gather-run";
 
 export const GatherList: React.FC<IResourceComponentsProps> = () => {
 	const translate = useTranslate();
 	const router = useRouter();
-	const { projectid } = router.query;
+	const { projectid } = router.query || {};
+	const [opened, setOpened] = useState(false);
+	const [selected, setSelected] = useState(null);
 
 	const breadcrumbs = [
 		{ title: translate("projects.projects"), href: "/projects" },
@@ -26,7 +29,7 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 	];
 
 	const apiResponse = useList({
-		resource: `projects/${projectid}/gathers`,
+		resource: projectid ? `projects/${projectid}/gathers` : "",
 	});
 	const listResponse = apiResponse?.data?.data || [];
 
@@ -90,8 +93,16 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 									<IconRefresh size={20} color="blue" />
 								</Button>
 							)}
-							{run_status === "not_yet_run" && (
-								<Button p={0} variant="subtle" color="green" onClick={() => {}}>
+							{run_status === "yet_to_run" && (
+								<Button
+									p={0}
+									variant="subtle"
+									color="green"
+									onClick={() => {
+										setSelected(row.original);
+										setOpened(true);
+									}}
+								>
 									<IconPlayerPlay size={20} color="green" />
 								</Button>
 							)}
@@ -139,22 +150,29 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 		},
 	}));
 	return (
-		<List breadcrumb={<BreadcrumbsComponent breadcrumbs={breadcrumbs} />}>
-			<ScrollArea>
-				<TableComponent
-					headerGroups={getHeaderGroups}
-					rowModel={getRowModel}
-					data={apiResponse}
+		<>
+			<List breadcrumb={<BreadcrumbsComponent breadcrumbs={breadcrumbs} />}>
+				<ScrollArea>
+					<TableComponent
+						headerGroups={getHeaderGroups}
+						rowModel={getRowModel}
+						data={apiResponse}
+					/>
+				</ScrollArea>
+				<br />
+				<Pagination
+					position="right"
+					total={pageCount}
+					page={current}
+					onChange={setCurrent}
 				/>
-			</ScrollArea>
-			<br />
-			<Pagination
-				position="right"
-				total={pageCount}
-				page={current}
-				onChange={setCurrent}
+			</List>
+			<GatherRunModal
+				opened={opened}
+				setOpened={setOpened}
+				gatherDetail={selected}
 			/>
-		</List>
+		</>
 	);
 };
 
