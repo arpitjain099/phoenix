@@ -3,7 +3,13 @@
 To add new deployments, add the create_deployments function to variable
 `list_of_create_deployment_fn`.
 The functions in this list have the same interface as the CreateDeployments protocol.
+
+This module can be run as a script to create deployments.
+
+Example:
+    $ python prefect_deployments.py
 """
+import argparse
 import asyncio
 from typing import Coroutine, Protocol
 
@@ -62,3 +68,23 @@ async def create_all_deployments(
             )
         )
     await asyncio.gather(*coroutines)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Create deployments for phiphi", prog="PhiphiDeploymentCreator"
+    )
+    # Currently image is the only argument that is used.
+    # As we need others they should be added.
+    parser.add_argument(
+        "--image",
+        default=constants.DEFAULT_IMAGE,
+        help=("The image to use for the deployments."),
+    )
+    args = parser.parse_args()
+
+    asyncio.run(
+        create_all_deployments(
+            image=args.image,
+        )
+    )
