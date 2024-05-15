@@ -1,5 +1,7 @@
 
 default_path = projects/phiphi/
+phiphi_gitlab_repo = registry.gitlab.com/howtobuildup/phoenix/python/phiphi
+image = "$(phiphi_gitlab_repo):$(tag)"
 
 DEV_COMPOSE_COMMAND=docker compose -f compose.yaml -f compose.dev.yaml
 
@@ -34,6 +36,13 @@ test:
 format:
 	@echo "Running `format` in ci environment"
 	docker compose run api make format path=$(default_path)
+
+# Usage: make create_prefect_deployments image=registry.gitlab.com/howtobuildup/phoenix/python/phiphi:main
+# This function can be used in CI to create all prefect deployments with the image that it has
+# just published
+create_prefect_deployments:
+	@echo "Create prefect deployments"
+	$(DEV_COMPOSE_COMMAND) run api python projects/phiphi/phiphi/prefect_deployments.py --image $(image)
 
 fix_local_permissions:
 	sudo chown -R $(USER):$(USER) phiphi/
