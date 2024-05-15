@@ -12,9 +12,9 @@ generalised_messages_schema = pa.DataFrameSchema(
         "source": pa.Column(pa.String, checks=pa.Check.isin(["apify"]), nullable=False),
         # NOTE: combination of (platform, data_type, pi_platform_message_id) should give a unique
         # message, but it won't be a unique row as we process the same message multiple times.
-        # Doing groupby on these columns then get MAX(phoenix_processed_at) will give the latest
-        # message.
-        # `phoenix_platform_message_id` can be used instead of `pi_platform_message_id` also.
+        # Doing groupby on these columns then getting MAX(phoenix_processed_at) will give the
+        # latest set of unique messages. `phoenix_platform_message_id` can be used instead of
+        # `pi_platform_message_id` in the groupby also.
         "platform": pa.Column(
             pa.String,
             checks=pa.Check.isin(["facebook", "instagram", "tiktok", "x-twitter"]),
