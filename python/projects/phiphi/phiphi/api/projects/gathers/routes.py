@@ -27,3 +27,22 @@ def get_gather(
     if gather is None:
         raise fastapi.HTTPException(status_code=404, detail="Gather not found")
     return gather
+
+
+@router.get(
+    "/projects/{project_id}/gathers/{gather_id}/estimate",
+    response_model=schemas.GatherEstimate,
+)
+def get_gather_estimate(
+    project_id: int, gather_id: int, session: deps.SessionDep
+) -> schemas.GatherEstimate:
+    """Get an gather estimate.
+
+    This is a dummy function that returns a dummy estimate.
+    """
+    return schemas.GatherEstimate(
+        id=gather_id,
+        estimated_credit_cost=100,
+        estimated_credit_cumulative_cost=200,
+        estimated_duration_minutes=30,
+    )

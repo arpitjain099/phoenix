@@ -64,3 +64,12 @@ class GatherCreate(GatherBase):
 
 class GatherUpdate(pydantic.BaseModel):
     """Gather update schema."""
+
+
+class GatherEstimate(pydantic.BaseModel):
+    """Gather estimate schema."""
+
+    id: int
+    estimated_credit_cost: int
+    estimated_credit_cumulative_cost: int
+    estimated_duration_minutes: int
