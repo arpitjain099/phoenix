@@ -38,6 +38,16 @@ format:
 	@echo "Running `format` in ci environment"
 	docker compose run api make format path=$(default_path)
 
+push_phiphi_image:
+	@echo "Pushing the phiphi image to the registry for tag $(tag)"
+	@if [ "$(tag)" = "main" ] || [ "$(tag)" = "dev" ]; then \
+			echo "Error: Pushing to 'main' or 'dev' tags is not allowed!"; \
+			exit 1; \
+	else \
+			docker tag phiphi:latest $(phiphi_gitlab_repo):$(tag); \
+			docker push $(phiphi_gitlab_repo):$(tag); \
+	fi
+
 # Usage: make create_prefect_deployments image=registry.gitlab.com/howtobuildup/phoenix/python/phiphi:main
 # This function can be used in CI to create all prefect deployments with the image that it has
 # just published
