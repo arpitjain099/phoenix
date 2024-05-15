@@ -1,18 +1,8 @@
 """Schemas for project runs."""
 import datetime
-from enum import Enum
 
 import pydantic
-
-
-class RunStatus(str, Enum):
-    """Project run status."""
-
-    in_queue = "in_queue"
-    processing = "processing"
-    completed = "completed"
-    failed = "failed"
-    yet_to_run = "yet_to_run"
+from phiphi.api import base_schemas
 
 
 class ProjectRunsBase(pydantic.BaseModel):
@@ -36,7 +26,7 @@ class ProjectRunsResponse(ProjectRunsBase):
     completed_at: datetime.datetime | None = None
     failed_at: datetime.datetime | None = None
     environment_slug: str
-    run_status: str
+    run_status: base_schemas.RunStatus
 
 
 class ProjectRunsUpdate(pydantic.BaseModel):

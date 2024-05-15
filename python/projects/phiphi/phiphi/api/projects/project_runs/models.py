@@ -3,7 +3,7 @@ import datetime
 from typing import Optional
 
 from phiphi import platform_db
-from phiphi.api.projects.project_runs import schemas
+from phiphi.api import base_schemas
 from sqlalchemy import ForeignKey, orm
 from sqlalchemy.ext.hybrid import hybrid_property
 
@@ -28,10 +28,10 @@ class ProjectRuns(platform_db.Base):
         """Run status hybrid property."""
         # Check if there are any running project runs
         if self.failed_at:
-            return schemas.RunStatus.failed
+            return base_schemas.RunStatus.failed
         elif self.completed_at:
-            return schemas.RunStatus.completed
+            return base_schemas.RunStatus.completed
         elif self.started_processing_at:
-            return schemas.RunStatus.processing
+            return base_schemas.RunStatus.processing
         else:
-            return schemas.RunStatus.in_queue
+            return base_schemas.RunStatus.in_queue

@@ -1,6 +1,6 @@
 """Routes for gathers."""
 import fastapi
-from phiphi.api import deps
+from phiphi.api import base_schemas, deps
 from phiphi.api.projects.project_runs import crud, schemas
 
 router = fastapi.APIRouter()
@@ -19,7 +19,7 @@ def create_project_runs(
 def get_project_runs(
     session: deps.SessionDep,
     project_id: int,
-    run_status: schemas.RunStatus | None = None,
+    run_status: base_schemas.RunStatus | None = None,
     start: int = 0,
     end: int = 100,
 ) -> list[schemas.ProjectRunsResponse]:

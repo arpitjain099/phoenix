@@ -5,8 +5,8 @@ from sqlalchemy import ForeignKey, orm
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from phiphi import platform_db
-from phiphi.api import base_models
-from phiphi.api.projects.project_runs import models, schemas
+from phiphi.api import base_models, base_schemas
+from phiphi.api.projects.project_runs import models
 
 
 class ProjectBase(platform_db.Base):
@@ -54,6 +54,6 @@ class Project(ProjectBase, base_models.TimestampModel):
         # Check if there are any running project runs
 
         if self.last_run is None:
-            return schemas.RunStatus.yet_to_run
+            return base_schemas.RunStatus.yet_to_run
 
         return self.last_run.run_status
