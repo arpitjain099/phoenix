@@ -3,7 +3,7 @@
 Single flow that all Apify scrapers use.
 """
 import json
-from typing import Dict, List, Literal, Union
+from typing import Dict, List, Union
 
 import prefect
 from apify_client import ApifyClient
@@ -13,7 +13,6 @@ from phiphi.pipeline_jobs.gathers import apify_input_schemas
 @prefect.task
 def apify_scrape_and_batch_download_results(
     apify_token: str,
-    data_type: Literal["posts", "comments"],
     run_input: Union[apify_input_schemas.ApifyFacebookPostsInput],
     batch_size: int = 100,
 ) -> None:

@@ -23,7 +23,6 @@ def manual_test_apify_scrape_and_batch_download():
 
     apify_flow.apify_scrape_and_batch_download_results(
         apify_token="MY_APIFY_TOKEN",
-        data_type="posts",
         run_input=run_input,
         batch_size=3,
     )
