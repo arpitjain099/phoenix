@@ -11,7 +11,14 @@ import logging
 from sqlalchemy.orm import Session
 
 from phiphi import platform_db
-from phiphi.seed import apify_facebook_post_gather, environments, project_runs, projects, users
+from phiphi.seed import (
+    apify_facebook_comments,
+    apify_facebook_post_gather,
+    environments,
+    project_runs,
+    projects,
+    users,
+)
 
 main_logger = logging.getLogger("phiphi.seed.main::" + __name__)
 main_logger.setLevel(logging.INFO)
@@ -42,6 +49,7 @@ def main(session: Session, testing: bool = False) -> None:
         projects.seed_test_project(session)
         project_runs.seed_test_project_runs(session)
         apify_facebook_post_gather.seed_test_apify_facebook_post_gathers(session)
+        apify_facebook_comments.seed_test_apify_facebook_comment_gathers(session)
 
 
 if __name__ == "__main__":

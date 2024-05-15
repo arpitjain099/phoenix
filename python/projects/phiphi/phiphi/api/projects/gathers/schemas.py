@@ -16,6 +16,7 @@ class DataType(str, Enum):
     """data type enum."""
 
     posts = "posts"
+    comments = "comments"
 
 
 class Source(str, Enum):
@@ -28,12 +29,13 @@ class GatherBase(pydantic.BaseModel):
     """Gather base schema.
 
     Shared properties of all gathers.
+
+    Please note that the source, platform and data type are not included in this schema as they are
+    taken from the route that creates the child gather. This is because the source, platform and
+    data type are part of the child type and are not user defined.
     """
 
     description: Annotated[str, pydantic.Field(description="The description of the gather")]
-    platform: Annotated[Platform, pydantic.Field(description="The platform of the gather")]
-    data_type: Annotated[DataType, pydantic.Field(description="The data type of the gather")]
-    source: Annotated[Source, pydantic.Field(description="The data type of the gather")]
 
 
 class GatherResponse(GatherBase):
@@ -44,6 +46,9 @@ class GatherResponse(GatherBase):
 
     model_config = pydantic.ConfigDict(from_attributes=True)
     id: int
+    platform: Annotated[Platform, pydantic.Field(description="The platform of the gather")]
+    data_type: Annotated[DataType, pydantic.Field(description="The data type of the gather")]
+    source: Annotated[Source, pydantic.Field(description="The data type of the gather")]
     created_at: datetime.datetime
     updated_at: datetime.datetime
     project_id: int
