@@ -1,4 +1,4 @@
-"""Functions which take an Apify json blob and nornamlise it into a standard format."""
+"""Functions which take an Apify json blob and normalise it into a standard format."""
 import hashlib
 import json
 import pathlib
