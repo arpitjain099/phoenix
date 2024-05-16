@@ -122,6 +122,9 @@ python_phiphi_ci_test:
   needs:
     - job: python_images_pre_build
       artifacts: true
+      parallel:
+        matrix:
+          - PROJECT: phiphi
 
 lint_phoenix_chart_main:
   stage: test
