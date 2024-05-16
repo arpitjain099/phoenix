@@ -31,7 +31,8 @@ def create_deployments(
     By default the deployments are into the main work pool.
 
     Args:
-        override_work_pool_name (str | None): The name of the work pool to use for deployments.
+        override_work_pool_name (str | None): The name of the work pool to use to override the
+        default work pool.
         deployment_name_prefix (str, optional): The prefix of the deployment name. Defaults to "".
         image (str, optional): The image to use for the deployments. Defaults to
         constants.DEFAULT_IMAGE.
