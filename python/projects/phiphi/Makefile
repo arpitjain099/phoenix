@@ -1,7 +1,8 @@
 
 default_path = projects/phiphi/
 phiphi_gitlab_repo = registry.gitlab.com/howtobuildup/phoenix/python/phiphi
-image = "$(phiphi_gitlab_repo):$(tag)"
+tag ?= latest
+image ?= "$(phiphi_gitlab_repo):$(tag)"
 
 DEV_COMPOSE_COMMAND=docker compose -f compose.yaml -f compose.dev.yaml
 
