@@ -49,6 +49,10 @@ spec:
           {{- else }}
             value: "false"
           {{- end }}
+          {{- if .Values.gcp_service_account.enabled }}
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: /var/secrets/google/{{ .Values.gcp_service_account.secret_key }}
+          {{- end }}
         command: ["/app/projects/phiphi/entrypoint.sh"]
         args: [
           "uvicorn",
@@ -60,6 +64,17 @@ spec:
           # scheme and host. This is needed for the console to work correctly.
           "--proxy-headers"
         ]
+## This is the secret that is used to store the GCP service account json
+      {{- if .Values.gcp_service_account.enabled }}
+        volumeMounts:
+        - name: gcp-creds
+          mountPath: /var/secrets/google
+          readOnly: true
+      volumes:
+      - name: gcp-creds
+        secret:
+          secretName: {{ tpl (.Values.gcp_service_account.secret_name) . }}
+      {{- end }}
 ---
 apiVersion: v1
 kind: Service

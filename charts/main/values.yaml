@@ -21,6 +21,17 @@ ingress_cors:
 # It uses the api /oauth2/insecure_auth endpoint
 use_local_insecure_auth: false
 
+# GCP Service Account JSON
+# This is used to store the GCP service account json
+###################
+gcp_service_account:
+  enabled: false
+  # This is the json for the service account
+  secret_name: "{{ .Release.Name }}-gcp-service-account"
+  secret_key: "service-account.json"
+  # json : |
+    # <JSON>
+
 api:
   enabled: true
   replicas: 1
