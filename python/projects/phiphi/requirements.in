@@ -16,3 +16,9 @@ sqlalchemy
 psycopg
 prefect
 python-slugify
+
+## Pipeline deps
+apify-client
+pandas
+pandas-stubs
+pandera
