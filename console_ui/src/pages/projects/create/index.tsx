@@ -19,6 +19,8 @@ export const ProjectCreate: React.FC<IResourceComponentsProps> = () => {
 		},
 		validate: {
 			name: (value) => (value.length <= 0 ? "Name is required" : null),
+			expected_usage: (value) =>
+				value.length <= 0 ? "Expected usage is required" : null,
 			environment_slug: (value) =>
 				value.length <= 0 ? "Environment is required" : null,
 			pi_deleted_after_days: (value) =>
