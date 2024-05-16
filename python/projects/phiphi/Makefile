@@ -55,9 +55,10 @@ ALEMBIC_DOCKER_COMPOSE_COMMAND=docker compose -f compose.yaml -f compose.alembic
 
 alembic_revision:
 	@if [ -z "$(message)" ]; then \
-		echo "Path argument is required; add \`message=...\` to the make command."; \
+		echo "message argument is required; add \`message=...\` to the make command."; \
 		exit 1; \
 	fi
+	echo "WARNING: something is wrong with the processing the command and so you can't have spaces in the message."
 	$(ALEMBIC_DOCKER_COMPOSE_COMMAND) alembic revision --autogenerate -m "$(message)"
 
 UPGRADE_REVISION ?= heads
