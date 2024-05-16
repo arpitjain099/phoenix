@@ -56,6 +56,7 @@ If you have created a new file with a new model, you will need to add this to
 
 Use make commands to create a revision. Be aware that by default the revision will be created with
 the user `root`. See "Problems with files created in the container" for more information.
+WARNING: The revision description must not contain spaces. (The commands get messed up, so use _.)
 ```bash
 message="<revision description>" make alembic_revision
 ```
