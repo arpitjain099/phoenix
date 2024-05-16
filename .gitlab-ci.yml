@@ -1,3 +1,6 @@
+# The Gitlab CI is set up so that if your branch is called `ci/*` it will run the CI
+# To run jobs that are only on main you can add the rule:
+# - if: $CI_COMMIT_BRANCH =~ /^ci\/*/
 .docker_template:
   image: docker:latest
   services:
