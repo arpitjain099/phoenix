@@ -27,6 +27,10 @@ services:
         condition: service_healthy
       postgres_test:
         condition: service_healthy
+    environment:
+      PREFECT_PROFILE: ${PREFECT_PROFILE:-default}
+      PREFECT_API_KEY: ${PREFECT_API_KEY:-none}
+      PREFECT_API_URL: ${PREFECT_API_URL:-none}
   postgres:
     image: postgres:15-alpine
     restart: always

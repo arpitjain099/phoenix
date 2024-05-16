@@ -13,5 +13,9 @@ services:
       # This might need to change for the CICD to work
       - ~/.prefect:/app/.prefect
     environment:
-      - PREFECT_HOME=/app/.prefect
+      PREFECT_HOME: /app/.prefect
+      # Removing the API KEY and URL from the environment variables so they are taken from the
+      # /app/.prefect/config
+      PREFECT_API_KEY:
+      PREFECT_API_URL:
     command: ["uvicorn", "phiphi.api.main:app", "--reload", "--host", "0.0.0.0", "--port", "80"]
