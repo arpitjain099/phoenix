@@ -44,7 +44,7 @@ def upgrade() -> None:
         sa.Column("limit_posts_per_account", sa.Integer(), nullable=False),
         sa.Column("only_posts_older_than", sa.String(), nullable=True),
         sa.Column("only_posts_newer_than", sa.String(), nullable=True),
-        sa.Column("account_url_list", base_models.JSONEncodedValue(), nullable=True),
+        sa.Column("account_url_list", base_models.JSONEncodedValue(), nullable=False),
         sa.ForeignKeyConstraint(
             ["id"],
             ["gathers.id"],
