@@ -167,8 +167,8 @@
 		"fields": {
 			"id": "ID",
 			"source": "Source",
-			"only_posts_older_than": "Start Date",
-			"only_posts_newer_than": "End Date",
+			"only_posts_older_than": "Only Posts Older Than",
+			"only_posts_newer_than": "Only Posts Newer Than",
 			"platform": "Platform",
 			"project_id": "Project",
 			"limit_posts_per_account": "Limit Posts Per Account",
