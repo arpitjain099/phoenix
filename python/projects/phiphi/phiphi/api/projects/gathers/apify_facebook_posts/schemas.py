@@ -23,13 +23,13 @@ class ApifyFacebookPostGatherBase(gather_schemas.GatherBase):
         ),
     ]
     only_posts_older_than: Annotated[
-        str | None,
+        str,
         pydantic.Field(
             description="YYYY-MM-DD format",
         ),
     ]
     only_posts_newer_than: Annotated[
-        str | None,
+        str,
         pydantic.Field(
             description="YYYY-MM-DD format",
         ),

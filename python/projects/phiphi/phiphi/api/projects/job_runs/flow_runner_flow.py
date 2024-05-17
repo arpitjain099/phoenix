@@ -11,8 +11,11 @@ Likely this will become a module with sub-modules.
 """
 import asyncio
 from datetime import datetime
-from typing import Any
+from typing import Any, Union
 
+from phiphi import platform_db
+from phiphi.api.projects import gathers
+from phiphi.pipeline_jobs.gathers import apify_input_schemas
 from phiphi.types import PhiphiJobType
 from prefect import flow, runtime, task
 from prefect.client.schemas import objects
@@ -21,30 +24,40 @@ from prefect.flow_runs import wait_for_flow_run
 
 
 @task
-def read_job_params(job_type: PhiphiJobType, job_source_id: int) -> dict:
+def read_job_params(
+    project_id: int, job_type: PhiphiJobType, job_source_id: int
+) -> Union[apify_input_schemas.ApifyFacebookPostsInput]:
     """Task to read job params from the database.
 
     Args:
+        project_id: ID of the project.
         job_type: Type of job to run.
         job_source_id: ID of the source for the job. I.e., if type is `gather` then
             `job_source_id` is the ID of the row in the gathers table.
 
     Returns:
-        job_params_dict: Job parameters.
+        job_params: Job parameters.
     """
-    job_params_dict: dict
-    # Read job params from the database
     if job_type == "gather":
-        # Read row with id from gathers table
-        job_params_dict = {}
-    elif job_type == "classify":
-        # Read row with id from classifies table
-        job_params_dict = {}
-    elif job_type == "tabulate":
-        # Read row with id from tabulates table
-        job_params_dict = {}
+        with platform_db.get_session() as session:
+            gather = gathers.crud.get_gather(
+                session=session, project_id=project_id, gather_id=job_source_id
+            )
+        if gather is None:
+            raise ValueError(f"Gather with ID {job_source_id=} not found.")
+        elif type(gather) == gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse:
+            job_params = apify_input_schemas.ApifyFacebookPostsInput(
+                only_posts_older_than=gather.only_posts_older_than,
+                only_posts_newer_than=gather.only_posts_newer_than,
+                account_urls=gather.account_url_list,
+                results_per_url_limit=gather.limit_posts_per_account,
+            )
+        else:
+            raise NotImplementedError(f"Run for gather type {type(gather)=} not implemented yet.")
+    else:
+        raise NotImplementedError(f"Job type {job_type=} not implemented yet.")
 
-    return job_params_dict
+    return job_params
 
 
 @task
