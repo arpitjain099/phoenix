@@ -7,9 +7,10 @@ Implementation notes:
 import datetime
 from typing import Optional
 
+from sqlalchemy import Index, orm
+
 from phiphi import platform_db
 from phiphi.api import base_models
-from sqlalchemy import Index, orm
 
 
 class JobRunsBase(platform_db.Base):

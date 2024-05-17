@@ -13,14 +13,15 @@ import asyncio
 from datetime import datetime
 from typing import Any, Union
 
-from phiphi import platform_db
-from phiphi.api.projects import gathers
-from phiphi.pipeline_jobs.gathers import apify_input_schemas
-from phiphi.types import PhiphiJobType
 from prefect import flow, runtime, task
 from prefect.client.schemas import objects
 from prefect.deployments import deployments
 from prefect.flow_runs import wait_for_flow_run
+
+from phiphi import platform_db
+from phiphi.api.projects import gathers
+from phiphi.pipeline_jobs.gathers import apify_input_schemas
+from phiphi.types import PhiphiJobType
 
 
 @task
