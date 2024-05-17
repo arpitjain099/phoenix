@@ -8,13 +8,14 @@ import datetime
 from typing import Optional
 
 from phiphi import platform_db
-from sqlalchemy import orm
+from sqlalchemy import Index, orm
 
 
 class JobRuns(platform_db.Base):
     """Job runs model."""
 
     __tablename__ = "job_runs"
+    __table_args__ = (Index("idx_foreign_job_type_foreign_id", "foreign_job_type", "foreign_id"),)
 
     id: orm.Mapped[int] = orm.mapped_column(primary_key=True)
     row_created_at: orm.Mapped[datetime.datetime]
