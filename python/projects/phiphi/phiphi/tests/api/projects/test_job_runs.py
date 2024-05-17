@@ -30,3 +30,28 @@ def test_create_get_job_runs(reseed_tables, client: TestClient) -> None:
 
     job_run = response.json()
     assert job_run["id"] == job_run["id"]
+
+
+def test_get_job_runs(client: TestClient, reseed_tables) -> None:
+    """Test getting job runs."""
+    response = client.get("/projects/1/job_runs/")
+    assert response.status_code == 200
+    job_runs = response.json()
+    assert len(job_runs) == 2
+    # Assert desc id
+    assert job_runs[0]["id"] == 2
+    assert job_runs[1]["id"] == 1
+
+    response = client.get("/projects/2/job_runs/")
+    assert response.status_code == 200
+    job_runs = response.json()
+    assert len(job_runs) == 1
+    assert job_runs[0]["id"] == 3
+
+
+def test_get_job_runs_pagination(client: TestClient, reseed_tables) -> None:
+    """Test getting job runs with pagination."""
+    response = client.get("/projects/1/job_runs/?start=0&end=1")
+    assert response.status_code == 200
+    job_runs = response.json()
+    assert len(job_runs) == 1

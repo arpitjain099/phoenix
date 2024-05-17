@@ -44,3 +44,17 @@ def get_job_run(db: Session, project_id: int, job_run_id: int) -> schemas.JobRun
     if db_job_run is None:
         return None
     return schemas.JobRunResponse.model_validate(db_job_run)
+
+
+def get_job_runs(
+    db: Session, project_id: int, start: int = 0, end: int = 100
+) -> list[schemas.JobRunResponse]:
+    """Get job runs."""
+    db_job_runs = (
+        db.query(models.JobRuns)
+        .filter(models.JobRuns.project_id == project_id)
+        .order_by(models.JobRuns.id.desc())
+        .slice(start, end)
+        .all()
+    )
+    return [schemas.JobRunResponse.model_validate(db_job_run) for db_job_run in db_job_runs]
