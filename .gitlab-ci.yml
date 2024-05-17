@@ -329,7 +329,3 @@ publish_phiphi_prefect_deployments:
       variables:
         PREFECT_API_KEY: "$DEV_PREFECT_API_KEY"
         PREFECT_API_URL: "$DEV_PREFECT_API_URL"
-    - if: $CI_COMMIT_BRANCH =~ /^ci\/*/
-      variables:
-        PREFECT_API_KEY: "$DEV_PREFECT_API_KEY"
-        PREFECT_API_URL: "$DEV_PREFECT_API_URL"
