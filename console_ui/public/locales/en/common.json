@@ -216,7 +216,7 @@
 		}
 	},
 	"documentTitle": {
-		"default": "Console UI",
+		"default": "Console - Phoenix",
 		"suffix": " | Phoenix",
 		"projects": {
 			"list": "Projects | Phoenix",

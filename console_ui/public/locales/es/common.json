@@ -216,7 +216,7 @@
 		}
 	},
 	"documentTitle": {
-		"default": "Interfaz de consola",
+		"default": "Consola - Phoenix",
 		"suffix": " | Phoenix",
 		"projects": {
 			"list": "Proyectos | Phoenix",
