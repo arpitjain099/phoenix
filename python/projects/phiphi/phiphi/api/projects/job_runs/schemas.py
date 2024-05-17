@@ -54,3 +54,33 @@ class JobRunUpdateCompleted(pydantic.BaseModel):
     completed_at: Optional[datetime] = pydantic.Field(
         default_factory=datetime.now, description="The completion time of the flow run"
     )
+
+
+class JobRunResponse(JobRunCreated):
+    """Schema for the response when a job run for all responses."""
+
+    row_created_at: datetime = pydantic.Field(
+        default_factory=datetime.now, description="The time the job run was created"
+    )
+    project_id: int = pydantic.Field(
+        ..., description="The ID of the project associated with this job run"
+    )
+    status: Status = pydantic.Field(..., description="The status of the job run")
+    started_processing_at: Optional[datetime] = pydantic.Field(
+        default=None, description="The start time of the flow run"
+    )
+    completed_at: Optional[datetime] = pydantic.Field(
+        default=None, description="The completion time of the flow run"
+    )
+    flow_run_id: Optional[str] = pydantic.Field(
+        default=None, description="The ID of the flow run from Prefect"
+    )
+    flow_run_name: Optional[str] = pydantic.Field(
+        default=None, description="The name of the flow run from Prefect"
+    )
+    foreign_id: int = pydantic.Field(
+        ..., description="The foreign table ID associated with this job run"
+    )
+    foreign_job_type: str = pydantic.Field(
+        ..., description="The type of job (gather, classify, etc.)"
+    )
