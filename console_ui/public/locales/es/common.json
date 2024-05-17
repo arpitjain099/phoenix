@@ -99,6 +99,7 @@
 		"undo": "Deshacer",
 		"import": "Importar",
 		"clone": "Clonar",
+		"start_run": "Iniciar ejecución",
 		"notAccessTitle": "No tiene permiso para acceder"
 	},
 	"inputs": {
@@ -158,6 +159,7 @@
 	},
 	"gathers": {
 		"gathers": "Reuniones",
+		"details": "Detalles",
 		"titles": {
 			"create": "Crear reunión",
 			"edit": "Editar reunión",
@@ -181,6 +183,7 @@
 			"description": "Descripción",
 			"created_at": "Creado En",
 			"updated_at": "Actualizado En",
+			"last_run_started_at": "Última ejecución iniciada en",
 			"input": {
 				"data": "Recopilar Datos de Entrada",
 				"facebook_account_url_list": "URL de cuentas de Facebook",
@@ -204,6 +207,12 @@
 					"data": "Agregue los datos de entrada que le gustaría recopilar. Escriba/pegue las entradas separadas por ` ` (espacio)"
 				}
 			}
+		},
+		"run_estimate": {
+			"title": "¿Estás seguro de querer ejecutar esta recopilación?",
+			"estimated_credit_cost": "Créditos estimados para esta ejecución",
+			"estimated_duration_minutes": "Tiempo estimado",
+			"cost": "Costo estimado"
 		}
 	},
 	"documentTitle": {

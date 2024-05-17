@@ -99,6 +99,7 @@
 		"undo": "تراجع",
 		"import": "استيراد",
 		"clone": "نسخ",
+		"start_run": "بدء التشغيل",
 		"notAccessTitle": "ليس لديك إذن للوصول"
 	},
 	"inputs": {
@@ -158,6 +159,7 @@
 	},
 	"gathers": {
 		"gathers": "تجمعات",
+		"details": "تفاصيل",
 		"titles": {
 			"create": "إنشاء تجمع",
 			"edit": "تعديل التجمع",
@@ -181,6 +183,7 @@
 			"description": "الوصف",
 			"created_at": "تم الإنشاء في",
 			"updated_at": "تم التحديث في",
+			"last_run_started_at": "آخر تشغيل بدأ في",
 			"input": {
 				"data": "جمع بيانات الإدخال",
 				"facebook_account_url_list": "عناوين URL لحسابات الفيسبوك",
@@ -204,6 +207,12 @@
 					"data": "إضافة بيانات الإدخال التي ترغب في جمعها. اكتب/الصق الإدخالات مفصولة بـ ` ` (مسافة)"
 				}
 			}
+		},
+		"run_estimate": {
+			"title": "هل أنت متأكد أنك تريد تشغيل هذه الجمع؟",
+			"estimated_credit_cost": "الاعتمادات المقدرة لهذا التشغيل",
+			"estimated_duration_minutes": "الوقت المقدر",
+			"cost": "التكلفة المقدرة"
 		}
 	},
 	"documentTitle": {

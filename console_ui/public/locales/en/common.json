@@ -99,6 +99,7 @@
 		"undo": "Undo",
 		"import": "Import",
 		"clone": "Clone",
+		"start_run": "Start run",
 		"notAccessTitle": "You don't have permission to access"
 	},
 	"inputs": {
@@ -158,6 +159,7 @@
 	},
 	"gathers": {
 		"gathers": "Gathers",
+		"details": "Gather details",
 		"titles": {
 			"create": "Create Gather",
 			"edit": "Edit Gather",
@@ -181,6 +183,7 @@
 			"description": "Description",
 			"created_at": "Created At",
 			"updated_at": "Updated At",
+			"last_run_started_at": "Last Run Started At",
 			"input": {
 				"data": "Gather Input Data",
 				"facebook_account_url_list": "Facebook Account URLs",
@@ -204,6 +207,12 @@
 					"data": "Add the input data you would like to gather. Type/paste inputs separated by ` ` (space)"
 				}
 			}
+		},
+		"run_estimate": {
+			"title": "Are you sure you want to run this gather?",
+			"estimated_credit_cost": "Estimated credits for this run",
+			"estimated_duration_minutes": "Estimated time",
+			"cost": "Estimated Cost"
 		}
 	},
 	"documentTitle": {
