@@ -183,6 +183,8 @@
 			"updated_at": "Updated At",
 			"input": {
 				"data": "Gather Input Data",
+				"facebook_account_url_list": "Facebook Account URLs",
+				"facebook_post_url_list": " Facebook Post URLS",
 				"type": "Gather Input Type",
 				"data_placeholder": "Type/paste inputs seperated by ` ` (space)",
 				"button_text": "Add to inputs",

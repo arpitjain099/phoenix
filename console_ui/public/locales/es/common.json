@@ -183,6 +183,8 @@
 			"updated_at": "Actualizado En",
 			"input": {
 				"data": "Recopilar Datos de Entrada",
+				"facebook_account_url_list": "URL de cuentas de Facebook",
+				"facebook_post_url_list": "URL de publicaciones de Facebook",
 				"type": "Tipo de Datos de Entrada",
 				"data_placeholder": "Escriba/pegue las entradas separadas por ` ` (espacio)",
 				"button_text": "Agregar a las entradas",
