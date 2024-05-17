@@ -61,6 +61,46 @@ def read_job_params(
 
 
 @task
+def start_flow_run(
+    project_id: int,
+    job_type: PhiphiJobType,
+    job_source_id: int,
+    job_run_id: int,
+    job_params: Union[apify_input_schemas.ApifyFacebookPostsInput],
+) -> objects.FlowRun:
+    """Task to start the (inner) flow for the job.
+
+    Args:
+        project_id: ID of the project.
+        job_type: Type of job to run.
+        job_source_id: ID of the source for the job. Corresponds to the job_type table.
+        job_run_id: ID of the row in the job_runs table.
+        job_params: Parameters for the job.
+    """
+    if type(job_params) == apify_input_schemas.ApifyFacebookPostsInput:
+        deployment_name = "gather_apify_facebook_posts_flow/main_deployment"
+    else:
+        raise NotImplementedError(
+            f"Run for job_params type {type(job_params)=} not implemented yet."
+        )
+    job_run_flow: objects.FlowRun = asyncio.run(
+        deployments.run_deployment(
+            name=deployment_name,
+            parameters=job_params.dict(by_alias=True),
+            as_subflow=True,
+            timeout=0,  # this means it returns immediately with the metadata
+            tags=[
+                f"project_id:{project_id}",
+                f"job_type:{job_type}",
+                f"job_source_id:{job_source_id}",
+                f"job_run_id:{job_run_id}",
+            ],
+        )
+    )
+    return job_run_flow
+
+
+@task
 def create_job_run_row(job_type: PhiphiJobType, job_source_id: int) -> int:
     """Task to create a row in the job_runs table.
 
@@ -76,27 +116,6 @@ def create_job_run_row(job_type: PhiphiJobType, job_source_id: int) -> int:
     # Create row in job_runs table
     # Get id of the created row
     return 1  # id of the created row
-
-
-@task
-def start_flow_run(job_type: PhiphiJobType, job_params: dict) -> objects.FlowRun:
-    """Task to start the (inner) flow for the job.
-
-    Args:
-        job_type: Type of job to run.
-        job_params: Parameters for the job.
-    """
-    # if job_type == "gather":  # and other if statements for other job types
-    # TODO: we could add `tags` to tag with the project name/ID?
-    job_run_flow: objects.FlowRun = asyncio.run(
-        deployments.run_deployment(
-            name="gather_apify_facebook_posts_flow/main_deployment",
-            parameters=job_params,
-            as_subflow=True,
-            timeout=0,  # this means it returns immediately with the metadata
-        )
-    )
-    return job_run_flow
 
 
 @task
