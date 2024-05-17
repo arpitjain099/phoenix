@@ -24,3 +24,9 @@ def test_create_get_job_runs(reseed_tables, client: TestClient) -> None:
     assert job_run["created_at"] == CREATED_TIME
     assert job_run["project_id"] == 1
     assert job_run["status"] == schemas.Status.awaiting_start
+
+    response = client.get(f"/projects/1/job_runs/{job_run['id']}")
+    assert response.status_code == 200
+
+    job_run = response.json()
+    assert job_run["id"] == job_run["id"]

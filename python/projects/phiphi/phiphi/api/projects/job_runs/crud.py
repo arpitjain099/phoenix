@@ -32,3 +32,15 @@ def update_job_run(
         for field, value in job_run_data.dict(exclude={"id"}).items():
             setattr(db_job_run, field, value)
         db.commit()
+
+
+def get_job_run(db: Session, project_id: int, job_run_id: int) -> schemas.JobRunResponse | None:
+    """Get a job run."""
+    db_job_run = (
+        db.query(models.JobRuns)
+        .filter(models.JobRuns.project_id == project_id, models.JobRuns.id == job_run_id)
+        .first()
+    )
+    if db_job_run is None:
+        return None
+    return schemas.JobRunResponse.model_validate(db_job_run)

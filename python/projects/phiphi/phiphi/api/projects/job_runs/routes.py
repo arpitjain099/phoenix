@@ -12,3 +12,12 @@ def create_job_run(
 ) -> schemas.JobRunResponse:
     """Create a Project Job Run."""
     return crud.create_job_run(session, project_id, job_run_create)
+
+
+@router.get("/projects/{project_id}/job_runs/{id}", response_model=schemas.JobRunResponse)
+def get_job_run(project_id: int, id: int, session: deps.SessionDep) -> schemas.JobRunResponse:
+    """Get a Project Job Run."""
+    job_run = crud.get_job_run(session, project_id, id)
+    if job_run is None:
+        raise fastapi.HTTPException(status_code=404, detail="Job Run not found")
+    return job_run
