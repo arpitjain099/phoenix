@@ -59,8 +59,11 @@ class JobRunUpdateCompleted(pydantic.BaseModel):
 class JobRunResponse(JobRunCreated):
     """Schema for the response when a job run for all responses."""
 
-    row_created_at: datetime = pydantic.Field(
+    created_at: datetime = pydantic.Field(
         default_factory=datetime.now, description="The time the job run was created"
+    )
+    updated_at: datetime = pydantic.Field(
+        default_factory=datetime.now, description="The time the job run was last updated"
     )
     project_id: int = pydantic.Field(
         ..., description="The ID of the project associated with this job run"

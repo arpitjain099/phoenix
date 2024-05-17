@@ -8,11 +8,29 @@ import datetime
 from typing import Optional
 
 from phiphi import platform_db
+from phiphi.api import base_models
 from sqlalchemy import Index, orm
 
 
-class JobRuns(platform_db.Base):
+class JobRunsBase(platform_db.Base):
     """Job runs model."""
+
+    __abstract__ = True
+
+    id: orm.Mapped[int] = orm.mapped_column(primary_key=True)
+    project_id: orm.Mapped[int]
+    foreign_id: orm.Mapped[int]
+    foreign_job_type: orm.Mapped[str]
+    status: orm.Mapped[Optional[str]]
+    flow_run_id: orm.Mapped[Optional[str]]
+    # Note: name of the _flow run_, not the flow. Useful for searching in Prefect UI.
+    flow_run_name: orm.Mapped[Optional[str]]
+    started_processing_at: orm.Mapped[Optional[datetime.datetime]]
+    completed_at: orm.Mapped[Optional[datetime.datetime]]
+
+
+class JobRuns(JobRunsBase, base_models.TimestampModel):
+    """Job runs model that can inherit from multiple models."""
 
     __tablename__ = "job_runs"
     __table_args__ = (
@@ -31,15 +49,3 @@ class JobRuns(platform_db.Base):
             "foreign_id",
         ),
     )
-
-    id: orm.Mapped[int] = orm.mapped_column(primary_key=True)
-    project_id: orm.Mapped[int]
-    row_created_at: orm.Mapped[datetime.datetime]
-    foreign_id: orm.Mapped[int]
-    foreign_job_type: orm.Mapped[str]
-    status: orm.Mapped[Optional[str]]
-    flow_run_id: orm.Mapped[Optional[str]]
-    # Note: name of the _flow run_, not the flow. Useful for searching in Prefect UI.
-    flow_run_name: orm.Mapped[Optional[str]]
-    started_processing_at: orm.Mapped[Optional[datetime.datetime]]
-    completed_at: orm.Mapped[Optional[datetime.datetime]]
