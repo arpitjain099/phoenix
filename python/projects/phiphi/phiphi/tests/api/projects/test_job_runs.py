@@ -32,6 +32,28 @@ def test_create_get_job_runs(reseed_tables, client: TestClient) -> None:
     assert job_run["id"] == job_run["id"]
 
 
+def test_create_guard(reseed_tables, client: TestClient) -> None:
+    """Test that if a gather is not found, a job run is not created."""
+    data = {
+        "foreign_id": 5,
+        "foreign_job_type": "gather",
+    }
+
+    # Project is not found
+    response = client.post("/projects/4/job_runs/", json=data)
+    assert response.status_code == 400
+    assert response.json() == {"detail": "Gather not found"}
+
+    # Project is found and gather exists but the gather is not in the project
+    data = {
+        "foreign_id": 3,
+        "foreign_job_type": "gather",
+    }
+    response = client.post("/projects/1/job_runs/", json=data)
+    assert response.status_code == 400
+    assert response.json() == {"detail": "Gather not found"}
+
+
 def test_get_job_runs(client: TestClient, reseed_tables) -> None:
     """Test getting job runs."""
     response = client.get("/projects/1/job_runs/")

@@ -17,3 +17,11 @@ class EnvironmentNotFound(fastapi.HTTPException):
     def __init__(self) -> None:
         """Constructor for custom exception."""
         super().__init__(status_code=400, detail="Environment not found")
+
+
+class GatherNotFound(fastapi.HTTPException):
+    """Custom exception for null gather."""
+
+    def __init__(self) -> None:
+        """Constructor for custom exception."""
+        super().__init__(status_code=400, detail="Gather not found")
