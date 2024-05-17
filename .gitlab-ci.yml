@@ -1,5 +1,12 @@
-# The Gitlab CI is set up so that if your branch is called `ci/*` it will run the CI
-# To run jobs that are only on main you can add the rule:
+# ########
+# Docs on testing the CI:
+# The Gitlab CI is set up so that if your branch is called `ci/*` it will
+# run CI pipelines for every commit.
+#
+# To run jobs which are currently specified in the yaml to only run when
+# commits are added to `main` branch, you can (temporarily) add the following
+# rule to the job, which will force the job to run on all commits to `ci/*`
+# branches.
 # - if: $CI_COMMIT_BRANCH =~ /^ci\/*/
 .docker_template:
   image: docker:latest
