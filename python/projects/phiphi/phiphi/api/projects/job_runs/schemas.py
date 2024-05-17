@@ -59,6 +59,9 @@ class JobRunUpdateCompleted(pydantic.BaseModel):
 class JobRunResponse(JobRunCreated):
     """Schema for the response when a job run for all responses."""
 
+    # To map from the JobRuns model
+    model_config = pydantic.ConfigDict(from_attributes=True)
+
     created_at: datetime = pydantic.Field(
         default_factory=datetime.now, description="The time the job run was created"
     )

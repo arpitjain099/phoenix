@@ -5,13 +5,19 @@ from phiphi.api.projects.job_runs import models, schemas
 from sqlalchemy.orm import Session
 
 
-def create_job_run(db: Session, job_run_data: schemas.JobRunCreate) -> int:
+def create_job_run(
+    db: Session, project_id: int, job_run_create: schemas.JobRunCreate
+) -> schemas.JobRunResponse:
     """Create a new job run."""
-    db_job_run = models.JobRuns(**job_run_data.dict(), status=schemas.Status.awaiting_start)
+    db_job_run = models.JobRuns(
+        **job_run_create.dict(),
+        status=schemas.Status.awaiting_start,
+        project_id=project_id,
+    )
     db.add(db_job_run)
     db.commit()
     db.refresh(db_job_run)
-    return db_job_run.id
+    return schemas.JobRunResponse.model_validate(db_job_run)
 
 
 def update_job_run(
