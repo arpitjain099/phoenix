@@ -183,6 +183,7 @@
 			"description": "Description",
 			"created_at": "Créé à",
 			"updated_at": "Mis à jour à",
+			"last_run_started_at": "Dernière exécution commencée à",
 			"input": {
 				"data": "Collecter les données d'entrée",
 				"type": "Type de données d'entrée",

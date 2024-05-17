@@ -183,6 +183,7 @@
 			"description": "الوصف",
 			"created_at": "تم الإنشاء في",
 			"updated_at": "تم التحديث في",
+			"last_run_started_at": "آخر تشغيل بدأ في",
 			"input": {
 				"data": "جمع بيانات الإدخال",
 				"type": "نوع بيانات الإدخال",

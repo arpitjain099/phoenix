@@ -142,12 +142,6 @@ const GatherRunModal: React.FC<Props> = ({
 					</div>
 				</div>
 				<div className="flex justify-end items-center mt-4">
-					{/* <div className="flex flex-col text-warning-600">
-                <span className="text-sm font-medium">
-                  {formatToCurrency(estimateData?.estimated_cost_total)}
-                </span>
-                <span className="text-xs font-normal">Estatmated credit used after the run</span>
-              </div> */}
 					<div className="flex gap-4" role="group">
 						<Button variant="subtle" color="red" onClick={handleClose}>
 							{translate("buttons.cancel")}

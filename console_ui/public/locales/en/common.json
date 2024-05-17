@@ -183,6 +183,7 @@
 			"description": "Description",
 			"created_at": "Created At",
 			"updated_at": "Updated At",
+			"last_run_started_at": "Last Run Started At",
 			"input": {
 				"data": "Gather Input Data",
 				"type": "Gather Input Type",
