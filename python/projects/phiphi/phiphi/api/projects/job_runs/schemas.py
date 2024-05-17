@@ -15,15 +15,19 @@ class Status(str, Enum):
     failed = "failed"
 
 
+class ForeignJobType(str, Enum):
+    """The type of job run."""
+
+    gather = "gather"
+
+
 class JobRunCreate(pydantic.BaseModel):
     """Schema for creating a job run."""
 
     foreign_id: int = pydantic.Field(
         ..., description="The foreign table ID associated with this job run"
     )
-    foreign_job_type: str = pydantic.Field(
-        ..., description="The type of job (gather, classify, etc.)"
-    )
+    foreign_job_type: ForeignJobType = pydantic.Field(..., description="The type of job")
 
 
 class JobRunCreated(pydantic.BaseModel):
@@ -56,7 +60,7 @@ class JobRunUpdateCompleted(pydantic.BaseModel):
     )
 
 
-class JobRunResponse(JobRunCreated):
+class JobRunResponse(JobRunCreated, JobRunCreate):
     """Schema for the response when a job run for all responses."""
 
     # To map from the JobRuns model
@@ -83,10 +87,4 @@ class JobRunResponse(JobRunCreated):
     )
     flow_run_name: Optional[str] = pydantic.Field(
         default=None, description="The name of the flow run from Prefect"
-    )
-    foreign_id: int = pydantic.Field(
-        ..., description="The foreign table ID associated with this job run"
-    )
-    foreign_job_type: str = pydantic.Field(
-        ..., description="The type of job (gather, classify, etc.)"
     )

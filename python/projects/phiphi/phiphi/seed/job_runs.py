@@ -14,11 +14,11 @@ from sqlalchemy.orm import Session
 
 from phiphi.api.projects.job_runs import crud, schemas
 
-TEST_JOB_RUN = schemas.JobRunCreate(foreign_id=1, foreign_job_type="gather")
+TEST_JOB_RUN = schemas.JobRunCreate(foreign_id=1, foreign_job_type=schemas.ForeignJobType.gather)
 
-TEST_JOB_RUN_2 = schemas.JobRunCreate(foreign_id=2, foreign_job_type="gather")
+TEST_JOB_RUN_2 = schemas.JobRunCreate(foreign_id=2, foreign_job_type=schemas.ForeignJobType.gather)
 
-TEST_JOB_RUN_3 = schemas.JobRunCreate(foreign_id=3, foreign_job_type="gather")
+TEST_JOB_RUN_3 = schemas.JobRunCreate(foreign_id=3, foreign_job_type=schemas.ForeignJobType.gather)
 
 
 def seed_test_job_runs(session: Session) -> None:
