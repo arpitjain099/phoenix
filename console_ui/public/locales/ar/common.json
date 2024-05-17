@@ -167,8 +167,8 @@
 		"fields": {
 			"id": "المعرف",
 			"source": "مصدر",
-			"only_posts_older_than": "تاريخ البدء",
-			"only_posts_newer_than": "تاريخ الانتهاء",
+			"only_posts_older_than": "المنشورات فقط الأقدم من",
+			"only_posts_newer_than": "المنشورات فقط الأحدث من",
 			"platform": "المنصة",
 			"project_id": "المشروع",
 			"limit_posts_per_account": "الحد الأقصى للمنشورات لكل حساب",
