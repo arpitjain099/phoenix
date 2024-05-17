@@ -183,6 +183,8 @@
 			"updated_at": "تم التحديث في",
 			"input": {
 				"data": "جمع بيانات الإدخال",
+				"facebook_account_url_list": "عناوين URL لحسابات الفيسبوك",
+				"facebook_post_url_list": "عناوين URL للمنشورات على الفيسبوك",
 				"type": "نوع بيانات الإدخال",
 				"data_placeholder": "اكتب/الصق الإدخالات مفصولة بـ ` ` (مسافة)",
 				"button_text": "إضافة إلى الإدخالات",

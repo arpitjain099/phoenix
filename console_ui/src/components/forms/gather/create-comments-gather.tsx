@@ -98,7 +98,7 @@ const CreateCommentsGatherForm: React.FC<Props> = ({
 								<IconInfoCircle size={12} />
 							</span>
 						</Tooltip>
-						{translate("gathers.fields.input.data")}
+						{translate("gathers.fields.input.facebook_post_url_list")}
 						<span className="text-red-500 ml-1">*</span>
 						{inputList.length > 0 && (
 							<span className="italic ml-10">
