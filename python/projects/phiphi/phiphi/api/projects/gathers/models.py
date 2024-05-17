@@ -2,10 +2,11 @@
 import datetime
 from typing import Optional
 
+from sqlalchemy import orm
+
 from phiphi import platform_db
 from phiphi.api import base_models
 from phiphi.api.projects.job_runs import models as job_run_models
-from sqlalchemy import orm
 
 
 class GatherBase(platform_db.Base):

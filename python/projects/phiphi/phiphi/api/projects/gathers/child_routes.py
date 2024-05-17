@@ -15,6 +15,7 @@ typing was getting complex and we decided to ignore the typing errors.
 from typing import Callable, Type, TypeVar
 
 import fastapi
+
 from phiphi.api import deps
 from phiphi.api.projects.gathers import child_crud
 from phiphi.api.projects.gathers import models as gather_model

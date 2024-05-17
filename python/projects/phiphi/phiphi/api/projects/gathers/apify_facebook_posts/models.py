@@ -1,9 +1,10 @@
 """Apify facebook posts gather model."""
 from typing import Optional
 
+from sqlalchemy import ForeignKey, orm
+
 from phiphi.api import base_models
 from phiphi.api.projects.gathers import models as gather_models
-from sqlalchemy import ForeignKey, orm
 
 
 class ApifyFacebookPostGather(gather_models.Gather):
