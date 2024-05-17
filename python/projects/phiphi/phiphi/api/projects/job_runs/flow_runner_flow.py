@@ -19,7 +19,7 @@ from prefect.deployments import deployments
 from prefect.flow_runs import wait_for_flow_run
 
 from phiphi import platform_db
-from phiphi.api.projects import gathers
+from phiphi.api.projects import gathers, job_runs
 from phiphi.pipeline_jobs.gathers import apify_input_schemas
 from phiphi.types import PhiphiJobType
 
@@ -102,38 +102,19 @@ def start_flow_run(
 
 
 @task
-def create_job_run_row(job_type: PhiphiJobType, job_source_id: int) -> int:
-    """Task to create a row in the job_runs table.
-
-    Returns:
-        job_run_id: ID of the created row.
-    """
-    _ = {
-        "foreign_id": job_source_id,
-        "foreign_type": job_type,
-        "prefect_outer_flow_run_id": runtime.flow_run.id,
-        "prefect_outer_flow_run_name": runtime.flow_run.name,
-    }
-    # Create row in job_runs table
-    # Get id of the created row
-    return 1  # id of the created row
-
-
-@task
-def update_job_row_to_started(job_run_id: int, job_run_flow: objects.FlowRun) -> None:
-    """Update the job_runs table with info about the job and set status to started.
+def job_run_update_started(job_run_id: int) -> None:
+    """Update the job_runs row with the flow info and set status to started.
 
     Args:
         job_run_id: ID of the row in the job_runs table.
-        job_run_flow: Flow run object for the job.
     """
-    _ = {
-        "prefect_inner_flow_run_id": job_run_flow.id,
-        "prefect_inner_flow_run_name": job_run_flow.name,
-        "prefect_inner_flow_run_status": "started",
-        "prefect_inner_flow_run_started_at": datetime.now(),
-    }
-    # Update row in job_runs table for `job_run_id`
+    job_run_update_started = job_runs.schemas.JobRunUpdateStarted(
+        id=job_run_id,
+        flow_run_id=str(runtime.flow_run.id),
+        flow_run_name=runtime.flow_run.name,
+    )
+    with platform_db.get_session() as session:
+        job_runs.crud.update_job_run(db=session, job_run_data=job_run_update_started)
 
 
 @task
@@ -155,18 +136,24 @@ def update_job_row_with_end_result(job_run_id: int, job_run_flow_result: objects
 
 
 @flow(name="flow_runner_flow")
-def flow_runner_flow(job_type: PhiphiJobType, job_source_id: int) -> None:
+def flow_runner_flow(
+    project_id: int,
+    job_type: PhiphiJobType,
+    job_source_id: int,
+    job_run_id: int,
+) -> None:
     """Flow which runs flow deployments and records their status.
 
     Args:
+        project_id: ID of the project.
         job_type: Type of job to run.
         job_source_id: ID of the source for the job. I.e., if type is `gather` then
             `job_source_id` is the ID of the row in the gathers table.
+        job_run_id: ID of the row in the job_runs table.
     """
     job_params = read_job_params(job_type=job_type, job_source_id=job_source_id)
-    job_run_id = create_job_run_row(job_type=job_type, job_source_id=job_source_id)
     job_run_flow = start_flow_run(job_type=job_type, job_params=job_params)
-    update_job_row_to_started(job_run_id=job_run_id, job_run_flow=job_run_flow)
+    job_run_update_started(job_run_id=job_run_id)
     job_run_flow_result = wait_for_job_flow_run(job_run_flow=job_run_flow)
     update_job_row_with_end_result(job_run_id=job_run_id, job_run_flow_result=job_run_flow_result)
 
