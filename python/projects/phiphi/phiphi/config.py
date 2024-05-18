@@ -1,4 +1,5 @@
 """Configuration of phiphi application."""
+import json
 import logging
 import os
 from typing import Any, Optional
@@ -38,6 +39,20 @@ def parse_cors(v: Any) -> list[str] | str:
     raise ValueError(v)
 
 
+def parse_apify_keys(v: Any) -> Any:
+    """Parse apify keys into a dictionary.
+
+    The keys can be a dictionary or a json string.
+    We return type Any as pydantic will validate the type later.
+    """
+    if isinstance(v, dict):
+        return v
+    if isinstance(v, str):
+        return json.loads(v)
+
+    raise ValueError("APIFY_API_KEYS must be a dictionary or a json string.")
+
+
 class Settings(BaseSettings):
     """Settings of the app taken from environment variables."""
 
@@ -70,6 +85,7 @@ class Settings(BaseSettings):
     COOKIE_AUTH_NAME: Optional[str] = None
     # For a local cluster to be run without oauth2 implement.
     INCLUDE_INSECURE_AUTH: bool = False
+    APIFY_API_KEYS: Annotated[dict[str, str], pydantic.BeforeValidator(parse_apify_keys)] = {}
 
 
 if os.environ.get("SETTINGS_ENV_FILE"):
