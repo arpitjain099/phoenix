@@ -4,6 +4,7 @@ from enum import Enum
 from typing import Annotated
 
 import pydantic
+from phiphi.api.projects.job_runs import schemas as job_runs_schemas
 
 
 class Platform(str, Enum):
@@ -53,6 +54,7 @@ class GatherResponse(GatherBase):
     updated_at: datetime.datetime
     project_id: int
     deleted_at: datetime.datetime | None = None
+    latest_job_run: job_runs_schemas.JobRunResponse | None = None
 
 
 class GatherCreate(GatherBase):
