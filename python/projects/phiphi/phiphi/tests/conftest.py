@@ -133,6 +133,10 @@ def patch_settings(request: pytest.FixtureRequest) -> Iterator[config.Settings]:
 
         setattr(config.settings, key, val)
 
+    # Reapply the validation of the settings
+    # So that the parsing of the values in to fields is done correctly
+    config.settings = config.Settings(**config.settings.model_dump())
+
     yield config.settings
     # Restore the original settings
     config.settings.__dict__.update(original_settings.__dict__)
