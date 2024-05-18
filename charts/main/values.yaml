@@ -50,6 +50,22 @@ api:
   # Using * as since it is not possible to reach the api not via the
   # ingress it is not a security risk
   forwarded_allow_ips: "*"
+  apify_api_keys:
+    enabled: false
+    secret_name: "{{ .Release.Name }}-apify-api-keys"
+    secret_key: "apify-api-keys"
+    ###############
+    # APIFY_API_KEYS
+    #
+    # This is used to store the apify api keys
+    # The json needs to be a dictionary with the key being the name of the phoenix environment and the
+    # key. Example:
+    # {
+    #  "main": "<key>",
+    #  "phoenix_env_1": "<key>"
+    # }
+    # json : |
+      # <JSON>
 
   ###################
   # Example secrets
