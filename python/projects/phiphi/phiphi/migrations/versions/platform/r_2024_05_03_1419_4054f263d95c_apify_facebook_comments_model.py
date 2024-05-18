@@ -14,7 +14,7 @@ from phiphi.api import base_models
 
 # revision identifiers, used by Alembic.
 revision: str = "4054f263d95c"
-down_revision: Union[str, None] = "df1988f5395d"
+down_revision: Union[str, None] = "6d4b2c6a304c"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
