@@ -1,14 +1,4 @@
-"""Module containing (outer) flow which runs jobs (inner flows) and records their status.
-
-NOTE: Much of this functionality is stub/placeholder code.
-
-Depends on:
-- gathers and its child tables; to pull gather params and parse to pass for inner flow
-- inner flows (i.e. gather_apify_facebook_posts_flow and its params)
-- job_runs table; to create job_runs and update their status
-
-Likely this will become a module with sub-modules.
-"""
+"""Module containing (outer) flow which runs jobs (inner flows) and records their status."""
 import asyncio
 from typing import Union
 
@@ -27,16 +17,13 @@ from phiphi.types import PhiphiJobType
 def read_job_params(
     project_id: int, job_type: PhiphiJobType, job_source_id: int
 ) -> Union[apify_input_schemas.ApifyFacebookPostsInput]:
-    """Task to read job params from the database.
+    """Task to read the job's params from the database.
 
     Args:
         project_id: ID of the project.
         job_type: Type of job to run.
         job_source_id: ID of the source for the job. I.e., if type is `gather` then
             `job_source_id` is the ID of the row in the gathers table.
-
-    Returns:
-        job_params: Job parameters.
     """
     if job_type == "gather":
         with platform_db.get_session() as session:
@@ -68,7 +55,7 @@ def start_flow_run(
     job_run_id: int,
     job_params: Union[apify_input_schemas.ApifyFacebookPostsInput],
 ) -> objects.FlowRun:
-    """Task to start the (inner) flow for the job.
+    """Start the (inner) flow for the job.
 
     Args:
         project_id: ID of the project.
@@ -102,7 +89,7 @@ def start_flow_run(
 
 @task
 def job_run_update_started(job_run_id: int) -> None:
-    """Update the job_runs row with the flow info and set status to started.
+    """Update the job_runs row with this (outer) flow's info and set job row status to started.
 
     Args:
         job_run_id: ID of the row in the job_runs table.
@@ -125,7 +112,7 @@ def wait_for_job_flow_run(job_run_flow: objects.FlowRun) -> objects.FlowRun:
 
 @task
 def job_run_update_completed(job_run_id: int, job_run_flow_result: objects.FlowRun) -> None:
-    """Update the job_runs table with the final state of the job."""
+    """Update the job_runs table with the final state of the job (the inner flow)."""
     assert job_run_flow_result.state is not None
     status = (
         job_runs.schemas.Status.completed_sucessfully
