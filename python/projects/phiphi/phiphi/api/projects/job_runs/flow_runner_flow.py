@@ -1,13 +1,13 @@
 """Module containing (outer) flow which runs jobs (inner flows) and records their status."""
 import asyncio
-from typing import Union
+from typing import Coroutine, Union
 
 from prefect import flow, runtime, task
 from prefect.client.schemas import objects
 from prefect.deployments import deployments
 from prefect.flow_runs import wait_for_flow_run
 
-from phiphi import platform_db
+from phiphi import constants, platform_db
 from phiphi.api.projects import gathers, job_runs
 from phiphi.pipeline_jobs.gathers import apify_input_schemas
 from phiphi.types import PhiphiJobType
@@ -156,13 +156,39 @@ def flow_runner_flow(
     job_run_update_completed(job_run_id=job_run_id, job_run_flow_result=job_run_flow_result)
 
 
-if __name__ == "__main__":
-    asyncio.run(
-        flow_runner_flow.deploy(
-            name="main_deployment",
-            work_pool_name="TODO",  # this should be the work pool on k8s ye?
-            image="TODO",  # this should be the phiphi image!
-            tags=["TODO"],
-            build=False,
-        )
+def create_deployments(
+    override_work_pool_name: str | None = None,
+    deployment_name_prefix: str = "",
+    image: str = constants.DEFAULT_IMAGE,
+    tags: list[str] = [],
+    build: bool = False,
+    push: bool = False,
+) -> list[Coroutine]:
+    """Create deployments for flow_runner_flow.
+
+    Args:
+        override_work_pool_name (str | None): The name of the work pool to use to override the
+        default work pool.
+        deployment_name_prefix (str, optional): The prefix of the deployment name. Defaults to "".
+        image (str, optional): The image to use for the deployments. Defaults to
+        constants.DEFAULT_IMAGE.
+        tags (list[str], optional): The tags to use for the deployments. Defaults to [].
+        build (bool, optional): If True, build the image. Defaults to False.
+        push (bool, optional): If True, push the image. Defaults to False.
+
+    Returns:
+        list[Coroutine]: List of coroutines that create deployments.
+    """
+    work_pool_name = str(constants.WorkPool.main)
+    if override_work_pool_name:
+        work_pool_name = override_work_pool_name
+    task = flow_runner_flow.deploy(
+        name=deployment_name_prefix + "flow_runner_flow",
+        work_pool_name=work_pool_name,
+        image=image,
+        build=build,
+        push=push,
+        tags=tags,
     )
+
+    return [task]
