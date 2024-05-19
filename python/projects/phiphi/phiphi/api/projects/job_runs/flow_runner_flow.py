@@ -10,8 +10,7 @@ Depends on:
 Likely this will become a module with sub-modules.
 """
 import asyncio
-from datetime import datetime
-from typing import Any, Union
+from typing import Union
 
 from prefect import flow, runtime, task
 from prefect.client.schemas import objects
@@ -125,14 +124,18 @@ def wait_for_job_flow_run(job_run_flow: objects.FlowRun) -> objects.FlowRun:
 
 
 @task
-def update_job_row_with_end_result(job_run_id: int, job_run_flow_result: objects.FlowRun) -> None:
+def job_run_update_completed(job_run_id: int, job_run_flow_result: objects.FlowRun) -> None:
     """Update the job_runs table with the final state of the job."""
-    d: dict[str, Any] = {
-        "prefect_inner_flow_run_status": job_run_flow_result.state,
-    }
-    if job_run_flow_result.state == "Success":
-        d["prefect_inner_flow_run_completed_at"] = datetime.now()
-    # Update row in job_runs table for `job_run_id`
+    assert job_run_flow_result.state is not None
+    status = (
+        job_runs.schemas.Status.completed_sucessfully
+        if job_run_flow_result.state.is_completed()
+        else job_runs.schemas.Status.failed
+    )
+
+    job_run_update_completed = job_runs.schemas.JobRunUpdateCompleted(id=job_run_id, status=status)
+    with platform_db.get_session() as session:
+        job_runs.crud.update_job_run(db=session, job_run_data=job_run_update_completed)
 
 
 @flow(name="flow_runner_flow")
@@ -155,7 +158,7 @@ def flow_runner_flow(
     job_run_flow = start_flow_run(job_type=job_type, job_params=job_params)
     job_run_update_started(job_run_id=job_run_id)
     job_run_flow_result = wait_for_job_flow_run(job_run_flow=job_run_flow)
-    update_job_row_with_end_result(job_run_id=job_run_id, job_run_flow_result=job_run_flow_result)
+    job_run_update_completed(job_run_id=job_run_id, job_run_flow_result=job_run_flow_result)
 
 
 if __name__ == "__main__":
