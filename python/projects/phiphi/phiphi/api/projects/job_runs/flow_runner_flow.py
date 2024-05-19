@@ -154,8 +154,16 @@ def flow_runner_flow(
             `job_source_id` is the ID of the row in the gathers table.
         job_run_id: ID of the row in the job_runs table.
     """
-    job_params = read_job_params(job_type=job_type, job_source_id=job_source_id)
-    job_run_flow = start_flow_run(job_type=job_type, job_params=job_params)
+    job_params = read_job_params(
+        project_id=project_id, job_type=job_type, job_source_id=job_source_id
+    )
+    job_run_flow = start_flow_run(
+        project_id=project_id,
+        job_type=job_type,
+        job_source_id=job_source_id,
+        job_run_id=job_run_id,
+        job_params=job_params,
+    )
     job_run_update_started(job_run_id=job_run_id)
     job_run_flow_result = wait_for_job_flow_run(job_run_flow=job_run_flow)
     job_run_update_completed(job_run_id=job_run_id, job_run_flow_result=job_run_flow_result)
