@@ -35,6 +35,7 @@ import { IconUser } from "@tabler/icons";
 import { useRouter } from "next/router";
 import authProvider from "@providers/auth-provider";
 import accessControlProvider from "@providers/access-provider";
+import Image from "next/image";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
 	noLayout?: boolean;
@@ -56,7 +57,18 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
 			<ThemedLayoutV2
 				Header={() => <Header sticky />}
 				Title={({ collapsed }) => (
-					<ThemedTitleV2 collapsed={collapsed} text="Console UI" />
+					<ThemedTitleV2
+						collapsed={collapsed}
+						text="Console - Phoenix"
+						icon={
+							<Image
+								src="/logo_buildup.png"
+								width={32}
+								height={32}
+								alt="logo"
+							/>
+						}
+					/>
 				)}
 			>
 				<Component {...pageProps} />
