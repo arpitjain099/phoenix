@@ -128,12 +128,41 @@
       "spec": {
         "template": {
           "spec": {
+            "volumes": [
+              {
+                "name": "gcp-creds",
+                "secret": {
+                  "secretName": "phoenix-gcp-service-account"
+                }
+              }
+            ],
             "containers": [
               {
-                "env": "{{ env }}",
+                "env": [
+                  {
+                    "name": "SQLALCHEMY_DATABASE_URI",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "key": "SQLALCHEMY_DATABASE_URI",
+                        "name": "phoenix-api-secrets"
+                      }
+                    }
+                  },
+                  {
+                    "name": "GOOGLE_APPLICATION_CREDENTIALS",
+                    "value": "/var/secrets/google/service-account.json"
+                  }
+                ],
                 "args": "{{ command }}",
                 "name": "prefect-job",
                 "image": "{{ image }}",
+                "volumeMounts": [
+                  {
+                    "name": "gcp-creds",
+                    "readOnly": true,
+                    "mountPath": "/var/secrets/google"
+                  }
+                ],
                 "imagePullPolicy": "{{ image_pull_policy }}"
               }
             ],
