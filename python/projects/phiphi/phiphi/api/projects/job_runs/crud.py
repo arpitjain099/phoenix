@@ -11,7 +11,7 @@ def invalid_forgien_object_guard(
 ) -> None:
     """Guard to check if the foreign object exists."""
     if foreign_job_type == schemas.ForeignJobType.gather:
-        gather_crud.get_db_gather_with_guard(db, project_id, foreign_id)
+        gather_crud.get_gather_with_guard(db, project_id, foreign_id)
     else:
         raise ValueError("Invalid foreign job type")
 

@@ -52,7 +52,7 @@ def get_gathers(
     return [schemas.GatherResponse.model_validate(gather) for gather in gathers]
 
 
-def get_db_gather_with_guard(
+def get_gather_with_guard(
     session: sqlalchemy.orm.Session, project_id: int, gather_id: int
 ) -> None:
     """Guard for checking if a gather is in the db."""
