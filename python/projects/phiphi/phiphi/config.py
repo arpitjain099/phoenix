@@ -26,17 +26,17 @@ SqliteDsn = Annotated[
 ]
 
 
-def parse_cors(v: Any) -> list[str] | str:
+def parse_cors(input_value: Any) -> list[str] | str:
     """Parse cors origins into a list or str.
 
     Taken from:
     https://github.com/tiangolo/full-stack-fastapi-template/blob/master/backend/app/core/config.py#L18C1-L23C24
     """
-    if isinstance(v, str) and not v.startswith("["):
-        return [i.strip() for i in v.split(",")]
-    elif isinstance(v, list | str):
-        return v
-    raise ValueError(v)
+    if isinstance(input_value, str) and not input_value.startswith("["):
+        return [i.strip() for i in input_value.split(",")]
+    elif isinstance(input_value, list | str):
+        return input_value
+    raise ValueError(input_value)
 
 
 def parse_apify_keys(input_value: dict | str) -> Any:
