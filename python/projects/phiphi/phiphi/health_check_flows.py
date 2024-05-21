@@ -4,6 +4,8 @@ from typing import Coroutine
 
 import prefect
 import sqlalchemy
+from google.api_core import exceptions
+from google.cloud import bigquery
 
 from phiphi import config, constants, platform_db
 
@@ -30,11 +32,30 @@ def check_sqlalchemy_connection() -> bool:
     return False
 
 
+@prefect.task
+def check_bigquery_connection() -> bool:
+    """Check the BigQuery connection."""
+    try:
+        client = bigquery.Client()
+        datasets = list(client.list_datasets())
+        if datasets:
+            logger.info(f"Successfully connected to BigQuery. Found {len(datasets)} datasets.")
+        else:
+            logger.info("Successfully connected to BigQuery, but no datasets found.")
+        return True
+    except exceptions.GoogleAPIError as e:
+        logger.error(f"Google API Error: {e}")
+    except Exception as e:
+        logger.error(f"An unexpected error occurred: {e}")
+    return False
+
+
 @prefect.flow
 def health_check(environment_slug: str | None) -> None:
     """Main flow for the health check."""
     logger.info("Health checks started.")
     assert check_sqlalchemy_connection()
+    assert check_bigquery_connection()
     logger.info("Health checks completed.")
 
 
