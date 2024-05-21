@@ -3,17 +3,38 @@ import logging
 from typing import Coroutine
 
 import prefect
+import sqlalchemy
 
-from phiphi import config, constants
+from phiphi import config, constants, platform_db
 
 logger = logging.getLogger(__name__)
+
+
+@prefect.task
+def check_sqlalchemy_connection() -> bool:
+    """Check the SQLAlchemy connection to the database."""
+    try:
+        with platform_db.get_session() as session:
+            # Doing a SELECT 1 to check the connection.
+            select_query = sqlalchemy.select(1)
+            response = session.execute(select_query)
+            result = response.first()
+            assert result
+            assert result[0] == 1
+        logger.info("Successfully connected to platform database.")
+        return True
+    except sqlalchemy.exc.SQLAlchemyError as e:
+        logger.error(f"Failed to connect to platform database: {e}")
+    except Exception as e:
+        logger.error(f"An unexpected error occurred: {e}")
+    return False
 
 
 @prefect.flow
 def health_check(environment_slug: str | None) -> None:
     """Main flow for the health check."""
     logger.info("Health checks started.")
-    assert True
+    assert check_sqlalchemy_connection()
     logger.info("Health checks completed.")
 
 
