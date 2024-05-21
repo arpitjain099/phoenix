@@ -1,7 +1,4 @@
-"""Hello world flow for testing.
-
-This is a toy example and should be delete once a real flow is created.
-"""
+"""Health check flows."""
 from typing import Coroutine
 
 import prefect
