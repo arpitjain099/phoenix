@@ -79,7 +79,7 @@ alembic_downgrade:
 psql_dev:
 	@echo "Connecting to the development database..."
 	@echo "default password is 'password'"
-	psql -h localhost -p 5432 -U postgres -d test_db
+	psql -h localhost -p 5432 -U postgres -d dev_db
 
 psql_test:
 	@echo "Connecting to the test database..."

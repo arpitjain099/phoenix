@@ -45,20 +45,3 @@ def get_gather_estimate(
         estimated_credit_cost=100,
         estimated_duration_minutes=30,
     )
-
-
-@router.post(
-    "/projects/{project_id}/gathers/{gather_id}/runs/",
-    response_model=schemas.GatherResponse,
-)
-def create_gather_run(
-    project_id: int, gather_id: int, session: deps.SessionDep
-) -> schemas.GatherResponse:
-    """Create an gather run.
-
-    This is a dummy function that returns the gather.
-    """
-    gather = crud.get_gather(session, project_id, gather_id)
-    if gather is None:
-        raise fastapi.HTTPException(status_code=404, detail="Gather not found")
-    return gather

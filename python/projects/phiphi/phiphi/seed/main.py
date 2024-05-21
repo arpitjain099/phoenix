@@ -15,6 +15,7 @@ from phiphi.seed import (
     apify_facebook_comments,
     apify_facebook_post_gather,
     environments,
+    job_runs,
     projects,
     users,
 )
@@ -48,6 +49,7 @@ def main(session: Session, testing: bool = False) -> None:
         projects.seed_test_project(session)
         apify_facebook_post_gather.seed_test_apify_facebook_post_gathers(session)
         apify_facebook_comments.seed_test_apify_facebook_comment_gathers(session)
+        job_runs.seed_test_job_runs(session)
 
 
 if __name__ == "__main__":

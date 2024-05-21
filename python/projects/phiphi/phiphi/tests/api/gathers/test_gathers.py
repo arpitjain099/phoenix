@@ -46,16 +46,3 @@ def test_get_gathers_estimate(client: TestClient, reseed_tables) -> None:
     assert gather["id"] == 1
     assert gather["estimated_credit_cost"] == 100
     assert gather["estimated_duration_minutes"] == 30
-
-
-def test_create_gather_run(client: TestClient, reseed_tables) -> None:
-    """Test creating gather runs."""
-    response = client.post("/projects/1/gathers/1/runs/")
-    assert response.status_code == 200
-    gather = response.json()
-    assert gather["id"] == 1
-
-    response = client.post("/projects/2/gathers/3/runs/")
-    assert response.status_code == 200
-    gather = response.json()
-    assert gather["id"] == 3
