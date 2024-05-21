@@ -50,7 +50,7 @@ prefect-worker:
   worker:
     ## Account and workspace ID in secrets
     config:
-      workPool: "phoenix-local-worker-pool"
+      workPool: "local-work-pool"
 
 ######### WITH SELF SIGNED CERTIFICATES #########
 # cert_issuer:
