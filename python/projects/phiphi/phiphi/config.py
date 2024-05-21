@@ -39,16 +39,16 @@ def parse_cors(v: Any) -> list[str] | str:
     raise ValueError(v)
 
 
-def parse_apify_keys(v: Any) -> Any:
+def parse_apify_keys(input_value: dict | str) -> Any:
     """Parse apify keys into a dictionary.
 
     The keys can be a dictionary or a json string.
     We return type Any as pydantic will validate the type later.
     """
-    if isinstance(v, dict):
-        return v
-    if isinstance(v, str):
-        return json.loads(v)
+    if isinstance(input_value, dict):
+        return input_value
+    if isinstance(input_value, str):
+        return json.loads(input_value)
 
     raise ValueError("APIFY_API_KEYS must be a dictionary or a json string.")
 
