@@ -61,7 +61,7 @@ class JobRunUpdateCompleted(pydantic.BaseModel):
 
 
 class JobRunResponse(JobRunCreated, JobRunCreate):
-    """Schema for the response when a job run for all responses."""
+    """Schema for job_run response - uses optional fields to cover all possible responses."""
 
     # To map from the JobRuns model
     model_config = pydantic.ConfigDict(from_attributes=True)
