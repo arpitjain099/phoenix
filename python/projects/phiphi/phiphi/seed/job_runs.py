@@ -5,7 +5,7 @@ We are using a very simple and brittle seeding of the database.
 In that we have to check the ids of the projects and gathers in the database
 to seed the correct job runs.
 
-Currently this script will see 3 job runs in the database. This includes a job run for all the
+Currently this script will seed 3 job runs in the database. This includes a job run for all the
 apify_facebook_gathers:
 - 2 job runs in project 1
 - 1 job run in project 2
