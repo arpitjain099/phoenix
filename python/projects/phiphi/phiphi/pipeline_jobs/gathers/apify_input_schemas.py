@@ -40,7 +40,7 @@ class ApifyFacebookPostsInput(pydantic.BaseModel):
     )
 
     class Config:
-        """Pydantic configuration to allow population by field name."""
+        """Pydantic configuration."""
 
         extra = pydantic.Extra.forbid
 
