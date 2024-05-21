@@ -1,5 +1,4 @@
 """Health check flows."""
-import logging
 from typing import Coroutine
 
 import prefect
@@ -9,12 +8,11 @@ from google.cloud import bigquery
 
 from phiphi import config, constants, platform_db
 
-logger = logging.getLogger(__name__)
-
 
 @prefect.task
 def check_sqlalchemy_connection() -> bool:
     """Check the SQLAlchemy connection to the database."""
+    logger = prefect.get_run_logger()
     try:
         with platform_db.get_session() as session:
             # Doing a SELECT 1 to check the connection.
@@ -35,6 +33,7 @@ def check_sqlalchemy_connection() -> bool:
 @prefect.task
 def check_bigquery_connection() -> bool:
     """Check the BigQuery connection."""
+    logger = prefect.get_run_logger()
     try:
         client = bigquery.Client()
         datasets = list(client.list_datasets())
@@ -53,6 +52,7 @@ def check_bigquery_connection() -> bool:
 @prefect.flow
 def health_check(environment_slug: str | None) -> None:
     """Main flow for the health check."""
+    logger = prefect.get_run_logger()
     logger.info("Health checks started.")
     assert check_sqlalchemy_connection()
     assert check_bigquery_connection()
