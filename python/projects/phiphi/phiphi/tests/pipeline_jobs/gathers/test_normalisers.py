@@ -4,7 +4,7 @@ from datetime import datetime
 import pandas as pd
 import pytest
 
-from phiphi.pipeline_jobs.gathers import normalisers
+from phiphi.pipeline_jobs.gathers import normalisers, utils
 
 
 @pytest.fixture
@@ -111,7 +111,7 @@ def expected_dataframe():
 @pytest.mark.freeze_time(datetime.fromisoformat("2024-04-02T12:10:59"))
 def test_normalise_batch(expected_dataframe):
     """Test normalise_batch function."""
-    batch_json = normalisers.load_sample_raw_data(
+    batch_json = utils.load_sample_raw_data(
         source="apify",
         platform="facebook",
         data_type="post",
