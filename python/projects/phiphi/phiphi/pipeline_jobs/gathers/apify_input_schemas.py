@@ -5,7 +5,7 @@ This modules contains a Pydantic schema for each Apify scraper, which:
     - Converts that data structure to the correct structure for the Apify API.
 """
 import enum
-from typing import Annotated, Dict, List
+from typing import Annotated, Dict, List, Optional
 
 import pydantic
 
@@ -99,3 +99,72 @@ class ApifyFacebookCommentsInput(pydantic.BaseModel):
     def serialize_account_urls(self, urls: List[pydantic.HttpUrl]) -> List[Dict[str, str]]:
         """Convert a list of plain URLs to the list of dicts required for Apify."""
         return [{"url": str(url)} for url in urls]
+
+
+class TikTokSearchSection(str, enum.Enum):
+    """Enum for search section sorting options."""
+
+    VIDEO = "/video"
+    USER = "/user"
+
+
+class TikTokScraperInput(pydantic.BaseModel):
+    """Input schema for the TikTok Scraper.
+
+    Enables scraping data from TikTok based on various inputs like direct URLs, hashtags, or search
+    queries.
+
+    Ref to relevant Apify actor docs: https://apify.com/clockworks/tiktok-scraper/input-schema
+    """
+
+    hashtags: Optional[List[str]] = pydantic.Field(
+        None, description="List of hashtags to scrape TikTok videos for."
+    )
+    results_per_page: int = pydantic.Field(
+        25, description="Number of TikTok videos to scrape per hashtag, profile, or search query."
+    )
+    profiles: Optional[List[str]] = pydantic.Field(
+        None, description="List of TikTok usernames to scrape."
+    )
+    oldest_post_date: Optional[str] = pydantic.Field(
+        None, description="Scrape profile videos uploaded after or on this date."
+    )
+    scrape_last_n_days: Optional[int] = pydantic.Field(
+        None, description="Scrape profile videos from the last specified number of days."
+    )
+    search_queries: Optional[List[str]] = pydantic.Field(
+        None, description="Search queries to apply across videos and profiles."
+    )
+    search_section: Optional[TikTokSearchSection] = pydantic.Field(
+        None, description="Specifies where to apply the search query: to videos or profiles."
+    )
+    max_profiles_per_query: int = pydantic.Field(
+        10, description="Maximum number of profiles to scrape per search query."
+    )
+    post_urls: Optional[List[UrlStr]] = pydantic.Field(
+        None, description="Direct URLs of TikTok videos to scrape."
+    )
+    should_download_videos: bool = pydantic.Field(
+        False, description="Set to true to download TikTok videos."
+    )
+    should_download_covers: bool = pydantic.Field(
+        False, description="Set to true to download TikTok video covers (thumbnails)."
+    )
+    should_download_subtitles: bool = pydantic.Field(
+        False, description="Set to true to download subtitles for TikTok videos."
+    )
+    should_download_slideshow_images: bool = pydantic.Field(
+        False, description="Set to true to download TikTok slideshow images."
+    )
+    video_kv_store_id_or_name: Optional[str] = pydantic.Field(
+        None, description="Name or ID of the Key Value Store for storing downloaded media."
+    )
+    proxy_country_code: Optional[str] = pydantic.Field(
+        None,
+        description="2 letter proxy country code to use if scraping location-specific content.",
+    )
+
+    class Config:
+        """Pydantic configuration."""
+
+        extra = pydantic.Extra.forbid
