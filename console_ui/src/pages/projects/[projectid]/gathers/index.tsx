@@ -83,16 +83,13 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 					const { run_status } = row.original;
 					return (
 						<Group spacing="xs" noWrap>
-							{run_status === "in_queue" && (
-								<Button p={0} variant="subtle" onClick={() => {}}>
-									<IconRefresh size={20} color="blue" />
-								</Button>
-							)}
-							{run_status === "processing" && (
-								<Button p={0} variant="subtle" onClick={() => {}}>
-									<IconRefresh size={20} color="blue" />
-								</Button>
-							)}
+							{run_status === "in_queue" &&
+								run_status === "processing" &&
+								!run_status && (
+									<Button p={0} variant="subtle" onClick={() => {}}>
+										<IconRefresh size={20} color="blue" />
+									</Button>
+								)}
 							{run_status === "yet_to_run" && (
 								<Button
 									p={0}

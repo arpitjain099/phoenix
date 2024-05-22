@@ -1,13 +1,19 @@
 import React from "react";
-import { IResourceComponentsProps, useTranslate } from "@refinedev/core";
+import {
+	IResourceComponentsProps,
+	useGetIdentity,
+	useTranslate,
+} from "@refinedev/core";
 import { ColumnDef } from "@tanstack/react-table";
 import { Group, Pagination, ScrollArea } from "@mantine/core";
 import { EditButton, ShowButton, DateField, List } from "@refinedev/mantine";
 import { useTable } from "@refinedev/react-table";
+import { UserInfo } from "src/interfaces/user";
 import TableComponent from "../../components/table";
 
 export const ProjectList: React.FC<IResourceComponentsProps> = () => {
 	const translate = useTranslate();
+	const { data: user } = useGetIdentity<UserInfo>();
 	const columns = React.useMemo<ColumnDef<any>[]>(
 		() => [
 			{
@@ -69,7 +75,7 @@ export const ProjectList: React.FC<IResourceComponentsProps> = () => {
 	}));
 
 	return (
-		<List>
+		<List canCreate={user?.app_role === "admin"}>
 			<ScrollArea>
 				<TableComponent
 					headerGroups={getHeaderGroups}
