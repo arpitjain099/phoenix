@@ -14,6 +14,7 @@ import asyncio
 from typing import Coroutine, Protocol
 
 from phiphi import constants, hello_flows
+from phiphi.api.projects.job_runs import flow_runner_flow
 
 
 class CreateDeploymentsInterface(Protocol):
@@ -32,7 +33,10 @@ class CreateDeploymentsInterface(Protocol):
         pass
 
 
-list_of_create_deployment_fn: list[CreateDeploymentsInterface] = [hello_flows.create_deployments]
+list_of_create_deployment_fn: list[CreateDeploymentsInterface] = [
+    hello_flows.create_deployments,
+    flow_runner_flow.create_deployments,
+]
 
 
 async def create_all_deployments(

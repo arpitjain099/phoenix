@@ -51,12 +51,12 @@ class JobRunUpdateStarted(pydantic.BaseModel):
 
 
 class JobRunUpdateCompleted(pydantic.BaseModel):
-    """Schema for updating a job run when it completes."""
+    """Schema for updating a job run when it completes, or fails."""
 
     id: int = pydantic.Field(..., description="The ID of the job run being updated")
     status: Status = pydantic.Field(..., description="The final status of the flow run")
     completed_at: Optional[datetime] = pydantic.Field(
-        default_factory=datetime.now, description="The completion time of the flow run"
+        default_factory=datetime.now, description="The completion, or fail time of the flow run"
     )
 
 

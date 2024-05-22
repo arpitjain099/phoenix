@@ -4,6 +4,7 @@ from enum import Enum
 from typing import Annotated
 
 import pydantic
+
 from phiphi.api.projects.gathers import schemas as gather_schemas
 
 

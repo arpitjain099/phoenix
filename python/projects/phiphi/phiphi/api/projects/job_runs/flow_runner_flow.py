@@ -1,106 +1,106 @@
-"""Module containing (outer) flow which runs jobs (inner flows) and records their status.
-
-NOTE: Much of this functionality is stub/placeholder code.
-
-Depends on:
-- gathers and its child tables; to pull gather params and parse to pass for inner flow
-- inner flows (i.e. gather_apify_facebook_posts_flow and its params)
-- job_runs table; to create job_runs and update their status
-
-Likely this will become a module with sub-modules.
-"""
+"""Module containing (outer) flow which runs jobs (inner flows) and records their status."""
 import asyncio
-from datetime import datetime
-from typing import Any
+from typing import Coroutine, Union
 
-from phiphi.types import PhiphiJobType
 from prefect import flow, runtime, task
 from prefect.client.schemas import objects
 from prefect.deployments import deployments
 from prefect.flow_runs import wait_for_flow_run
 
+from phiphi import constants, platform_db
+from phiphi.api.projects import gathers, job_runs
+from phiphi.pipeline_jobs.gathers import apify_input_schemas
+from phiphi.types import PhiphiJobType
+
 
 @task
-def read_job_params(job_type: PhiphiJobType, job_source_id: int) -> dict:
-    """Task to read job params from the database.
+def read_job_params(
+    project_id: int, job_type: PhiphiJobType, job_source_id: int
+) -> Union[apify_input_schemas.ApifyFacebookPostsInput]:
+    """Task to read the job's params from the database.
 
     Args:
+        project_id: ID of the project.
         job_type: Type of job to run.
         job_source_id: ID of the source for the job. I.e., if type is `gather` then
             `job_source_id` is the ID of the row in the gathers table.
-
-    Returns:
-        job_params_dict: Job parameters.
     """
-    job_params_dict: dict
-    # Read job params from the database
     if job_type == "gather":
-        # Read row with id from gathers table
-        job_params_dict = {}
-    elif job_type == "classify":
-        # Read row with id from classifies table
-        job_params_dict = {}
-    elif job_type == "tabulate":
-        # Read row with id from tabulates table
-        job_params_dict = {}
+        with platform_db.get_session() as session:
+            gather = gathers.crud.get_gather(
+                session=session, project_id=project_id, gather_id=job_source_id
+            )
+        if gather is None:
+            raise ValueError(f"Gather with ID {job_source_id=} not found.")
+        elif type(gather) == gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse:
+            job_params = apify_input_schemas.ApifyFacebookPostsInput(
+                only_posts_older_than=gather.only_posts_older_than,
+                only_posts_newer_than=gather.only_posts_newer_than,
+                account_urls=gather.account_url_list,
+                results_per_url_limit=gather.limit_posts_per_account,
+            )
+        else:
+            raise NotImplementedError(f"Run for gather type {type(gather)=} not implemented yet.")
+    else:
+        raise NotImplementedError(f"Job type {job_type=} not implemented yet.")
 
-    return job_params_dict
-
-
-@task
-def create_job_run_row(job_type: PhiphiJobType, job_source_id: int) -> int:
-    """Task to create a row in the job_runs table.
-
-    Returns:
-        job_run_id: ID of the created row.
-    """
-    _ = {
-        "foreign_id": job_source_id,
-        "foreign_type": job_type,
-        "prefect_outer_flow_run_id": runtime.flow_run.id,
-        "prefect_outer_flow_run_name": runtime.flow_run.name,
-    }
-    # Create row in job_runs table
-    # Get id of the created row
-    return 1  # id of the created row
+    return job_params
 
 
 @task
-def start_flow_run(job_type: PhiphiJobType, job_params: dict) -> objects.FlowRun:
-    """Task to start the (inner) flow for the job.
+def start_flow_run(
+    project_id: int,
+    job_type: PhiphiJobType,
+    job_source_id: int,
+    job_run_id: int,
+    job_params: Union[apify_input_schemas.ApifyFacebookPostsInput],
+) -> objects.FlowRun:
+    """Start the (inner) flow for the job.
 
     Args:
+        project_id: ID of the project.
         job_type: Type of job to run.
+        job_source_id: ID of the source for the job. Corresponds to the job_type table.
+        job_run_id: ID of the row in the job_runs table.
         job_params: Parameters for the job.
     """
-    # if job_type == "gather":  # and other if statements for other job types
-    # TODO: we could add `tags` to tag with the project name/ID?
+    if type(job_params) == apify_input_schemas.ApifyFacebookPostsInput:
+        deployment_name = "gather_apify_facebook_posts_flow/main_deployment"
+    else:
+        raise NotImplementedError(
+            f"Run for job_params type {type(job_params)=} not implemented yet."
+        )
     job_run_flow: objects.FlowRun = asyncio.run(
         deployments.run_deployment(
-            name="gather_apify_facebook_posts_flow/main_deployment",
-            parameters=job_params,
+            name=deployment_name,
+            parameters=job_params.dict(by_alias=True),
             as_subflow=True,
             timeout=0,  # this means it returns immediately with the metadata
+            tags=[
+                f"project_id:{project_id}",
+                f"job_type:{job_type}",
+                f"job_source_id:{job_source_id}",
+                f"job_run_id:{job_run_id}",
+            ],
         )
     )
     return job_run_flow
 
 
 @task
-def update_job_row_to_started(job_run_id: int, job_run_flow: objects.FlowRun) -> None:
-    """Update the job_runs table with info about the job and set status to started.
+def job_run_update_started(job_run_id: int) -> None:
+    """Update the job_runs row with this (outer) flow's info and set job row status to started.
 
     Args:
         job_run_id: ID of the row in the job_runs table.
-        job_run_flow: Flow run object for the job.
     """
-    _ = {
-        "prefect_inner_flow_run_id": job_run_flow.id,
-        "prefect_inner_flow_run_name": job_run_flow.name,
-        "prefect_inner_flow_run_status": "started",
-        "prefect_inner_flow_run_started_at": datetime.now(),
-    }
-    # Update row in job_runs table for `job_run_id`
+    job_run_update_started = job_runs.schemas.JobRunUpdateStarted(
+        id=job_run_id,
+        flow_run_id=str(runtime.flow_run.id),
+        flow_run_name=runtime.flow_run.name,
+    )
+    with platform_db.get_session() as session:
+        job_runs.crud.update_job_run(db=session, job_run_data=job_run_update_started)
 
 
 @task
@@ -111,40 +111,84 @@ def wait_for_job_flow_run(job_run_flow: objects.FlowRun) -> objects.FlowRun:
 
 
 @task
-def update_job_row_with_end_result(job_run_id: int, job_run_flow_result: objects.FlowRun) -> None:
-    """Update the job_runs table with the final state of the job."""
-    d: dict[str, Any] = {
-        "prefect_inner_flow_run_status": job_run_flow_result.state,
-    }
-    if job_run_flow_result.state == "Success":
-        d["prefect_inner_flow_run_completed_at"] = datetime.now()
-    # Update row in job_runs table for `job_run_id`
+def job_run_update_completed(job_run_id: int, job_run_flow_result: objects.FlowRun) -> None:
+    """Update the job_runs table with the final state of the job (the inner flow)."""
+    assert job_run_flow_result.state is not None
+    status = (
+        job_runs.schemas.Status.completed_sucessfully
+        if job_run_flow_result.state.is_completed()
+        else job_runs.schemas.Status.failed
+    )
+
+    job_run_update_completed = job_runs.schemas.JobRunUpdateCompleted(id=job_run_id, status=status)
+    with platform_db.get_session() as session:
+        job_runs.crud.update_job_run(db=session, job_run_data=job_run_update_completed)
 
 
 @flow(name="flow_runner_flow")
-def flow_runner_flow(job_type: PhiphiJobType, job_source_id: int) -> None:
+def flow_runner_flow(
+    project_id: int,
+    job_type: PhiphiJobType,
+    job_source_id: int,
+    job_run_id: int,
+) -> None:
     """Flow which runs flow deployments and records their status.
 
     Args:
+        project_id: ID of the project.
         job_type: Type of job to run.
         job_source_id: ID of the source for the job. I.e., if type is `gather` then
             `job_source_id` is the ID of the row in the gathers table.
+        job_run_id: ID of the row in the job_runs table.
     """
-    job_params = read_job_params(job_type=job_type, job_source_id=job_source_id)
-    job_run_id = create_job_run_row(job_type=job_type, job_source_id=job_source_id)
-    job_run_flow = start_flow_run(job_type=job_type, job_params=job_params)
-    update_job_row_to_started(job_run_id=job_run_id, job_run_flow=job_run_flow)
-    job_run_flow_result = wait_for_job_flow_run(job_run_flow=job_run_flow)
-    update_job_row_with_end_result(job_run_id=job_run_id, job_run_flow_result=job_run_flow_result)
-
-
-if __name__ == "__main__":
-    asyncio.run(
-        flow_runner_flow.deploy(
-            name="main_deployment",
-            work_pool_name="TODO",  # this should be the work pool on k8s ye?
-            image="TODO",  # this should be the phiphi image!
-            tags=["TODO"],
-            build=False,
-        )
+    job_params = read_job_params(
+        project_id=project_id, job_type=job_type, job_source_id=job_source_id
     )
+    job_run_flow = start_flow_run(
+        project_id=project_id,
+        job_type=job_type,
+        job_source_id=job_source_id,
+        job_run_id=job_run_id,
+        job_params=job_params,
+    )
+    job_run_update_started(job_run_id=job_run_id)
+    job_run_flow_result = wait_for_job_flow_run(job_run_flow=job_run_flow)
+    job_run_update_completed(job_run_id=job_run_id, job_run_flow_result=job_run_flow_result)
+
+
+def create_deployments(
+    override_work_pool_name: str | None = None,
+    deployment_name_prefix: str = "",
+    image: str = constants.DEFAULT_IMAGE,
+    tags: list[str] = [],
+    build: bool = False,
+    push: bool = False,
+) -> list[Coroutine]:
+    """Create deployments for flow_runner_flow.
+
+    Args:
+        override_work_pool_name (str | None): The name of the work pool to use to override the
+        default work pool.
+        deployment_name_prefix (str, optional): The prefix of the deployment name. Defaults to "".
+        image (str, optional): The image to use for the deployments. Defaults to
+        constants.DEFAULT_IMAGE.
+        tags (list[str], optional): The tags to use for the deployments. Defaults to [].
+        build (bool, optional): If True, build the image. Defaults to False.
+        push (bool, optional): If True, push the image. Defaults to False.
+
+    Returns:
+        list[Coroutine]: List of coroutines that create deployments.
+    """
+    work_pool_name = str(constants.WorkPool.main)
+    if override_work_pool_name:
+        work_pool_name = override_work_pool_name
+    task = flow_runner_flow.deploy(
+        name=deployment_name_prefix + "flow_runner_flow",
+        work_pool_name=work_pool_name,
+        image=image,
+        build=build,
+        push=push,
+        tags=tags,
+    )
+
+    return [task]

@@ -1,8 +1,9 @@
 """Crud functionality for job runs."""
 from typing import Union
 
-from phiphi.api.projects.job_runs import models, schemas
 from sqlalchemy.orm import Session
+
+from phiphi.api.projects.job_runs import models, schemas
 
 
 def invalid_foreign_object_guard(
