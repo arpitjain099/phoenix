@@ -1,7 +1,6 @@
 """Crud functionality for job runs."""
 from typing import Union
 
-from phiphi.api.projects.gathers import crud as gather_crud
 from phiphi.api.projects.job_runs import models, schemas
 from sqlalchemy.orm import Session
 
@@ -10,6 +9,8 @@ def invalid_forgien_object_guard(
     db: Session, project_id: int, foreign_id: int, foreign_job_type: schemas.ForeignJobType
 ) -> None:
     """Guard to check if the foreign object exists."""
+    from phiphi.api.projects.gathers import crud as gather_crud
+
     if foreign_job_type == schemas.ForeignJobType.gather:
         gather_crud.get_gather_with_guard(db, project_id, foreign_id)
     else:
