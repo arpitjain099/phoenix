@@ -71,6 +71,10 @@ class Settings(BaseSettings):
     # For a local cluster to be run without oauth2 implement.
     INCLUDE_INSECURE_AUTH: bool = False
 
+    # Pipelines
+    # If True; don't make real Apify calls, read static sample data from within module instead
+    USE_MOCK_APIFY: bool = False
+
 
 if os.environ.get("SETTINGS_ENV_FILE"):
     logger.warning(

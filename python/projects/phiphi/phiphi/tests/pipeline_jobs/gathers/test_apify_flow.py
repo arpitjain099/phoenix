@@ -1,7 +1,5 @@
 """Tests for Apify gathers."""
-import os
-from unittest import mock
-
+import pytest
 from prefect.logging import disable_run_logger as disable_prefect_run_logger
 
 from phiphi.pipeline_jobs.gathers import apify_flow, apify_input_schemas
@@ -32,8 +30,8 @@ def manual_test_apify_scrape_and_batch_download():
     )
 
 
-@mock.patch.dict(os.environ, {"USE_MOCK_APIFY": "true"}, clear=True)
-def test_mock_apify_scrape_and_batch_download_results():
+@pytest.mark.patch_settings({"USE_MOCK_APIFY": True})
+def test_mock_apify_scrape_and_batch_download_results(patch_settings):
     """Test apify_scrape_and_batch_download_results with mocked out Apify function."""
     run_input = apify_input_schemas.ApifyFacebookPostsInput(
         only_posts_older_than="2024-04-04",

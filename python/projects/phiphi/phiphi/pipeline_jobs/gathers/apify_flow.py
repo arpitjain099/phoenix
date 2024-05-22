@@ -5,12 +5,12 @@ Single flow that all Apify scrapers use.
 Includes switch for using mock data read directly from file for testing purposes.
 """
 import json
-import os
 from typing import Dict, Iterator, List, Tuple, Union
 
 import apify_client
 import prefect
 
+from phiphi import config
 from phiphi.pipeline_jobs.gathers import apify_input_schemas, utils
 
 
@@ -54,7 +54,7 @@ def apify_scrape_and_batch_download_results(
     batch_size: int = 100,
 ) -> None:
     """Scrape data using the Apify API and save them to JSON blobs in batches."""
-    if os.environ.get("USE_MOCK_APIFY", "false").lower() == "true":
+    if config.settings.USE_MOCK_APIFY:
         dataset_iterator, dataset_client = mock_apify_scrape(
             apify_token, "apify/facebook-posts-scraper", run_input
         )
