@@ -52,6 +52,7 @@ def apify_scrape_and_batch_download_results(
     apify_token: str,
     run_input: Union[apify_input_schemas.ApifyFacebookPostsInput],
     batch_size: int = 100,
+    dev_batch_dir: str = "",
 ) -> None:
     """Scrape data using the Apify API and save them to JSON blobs in batches."""
     if config.settings.USE_MOCK_APIFY:
@@ -73,7 +74,7 @@ def apify_scrape_and_batch_download_results(
 
         # Write the batch to file when reaching the batch size
         if len(batch_items) == batch_size:
-            file_name = f"batch_{batch_num}.json"
+            file_name = dev_batch_dir + f"batch_{batch_num}.json"
             with open(file_name, "w") as f:
                 json.dump(batch_items, f)
 
@@ -82,7 +83,7 @@ def apify_scrape_and_batch_download_results(
 
     # Write any remaining items in the final batch if not empty
     if batch_items:
-        file_name = f"batch_{batch_num}.json"
+        file_name = dev_batch_dir + f"batch_{batch_num}.json"
         with open(file_name, "w") as f:
             json.dump(batch_items, f)
 

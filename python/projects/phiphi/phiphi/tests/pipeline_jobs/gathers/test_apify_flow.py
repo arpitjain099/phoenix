@@ -31,7 +31,7 @@ def manual_test_apify_scrape_and_batch_download():
 
 
 @pytest.mark.patch_settings({"USE_MOCK_APIFY": True})
-def test_mock_apify_scrape_and_batch_download_results(patch_settings):
+def test_mock_apify_scrape_and_batch_download_results(tmpdir, patch_settings):
     """Test apify_scrape_and_batch_download_results with mocked out Apify function."""
     run_input = apify_input_schemas.ApifyFacebookPostsInput(
         only_posts_older_than="2024-04-04",
@@ -46,4 +46,5 @@ def test_mock_apify_scrape_and_batch_download_results(patch_settings):
             apify_token="NOT_A_TOKEN",
             run_input=run_input,
             batch_size=3,
+            dev_batch_dir=tmpdir,
         )
