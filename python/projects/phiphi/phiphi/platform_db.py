@@ -1,5 +1,6 @@
 """Database."""
 import logging
+from contextlib import contextmanager
 from typing import Generator
 
 from sqlalchemy import create_engine
@@ -17,6 +18,7 @@ class Base(DeclarativeBase):
 engine = create_engine(str(config.settings.SQLALCHEMY_DATABASE_URI))
 
 
+@contextmanager
 def get_session() -> Generator[Session, None, None]:
     """Get the session."""
     with Session(engine) as session:
