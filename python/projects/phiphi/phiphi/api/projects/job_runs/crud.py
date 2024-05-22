@@ -5,7 +5,7 @@ from phiphi.api.projects.job_runs import models, schemas
 from sqlalchemy.orm import Session
 
 
-def invalid_forgien_object_guard(
+def invalid_foreign_object_guard(
     db: Session, project_id: int, foreign_id: int, foreign_job_type: schemas.ForeignJobType
 ) -> None:
     """Guard to check if the foreign object exists."""
@@ -21,7 +21,7 @@ def create_job_run(
     db: Session, project_id: int, job_run_create: schemas.JobRunCreate
 ) -> schemas.JobRunResponse:
     """Create a new job run."""
-    invalid_forgien_object_guard(
+    invalid_foreign_object_guard(
         db, project_id, job_run_create.foreign_id, job_run_create.foreign_job_type
     )
     db_job_run = models.JobRuns(
