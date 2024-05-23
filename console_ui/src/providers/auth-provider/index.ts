@@ -63,9 +63,19 @@ const checkAuthUrl = async (url: string): Promise<boolean> => {
 	}
 };
 
-export const getUserRole = async (): Promise<string | null> => {
+export const getCurrentUserInfo = () => {
 	const userInfoFromCookie = storageService.get(USER_INFO_COOKIE_NAME);
-	const userInfo = userInfoFromCookie ? JSON.parse(userInfoFromCookie) : null;
+	return userInfoFromCookie ? JSON.parse(userInfoFromCookie) : null;
+};
+
+export const setUserInfoFromAPI = async (): Promise<UserInfo | null> => {
+	const userInfo = await fetchUserInfo();
+	storageService.set(USER_INFO_COOKIE_NAME, JSON.stringify(userInfo));
+	return userInfo;
+};
+
+export const getUserRole = async (): Promise<string | null> => {
+	const userInfo = await getCurrentUserInfo();
 	if (userInfo && Object.hasOwn(userInfo, "app_role")) {
 		return userInfo.app_role;
 	}
@@ -113,13 +123,9 @@ const authProvider: AuthProvider = {
 		return { authenticated: false };
 	},
 	getIdentity: async () => {
-		const userInfoFromCookie = storageService.get(USER_INFO_COOKIE_NAME);
-		let userInfo = null;
-		if (!userInfoFromCookie) {
-			userInfo = await fetchUserInfo();
-			storageService.set(USER_INFO_COOKIE_NAME, JSON.stringify(userInfo));
-		} else {
-			userInfo = JSON.parse(userInfoFromCookie);
+		let userInfo = getCurrentUserInfo();
+		if (!userInfo) {
+			userInfo = await setUserInfoFromAPI();
 		}
 		return userInfo;
 	},
