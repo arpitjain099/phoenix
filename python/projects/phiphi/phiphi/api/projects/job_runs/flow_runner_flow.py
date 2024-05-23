@@ -26,7 +26,7 @@ def read_job_params(
             `job_source_id` is the ID of the row in the gathers table.
     """
     if job_type == "gather":
-        with platform_db.get_session() as session:
+        with platform_db.get_session_context() as session:
             gather = gathers.crud.get_gather(
                 session=session, project_id=project_id, gather_id=job_source_id
             )
@@ -99,7 +99,7 @@ def job_run_update_started(job_run_id: int) -> None:
         flow_run_id=str(runtime.flow_run.id),
         flow_run_name=runtime.flow_run.name,
     )
-    with platform_db.get_session() as session:
+    with platform_db.get_session_context() as session:
         job_runs.crud.update_job_run(db=session, job_run_data=job_run_update_started)
 
 
@@ -121,7 +121,7 @@ def job_run_update_completed(job_run_id: int, job_run_flow_result: objects.FlowR
     )
 
     job_run_update_completed = job_runs.schemas.JobRunUpdateCompleted(id=job_run_id, status=status)
-    with platform_db.get_session() as session:
+    with platform_db.get_session_context() as session:
         job_runs.crud.update_job_run(db=session, job_run_data=job_run_update_completed)
 
 
