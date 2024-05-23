@@ -22,22 +22,22 @@ class ApifyFacebookPostsInput(pydantic.BaseModel):
     Ref to relevant Apify actor docs: https://apify.com/apify/facebook-posts-scraper/input-schema
     """
 
-    only_posts_older_than: str = pydantic.Field(
-        None,
-        serialization_alias="onlyPostsOlderThan",
-        description="Fetch posts only older than this date (YYYY-MM-DD)",
-    )
-    only_posts_newer_than: str = pydantic.Field(
-        None,
-        serialization_alias="onlyPostsNewerThan",
-        description="Fetch posts only newer than this date (YYYY-MM-DD)",
-    )
     results_per_url_limit: int = pydantic.Field(
         25, serialization_alias="resultsLimit", description="Limit results per account"
     )
     account_urls: List[UrlStr] = pydantic.Field(
         serialization_alias="startUrls",
         description="List of Facebook page/profile URLs to scrape from",
+    )
+    only_posts_older_than: Optional[str] = pydantic.Field(
+        default=None,
+        serialization_alias="onlyPostsOlderThan",
+        description="Fetch posts only older than this date (YYYY-MM-DD)",
+    )
+    only_posts_newer_than: Optional[str] = pydantic.Field(
+        default=None,
+        serialization_alias="onlyPostsNewerThan",
+        description="Fetch posts only newer than this date (YYYY-MM-DD)",
     )
 
     class Config:

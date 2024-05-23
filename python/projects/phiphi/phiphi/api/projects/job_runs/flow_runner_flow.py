@@ -73,7 +73,7 @@ def start_flow_run(
     job_run_flow: objects.FlowRun = asyncio.run(
         deployments.run_deployment(
             name=deployment_name,
-            parameters=job_params.dict(by_alias=True),
+            parameters=job_params.dict(by_alias=True, exclude_unset=True),
             as_subflow=True,
             timeout=0,  # this means it returns immediately with the metadata
             tags=[

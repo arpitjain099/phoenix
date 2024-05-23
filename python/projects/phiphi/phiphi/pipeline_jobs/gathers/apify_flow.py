@@ -29,7 +29,9 @@ def apify_scrape(
     """Scrape data using the Apify API and return an iterator."""
     client = apify_client.ApifyClient(apify_token)
     # Run the Apify actor
-    run_info = client.actor(actor_name).call(run_input=run_input.dict(by_alias=True))
+    run_info = client.actor(actor_name).call(
+        run_input=run_input.dict(by_alias=True, exclude_unset=True)
+    )
     assert run_info is not None
     # Access the dataset client associated with the actor's results
     dataset_client = client.dataset(run_info["defaultDatasetId"])
