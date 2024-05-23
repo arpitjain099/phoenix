@@ -5,7 +5,7 @@ This modules contains a Pydantic schema for each Apify scraper, which:
     - Converts that data structure to the correct structure for the Apify API.
 """
 import enum
-from typing import Annotated, Dict, List, Optional
+from typing import Annotated, Dict, List, Optional, Union
 
 import pydantic
 
@@ -203,3 +203,11 @@ class TikTokCommentsScraperInput(pydantic.BaseModel):
         """Pydantic configuration."""
 
         extra = pydantic.Extra.forbid
+
+
+ApifyInputType = Union[
+    ApifyFacebookPostsInput,
+    ApifyFacebookCommentsInput,
+    TikTokScraperInput,
+    TikTokCommentsScraperInput,
+]
