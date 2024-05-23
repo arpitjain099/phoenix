@@ -94,6 +94,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
 
 	useEffect(() => {
 		const checkAuth = async () => {
+			setLoading(true);
 			const { authenticated } = await authProvider.check();
 			if (!authenticated) {
 				await authProvider.login({});

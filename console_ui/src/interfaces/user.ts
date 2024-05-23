@@ -3,4 +3,5 @@ export type UserInfo = {
 	display_name: string;
 	email: string;
 	created_at: string;
+	app_role: string;
 };
