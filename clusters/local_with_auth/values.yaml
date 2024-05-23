@@ -1,12 +1,22 @@
+ingress_cors:
+  enabled: true
+  allow_origin: "https://console.{{ .Values.base_host }}"
+use_local_insecure_auth: false
+api:
+  cors_origins: "https://console.{{ .Values.base_host }}"
 console:
   enabled: true
   # Default oauth2 cookie name
   # Has to have cookie_httponly false
   env_auth_cookie: "_oauth2_proxy"
-cert_issuer:
-  enabled: false
-cert-manager:
-  enabled: false
+  dev_admin_email: "buildup@datavaluepeople"
+  user_info_cookie_name: "user"
+  api_url: "https://api.{{ .Values.base_host }}"
+  # Using the insecure auth for the console
+  env_auth_url: "https://oauth.{{ .Values.base_host }}/oauth2/auth"
+  # So there is no redirect for the local cluster if there is an error
+  env_login_url: "https://oauth.{{ .Values.base_host }}/oauth2/start"
+  env_logout_url: "https://oauth.{{ .Values.base_host }}/oauth2/sign_out"
 oauth2-proxy:
   config:
     configFile: |
@@ -33,7 +43,7 @@ oauth2-proxy:
       show_debug_on_error = true
       insecure_oidc_allow_unverified_email = true
       ssl_insecure_skip_verify=true
-      cookie_secure="false"
+      cookie_secure="true"
 superset:
   enabled: true
   # These secrets must be created before the first apply of the chart
@@ -52,3 +62,11 @@ superset:
 
       # Throw error if got past the auth layer
       LOGIN_REDIRECT_URL = False
+
+######### WITH SELF SIGNED CERTIFICATES #########
+cert_issuer:
+ enabled: true
+ issuer_name: "selfsigned-issuer"
+ issuer_email: "buildup@datavaluepeople.com"
+cert-manager:
+  enabled: true

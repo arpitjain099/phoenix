@@ -1,11 +1,10 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Release.Name }}-main-ingress
+  name: {{ .Release.Name }}-api-main-ingress
   annotations:
     kubernetes.io/ingress.class: {{ .Values.ingressClassName }}
     nginx.ingress.kubernetes.io/rewrite-target: /
-    {{- include "phoenixmain.authSignin" . | nindent 4 }}
     {{- if .Values.use_local_insecure_auth }}
     nginx.ingress.kubernetes.io/auth-url: http://{{ .Release.Name }}-api-service.{{ .Release.Namespace }}.svc.cluster.local/oauth2/insecure_auth
     {{- else }}
@@ -22,17 +21,17 @@ spec:
   {{- if .Values.cert_issuer.enabled }}
   tls:
   - hosts:
-      - dashboard.main.{{ .Values.base_host }}
+      - api.{{ .Values.base_host }}
     secretName: main-ingress-phoenix-tls
   {{- end }}
   rules:
-    - host: dashboard.main.{{ .Values.base_host }}
+    - host: api.{{ .Values.base_host }}
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: {{ .Release.Name }}-superset
+                name: {{ .Release.Name }}-api-service
                 port:
-                  number: 8088
+                  number: 80

@@ -81,21 +81,6 @@ You can also use `make clean` to remove all the tilt resources and default volum
 The default local cluster uses the insecure authentication via the api and does not require any
 setup.
 
-### Third-party authentication
-
-The `make local_with_auth_up` cluster uses a third-party authentication provider to authenticate users.
-This can be done on any providers such as auth0. You will have to configure the
-`oauth2-proxy.config`.
-To do this:
-- create an account with auth0
-- create an application
-- create a user in the application
-- set the callback URL to `http://oauth.phoenix.local/oauth2/callback`
-- copy the client id and secret to the cluster/local_with_auth/secrets.yaml file
-- update the `oidc_issuer_url` and `whitelist_domains` in cluster/local_with_auth/values.yaml
-- once the local cluster is up you should be redirected to the auth0 login page if you go to
-  `http://api.phoenix.local/`
-
 ## Prefect worker [OPTIONAL]
 
 It is possible to have a prefect worker in the local cluster. This is useful for testing the
@@ -109,23 +94,10 @@ prefect flow and the prefect worker. To do this:
 - you can then create the deployments and run as needed. [Prefect
   tutorial](https://docs.prefect.io/latest/guides/deployment/kubernetes/#define-a-flow)
 
-## Running local with SSL [Optional]
+## Local cluster with authentication and SSL
 
-It is possible to run the local cluster with SSL. This is useful for testing the system with SSL
-locally. In general this should not be done.
-
-- Uncomment "WITH SELF SIGNED CERTIFICATES" in `local/values.yaml`
-- Replace all `http://` with `https://` in the `local/values.yaml` file
-- `make up`
-- in a different terminal (check the context) run: `kubectl apply -f clusters/local/selfsigned.yaml`
-- go to `api.phoenix.local` `dashboard.main.phoenix.local` in your browser and proceed with the
-  insecure certificate
-- go to `console.phoenix.local` in your browser and proceed with the insecure certificate
-- You should now be able to use the platform locally with SSL
-
-Note: it might also be possible to add the created certificate to as a trusted certificate in your
-browser. But you will need to do this for each browser you use and allowing your browser to proceed
-to insecure sites is easier.
+See [cluster/local_with_auth/README.md](cluster/local_with_auth/README.md) for a local cluster with
+authentication and SSL. This is useful for testing the full system with authentication and SSL.
 
 ## Hello world
 
