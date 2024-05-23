@@ -22,7 +22,7 @@ spec:
   tls:
   - hosts:
       - api.{{ .Values.base_host }}
-    secretName: main-ingress-phoenix-tls
+    secretName: api-main-ingress-phoenix-tls
   {{- end }}
   rules:
     - host: api.{{ .Values.base_host }}
