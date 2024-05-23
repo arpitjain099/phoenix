@@ -3,6 +3,8 @@ default_path = projects/phiphi/
 phiphi_gitlab_repo = registry.gitlab.com/howtobuildup/phoenix/python/phiphi
 tag ?= latest
 image ?= "$(phiphi_gitlab_repo):$(tag)"
+override_work_pool_name ?= local-work-pool
+group_name ?= local
 
 DEV_COMPOSE_COMMAND=docker compose -f compose.yaml -f compose.dev.yaml
 
@@ -38,12 +40,31 @@ format:
 	@echo "Running `format` in ci environment"
 	docker compose run api make format path=$(default_path)
 
+push_phiphi_image:
+	@echo "Pushing the phiphi image to the registry for tag $(tag)"
+	@if [ "$(tag)" = "main" ] || [ "$(tag)" = "dev" ]; then \
+			echo "Error: Pushing to 'main' or 'dev' tags is not allowed!"; \
+			exit 1; \
+	else \
+			docker tag phiphi:latest $(phiphi_gitlab_repo):$(tag); \
+			docker push $(phiphi_gitlab_repo):$(tag); \
+	fi
+
 # Usage: make create_prefect_deployments image=registry.gitlab.com/howtobuildup/phoenix/python/phiphi:main
 # This function can be used in CI to create all prefect deployments with the image that it has
 # just published
 create_prefect_deployments:
 	@echo "Create prefect deployments"
 	$(DEV_COMPOSE_COMMAND) run api python projects/phiphi/phiphi/prefect_deployments.py --image $(image)
+
+create_prefect_grouped_deployments:
+	@echo "Building and pushing phiphi image with tag $(group_name)"
+	make build
+	tag=$(group_name) make push_phiphi_image
+	@echo "Create grouped deployments for development and testing"
+	$(DEV_COMPOSE_COMMAND) run api python projects/phiphi/phiphi/prefect_grouped_deployments.py \
+			--override_work_pool_name $(override_work_pool_name) \
+			--group_name $(group_name)
 
 fix_local_permissions:
 	sudo chown -R $(USER):$(USER) phiphi/
