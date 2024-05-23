@@ -3,8 +3,8 @@ default_path = projects/phiphi/
 phiphi_gitlab_repo = registry.gitlab.com/howtobuildup/phoenix/python/phiphi
 tag ?= latest
 image ?= "$(phiphi_gitlab_repo):$(tag)"
-override_work_pool_name = local-work-pool
-group_name = local
+override_work_pool_name ?= local-work-pool
+group_name ?= local
 
 DEV_COMPOSE_COMMAND=docker compose -f compose.yaml -f compose.dev.yaml
 
