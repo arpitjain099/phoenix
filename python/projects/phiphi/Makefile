@@ -58,12 +58,13 @@ create_prefect_deployments:
 	$(DEV_COMPOSE_COMMAND) run api python projects/phiphi/phiphi/prefect_deployments.py --image $(image)
 
 create_prefect_grouped_deployments:
+	@echo "Building and pushing phiphi image with tag $(group_name)"
+	make build
+	tag=$(group_name) make push_phiphi_image
 	@echo "Create grouped deployments for development and testing"
 	$(DEV_COMPOSE_COMMAND) run api python projects/phiphi/phiphi/prefect_grouped_deployments.py \
 			--override_work_pool_name $(override_work_pool_name) \
 			--group_name $(group_name)
-	make build
-	tag=$(group_name) make push_phiphi_image
 
 fix_local_permissions:
 	sudo chown -R $(USER):$(USER) phiphi/
