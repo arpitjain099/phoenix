@@ -1,4 +1,5 @@
 """Configuration of phiphi application."""
+import json
 import logging
 import os
 from typing import Any, Optional
@@ -25,17 +26,31 @@ SqliteDsn = Annotated[
 ]
 
 
-def parse_cors(v: Any) -> list[str] | str:
+def parse_cors(input_value: Any) -> list[str] | str:
     """Parse cors origins into a list or str.
 
     Taken from:
     https://github.com/tiangolo/full-stack-fastapi-template/blob/master/backend/app/core/config.py#L18C1-L23C24
     """
-    if isinstance(v, str) and not v.startswith("["):
-        return [i.strip() for i in v.split(",")]
-    elif isinstance(v, list | str):
-        return v
-    raise ValueError(v)
+    if isinstance(input_value, str) and not input_value.startswith("["):
+        return [i.strip() for i in input_value.split(",")]
+    elif isinstance(input_value, list | str):
+        return input_value
+    raise ValueError(input_value)
+
+
+def parse_apify_keys(input_value: dict | str) -> Any:
+    """Parse apify keys into a dictionary.
+
+    The keys can be a dictionary or a json string.
+    We return type Any as pydantic will validate the type later.
+    """
+    if isinstance(input_value, dict):
+        return input_value
+    if isinstance(input_value, str):
+        return json.loads(input_value)
+
+    raise ValueError("APIFY_API_KEYS must be a dictionary or a json string.")
 
 
 class Settings(BaseSettings):
@@ -70,6 +85,7 @@ class Settings(BaseSettings):
     COOKIE_AUTH_NAME: Optional[str] = None
     # For a local cluster to be run without oauth2 implement.
     INCLUDE_INSECURE_AUTH: bool = False
+    APIFY_API_KEYS: Annotated[dict[str, str], pydantic.BeforeValidator(parse_apify_keys)] = {}
 
     # Pipelines
     # If True; don't make real Apify calls, read static sample data from within module instead

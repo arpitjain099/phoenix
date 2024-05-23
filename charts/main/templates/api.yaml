@@ -53,6 +53,13 @@ spec:
           - name: GOOGLE_APPLICATION_CREDENTIALS
             value: /var/secrets/google/{{ .Values.gcp_service_account.secret_key }}
           {{- end }}
+          {{- if .Values.api.apify_api_keys.enabled }}
+          - name: APIFY_API_KEYS
+            valueFrom:
+              secretKeyRef:
+                name: {{ tpl ( .Values.api.apify_api_keys.secret_name ) . }}
+                key: {{ .Values.api.apify_api_keys.secret_key }}
+          {{- end }}
         command: ["/app/projects/phiphi/entrypoint.sh"]
         args: [
           "uvicorn",
