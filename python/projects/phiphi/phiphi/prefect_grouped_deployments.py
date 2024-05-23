@@ -23,6 +23,8 @@ async def create_grouped_deployments(
 
     The deployments that are created are prefixed with the group_name.
     """
+    print(f"Creating deployments for group: {group_name}")
+    print(f"Override work pool name: {override_work_pool_name}")
     await prefect_deployments.create_all_deployments(
         override_work_pool_name=override_work_pool_name,
         deployment_name_prefix=f"{group_name}-",
