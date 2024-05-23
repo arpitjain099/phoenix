@@ -13,7 +13,7 @@ import argparse
 import asyncio
 from typing import Coroutine, Protocol
 
-from phiphi import constants, hello_flows
+from phiphi import constants, health_check_flows
 from phiphi.api.projects.job_runs import flow_runner_flow
 
 
@@ -34,8 +34,9 @@ class CreateDeploymentsInterface(Protocol):
 
 
 list_of_create_deployment_fn: list[CreateDeploymentsInterface] = [
-    hello_flows.create_deployments,
+    health_check_flows.create_deployments,
     flow_runner_flow.create_deployments,
+    # Add new create deployment functions here.
 ]
 
 
