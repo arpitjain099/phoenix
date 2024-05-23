@@ -14,7 +14,7 @@ def check_sqlalchemy_connection() -> bool:
     """Check the SQLAlchemy connection to the database."""
     logger = prefect.get_run_logger()
     try:
-        with platform_db.get_session() as session:
+        with platform_db.get_session_context() as session:
             # Doing a SELECT 1 to check the connection.
             select_query = sqlalchemy.select(1)
             response = session.execute(select_query)
