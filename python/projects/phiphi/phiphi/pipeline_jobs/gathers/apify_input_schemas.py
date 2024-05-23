@@ -76,7 +76,7 @@ class ApifyFacebookCommentsInput(pydantic.BaseModel):
         description="Limit results per post; defaults to 50 if not set",
     )
     include_nested_comments: bool = pydantic.Field(
-        False,
+        default=False,
         serialization_alias="includeNestedComments",
         description=(
             "If True, includes up to 3 levels of nested comments/replies. "
@@ -84,8 +84,8 @@ class ApifyFacebookCommentsInput(pydantic.BaseModel):
             "and incur more cost than expected."
         ),
     )
-    comment_sort_option: FacebookCommentSortOption = pydantic.Field(
-        FacebookCommentSortOption.RANKED_UNFILTERED,
+    comment_sort_option: Optional[FacebookCommentSortOption] = pydantic.Field(
+        default=None,
         serialization_alias="viewOption",
         description="Sorting option for comments, default is 'RANKED_UNFILTERED'",
     )
@@ -118,49 +118,50 @@ class TikTokScraperInput(pydantic.BaseModel):
     """
 
     hashtags: Optional[List[str]] = pydantic.Field(
-        None, description="List of hashtags to scrape TikTok videos for."
+        default=None, description="List of hashtags to scrape TikTok videos for."
     )
     results_per_page: int = pydantic.Field(
         25, description="Number of TikTok videos to scrape per hashtag, profile, or search query."
     )
     profiles: Optional[List[str]] = pydantic.Field(
-        None, description="List of TikTok usernames to scrape."
+        default=None, description="List of TikTok usernames to scrape."
     )
     oldest_post_date: Optional[str] = pydantic.Field(
-        None, description="Scrape profile videos uploaded after or on this date."
+        default=None, description="Scrape profile videos uploaded after or on this date."
     )
     scrape_last_n_days: Optional[int] = pydantic.Field(
-        None, description="Scrape profile videos from the last specified number of days."
+        default=None, description="Scrape profile videos from the last specified number of days."
     )
     search_queries: Optional[List[str]] = pydantic.Field(
-        None, description="Search queries to apply across videos and profiles."
+        default=None, description="Search queries to apply across videos and profiles."
     )
     search_section: Optional[TikTokSearchSection] = pydantic.Field(
-        None, description="Specifies where to apply the search query: to videos or profiles."
+        default=None,
+        description="Specifies where to apply the search query: to videos or profiles.",
     )
     max_profiles_per_query: int = pydantic.Field(
         10, description="Maximum number of profiles to scrape per search query."
     )
     post_urls: Optional[List[UrlStr]] = pydantic.Field(
-        None, description="Direct URLs of TikTok videos to scrape."
+        default=None, description="Direct URLs of TikTok videos to scrape."
     )
     should_download_videos: bool = pydantic.Field(
-        False, description="Set to true to download TikTok videos."
+        default=False, description="Set to true to download TikTok videos."
     )
     should_download_covers: bool = pydantic.Field(
-        False, description="Set to true to download TikTok video covers (thumbnails)."
+        default=False, description="Set to true to download TikTok video covers (thumbnails)."
     )
     should_download_subtitles: bool = pydantic.Field(
-        False, description="Set to true to download subtitles for TikTok videos."
+        default=False, description="Set to true to download subtitles for TikTok videos."
     )
     should_download_slideshow_images: bool = pydantic.Field(
-        False, description="Set to true to download TikTok slideshow images."
+        default=False, description="Set to true to download TikTok slideshow images."
     )
     video_kv_store_id_or_name: Optional[str] = pydantic.Field(
-        None, description="Name or ID of the Key Value Store for storing downloaded media."
+        default=None, description="Name or ID of the Key Value Store for storing downloaded media."
     )
     proxy_country_code: Optional[str] = pydantic.Field(
-        None,
+        default=None,
         description="2 letter proxy country code to use if scraping location-specific content.",
     )
 
