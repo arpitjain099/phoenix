@@ -149,6 +149,15 @@
                     }
                   },
                   {
+                    "name": "APIFY_API_KEYS",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "key": "apify-api-keys",
+                        "name": "phoenix-apify-api-keys"
+                      }
+                    }
+                  },
+                  {
                     "name": "GOOGLE_APPLICATION_CREDENTIALS",
                     "value": "/var/secrets/google/service-account.json"
                   }
