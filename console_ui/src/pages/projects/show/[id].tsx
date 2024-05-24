@@ -1,6 +1,5 @@
 import {
 	IResourceComponentsProps,
-	useCreate,
 	useResource,
 	useShow,
 	useTranslate,
@@ -19,7 +18,6 @@ import Link from "next/link";
 
 export const ProjectShow: React.FC<IResourceComponentsProps> = () => {
 	const translate = useTranslate();
-	const { mutate } = useCreate();
 	const { queryResult } = useShow();
 	const { data, isLoading } = queryResult;
 
@@ -33,13 +31,6 @@ export const ProjectShow: React.FC<IResourceComponentsProps> = () => {
 		variant: "filled",
 		resource: identifier,
 		recordItemId: idFromParams,
-	};
-
-	const runInstance = async () => {
-		mutate({
-			resource: `instances/${idFromParams}/runs`,
-			values: {},
-		});
 	};
 
 	return (
@@ -99,17 +90,14 @@ export const ProjectShow: React.FC<IResourceComponentsProps> = () => {
 				<DateField value={record?.updated_at} />
 			</Group>
 			<Group className="mt-4 flex flex-col items-start gap-4">
-				<Button onClick={runInstance}>Run</Button>
 				<Link
 					href="/projects/[projectid]/gathers"
 					as={`/projects/${idFromParams}/gathers`}
 				>
 					<Button>{translate("gathers.gathers")}</Button>
 				</Link>
-				{record?.status !== "pending" && (
-					<Button leftIcon={<IconEye />}>Go to Visualisation</Button>
-				)}
-				{record?.status !== "pending" && <EditButton {...editButtonProps} />}
+				<Button leftIcon={<IconEye />}>Go to Visualisation</Button>
+				<EditButton {...editButtonProps} />
 			</Group>
 		</Show>
 	);
