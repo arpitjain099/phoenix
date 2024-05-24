@@ -72,3 +72,10 @@ cert_issuer:
  issuer_email: "buildup@datavaluepeople.com"
 cert-manager:
   enabled: true
+
+prefect-worker:
+  enabled: true
+  worker:
+    ## Account and workspace ID in secrets
+    config:
+      workPool: "local-work-pool"
