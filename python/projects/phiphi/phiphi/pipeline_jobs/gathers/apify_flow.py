@@ -16,8 +16,8 @@ from phiphi.pipeline_jobs.gathers import apify_input_schemas, utils
 input_actor_map = {
     apify_input_schemas.ApifyFacebookPostsInput: "apify/facebook-posts-scraper",
     apify_input_schemas.ApifyFacebookCommentsInput: "apify/facebook-comments-scraper",
-    apify_input_schemas.TikTokScraperInput: "clockworks/tiktok-scraper",
-    apify_input_schemas.TikTokCommentsScraperInput: "clockworks/tiktok-comments-scraper",
+    apify_input_schemas.ApifyTiktokPostsInput: "clockworks/tiktok-scraper",
+    apify_input_schemas.ApifyTiktokCommentsInput: "clockworks/tiktok-comments-scraper",
 }
 
 

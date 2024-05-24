@@ -101,14 +101,14 @@ class ApifyFacebookCommentsInput(pydantic.BaseModel):
         return [{"url": str(url)} for url in urls]
 
 
-class TikTokSearchSection(str, enum.Enum):
+class TiktokSearchSection(str, enum.Enum):
     """Enum for search section sorting options."""
 
     VIDEO = "/video"
     USER = "/user"
 
 
-class TikTokScraperInput(pydantic.BaseModel):
+class ApifyTiktokPostsInput(pydantic.BaseModel):
     """Input schema for the TikTok Scraper.
 
     Enables scraping data from TikTok based on various inputs like direct URLs, hashtags, or search
@@ -117,14 +117,28 @@ class TikTokScraperInput(pydantic.BaseModel):
     Ref to relevant Apify actor docs: https://apify.com/clockworks/tiktok-scraper/input-schema
     """
 
+    results_per_page: int = pydantic.Field(
+        25,
+        description=(
+            "Number of TikTok videos to scrape per hashtag, profile, or search query. "
+            "This field is applicable to hashtags, profiles, and search."
+        ),
+    )
     hashtags: Optional[List[str]] = pydantic.Field(
         default=None, description="List of hashtags to scrape TikTok videos for."
     )
-    results_per_page: int = pydantic.Field(
-        25, description="Number of TikTok videos to scrape per hashtag, profile, or search query."
-    )
     profiles: Optional[List[str]] = pydantic.Field(
         default=None, description="List of TikTok usernames to scrape."
+    )
+    search_queries: Optional[List[str]] = pydantic.Field(
+        default=None, description="Search queries to apply across videos and profiles."
+    )
+    search_section: Optional[TiktokSearchSection] = pydantic.Field(
+        default=None,
+        description="Specifies where to apply the search query: to videos or profiles.",
+    )
+    post_urls: Optional[List[UrlStr]] = pydantic.Field(
+        default=None, description="Direct URLs of TikTok videos to scrape."
     )
     oldest_post_date: Optional[str] = pydantic.Field(
         default=None, description="Scrape profile videos uploaded after or on this date."
@@ -132,18 +146,12 @@ class TikTokScraperInput(pydantic.BaseModel):
     scrape_last_n_days: Optional[int] = pydantic.Field(
         default=None, description="Scrape profile videos from the last specified number of days."
     )
-    search_queries: Optional[List[str]] = pydantic.Field(
-        default=None, description="Search queries to apply across videos and profiles."
-    )
-    search_section: Optional[TikTokSearchSection] = pydantic.Field(
+    max_profiles_per_query: Optional[int] = pydantic.Field(
         default=None,
-        description="Specifies where to apply the search query: to videos or profiles.",
-    )
-    max_profiles_per_query: int = pydantic.Field(
-        10, description="Maximum number of profiles to scrape per search query."
-    )
-    post_urls: Optional[List[UrlStr]] = pydantic.Field(
-        default=None, description="Direct URLs of TikTok videos to scrape."
+        description=(
+            "Only applies to profile searches. In this case ignore the 100 number of videos "
+            "section and choose the number of profiles you want to scrape here."
+        ),
     )
     should_download_videos: bool = pydantic.Field(
         default=False, description="Set to true to download TikTok videos."
@@ -171,7 +179,7 @@ class TikTokScraperInput(pydantic.BaseModel):
         extra = pydantic.Extra.forbid
 
 
-class TikTokCommentsScraperInput(pydantic.BaseModel):
+class ApifyTiktokCommentsInput(pydantic.BaseModel):
     """Input schema for the TikTok Comments Scraper.
 
     Facilitates the extraction of comments from specific TikTok videos by providing URLs.
@@ -209,6 +217,6 @@ class TikTokCommentsScraperInput(pydantic.BaseModel):
 ApifyInputType = Union[
     ApifyFacebookPostsInput,
     ApifyFacebookCommentsInput,
-    TikTokScraperInput,
-    TikTokCommentsScraperInput,
+    ApifyTiktokPostsInput,
+    ApifyTiktokCommentsInput,
 ]
