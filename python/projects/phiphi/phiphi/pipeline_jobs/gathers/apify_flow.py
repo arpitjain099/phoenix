@@ -64,17 +64,20 @@ def apify_scrape_and_batch_download_results(
     dev_batch_dir: str = "",
 ) -> None:
     """Scrape data using the Apify API and save them to JSON blobs in batches."""
+    prefect_logger = prefect.get_run_logger()
     apify_actor_name = input_actor_map[type(run_input)]
 
     if config.settings.USE_MOCK_APIFY:
+        prefect_logger.info("Reading mock data.")
         dataset_iterator, dataset_client = mock_apify_scrape(
             apify_token, apify_actor_name, run_input
         )
     else:
+        prefect_logger.info("Making Apify call.")
         dataset_iterator, dataset_client = apify_scrape(apify_token, apify_actor_name, run_input)
 
     # Initialize batch tracking
-    batch_num = 1
+    batch_num = 0
     batch_items: List[Dict] = []
 
     # Iterate over dataset items and write to JSON files in batches
@@ -95,9 +98,10 @@ def apify_scrape_and_batch_download_results(
         file_name = dev_batch_dir + f"batch_{batch_num}.json"
         with open(file_name, "w") as f:
             json.dump(batch_items, f)
+        batch_num += 1
 
     # Delete the dataset after downloading to save on storage costs
     if dataset_client is not None:
         dataset_client.delete()
 
-    prefect.get_run_logger().info(f"Finished scraping. Batches written: {batch_num}")
+    prefect_logger.info(f"Finished scraping. Batches written: {batch_num}")
