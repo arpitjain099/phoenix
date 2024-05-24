@@ -214,12 +214,11 @@ class ApifyTiktokCommentsInput(pydantic.BaseModel):
     """
 
     post_urls: List[UrlStr] = pydantic.Field(
-        ...,
         serialization_alias="postURLs",
         description="List of URLs for TikTok videos from which to scrape comments.",
     )
     comments_per_post: int = pydantic.Field(
-        25,
+        default=25,
         serialization_alias="commentsPerPost",
         description=(
             "Maximum number of comments to scrape from each video; defaults to 100. "
@@ -227,7 +226,7 @@ class ApifyTiktokCommentsInput(pydantic.BaseModel):
         ),
     )
     max_replies_per_comment: int = pydantic.Field(
-        0,
+        default=0,
         serialization_alias="maxRepliesPerComment",
         description="Docs say 'Slow'. Maximum number of replies to scrape from each comment; "
         "defaults to 0. NOTE: it is currently not guaranteed that the scraper will manage to "
