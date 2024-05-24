@@ -13,10 +13,14 @@ const LOGOUT_URL = process.env.NEXT_PUBLIC_ENV_LOGOUT_URL!;
 const ENV = process.env.NEXT_PUBLIC_ENV!;
 const DEV_LOGIN_EMAIL = process.env.NEXT_PUBLIC_DEV_ADMIN_EMAIL!;
 
+const getLoginUrl = () => {
+	const current_url = window.location.href;
+	return `${LOGIN_URL}?rd=${current_url}`;
+};
+
 const redirectToLoginPage = () => {
 	if (ENV !== "dev" && LOGIN_URL) {
-		const current_url = window.location.href;
-		window.location.href = `${LOGIN_URL}?rd=${current_url}`;
+		window.location.href = getLoginUrl();
 	}
 };
 
@@ -117,10 +121,14 @@ const authProvider: AuthProvider = {
 		if (ENV === "dev" && storageService.get(DEV_AUTH_COOKIE)) {
 			return { authenticated: true };
 		}
+		if (ENV === "dev") {
+			storageService.set(DEV_AUTH_COOKIE, DEV_LOGIN_EMAIL);
+			return { authenticated: true };
+		}
 		if (await checkAuth()) {
 			return { authenticated: true };
 		}
-		return { authenticated: false };
+		return { authenticated: false, redirectTo: getLoginUrl() };
 	},
 	getIdentity: async () => {
 		let userInfo = getCurrentUserInfo();
