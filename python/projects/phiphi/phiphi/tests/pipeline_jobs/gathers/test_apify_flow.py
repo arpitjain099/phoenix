@@ -5,7 +5,6 @@ from prefect.logging import disable_run_logger as disable_prefect_run_logger
 from phiphi.pipeline_jobs.gathers import apify_flow, apify_input_schemas
 
 
-@pytest.fixture
 def facebook_posts_input_example() -> apify_input_schemas.ApifyFacebookPostsInput:
     """Example input for the ApifyFacebookPostsInput schema."""
     return apify_input_schemas.ApifyFacebookPostsInput(
@@ -19,7 +18,38 @@ def facebook_posts_input_example() -> apify_input_schemas.ApifyFacebookPostsInpu
     )
 
 
-def manual_test_apify_scrape_and_batch_download(facebook_posts_input_example):
+def facebook_comments_input_example() -> apify_input_schemas.ApifyFacebookCommentsInput:
+    """Example input for the ApifyFacebookCommentsInput schema."""
+    return apify_input_schemas.ApifyFacebookCommentsInput(
+        post_urls=[
+            "https://www.facebook.com/unitednations/posts/pfbid045as8QKV2uLVYe2NumDPs7a68Hr4P5cjmoyMRo2e4dj4p3rp2gWNNj948Uu7BVcxl",
+            "https://www.facebook.com/unitednations/posts/pfbid0LmBjLodaYjFhvntY3rX4xB2cyrcUeXHuasXJNFgimkNX7NE76CjSEYCwwveF9v5ml",
+        ],
+        results_limit=4,
+    )
+
+
+def tiktok_posts_input_example() -> apify_input_schemas.ApifyTiktokPostsInput:
+    """Example input for the ApifyTiktokPostsInput schema."""
+    return apify_input_schemas.ApifyTiktokPostsInput(
+        hashtags=["#peacebuilding"],
+        profiles=["@unitednations"],
+        results_per_page=4,
+    )
+
+
+def tiktok_comments_input_example() -> apify_input_schemas.ApifyTiktokCommentsInput:
+    """Example input for the ApifyTiktokCommentsInput schema."""
+    return apify_input_schemas.ApifyTiktokCommentsInput(
+        post_urls=[
+            "https://www.tiktok.com/@unitednations/video/7369984375460498734",
+            "https://www.tiktok.com/@unitednations/video/7368916231921126702",
+        ],
+        comments_per_post=4,
+    )
+
+
+def manual_test_apify_scrape_and_batch_download():
     """Manually test the apify_scrape_and_batch_download_results flow.
 
     WARNING: this will incur costs on Apify.
@@ -29,7 +59,7 @@ def manual_test_apify_scrape_and_batch_download(facebook_posts_input_example):
     - change the input fixture to the corresponding desired Apify actor to test
     - run the function manually
     """
-    run_input = facebook_posts_input_example
+    run_input = facebook_comments_input_example()
     apify_flow.apify_scrape_and_batch_download_results(
         apify_token="MY_APIFY_TOKEN",
         run_input=run_input,
