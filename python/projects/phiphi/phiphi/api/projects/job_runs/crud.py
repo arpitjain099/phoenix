@@ -3,17 +3,36 @@ from typing import Union
 
 from sqlalchemy.orm import Session
 
+from phiphi.api import exceptions
 from phiphi.api.projects.job_runs import models, schemas
+
+
+def check_valid_gather(db: Session, project_id: int, gather_id: int) -> bool:
+    """Check if the gather exists and is valid.
+
+    If the gather is not found or is invalid, raise an exception.
+    """
+    from phiphi.api.projects.gathers import crud as gather_crud
+
+    gather = gather_crud.get_gather(db, project_id, gather_id)
+    if gather is None:
+        raise exceptions.GatherNotFound()
+
+    if not gather.latest_job_run:
+        return True
+
+    if not gather.latest_job_run.completed_at:
+        raise exceptions.GatherHasActiveJobRun()
+
+    return True
 
 
 def invalid_foreign_object_guard(
     db: Session, project_id: int, foreign_id: int, foreign_job_type: schemas.ForeignJobType
 ) -> None:
     """Guard to check if the foreign object exists."""
-    from phiphi.api.projects.gathers import crud as gather_crud
-
     if foreign_job_type == schemas.ForeignJobType.gather:
-        gather_crud.get_gather_with_guard(db, project_id, foreign_id)
+        check_valid_gather(db, project_id, foreign_id)
     else:
         raise ValueError("Invalid foreign job type")
 

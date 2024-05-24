@@ -25,3 +25,11 @@ class GatherNotFound(fastapi.HTTPException):
     def __init__(self) -> None:
         """Constructor for custom exception."""
         super().__init__(status_code=400, detail="Gather not found")
+
+
+class GatherHasActiveJobRun(fastapi.HTTPException):
+    """Custom exception for gathers that have an active job run."""
+
+    def __init__(self) -> None:
+        """Constructor for custom exception."""
+        super().__init__(status_code=400, detail="Gather has an active job run")
