@@ -22,18 +22,6 @@ export const ProjectList: React.FC<IResourceComponentsProps> = () => {
 				header: translate("projects.fields.name"),
 			},
 			{
-				id: "run_status",
-				accessorKey: "run_status",
-				header: translate("projects.fields.status"),
-				cell: function render({ getValue }) {
-					return (
-						<span
-							className={`capitalize ${getValue() === "processing" ? "text-orange-500" : getValue() === "success" ? "text-green-500" : "text-red-500"}`}
-						>{`${getValue()}`}</span>
-					);
-				},
-			},
-			{
 				id: "created_at",
 				accessorKey: "created_at",
 				header: translate("projects.fields.created_at"),

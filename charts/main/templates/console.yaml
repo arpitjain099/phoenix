@@ -37,6 +37,10 @@ spec:
             value: {{ tpl (.Values.console.env_login_url) . }}
           - name: NEXT_PUBLIC_ENV_LOGOUT_URL
             value: {{ tpl (.Values.console.env_logout_url) . }}
+          - name: NEXT_PUBLIC_PLATFORM_DOMAIN_BASE
+            value: {{ .Values.base_host | quote }}
+          - name: NEXT_PUBLIC_PLATFORM_DOMAIN_SCHEMA
+            value: {{ .Values.base_schema | quote }}
 ---
 apiVersion: v1
 kind: Service

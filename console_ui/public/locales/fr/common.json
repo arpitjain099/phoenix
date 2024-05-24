@@ -149,7 +149,8 @@
 			"create": "Créer une project",
 			"edit": "Modifier l'project",
 			"list": "Projects",
-			"show": "Afficher l'project"
+			"show": "Afficher l'project",
+			"dashboard": "Tableau de bord"
 		},
 		"warnings": {
 			"create": "Pour étendre 'Les informations personnelles sont supprimées après' ou 'Toutes les données sont supprimées après' jours au-delà de 365, veuillez contacter le support !",

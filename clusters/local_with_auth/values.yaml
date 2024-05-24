@@ -1,3 +1,5 @@
+base_host: "phoenix.local"
+base_schema: "https"
 ingress_cors:
   enabled: true
   allow_origin: "https://console.{{ .Values.base_host }}"

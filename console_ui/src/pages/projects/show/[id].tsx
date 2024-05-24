@@ -1,6 +1,5 @@
 import {
 	IResourceComponentsProps,
-	useCreate,
 	useResource,
 	useShow,
 	useTranslate,
@@ -17,9 +16,11 @@ import { Button, Group, Title } from "@mantine/core";
 import { IconEye } from "@tabler/icons";
 import Link from "next/link";
 
+const PLATFORM_DOMAIN_BASE = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN_BASE!;
+const PLATFORM_SCHEMA_BASE = process.env.NEXT_PUBLIC_PLATFORM_SCHEMA_BASE!;
+
 export const ProjectShow: React.FC<IResourceComponentsProps> = () => {
 	const translate = useTranslate();
-	const { mutate } = useCreate();
 	const { queryResult } = useShow();
 	const { data, isLoading } = queryResult;
 
@@ -33,13 +34,6 @@ export const ProjectShow: React.FC<IResourceComponentsProps> = () => {
 		variant: "filled",
 		resource: identifier,
 		recordItemId: idFromParams,
-	};
-
-	const runInstance = async () => {
-		mutate({
-			resource: `instances/${idFromParams}/runs`,
-			values: {},
-		});
 	};
 
 	return (
@@ -99,17 +93,23 @@ export const ProjectShow: React.FC<IResourceComponentsProps> = () => {
 				<DateField value={record?.updated_at} />
 			</Group>
 			<Group className="mt-4 flex flex-col items-start gap-4">
-				<Button onClick={runInstance}>Run</Button>
 				<Link
 					href="/projects/[projectid]/gathers"
 					as={`/projects/${idFromParams}/gathers`}
 				>
 					<Button>{translate("gathers.gathers")}</Button>
 				</Link>
-				{record?.status !== "pending" && (
-					<Button leftIcon={<IconEye />}>Go to Visualisation</Button>
+				{PLATFORM_DOMAIN_BASE && PLATFORM_SCHEMA_BASE && (
+					<Link
+						href={`${PLATFORM_SCHEMA_BASE}://dashboard.${record?.environment_slug}.${PLATFORM_DOMAIN_BASE}`}
+						target="_blank"
+					>
+						<Button leftIcon={<IconEye />}>
+							{translate("projects.titles.dashboard")}
+						</Button>
+					</Link>
 				)}
-				{record?.status !== "pending" && <EditButton {...editButtonProps} />}
+				<EditButton {...editButtonProps} />
 			</Group>
 		</Show>
 	);
