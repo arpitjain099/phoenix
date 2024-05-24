@@ -1,4 +1,4 @@
-import { CanAccess, Refine } from "@refinedev/core";
+import { CanAccess, Refine, Authenticated } from "@refinedev/core";
 import { DevtoolsProvider } from "@refinedev/devtools";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 import {
@@ -11,7 +11,7 @@ import routerProvider, {
 	DocumentTitleHandler,
 	UnsavedChangesNotifier,
 } from "@refinedev/nextjs-router";
-import React, { useEffect, useState } from "react";
+import React, { Suspense } from "react";
 import type { NextPage } from "next";
 import { AppProps } from "next/app";
 import "@styles/global.css";
@@ -22,7 +22,6 @@ import {
 	ColorSchemeProvider,
 	Global,
 	MantineProvider,
-	Skeleton,
 } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import { NotificationsProvider } from "@mantine/notifications";
@@ -32,7 +31,6 @@ import { appWithTranslation, useTranslation } from "next-i18next";
 // initialize i18n
 import "../providers/i18n";
 import { IconUser } from "@tabler/icons";
-import { useRouter } from "next/router";
 import authProvider from "@providers/auth-provider";
 import accessControlProvider from "@providers/access-provider";
 import Image from "next/image";
@@ -46,33 +44,39 @@ type AppPropsWithLayout = AppProps & {
 };
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
-	const router = useRouter();
-	const [loading, setLoading] = useState(true);
 	const renderComponent = () => {
+		// If the Component has noLayout, we will render it without the layout
+		// We also render it without the authentication
+		// As it should add it's own authentication
 		if (Component.noLayout) {
 			return <Component {...pageProps} />;
 		}
 
 		return (
-			<ThemedLayoutV2
-				Header={() => <Header sticky />}
-				Title={({ collapsed }) => (
-					<ThemedTitleV2
-						collapsed={collapsed}
-						text="Console - Phoenix"
-						icon={
-							<Image
-								src="/logo_buildup.png"
-								width={32}
-								height={32}
-								alt="logo"
+			// At somepoint we should add an if for the Components that have no authentication to no includes these
+			<Authenticated key="app">
+				<CanAccess>
+					<ThemedLayoutV2
+						Header={() => <Header sticky />}
+						Title={({ collapsed }) => (
+							<ThemedTitleV2
+								collapsed={collapsed}
+								text="Console - Phoenix"
+								icon={
+									<Image
+										src="/logo_buildup.png"
+										width={32}
+										height={32}
+										alt="logo"
+									/>
+								}
 							/>
-						}
-					/>
-				)}
-			>
-				<Component {...pageProps} />
-			</ThemedLayoutV2>
+						)}
+					>
+						<Component {...pageProps} />
+					</ThemedLayoutV2>
+				</CanAccess>
+			</Authenticated>
 		);
 	};
 
@@ -92,91 +96,77 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
 	const toggleColorScheme = (value?: ColorScheme) =>
 		setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
 
-	useEffect(() => {
-		const checkAuth = async () => {
-			setLoading(true);
-			const { authenticated } = await authProvider.check();
-			if (!authenticated) {
-				await authProvider.login({});
-			}
-			setLoading(false);
-		};
-		checkAuth();
-	}, [router]);
-
-	if (loading) {
-		return <Skeleton />; // Show a loading indicator while checking authentication
-	}
-
 	return (
-		<RefineKbarProvider>
-			<ColorSchemeProvider
-				colorScheme={colorScheme}
-				toggleColorScheme={toggleColorScheme}
-			>
-				{/* You can change the theme colors here. example: theme={{ ...RefineThemes.Magenta, colorScheme:colorScheme }} */}
-				<MantineProvider
-					theme={{ ...RefineThemes.Blue, colorScheme }}
-					withNormalizeCSS
-					withGlobalStyles
+		<Suspense>
+			<RefineKbarProvider>
+				<ColorSchemeProvider
+					colorScheme={colorScheme}
+					toggleColorScheme={toggleColorScheme}
 				>
-					<Global styles={{ body: { WebkitFontSmoothing: "auto" } }} />
-					<NotificationsProvider position="top-right">
-						<DevtoolsProvider>
-							<Refine
-								routerProvider={routerProvider}
-								dataProvider={dataProvider}
-								notificationProvider={notificationProvider}
-								i18nProvider={i18nProvider}
-								authProvider={authProvider}
-								accessControlProvider={accessControlProvider}
-								resources={[
-									{
-										name: "projects",
-										list: "/projects",
-										create: "/projects/create",
-										edit: "/projects/edit/:id",
-										show: "/projects/show/:id",
-										meta: {
-											canDelete: true,
+					{/* You can change the theme colors here. example: theme={{ ...RefineThemes.Magenta, colorScheme:colorScheme }} */}
+					<MantineProvider
+						theme={{ ...RefineThemes.Blue, colorScheme }}
+						withNormalizeCSS
+						withGlobalStyles
+					>
+						<Global styles={{ body: { WebkitFontSmoothing: "auto" } }} />
+						<NotificationsProvider position="top-right">
+							<DevtoolsProvider>
+								<Refine
+									routerProvider={routerProvider}
+									dataProvider={dataProvider}
+									notificationProvider={notificationProvider}
+									i18nProvider={i18nProvider}
+									authProvider={authProvider}
+									accessControlProvider={accessControlProvider}
+									resources={[
+										{
+											name: "projects",
+											list: "/projects",
+											create: "/projects/create",
+											edit: "/projects/edit/:id",
+											show: "/projects/show/:id",
+											meta: {
+												canDelete: true,
+											},
 										},
-									},
-									{
-										name: "",
-										list: "/projects/:projectid/gathers",
-										create: "/projects/:projectid/gathers/create",
-										meta: {
-											label: "Gathers",
-											parent: "projects",
-											hide: true,
+										{
+											name: "",
+											list: "/projects/:projectid/gathers",
+											create: "/projects/:projectid/gathers/create",
+											meta: {
+												label: "Gathers",
+												parent: "projects",
+												hide: true,
+											},
 										},
-									},
-									{
-										name: "profile",
-										list: "/profile",
-										meta: {
-											label: "Profile",
-											icon: <IconUser size="16" />,
+										{
+											name: "profile",
+											list: "/profile",
+											meta: {
+												label: "Profile",
+												icon: <IconUser size="16" />,
+											},
 										},
-									},
-								]}
-								options={{
-									syncWithLocation: true,
-									warnWhenUnsavedChanges: true,
-									useNewQueryKeys: true,
-									projectId: "nMl5vA-MzwgF4-ONcYky",
-								}}
-							>
-								<CanAccess>{renderComponent()}</CanAccess>
-								<RefineKbar />
-								<UnsavedChangesNotifier />
-								<DocumentTitleHandler />
-							</Refine>
-						</DevtoolsProvider>
-					</NotificationsProvider>
-				</MantineProvider>
-			</ColorSchemeProvider>
-		</RefineKbarProvider>
+									]}
+									options={{
+										syncWithLocation: true,
+										warnWhenUnsavedChanges: true,
+										useNewQueryKeys: true,
+										projectId: "nMl5vA-MzwgF4-ONcYky",
+									}}
+								>
+									{renderComponent()}
+									<RefineKbar />
+									<UnsavedChangesNotifier />
+									<DocumentTitleHandler />
+								</Refine>
+							</DevtoolsProvider>
+						</NotificationsProvider>
+					</MantineProvider>
+				</ColorSchemeProvider>
+			</RefineKbarProvider>
+		</Suspense>
 	);
 }
 
