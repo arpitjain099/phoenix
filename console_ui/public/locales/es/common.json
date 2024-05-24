@@ -149,7 +149,8 @@
 			"create": "Crear proyecto",
 			"edit": "Editar proyecto",
 			"list": "Proyectos",
-			"show": "Mostrar proyecto"
+			"show": "Mostrar proyecto",
+			"dashboard": "Tablero de control"
 		},
 		"warnings": {
 			"create": "¡Para extender los días de 'La información personal se eliminará después' o 'Todos los datos se eliminarán después' más allá de 365, por favor, contacte con soporte!",

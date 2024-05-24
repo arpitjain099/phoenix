@@ -1,5 +1,6 @@
 # This is the base host that will be used for all ingress resources
 base_host: "phoenix.local"
+base_schema: "http"
 
 # The ingress class to use
 # Public is the one needed for microk8s

@@ -149,7 +149,8 @@
 			"create": "Create Project",
 			"edit": "Edit Project",
 			"list": "Projects",
-			"show": "Show Project"
+			"show": "Show Project",
+			"dashboard": "Go to Dashboard"
 		},
 		"warnings": {
 			"create": "To extend 'Personal Information is deleted after' or 'All data is deleted after' days beyond 365, please contact support!",
