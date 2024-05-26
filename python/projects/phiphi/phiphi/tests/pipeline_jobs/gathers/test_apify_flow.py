@@ -49,19 +49,18 @@ def tiktok_comments_input_example() -> apify_input_schemas.ApifyTiktokCommentsIn
     )
 
 
-def manual_test_apify_scrape_and_batch_download():
+def manual_test_apify_scrape_and_batch_download(apify_token: str):
     """Manually test the apify_scrape_and_batch_download_results flow.
 
     WARNING: this will incur costs on Apify.
 
     To use this test:
-    - replace "MY_APIFY_TOKEN" with your own Apify API token
-    - change the input fixture to the corresponding desired Apify actor to test
+    - change `run_input` to the corresponding desired Apify actor to test
     - run the function manually
     """
     run_input = facebook_comments_input_example()
     apify_flow.apify_scrape_and_batch_download_results(
-        apify_token="MY_APIFY_TOKEN",
+        apify_token=apify_token,
         run_input=run_input,
         batch_size=3,
     )
