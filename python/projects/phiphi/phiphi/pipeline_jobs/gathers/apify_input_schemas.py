@@ -104,8 +104,8 @@ class ApifyFacebookCommentsInput(pydantic.BaseModel):
 class TiktokSearchSection(str, enum.Enum):
     """Enum for search section sorting options."""
 
-    VIDEO = "/video"
-    USER = "/user"
+    VIDEO = "video"
+    USER = "user"
 
 
 class ApifyTiktokPostsInput(pydantic.BaseModel):
