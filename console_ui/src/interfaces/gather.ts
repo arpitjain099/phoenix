@@ -1,4 +1,5 @@
 export interface IGatherRun {
 	project_id: string;
-	gather_id: boolean;
+	gather_id: string;
+	type?: string;
 }

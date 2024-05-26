@@ -8,12 +8,14 @@ interface Props {
 	opened: boolean;
 	setOpened: any;
 	gatherDetail: any;
+	handleRefresh: () => void;
 }
 
 const GatherRunModal: React.FC<Props> = ({
 	opened,
 	setOpened,
 	gatherDetail,
+	handleRefresh,
 }) => {
 	const translate = useTranslate();
 	const [loading, setLoading] = useState(false);
@@ -50,9 +52,10 @@ const GatherRunModal: React.FC<Props> = ({
 			.gatherRun({
 				project_id: gatherDetail.project_id,
 				gather_id: gatherDetail.id,
+				type: "gather",
 			})
 			.then(() => {
-				// need to refetch the list data here
+				handleRefresh();
 				handleClose();
 				setLoading(false);
 			})

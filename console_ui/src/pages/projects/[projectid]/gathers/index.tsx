@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	IResourceComponentsProps,
 	useTranslate,
@@ -7,7 +7,7 @@ import {
 } from "@refinedev/core";
 import { useTable } from "@refinedev/react-table";
 import { ColumnDef } from "@tanstack/react-table";
-import { ScrollArea, Pagination, Group, Button } from "@mantine/core";
+import { ScrollArea, Pagination, Group, Button, Tooltip } from "@mantine/core";
 import { List, DateField } from "@refinedev/mantine";
 import TableComponent from "@components/table";
 import { useRouter } from "next/router";
@@ -22,6 +22,7 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 	const { projectid } = router.query || {};
 	const [opened, setOpened] = useState(false);
 	const [selected, setSelected] = useState(null);
+	const [gatherList, setGatherList] = useState<any>([]);
 
 	const breadcrumbs = [
 		{ title: translate("projects.projects"), href: "/projects" },
@@ -31,7 +32,10 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 	const apiResponse = useList({
 		resource: projectid ? `projects/${projectid}/gathers` : "",
 	});
-	const listResponse = apiResponse?.data?.data || [];
+
+	const handleGatherRefresh = () => {
+		apiResponse.refetch();
+	};
 
 	const columns = React.useMemo<ColumnDef<any>[]>(
 		() => [
@@ -57,21 +61,20 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 			},
 			{
 				id: "last_run_started_at",
-				accessorKey: "last_run_started_at",
+				accessorKey: "latest_job_run.started_processing_at",
 				header: translate("gathers.fields.last_run_started_at"),
 				cell: function render({ getValue }) {
-					return <DateField value={getValue<any>()} />;
+					return getValue() ? <DateField value={getValue<any>()} /> : "";
 				},
 			},
 			{
-				id: "run_status",
-				accessorKey: "run_status",
+				id: "status",
+				accessorKey: "latest_job_run.status",
 				header: translate("projects.fields.status"),
 				cell: function render({ getValue }) {
+					const status = getValue() || ""; // Default to empty string if getValue() is null or undefined
 					return (
-						<span
-							className={`${statusTextStyle(getValue())}`}
-						>{`${getValue()}`}</span>
+						<span className={`${statusTextStyle(status)}`}>{`${status}`}</span>
 					);
 				},
 			},
@@ -80,35 +83,41 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 				accessorKey: "id",
 				header: translate("table.actions"),
 				cell: function render({ row }) {
-					const { run_status } = row.original;
+					const handleRefresh = () => {
+						apiResponse.refetch();
+					};
+					const { latest_job_run } = row.original;
+					const status = latest_job_run ? latest_job_run.status : null;
 					return (
 						<Group spacing="xs" noWrap>
-							{run_status === "in_queue" &&
-								run_status === "processing" &&
-								!run_status && (
-									<Button p={0} variant="subtle" onClick={() => {}}>
+							{(status === "awaiting_start" || status === "processing") && (
+								<Tooltip label="Refresh">
+									<Button p={0} variant="subtle" onClick={handleRefresh}>
 										<IconRefresh size={20} color="blue" />
 									</Button>
-								)}
-							{run_status === "yet_to_run" && (
-								<Button
-									p={0}
-									variant="subtle"
-									color="green"
-									onClick={() => {
-										setSelected(row.original);
-										setOpened(true);
-									}}
-								>
-									<IconPlayerPlay size={20} color="green" />
-								</Button>
+								</Tooltip>
 							)}
-							{run_status === "failed" && (
+							{(status === "yet_to_run" || !status) && (
+								<Tooltip label="Start">
+									<Button
+										p={0}
+										variant="subtle"
+										color="green"
+										onClick={() => {
+											setSelected(row.original);
+											setOpened(true);
+										}}
+									>
+										<IconPlayerPlay size={20} color="green" />
+									</Button>
+								</Tooltip>
+							)}
+							{status === "failed" && (
 								<Button p={0} variant="subtle" color="red" onClick={() => {}}>
 									<IconTrash size={20} color="red" className="cursor-pointer" />
 								</Button>
 							)}
-							{run_status === "completed" && (
+							{status === "completed_sucessfully" && (
 								<Button p={0} variant="subtle" color="red" onClick={() => {}}>
 									<IconTrash size={20} color="red" className="cursor-pointer" />
 								</Button>
@@ -118,7 +127,7 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 				},
 			},
 		],
-		[translate]
+		[translate, apiResponse]
 	);
 	const {
 		getHeaderGroups,
@@ -127,7 +136,7 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 		refineCore: { setCurrent, pageCount, current },
 	} = useTable({
 		columns,
-		data: listResponse,
+		data: gatherList,
 	});
 
 	const { data: tableData } = apiResponse;
@@ -146,6 +155,13 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 			projectData,
 		},
 	}));
+
+	useEffect(() => {
+		if (apiResponse?.data?.data) {
+			setGatherList(apiResponse.data.data);
+		}
+	}, [apiResponse?.data?.data]);
+
 	return (
 		<>
 			<List breadcrumb={<BreadcrumbsComponent breadcrumbs={breadcrumbs} />}>
@@ -168,6 +184,7 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 				opened={opened}
 				setOpened={setOpened}
 				gatherDetail={selected}
+				handleRefresh={handleGatherRefresh}
 			/>
 		</>
 	);

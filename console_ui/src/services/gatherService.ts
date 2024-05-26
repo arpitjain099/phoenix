@@ -14,7 +14,11 @@ export default class GatherService {
 
 	async gatherRun(data: IGatherRun) {
 		const response = await axios.post(
-			`${API_URL}/projects/${data?.project_id}/gathers/${data?.gather_id}/runs`
+			`${API_URL}/projects/${data?.project_id}/job_runs/`,
+			{
+				foreign_id: data.gather_id,
+				foreign_job_type: data.type,
+			}
 		);
 		return response;
 	}
