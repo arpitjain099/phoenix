@@ -210,7 +210,7 @@ class ApifyTiktokCommentsInput(pydantic.BaseModel):
 
     Facilitates the extraction of comments from specific TikTok videos by providing URLs.
 
-    Ref to relevant Apify actor docs: https://apify.com/clockworks/tiktok-scraper/input-schema
+    Ref Apify actor docs: https://apify.com/clockworks/tiktok-comments-scraper/input-schema
     """
 
     post_urls: List[UrlStr] = pydantic.Field(
