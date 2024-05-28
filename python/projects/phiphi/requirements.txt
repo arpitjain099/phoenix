@@ -325,9 +325,12 @@ pytest==8.0.0
     #   -r projects/phiphi/../../dev-requirements.txt
     #   pytest-cov
     #   pytest-freezegun
+    #   pytest-mock
 pytest-cov==4.1.0
     # via -r projects/phiphi/../../dev-requirements.txt
 pytest-freezegun==0.4.2
+    # via -r projects/phiphi/requirements.in
+pytest-mock==3.14.0
     # via -r projects/phiphi/requirements.in
 python-dateutil==2.9.0.post0
     # via

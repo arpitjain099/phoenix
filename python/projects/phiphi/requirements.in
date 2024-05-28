@@ -6,6 +6,7 @@
 
 ## Dev deps
 pytest-freezegun
+pytest-mock
 
 ## DB management deps
 alembic

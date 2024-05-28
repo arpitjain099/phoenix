@@ -1,7 +1,11 @@
 """Tests for Apify gathers."""
+import json
+
+import pandas as pd
 import pytest
 from prefect.logging import disable_run_logger as disable_prefect_run_logger
 
+from phiphi import config
 from phiphi.pipeline_jobs.gathers import apify_flow, apify_input_schemas
 
 
@@ -52,7 +56,8 @@ def tiktok_comments_input_example() -> apify_input_schemas.ApifyTiktokCommentsIn
 def manual_test_apify_scrape_and_batch_download(apify_token: str):
     """Manually test the apify_scrape_and_batch_download_results flow.
 
-    WARNING: this will incur costs on Apify.
+    WARNING: this will incur costs on Apify (unless use have configured the mock settings).
+    WARNING: this will write to BigQuery (unless you have configured the mock settings).
 
     To use this test:
     - change `run_input` to the corresponding desired Apify actor to test
@@ -62,17 +67,46 @@ def manual_test_apify_scrape_and_batch_download(apify_token: str):
     apify_flow.apify_scrape_and_batch_download_results(
         apify_token=apify_token,
         run_input=run_input,
+        project_id=1,
+        gather_id=1,
+        job_run_id=1,
+        bigquery_dataset="test_dataset",
+        bigquery_table="test_table",
         batch_size=3,
     )
 
 
-@pytest.mark.patch_settings({"USE_MOCK_APIFY": True})
-def test_mock_apify_scrape_and_batch_download_results(tmpdir, patch_settings):
+@pytest.mark.patch_settings(
+    {
+        "USE_MOCK_APIFY": True,
+        "USE_MOCK_BQ": True,
+    }
+)
+def test_mock_apify_scrape_and_batch_download_results(tmpdir, patch_settings, mocker):
     """Test apify_scrape_and_batch_download_results with mocked out Apify function."""
+    mocker.patch.object(config.settings, "MOCK_BQ_ROOT_DIR", str(tmpdir))
+
     with disable_prefect_run_logger():
         apify_flow.apify_scrape_and_batch_download_results.fn(
             apify_token="NOT_A_TOKEN",
             run_input=facebook_posts_input_example(),
+            project_id=1,
+            gather_id=1,
+            job_run_id=1,
             batch_size=3,
-            dev_batch_dir=tmpdir,
+            bigquery_dataset="test_dataset",
+            bigquery_table="test_table",
         )
+
+    # Check that the parquet file was written
+    parquet_file_path = tmpdir.join("test_dataset", "test_table.parquet")
+    assert parquet_file_path.check()
+
+    # Load the parquet file and verify its contents
+    read_df = pd.read_parquet(parquet_file_path)
+    assert not read_df.empty
+    assert "project_id" in read_df.columns
+    assert read_df["project_id"].iloc[0] == 1
+    assert "json_data" in read_df.columns
+    assert json.loads(read_df["json_data"].iloc[0])  # Ensure JSON data is valid
+    assert len(read_df) == 3  # Note this depends on the sample data
