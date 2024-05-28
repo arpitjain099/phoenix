@@ -22,4 +22,5 @@ apify-client
 pandas
 pandas-stubs
 pandera
+pyarrow
 google-cloud-bigquery

@@ -2,6 +2,7 @@
 import json
 import logging
 import os
+import pathlib
 from typing import Any, Optional
 
 import pydantic
@@ -90,6 +91,19 @@ class Settings(BaseSettings):
     # Pipelines
     # If True; don't make real Apify calls, read static sample data from within module instead
     USE_MOCK_APIFY: bool = False
+    # If True; don't make real writes to BigQuery, write to local parquet files instead
+    USE_MOCK_BQ: bool = False
+    # Root directory for mock BigQuery data, defined relative to this config file, computed by
+    # validator function.
+    MOCK_BQ_ROOT_DIR: str = "../mock_bq_data"
+
+    def model_post_init(self, __context):  # type: ignore[no-untyped-def]
+        """Set the mock bq root directory as an absolute path."""
+        path = pathlib.Path(self.MOCK_BQ_ROOT_DIR)
+        if not path.is_absolute():
+            config_file_dir = pathlib.Path(__file__).parent
+            self.MOCK_BQ_ROOT_DIR = str(config_file_dir.joinpath(path).resolve())
+        self.MOCK_BQ_ROOT_DIR = str(path)
 
 
 if os.environ.get("SETTINGS_ENV_FILE"):

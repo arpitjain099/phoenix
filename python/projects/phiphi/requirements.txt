@@ -235,6 +235,7 @@ numpy==1.26.4
     #   pandas
     #   pandas-stubs
     #   pandera
+    #   pyarrow
 oauthlib==3.2.2
     # via
     #   kubernetes
@@ -287,6 +288,8 @@ protobuf==4.25.3
     #   grpcio-status
     #   proto-plus
 psycopg==3.1.18
+    # via -r projects/phiphi/requirements.in
+pyarrow==16.1.0
     # via -r projects/phiphi/requirements.in
 pyasn1==0.6.0
     # via
