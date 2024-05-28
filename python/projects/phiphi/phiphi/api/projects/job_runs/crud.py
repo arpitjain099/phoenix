@@ -60,7 +60,7 @@ def update_job_run(
     job_run_data: Union[
         schemas.JobRunUpdateStarted, schemas.JobRunUpdateCompleted, schemas.JobRunUpdateProcessing
     ],
-) -> None:
+) -> schemas.JobRunResponse:
     """Update a job run.
 
     Note that only the schemas giving in the signature are allowed to be passed in.
@@ -70,6 +70,8 @@ def update_job_run(
         for field, value in job_run_data.dict(exclude={"id"}).items():
             setattr(db_job_run, field, value)
         db.commit()
+
+    return schemas.JobRunResponse.model_validate(db_job_run)
 
 
 def get_job_run(db: Session, project_id: int, job_run_id: int) -> schemas.JobRunResponse | None:

@@ -1,6 +1,9 @@
 """Test job runs routes."""
+from unittest import mock
+
 import pytest
 from fastapi.testclient import TestClient
+from prefect.client.schemas import objects
 
 from phiphi.api.projects.job_runs import schemas
 
@@ -9,7 +12,8 @@ UPDATE_TIME = "2024-04-01T12:00:02"
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
-def test_create_get_job_runs(reseed_tables, client: TestClient) -> None:
+@mock.patch("phiphi.api.projects.job_runs.routes.wrapped_run_deployment")
+def test_create_get_job_runs(m_run_deployment, reseed_tables, client: TestClient) -> None:
     """Test create and then get of an job run."""
     data = {
         "foreign_id": 4,
@@ -18,6 +22,11 @@ def test_create_get_job_runs(reseed_tables, client: TestClient) -> None:
 
     project_id = 2
 
+    mock_flow_run = mock.MagicMock(spec=objects.FlowRun)
+    mock_flow_run.id = "mock_uuid"
+    mock_flow_run.name = "mock_flow_run"
+    m_run_deployment.return_value = mock_flow_run
+
     response = client.post(f"/projects/{project_id}/job_runs/", json=data)
     assert response.status_code == 200
     job_run = response.json()
@@ -25,7 +34,19 @@ def test_create_get_job_runs(reseed_tables, client: TestClient) -> None:
     assert job_run["foreign_job_type"] == data["foreign_job_type"]
     assert job_run["created_at"] == CREATED_TIME
     assert job_run["project_id"] == project_id
-    assert job_run["status"] == schemas.Status.awaiting_start
+    assert job_run["status"] == schemas.Status.in_queue
+    assert job_run["flow_run_id"] == "mock_uuid"
+    assert job_run["flow_run_name"] == "mock_flow_run"
+    assert job_run["completed_at"] is None
+    m_run_deployment.assert_called_once_with(
+        name="flow_runner_flow/flow_runner_flow",
+        parameters={
+            "project_id": project_id,
+            "job_type": data["foreign_job_type"],
+            "job_source_id": data["foreign_id"],
+            "job_run_id": job_run["id"],
+        },
+    )
 
     response = client.get(f"/projects/{project_id}/job_runs/{job_run['id']}")
     assert response.status_code == 200
