@@ -56,6 +56,37 @@ def test_create_get_job_runs(m_run_deployment, reseed_tables, client: TestClient
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
+@mock.patch("phiphi.api.projects.job_runs.routes.wrapped_run_deployment")
+def test_create_run_deployments_error(m_run_deployment, reseed_tables, client: TestClient) -> None:
+    """Test that if an error occurs in the deployment, the job run is updated."""
+    data = {
+        "foreign_id": 4,
+        "foreign_job_type": "gather",
+    }
+
+    project_id = 2
+
+    m_run_deployment.side_effect = Exception("Error")
+
+    response = client.post(f"/projects/{project_id}/job_runs/", json=data)
+    assert response.status_code == 200
+    job_run = response.json()
+    assert job_run["foreign_id"] == data["foreign_id"]
+    assert job_run["foreign_job_type"] == data["foreign_job_type"]
+    assert job_run["created_at"] == CREATED_TIME
+    assert job_run["project_id"] == project_id
+    assert job_run["status"] == schemas.Status.failed
+    assert job_run["completed_at"] == CREATED_TIME
+
+    response = client.get(f"/projects/{project_id}/job_runs/{job_run['id']}")
+    assert response.status_code == 200
+
+    job_run = response.json()
+    assert job_run["id"] == job_run["id"]
+    assert job_run["status"] == schemas.Status.failed
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
 def test_create_guard_for_repeated_job_run(reseed_tables, client: TestClient) -> None:
     """Test don't allow to create a second running job."""
     data = {

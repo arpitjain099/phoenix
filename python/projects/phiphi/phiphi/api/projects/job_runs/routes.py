@@ -1,4 +1,5 @@
 """JobRun routes."""
+from datetime import datetime
 from typing import Any
 
 import fastapi
@@ -49,11 +50,31 @@ async def start_deployment(
 async def create_job_run(
     project_id: int, session: deps.SessionDep, job_run_create: schemas.JobRunCreate
 ) -> schemas.JobRunResponse:
-    """Create a Project Job Run."""
+    """Create a Project Job Run.
+
+    Args:
+        project_id: ID of the project.
+        job_run_create: Data to create the job run.
+        deployment_name_prefix: Prefix to add to the deployment name.
+        session: Database session.
+
+    Returns:
+        Created Job Run.
+    """
     job_run = crud.create_job_run(session, project_id, job_run_create)
-    job_run = await start_deployment(
-        session=session, name="flow_runner_flow/flow_runner_flow", job_run=job_run
-    )
+    try:
+        job_run = await start_deployment(
+            session=session, name="flow_runner_flow/flow_runner_flow", job_run=job_run
+        )
+    except Exception:
+        job_run = crud.update_job_run(
+            session,
+            schemas.JobRunUpdateCompleted(
+                id=job_run.id,
+                status=schemas.Status.failed,
+                completed_at=datetime.now(),
+            ),
+        )
     return job_run
 
 
