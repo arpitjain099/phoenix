@@ -7,7 +7,14 @@ import {
 } from "@refinedev/core";
 import { useTable } from "@refinedev/react-table";
 import { ColumnDef } from "@tanstack/react-table";
-import { ScrollArea, Pagination, Group, Button, Tooltip } from "@mantine/core";
+import {
+	ScrollArea,
+	Pagination,
+	Group,
+	Button,
+	Tooltip,
+	Loader,
+} from "@mantine/core";
 import { List, DateField } from "@refinedev/mantine";
 import TableComponent from "@components/table";
 import { useRouter } from "next/router";
@@ -15,6 +22,8 @@ import BreadcrumbsComponent from "@components/breadcrumbs";
 import { statusTextStyle } from "src/utils";
 import { IconPlayerPlay, IconRefresh, IconTrash } from "@tabler/icons";
 import GatherRunModal from "@components/modals/gather-run";
+import { gatherService } from "src/services";
+import { GatherResponse } from "src/interfaces/gather";
 
 export const GatherList: React.FC<IResourceComponentsProps> = () => {
 	const translate = useTranslate();
@@ -23,6 +32,9 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 	const [opened, setOpened] = useState(false);
 	const [selected, setSelected] = useState(null);
 	const [gatherList, setGatherList] = useState<any>([]);
+	const [loadingStates, setLoadingStates] = useState<{
+		[key: string]: boolean;
+	}>({});
 
 	const breadcrumbs = [
 		{ title: translate("projects.projects"), href: "/projects" },
@@ -33,8 +45,25 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 		resource: projectid ? `projects/${projectid}/gathers` : "",
 	});
 
-	const handleGatherRefresh = () => {
-		apiResponse.refetch();
+	const handleGatherRefresh = async (gatherDetail: GatherResponse) => {
+		setLoadingStates((prev) => ({ ...prev, [gatherDetail.id]: true }));
+		try {
+			const { data } = await gatherService.fetchJobRun({
+				project_id: gatherDetail.project_id,
+				id: gatherDetail?.latest_job_run?.id,
+			});
+			setGatherList((prevList: GatherResponse[]) =>
+				prevList.map((gather) =>
+					gather.id === gatherDetail.id
+						? { ...gather, latest_job_run: data }
+						: gather
+				)
+			);
+		} catch (error) {
+			console.error("Error fetching gather details:", error);
+		} finally {
+			setLoadingStates((prev) => ({ ...prev, [gatherDetail.id]: false }));
+		}
 	};
 
 	const columns = React.useMemo<ColumnDef<any>[]>(
@@ -83,51 +112,78 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 				accessorKey: "id",
 				header: translate("table.actions"),
 				cell: function render({ row }) {
-					const handleRefresh = () => {
-						apiResponse.refetch();
-					};
+					const gatherId = row.original.id;
 					const { latest_job_run } = row.original;
 					const status = latest_job_run ? latest_job_run.status : null;
+					const isLoading = loadingStates[gatherId];
 					return (
 						<Group spacing="xs" noWrap>
-							{(status === "awaiting_start" || status === "processing") && (
-								<Tooltip label="Refresh">
-									<Button p={0} variant="subtle" onClick={handleRefresh}>
-										<IconRefresh size={20} color="blue" />
-									</Button>
-								</Tooltip>
-							)}
-							{(status === "yet_to_run" || !status) && (
-								<Tooltip label="Start">
-									<Button
-										p={0}
-										variant="subtle"
-										color="green"
-										onClick={() => {
-											setSelected(row.original);
-											setOpened(true);
-										}}
-									>
-										<IconPlayerPlay size={20} color="green" />
-									</Button>
-								</Tooltip>
-							)}
-							{status === "failed" && (
-								<Button p={0} variant="subtle" color="red" onClick={() => {}}>
-									<IconTrash size={20} color="red" className="cursor-pointer" />
-								</Button>
-							)}
-							{status === "completed_sucessfully" && (
-								<Button p={0} variant="subtle" color="red" onClick={() => {}}>
-									<IconTrash size={20} color="red" className="cursor-pointer" />
-								</Button>
+							{isLoading ? (
+								<Loader size="sm" />
+							) : (
+								<>
+									{(status === "awaiting_start" || status === "processing") && (
+										<Tooltip label="Refresh">
+											<Button
+												p={0}
+												variant="subtle"
+												onClick={() => handleGatherRefresh(row.original)}
+											>
+												<IconRefresh size={20} color="blue" />
+											</Button>
+										</Tooltip>
+									)}
+									{(status === "yet_to_run" || !status) && (
+										<Tooltip label="Start">
+											<Button
+												p={0}
+												variant="subtle"
+												color="green"
+												onClick={() => {
+													setSelected(row.original);
+													setOpened(true);
+												}}
+											>
+												<IconPlayerPlay size={20} color="green" />
+											</Button>
+										</Tooltip>
+									)}
+									{status === "failed" && (
+										<Button
+											p={0}
+											variant="subtle"
+											color="red"
+											onClick={() => {}}
+										>
+											<IconTrash
+												size={20}
+												color="red"
+												className="cursor-pointer"
+											/>
+										</Button>
+									)}
+									{status === "completed_sucessfully" && (
+										<Button
+											p={0}
+											variant="subtle"
+											color="red"
+											onClick={() => {}}
+										>
+											<IconTrash
+												size={20}
+												color="red"
+												className="cursor-pointer"
+											/>
+										</Button>
+									)}
+								</>
 							)}
 						</Group>
 					);
 				},
 			},
 		],
-		[translate, apiResponse]
+		[translate, loadingStates]
 	);
 	const {
 		getHeaderGroups,

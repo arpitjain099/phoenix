@@ -4,6 +4,11 @@ import { IGatherRun } from "src/interfaces/gather";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+export interface IFetchJobRun {
+	project_id: number;
+	id: number;
+}
+
 export default class GatherService {
 	async getGatherRunEstimate(data: IGatherRun) {
 		const response = await axios.get(
@@ -19,6 +24,13 @@ export default class GatherService {
 				foreign_id: data.gather_id,
 				foreign_job_type: data.type,
 			}
+		);
+		return response;
+	}
+
+	async fetchJobRun(data: IFetchJobRun) {
+		const response = await axios.get(
+			`${API_URL}/projects/${data?.project_id}/job_runs/${data?.id}`
 		);
 		return response;
 	}

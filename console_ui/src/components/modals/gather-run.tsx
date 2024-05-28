@@ -1,6 +1,7 @@
 import { Modal, Button } from "@mantine/core";
 import { useTranslate } from "@refinedev/core";
 import { useEffect, useState } from "react";
+import { GatherResponse } from "src/interfaces/gather";
 import { gatherService } from "src/services";
 import { formatToCurrency } from "src/utils";
 
@@ -8,7 +9,7 @@ interface Props {
 	opened: boolean;
 	setOpened: any;
 	gatherDetail: any;
-	handleRefresh: () => void;
+	handleRefresh: (value: GatherResponse) => void;
 }
 
 const GatherRunModal: React.FC<Props> = ({
@@ -55,7 +56,7 @@ const GatherRunModal: React.FC<Props> = ({
 				type: "gather",
 			})
 			.then(() => {
-				handleRefresh();
+				handleRefresh(gatherDetail);
 				handleClose();
 				setLoading(false);
 			})
