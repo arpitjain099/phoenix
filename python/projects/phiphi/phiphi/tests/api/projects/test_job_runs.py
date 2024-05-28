@@ -85,6 +85,24 @@ def test_create_run_deployments_error(m_run_deployment, reseed_tables, client: T
     assert job_run["id"] == job_run["id"]
     assert job_run["status"] == schemas.Status.failed
 
+    # Second call to get the job run now works as the first job is completed
+    mock_flow_run = mock.MagicMock(spec=objects.FlowRun)
+    mock_flow_run.id = "mock_uuid"
+    mock_flow_run.name = "mock_flow_run"
+    m_run_deployment.return_value = mock_flow_run
+    m_run_deployment.side_effect = None
+    response = client.post(f"/projects/{project_id}/job_runs/", json=data)
+    assert response.status_code == 200
+    job_run_2 = response.json()
+    assert job_run_2["foreign_id"] == data["foreign_id"]
+    assert job_run_2["foreign_job_type"] == data["foreign_job_type"]
+    assert job_run_2["created_at"] == CREATED_TIME
+    assert job_run_2["project_id"] == project_id
+    assert job_run_2["status"] == schemas.Status.in_queue
+    assert job_run_2["flow_run_id"] == "mock_uuid"
+    assert job_run_2["flow_run_name"] == "mock_flow_run"
+    assert job_run_2["id"] != job_run["id"]
+
 
 @pytest.mark.freeze_time(CREATED_TIME)
 def test_create_guard_for_repeated_job_run(reseed_tables, client: TestClient) -> None:
