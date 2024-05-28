@@ -1,4 +1,5 @@
 """JobRun routes."""
+import logging
 from datetime import datetime
 from typing import Any
 
@@ -11,6 +12,8 @@ from phiphi.api import deps
 from phiphi.api.projects.job_runs import crud, schemas
 
 router = fastapi.APIRouter()
+
+logger = logging.getLogger(__name__)
 
 
 async def wrapped_run_deployment(name: str, parameters: dict[str, Any]) -> objects.FlowRun:
@@ -66,7 +69,7 @@ async def create_job_run(
         job_run = await start_deployment(
             session=session, name="flow_runner_flow/flow_runner_flow", job_run=job_run
         )
-    except Exception:
+    except Exception as e:
         job_run = crud.update_job_run(
             session,
             schemas.JobRunUpdateCompleted(
@@ -75,6 +78,7 @@ async def create_job_run(
                 completed_at=datetime.now(),
             ),
         )
+        logger.error("Error running deployment", exc_info=e)
     return job_run
 
 
