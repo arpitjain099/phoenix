@@ -184,7 +184,7 @@
 			"description": "Descripción",
 			"created_at": "Creado En",
 			"updated_at": "Actualizado En",
-			"last_run_started_at": "Última ejecución iniciada en",
+			"started_processing_at": "Comenzó el procesamiento a",
 			"input": {
 				"data": "Recopilar Datos de Entrada",
 				"facebook_account_url_list": "URL de cuentas de Facebook",

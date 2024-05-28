@@ -30,6 +30,14 @@ export const ProjectList: React.FC<IResourceComponentsProps> = () => {
 				},
 			},
 			{
+				id: "updated_at",
+				accessorKey: "updated_at",
+				header: translate("projects.fields.updated_at"),
+				cell: function render({ getValue }) {
+					return <DateField value={getValue<any>()} />;
+				},
+			},
+			{
 				id: "actions",
 				accessorKey: "id",
 				header: translate("table.actions"),

@@ -11,7 +11,7 @@ export const toReadableDate = (date: string): string => {
 
 export const statusTextStyle = (type: any): string => {
 	switch (type) {
-		case "in_queue":
+		case "awaiting_start":
 			return "text-orange-500";
 		case "yet_to_run":
 			return "text-orange-500";
@@ -19,7 +19,7 @@ export const statusTextStyle = (type: any): string => {
 			return "text-orange-500";
 		case "failed":
 			return "text-red-500";
-		case "completed":
+		case "completed_sucessfully":
 			return "text-green-500";
 		default:
 			return "";

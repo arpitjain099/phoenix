@@ -184,7 +184,7 @@
 			"description": "Description",
 			"created_at": "Created At",
 			"updated_at": "Updated At",
-			"last_run_started_at": "Last Run Started At",
+			"started_processing_at": "Started Processing At",
 			"input": {
 				"data": "Gather Input Data",
 				"facebook_account_url_list": "Facebook Account URLs",
