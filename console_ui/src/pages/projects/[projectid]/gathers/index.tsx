@@ -89,9 +89,9 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 				header: translate("gathers.fields.description"),
 			},
 			{
-				id: "last_run_started_at",
+				id: "started_processing_at",
 				accessorKey: "latest_job_run.started_processing_at",
-				header: translate("gathers.fields.last_run_started_at"),
+				header: translate("gathers.fields.started_processing_at"),
 				cell: function render({ getValue }) {
 					return getValue() ? <DateField value={getValue<any>()} /> : "";
 				},
