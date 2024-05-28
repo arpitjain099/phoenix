@@ -1,6 +1,28 @@
 """Tables schemas for the project database."""
 import pandera as pa
 
+# Schema for gather batches
+gather_batches_schema = pa.DataFrameSchema(
+    {
+        "project_id": pa.Column(pa.Int, nullable=False),
+        "gather_id": pa.Column(pa.Int, nullable=False),
+        "job_run_id": pa.Column(pa.Int, nullable=False),
+        "source": pa.Column(pa.String, checks=pa.Check.isin(["apify"]), nullable=False),
+        "platform": pa.Column(
+            pa.String,
+            checks=pa.Check.isin(["facebook", "instagram", "tiktok", "x-twitter"]),
+            nullable=False,
+        ),
+        "data_type": pa.Column(
+            pa.String, checks=pa.Check.isin(["post", "comment"]), nullable=False
+        ),
+        "batch_created_at": pa.Column(pa.DateTime, nullable=False),
+        "json_data": pa.Column(pa.String, nullable=False),
+        "last_processed_at": pa.Column(pa.DateTime, nullable=True),
+    }
+)
+
+
 # Schema that all messages (of any type and any source) should be normalised to
 generalised_messages_schema = pa.DataFrameSchema(
     {
