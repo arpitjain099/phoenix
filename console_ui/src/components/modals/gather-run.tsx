@@ -1,4 +1,4 @@
-import { Modal, Button } from "@mantine/core";
+import { Modal, Button, Text } from "@mantine/core";
 import { useTranslate } from "@refinedev/core";
 import { useEffect, useState } from "react";
 import { GatherResponse } from "src/interfaces/gather";
@@ -81,67 +81,67 @@ const GatherRunModal: React.FC<Props> = ({
 				{error && <span className="text-red-500">{error}</span>}
 				<div>
 					<div className="mb-4">
-						<span className="uppercase text-neutral-800 font-medium text-xs tracking-widest">
+						<Text className="uppercase text-neutral-500 font-medium text-base tracking-widest">
 							{translate("gathers.details")}
-						</span>
+						</Text>
 					</div>
 					<div className="w-full flex mb-5 p-1">
 						<div className="w-1/2 flex flex-col">
-							<span className="text-neutral-800 font-medium text-sm capitalize">
+							<Text className="font-medium text-lg capitalize">
 								{gatherDetail?.source}
-							</span>
-							<span className="text-xs text-neutral-500 font-normal">
+							</Text>
+							<Text className="text-base text-neutral-500 font-normal">
 								{translate("gathers.fields.source")}
-							</span>
+							</Text>
 						</div>
 						<div className="w-1/2 flex flex-col">
-							<span className="text-neutral-800 font-medium text-sm capitalize">
+							<Text className="font-medium text-lg capitalize">
 								{gatherDetail?.platform}
-							</span>
-							<span className="text-xs text-neutral-500 font-normal">
+							</Text>
+							<Text className="text-base text-neutral-500 font-normal">
 								{translate("gathers.fields.platform")}
-							</span>
+							</Text>
 						</div>
 					</div>
 					<div className="w-full flex mb-5 p-1">
 						<div className="w-1/2 flex flex-col">
-							<span className="text-neutral-800 font-medium text-sm capitalize">
+							<Text className="font-medium text-lg capitalize">
 								{gatherDetail?.data_type}
-							</span>
-							<span className="text-xs text-neutral-500 font-normal">
+							</Text>
+							<Text className="text-base text-neutral-500 font-normal">
 								{translate("gathers.fields.data_type")}
-							</span>
+							</Text>
 						</div>
 						<div className="w-1/2 flex flex-col">
-							<span className="text-neutral-800 font-medium text-sm">
+							<Text className="font-medium text-neutral-500 text-lg">
 								{gatherDetail?.description}
-							</span>
-							<span className="text-xs text-neutral-500 font-normal">
+							</Text>
+							<Text className="text-base text-neutral-500 font-normal">
 								{translate("gathers.fields.description")}
-							</span>
+							</Text>
 						</div>
 					</div>
 					<div className="mb-4">
-						<span className="mb-4 uppercase text-neutral-800 font-medium text-xs tracking-widest">
+						<Text className="mb-4 uppercase font-medium text-base tracking-widest">
 							{translate("gathers.run_estimate.cost")}
-						</span>
+						</Text>
 					</div>
 					<div className="w-full flex items-center mb-5 p-1">
 						<div className="w-1/2 flex flex-col">
-							<span className="text-neutral-800 font-medium text-sm">
+							<Text className="font-medium text text-">
 								{formatToCurrency(estimateData?.estimated_credit_cost)}
-							</span>
-							<span className="text-xs text-neutral-500 font-normal">
+							</Text>
+							<Text className="text-base text-neutral-500 font-normal">
 								{translate("gathers.run_estimate.estimated_credit_cost")}
-							</span>
+							</Text>
 						</div>
 						<div className="w-1/2 flex flex-col">
-							<span className="text-neutral-800 font-medium text-sm">
+							<Text className="font-medium text-lg">
 								{estimateData?.estimated_duration_minutes}
-							</span>
-							<span className="text-xs text-neutral-500 font-normal">
+							</Text>
+							<Text className="text-base text-neutral-500 font-normal">
 								{translate("gathers.run_estimate.estimated_duration_minutes")}
-							</span>
+							</Text>
 						</div>
 					</div>
 				</div>
