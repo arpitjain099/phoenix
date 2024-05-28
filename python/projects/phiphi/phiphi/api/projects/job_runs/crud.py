@@ -56,7 +56,10 @@ def create_job_run(
 
 
 def update_job_run(
-    db: Session, job_run_data: Union[schemas.JobRunUpdateStarted, schemas.JobRunUpdateCompleted]
+    db: Session,
+    job_run_data: Union[
+        schemas.JobRunUpdateStarted, schemas.JobRunUpdateCompleted, schemas.JobRunUpdateProcessing
+    ],
 ) -> None:
     """Update a job run.
 

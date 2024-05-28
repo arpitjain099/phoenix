@@ -2,7 +2,7 @@
 import asyncio
 from typing import Coroutine, Union
 
-from prefect import flow, runtime, task
+from prefect import flow, task
 from prefect.client.schemas import objects
 from prefect.deployments import deployments
 from prefect.flow_runs import wait_for_flow_run
@@ -94,13 +94,11 @@ def job_run_update_started(job_run_id: int) -> None:
     Args:
         job_run_id: ID of the row in the job_runs table.
     """
-    job_run_update_started = job_runs.schemas.JobRunUpdateStarted(
+    job_run_update_processing = job_runs.schemas.JobRunUpdateProcessing(
         id=job_run_id,
-        flow_run_id=str(runtime.flow_run.id),
-        flow_run_name=runtime.flow_run.name,
     )
     with platform_db.get_session_context() as session:
-        job_runs.crud.update_job_run(db=session, job_run_data=job_run_update_started)
+        job_runs.crud.update_job_run(db=session, job_run_data=job_run_update_processing)
 
 
 @task
