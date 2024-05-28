@@ -1,12 +1,13 @@
 """Health check flows."""
 from typing import Coroutine
 
+import apify_client
 import prefect
 import sqlalchemy
 from google.api_core import exceptions
 from google.cloud import bigquery
 
-from phiphi import config, constants, platform_db
+from phiphi import config, constants, platform_db, utils
 
 
 @prefect.task
@@ -49,6 +50,30 @@ def check_bigquery_connection() -> bool:
     return False
 
 
+@prefect.task
+def check_apify_connection() -> bool:
+    """Check the Apify connection."""
+    logger = prefect.get_run_logger()
+    try:
+        client = apify_client.ApifyClient(utils.get_apify_api_key())
+        actors_collection = client.actors().list()
+        actors_count = actors_collection.count
+        actors = [item["name"] for item in actors_collection.items]
+        if actors_count > 0:
+            logger.info(f"Successfully connected to Apify. Found {actors_count} actors.")
+            logger.info(f"Actors: {actors}")
+        else:
+            logger.info("Successfully connected to Apify, but no actors.")
+        return True
+    except apify_client._errors.ApifyClientError as e:
+        logger.error(f"Apify Client Error: {e}")
+    except apify_client._errors.ApifyApiError as e:
+        logger.error(f"Apify API Error: {e}")
+    except Exception as e:
+        logger.error(f"An unexpected error occurred: {e}")
+    return False
+
+
 @prefect.flow
 def health_check(environment_slug: str | None) -> None:
     """Main flow for the health check."""
@@ -56,6 +81,7 @@ def health_check(environment_slug: str | None) -> None:
     logger.info("Health checks started.")
     assert check_sqlalchemy_connection()
     assert check_bigquery_connection()
+    assert check_apify_connection()
     logger.info("Health checks completed.")
 
 
