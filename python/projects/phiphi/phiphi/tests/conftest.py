@@ -83,11 +83,13 @@ def reseed_tables(session):
 
     Use this fixture to reset the data for a test.
     """
-    seed_main.main(session, True)
-    yield session
-    # Need to close the session or will not release the lock on the database
-    # and next command in an other connection will hang.
-    session.close()
+    try:
+        seed_main.main(session, True)
+        yield session
+    finally:
+        # Need to close the session or will not release the lock on the database
+        # and next command in an other connection will hang.
+        session.close()
 
 
 @pytest.fixture(scope="function")
