@@ -114,7 +114,9 @@ def test_create_guard_for_repeated_job_run(reseed_tables, client: TestClient) ->
 
     response = client.post("/projects/1/job_runs/", json=data)
     assert response.status_code == 400
-    assert response.json() == {"detail": "Gather has an active job run"}
+    assert response.json() == {
+        "detail": "Foreign object has an active job run. Type: ForeignJobType.gather, Id: 1"
+    }
 
 
 def test_create_guard(reseed_tables, client: TestClient) -> None:
