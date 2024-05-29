@@ -85,6 +85,7 @@ def mock_apify_scrape(
 
 
 def update_and_write_batch(
+    batch_id: int,
     batch_items: List[Dict],
     gather_batch_df: pd.DataFrame,
     bigquery_dataset: str,
@@ -92,6 +93,7 @@ def update_and_write_batch(
 ) -> None:
     """Update the batch_created_at and json_data fields and write."""
     # Update the specific columns
+    gather_batch_df.loc[0, "batch_id"] = batch_id
     gather_batch_df.loc[0, "batch_created_at"] = pd.Timestamp.now()
     gather_batch_df.loc[0, "json_data"] = json.dumps(batch_items)
 
@@ -136,6 +138,7 @@ def apify_scrape_and_batch_download_results(
         "source": "apify",
         "platform": input_type_mapping[type(run_input)]["platform"],
         "data_type": input_type_mapping[type(run_input)]["data_type"],
+        "batch_id": 0,  # This will be updated for each batch
         "batch_created_at": pd.Timestamp.now(),  # This will be updated for each batch
         "json_data": "",  # This will be updated for each batch
         "last_processed_at": pd.NaT,  # Use pd.NaT for missing datetime values
@@ -152,6 +155,7 @@ def apify_scrape_and_batch_download_results(
         if len(batch_items) == batch_size:
             prefect_logger.info(f"Inserting batch {batch_num}")
             update_and_write_batch(
+                batch_num,
                 batch_items,
                 gather_batch_df,
                 bigquery_dataset,
@@ -163,6 +167,7 @@ def apify_scrape_and_batch_download_results(
     # Insert any remaining items in the final batch if not empty
     if batch_items:
         update_and_write_batch(
+            batch_num,
             batch_items,
             gather_batch_df,
             bigquery_dataset,

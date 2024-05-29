@@ -109,4 +109,6 @@ def test_mock_apify_scrape_and_batch_download_results(tmpdir, patch_settings, mo
     assert read_df["project_id"].iloc[0] == 1
     assert "json_data" in read_df.columns
     assert json.loads(read_df["json_data"].iloc[0])  # Ensure JSON data is valid
+    assert read_df["batch_id"].iloc[0] == 0
+    assert read_df["batch_id"].iloc[2] == 2
     assert len(read_df) == 3  # Note this depends on the sample data

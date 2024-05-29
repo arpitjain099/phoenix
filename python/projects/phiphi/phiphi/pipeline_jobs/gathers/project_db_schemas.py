@@ -16,6 +16,7 @@ gather_batches_schema = pa.DataFrameSchema(
         "data_type": pa.Column(
             pa.String, checks=pa.Check.isin(["post", "comment"]), nullable=False
         ),
+        "batch_id": pa.Column(pa.Int, nullable=False),
         "batch_created_at": pa.Column(pa.DateTime, nullable=False),
         "json_data": pa.Column(pa.String, nullable=False),
         "last_processed_at": pa.Column(pa.DateTime, nullable=True),
