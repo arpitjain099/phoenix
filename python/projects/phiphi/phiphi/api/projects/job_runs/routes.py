@@ -55,11 +55,7 @@ async def create_job_run(
 ) -> schemas.JobRunResponse:
     """Create a Project Job Run.
 
-    Args:
-        project_id: ID of the project.
-        job_run_create: Data to create the job run.
-        deployment_name_prefix: Prefix to add to the deployment name.
-        session: Database session.
+    For tabulate types you must have a foreign_id of 0.
 
     Returns:
         Created Job Run.
