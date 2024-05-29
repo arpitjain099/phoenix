@@ -5,7 +5,7 @@ Single flow that all Apify scrapers use.
 Includes switch for using mock data read directly from file for testing purposes.
 """
 import json
-from typing import Dict, Iterator, List, Tuple, Union
+from typing import Dict, Iterator, List, Tuple
 
 import apify_client
 import prefect
@@ -13,16 +13,25 @@ import prefect
 from phiphi import config
 from phiphi.pipeline_jobs.gathers import apify_input_schemas, utils
 
+input_actor_map = {
+    apify_input_schemas.ApifyFacebookPostsInput: "apify/facebook-posts-scraper",
+    apify_input_schemas.ApifyFacebookCommentsInput: "apify/facebook-comments-scraper",
+    apify_input_schemas.ApifyTiktokPostsInput: "clockworks/tiktok-scraper",
+    apify_input_schemas.ApifyTiktokCommentsInput: "clockworks/tiktok-comments-scraper",
+}
+
 
 def apify_scrape(
     apify_token: str,
     actor_name: str,
-    run_input: Union[apify_input_schemas.ApifyFacebookPostsInput],
+    run_input: apify_input_schemas.ApifyInputType,
 ) -> Tuple[Iterator[Dict], apify_client.clients.DatasetClient]:
     """Scrape data using the Apify API and return an iterator."""
     client = apify_client.ApifyClient(apify_token)
     # Run the Apify actor
-    run_info = client.actor(actor_name).call(run_input=run_input.dict(by_alias=True))
+    run_info = client.actor(actor_name).call(
+        run_input=run_input.dict(by_alias=True, exclude_unset=True)
+    )
     assert run_info is not None
     # Access the dataset client associated with the actor's results
     dataset_client = client.dataset(run_info["defaultDatasetId"])
@@ -32,7 +41,7 @@ def apify_scrape(
 def mock_apify_scrape(
     apify_token: str,
     actor_name: str,
-    run_input: Union[apify_input_schemas.ApifyFacebookPostsInput],
+    run_input: apify_input_schemas.ApifyInputType,
 ) -> Tuple[Iterator[Dict], None]:
     """Read mock scraping data and return an iterator."""
     if actor_name == "apify/facebook-posts-scraper":
@@ -50,22 +59,25 @@ def mock_apify_scrape(
 @prefect.task
 def apify_scrape_and_batch_download_results(
     apify_token: str,
-    run_input: Union[apify_input_schemas.ApifyFacebookPostsInput],
+    run_input: apify_input_schemas.ApifyInputType,
     batch_size: int = 100,
     dev_batch_dir: str = "",
 ) -> None:
     """Scrape data using the Apify API and save them to JSON blobs in batches."""
+    prefect_logger = prefect.get_run_logger()
+    apify_actor_name = input_actor_map[type(run_input)]
+
     if config.settings.USE_MOCK_APIFY:
+        prefect_logger.info("Reading mock data.")
         dataset_iterator, dataset_client = mock_apify_scrape(
-            apify_token, "apify/facebook-posts-scraper", run_input
+            apify_token, apify_actor_name, run_input
         )
     else:
-        dataset_iterator, dataset_client = apify_scrape(
-            apify_token, "apify/facebook-posts-scraper", run_input
-        )
+        prefect_logger.info("Making Apify call.")
+        dataset_iterator, dataset_client = apify_scrape(apify_token, apify_actor_name, run_input)
 
     # Initialize batch tracking
-    batch_num = 1
+    batch_num = 0
     batch_items: List[Dict] = []
 
     # Iterate over dataset items and write to JSON files in batches
@@ -86,9 +98,10 @@ def apify_scrape_and_batch_download_results(
         file_name = dev_batch_dir + f"batch_{batch_num}.json"
         with open(file_name, "w") as f:
             json.dump(batch_items, f)
+        batch_num += 1
 
     # Delete the dataset after downloading to save on storage costs
     if dataset_client is not None:
         dataset_client.delete()
 
-    prefect.get_run_logger().info(f"Finished scraping. Batches written: {batch_num}")
+    prefect_logger.info(f"Finished scraping. Batches written: {batch_num}")
