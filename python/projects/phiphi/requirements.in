@@ -6,6 +6,7 @@
 
 ## Dev deps
 pytest-freezegun
+pytest-mock
 
 ## DB management deps
 alembic
@@ -22,4 +23,5 @@ apify-client
 pandas
 pandas-stubs
 pandera
+pyarrow
 google-cloud-bigquery

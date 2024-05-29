@@ -235,6 +235,7 @@ numpy==1.26.4
     #   pandas
     #   pandas-stubs
     #   pandera
+    #   pyarrow
 oauthlib==3.2.2
     # via
     #   kubernetes
@@ -288,6 +289,8 @@ protobuf==4.25.3
     #   proto-plus
 psycopg==3.1.18
     # via -r projects/phiphi/requirements.in
+pyarrow==16.1.0
+    # via -r projects/phiphi/requirements.in
 pyasn1==0.6.0
     # via
     #   pyasn1-modules
@@ -322,9 +325,12 @@ pytest==8.0.0
     #   -r projects/phiphi/../../dev-requirements.txt
     #   pytest-cov
     #   pytest-freezegun
+    #   pytest-mock
 pytest-cov==4.1.0
     # via -r projects/phiphi/../../dev-requirements.txt
 pytest-freezegun==0.4.2
+    # via -r projects/phiphi/requirements.in
+pytest-mock==3.14.0
     # via -r projects/phiphi/requirements.in
 python-dateutil==2.9.0.post0
     # via
