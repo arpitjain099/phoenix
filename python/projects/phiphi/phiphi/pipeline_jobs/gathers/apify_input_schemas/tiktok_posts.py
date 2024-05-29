@@ -8,10 +8,13 @@ from phiphi.pipeline_jobs.gathers.apify_input_schemas.types import UrlStr
 
 
 class TiktokSearchSection(str, enum.Enum):
-    """Enum for search section sorting options."""
+    """Enum for search section sorting options.
 
-    VIDEO = "video"
-    USER = "user"
+    The `/` is just part the Apify actor input API.
+    """
+
+    VIDEO = "/video"
+    USER = "/user"
 
 
 class ApifyTiktokPostsInput(pydantic.BaseModel):
