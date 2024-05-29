@@ -146,16 +146,17 @@ def test_get_job_runs(client: TestClient, reseed_tables) -> None:
     response = client.get("/projects/1/job_runs/")
     assert response.status_code == 200
     job_runs = response.json()
-    assert len(job_runs) == 2
+    assert len(job_runs) == 3
     # Assert desc id
-    assert job_runs[0]["id"] == 2
-    assert job_runs[1]["id"] == 1
+    assert job_runs[0]["id"] == 3
+    assert job_runs[1]["id"] == 2
+    assert job_runs[2]["id"] == 1
 
     response = client.get("/projects/2/job_runs/")
     assert response.status_code == 200
     job_runs = response.json()
     assert len(job_runs) == 1
-    assert job_runs[0]["id"] == 3
+    assert job_runs[0]["id"] == 4
 
 
 def test_get_job_runs_pagination(client: TestClient, reseed_tables) -> None:

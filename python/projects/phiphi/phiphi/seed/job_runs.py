@@ -19,11 +19,14 @@ TEST_JOB_RUN = schemas.JobRunCreate(foreign_id=1, foreign_job_type=schemas.Forei
 TEST_JOB_RUN_2 = schemas.JobRunCreate(foreign_id=2, foreign_job_type=schemas.ForeignJobType.gather)
 
 TEST_JOB_RUN_3 = schemas.JobRunCreate(foreign_id=3, foreign_job_type=schemas.ForeignJobType.gather)
+TEST_JOB_RUN_4 = schemas.JobRunCreate(
+    foreign_id=0, foreign_job_type=schemas.ForeignJobType.tabulate
+)
 
 
 def seed_test_job_runs(session: Session) -> None:
     """Seed the job runs."""
-    job_runs_project_1 = [TEST_JOB_RUN, TEST_JOB_RUN_2]
+    job_runs_project_1 = [TEST_JOB_RUN, TEST_JOB_RUN_2, TEST_JOB_RUN_4]
 
     for job_run in job_runs_project_1:
         crud.create_job_run(db=session, project_id=1, job_run_create=job_run)
