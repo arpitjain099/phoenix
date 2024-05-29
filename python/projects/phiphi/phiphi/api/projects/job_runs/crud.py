@@ -83,16 +83,17 @@ def get_job_run(db: Session, project_id: int, job_run_id: int) -> schemas.JobRun
 
 
 def get_job_runs(
-    db: Session, project_id: int, start: int = 0, end: int = 100
+    db: Session,
+    project_id: int,
+    start: int = 0,
+    end: int = 100,
+    foreign_job_type: schemas.ForeignJobType | None = None,
 ) -> list[schemas.JobRunResponse]:
     """Get job runs."""
-    db_job_runs = (
-        db.query(models.JobRuns)
-        .filter(models.JobRuns.project_id == project_id)
-        .order_by(models.JobRuns.id.desc())
-        .slice(start, end)
-        .all()
-    )
+    query = db.query(models.JobRuns).filter(models.JobRuns.project_id == project_id)
+    if foreign_job_type:
+        query = query.filter(models.JobRuns.foreign_job_type == foreign_job_type)
+    db_job_runs = query.order_by(models.JobRuns.id.desc()).slice(start, end).all()
     return [schemas.JobRunResponse.model_validate(db_job_run) for db_job_run in db_job_runs]
 
 

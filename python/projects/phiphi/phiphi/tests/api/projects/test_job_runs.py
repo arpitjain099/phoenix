@@ -159,6 +159,19 @@ def test_get_job_runs(client: TestClient, reseed_tables) -> None:
     assert job_runs[0]["id"] == 4
 
 
+def test_get_job_runs_by_type(client: TestClient, reseed_tables) -> None:
+    """Test getting job runs."""
+    response = client.get("/projects/1/job_runs/?foreign_job_type=gather")
+    assert response.status_code == 200
+    job_runs = response.json()
+    assert len(job_runs) == 2
+    # Assert desc id
+    assert job_runs[0]["id"] == 2
+    assert job_runs[0]["foreign_job_type"] == "gather"
+    assert job_runs[1]["id"] == 1
+    assert job_runs[1]["foreign_job_type"] == "gather"
+
+
 def test_get_job_runs_pagination(client: TestClient, reseed_tables) -> None:
     """Test getting job runs with pagination."""
     response = client.get("/projects/1/job_runs/?start=0&end=1")
