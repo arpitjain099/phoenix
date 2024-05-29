@@ -141,6 +141,28 @@ def test_create_guard(reseed_tables, client: TestClient) -> None:
     assert response.json() == {"detail": "Gather not found"}
 
 
+def test_create_guard_tabulate(reseed_tables, client: TestClient) -> None:
+    """Test that if tabulate is not 0."""
+    data = {
+        "foreign_id": 1,
+        "foreign_job_type": "tabulate",
+    }
+
+    # Project is not found
+    response = client.post("/projects/4/job_runs/", json=data)
+    assert response.status_code == 400
+    assert response.json() == {"detail": "Tabulate must have a foreign_id of 0"}
+
+    # Project is found and gather exists but the gather is not in the project
+    data = {
+        "foreign_id": 3,
+        "foreign_job_type": "gather",
+    }
+    response = client.post("/projects/1/job_runs/", json=data)
+    assert response.status_code == 400
+    assert response.json() == {"detail": "Gather not found"}
+
+
 def test_get_job_runs(client: TestClient, reseed_tables) -> None:
     """Test getting job runs."""
     response = client.get("/projects/1/job_runs/")

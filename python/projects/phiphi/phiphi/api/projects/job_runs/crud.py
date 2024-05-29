@@ -28,6 +28,9 @@ def invalid_foreign_object_guard(
     if foreign_job_type == schemas.ForeignJobType.gather:
         check_valid_gather(db, project_id, foreign_id)
 
+    if foreign_job_type == schemas.ForeignJobType.tabulate and foreign_id != 0:
+        raise exceptions.HttpException400("Tabulate must have a foreign_id of 0")
+
     latest_job_run = get_latest_job_run(db, project_id, foreign_id, foreign_job_type)
     if latest_job_run and not latest_job_run.completed_at:
         raise exceptions.ForeignObjectHasActiveJobRun(foreign_id, str(foreign_job_type))

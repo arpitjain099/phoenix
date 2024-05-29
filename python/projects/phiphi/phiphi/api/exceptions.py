@@ -3,6 +3,14 @@
 import fastapi
 
 
+class HttpException400(fastapi.HTTPException):
+    """Custom exception for 400 status code."""
+
+    def __init__(self, detail: str) -> None:
+        """Constructor for custom exception."""
+        super().__init__(status_code=400, detail=detail)
+
+
 class ProjectNotFound(fastapi.HTTPException):
     """Custom exception for null projects."""
 
