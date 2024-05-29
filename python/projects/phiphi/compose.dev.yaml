@@ -19,4 +19,11 @@ services:
       PREFECT_API_KEY:
       PREFECT_API_URL:
       APIFY_API_KEYS: ${APIFY_API_KEYS:-{}}
-    command: ["uvicorn", "phiphi.api.main:app", "--reload", "--host", "0.0.0.0", "--port", "80"]
+    command: [
+      "uvicorn",
+      "phiphi.api.main:app",
+      "--reload",
+      "--host", "0.0.0.0",
+      "--port", "80",
+      "--log-level", "debug"
+    ]

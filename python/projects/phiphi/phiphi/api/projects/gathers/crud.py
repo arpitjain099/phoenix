@@ -1,7 +1,6 @@
 """Gather crud functionality."""
 import sqlalchemy.orm
 
-from phiphi.api import exceptions
 from phiphi.api.projects import crud as project_crud
 from phiphi.api.projects.gathers import models, schemas
 
@@ -51,16 +50,3 @@ def get_gathers(
     if not gathers:
         return []
     return [schemas.GatherResponse.model_validate(gather) for gather in gathers]
-
-
-def get_gather_with_guard(
-    session: sqlalchemy.orm.Session, project_id: int, gather_id: int
-) -> None:
-    """Guard for checking if a gather is in the db."""
-    db_gather = (
-        session.query(models.Gather)
-        .filter(models.Gather.project_id == project_id, models.Gather.id == gather_id)
-        .first()
-    )
-    if db_gather is None:
-        raise exceptions.GatherNotFound()

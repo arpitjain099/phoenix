@@ -10,6 +10,7 @@ class Status(str, Enum):
     """Job run status."""
 
     awaiting_start = "awaiting_start"
+    in_queue = "in_queue"
     processing = "processing"
     completed_sucessfully = "completed_sucessfully"
     failed = "failed"
@@ -42,6 +43,15 @@ class JobRunUpdateStarted(pydantic.BaseModel):
     id: int = pydantic.Field(..., description="The ID of the job run being updated")
     flow_run_id: str = pydantic.Field(..., description="The ID of the flow run from Prefect")
     flow_run_name: str = pydantic.Field(..., description="The name of the flow run from Prefect")
+    status: Status = pydantic.Field(
+        default=Status.in_queue, description="The status of the flow run"
+    )
+
+
+class JobRunUpdateProcessing(pydantic.BaseModel):
+    """Schema for updating a job run when it is processing."""
+
+    id: int = pydantic.Field(..., description="The ID of the job run being updated")
     status: Status = pydantic.Field(
         default=Status.processing, description="The status of the flow run"
     )
