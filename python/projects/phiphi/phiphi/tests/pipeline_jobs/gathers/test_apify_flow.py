@@ -53,19 +53,20 @@ def tiktok_comments_input_example() -> apify_input_schemas.ApifyTiktokCommentsIn
     )
 
 
-def manual_test_apify_scrape_and_batch_download(apify_token: str):
+def manual_test_apify_scrape_and_batch_download():
     """Manually test the apify_scrape_and_batch_download_results flow.
 
     WARNING: this will incur costs on Apify (unless use have configured the mock settings).
     WARNING: this will write to BigQuery (unless you have configured the mock settings).
 
     To use this test:
+    - ensure that a valid Apify token is set in the config - you should use your personal token not
+      the org token ideally
     - change `run_input` to the corresponding desired Apify actor to test
     - run the function manually
     """
     run_input = facebook_comments_input_example()
     apify_flow.apify_scrape_and_batch_download_results(
-        apify_token=apify_token,
         run_input=run_input,
         project_id=1,
         gather_id=1,
@@ -80,6 +81,7 @@ def manual_test_apify_scrape_and_batch_download(apify_token: str):
     {
         "USE_MOCK_APIFY": True,
         "USE_MOCK_BQ": True,
+        "APIFY_API_KEYS": {"main": "dummy_key"},
     }
 )
 def test_mock_apify_scrape_and_batch_download_results(tmpdir, patch_settings, mocker):
@@ -88,7 +90,6 @@ def test_mock_apify_scrape_and_batch_download_results(tmpdir, patch_settings, mo
 
     with disable_prefect_run_logger():
         apify_flow.apify_scrape_and_batch_download_results.fn(
-            apify_token="NOT_A_TOKEN",
             run_input=facebook_posts_input_example(),
             project_id=1,
             gather_id=1,
