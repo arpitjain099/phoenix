@@ -13,7 +13,7 @@ export const statusTextStyle = (type: any): string => {
 	switch (type) {
 		case "awaiting_start":
 			return "text-orange-500";
-		case "yet_to_run":
+		case "in_queue":
 			return "text-orange-500";
 		case "processing":
 			return "text-orange-500";

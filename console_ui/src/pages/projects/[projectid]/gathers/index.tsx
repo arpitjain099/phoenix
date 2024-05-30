@@ -122,7 +122,7 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 								<Loader size="sm" />
 							) : (
 								<>
-									{(status === "awaiting_start" || status === "processing") && (
+									{(status === "in_queue" || status === "processing") && (
 										<Tooltip label="Refresh">
 											<Button
 												p={0}
@@ -133,7 +133,7 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 											</Button>
 										</Tooltip>
 									)}
-									{(status === "yet_to_run" || !status) && (
+									{(status === "awaiting_start" || !status) && (
 										<Tooltip label="Start">
 											<Button
 												p={0}
