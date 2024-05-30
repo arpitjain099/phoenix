@@ -223,7 +223,7 @@
 			"started_processing_at": "Inicio del procesamiento",
 			"completed_at": "Completado a las"
 		}
-	},	
+	},
 	"documentTitle": {
 		"default": "Consola - Phoenix",
 		"suffix": " | Phoenix",
