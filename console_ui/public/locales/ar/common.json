@@ -216,6 +216,14 @@
 			"cost": "التكلفة المقدرة"
 		}
 	},
+	"tabulate": {
+		"title": "جمع وتحضير مجموعة بيانات لوحة المعلومات",
+		"tabulate": "جمع",
+		"fields": {
+			"started_processing_at": "بدأت المعالجة في",
+			"completed_at": "اكتملت في"
+		}
+	},	
 	"documentTitle": {
 		"default": "وحدة التحكم - فينيكس",
 		"suffix": " | في في",

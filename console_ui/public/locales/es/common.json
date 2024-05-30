@@ -216,6 +216,14 @@
 			"cost": "Costo estimado"
 		}
 	},
+	"tabulate": {
+		"title": "Tabular y producir el conjunto de datos del tablero",
+		"tabulate": "Tabular",
+		"fields": {
+			"started_processing_at": "Inicio del procesamiento",
+			"completed_at": "Completado a las"
+		}
+	},	
 	"documentTitle": {
 		"default": "Consola - Phoenix",
 		"suffix": " | Phoenix",

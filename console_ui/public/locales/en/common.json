@@ -216,6 +216,14 @@
 			"cost": "Estimated Cost"
 		}
 	},
+	"tabulate": {
+		"title": "Tabulate and produce the dashboard dataset",
+		"tabulate": "Tabulate",
+		"fields": {
+			"started_processing_at": "Started Processing At",
+			"completed_at": "Completed At"
+		}
+	},
 	"documentTitle": {
 		"default": "Console - Phoenix",
 		"suffix": " | Phoenix",

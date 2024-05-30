@@ -216,6 +216,14 @@
 			"cost": "Coût estimé"
 		}
 	},
+	"tabulate": {
+		"title": "Tabuler et produire l'ensemble de données du tableau de bord",
+		"tabulate": "Tabuler",
+		"fields": {
+			"started_processing_at": "Début du traitement",
+			"completed_at": "Terminé à"
+		}
+	},	
 	"documentTitle": {
 		"default": "Console - Phoenix",
 		"suffix": " | Phoenix",
