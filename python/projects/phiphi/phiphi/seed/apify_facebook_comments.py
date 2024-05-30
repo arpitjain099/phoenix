@@ -10,7 +10,7 @@ TEST_APIFY_FACEBOOK_COMMENT_GATHER_CREATE = schemas.ApifyFacebookCommentGatherCr
     description="Phoenix Apify Facebook COMMENT Gather",
     post_url_list=["https://phoenix.com", "https://buildup.org"],
     limit_comments_per_post=1000,
-    sort_comments_by=schemas.SortComment.facebook_default,
+    sort_comments_by=schemas.FacebookCommentSortOption.facebook_default,
     include_comment_replies=False,
 )
 
@@ -18,7 +18,7 @@ TEST_APIFY_FACEBOOK_COMMENT_GATHER_CREATE_2 = schemas.ApifyFacebookCommentGather
     description="Phoenix Apify Facebook COMMENT Gather 2",
     post_url_list=["https://phoenix.com", "https://buildup.org"],
     limit_comments_per_post=1000,
-    sort_comments_by=schemas.SortComment.most_relevant,
+    sort_comments_by=schemas.FacebookCommentSortOption.most_relevant,
     include_comment_replies=True,
 )
 
@@ -26,7 +26,7 @@ TEST_APIFY_FACEBOOK_COMMENT_GATHER_CREATE_3 = schemas.ApifyFacebookCommentGather
     description="Phoenix Apify Facebook COMMENT Gather 3",
     post_url_list=["https://phoenix.com"],
     limit_comments_per_post=1000,
-    sort_comments_by=schemas.SortComment.newest_first,
+    sort_comments_by=schemas.FacebookCommentSortOption.newest_first,
     include_comment_replies=False,
 )
 

@@ -1,15 +1,15 @@
 """Schemas for apify facebook comments gathers."""
-
-from enum import Enum
-from typing import Annotated
+import enum
+from typing import List, Optional
 
 import pydantic
 
 from phiphi.api.projects.gathers import schemas as gather_schemas
+from phiphi.pydantic_types import UrlStr
 
 
-class SortComment(str, Enum):
-    """SortComment enum."""
+class FacebookCommentSortOption(str, enum.Enum):
+    """Enum for the sorting options for Facebook comments."""
 
     facebook_default = "facebook_default"
     most_relevant = "most_relevant"
@@ -17,35 +17,56 @@ class SortComment(str, Enum):
     non_filtered = "non_filtered"
 
 
+apify_facebook_comment_sort_option_mapping = {
+    FacebookCommentSortOption.facebook_default: "RANKED_UNFILTERED",
+    FacebookCommentSortOption.most_relevant: "RANKED_THREADED",
+    FacebookCommentSortOption.newest_first: "RECENT_ACTIVITY",
+    FacebookCommentSortOption.non_filtered: "RANKED_UNFILTERED",
+}
+
+
 class ApifyFacebookCommentGatherBase(gather_schemas.GatherBase):
-    """Apify Facebook Comments Gather config schema."""
+    """Input schema for the Apify Facebook comments scraper.
 
-    post_url_list: Annotated[
-        list[str],
-        pydantic.Field(description="The post url list, should be the full url including https"),
-    ]
+    Ref to relevant Apify actor docs: https://apify.com/apify/facebook-comments-scraper/input-schema
+    """
 
-    limit_comments_per_post: Annotated[
-        int,
-        pydantic.Field(
-            default=1000,
-            description="Limit the number of comments per post",
+    limit_comments_per_post: int = pydantic.Field(
+        25,
+        serialization_alias="resultsLimit",
+        description="Limit results per post; defaults to 50 if not set",
+    )
+    post_url_list: List[UrlStr] = pydantic.Field(
+        ...,
+        serialization_alias="startUrls",
+        description="List of Facebook post URLs to scrape comments from",
+    )
+    sort_comments_by: Optional[FacebookCommentSortOption] = pydantic.Field(
+        default=None,
+        serialization_alias="viewOption",
+        description="Sorting option for comments, default is 'RANKED_UNFILTERED'",
+    )
+    include_comment_replies: bool = pydantic.Field(
+        default=False,
+        serialization_alias="includeNestedComments",
+        description=(
+            "If True, includes up to 3 levels of nested comments/replies. "
+            "WARNING: this breaks results_limit and will likely return more comments "
+            "and incur more cost than expected."
         ),
-    ]
-    sort_comments_by: Annotated[
-        SortComment,
-        pydantic.Field(
-            description="Sort the comments to gather. Can be used with `limit-comments_per_posts` "
-            "to reduce costs and increase the relevance of the comments gathered.",
-            default=SortComment.facebook_default,
-        ),
-    ]
-    include_comment_replies: Annotated[
-        bool,
-        pydantic.Field(
-            description="Includes the nested replies of comments.",
-        ),
-    ]
+    )
+
+    class Config:
+        """Pydantic configuration."""
+
+        extra = pydantic.Extra.forbid
+
+    @pydantic.field_serializer("sort_comments_by", when_used="unless-none")
+    def serialize_sort_comments_by(
+        self, value: Optional[FacebookCommentSortOption]
+    ) -> Optional[str]:
+        """Serialize sort_comments_by."""
+        return apify_facebook_comment_sort_option_mapping[value] if value else None
 
 
 class ApifyFacebookCommentGatherResponse(
