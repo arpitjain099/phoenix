@@ -11,7 +11,7 @@ def load_sample_raw_data(
 ) -> list[dict]:
     """Return a sample raw data JSON blob for a given source, platform, and data type."""
     if source == "apify" and platform == "facebook" and data_type == "post":
-        relative_path = "sample_apify_data/facebook_posts.json"
+        relative_path = "apify_sample_data/facebook_posts.json"
     else:
         raise NotImplementedError(f"{source=}, {platform=}, {data_type=} not supported.")
 
