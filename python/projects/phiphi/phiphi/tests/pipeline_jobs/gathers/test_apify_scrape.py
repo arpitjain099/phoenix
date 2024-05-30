@@ -6,7 +6,7 @@ import pytest
 from prefect.logging import disable_run_logger as disable_prefect_run_logger
 
 from phiphi import config
-from phiphi.pipeline_jobs.gathers import apify_flow, apify_input_schemas
+from phiphi.pipeline_jobs.gathers import apify_input_schemas, apify_scrape
 
 
 def facebook_posts_input_example() -> apify_input_schemas.ApifyFacebookPostsInput:
@@ -66,7 +66,7 @@ def manual_test_apify_scrape_and_batch_download():
     - run the function manually
     """
     run_input = facebook_comments_input_example()
-    apify_flow.apify_scrape_and_batch_download_results(
+    apify_scrape.apify_scrape_and_batch_download_results(
         run_input=run_input,
         project_id=1,
         gather_id=1,
@@ -89,7 +89,7 @@ def test_mock_apify_scrape_and_batch_download_results(tmpdir, patch_settings, mo
     mocker.patch.object(config.settings, "MOCK_BQ_ROOT_DIR", str(tmpdir))
 
     with disable_prefect_run_logger():
-        apify_flow.apify_scrape_and_batch_download_results.fn(
+        apify_scrape.apify_scrape_and_batch_download_results.fn(
             run_input=facebook_posts_input_example(),
             project_id=1,
             gather_id=1,
