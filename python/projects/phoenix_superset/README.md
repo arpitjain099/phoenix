@@ -35,15 +35,14 @@ You should then be able to see the superset welcome page.
 
 ## Adding drivers
 
-To add drivers to the superset image you can add the driver to the `requirements.in` file and follow the below steps:
+To add drivers to the superset image you can add the driver to the `docker.requirements.in` file and follow the below steps:
 
 - Check the list of available drivers for superset,
   [here](https://superset.apache.org/docs/databases/installing-database-drivers).
-- Update the `requirements.in` file with the new driver package. Include the version, see below.
-- Build the image using `make build`.
-- Compile the requirements using using python development tools (python/Makefile) `make
-  compile_requirements path=projects/phoenix-superset`. See the [python development
-  tools](../../python/README.md) for more information.
+- Update the `docker.requirements.in` file with the new driver package. Include the version, see below.
+- Build the image using `make build`
+- You can check that the driver is working by following the steps in the testing section. And
+  creating a new database connection.
 
 A note about pinning the version of the driver. It is important to pin the version of the driver to
 avoid breaking changes. The version should be pinned to the latest version that is compatible with
