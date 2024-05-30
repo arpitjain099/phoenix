@@ -11,8 +11,8 @@ import apify_client
 import pandas as pd
 import prefect
 
-from phiphi import config
-from phiphi.pipeline_jobs import utils
+from phiphi import config, utils
+from phiphi.pipeline_jobs import utils as pipeline_jobs_utils
 from phiphi.pipeline_jobs.gathers import (
     apify_input_schemas,
     project_db_schemas,
@@ -100,12 +100,11 @@ def update_and_write_batch(
     # Validate the DataFrame against the Pandera schema
     validated_df = project_db_schemas.gather_batches_schema.validate(gather_batch_df)
 
-    utils.write_data(df=validated_df, dataset=bigquery_dataset, table=bigquery_table)
+    pipeline_jobs_utils.write_data(df=validated_df, dataset=bigquery_dataset, table=bigquery_table)
 
 
 @prefect.task
 def apify_scrape_and_batch_download_results(
-    apify_token: str,
     run_input: apify_input_schemas.ApifyInputType,
     project_id: int,
     gather_id: int,
@@ -116,6 +115,8 @@ def apify_scrape_and_batch_download_results(
 ) -> None:
     """Scrape data using the Apify API and save them to a GCP BigQuery table or Parquet."""
     prefect_logger = prefect.get_run_logger()
+
+    apify_token = utils.get_apify_api_key()
     apify_actor_name = input_actor_map[type(run_input)]
 
     if config.settings.USE_MOCK_APIFY:
