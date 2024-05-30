@@ -56,12 +56,18 @@ def start_flow_run(
     """
     if job_type == "gather":
         deployment_name = "gather_flow/main_deployment"
+        params = {
+            "job_run_id": job_run_id,
+            "gather_params": job_params,
+            "bigquery_dataset": "TODO",
+            "bigquery_table": "TODO",
+        }
     else:
         raise NotImplementedError(f"Job type {job_type=} not implemented yet.")
     job_run_flow: objects.FlowRun = asyncio.run(
         deployments.run_deployment(
             name=deployment_name,
-            parameters=job_params.dict(),
+            parameters=params,
             as_subflow=True,
             timeout=0,  # this means it returns immediately with the metadata
             tags=[

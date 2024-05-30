@@ -4,14 +4,13 @@ from typing import Coroutine
 import prefect
 
 from phiphi import constants
-from phiphi.pipeline_jobs.gathers import apify_input_schemas, apify_scrape
+from phiphi.api.projects import gathers
+from phiphi.pipeline_jobs.gathers import apify_scrape
 
 
 @prefect.flow(name="gather_flow")
 def gather_flow(
-    run_input: apify_input_schemas.ApifyInputType,
-    project_id: int,
-    gather_id: int,
+    gather_params: gathers.schemas.GatherResponse,
     job_run_id: int,
     bigquery_dataset: str,
     bigquery_table: str,
@@ -19,9 +18,9 @@ def gather_flow(
 ) -> None:
     """Flow which gathers data."""
     apify_scrape.apify_scrape_and_batch_download_results(
-        run_input=run_input,
-        project_id=project_id,
-        gather_id=gather_id,
+        run_input=gather_params.to_apify_schema(),
+        project_id=gather_params.project_id,
+        gather_id=gather_params.id,
         job_run_id=job_run_id,
         bigquery_dataset=bigquery_dataset,
         bigquery_table=bigquery_table,
