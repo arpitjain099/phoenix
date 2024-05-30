@@ -9,14 +9,13 @@ from prefect.flow_runs import wait_for_flow_run
 
 from phiphi import constants, platform_db
 from phiphi.api.projects import gathers, job_runs
-from phiphi.pipeline_jobs.gathers import apify_input_schemas
 from phiphi.types import PhiphiJobType
 
 
 @task
 def read_job_params(
     project_id: int, job_type: PhiphiJobType, job_source_id: int
-) -> Union[apify_input_schemas.ApifyFacebookPostsInput]:
+) -> Union[gathers.schemas.GatherResponse]:
     """Task to read the job's params from the database.
 
     Args:
@@ -27,22 +26,13 @@ def read_job_params(
     """
     if job_type == "gather":
         with platform_db.get_session_context() as session:
-            gather = gathers.crud.get_gather(
+            job_params = gathers.crud.get_gather(
                 session=session, project_id=project_id, gather_id=job_source_id
             )
-        if gather is None:
-            raise ValueError(f"Gather with ID {job_source_id=} not found.")
-        elif type(gather) == gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse:
-            job_params = apify_input_schemas.ApifyFacebookPostsInput(
-                only_posts_older_than=gather.only_posts_older_than,
-                only_posts_newer_than=gather.only_posts_newer_than,
-                account_urls=gather.account_url_list,
-                results_per_url_limit=gather.limit_posts_per_account,
-            )
-        else:
-            raise NotImplementedError(f"Run for gather type {type(gather)=} not implemented yet.")
     else:
         raise NotImplementedError(f"Job type {job_type=} not implemented yet.")
+    if job_params is None:
+        raise ValueError(f"Job with {project_id=}, {job_type=}, {job_source_id=} not found.")
 
     return job_params
 
@@ -53,7 +43,7 @@ def start_flow_run(
     job_type: PhiphiJobType,
     job_source_id: int,
     job_run_id: int,
-    job_params: Union[apify_input_schemas.ApifyFacebookPostsInput],
+    job_params: Union[gathers.schemas.GatherResponse],
 ) -> objects.FlowRun:
     """Start the (inner) flow for the job.
 
@@ -64,16 +54,14 @@ def start_flow_run(
         job_run_id: ID of the row in the job_runs table.
         job_params: Parameters for the job.
     """
-    if type(job_params) == apify_input_schemas.ApifyFacebookPostsInput:
-        deployment_name = "gather_apify_facebook_posts_flow/main_deployment"
+    if job_type == "gather":
+        deployment_name = "gather_flow/main_deployment"
     else:
-        raise NotImplementedError(
-            f"Run for job_params type {type(job_params)=} not implemented yet."
-        )
+        raise NotImplementedError(f"Job type {job_type=} not implemented yet.")
     job_run_flow: objects.FlowRun = asyncio.run(
         deployments.run_deployment(
             name=deployment_name,
-            parameters=job_params.dict(by_alias=True, exclude_unset=True),
+            parameters=job_params.dict(),
             as_subflow=True,
             timeout=0,  # this means it returns immediately with the metadata
             tags=[
