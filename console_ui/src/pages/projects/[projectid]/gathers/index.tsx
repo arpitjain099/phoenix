@@ -22,7 +22,7 @@ import BreadcrumbsComponent from "@components/breadcrumbs";
 import { statusTextStyle } from "src/utils";
 import { IconPlayerPlay, IconRefresh, IconTrash } from "@tabler/icons";
 import GatherRunModal from "@components/modals/gather-run";
-import { gatherService } from "src/services";
+import { jobRunService } from "src/services";
 import { GatherResponse } from "src/interfaces/gather";
 
 export const GatherList: React.FC<IResourceComponentsProps> = () => {
@@ -48,9 +48,10 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 	const handleGatherRefresh = async (gatherDetail: GatherResponse) => {
 		setLoadingStates((prev) => ({ ...prev, [gatherDetail.id]: true }));
 		try {
-			const { data } = await gatherService.fetchJobRun({
+			const { data } = await jobRunService.fetchJobRun({
 				project_id: gatherDetail.project_id,
 				id: gatherDetail?.latest_job_run?.id,
+				type: "gather",
 			});
 			setGatherList((prevList: GatherResponse[]) =>
 				prevList.map((gather) =>
