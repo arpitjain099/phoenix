@@ -32,11 +32,6 @@ class ApifyFacebookPostGatherBase(gather_schemas.GatherBase):
         description="Fetch posts only newer than this date (YYYY-MM-DD)",
     )
 
-    class Config:
-        """Pydantic configuration."""
-
-        extra = pydantic.Extra.forbid
-
 
 class ApifyFacebookPostGatherResponse(gather_schemas.GatherResponse, ApifyFacebookPostGatherBase):
     """Apify Gather schema.

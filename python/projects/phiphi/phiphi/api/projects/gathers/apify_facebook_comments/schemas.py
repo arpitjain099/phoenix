@@ -56,11 +56,6 @@ class ApifyFacebookCommentGatherBase(gather_schemas.GatherBase):
         ),
     )
 
-    class Config:
-        """Pydantic configuration."""
-
-        extra = pydantic.Extra.forbid
-
 
 class ApifyFacebookCommentGatherResponse(
     gather_schemas.GatherResponse, ApifyFacebookCommentGatherBase
