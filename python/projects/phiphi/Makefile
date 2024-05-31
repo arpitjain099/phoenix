@@ -36,6 +36,10 @@ test:
 	@echo "Running `format` in ci environment"
 	docker compose run api make test path=$(default_path)
 
+test_integration:
+	@echo "Running `tests/integration` in ci environment"
+	docker compose run -e PYTEST_ARGS_OVERRIDE="tests/integration/" api make test path=$(default_path)
+
 format:
 	@echo "Running `format` in ci environment"
 	docker compose run api make format path=$(default_path)

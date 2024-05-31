@@ -41,9 +41,10 @@ typecheck: check_path_exists
 # consistent with other make commands.
 test: check_path_exists
 	@echo "Running tests for path $(path)..."
+	@echo "Test args: $${PYTEST_ARGS_OVERRIDE:-tests}"
 	@normalized_path=$$(echo "$(path)" | sed 's:/*$$::'); \
 	base_dir=$$(basename $$normalized_path); \
-	cd $$normalized_path/$$base_dir && pytest tests
+	cd $$normalized_path/$$base_dir && eval pytest $${PYTEST_ARGS_OVERRIDE:-tests}
 
 check_path_is_project:
 	@if echo "$(path)" | grep -qvE '^projects/'; then \
