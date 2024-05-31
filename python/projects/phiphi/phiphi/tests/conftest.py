@@ -63,6 +63,21 @@ def session(test_engine) -> Generator[Session, None, None]:
         yield session
 
 
+@pytest.fixture(scope="session")
+def session_context(session) -> Generator[Session, None, None]:
+    """Create the session for testing.
+
+    This should be used when testing data pipelines that use
+    `with platform_db.get_session_context() as session:`
+
+    Recommended to use in conjunction with the `recreate_tables` or `reseed_tables` fixtures.
+    """
+    old_get_session_context = platform_db.get_session_context
+    platform_db.get_session_context = lambda: session
+    yield session
+    platform_db.get_session_context = old_get_session_context
+
+
 @pytest.fixture(scope="function")
 def recreate_tables(session):
     """Recreate tables deleting all the data in the database.
