@@ -1,6 +1,6 @@
 """Schemas for apify facebook comments gathers."""
 import enum
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 
 import pydantic
 
@@ -61,13 +61,6 @@ class ApifyFacebookCommentGatherBase(gather_schemas.GatherBase):
 
         extra = pydantic.Extra.forbid
 
-    @pydantic.field_serializer("sort_comments_by", when_used="unless-none")
-    def serialize_sort_comments_by(
-        self, value: Optional[FacebookCommentSortOption]
-    ) -> Optional[str]:
-        """Serialize sort_comments_by."""
-        return apify_facebook_comment_sort_option_mapping[value] if value else None
-
 
 class ApifyFacebookCommentGatherResponse(
     gather_schemas.GatherResponse, ApifyFacebookCommentGatherBase
@@ -78,6 +71,25 @@ class ApifyFacebookCommentGatherResponse(
     """
 
     model_config = pydantic.ConfigDict(from_attributes=True)
+
+    def serialize_to_apify_input(self) -> Dict[str, Any]:
+        """Serialize the instance to a dictionary suitable for Apify API."""
+        apify_dict = super().serialize_to_apify_input()
+        if "startUrls" in apify_dict:
+            apify_dict["startUrls"] = self.serialize_comment_urls(apify_dict["startUrls"])
+        if "viewOption" in apify_dict:
+            apify_dict["viewOption"] = self.serialize_sort_comments_by(apify_dict["viewOption"])
+        return apify_dict
+
+    @staticmethod
+    def serialize_comment_urls(urls: List[str]) -> List[Dict[str, str]]:
+        """Convert a list of plain URLs to the list of dicts required for Apify."""
+        return [{"url": str(url)} for url in urls]
+
+    @staticmethod
+    def serialize_sort_comments_by(value: Optional[FacebookCommentSortOption]) -> Optional[str]:
+        """Serialize sort_comments_by."""
+        return apify_facebook_comment_sort_option_mapping[value] if value else None
 
 
 class ApifyFacebookCommentGatherCreate(

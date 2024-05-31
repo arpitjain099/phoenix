@@ -1,7 +1,7 @@
 """Schemas for gathers."""
 import datetime
 from enum import Enum
-from typing import Annotated
+from typing import Annotated, Any, Dict
 
 import pydantic
 
@@ -56,6 +56,13 @@ class GatherResponse(GatherBase):
     project_id: int
     deleted_at: datetime.datetime | None = None
     latest_job_run: job_runs_schemas.JobRunResponse | None = None
+
+    def serialize_to_apify_input(self) -> Dict[str, Any]:
+        """Serialize the instance to a dictionary suitable for Apify API."""
+        base_fields = set(GatherResponse.__fields__.keys())  # type: ignore[attr-defined]
+        instance_dict = self.model_dump(by_alias=True, exclude_unset=True)
+        apify_dict = {key: value for key, value in instance_dict.items() if key not in base_fields}
+        return apify_dict
 
 
 class GatherCreate(GatherBase):

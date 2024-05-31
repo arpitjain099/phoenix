@@ -1,6 +1,10 @@
 """Test Apify Facebook Posts Gathers."""
+import datetime
+
 import pytest
 from fastapi.testclient import TestClient
+
+from phiphi.api.projects import gathers
 
 CREATED_TIME = "2024-04-01T12:00:01"
 UPDATE_TIME = "2024-04-01T12:00:02"
@@ -52,3 +56,78 @@ def test_data_type_apify_facebook_post(reseed_tables, client: TestClient) -> Non
     json_response = response.json()
     assert response.status_code == 200
     assert json_response["data_type"] == "posts"
+
+
+def test_serialize_facebook_post_gather_response_with_all_fields():
+    """Test that ApifyFacebookPostGatherResponse serializes correctly."""
+    instance = gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse(
+        description="Example",
+        limit_posts_per_account=10,
+        account_url_list=[
+            "https://www.facebook.com/humansofnewyork/",
+            "https://www.facebook.com/example_account/",
+        ],
+        only_posts_older_than="2024-04-04",
+        only_posts_newer_than="2024-04-03",
+        id=1,
+        platform=gathers.schemas.Platform.facebook,
+        data_type=gathers.schemas.DataType.posts,
+        source=gathers.schemas.Source.apify,
+        created_at=datetime.datetime.now(),
+        updated_at=datetime.datetime.now(),
+        project_id=123,
+        deleted_at=None,
+        latest_job_run=None,
+    )
+
+    output_dict = instance.serialize_to_apify_input()
+
+    expected_output_dict = {
+        "resultsLimit": 10,
+        "startUrls": [
+            {"url": "https://www.facebook.com/humansofnewyork/"},
+            {"url": "https://www.facebook.com/example_account/"},
+        ],
+        "onlyPostsOlderThan": "2024-04-04",
+        "onlyPostsNewerThan": "2024-04-03",
+    }
+
+    assert expected_output_dict == output_dict
+
+
+def test_serialize_facebook_post_gather_response_with_required_fields_only():
+    """Test that serialize to Apify correctly omits fields when they are not provided."""
+    instance = gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse(
+        description="Example",
+        limit_posts_per_account=10,
+        account_url_list=[
+            "https://www.facebook.com/humansofnewyork/",
+            "https://www.facebook.com/example_account/",
+        ],
+        id=1,
+        platform=gathers.schemas.Platform.facebook,
+        data_type=gathers.schemas.DataType.posts,
+        source=gathers.schemas.Source.apify,
+        created_at=datetime.datetime.now(),
+        updated_at=datetime.datetime.now(),
+        project_id=123,
+        deleted_at=None,
+        latest_job_run=None,
+    )
+
+    output_dict = instance.serialize_to_apify_input()
+
+    expected_keys = ["resultsLimit", "startUrls"]
+    assert all(key in output_dict for key in expected_keys)
+    assert "onlyPostsOlderThan" not in output_dict
+    assert "onlyPostsNewerThan" not in output_dict
+
+    expected_output_dict = {
+        "resultsLimit": 10,
+        "startUrls": [
+            {"url": "https://www.facebook.com/humansofnewyork/"},
+            {"url": "https://www.facebook.com/example_account/"},
+        ],
+    }
+
+    assert expected_output_dict == output_dict

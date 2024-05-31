@@ -1,6 +1,6 @@
 """Schemas for apify facebook post gathers."""
 
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 
 import pydantic
 
@@ -45,6 +45,18 @@ class ApifyFacebookPostGatherResponse(gather_schemas.GatherResponse, ApifyFacebo
     """
 
     model_config = pydantic.ConfigDict(from_attributes=True)
+
+    def serialize_to_apify_input(self) -> Dict[str, Any]:
+        """Serialize the instance to a dictionary suitable for Apify API."""
+        apify_dict = super().serialize_to_apify_input()
+        if "startUrls" in apify_dict:
+            apify_dict["startUrls"] = self.serialize_account_urls(apify_dict["startUrls"])
+        return apify_dict
+
+    @staticmethod
+    def serialize_account_urls(urls: List[str]) -> List[Dict[str, str]]:
+        """Convert a list of plain URLs to the list of dicts required for Apify."""
+        return [{"url": str(url)} for url in urls]
 
 
 class ApifyFacebookPostGatherCreate(gather_schemas.GatherCreate, ApifyFacebookPostGatherBase):
