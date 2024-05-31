@@ -219,6 +219,7 @@
 	"tabulate": {
 		"title": "Tabuler et produire l'ensemble de données du tableau de bord",
 		"tabulate": "Tabuler",
+		"run": "Lancer une tabulation",
 		"fields": {
 			"started_processing_at": "Début du traitement",
 			"completed_at": "Terminé à"

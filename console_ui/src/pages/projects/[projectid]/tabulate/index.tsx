@@ -75,14 +75,14 @@ export const TabulateList: React.FC<IResourceComponentsProps> = () => {
 				accessorKey: "started_processing_at",
 				header: translate("tabulate.fields.started_processing_at"),
 				cell: ({ getValue }) =>
-					getValue() ? <DateField value={getValue<any>()} /> : "",
+					getValue() ? <DateField format="LLL" value={getValue<any>()} /> : "",
 			},
 			{
 				id: "completed_at",
 				accessorKey: "completed_at",
 				header: translate("tabulate.fields.completed_at"),
 				cell: ({ getValue }) =>
-					getValue() ? <DateField value={getValue<any>()} /> : "",
+					getValue() ? <DateField format="LLL" value={getValue<any>()} /> : "",
 			},
 			{
 				id: "status",
@@ -98,41 +98,25 @@ export const TabulateList: React.FC<IResourceComponentsProps> = () => {
 				accessorKey: "id",
 				header: translate("table.actions"),
 				cell: ({ row }) => {
-					const gatherId = row.original.id;
+					const jobId = row.original.id;
 					const { status } = row.original;
-					const isLoading = loadingStates[gatherId];
+					const isLoading = loadingStates[jobId];
 					return (
 						<Group spacing="xs" noWrap>
 							{isLoading ? (
 								<Loader size="sm" />
 							) : (
-								<>
-									{(status === "in_queue" || status === "processing") && (
-										<Tooltip label="Refresh">
-											<Button
-												p={0}
-												variant="subtle"
-												onClick={() => handleRefresh(row.original)}
-											>
-												<IconRefresh size={20} color="blue" />
-											</Button>
-										</Tooltip>
-									)}
-									{["failed", "completed_sucessfully"].includes(status) && (
+								["in_queue", "processing"].includes(status) && (
+									<Tooltip label="Refresh">
 										<Button
 											p={0}
 											variant="subtle"
-											color="red"
-											onClick={() => {}}
+											onClick={() => handleRefresh(row.original)}
 										>
-											<IconTrash
-												size={20}
-												color="red"
-												className="cursor-pointer"
-											/>
+											<IconRefresh size={20} color="blue" />
 										</Button>
-									)}
-								</>
+									</Tooltip>
+								)
 							)}
 						</Group>
 					);
@@ -166,7 +150,7 @@ export const TabulateList: React.FC<IResourceComponentsProps> = () => {
 	const handleStartRun = () => {
 		setLoading(true);
 		jobRunService
-			.gatherRun({
+			.jobRun({
 				project_id: Number(projectid),
 				id: 0,
 				type: "tabulate",
@@ -188,8 +172,15 @@ export const TabulateList: React.FC<IResourceComponentsProps> = () => {
 			headerButtons={({ defaultButtons }) => (
 				<>
 					{defaultButtons}
-					<Button type="button" loading={loading} onClick={handleStartRun}>
-						Run a tabulate
+					<Button
+						type="button"
+						loading={loading}
+						onClick={handleStartRun}
+						disabled={tabulateList.some(
+							(item: JobRunResponse) => item.completed_at === null
+						)}
+					>
+						{translate("tabulate.run")}
 					</Button>
 				</>
 			)}

@@ -219,6 +219,7 @@
 	"tabulate": {
 		"title": "Tabulate and produce the dashboard dataset",
 		"tabulate": "Tabulate",
+		"run": "Run a Tabulate",
 		"fields": {
 			"started_processing_at": "Started Processing At",
 			"completed_at": "Completed At"

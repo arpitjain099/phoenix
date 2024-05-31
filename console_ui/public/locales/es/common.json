@@ -219,6 +219,7 @@
 	"tabulate": {
 		"title": "Tabular y producir el conjunto de datos del tablero",
 		"tabulate": "Tabular",
+		"run": "Ejecutar una tabulación",
 		"fields": {
 			"started_processing_at": "Inicio del procesamiento",
 			"completed_at": "Completado a las"

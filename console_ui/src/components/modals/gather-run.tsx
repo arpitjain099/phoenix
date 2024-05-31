@@ -2,7 +2,7 @@ import { Modal, Button, Text } from "@mantine/core";
 import { useTranslate } from "@refinedev/core";
 import { useEffect, useState } from "react";
 import { GatherResponse } from "src/interfaces/gather";
-import { jobRunService } from "src/services";
+import { jobRunService, gatherService } from "src/services";
 import { formatToCurrency } from "src/utils";
 
 interface Props {
@@ -26,7 +26,7 @@ const GatherRunModal: React.FC<Props> = ({
 	useEffect(() => {
 		if (opened) {
 			setLoading(true);
-			jobRunService
+			gatherService
 				.getGatherRunEstimate({
 					project_id: gatherDetail.project_id,
 					id: gatherDetail.id,
@@ -50,7 +50,7 @@ const GatherRunModal: React.FC<Props> = ({
 	const handleStartRun = () => {
 		setLoading(true);
 		jobRunService
-			.gatherRun({
+			.jobRun({
 				project_id: gatherDetail.project_id,
 				id: gatherDetail.id,
 				type: "gather",
