@@ -100,6 +100,13 @@ def wait_for_job_flow_run(job_run_flow: objects.FlowRun) -> objects.FlowRun:
     return flow_run_result
 
 
+def update_job_run_with_status(job_run_id: int, status: job_runs.schemas.Status) -> None:
+    """Update the job_runs table with the given status."""
+    job_run_update_completed = job_runs.schemas.JobRunUpdateCompleted(id=job_run_id, status=status)
+    with platform_db.get_session_context() as session:
+        job_runs.crud.update_job_run(db=session, job_run_data=job_run_update_completed)
+
+
 @task
 def job_run_update_completed(job_run_id: int, job_run_flow_result: objects.FlowRun) -> None:
     """Update the job_runs table with the final state of the job (the inner flow)."""
@@ -110,12 +117,21 @@ def job_run_update_completed(job_run_id: int, job_run_flow_result: objects.FlowR
         else job_runs.schemas.Status.failed
     )
 
-    job_run_update_completed = job_runs.schemas.JobRunUpdateCompleted(id=job_run_id, status=status)
-    with platform_db.get_session_context() as session:
-        job_runs.crud.update_job_run(db=session, job_run_data=job_run_update_completed)
+    update_job_run_with_status(job_run_id=job_run_id, status=status)
 
 
-@flow(name="flow_runner_flow")
+def non_success_hook(flow: objects.Flow, flow_run: objects.FlowRun, state: objects.State) -> None:
+    """Hook to run when the flow fails."""
+    job_run_id = flow_run.parameters["job_run_id"]
+    update_job_run_with_status(job_run_id=job_run_id, status=job_runs.schemas.Status.failed)
+
+
+@flow(
+    name="flow_runner_flow",
+    on_failure=[non_success_hook],
+    on_cancellation=[non_success_hook],
+    on_crashed=[non_success_hook],
+)
 def flow_runner_flow(
     project_id: int,
     job_type: PhiphiJobType,
