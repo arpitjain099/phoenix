@@ -55,7 +55,7 @@ def start_flow_run(
         job_params: Parameters for the job.
     """
     if job_type == "gather":
-        deployment_name = "gather_flow/main_deployment"
+        deployment_name = "gather_flow"
         params = {
             "job_run_id": job_run_id,
             "gather_params": job_params,
