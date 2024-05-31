@@ -100,4 +100,5 @@ for key, (request_schema, response_schema, child_model) in list_of_child_gather_
     router.post(
         f"/projects/{{project_id}}/gathers/{key}",
         response_model=response_schema,
+        response_model_by_alias=False,
     )(make_create_child_gather_route(request_schema, response_schema, child_model, key))

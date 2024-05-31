@@ -17,7 +17,7 @@ def test_create_apify_facebook_comment_gather(reseed_tables, client: TestClient)
         "description": "First apify gather",
         "limit_comments_per_post": 1000,
         "sort_comments_by": "facebook_default",
-        "post_url_list": ["https://buildup.org"],
+        "post_url_list": ["https://buildup.org/"],
         "include_comment_replies": True,
         "source": "apify",
         "platform": "facebook",
@@ -27,6 +27,7 @@ def test_create_apify_facebook_comment_gather(reseed_tables, client: TestClient)
     response = client.post(f"/projects/{project_id}/gathers/apify_facebook_comments", json=data)
     assert response.status_code == 200
     gather = response.json()
+
     assert gather["description"] == data["description"]
     assert gather["project_id"] == project_id
     assert gather["sort_comments_by"] == data["sort_comments_by"]
@@ -49,7 +50,7 @@ def test_data_type_apify_facebook_comment(reseed_tables, client: TestClient) -> 
         "description": "First apify gather",
         "limit_comments_per_post": 1000,
         "sort_comments_by": "facebook_default",
-        "post_url_list": ["https://buildup.org"],
+        "post_url_list": ["https://buildup.org/"],
         "include_comment_replies": True,
         "source": "apify",
         "platform": "facebook",
