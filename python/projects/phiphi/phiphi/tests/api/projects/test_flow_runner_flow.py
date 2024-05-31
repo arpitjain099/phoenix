@@ -1,6 +1,7 @@
 """Test flow_runner_flow."""
 from unittest import mock
 
+import pytest
 from prefect.client.schemas import objects
 from prefect.logging import disable_run_logger
 
@@ -8,10 +9,22 @@ from phiphi.api.projects.gathers import crud as gathers_crud
 from phiphi.api.projects.job_runs import crud, flow_runner_flow, schemas
 
 
+@pytest.mark.parametrize(
+    "mock_return_wait_flow_run_completed,expected_job_run_status",
+    [
+        (True, schemas.Status.completed_sucessfully),
+        (False, schemas.Status.failed),
+    ],
+)
 @mock.patch("phiphi.api.projects.job_runs.flow_runner_flow.wait_for_job_flow_run")
 @mock.patch("phiphi.api.projects.job_runs.flow_runner_flow.start_flow_run")
 def test_flow_runner_flow(
-    mock_start_flow_run, mock_wait_for_flow_run, session_context, reseed_tables
+    mock_start_flow_run,
+    mock_wait_for_flow_run,
+    mock_return_wait_flow_run_completed,
+    expected_job_run_status,
+    session_context,
+    reseed_tables,
 ):
     """Test the flow_runner_flow."""
     project_id = 1
@@ -32,7 +45,7 @@ def test_flow_runner_flow(
     mock_start_flow_state.is_completed.return_value = True
 
     mock_wait_flow_state = mock.MagicMock()
-    mock_wait_flow_state.is_completed.return_value = True
+    mock_wait_flow_state.is_completed.return_value = mock_return_wait_flow_run_completed
 
     assert job_run.status == schemas.Status.awaiting_start
 
@@ -71,5 +84,5 @@ def test_flow_runner_flow(
 
     assert job_run_completed
     assert job_run_completed.id == job_run.id
-    assert job_run_completed.status == schemas.Status.completed_sucessfully
+    assert job_run_completed.status == expected_job_run_status
     assert job_run_completed.completed_at is not None
