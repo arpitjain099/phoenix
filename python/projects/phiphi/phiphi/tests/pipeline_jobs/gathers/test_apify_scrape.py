@@ -1,4 +1,5 @@
 """Tests for Apify gathers."""
+import datetime
 import json
 
 import pandas as pd
@@ -6,30 +7,57 @@ import pytest
 from prefect.logging import disable_run_logger as disable_prefect_run_logger
 
 from phiphi import config
+from phiphi.api.projects import gathers
 from phiphi.pipeline_jobs.gathers import apify_input_schemas, apify_scrape
 
 
-def facebook_posts_input_example() -> apify_input_schemas.ApifyFacebookPostsInput:
-    """Example input for the ApifyFacebookPostsInput schema."""
-    return apify_input_schemas.ApifyFacebookPostsInput(
-        only_posts_older_than="2024-04-04",
-        only_posts_newer_than="2024-01-03",
-        results_per_url_limit=4,
-        account_urls=[
+def facebook_posts_input_example() -> (
+    gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse
+):
+    """Example input for the ApifyFacebookPostGatherResponse schema."""
+    return gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse(
+        description="Example",
+        limit_posts_per_account=4,
+        account_url_list=[
             "https://www.facebook.com/howtobuildup/",
             "https://www.facebook.com/unitednations/",
         ],
+        only_posts_older_than="2024-04-04",
+        only_posts_newer_than="2024-01-03",
+        id=1,
+        platform=gathers.schemas.Platform.facebook,
+        data_type=gathers.schemas.DataType.posts,
+        source=gathers.schemas.Source.apify,
+        created_at=datetime.datetime.now(),
+        updated_at=datetime.datetime.now(),
+        project_id=1,
+        deleted_at=None,
+        latest_job_run=None,
     )
 
 
-def facebook_comments_input_example() -> apify_input_schemas.ApifyFacebookCommentsInput:
-    """Example input for the ApifyFacebookCommentsInput schema."""
-    return apify_input_schemas.ApifyFacebookCommentsInput(
-        post_urls=[
+def facebook_comments_input_example() -> (
+    gathers.apify_facebook_comments.schemas.ApifyFacebookCommentGatherResponse
+):
+    """Example input for the ApifyFacebookCommentGatherResponse schema."""
+    return gathers.apify_facebook_comments.schemas.ApifyFacebookCommentGatherResponse(
+        description="Example",
+        limit_comments_per_post=4,
+        post_url_list=[
             "https://www.facebook.com/unitednations/posts/pfbid045as8QKV2uLVYe2NumDPs7a68Hr4P5cjmoyMRo2e4dj4p3rp2gWNNj948Uu7BVcxl",
             "https://www.facebook.com/unitednations/posts/pfbid0LmBjLodaYjFhvntY3rX4xB2cyrcUeXHuasXJNFgimkNX7NE76CjSEYCwwveF9v5ml",
         ],
-        results_limit=4,
+        sort_comments_by=gathers.apify_facebook_comments.schemas.FacebookCommentSortOption.facebook_default,
+        include_comment_replies=False,
+        id=1,
+        platform=gathers.schemas.Platform.facebook,
+        data_type=gathers.schemas.DataType.comments,
+        source=gathers.schemas.Source.apify,
+        created_at=datetime.datetime.now(),
+        updated_at=datetime.datetime.now(),
+        project_id=1,
+        deleted_at=None,
+        latest_job_run=None,
     )
 
 

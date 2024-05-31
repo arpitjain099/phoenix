@@ -18,7 +18,7 @@ def gather_flow(
 ) -> None:
     """Flow which gathers data."""
     apify_scrape.apify_scrape_and_batch_download_results(
-        run_input=gather_params.to_apify_schema(),
+        run_input=gather_params,
         project_id=gather_params.project_id,
         gather_id=gather_params.id,
         job_run_id=job_run_id,

@@ -12,6 +12,7 @@ import pandas as pd
 import prefect
 
 from phiphi import config, utils
+from phiphi.api.projects import gathers
 from phiphi.pipeline_jobs import utils as pipeline_jobs_utils
 from phiphi.pipeline_jobs.gathers import (
     apify_input_schemas,
@@ -22,44 +23,26 @@ from phiphi.pipeline_jobs.gathers import (
 )
 
 input_actor_map = {
-    apify_input_schemas.ApifyFacebookPostsInput: "apify/facebook-posts-scraper",
-    apify_input_schemas.ApifyFacebookCommentsInput: "apify/facebook-comments-scraper",
+    gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse: (
+        "apify/facebook-posts-scraper"
+    ),
+    gathers.apify_facebook_comments.schemas.ApifyFacebookCommentGatherResponse: (
+        "apify/facebook-comments-scraper"
+    ),
     apify_input_schemas.ApifyTiktokPostsInput: "clockworks/tiktok-scraper",
     apify_input_schemas.ApifyTiktokCommentsInput: "clockworks/tiktok-comments-scraper",
-}
-
-# Mapping from input types to schema variables
-input_type_mapping = {
-    apify_input_schemas.ApifyFacebookPostsInput: {
-        "platform": "facebook",
-        "data_type": "post",
-    },
-    apify_input_schemas.ApifyFacebookCommentsInput: {
-        "platform": "facebook",
-        "data_type": "comment",
-    },
-    apify_input_schemas.ApifyTiktokPostsInput: {
-        "platform": "tiktok",
-        "data_type": "post",
-    },
-    apify_input_schemas.ApifyTiktokCommentsInput: {
-        "platform": "tiktok",
-        "data_type": "comment",
-    },
 }
 
 
 def apify_scrape(
     apify_token: str,
     actor_name: str,
-    run_input: apify_input_schemas.ApifyInputType,
+    run_input: gathers.schemas.GatherResponse,
 ) -> Tuple[Iterator[Dict], apify_client.clients.DatasetClient]:
     """Scrape data using the Apify API and return an iterator."""
     client = apify_client.ApifyClient(apify_token)
     # Run the Apify actor
-    run_info = client.actor(actor_name).call(
-        run_input=run_input.dict(by_alias=True, exclude_unset=True)
-    )
+    run_info = client.actor(actor_name).call(run_input=run_input.serialize_to_apify_input())
     assert run_info is not None
     # Access the dataset client associated with the actor's results
     dataset_client = client.dataset(run_info["defaultDatasetId"])
@@ -69,19 +52,16 @@ def apify_scrape(
 def mock_apify_scrape(
     apify_token: str,
     actor_name: str,
-    run_input: apify_input_schemas.ApifyInputType,
+    run_input: gathers.schemas.GatherResponse,
 ) -> Tuple[Iterator[Dict], None]:
     """Read mock scraping data and return an iterator."""
-    if actor_name == "apify/facebook-posts-scraper":
-        return iter(
-            gather_utils.load_sample_raw_data(
-                source="apify",
-                platform="facebook",
-                data_type="post",
-            )
-        ), None
-    else:
-        raise NotImplementedError(f"Mock data not implemented for actor: {actor_name}")
+    return iter(
+        gather_utils.load_sample_raw_data(
+            source=gathers.schemas.Source.apify,
+            platform=run_input.platform,
+            data_type=run_input.data_type,
+        )
+    ), None
 
 
 def update_and_write_batch(
@@ -105,7 +85,7 @@ def update_and_write_batch(
 
 @prefect.task
 def apify_scrape_and_batch_download_results(
-    run_input: apify_input_schemas.ApifyInputType,
+    run_input: gathers.schemas.GatherResponse,
     project_id: int,
     gather_id: int,
     job_run_id: int,
@@ -137,8 +117,8 @@ def apify_scrape_and_batch_download_results(
         "gather_id": gather_id,
         "job_run_id": job_run_id,
         "source": "apify",
-        "platform": input_type_mapping[type(run_input)]["platform"],
-        "data_type": input_type_mapping[type(run_input)]["data_type"],
+        "platform": run_input.platform,
+        "data_type": run_input.data_type,
         "batch_id": 0,  # This will be updated for each batch
         "batch_created_at": pd.Timestamp.now(),  # This will be updated for each batch
         "json_data": "",  # This will be updated for each batch

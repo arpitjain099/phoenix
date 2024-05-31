@@ -2,10 +2,11 @@
 import hashlib
 import uuid
 from datetime import datetime
-from typing import Callable, Dict, List, Literal, Union
+from typing import Callable, Dict, List, Union
 
 import pandas as pd
 
+from phiphi.api.projects.gathers import schemas as gather_schemas
 from phiphi.pipeline_jobs.gathers import project_db_schemas
 
 
@@ -38,9 +39,9 @@ def normalise_batch(
     gather_id: int,
     gather_batch_id: int,
     gathered_at: datetime,
-    source: Literal["apify"],
-    platform: Literal["facebook", "instagram", "tiktok", "x-twitter"],
-    data_type: Literal["post", "comment"],
+    source: gather_schemas.Source,
+    platform: gather_schemas.Platform,
+    data_type: gather_schemas.DataType,
 ) -> pd.DataFrame:
     """Process a list of JSON blobs and normalize them into a DataFrame."""
     normalized_records = [normaliser(blob) for blob in batch_json]
