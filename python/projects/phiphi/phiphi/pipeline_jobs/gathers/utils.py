@@ -1,17 +1,22 @@
 """Utils for gathers."""
 import json
 import pathlib
-from typing import Literal
+
+from phiphi.api.projects.gathers import schemas as gather_schemas
 
 
 def load_sample_raw_data(
-    source: Literal["apify"],
-    platform: Literal["facebook", "instagram", "tiktok", "x-twitter"],
-    data_type: Literal["post", "comment"],
+    source: gather_schemas.Source,
+    platform: gather_schemas.Platform,
+    data_type: gather_schemas.DataType,
 ) -> list[dict]:
     """Return a sample raw data JSON blob for a given source, platform, and data type."""
-    if source == "apify" and platform == "facebook" and data_type == "post":
-        relative_path = "sample_apify_data/facebook_posts.json"
+    if (
+        source == gather_schemas.Source.apify
+        and platform == gather_schemas.Platform.facebook
+        and data_type == gather_schemas.DataType.posts
+    ):
+        relative_path = "apify_sample_data/facebook_posts.json"
     else:
         raise NotImplementedError(f"{source=}, {platform=}, {data_type=} not supported.")
 

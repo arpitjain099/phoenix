@@ -1,5 +1,4 @@
 """Apify facebook comments gather model."""
-
 from sqlalchemy import ForeignKey, orm
 
 from phiphi.api import base_models

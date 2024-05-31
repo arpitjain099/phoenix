@@ -4,6 +4,7 @@ from datetime import datetime
 import pandas as pd
 import pytest
 
+from phiphi.api.projects.gathers import schemas
 from phiphi.pipeline_jobs.gathers import normalisers, utils
 
 
@@ -100,9 +101,9 @@ def expected_dataframe():
     df["gather_id"] = 2
     df["gather_batch_id"] = 3
     df["gathered_at"] = datetime.fromisoformat("2024-04-01T12:00:00")
-    df["source"] = "apify"
-    df["platform"] = "facebook"
-    df["data_type"] = "post"
+    df["source"] = schemas.Source.apify
+    df["platform"] = schemas.Platform.facebook
+    df["data_type"] = schemas.DataType.posts
     df["phoenix_processed_at"] = datetime.fromisoformat("2024-04-02T12:10:59")
 
     return df
@@ -112,9 +113,9 @@ def expected_dataframe():
 def test_normalise_batch(expected_dataframe):
     """Test normalise_batch function."""
     batch_json = utils.load_sample_raw_data(
-        source="apify",
-        platform="facebook",
-        data_type="post",
+        source=schemas.Source.apify,
+        platform=schemas.Platform.facebook,
+        data_type=schemas.DataType.posts,
     )
 
     processed_df = normalisers.normalise_batch(
@@ -124,9 +125,10 @@ def test_normalise_batch(expected_dataframe):
         gather_id=2,
         gather_batch_id=3,
         gathered_at=datetime.fromisoformat("2024-04-01T12:00:00"),
-        source="apify",
-        platform="facebook",
-        data_type="post",
+        source=schemas.Source.apify,
+        platform=schemas.Platform.facebook,
+        data_type=schemas.DataType.posts,
     )
 
     pd.testing.assert_frame_equal(processed_df, expected_dataframe)
+    assert processed_df["source"].iloc[0] == "apify"

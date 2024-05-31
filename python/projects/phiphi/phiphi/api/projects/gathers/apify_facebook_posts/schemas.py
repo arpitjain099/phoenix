@@ -1,39 +1,36 @@
 """Schemas for apify facebook post gathers."""
 
-from typing import Annotated
+from typing import Any, Dict, List, Optional
 
 import pydantic
 
 from phiphi.api.projects.gathers import schemas as gather_schemas
+from phiphi.pydantic_types import UrlStr
 
 
 class ApifyFacebookPostGatherBase(gather_schemas.GatherBase):
-    """Gather config schema."""
+    """Input schema for the Apify Facebook posts scraper.
 
-    account_url_list: Annotated[
-        list[str],
-        pydantic.Field(description="The author url list, should be the full url including https"),
-    ]
+    Ref to relevant Apify actor docs: https://apify.com/apify/facebook-posts-scraper/input-schema
+    """
 
-    limit_posts_per_account: Annotated[
-        int,
-        pydantic.Field(
-            default=1000,
-            description="",
-        ),
-    ]
-    only_posts_older_than: Annotated[
-        str,
-        pydantic.Field(
-            description="YYYY-MM-DD format",
-        ),
-    ]
-    only_posts_newer_than: Annotated[
-        str,
-        pydantic.Field(
-            description="YYYY-MM-DD format",
-        ),
-    ]
+    limit_posts_per_account: int = pydantic.Field(
+        25, serialization_alias="resultsLimit", description="Limit results per account"
+    )
+    account_url_list: List[UrlStr] = pydantic.Field(
+        serialization_alias="startUrls",
+        description="List of Facebook page/profile URLs to scrape from",
+    )
+    only_posts_older_than: Optional[str] = pydantic.Field(
+        default=None,
+        serialization_alias="onlyPostsOlderThan",
+        description="Fetch posts only older than this date (YYYY-MM-DD)",
+    )
+    only_posts_newer_than: Optional[str] = pydantic.Field(
+        default=None,
+        serialization_alias="onlyPostsNewerThan",
+        description="Fetch posts only newer than this date (YYYY-MM-DD)",
+    )
 
 
 class ApifyFacebookPostGatherResponse(gather_schemas.GatherResponse, ApifyFacebookPostGatherBase):
@@ -43,6 +40,18 @@ class ApifyFacebookPostGatherResponse(gather_schemas.GatherResponse, ApifyFacebo
     """
 
     model_config = pydantic.ConfigDict(from_attributes=True)
+
+    def serialize_to_apify_input(self) -> Dict[str, Any]:
+        """Serialize the instance to a dictionary suitable for Apify API."""
+        apify_dict = super().serialize_to_apify_input()
+        if "startUrls" in apify_dict:
+            apify_dict["startUrls"] = self.serialize_account_urls(apify_dict["startUrls"])
+        return apify_dict
+
+    @staticmethod
+    def serialize_account_urls(urls: List[str]) -> List[Dict[str, str]]:
+        """Convert a list of plain URLs to the list of dicts required for Apify."""
+        return [{"url": str(url)} for url in urls]
 
 
 class ApifyFacebookPostGatherCreate(gather_schemas.GatherCreate, ApifyFacebookPostGatherBase):

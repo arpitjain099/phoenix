@@ -8,7 +8,11 @@ router = fastapi.APIRouter()
 router.include_router(child_routes.router)
 
 
-@router.get("/projects/{project_id}/gathers/", response_model=list[schemas.GatherResponse])
+@router.get(
+    "/projects/{project_id}/gathers/",
+    response_model=list[schemas.GatherResponse],
+    response_model_by_alias=False,
+)
 def get_gathers(
     session: deps.SessionDep, project_id: int, start: int = 0, end: int = 100
 ) -> list[schemas.GatherResponse]:
@@ -19,6 +23,7 @@ def get_gathers(
 @router.get(
     "/projects/{project_id}/gathers/{gather_id}",
     response_model=schemas.GatherResponse,
+    response_model_by_alias=False,
 )
 def get_gather(
     project_id: int, gather_id: int, session: deps.SessionDep
@@ -33,6 +38,7 @@ def get_gather(
 @router.get(
     "/projects/{project_id}/gathers/{gather_id}/estimate",
     response_model=schemas.GatherEstimate,
+    response_model_by_alias=False,
 )
 def get_gather_estimate(
     project_id: int, gather_id: int, session: deps.SessionDep
