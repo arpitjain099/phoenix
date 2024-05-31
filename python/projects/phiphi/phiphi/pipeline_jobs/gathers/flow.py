@@ -12,18 +12,19 @@ from phiphi.pipeline_jobs.gathers import apify_scrape
 def gather_flow(
     gather_params: gathers.schemas.GatherResponse,
     job_run_id: int,
-    bigquery_dataset: str,
-    bigquery_table: str,
     batch_size: int = 100,
 ) -> None:
     """Flow which gathers data."""
+    bigquery_dataset = constants.BIGQUERY_DATASET_NAME_FOR_PROJECT.format(
+        project_id=gather_params.project_id
+    )
+
     apify_scrape.apify_scrape_and_batch_download_results(
         run_input=gather_params,
         project_id=gather_params.project_id,
         gather_id=gather_params.id,
         job_run_id=job_run_id,
         bigquery_dataset=bigquery_dataset,
-        bigquery_table=bigquery_table,
         batch_size=batch_size,
     )
 

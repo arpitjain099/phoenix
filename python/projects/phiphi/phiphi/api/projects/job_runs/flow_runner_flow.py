@@ -59,8 +59,6 @@ def start_flow_run(
         params = {
             "job_run_id": job_run_id,
             "gather_params": job_params,
-            "bigquery_dataset": "TODO",
-            "bigquery_table": "TODO",
         }
     else:
         raise NotImplementedError(f"Job type {job_type=} not implemented yet.")

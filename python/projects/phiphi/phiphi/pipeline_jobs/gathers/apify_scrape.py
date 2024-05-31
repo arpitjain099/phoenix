@@ -16,11 +16,10 @@ from phiphi.api.projects import gathers
 from phiphi.pipeline_jobs import utils as pipeline_jobs_utils
 from phiphi.pipeline_jobs.gathers import (
     apify_input_schemas,
+    constants,
     project_db_schemas,
 )
-from phiphi.pipeline_jobs.gathers import (
-    utils as gather_utils,
-)
+from phiphi.pipeline_jobs.gathers import utils as gather_utils
 
 input_actor_map = {
     gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse: (
@@ -90,7 +89,7 @@ def apify_scrape_and_batch_download_results(
     gather_id: int,
     job_run_id: int,
     bigquery_dataset: str,
-    bigquery_table: str,
+    bigquery_table: str = constants.GATHER_BATCHES_TABLE_NAME,
     batch_size: int = 100,
 ) -> None:
     """Scrape data using the Apify API and save them to a GCP BigQuery table or Parquet."""
