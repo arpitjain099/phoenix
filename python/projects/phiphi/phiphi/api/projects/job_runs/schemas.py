@@ -20,6 +20,7 @@ class ForeignJobType(str, Enum):
     """The type of job run."""
 
     gather = "gather"
+    tabulate = "tabulate"
 
 
 class JobRunCreate(pydantic.BaseModel):

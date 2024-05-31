@@ -55,11 +55,7 @@ async def create_job_run(
 ) -> schemas.JobRunResponse:
     """Create a Project Job Run.
 
-    Args:
-        project_id: ID of the project.
-        job_run_create: Data to create the job run.
-        deployment_name_prefix: Prefix to add to the deployment name.
-        session: Database session.
+    For tabulate types you must have a foreign_id of 0.
 
     Returns:
         Created Job Run.
@@ -93,7 +89,11 @@ def get_job_run(project_id: int, id: int, session: deps.SessionDep) -> schemas.J
 
 @router.get("/projects/{project_id}/job_runs/", response_model=list[schemas.JobRunResponse])
 def get_job_runs(
-    project_id: int, session: deps.SessionDep, start: int = 0, end: int = 100
+    project_id: int,
+    session: deps.SessionDep,
+    start: int = 0,
+    end: int = 100,
+    foreign_job_type: schemas.ForeignJobType | None = None,
 ) -> list[schemas.JobRunResponse]:
     """Get Project Job Runs."""
-    return crud.get_job_runs(session, project_id, start, end)
+    return crud.get_job_runs(session, project_id, start, end, foreign_job_type)

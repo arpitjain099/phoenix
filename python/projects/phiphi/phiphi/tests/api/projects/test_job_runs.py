@@ -114,7 +114,9 @@ def test_create_guard_for_repeated_job_run(reseed_tables, client: TestClient) ->
 
     response = client.post("/projects/1/job_runs/", json=data)
     assert response.status_code == 400
-    assert response.json() == {"detail": "Gather has an active job run"}
+    assert response.json() == {
+        "detail": "Foreign object has an active job run. Type: ForeignJobType.gather, Id: 1"
+    }
 
 
 def test_create_guard(reseed_tables, client: TestClient) -> None:
@@ -139,21 +141,57 @@ def test_create_guard(reseed_tables, client: TestClient) -> None:
     assert response.json() == {"detail": "Gather not found"}
 
 
+def test_create_guard_tabulate(reseed_tables, client: TestClient) -> None:
+    """Test that if tabulate is not 0."""
+    data = {
+        "foreign_id": 1,
+        "foreign_job_type": "tabulate",
+    }
+
+    # Project is not found
+    response = client.post("/projects/4/job_runs/", json=data)
+    assert response.status_code == 400
+    assert response.json() == {"detail": "Tabulate must have a foreign_id of 0"}
+
+    # Project is found and gather exists but the gather is not in the project
+    data = {
+        "foreign_id": 3,
+        "foreign_job_type": "gather",
+    }
+    response = client.post("/projects/1/job_runs/", json=data)
+    assert response.status_code == 400
+    assert response.json() == {"detail": "Gather not found"}
+
+
 def test_get_job_runs(client: TestClient, reseed_tables) -> None:
     """Test getting job runs."""
     response = client.get("/projects/1/job_runs/")
     assert response.status_code == 200
     job_runs = response.json()
-    assert len(job_runs) == 2
+    assert len(job_runs) == 4
     # Assert desc id
-    assert job_runs[0]["id"] == 2
-    assert job_runs[1]["id"] == 1
+    assert job_runs[1]["id"] == 3
+    assert job_runs[2]["id"] == 2
+    assert job_runs[3]["id"] == 1
 
     response = client.get("/projects/2/job_runs/")
     assert response.status_code == 200
     job_runs = response.json()
     assert len(job_runs) == 1
-    assert job_runs[0]["id"] == 3
+    assert job_runs[0]["id"] == 5
+
+
+def test_get_job_runs_by_type(client: TestClient, reseed_tables) -> None:
+    """Test getting job runs."""
+    response = client.get("/projects/1/job_runs/?foreign_job_type=gather")
+    assert response.status_code == 200
+    job_runs = response.json()
+    assert len(job_runs) == 3
+    # Assert desc id
+    assert job_runs[1]["id"] == 2
+    assert job_runs[1]["foreign_job_type"] == "gather"
+    assert job_runs[2]["id"] == 1
+    assert job_runs[2]["foreign_job_type"] == "gather"
 
 
 def test_get_job_runs_pagination(client: TestClient, reseed_tables) -> None:

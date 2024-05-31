@@ -18,12 +18,6 @@ def check_valid_gather(db: Session, project_id: int, gather_id: int) -> bool:
     if gather is None:
         raise exceptions.GatherNotFound()
 
-    if not gather.latest_job_run:
-        return True
-
-    if not gather.latest_job_run.completed_at:
-        raise exceptions.GatherHasActiveJobRun()
-
     return True
 
 
@@ -33,8 +27,13 @@ def invalid_foreign_object_guard(
     """Guard to check if the foreign object exists."""
     if foreign_job_type == schemas.ForeignJobType.gather:
         check_valid_gather(db, project_id, foreign_id)
-    else:
-        raise ValueError("Invalid foreign job type")
+
+    if foreign_job_type == schemas.ForeignJobType.tabulate and foreign_id != 0:
+        raise exceptions.HttpException400("Tabulate must have a foreign_id of 0")
+
+    latest_job_run = get_latest_job_run(db, project_id, foreign_id, foreign_job_type)
+    if latest_job_run and not latest_job_run.completed_at:
+        raise exceptions.ForeignObjectHasActiveJobRun(foreign_id, str(foreign_job_type))
 
 
 def create_job_run(
@@ -87,14 +86,33 @@ def get_job_run(db: Session, project_id: int, job_run_id: int) -> schemas.JobRun
 
 
 def get_job_runs(
-    db: Session, project_id: int, start: int = 0, end: int = 100
+    db: Session,
+    project_id: int,
+    start: int = 0,
+    end: int = 100,
+    foreign_job_type: schemas.ForeignJobType | None = None,
 ) -> list[schemas.JobRunResponse]:
     """Get job runs."""
-    db_job_runs = (
-        db.query(models.JobRuns)
-        .filter(models.JobRuns.project_id == project_id)
-        .order_by(models.JobRuns.id.desc())
-        .slice(start, end)
-        .all()
-    )
+    query = db.query(models.JobRuns).filter(models.JobRuns.project_id == project_id)
+    if foreign_job_type:
+        query = query.filter(models.JobRuns.foreign_job_type == foreign_job_type)
+    db_job_runs = query.order_by(models.JobRuns.id.desc()).slice(start, end).all()
     return [schemas.JobRunResponse.model_validate(db_job_run) for db_job_run in db_job_runs]
+
+
+def get_latest_job_run(
+    db: Session,
+    project_id: int,
+    foreign_id: int | None = None,
+    foreign_job_type: schemas.ForeignJobType | None = None,
+) -> schemas.JobRunResponse | None:
+    """Get the latest job run."""
+    query = db.query(models.JobRuns).filter(models.JobRuns.project_id == project_id)
+    if foreign_id:
+        query = query.filter(models.JobRuns.foreign_id == foreign_id)
+    if foreign_job_type:
+        query = query.filter(models.JobRuns.foreign_job_type == foreign_job_type)
+    db_job_run = query.order_by(models.JobRuns.id.desc()).first()
+    if db_job_run is None:
+        return None
+    return schemas.JobRunResponse.model_validate(db_job_run)

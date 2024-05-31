@@ -11,7 +11,7 @@ def test_get_gather_crud(client: TestClient, reseed_tables) -> None:
     assert gather.id == 1
     assert gather.project_id == 1
     assert gather.latest_job_run
-    assert gather.latest_job_run.id == 1
+    assert gather.latest_job_run.id == 4
     assert gather.latest_job_run.status == "awaiting_start"
 
 
@@ -23,7 +23,7 @@ def test_get_gather(client: TestClient, reseed_tables) -> None:
 
     assert gather_1["id"] == 1
     assert gather_1["project_id"] == 1
-    assert gather_1["latest_job_run"]["id"] == 1
+    assert gather_1["latest_job_run"]["id"] == 4
     assert gather_1["latest_job_run"]["status"] == "awaiting_start"
 
     response_2 = client.get("/projects/2/gathers/3")

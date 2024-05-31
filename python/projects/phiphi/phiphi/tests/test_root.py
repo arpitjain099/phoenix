@@ -1,4 +1,7 @@
-"""Test root hello world."""
+"""Test root functionality.
+
+This module tests the most basic root functionality of the app.
+"""
 import sqlalchemy
 from fastapi.testclient import TestClient
 
