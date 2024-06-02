@@ -20,3 +20,7 @@ def test_bq_pipeline_integration(session_context, reseed_tables):
     dataset = projects.init_project_db.fn(project_id=1, namespace_prefix=test_prefix)
     client = bigquery.Client()
     assert client.get_dataset(dataset)
+
+    # Check that will not fail if the dataset already exists.
+    dataset = projects.init_project_db.fn(project_id=1, namespace_prefix=test_prefix)
+    assert client.get_dataset(dataset)
