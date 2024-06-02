@@ -122,18 +122,7 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 								<Loader size="sm" />
 							) : (
 								<>
-									{(status === "in_queue" || status === "processing") && (
-										<Tooltip label="Refresh">
-											<Button
-												p={0}
-												variant="subtle"
-												onClick={() => handleGatherRefresh(row.original)}
-											>
-												<IconRefresh size={20} color="blue" />
-											</Button>
-										</Tooltip>
-									)}
-									{(status === "awaiting_start" || !status) && (
+									{!status && (
 										<Tooltip label="Start">
 											<Button
 												p={0}
@@ -145,6 +134,19 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 												}}
 											>
 												<IconPlayerPlay size={20} color="green" />
+											</Button>
+										</Tooltip>
+									)}
+									{["in_queue", "processing", "awaiting_start"].includes(
+										status
+									) && (
+										<Tooltip label="Refresh">
+											<Button
+												p={0}
+												variant="subtle"
+												onClick={() => handleGatherRefresh(row.original)}
+											>
+												<IconRefresh size={20} color="blue" />
 											</Button>
 										</Tooltip>
 									)}
