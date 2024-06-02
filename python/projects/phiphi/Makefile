@@ -37,8 +37,9 @@ test:
 	docker compose run api make test path=$(default_path)
 
 test_integration:
-	@echo "Running `tests/integration` in ci environment"
-	docker compose run -e PYTEST_ARGS_OVERRIDE="tests/integration/" api make test path=$(default_path)
+	@echo "Running `tests/integration` in dev environment"
+	@echo "Currently dev environment is the only environment with gcloud credentials setup."
+	$(DEV_COMPOSE_COMMAND) run -e PYTEST_ARGS_OVERRIDE="tests/integration/" api make test path=$(default_path)
 
 format:
 	@echo "Running `format` in ci environment"
