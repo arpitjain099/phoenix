@@ -61,3 +61,16 @@ def test_get_project_namespace():
 def test_get_project_namespace_prefix():
     """Test get project namespace."""
     assert utils.get_project_namespace(1, "test_") == "test_project_id1"
+
+
+@pytest.mark.parametrize(
+    "project_id, namespace_prefix",
+    [
+        (-1, ""),
+        (1, "test-"),
+    ],
+)
+def test_get_project_namespace_invalid(project_id, namespace_prefix):
+    """Test get project namespace."""
+    with pytest.raises(ValueError):
+        utils.get_project_namespace(project_id, namespace_prefix)

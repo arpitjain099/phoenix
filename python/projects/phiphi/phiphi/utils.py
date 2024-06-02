@@ -1,4 +1,6 @@
 """Utils for phiphi."""
+import re
+
 from phiphi import config
 
 PROJECT_NAMESPACE_STRING = "project_id{project_id}"
@@ -19,9 +21,36 @@ def get_project_namespace(project_id: int, namespace_prefix: str = "") -> str:
     The project name is a unique identifier for the project.
     It can be used for  naming resources like bigquery datasets.
 
+    The namespace must be a valid BigQuery dataset name. As such project_id and namespace_prefix
+    must follow the constraints for BigQuery dataset names:
+    https://cloud.google.com/bigquery/docs/datasets#dataset-naming
+
     Args:
         project_id (int): The project id.
         namespace_prefix (str, optional): The namespace prefix. Defaults to "".
             Used for testing.
     """
-    return namespace_prefix + PROJECT_NAMESPACE_STRING.format(project_id=project_id)
+    namespace = namespace_prefix + PROJECT_NAMESPACE_STRING.format(project_id=project_id)
+    if not is_valid_bigquery_dataset_name(namespace):
+        raise ValueError(f"Invalid project namespace: {namespace}")
+    return namespace
+
+
+def is_valid_bigquery_dataset_name(dataset_name: str) -> bool:
+    """Check if the provided string is a valid BigQuery dataset name.
+
+    Args:
+        dataset_name (str): The dataset name to validate.
+
+    Returns:
+        bool: True if valid, False otherwise.
+    """
+    # Check length constraint
+    if len(dataset_name) > 1024:
+        return False
+
+    # Check allowed characters
+    if not re.match(r"^[a-zA-Z0-9_]+$", dataset_name):
+        return False
+
+    return True
