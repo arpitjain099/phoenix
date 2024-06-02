@@ -53,6 +53,6 @@ def test_get_apify_keys_not_found_env(patch_settings):
         utils.get_apify_api_key()
 
 
-def test_get_bigquery_dataset_name():
-    """Test get bigquery dataset name."""
-    assert utils.get_bigquery_dataset_name(123) == "project_id123"
+def test_get_project_namespace():
+    """Test get project namespace."""
+    assert utils.get_project_namespace(1) == "project_id1"

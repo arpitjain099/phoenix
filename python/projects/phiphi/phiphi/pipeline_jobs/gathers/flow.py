@@ -15,9 +15,7 @@ def gather_flow(
     batch_size: int = 100,
 ) -> None:
     """Flow which gathers data."""
-    bigquery_dataset = utils.get_bigquery_dataset_name(
-        project_id=gather.project_id
-    )
+    bigquery_dataset = utils.get_project_namespace(project_id=gather.project_id)
 
     apify_scrape.apify_scrape_and_batch_download_results(
         gather=gather,
