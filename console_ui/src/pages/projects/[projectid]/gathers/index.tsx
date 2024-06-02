@@ -24,8 +24,13 @@ import { IconPlayerPlay, IconRefresh, IconTrash } from "@tabler/icons";
 import GatherRunModal from "@components/modals/gather-run";
 import { jobRunService } from "src/services";
 import { GatherResponse } from "src/interfaces/gather";
+import { GetServerSideProps } from "next";
 
-export const GatherList: React.FC<IResourceComponentsProps> = () => {
+export const getServerSideProps: GetServerSideProps<{}> = async (_context) => ({
+	props: {},
+});
+
+const GatherList: React.FC<IResourceComponentsProps> = () => {
 	const translate = useTranslate();
 	const router = useRouter();
 	const { projectid } = router.query || {};
@@ -38,6 +43,7 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 
 	const breadcrumbs = [
 		{ title: translate("projects.projects"), href: "/projects" },
+		{ title: projectid as string, href: `/projects/show/${projectid}` },
 		{ title: translate("gathers.gathers"), href: "#" },
 	];
 

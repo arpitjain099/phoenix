@@ -19,11 +19,16 @@ import TableComponent from "@components/table";
 import { useRouter } from "next/router";
 import BreadcrumbsComponent from "@components/breadcrumbs";
 import { statusTextStyle } from "src/utils";
-import { IconRefresh, IconTrash } from "@tabler/icons";
+import { IconRefresh } from "@tabler/icons";
 import { jobRunService } from "src/services";
 import { JobRunResponse } from "src/interfaces/job-run";
+import { GetServerSideProps } from "next";
 
-export const TabulateList: React.FC<IResourceComponentsProps> = () => {
+export const getServerSideProps: GetServerSideProps<{}> = async (_context) => ({
+	props: {},
+});
+
+const TabulateList: React.FC<IResourceComponentsProps> = () => {
 	const translate = useTranslate();
 	const router = useRouter();
 	const { projectid } = router.query || {};
@@ -35,6 +40,7 @@ export const TabulateList: React.FC<IResourceComponentsProps> = () => {
 
 	const breadcrumbs = [
 		{ title: translate("projects.projects"), href: "/projects" },
+		{ title: projectid as string, href: `/projects/show/${projectid}` },
 		{ title: translate("tabulate.tabulate"), href: "#" },
 	];
 
@@ -155,8 +161,8 @@ export const TabulateList: React.FC<IResourceComponentsProps> = () => {
 				id: 0,
 				type: "tabulate",
 			})
-			.then((res) => {
-				handleRefresh(res.data);
+			.then(() => {
+				apiResponse.refetch();
 				setLoading(false);
 			})
 			.catch((err) => {
