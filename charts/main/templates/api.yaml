@@ -43,6 +43,8 @@ spec:
           # For instances you have to do `--forwarded-allow-ips=*` with no quotes (double or single) around the *
           - name: FORWARDED_ALLOW_IPS
             value: {{ .Values.api.forwarded_allow_ips | quote}}
+          - name: USE_MOCK_APIFY
+            value: {{ .Values.api.use_mock_apify | quote }}
           - name: INCLUDE_INSECURE_AUTH
           {{- if .Values.use_local_insecure_auth }}
             value: "true"
