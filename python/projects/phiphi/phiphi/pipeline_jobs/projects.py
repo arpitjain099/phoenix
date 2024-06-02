@@ -8,6 +8,7 @@ from phiphi import utils
 @prefect.task
 def init_project_db(
     project_id: int,
+    namespace_prefix: str = "",
 ) -> str:
     """Initialize the project database.
 
@@ -16,11 +17,13 @@ def init_project_db(
 
     Args:
         project_id (int): The project id.
+        namespace_prefix (str, optional): The namespace prefix. Defaults to "".
+            Used for testing.
 
     Returns:
         str: The project namespace.
     """
     client = bigquery.Client()
-    project_namespace = utils.get_project_namespace(project_id)
+    project_namespace = utils.get_project_namespace(project_id, namespace_prefix)
     client.create_dataset(dataset=project_namespace, exists_ok=True)
     return project_namespace

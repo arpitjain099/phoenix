@@ -56,3 +56,8 @@ def test_get_apify_keys_not_found_env(patch_settings):
 def test_get_project_namespace():
     """Test get project namespace."""
     assert utils.get_project_namespace(1) == "project_id1"
+
+
+def test_get_project_namespace_prefix():
+    """Test get project namespace."""
+    assert utils.get_project_namespace(1, "test_") == "test_project_id1"

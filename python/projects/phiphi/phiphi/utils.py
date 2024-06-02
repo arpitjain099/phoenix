@@ -13,10 +13,15 @@ def get_apify_api_key(environment_slug: str | None = None) -> str:
     return config.settings.APIFY_API_KEYS[environment_slug]
 
 
-def get_project_namespace(project_id: int) -> str:
+def get_project_namespace(project_id: int, namespace_prefix: str = "") -> str:
     """Get the project namespace.
 
     The project name is a unique identifier for the project.
     It can be used for  naming resources like bigquery datasets.
+
+    Args:
+        project_id (int): The project id.
+        namespace_prefix (str, optional): The namespace prefix. Defaults to "".
+            Used for testing.
     """
-    return PROJECT_NAMESPACE_STRING.format(project_id=project_id)
+    return namespace_prefix + PROJECT_NAMESPACE_STRING.format(project_id=project_id)
