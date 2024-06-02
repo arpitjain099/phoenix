@@ -3,7 +3,7 @@ from typing import Coroutine
 
 import prefect
 
-from phiphi import constants
+from phiphi import constants, utils
 from phiphi.api.projects import gathers
 from phiphi.pipeline_jobs.gathers import apify_scrape
 
@@ -15,7 +15,7 @@ def gather_flow(
     batch_size: int = 100,
 ) -> None:
     """Flow which gathers data."""
-    bigquery_dataset = constants.BIGQUERY_DATASET_NAME_FOR_PROJECT.format(
+    bigquery_dataset = utils.get_bigquery_dataset_name(
         project_id=gather.project_id
     )
 
