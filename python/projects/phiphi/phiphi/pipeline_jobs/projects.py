@@ -27,3 +27,20 @@ def init_project_db(
     project_namespace = utils.get_project_namespace(project_id, namespace_prefix)
     client.create_dataset(dataset=project_namespace, exists_ok=True)
     return project_namespace
+
+
+@prefect.task
+def delete_project_db(
+    project_id: int,
+    namespace_prefix: str = "",
+) -> None:
+    """Delete the project database.
+
+    Args:
+        project_id (int): The project id.
+        namespace_prefix (str, optional): The namespace prefix. Defaults to "".
+            Used for testing.
+    """
+    client = bigquery.Client()
+    project_namespace = utils.get_project_namespace(project_id, namespace_prefix)
+    client.delete_dataset(dataset=project_namespace, delete_contents=True, not_found_ok=True)
