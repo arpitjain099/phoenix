@@ -1,5 +1,6 @@
 """Utility functions for data processing and uploading."""
 import os
+import re
 
 import pandas as pd
 
@@ -31,3 +32,45 @@ def write_data(
         df.to_parquet(parquet_file_path, index=False)
     else:
         df.to_gbq(destination_table=f"{dataset}.{table}", if_exists="append")
+
+
+def read_data(query: str, dataset: str, table: str) -> pd.DataFrame:
+    """Read data from BigQuery or a local Parquet file based on configuration.
+
+    Args:
+        query (str): The SQL query to run when reading from BigQuery.
+        dataset (str): BigQuery dataset name.
+        table (str): BigQuery table name.
+
+    Returns:
+        pd.DataFrame: The resulting DataFrame from the query.
+    """
+    if config.settings.USE_MOCK_BQ:
+        parquet_file_path = os.path.join(
+            config.settings.MOCK_BQ_ROOT_DIR, dataset, table + ".parquet"
+        )
+        if os.path.exists(parquet_file_path):
+            full_table_df = pd.read_parquet(parquet_file_path)
+            # Simulate SQL query using pandas query
+            pd_query = translate_bq_to_pandas_query(query)
+            return full_table_df.query(pd_query)
+        else:
+            raise FileNotFoundError(f"Parquet file not found at {parquet_file_path}")
+    else:
+        return pd.read_gbq(query)
+
+
+def translate_bq_to_pandas_query(bq_query: str) -> str:
+    """Translate a simple BigQuery query to a Pandas DataFrame query."""
+    # Extract the WHERE clause
+    match = re.search(r"WHERE (.+)", bq_query, re.IGNORECASE)
+    if not match:
+        raise ValueError("Only simple WHERE clauses are supported.")
+    where_clause = match.group(1)
+    # Replace BigQuery operators with Pandas equivalents
+    pandas_query = where_clause.replace(" AND ", " and ").replace(" OR ", " or ")
+    # Change "=" to "=="
+    pandas_query = re.sub(r"(?<!=)=(?!=)", "==", pandas_query)
+    # Remove backticks if present
+    pandas_query = pandas_query.replace("`", "")
+    return pandas_query
