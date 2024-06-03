@@ -15,21 +15,18 @@ from phiphi import config, utils
 from phiphi.api.projects import gathers
 from phiphi.pipeline_jobs import utils as pipeline_jobs_utils
 from phiphi.pipeline_jobs.gathers import (
-    apify_input_schemas,
     constants,
     project_db_schemas,
 )
 from phiphi.pipeline_jobs.gathers import utils as gather_utils
 
-gather_apify_actor_map = {
+gather_apify_actor_map: dict[type[gathers.schemas.GatherResponse], str] = {
     gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse: (
         "apify/facebook-posts-scraper"
     ),
     gathers.apify_facebook_comments.schemas.ApifyFacebookCommentGatherResponse: (
         "apify/facebook-comments-scraper"
     ),
-    apify_input_schemas.ApifyTiktokPostsInput: "clockworks/tiktok-scraper",
-    apify_input_schemas.ApifyTiktokCommentsInput: "clockworks/tiktok-comments-scraper",
 }
 
 
