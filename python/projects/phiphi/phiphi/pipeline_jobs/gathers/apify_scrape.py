@@ -21,7 +21,7 @@ from phiphi.pipeline_jobs.gathers import (
 )
 from phiphi.pipeline_jobs.gathers import utils as gather_utils
 
-input_actor_map = {
+gather_apify_actor_map = {
     gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse: (
         "apify/facebook-posts-scraper"
     ),
@@ -36,12 +36,12 @@ input_actor_map = {
 def apify_scrape(
     apify_token: str,
     actor_name: str,
-    run_input: gathers.schemas.GatherResponse,
+    gather: gathers.schemas.GatherResponse,
 ) -> Tuple[Iterator[Dict], apify_client.clients.DatasetClient]:
     """Scrape data using the Apify API and return an iterator."""
     client = apify_client.ApifyClient(apify_token)
     # Run the Apify actor
-    run_info = client.actor(actor_name).call(run_input=run_input.serialize_to_apify_input())
+    run_info = client.actor(actor_name).call(run_input=gather.serialize_to_apify_input())
     assert run_info is not None
     # Access the dataset client associated with the actor's results
     dataset_client = client.dataset(run_info["defaultDatasetId"])
@@ -51,14 +51,14 @@ def apify_scrape(
 def mock_apify_scrape(
     apify_token: str,
     actor_name: str,
-    run_input: gathers.schemas.GatherResponse,
+    gather: gathers.schemas.GatherResponse,
 ) -> Tuple[Iterator[Dict], None]:
     """Read mock scraping data and return an iterator."""
     return iter(
         gather_utils.load_sample_raw_data(
             source=gathers.schemas.Source.apify,
-            platform=run_input.platform,
-            data_type=run_input.data_type,
+            platform=gather.platform,
+            data_type=gather.data_type,
         )
     ), None
 
@@ -84,9 +84,7 @@ def update_and_write_batch(
 
 @prefect.task
 def apify_scrape_and_batch_download_results(
-    run_input: gathers.schemas.GatherResponse,
-    project_id: int,
-    gather_id: int,
+    gather: gathers.schemas.GatherResponse,
     job_run_id: int,
     bigquery_dataset: str,
     bigquery_table: str = constants.GATHER_BATCHES_TABLE_NAME,
@@ -96,28 +94,26 @@ def apify_scrape_and_batch_download_results(
     prefect_logger = prefect.get_run_logger()
 
     apify_token = utils.get_apify_api_key()
-    apify_actor_name = input_actor_map[type(run_input)]
+    apify_actor_name = gather_apify_actor_map[type(gather)]
 
     if config.settings.USE_MOCK_APIFY:
         prefect_logger.info("Reading mock data.")
-        dataset_iterator, dataset_client = mock_apify_scrape(
-            apify_token, apify_actor_name, run_input
-        )
+        dataset_iterator, dataset_client = mock_apify_scrape(apify_token, apify_actor_name, gather)
     else:
         prefect_logger.info("Making Apify call.")
-        dataset_iterator, dataset_client = apify_scrape(apify_token, apify_actor_name, run_input)
+        dataset_iterator, dataset_client = apify_scrape(apify_token, apify_actor_name, gather)
 
     # Initialize batch tracking
     batch_num = 0
     batch_items: List[Dict] = []
 
     static_data = {
-        "project_id": project_id,
-        "gather_id": gather_id,
+        "project_id": gather.project_id,
+        "gather_id": gather.id,
         "job_run_id": job_run_id,
         "source": "apify",
-        "platform": run_input.platform,
-        "data_type": run_input.data_type,
+        "platform": gather.platform,
+        "data_type": gather.data_type,
         "batch_id": 0,  # This will be updated for each batch
         "batch_created_at": pd.Timestamp.now(),  # This will be updated for each batch
         "json_data": "",  # This will be updated for each batch
