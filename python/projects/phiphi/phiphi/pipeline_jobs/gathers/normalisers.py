@@ -6,7 +6,7 @@ from typing import Callable, Dict, List, Union
 
 import pandas as pd
 
-from phiphi.api.projects.gathers import schemas as gather_schemas
+from phiphi.api.projects import gathers
 from phiphi.pipeline_jobs.gathers import project_db_schemas
 
 
@@ -35,26 +35,22 @@ def normalise_single_facebook_posts_json(json_blob: Dict) -> Dict:
 def normalise_batch(
     normaliser: Callable[[Dict], Dict],
     batch_json: List[Dict],
-    project_id: int,
-    gather_id: int,
+    gather: gathers.schemas.GatherResponse,
     gather_batch_id: int,
     gathered_at: datetime,
-    source: gather_schemas.Source,
-    platform: gather_schemas.Platform,
-    data_type: gather_schemas.DataType,
 ) -> pd.DataFrame:
     """Process a list of JSON blobs and normalize them into a DataFrame."""
     normalized_records = [normaliser(blob) for blob in batch_json]
     messages_df = pd.DataFrame(normalized_records)
 
     # Add constant columns to the DataFrame
-    messages_df["project_id"] = project_id
-    messages_df["gather_id"] = gather_id
+    messages_df["project_id"] = gather.project_id
+    messages_df["gather_id"] = gather.id
     messages_df["gather_batch_id"] = gather_batch_id
     messages_df["gathered_at"] = gathered_at
-    messages_df["source"] = source
-    messages_df["platform"] = platform
-    messages_df["data_type"] = data_type
+    messages_df["source"] = gather.source
+    messages_df["platform"] = gather.platform
+    messages_df["data_type"] = gather.data_type
     messages_df["phoenix_processed_at"] = datetime.now()
 
     # Validate the DataFrame using the schema

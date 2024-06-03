@@ -98,7 +98,7 @@ def expected_dataframe():
 
     df = pd.DataFrame(data)  # noqa: PD901
     df["project_id"] = 1
-    df["gather_id"] = 2
+    df["gather_id"] = 1
     df["gather_batch_id"] = 3
     df["gathered_at"] = datetime.fromisoformat("2024-04-01T12:00:00")
     df["source"] = schemas.Source.apify
@@ -110,7 +110,7 @@ def expected_dataframe():
 
 
 @pytest.mark.freeze_time(datetime.fromisoformat("2024-04-02T12:10:59"))
-def test_normalise_batch(expected_dataframe):
+def test_normalise_batch(expected_dataframe, facebook_posts_gather_fixture):
     """Test normalise_batch function."""
     batch_json = utils.load_sample_raw_data(
         source=schemas.Source.apify,
@@ -121,13 +121,9 @@ def test_normalise_batch(expected_dataframe):
     processed_df = normalisers.normalise_batch(
         normaliser=normalisers.normalise_single_facebook_posts_json,
         batch_json=batch_json,
-        project_id=1,
-        gather_id=2,
+        gather=facebook_posts_gather_fixture,
         gather_batch_id=3,
         gathered_at=datetime.fromisoformat("2024-04-01T12:00:00"),
-        source=schemas.Source.apify,
-        platform=schemas.Platform.facebook,
-        data_type=schemas.DataType.posts,
     )
 
     pd.testing.assert_frame_equal(processed_df, expected_dataframe)
