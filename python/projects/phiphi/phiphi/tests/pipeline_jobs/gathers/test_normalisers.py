@@ -3,9 +3,11 @@ from datetime import datetime
 
 import pandas as pd
 import pytest
+from prefect.logging import disable_run_logger as disable_prefect_run_logger
 
+from phiphi import config
 from phiphi.api.projects.gathers import schemas
-from phiphi.pipeline_jobs.gathers import normalisers, utils
+from phiphi.pipeline_jobs.gathers import apify_scrape, normalisers, utils
 
 
 @pytest.fixture
@@ -126,5 +128,54 @@ def test_normalise_batch(expected_dataframe, facebook_posts_gather_fixture):
         gathered_at=datetime.fromisoformat("2024-04-01T12:00:00"),
     )
 
+    pd.testing.assert_frame_equal(processed_df, expected_dataframe)
+    assert processed_df["source"].iloc[0] == "apify"
+
+
+@pytest.mark.patch_settings(
+    {
+        "USE_MOCK_APIFY": True,
+        "USE_MOCK_BQ": True,
+        "APIFY_API_KEYS": {"main": "dummy_key"},
+    }
+)
+def test_normalise_batches(
+    tmpdir, patch_settings, mocker, facebook_posts_gather_fixture, expected_dataframe
+):
+    """Test normalise_batches function."""
+    # Set up mock BigQuery root directory
+    mocker.patch.object(config.settings, "MOCK_BQ_ROOT_DIR", str(tmpdir))
+
+    # First, run the scrape and batch download results function
+    with disable_prefect_run_logger():
+        apify_scrape.apify_scrape_and_batch_download_results.fn(
+            gather=facebook_posts_gather_fixture,
+            job_run_id=1,
+            batch_size=3,
+            bigquery_dataset="test_dataset",
+            bigquery_table="gather_batches",
+        )
+
+    # Check that the parquet file was written
+    parquet_file_path = tmpdir.join("test_dataset", "gather_batches.parquet")
+    assert parquet_file_path.check()
+
+    # Now, run the normalise_batches function
+    with disable_prefect_run_logger():
+        normalisers.normalise_batches.fn(
+            gather=facebook_posts_gather_fixture,
+            batch_size=3,
+            bigquery_dataset="test_dataset",
+        )
+
+    # Check that the normalized data was written to the correct Parquet file
+    parquet_file_path = tmpdir.join("test_dataset", "generalised_messages.parquet")
+    assert parquet_file_path.check()
+
+    # Alter expected DataFrame to match that now using multiple batches
+    expected_dataframe["gather_batch_id"] = [0, 0, 0, 1, 1, 1, 2, 2]
+
+    # Load the parquet file and verify its contents
+    processed_df = pd.read_parquet(parquet_file_path)
     pd.testing.assert_frame_equal(processed_df, expected_dataframe)
     assert processed_df["source"].iloc[0] == "apify"

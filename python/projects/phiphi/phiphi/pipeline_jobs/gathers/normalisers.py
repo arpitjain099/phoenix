@@ -1,13 +1,16 @@
 """Functions which take an Apify json blob and normalise it into a standard format."""
 import hashlib
+import json
 import uuid
 from datetime import datetime
 from typing import Callable, Dict, List, Union
 
 import pandas as pd
+import prefect
 
 from phiphi.api.projects import gathers
-from phiphi.pipeline_jobs.gathers import project_db_schemas
+from phiphi.pipeline_jobs import utils
+from phiphi.pipeline_jobs.gathers import constants, project_db_schemas
 
 
 def anonymize(input_value: Union[str, int]) -> str:
@@ -57,3 +60,50 @@ def normalise_batch(
     project_db_schemas.generalised_messages_schema.validate(messages_df)
 
     return messages_df
+
+
+gather_normalisation_map: Dict[type[gathers.schemas.GatherResponse], Callable[[Dict], Dict]] = {
+    gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse: (
+        normalise_single_facebook_posts_json
+    ),
+    # Add other gather types and their corresponding normalization functions here
+}
+
+
+@prefect.task
+def normalise_batches(
+    gather: gathers.schemas.GatherResponse,
+    batch_size: int,
+    bigquery_dataset: str,
+) -> None:
+    """Normalize batches and write to a BigQuery table."""
+    prefect_logger = prefect.get_run_logger()
+    norm_func = gather_normalisation_map[type(gather)]
+
+    query = f"""
+        SELECT * FROM {bigquery_dataset}.{constants.GATHER_BATCHES_TABLE_NAME}
+        WHERE gather_id = {gather.id}
+    """
+    batches = utils.read_data(
+        query, dataset=bigquery_dataset, table=constants.GATHER_BATCHES_TABLE_NAME
+    )
+    project_db_schemas.gather_batches_schema.validate(batches)
+
+    for _, batch in batches.iterrows():
+        prefect_logger.info(f"Normalizing batch {batch.batch_id}")
+
+        batch_json = json.loads(batch.json_data)
+        normalized_df = normalise_batch(
+            normaliser=norm_func,
+            batch_json=batch_json,
+            gather=gather,
+            gather_batch_id=batch.batch_id,
+            gathered_at=batch.batch_created_at,
+        )
+
+        utils.write_data(
+            df=normalized_df,
+            dataset=bigquery_dataset,
+            table=constants.GENERALISED_MESSAGES_TABLE_NAME,
+        )
+        prefect_logger.info(f"Batch {batch.batch_id} normalized and written.")
