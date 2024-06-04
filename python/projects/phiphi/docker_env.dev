@@ -1,3 +1,5 @@
 USE_COOKIE_AUTH = "true"
 COOKIE_AUTH_NAME = "phiphi-user-email"
 CORS_ORIGINS="http://localhost:3000"
+APIFY_API_KEYS='{"main":"dummy_key"}'
+USE_MOCK_APIFY="true"

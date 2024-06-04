@@ -19,7 +19,6 @@ services:
       # /app/.prefect/config
       PREFECT_API_KEY:
       PREFECT_API_URL:
-      APIFY_API_KEYS: ${APIFY_API_KEYS:-{}}
       CLOUDSDK_CONFIG: /gcp/config
       GOOGLE_APPLICATION_CREDENTIALS: /gcp/config/application_default_credentials.json
       # Be careful with the GOOGLE_CLOUD_PROJECT as resources in this project will be created and used.
