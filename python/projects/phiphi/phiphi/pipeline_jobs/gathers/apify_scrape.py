@@ -5,6 +5,7 @@ Single flow that all Apify scrapers use.
 Includes switch for using mock data read directly from file for testing purposes.
 """
 import json
+from datetime import datetime
 from typing import Dict, Iterator, List, Tuple
 
 import apify_client
@@ -67,10 +68,10 @@ def update_and_write_batch(
     bigquery_dataset: str,
     bigquery_table: str,
 ) -> None:
-    """Update the batch_created_at and json_data fields and write."""
+    """Update the gathered_at and json_data fields and write."""
     # Update the specific columns
     gather_batch_df.loc[0, "batch_id"] = batch_id
-    gather_batch_df.loc[0, "batch_created_at"] = pd.Timestamp.now()
+    gather_batch_df.loc[0, "gathered_at"] = datetime.utcnow()
     gather_batch_df.loc[0, "json_data"] = json.dumps(batch_items)
 
     # Validate the DataFrame against the Pandera schema
@@ -112,13 +113,16 @@ def apify_scrape_and_batch_download_results(
         "platform": gather.platform,
         "data_type": gather.data_type,
         "batch_id": 0,  # This will be updated for each batch
-        "batch_created_at": pd.Timestamp.now(),  # This will be updated for each batch
+        "gathered_at": datetime.utcnow(),  # This will be updated for each batch
         "json_data": "",  # This will be updated for each batch
         "last_processed_at": pd.NaT,  # Use pd.NaT for missing datetime values
     }
 
     gather_batch_df = pd.DataFrame([static_data])
-    project_db_schemas.gather_batches_schema.validate(gather_batch_df)
+    gather_batch_df["last_processed_at"] = gather_batch_df["last_processed_at"].dt.tz_localize(
+        "UTC"
+    )
+    validated_gather_batch_df = project_db_schemas.gather_batches_schema.validate(gather_batch_df)
 
     # Iterate over dataset items and insert into BigQuery or Parquet in batches
     for item in dataset_iterator:
@@ -130,7 +134,7 @@ def apify_scrape_and_batch_download_results(
             update_and_write_batch(
                 batch_num,
                 batch_items,
-                gather_batch_df,
+                validated_gather_batch_df,
                 bigquery_dataset,
                 bigquery_table,
             )
@@ -142,7 +146,7 @@ def apify_scrape_and_batch_download_results(
         update_and_write_batch(
             batch_num,
             batch_items,
-            gather_batch_df,
+            validated_gather_batch_df,
             bigquery_dataset,
             bigquery_table,
         )

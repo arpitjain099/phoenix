@@ -54,12 +54,12 @@ def normalise_batch(
     messages_df["source"] = gather.source
     messages_df["platform"] = gather.platform
     messages_df["data_type"] = gather.data_type
-    messages_df["phoenix_processed_at"] = datetime.now()
+    messages_df["phoenix_processed_at"] = datetime.utcnow()
 
     # Validate the DataFrame using the schema
-    project_db_schemas.generalised_messages_schema.validate(messages_df)
+    validated_df = project_db_schemas.generalised_messages_schema.validate(messages_df)
 
-    return messages_df
+    return validated_df
 
 
 gather_normalisation_map: Dict[type[gathers.schemas.GatherResponse], Callable[[Dict], Dict]] = {
@@ -84,12 +84,12 @@ def normalise_batches(
         SELECT * FROM {bigquery_dataset}.{constants.GATHER_BATCHES_TABLE_NAME}
         WHERE gather_id = {gather.id}
     """
-    batches = utils.read_data(
+    batches_df = utils.read_data(
         query, dataset=bigquery_dataset, table=constants.GATHER_BATCHES_TABLE_NAME
     )
-    project_db_schemas.gather_batches_schema.validate(batches)
+    validated_batches_df = project_db_schemas.gather_batches_schema.validate(batches_df)
 
-    for _, batch in batches.iterrows():
+    for _, batch in validated_batches_df.iterrows():
         prefect_logger.info(f"Normalizing batch {batch.batch_id}")
 
         batch_json = json.loads(batch.json_data)
@@ -98,7 +98,7 @@ def normalise_batches(
             batch_json=batch_json,
             gather=gather,
             gather_batch_id=batch.batch_id,
-            gathered_at=batch.batch_created_at,
+            gathered_at=batch.gathered_at,
         )
 
         utils.write_data(
