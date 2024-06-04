@@ -106,7 +106,6 @@ def apify_scrape_and_batch_download_results(
     batch_items: List[Dict] = []
 
     static_data = {
-        "project_id": gather.project_id,
         "gather_id": gather.id,
         "job_run_id": job_run_id,
         "source": "apify",

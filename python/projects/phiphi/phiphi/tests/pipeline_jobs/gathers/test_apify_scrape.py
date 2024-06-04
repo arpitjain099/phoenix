@@ -81,8 +81,8 @@ def test_mock_apify_scrape_and_batch_download_results(
     # Load the parquet file and verify its contents
     read_df = pd.read_parquet(parquet_file_path)
     assert not read_df.empty
-    assert "project_id" in read_df.columns
-    assert read_df["project_id"].iloc[0] == 1
+    assert "gather_id" in read_df.columns
+    assert read_df["gather_id"].iloc[0] == 1
     assert "json_data" in read_df.columns
     assert json.loads(read_df["json_data"].iloc[0])  # Ensure JSON data is valid
     assert read_df["batch_id"].iloc[0] == 0

@@ -47,7 +47,6 @@ def normalise_batch(
     messages_df = pd.DataFrame(normalized_records)
 
     # Add constant columns to the DataFrame
-    messages_df["project_id"] = gather.project_id
     messages_df["gather_id"] = gather.id
     messages_df["gather_batch_id"] = gather_batch_id
     messages_df["gathered_at"] = gathered_at
