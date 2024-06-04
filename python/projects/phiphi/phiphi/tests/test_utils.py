@@ -51,3 +51,26 @@ def test_get_apify_keys_not_found_env(patch_settings):
     """Test get apify keys."""
     with pytest.raises(ValueError):
         utils.get_apify_api_key()
+
+
+def test_get_project_namespace():
+    """Test get project namespace."""
+    assert utils.get_project_namespace(1) == "project_id1"
+
+
+def test_get_project_namespace_prefix():
+    """Test get project namespace."""
+    assert utils.get_project_namespace(1, "test_") == "test_project_id1"
+
+
+@pytest.mark.parametrize(
+    "project_id, namespace_prefix",
+    [
+        (-1, ""),
+        (1, "test-"),
+    ],
+)
+def test_get_project_namespace_invalid(project_id, namespace_prefix):
+    """Test get project namespace."""
+    with pytest.raises(ValueError):
+        utils.get_project_namespace(project_id, namespace_prefix)

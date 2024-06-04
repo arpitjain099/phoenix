@@ -34,6 +34,25 @@ Be aware that these commands use the `make` in the parent directory, but inside 
 is to ensure that the commands are run in the same environment as the API and to simplify the setup
 of the development environment.
 
+### Integration tests
+
+There are integration tests allow for quicker development iteration. To run the integration
+tests you need to have your local environment authenticated with gcloud. You can do this by
+running:
+```bash
+gcloud auth application-default login
+```
+
+Then you can run the integration tests with:
+```bash
+make integration_test
+```
+
+Be aware that the integration tests will create and delete resources in the Gcloud project. Make
+sure that you are using the correct project. Also be aware that if the integration test fails, the
+resources might not be deleted and will need to be deleted manually. See documentation in the test
+file for more information.
+
 ## Problems with files created in the container
 
 If a file is created in the container, for instance using `make alembic_revision`, it could have a

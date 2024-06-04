@@ -9,6 +9,3 @@ class WorkPool(StrEnum):
     """Work pool enum."""
 
     main = "main-work-pool"
-
-
-BIGQUERY_DATASET_NAME_FOR_PROJECT = "project_id{project_id}"

@@ -12,6 +12,7 @@ services:
       # this is so prefect run in the container uses the host authentication
       # This might need to change for the CICD to work
       - ~/.prefect:/app/.prefect
+      - $HOME/.config/gcloud:/gcp/config:ro
     environment:
       PREFECT_HOME: /app/.prefect
       # Removing the API KEY and URL from the environment variables so they are taken from the
@@ -19,6 +20,10 @@ services:
       PREFECT_API_KEY:
       PREFECT_API_URL:
       APIFY_API_KEYS: ${APIFY_API_KEYS:-{}}
+      CLOUDSDK_CONFIG: /gcp/config
+      GOOGLE_APPLICATION_CREDENTIALS: /gcp/config/application_default_credentials.json
+      # Be careful with the GOOGLE_CLOUD_PROJECT as resources in this project will be created and used.
+      GOOGLE_CLOUD_PROJECT: ${GOOGLE_CLOUD_PROJECT}
     command: [
       "uvicorn",
       "phiphi.api.main:app",
