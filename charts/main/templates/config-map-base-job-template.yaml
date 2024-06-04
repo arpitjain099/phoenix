@@ -136,12 +136,14 @@ data:
             "template": {
               "spec": {
                 "volumes": [
+                  {{- if .Values.gcp_service_account.enabled }}
                   {
                     "name": "gcp-creds",
                     "secret": {
-                      "secretName": "phoenix-gcp-service-account"
+                      "secretName": {{ tpl (.Values.gcp_service_account.secret_name) . | quote }}
                     }
                   }
+                  {{- end }}
                 ],
                 "containers": [
                   {
@@ -151,33 +153,40 @@ data:
                         "valueFrom": {
                           "secretKeyRef": {
                             "key": "SQLALCHEMY_DATABASE_URI",
-                            "name": "phoenix-api-secrets"
+                            "name": {{ tpl (.Values.api.secretKey) . | quote }}
                           }
                         }
-                      },
+                      }
+                      ,
+                      {{- if .Values.api.apify_api_keys.enabled }}
                       {
                         "name": "APIFY_API_KEYS",
                         "valueFrom": {
                           "secretKeyRef": {
-                            "key": "apify-api-keys",
-                            "name": "phoenix-apify-api-keys"
+                            "key": {{ .Values.api.apify_api_keys.secret_key | quote }},
+                            "name": {{ tpl ( .Values.api.apify_api_keys.secret_name ) . | quote }}
                           }
                         }
                       },
+                      {{- end }}
+                      {{- if .Values.gcp_service_account.enabled }}
                       {
                         "name": "GOOGLE_APPLICATION_CREDENTIALS",
-                        "value": "/var/secrets/google/service-account.json"
+                        "value": "/var/secrets/google/{{ .Values.gcp_service_account.secret_key }}"
                       }
+                      {{- end }}
                     ],
                     "args": "{{`{{ command }}`}}",
                     "name": "prefect-job",
                     "image": "{{`{{ image }}`}}",
                     "volumeMounts": [
+                      {{- if .Values.gcp_service_account.enabled }}
                       {
                         "name": "gcp-creds",
                         "readOnly": true,
                         "mountPath": "/var/secrets/google"
                       }
+                      {{- end }}
                     ],
                     "imagePullPolicy": "{{`{{ image_pull_policy }}`}}"
                   }
