@@ -43,7 +43,7 @@ def read_job_params(
 
 
 @task
-def start_flow_run(
+async def start_flow_run(
     project_id: int,
     job_type: PhiphiJobType,
     job_source_id: int,
@@ -71,19 +71,17 @@ def start_flow_run(
         }
     else:
         raise NotImplementedError(f"Job type {job_type=} not implemented yet.")
-    job_run_flow: objects.FlowRun = asyncio.run(
-        deployments.run_deployment(
-            name=deployment_name,
-            parameters=params,
-            as_subflow=True,
-            timeout=0,  # this means it returns immediately with the metadata
-            tags=[
-                f"project_id:{project_id}",
-                f"job_type:{job_type}",
-                f"job_source_id:{job_source_id}",
-                f"job_run_id:{job_run_id}",
-            ],
-        )
+    job_run_flow: objects.FlowRun = await deployments.run_deployment(
+        name=deployment_name,
+        parameters=params,
+        as_subflow=True,
+        timeout=0,  # this means it returns immediately with the metadata
+        tags=[
+            f"project_id:{project_id}",
+            f"job_type:{job_type}",
+            f"job_source_id:{job_source_id}",
+            f"job_run_id:{job_run_id}",
+        ],
     )
     return job_run_flow
 
@@ -103,9 +101,9 @@ def job_run_update_started(job_run_id: int) -> None:
 
 
 @task
-def wait_for_job_flow_run(job_run_flow: objects.FlowRun) -> objects.FlowRun:
+async def wait_for_job_flow_run(job_run_flow: objects.FlowRun) -> objects.FlowRun:
     """Wait for the inner flow to complete and fetch the final state."""
-    flow_run_result: objects.FlowRun = asyncio.run(wait_for_flow_run(flow_run_id=job_run_flow.id))
+    flow_run_result: objects.FlowRun = await wait_for_flow_run(flow_run_id=job_run_flow.id)
     return flow_run_result
 
 
@@ -141,7 +139,7 @@ def non_success_hook(flow: objects.Flow, flow_run: objects.FlowRun, state: objec
     on_cancellation=[non_success_hook],
     on_crashed=[non_success_hook],
 )
-def flow_runner_flow(
+async def flow_runner_flow(
     project_id: int,
     job_type: PhiphiJobType,
     job_source_id: int,
@@ -159,7 +157,7 @@ def flow_runner_flow(
     job_params = read_job_params(
         project_id=project_id, job_type=job_type, job_source_id=job_source_id
     )
-    job_run_flow = start_flow_run(
+    job_run_flow = await start_flow_run(
         project_id=project_id,
         job_type=job_type,
         job_source_id=job_source_id,
@@ -167,7 +165,7 @@ def flow_runner_flow(
         job_params=job_params,
     )
     job_run_update_started(job_run_id=job_run_id)
-    job_run_flow_result = wait_for_job_flow_run(job_run_flow=job_run_flow)
+    job_run_flow_result = await wait_for_job_flow_run(job_run_flow=job_run_flow)
     job_run_update_completed(job_run_id=job_run_id, job_run_flow_result=job_run_flow_result)
 
 
