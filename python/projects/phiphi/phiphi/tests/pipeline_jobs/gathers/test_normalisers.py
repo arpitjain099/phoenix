@@ -3,9 +3,11 @@ from datetime import datetime
 
 import pandas as pd
 import pytest
+from prefect.logging import disable_run_logger as disable_prefect_run_logger
 
+from phiphi import config
 from phiphi.api.projects.gathers import schemas
-from phiphi.pipeline_jobs.gathers import normalisers, utils
+from phiphi.pipeline_jobs.gathers import apify_scrape, normalisers, utils
 
 
 @pytest.fixture
@@ -64,14 +66,14 @@ def expected_dataframe():
             "https://www.facebook.com/unitednations/posts/pfbid0LmBjLodaYjFhvntY3rX4xB2cyrcUeXHuasXJNFgimkNX7NE76CjSEYCwwveF9v5ml",
         ],
         "platform_message_last_updated_at": [
-            datetime.fromisoformat("2024-04-03T06:00:25"),
-            datetime.fromisoformat("2024-03-25T07:00:17"),
-            datetime.fromisoformat("2024-02-22T16:00:01"),
-            datetime.fromisoformat("2024-04-03T18:02:22"),
-            datetime.fromisoformat("2024-04-03T08:02:00"),
-            datetime.fromisoformat("2024-04-02T18:04:00"),
-            datetime.fromisoformat("2024-02-21T08:00:10"),
-            datetime.fromisoformat("2024-04-02T08:07:30"),
+            datetime.fromisoformat("2024-04-03T06:00:25.000Z"),
+            datetime.fromisoformat("2024-03-25T07:00:17.000Z"),
+            datetime.fromisoformat("2024-02-22T16:00:01.000Z"),
+            datetime.fromisoformat("2024-04-03T18:02:22.000Z"),
+            datetime.fromisoformat("2024-04-03T08:02:00.000Z"),
+            datetime.fromisoformat("2024-04-02T18:04:00.000Z"),
+            datetime.fromisoformat("2024-02-21T08:00:10.000Z"),
+            datetime.fromisoformat("2024-04-02T08:07:30.000Z"),
         ],
         "phoenix_platform_message_id": [
             normalisers.anonymize("843404157832210"),
@@ -98,19 +100,21 @@ def expected_dataframe():
 
     df = pd.DataFrame(data)  # noqa: PD901
     df["project_id"] = 1
-    df["gather_id"] = 2
+    df["gather_id"] = 1
     df["gather_batch_id"] = 3
-    df["gathered_at"] = datetime.fromisoformat("2024-04-01T12:00:00")
+    df["gathered_at"] = pd.to_datetime("2024-04-01T12:00:00.000Z")
     df["source"] = schemas.Source.apify
     df["platform"] = schemas.Platform.facebook
     df["data_type"] = schemas.DataType.posts
-    df["phoenix_processed_at"] = datetime.fromisoformat("2024-04-02T12:10:59")
+    df["phoenix_processed_at"] = datetime.fromisoformat("2024-04-02T12:10:59.000Z")
+    for column in ["platform_message_last_updated_at", "gathered_at", "phoenix_processed_at"]:
+        df[column] = df[column].astype("datetime64[ms, UTC]")  # type: ignore[call-overload]
 
     return df
 
 
-@pytest.mark.freeze_time(datetime.fromisoformat("2024-04-02T12:10:59"))
-def test_normalise_batch(expected_dataframe):
+@pytest.mark.freeze_time("2024-04-02T12:10:59.000Z")
+def test_normalise_batch(expected_dataframe, facebook_posts_gather_fixture):
     """Test normalise_batch function."""
     batch_json = utils.load_sample_raw_data(
         source=schemas.Source.apify,
@@ -121,14 +125,61 @@ def test_normalise_batch(expected_dataframe):
     processed_df = normalisers.normalise_batch(
         normaliser=normalisers.normalise_single_facebook_posts_json,
         batch_json=batch_json,
-        project_id=1,
-        gather_id=2,
+        gather=facebook_posts_gather_fixture,
         gather_batch_id=3,
-        gathered_at=datetime.fromisoformat("2024-04-01T12:00:00"),
-        source=schemas.Source.apify,
-        platform=schemas.Platform.facebook,
-        data_type=schemas.DataType.posts,
+        gathered_at=datetime.fromisoformat("2024-04-01T12:00:00.000Z"),
     )
 
+    pd.testing.assert_frame_equal(processed_df, expected_dataframe)
+    assert processed_df["source"].iloc[0] == "apify"
+
+
+@pytest.mark.patch_settings(
+    {
+        "USE_MOCK_APIFY": True,
+        "USE_MOCK_BQ": True,
+        "APIFY_API_KEYS": {"main": "dummy_key"},
+    }
+)
+def test_normalise_batches(
+    tmpdir, patch_settings, mocker, facebook_posts_gather_fixture, expected_dataframe, freezer
+):
+    """Test normalise_batches function."""
+    # Set up mock BigQuery root directory
+    mocker.patch.object(config.settings, "MOCK_BQ_ROOT_DIR", str(tmpdir))
+
+    freezer.move_to("2024-04-01T12:00:00.000Z")
+    # First, run the scrape and batch download results function
+    with disable_prefect_run_logger():
+        apify_scrape.apify_scrape_and_batch_download_results.fn(
+            gather=facebook_posts_gather_fixture,
+            job_run_id=1,
+            batch_size=3,
+            bigquery_dataset="test_dataset",
+            bigquery_table="gather_batches",
+        )
+
+    # Check that the parquet file was written
+    parquet_file_path = tmpdir.join("test_dataset", "gather_batches.parquet")
+    assert parquet_file_path.check()
+
+    freezer.move_to("2024-04-02T12:10:59.000Z")
+    # Now, run the normalise_batches function
+    with disable_prefect_run_logger():
+        normalisers.normalise_batches.fn(
+            gather=facebook_posts_gather_fixture,
+            job_run_id=1,
+            bigquery_dataset="test_dataset",
+        )
+
+    # Check that the normalized data was written to the correct Parquet file
+    parquet_file_path = tmpdir.join("test_dataset", "generalised_messages.parquet")
+    assert parquet_file_path.check()
+
+    # Alter expected DataFrame to match that now using multiple batches
+    expected_dataframe["gather_batch_id"] = [0, 0, 0, 1, 1, 1, 2, 2]
+
+    # Load the parquet file and verify its contents
+    processed_df = pd.read_parquet(parquet_file_path)
     pd.testing.assert_frame_equal(processed_df, expected_dataframe)
     assert processed_df["source"].iloc[0] == "apify"

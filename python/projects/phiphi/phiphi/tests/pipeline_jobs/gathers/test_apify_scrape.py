@@ -1,5 +1,4 @@
 """Tests for Apify gathers."""
-import datetime
 import json
 
 import pandas as pd
@@ -7,58 +6,8 @@ import pytest
 from prefect.logging import disable_run_logger as disable_prefect_run_logger
 
 from phiphi import config
-from phiphi.api.projects import gathers
 from phiphi.pipeline_jobs.gathers import apify_input_schemas, apify_scrape
-
-
-def facebook_posts_gather_example() -> (
-    gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse
-):
-    """Example for ApifyFacebookPostGatherResponse schema."""
-    return gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse(
-        description="Example",
-        limit_posts_per_account=4,
-        account_url_list=[
-            "https://www.facebook.com/howtobuildup/",
-            "https://www.facebook.com/unitednations/",
-        ],
-        only_posts_older_than="2024-04-04",
-        only_posts_newer_than="2024-01-03",
-        id=1,
-        platform=gathers.schemas.Platform.facebook,
-        data_type=gathers.schemas.DataType.posts,
-        source=gathers.schemas.Source.apify,
-        created_at=datetime.datetime.now(),
-        updated_at=datetime.datetime.now(),
-        project_id=1,
-        deleted_at=None,
-        latest_job_run=None,
-    )
-
-
-def facebook_comments_gather_example() -> (
-    gathers.apify_facebook_comments.schemas.ApifyFacebookCommentGatherResponse
-):
-    """Example for ApifyFacebookCommentGatherResponse schema."""
-    return gathers.apify_facebook_comments.schemas.ApifyFacebookCommentGatherResponse(
-        description="Example",
-        limit_comments_per_post=4,
-        post_url_list=[
-            "https://www.facebook.com/unitednations/posts/pfbid045as8QKV2uLVYe2NumDPs7a68Hr4P5cjmoyMRo2e4dj4p3rp2gWNNj948Uu7BVcxl",
-            "https://www.facebook.com/unitednations/posts/pfbid0LmBjLodaYjFhvntY3rX4xB2cyrcUeXHuasXJNFgimkNX7NE76CjSEYCwwveF9v5ml",
-        ],
-        sort_comments_by=gathers.apify_facebook_comments.schemas.FacebookCommentSortOption.facebook_default,
-        include_comment_replies=False,
-        id=1,
-        platform=gathers.schemas.Platform.facebook,
-        data_type=gathers.schemas.DataType.comments,
-        source=gathers.schemas.Source.apify,
-        created_at=datetime.datetime.now(),
-        updated_at=datetime.datetime.now(),
-        project_id=1,
-        deleted_at=None,
-        latest_job_run=None,
-    )
+from phiphi.tests.pipeline_jobs.gathers import example_gathers
 
 
 def tiktok_posts_input_example() -> apify_input_schemas.ApifyTiktokPostsInput:
@@ -93,7 +42,7 @@ def manual_test_apify_scrape_and_batch_download():
     - change `gather` to the corresponding desired Apify actor to test
     - run the function manually
     """
-    gather = facebook_comments_gather_example()
+    gather = example_gathers.facebook_comments_gather_example()
     apify_scrape.apify_scrape_and_batch_download_results(
         gather=gather,
         job_run_id=1,
@@ -110,13 +59,15 @@ def manual_test_apify_scrape_and_batch_download():
         "APIFY_API_KEYS": {"main": "dummy_key"},
     }
 )
-def test_mock_apify_scrape_and_batch_download_results(tmpdir, patch_settings, mocker):
+def test_mock_apify_scrape_and_batch_download_results(
+    tmpdir, patch_settings, mocker, facebook_posts_gather_fixture
+):
     """Test apify_scrape_and_batch_download_results with mocked out Apify function."""
     mocker.patch.object(config.settings, "MOCK_BQ_ROOT_DIR", str(tmpdir))
 
     with disable_prefect_run_logger():
         apify_scrape.apify_scrape_and_batch_download_results.fn(
-            gather=facebook_posts_gather_example(),
+            gather=facebook_posts_gather_fixture,
             job_run_id=1,
             batch_size=3,
             bigquery_dataset="test_dataset",
