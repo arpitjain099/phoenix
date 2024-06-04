@@ -73,37 +73,45 @@ gather_normalisation_map: Dict[type[gathers.schemas.GatherResponse], Callable[[D
 @prefect.task
 def normalise_batches(
     gather: gathers.schemas.GatherResponse,
-    batch_size: int,
+    job_run_id: int,
     bigquery_dataset: str,
 ) -> None:
     """Normalize batches and write to a BigQuery table."""
     prefect_logger = prefect.get_run_logger()
     norm_func = gather_normalisation_map[type(gather)]
 
-    query = f"""
-        SELECT * FROM {bigquery_dataset}.{constants.GATHER_BATCHES_TABLE_NAME}
-        WHERE gather_id = {gather.id}
-    """
-    batches_df = utils.read_data(
-        query, dataset=bigquery_dataset, table=constants.GATHER_BATCHES_TABLE_NAME
-    )
-    validated_batches_df = project_db_schemas.gather_batches_schema.validate(batches_df)
-
-    for _, batch in validated_batches_df.iterrows():
-        prefect_logger.info(f"Normalizing batch {batch.batch_id}")
-
-        batch_json = json.loads(batch.json_data)
-        normalized_df = normalise_batch(
-            normaliser=norm_func,
-            batch_json=batch_json,
-            gather=gather,
-            gather_batch_id=batch.batch_id,
-            gathered_at=batch.gathered_at,
+    batch_id = 0
+    while True:
+        query = f"""
+            SELECT * FROM {bigquery_dataset}.{constants.GATHER_BATCHES_TABLE_NAME}
+            WHERE gather_id = {gather.id} AND job_run_id = {job_run_id} AND batch_id = {batch_id}
+        """
+        batches_df = utils.read_data(
+            query, dataset=bigquery_dataset, table=constants.GATHER_BATCHES_TABLE_NAME
         )
 
-        utils.write_data(
-            df=normalized_df,
-            dataset=bigquery_dataset,
-            table=constants.GENERALISED_MESSAGES_TABLE_NAME,
-        )
-        prefect_logger.info(f"Batch {batch.batch_id} normalized and written.")
+        if batches_df.empty:
+            break
+
+        validated_batches_df = project_db_schemas.gather_batches_schema.validate(batches_df)
+
+        for _, batch in validated_batches_df.iterrows():
+            prefect_logger.info(f"Normalizing batch {batch.batch_id}")
+
+            batch_json = json.loads(batch.json_data)
+            normalized_df = normalise_batch(
+                normaliser=norm_func,
+                batch_json=batch_json,
+                gather=gather,
+                gather_batch_id=batch.batch_id,
+                gathered_at=batch.gathered_at,
+            )
+
+            utils.write_data(
+                df=normalized_df,
+                dataset=bigquery_dataset,
+                table=constants.GENERALISED_MESSAGES_TABLE_NAME,
+            )
+            prefect_logger.info(f"Batch {batch.batch_id} normalized and written.")
+
+        batch_id += 1
