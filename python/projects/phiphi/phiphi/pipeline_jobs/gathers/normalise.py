@@ -41,6 +41,9 @@ gather_normalisation_map: Dict[type[gathers.schemas.GatherResponse], Callable[[D
     gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse: (
         normalisers.normalise_single_facebook_posts_json
     ),
+    gathers.apify_facebook_comments.schemas.ApifyFacebookCommentGatherResponse: (
+        normalisers.normalise_single_facebook_comments_json
+    ),
     # Add other gather types and their corresponding normalization functions here
 }
 

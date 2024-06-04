@@ -17,6 +17,12 @@ def load_sample_raw_data(
         and data_type == gather_schemas.DataType.posts
     ):
         relative_path = "apify_sample_data/facebook_posts.json"
+    elif (
+        source == gather_schemas.Source.apify
+        and platform == gather_schemas.Platform.facebook
+        and data_type == gather_schemas.DataType.comments
+    ):
+        relative_path = "apify_sample_data/facebook_comments.json"
     else:
         raise NotImplementedError(f"{source=}, {platform=}, {data_type=} not supported.")
 
