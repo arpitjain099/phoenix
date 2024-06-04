@@ -5,9 +5,22 @@ import pytest
 from fastapi.testclient import TestClient
 
 from phiphi.api.projects import gathers
+from phiphi.api.projects.gathers import child_crud
 
 CREATED_TIME = "2024-04-01T12:00:01"
 UPDATE_TIME = "2024-04-01T12:00:02"
+
+
+def test_get_gather_crud(client: TestClient, reseed_tables) -> None:
+    """Test getting gathers."""
+    gather = child_crud.get_child_gather(reseed_tables, 2, 4)
+    assert gather
+    assert gather.id == 4
+    assert gather.project_id == 2
+    assert gather.source == "apify"
+    assert gather.platform == "facebook"
+    assert gather.data_type == "comments"
+    assert gather.limit_comments_per_post == 1000
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
