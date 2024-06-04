@@ -156,8 +156,7 @@ data:
                             "name": {{ tpl (.Values.api.secretKey) . | quote }}
                           }
                         }
-                      }
-                      ,
+                      },
                       {{- if .Values.api.apify_api_keys.enabled }}
                       {
                         "name": "APIFY_API_KEYS",
@@ -173,8 +172,12 @@ data:
                       {
                         "name": "GOOGLE_APPLICATION_CREDENTIALS",
                         "value": "/var/secrets/google/{{ .Values.gcp_service_account.secret_key }}"
-                      }
+                      },
                       {{- end }}
+                      {
+                        "name": "USE_MOCK_APIFY",
+                        "value": {{ .Values.api.use_mock_apify | quote }}
+                      }
                     ],
                     "args": "{{`{{ command }}`}}",
                     "name": "prefect-job",
