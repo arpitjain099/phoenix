@@ -62,12 +62,14 @@ spec:
                 name: {{ tpl ( .Values.api.apify_api_keys.secret_name ) . }}
                 key: {{ .Values.api.apify_api_keys.secret_key }}
           {{- end }}
-          {{- if index (index .Values "prefect-worker" ) "enabled" }}
+          {{- if and .Values.prefect .Values.prefect.apiKey }}
           - name: PREFECT_API_KEY
             valueFrom:
               secretKeyRef:
                 name: prefect-api-key
                 key: key
+          {{- end }}
+          {{- if index (index .Values "prefect-worker" ) "enabled" }}
           - name: PREFECT_API_URL
             # This uses the subchart to get the prefect-worker url
             value: {{ include "worker.apiUrl" (index  .Subcharts "prefect-worker") }}
