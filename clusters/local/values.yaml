@@ -48,6 +48,11 @@ superset:
 prefect-worker:
   enabled: true
   worker:
-    ## Account and workspace ID in secrets
+    apiConfig: server
     config:
-      workPool: "local-work-pool"
+      workPool: "main-work-pool"
+    serverApiConfig:
+      apiUrl: "http://prefect-server.default.svc.cluster.local:4200/api"
+
+prefect-server:
+  enabled: true
