@@ -7,7 +7,12 @@ from prefect.client.schemas import objects
 from prefect.deployments import deployments
 from prefect.flow_runs import wait_for_flow_run
 
-from phiphi import all_platform_models, constants, platform_db, utils  # noqa: F401
+from phiphi import (
+    all_platform_models,  # noqa: F401
+    constants,
+    platform_db,
+    utils,
+)
 from phiphi.api.projects import gathers, job_runs
 from phiphi.types import PhiphiJobType
 
