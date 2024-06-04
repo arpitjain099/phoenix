@@ -138,9 +138,24 @@ const authProvider: AuthProvider = {
 		return userInfo;
 	},
 	onError: async (error) => {
-		if (error.response?.status === 401) {
-			redirectToLoginPage();
-			return { logout: true };
+		if (error.response?.status === 401 || error.response?.status === 403) {
+			const isAuthenticated = await checkAuthUrl(AUTH_URL);
+			if (!isAuthenticated) {
+				storageService.remove(USER_INFO_COOKIE_NAME);
+				redirectToLoginPage();
+			} else {
+				showNotification({
+					title: "Error",
+					// This needs to be translated
+					message: "You don't have access to this Request",
+					color: "red",
+					autoClose: 20000,
+				});
+				// For some reason this error is not being shown
+				return { error: new Error("You don't have access to this Request") };
+			}
+		} else {
+			return { error };
 		}
 		return { error };
 	},
