@@ -304,3 +304,12 @@ oauth2-proxy:
 
 prefect-worker:
   enabled: false
+
+# To expose this use the command:
+# kubectl port-forward svc/prefect-server 4200:4200
+prefect-server:
+  enabled: false
+  postgresql:
+    # By defaul this is disabled becuase there are
+    nameOverride: "prefectdb"
+
