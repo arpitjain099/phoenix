@@ -11,10 +11,10 @@ from phiphi.api.projects import gathers
 from phiphi.pipeline_jobs.gathers import apify_input_schemas, apify_scrape
 
 
-def facebook_posts_input_example() -> (
+def facebook_posts_gather_example() -> (
     gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse
 ):
-    """Example input for the ApifyFacebookPostGatherResponse schema."""
+    """Example for ApifyFacebookPostGatherResponse schema."""
     return gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse(
         description="Example",
         limit_posts_per_account=4,
@@ -36,10 +36,10 @@ def facebook_posts_input_example() -> (
     )
 
 
-def facebook_comments_input_example() -> (
+def facebook_comments_gather_example() -> (
     gathers.apify_facebook_comments.schemas.ApifyFacebookCommentGatherResponse
 ):
-    """Example input for the ApifyFacebookCommentGatherResponse schema."""
+    """Example for ApifyFacebookCommentGatherResponse schema."""
     return gathers.apify_facebook_comments.schemas.ApifyFacebookCommentGatherResponse(
         description="Example",
         limit_comments_per_post=4,
@@ -90,14 +90,12 @@ def manual_test_apify_scrape_and_batch_download():
     To use this test:
     - ensure that a valid Apify token is set in the config - you should use your personal token not
       the org token ideally
-    - change `run_input` to the corresponding desired Apify actor to test
+    - change `gather` to the corresponding desired Apify actor to test
     - run the function manually
     """
-    run_input = facebook_comments_input_example()
+    gather = facebook_comments_gather_example()
     apify_scrape.apify_scrape_and_batch_download_results(
-        run_input=run_input,
-        project_id=1,
-        gather_id=1,
+        gather=gather,
         job_run_id=1,
         bigquery_dataset="test_dataset",
         bigquery_table="test_table",
@@ -118,9 +116,7 @@ def test_mock_apify_scrape_and_batch_download_results(tmpdir, patch_settings, mo
 
     with disable_prefect_run_logger():
         apify_scrape.apify_scrape_and_batch_download_results.fn(
-            run_input=facebook_posts_input_example(),
-            project_id=1,
-            gather_id=1,
+            gather=facebook_posts_gather_example(),
             job_run_id=1,
             batch_size=3,
             bigquery_dataset="test_dataset",
