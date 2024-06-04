@@ -1,4 +1,4 @@
-"""Tests for the normalisers module."""
+"""Tests for the normalise module."""
 from datetime import datetime
 
 import pandas as pd
@@ -7,7 +7,7 @@ from prefect.logging import disable_run_logger as disable_prefect_run_logger
 
 from phiphi import config
 from phiphi.api.projects.gathers import schemas
-from phiphi.pipeline_jobs.gathers import apify_scrape, normalisers, utils
+from phiphi.pipeline_jobs.gathers import apify_scrape, normalise, utils
 
 
 @pytest.fixture
@@ -76,24 +76,24 @@ def expected_dataframe():
             datetime.fromisoformat("2024-04-02T08:07:30.000Z"),
         ],
         "phoenix_platform_message_id": [
-            normalisers.anonymize("843404157832210"),
-            normalisers.anonymize("837532328419393"),
-            normalisers.anonymize("818337297005563"),
-            normalisers.anonymize("824283126394381"),
-            normalisers.anonymize("823689576453736"),
-            normalisers.anonymize("823537799802247"),
-            normalisers.anonymize("817481123757847"),
-            normalisers.anonymize("823003113189049"),
+            normalise.anonymize("843404157832210"),
+            normalise.anonymize("837532328419393"),
+            normalise.anonymize("818337297005563"),
+            normalise.anonymize("824283126394381"),
+            normalise.anonymize("823689576453736"),
+            normalise.anonymize("823537799802247"),
+            normalise.anonymize("817481123757847"),
+            normalise.anonymize("823003113189049"),
         ],
         "phoenix_platform_message_author_id": [
-            normalisers.anonymize("100064878993116"),
-            normalisers.anonymize("100064878993116"),
-            normalisers.anonymize("100064878993116"),
-            normalisers.anonymize("100064381045972"),
-            normalisers.anonymize("100064381045972"),
-            normalisers.anonymize("100064381045972"),
-            normalisers.anonymize("100064878993116"),
-            normalisers.anonymize("100064381045972"),
+            normalise.anonymize("100064878993116"),
+            normalise.anonymize("100064878993116"),
+            normalise.anonymize("100064878993116"),
+            normalise.anonymize("100064381045972"),
+            normalise.anonymize("100064381045972"),
+            normalise.anonymize("100064381045972"),
+            normalise.anonymize("100064878993116"),
+            normalise.anonymize("100064381045972"),
         ],
         "phoenix_platform_parent_message_id": [None, None, None, None, None, None, None, None],
     }
@@ -121,8 +121,8 @@ def test_normalise_batch(expected_dataframe, facebook_posts_gather_fixture):
         data_type=schemas.DataType.posts,
     )
 
-    processed_df = normalisers.normalise_batch(
-        normaliser=normalisers.normalise_single_facebook_posts_json,
+    processed_df = normalise.normalise_batch(
+        normaliser=normalise.normalise_single_facebook_posts_json,
         batch_json=batch_json,
         gather=facebook_posts_gather_fixture,
         gather_batch_id=3,
@@ -165,7 +165,7 @@ def test_normalise_batches(
     freezer.move_to("2024-04-02T12:10:59.000Z")
     # Now, run the normalise_batches function
     with disable_prefect_run_logger():
-        normalisers.normalise_batches.fn(
+        normalise.normalise_batches.fn(
             gather=facebook_posts_gather_fixture,
             job_run_id=1,
             bigquery_dataset="test_dataset",
