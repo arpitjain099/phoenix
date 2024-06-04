@@ -304,6 +304,16 @@ oauth2-proxy:
 
 prefect-worker:
   enabled: false
+  worker:
+    config:
+      baseJobTemplate:
+        existingConfigMapName: "phoenix-base-job-template"
+
+baseJobTemplate:
+  enabled: false
+  defaultImage: "registry.gitlab.com/howtobuildup/phoenix/python/phiphi:latest"
+  defaultImagePullPolicy: "Always"
+  defaultPodWatchTimeoutSeconds: 60
 
 # To expose this use the command:
 # kubectl port-forward svc/prefect-server 4200:4200

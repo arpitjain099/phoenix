@@ -54,5 +54,8 @@ prefect-worker:
     serverApiConfig:
       apiUrl: "http://prefect-server.default.svc.cluster.local:4200/api"
 
+baseJobTemplate:
+  enabled: true
+
 prefect-server:
   enabled: true
