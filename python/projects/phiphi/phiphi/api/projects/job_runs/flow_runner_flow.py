@@ -31,7 +31,7 @@ def read_job_params(
     """
     if job_type == "gather":
         with platform_db.get_session_context() as session:
-            job_params = gathers.crud.get_gather(
+            job_params = gathers.child_crud.get_child_gather(
                 session=session, project_id=project_id, gather_id=job_source_id
             )
     else:
