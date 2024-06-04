@@ -57,7 +57,7 @@ def start_flow_run(
     project_namespace = utils.get_project_namespace(project_id=project_id)
 
     if job_type == "gather":
-        deployment_name = "gather_flow"
+        deployment_name = "gather_flow/gather_flow"
         params = {
             "gather_params": job_params,
             "job_run_id": job_run_id,
