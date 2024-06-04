@@ -4,6 +4,12 @@ ingress_cors:
 use_local_insecure_auth: true
 api:
   cors_origins: "http://console.{{ .Values.base_host }}"
+  apify_api_keys:
+    enabled: true
+    json: |
+      {
+        "main": "dummy_key"
+      }
 cert_issuer:
   enabled: false
 console:
