@@ -51,6 +51,8 @@ api:
   # Using * as since it is not possible to reach the api not via the
   # ingress it is not a security risk
   forwarded_allow_ips: "*"
+  # This should be False for production environments
+  use_mock_apify: true
   apify_api_keys:
     enabled: false
     secret_name: "{{ .Release.Name }}-apify-api-keys"

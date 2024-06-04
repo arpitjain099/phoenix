@@ -43,6 +43,8 @@ spec:
           # For instances you have to do `--forwarded-allow-ips=*` with no quotes (double or single) around the *
           - name: FORWARDED_ALLOW_IPS
             value: {{ .Values.api.forwarded_allow_ips | quote}}
+          - name: USE_MOCK_APIFY
+            value: {{ .Values.api.use_mock_apify | quote }}
           - name: INCLUDE_INSECURE_AUTH
           {{- if .Values.use_local_insecure_auth }}
             value: "true"
@@ -59,6 +61,16 @@ spec:
               secretKeyRef:
                 name: {{ tpl ( .Values.api.apify_api_keys.secret_name ) . }}
                 key: {{ .Values.api.apify_api_keys.secret_key }}
+          {{- end }}
+          {{- if index (index .Values "prefect-worker" ) "enabled" }}
+          - name: PREFECT_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: prefect-api-key
+                key: key
+          - name: PREFECT_API_URL
+            # This uses the subchart to get the prefect-worker url
+            value: {{ include "worker.apiUrl" (index  .Subcharts "prefect-worker") }}
           {{- end }}
         command: ["/app/projects/phiphi/entrypoint.sh"]
         args: [
