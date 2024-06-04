@@ -37,7 +37,7 @@ dependencies:
   condition: platformdb.enabled
 - name: prefect-worker
   repository: https://prefecthq.github.io/prefect-helm
-  version: 2024.5.2224951
+  version: 2024.5.29222000
   condition: prefect-worker.enabled
 - name: prefect-server
   repository: https://prefecthq.github.io/prefect-helm
