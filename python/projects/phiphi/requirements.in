@@ -5,6 +5,7 @@
 # Third party deps
 
 ## Dev deps
+pytest-asyncio
 pytest-freezegun
 pytest-mock
 

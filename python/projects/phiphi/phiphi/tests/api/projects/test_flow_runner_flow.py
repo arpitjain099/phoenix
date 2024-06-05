@@ -1,5 +1,6 @@
-"""Test flow_runner_flow."""
+"""Test the flow_runner_flow."""
 from unittest import mock
+from unittest.mock import AsyncMock
 
 import pytest
 from prefect.client.schemas import objects
@@ -9,6 +10,7 @@ from phiphi.api.projects.gathers import crud as gathers_crud
 from phiphi.api.projects.job_runs import crud, flow_runner_flow, schemas
 
 
+@pytest.mark.asyncio
 @pytest.mark.parametrize(
     "mock_return_wait_flow_run_completed,expected_job_run_status",
     [
@@ -16,9 +18,11 @@ from phiphi.api.projects.job_runs import crud, flow_runner_flow, schemas
         (False, schemas.Status.failed),
     ],
 )
-@mock.patch("phiphi.api.projects.job_runs.flow_runner_flow.wait_for_job_flow_run")
-@mock.patch("phiphi.api.projects.job_runs.flow_runner_flow.start_flow_run")
-def test_flow_runner_flow(
+@mock.patch(
+    "phiphi.api.projects.job_runs.flow_runner_flow.wait_for_job_flow_run", new_callable=AsyncMock
+)
+@mock.patch("phiphi.api.projects.job_runs.flow_runner_flow.start_flow_run", new_callable=AsyncMock)
+async def test_flow_runner_flow(
     mock_start_flow_run,
     mock_wait_for_flow_run,
     mock_return_wait_flow_run_completed,
@@ -62,7 +66,7 @@ def test_flow_runner_flow(
     mock_wait_for_flow_run.return_value = mock_return_wait_flow_run
 
     with disable_run_logger():
-        flow_runner_flow.flow_runner_flow.fn(
+        await flow_runner_flow.flow_runner_flow.fn(
             project_id=project_id,
             job_type=job_run.foreign_job_type.value,
             job_source_id=job_run.foreign_id,
@@ -88,9 +92,12 @@ def test_flow_runner_flow(
     assert job_run_completed.completed_at is not None
 
 
-@mock.patch("phiphi.api.projects.job_runs.flow_runner_flow.read_job_params")
-def test_flow_runner_flow_expection(mock_read_job_params, session_context, reseed_tables):
-    """Test the flow_runner_flow if there is an expection."""
+@pytest.mark.asyncio
+@mock.patch(
+    "phiphi.api.projects.job_runs.flow_runner_flow.read_job_params", new_callable=AsyncMock
+)
+async def test_flow_runner_flow_exception(mock_read_job_params, session_context, reseed_tables):
+    """Test the flow_runner_flow if there is an exception."""
     project_id = 1
     gather_id = 2
     job_run_create = schemas.JobRunCreate(
@@ -106,7 +113,7 @@ def test_flow_runner_flow_expection(mock_read_job_params, session_context, resee
     assert job_run.status == schemas.Status.awaiting_start
 
     with pytest.raises(Exception):
-        flow_runner_flow.flow_runner_flow(
+        await flow_runner_flow.flow_runner_flow(
             project_id=project_id,
             job_type=job_run.foreign_job_type.value,
             job_source_id=job_run.foreign_id,
