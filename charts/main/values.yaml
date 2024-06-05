@@ -53,9 +53,6 @@ api:
   forwarded_allow_ips: "*"
   # This should be False for production environments
   use_mock_apify: true
-  prefect_deployments:
-    enabled: false
-    image: "{{ tpl (Values.api.image.repository ) . }}:{{ .Values.api.image.tag }}"
   apify_api_keys:
     enabled: false
     secret_name: "{{ .Release.Name }}-apify-api-keys"
@@ -322,3 +319,10 @@ prefect-server:
     # By defaul this is disabled becuase there are
     nameOverride: "prefectdb"
 
+
+## Prefect deployment
+prefect_deployments:
+  enabled: false
+  image: "{{ tpl (Values.api.image.repository ) . }}:{{ .Values.api.image.tag }}"
+  enable_health_check: false
+  health_check_deployment_name: "health-check/main"

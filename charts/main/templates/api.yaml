@@ -19,17 +19,6 @@ spec:
         command: ['sh', '-c',
           'until pg_isready -h {{ tpl ( .Values.api.db_auth.host ) . }} -p {{ .Values.api.db_auth.port }} -U {{ .Values.api.db_auth.username }} -d {{ .Values.api.db_auth.database }}; 
           do echo waiting for database; sleep 2; done;']
-      {{- if .Values.api.prefect_deployments.enabled }}
-      - name: prefect-deployments
-        {{- include "phoenixmain.phiphi_container" . | nindent 8 }}
-        command: ["/app/projects/phiphi/entrypoint.sh"]
-        args: [
-          "python",
-          "projects/phiphi/phiphi/prefect_deployments.py",
-          "--image",
-          {{ tpl (.Values.api.prefect_deployments.image ) . | quote }},
-        ]
-      {{- end }}
       containers:
       - name: phiphi
         {{- include "phoenixmain.phiphi_container" . | nindent 8 }}

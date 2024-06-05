@@ -1,0 +1,39 @@
+{{- if .Values.prefect_deployments.enabled -}}
+apiVersion:  batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-prefect-deployments
+spec:
+  template:
+    metadata:
+      name: {{ .Release.Name }}-prefect-deployments
+    spec:
+      restartPolicy: Never
+      initContainers:
+      - name: prefect-deployments
+        {{- include "phoenixmain.phiphi_container" . | nindent 8 }}
+        command: ["/app/projects/phiphi/entrypoint.sh"]
+        args: [
+          "python",
+          "projects/phiphi/phiphi/prefect_deployments.py",
+          "--image",
+          {{ tpl (.Values.prefect_deployments.image ) . | quote }},
+        ]
+      containers:
+      - name: prefect-health-check
+        {{- include "phoenixmain.phiphi_container" . | nindent 8 }}
+        command: ["/app/projects/phiphi/entrypoint.sh"]
+        args: [
+          "prefect",
+          "deployment",
+          "run",
+          "--watch",
+          "{{ .Values.prefect_deployments.health_check_deployment_name }}",
+        ]
+      {{- if .Values.gcp_service_account.enabled }}
+      volumes:
+      - name: gcp-creds
+        secret:
+          secretName: {{ tpl (.Values.gcp_service_account.secret_name) . }}
+      {{- end }}
+{{- end }}
