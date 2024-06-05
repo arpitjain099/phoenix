@@ -34,6 +34,7 @@ def test_bq_pipeline_integration(session_context, reseed_tables):
     gather_flow.gather_flow(
         gather=example_gathers.facebook_posts_gather_example(),
         job_run_id=1,
+        project_namespace=test_project_namespace,
         batch_size=3,
     )
 

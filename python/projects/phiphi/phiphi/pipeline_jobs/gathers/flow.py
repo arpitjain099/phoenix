@@ -3,7 +3,7 @@ from typing import Coroutine
 
 import prefect
 
-from phiphi import constants, utils
+from phiphi import constants
 from phiphi.api.projects import gathers
 from phiphi.pipeline_jobs.gathers import apify_scrape, normalise
 
@@ -12,21 +12,20 @@ from phiphi.pipeline_jobs.gathers import apify_scrape, normalise
 def gather_flow(
     gather: gathers.schemas.GatherResponse,
     job_run_id: int,
+    project_namespace: str,
     batch_size: int = 100,
 ) -> None:
     """Flow which gathers data."""
-    bigquery_dataset = utils.get_project_namespace(project_id=gather.project_id)
-
     apify_scrape.apify_scrape_and_batch_download_results(
         gather=gather,
         job_run_id=job_run_id,
-        bigquery_dataset=bigquery_dataset,
+        bigquery_dataset=project_namespace,
         batch_size=batch_size,
     )
     normalise.normalise_batches(
         gather=gather,
         job_run_id=job_run_id,
-        bigquery_dataset=bigquery_dataset,
+        bigquery_dataset=project_namespace,
     )
 
 
