@@ -18,8 +18,7 @@ def test_bq_pipeline_integration(session_context, reseed_tables):
 
     If the test fails you may need to manually clean up the dataset.
     """
-    maxval = 10
-    temp_prefix = str(uuid.uuid4())[:maxval]
+    temp_prefix = str(uuid.uuid4())[:10]
     temp_prefix = temp_prefix.replace("-", "")
     test_prefix = f"test_{temp_prefix}"
     dataset = projects.init_project_db.fn(project_id=1, namespace_prefix=test_prefix)
