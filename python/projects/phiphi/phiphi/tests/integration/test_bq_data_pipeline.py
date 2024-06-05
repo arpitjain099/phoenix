@@ -44,7 +44,7 @@ def test_bq_pipeline_integration(session_context, reseed_tables):
     # You need to set this in the environment
     gather_flow.gather_flow(
         gather_dict=gather_instance.dict(),
-        gather_schema_name=gather_instance.__class__.__name__,
+        gather_child_type=gather_instance.child_type,
         job_run_id=1,
         project_namespace=test_project_namespace,
         batch_size=3,
