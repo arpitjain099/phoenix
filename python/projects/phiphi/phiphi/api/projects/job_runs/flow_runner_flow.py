@@ -8,7 +8,6 @@ from prefect.deployments import deployments
 from prefect.flow_runs import wait_for_flow_run
 
 from phiphi import (
-    all_platform_models,  # noqa: F401
     constants,
     platform_db,
     utils,

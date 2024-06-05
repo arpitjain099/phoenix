@@ -7,7 +7,13 @@ from phiphi.api.projects import crud as project_crud
 from phiphi.api.projects.gathers import models as gather_model
 from phiphi.api.projects.gathers import schemas as gather_schema
 from phiphi.api.projects.gathers.apify_facebook_comments import (
+    models as facebook_comment_models,  # noqa: F401
+)
+from phiphi.api.projects.gathers.apify_facebook_comments import (
     schemas as facebook_comment_schema,
+)
+from phiphi.api.projects.gathers.apify_facebook_posts import (
+    models as facebook_post_models,  # noqa: F401
 )
 from phiphi.api.projects.gathers.apify_facebook_posts import (
     schemas as facebook_post_schema,
