@@ -2,10 +2,9 @@
 from typing import Coroutine, Union
 
 import prefect
-from prefect import flow, task
+from prefect import flow, flow_runs, task
 from prefect.client.schemas import objects
 from prefect.deployments import deployments
-from prefect.flow_runs import wait_for_flow_run
 
 from phiphi import (
     constants,
@@ -104,7 +103,9 @@ async def wait_for_job_flow_run(job_run_flow: objects.FlowRun) -> objects.FlowRu
     """Wait for the inner flow to complete and fetch the final state."""
     logger = prefect.get_run_logger()
     logger.info(f"Waiting for flow run to complete. {job_run_flow.id=}")
-    flow_run_result: objects.FlowRun = await wait_for_flow_run(flow_run_id=job_run_flow.id)
+    flow_run_result: objects.FlowRun = await flow_runs.wait_for_flow_run(
+        flow_run_id=job_run_flow.id
+    )
     return flow_run_result
 
 

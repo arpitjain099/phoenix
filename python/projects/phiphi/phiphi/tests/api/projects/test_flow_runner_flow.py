@@ -18,9 +18,7 @@ from phiphi.api.projects.job_runs import crud, flow_runner_flow, schemas
         (False, schemas.Status.failed),
     ],
 )
-@mock.patch(
-    "phiphi.api.projects.job_runs.flow_runner_flow.wait_for_job_flow_run", new_callable=AsyncMock
-)
+@mock.patch("prefect.flow_runs.wait_for_flow_run", new_callable=AsyncMock)
 @mock.patch("phiphi.api.projects.job_runs.flow_runner_flow.start_flow_run", new_callable=AsyncMock)
 async def test_flow_runner_flow(
     mock_start_flow_run,
@@ -80,7 +78,7 @@ async def test_flow_runner_flow(
         job_run_id=job_run.id,
         job_params=gather,
     )
-    mock_wait_for_flow_run.assert_called_once_with(job_run_flow=mock_return_start_flow_run)
+    mock_wait_for_flow_run.assert_called_once_with(flow_run_id=mock_return_start_flow_run.id)
 
     job_run_completed = crud.get_job_run(
         db=session_context, project_id=project_id, job_run_id=job_run.id
