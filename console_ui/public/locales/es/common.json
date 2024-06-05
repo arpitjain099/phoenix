@@ -185,6 +185,7 @@
 			"created_at": "Creado En",
 			"updated_at": "Actualizado En",
 			"started_processing_at": "Comenzó el procesamiento a",
+			"started_run_at": "Iniciado a las",
 			"input": {
 				"data": "Recopilar Datos de Entrada",
 				"facebook_account_url_list": "URL de cuentas de Facebook",

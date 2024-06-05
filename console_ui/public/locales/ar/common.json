@@ -185,6 +185,7 @@
 			"created_at": "تم الإنشاء في",
 			"updated_at": "تم التحديث في",
 			"started_processing_at": "بدأ المعالجة في",
+			"started_run_at": "بدأ التشغيل في",
 			"input": {
 				"data": "جمع بيانات الإدخال",
 				"facebook_account_url_list": "عناوين URL لحسابات الفيسبوك",
