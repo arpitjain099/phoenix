@@ -95,27 +95,23 @@ prefect flow and the prefect worker. To do this:
   tutorial](https://docs.prefect.io/latest/guides/deployment/kubernetes/#define-a-flow)
 
 
-## Prefect server
+## Prefect server and deployments
 
-- Enable prefect server in the values
-- Prefect worker most not have an api key
+- Enable `prefect-server.enabled` and `prefect_deployment.enabled` in the values
+- Prefect worker must not have an api key
 - `make up`
-- In another termianl run `kubectl port-forward svc/prefect-server 4200:4200`
+- In another terminal run `kubectl port-forward svc/prefect-server 4200:4200`
 - Go to `http://localhost:4200` and you will see the prefect server dashboard
 - Update the `main-work-pool`:
 - `kubectl describe configmap phoenix-base-job-template`
 - Copy the json from the config map in to the `main-work-pool` in the prefect server dashboard
   (edit -> advanded). This is not needed for the helm chart with v3.
-- Make the deployments (this can be made in to an init container at somepoint):
-- Get the latest docker image for `localhost:32000/phiphi` `docker images`. (Unforunatly tags with
-  `latest` or whatever doesn't work you have to use `tilt-<sha>`)
-- get the name of the api pod
-- `kubectl exec -it <api-pod-name> -- bash`
-- Run: `python projects/phiphi/phiphi/prefect_deployments.py --image localhost:32000/phiphi:tilt-bc1d511028f79773` This 
-- Run: `prefect deployment run 'health-check/main'`
-- `prefect flow-run ls` to see the runs
+- You should be able to see the status of the health-check flow in the logs of the prefect-deployment
+  pod (in the tilt ui).
 - If you make a change to the code you will then to click the circle arrow in the tilt ui to re
-  build and then use the new `tilt-<sha>` image tag.
+  build the prefect-deployment. This is because there is no live update. You may also need to
+  update the Tilttile so that `prefect_deployments.image=localhost:32000/phiphi:latest` is replaced
+  with the last image that Tilt build. This will have the tag `tilt-<some-hash>`.
 
 ## Local cluster with authentication and SSL
 
