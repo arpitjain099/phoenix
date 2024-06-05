@@ -100,7 +100,11 @@ const GatherList: React.FC<IResourceComponentsProps> = () => {
 				accessorKey: "latest_job_run.started_processing_at",
 				header: translate("gathers.fields.started_processing_at"),
 				cell: function render({ getValue }) {
-					return getValue() ? <DateField value={getValue<any>()} /> : "";
+					return getValue() ? (
+						<DateField format="LLL" value={getValue<any>()} />
+					) : (
+						""
+					);
 				},
 			},
 			{

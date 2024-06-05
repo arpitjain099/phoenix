@@ -26,7 +26,11 @@ export const ProjectList: React.FC<IResourceComponentsProps> = () => {
 				accessorKey: "created_at",
 				header: translate("projects.fields.created_at"),
 				cell: function render({ getValue }) {
-					return <DateField value={getValue<any>()} />;
+					return getValue() ? (
+						<DateField format="LLL" value={getValue<any>()} />
+					) : (
+						""
+					);
 				},
 			},
 			{
@@ -34,7 +38,7 @@ export const ProjectList: React.FC<IResourceComponentsProps> = () => {
 				accessorKey: "updated_at",
 				header: translate("projects.fields.updated_at"),
 				cell: function render({ getValue }) {
-					return <DateField value={getValue<any>()} />;
+					return getValue() ? <DateField value={getValue<any>()} /> : "";
 				},
 			},
 			{
