@@ -9,14 +9,20 @@ from phiphi.pipeline_jobs.gathers import flow as gather_flow
 from phiphi.tests.pipeline_jobs.gathers import example_gathers
 
 
-# !!!!!!!!!!!!!!
-# Patch settings does not work with flows.
 def test_bq_pipeline_integration(session_context, reseed_tables):
     """Test pipeline integration with bigquery.
 
+    WARNING: !!!!!!!!!!!!!!
+    The patch settings fixture/monkey patching env vars does not work with Prefect flows.
+
     This creates a Bigquery dataset with name `test_<random_prefix>`.
 
-    If the test fails you may need to manually clean up the dataset.
+    Then runs a gather flow using sample example data (no Apify calls, unless you override the
+    projects settings to disable using Mock apify).
+
+    Finally, it deletes the dataset.
+
+    If the test fails you may need to manually clean up (delete) the dataset within Bigquery.
     """
     temp_project_namespace = str(uuid.uuid4())[:10]
     temp_project_namespace = temp_project_namespace.replace("-", "")
