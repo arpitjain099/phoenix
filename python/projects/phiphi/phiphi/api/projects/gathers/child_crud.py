@@ -69,7 +69,7 @@ def get_child_gather(
     session: sqlalchemy.orm.Session,
     project_id: int,
     gather_id: int,
-):
+) -> gather_schema.GatherResponse | None:
     """Get a child gather.
 
     A generalised function to get a child gather. This function is used to get
