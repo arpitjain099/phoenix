@@ -7,6 +7,8 @@ from prefect.client.schemas import objects
 from prefect.deployments import deployments
 
 from phiphi import (
+    # Need to import the Base for the polymorphic_identity to work
+    all_platform_models,  # noqa: F401
     constants,
     platform_db,
     utils,
