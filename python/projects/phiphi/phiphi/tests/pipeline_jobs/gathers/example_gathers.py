@@ -26,6 +26,7 @@ def facebook_posts_gather_example() -> (
         project_id=1,
         deleted_at=None,
         latest_job_run=None,
+        child_type=gathers.schemas.ChildType.apify_facebook_posts,
     )
 
 
@@ -51,4 +52,5 @@ def facebook_comments_gather_example() -> (
         project_id=1,
         deleted_at=None,
         latest_job_run=None,
+        child_type=gathers.schemas.ChildType.apify_facebook_comments,
     )

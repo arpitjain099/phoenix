@@ -96,6 +96,7 @@ def test_serialize_facebook_comment_gather_response_with_all_fields():
         project_id=123,
         deleted_at=None,
         latest_job_run=None,
+        child_type=gathers.schemas.ChildType.apify_facebook_comments,
     )
 
     output_dict = instance.serialize_to_apify_input()
@@ -131,6 +132,7 @@ def test_serialize_facebook_comment_gather_response_with_required_fields_only():
         project_id=123,
         deleted_at=None,
         latest_job_run=None,
+        child_type=gathers.schemas.ChildType.apify_facebook_comments,
     )
 
     output_dict = instance.serialize_to_apify_input()
