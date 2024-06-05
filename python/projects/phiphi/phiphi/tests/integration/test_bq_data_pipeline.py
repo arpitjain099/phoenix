@@ -6,7 +6,7 @@ from google.cloud import bigquery
 
 from phiphi.pipeline_jobs import projects
 from phiphi.pipeline_jobs.gathers import flow as gather_flow
-from phiphi.tests.pipeline_jobs.gathers import test_apify_scrape
+from phiphi.tests.pipeline_jobs.gathers import example_gathers
 
 
 # !!!!!!!!!!!!!!
@@ -33,7 +33,7 @@ def test_bq_pipeline_integration(session_context, reseed_tables):
     # Using patch_settings and mocking APIFY_API_KEYS does not work here
     # You need to set this in the environment
     gather_flow.gather_flow(
-        gather=test_apify_scrape.facebook_posts_gather_example(),
+        gather=example_gathers.facebook_posts_gather_example(),
         job_run_id=1,
         batch_size=3,
     )
