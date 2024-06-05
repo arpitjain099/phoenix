@@ -32,7 +32,7 @@ def create_child_gather(
     project_id: int,
     request_schema: create_schema_type,
     child_model: Type[child_model_type],
-    child_type: str,
+    child_type: gather_schema.ChildType,
 ) -> response_schema_type:
     """Create child gather.
 
