@@ -19,7 +19,11 @@ docker_build(
   live_update=[
     sync_phiphi,
   ],
+  extra_tag='latest',
 )
+
+# Needs to push the latest so it can be used by the prefect job
+local("docker push localhost:32000/phiphi:latest")
 
 sync_console_ui = sync('./console_ui/src/', '/app/src/')
 docker_build('phoenix_console', './console_ui/', live_update=[sync_console_ui])
@@ -28,4 +32,5 @@ k8s_yaml(helm(
   './charts/main/',
   name='phoenix',
   values=['./clusters/local/values.yaml', './clusters/local/secrets.yaml'],
+  set=["prefect_deployments.image=localhost:32000/phiphi:latest"],
 ))
