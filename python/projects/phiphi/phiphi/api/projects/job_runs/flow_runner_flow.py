@@ -62,7 +62,7 @@ async def start_flow_run(
     if job_type == "gather":
         deployment_name = "gather_flow/gather_flow"
         params = {
-            "gather_dict": job_params.dict(),
+            "gather_dict": job_params.model_dump(),
             "gather_schema_name": job_params.__class__.__name__,
             "job_run_id": job_run_id,
             "project_namespace": project_namespace,
