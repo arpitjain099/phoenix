@@ -36,5 +36,8 @@ def get_response_type(gather_child_type: gather_schemas.ChildType) -> ALL_TYPE:
         response_schema_type: Response schema type
     """
     if gather_child_type not in CHILD_TYPES_MAP:
-        raise ValueError(f"Unknown gather child type: {gather_child_type}")
+        raise ValueError(
+            f"Gather child_type: {gather_child_type} has not been added to CHILD_TYPES_MAP."
+            " This should be done."
+        )
     return CHILD_TYPES_MAP[gather_child_type]

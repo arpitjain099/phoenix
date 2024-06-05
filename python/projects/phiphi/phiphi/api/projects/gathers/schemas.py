@@ -9,7 +9,10 @@ from phiphi.api.projects.job_runs import schemas as job_runs_schemas
 
 
 class ChildType(str, Enum):
-    """Child Type Enum."""
+    """Child Type Enum.
+
+    Additions to this enum should be reflected in the CHILD_TYPES_MAP in child_types.py file.
+    """
 
     apify_facebook_posts = "apify_facebook_posts"
     apify_facebook_comments = "apify_facebook_comments"
