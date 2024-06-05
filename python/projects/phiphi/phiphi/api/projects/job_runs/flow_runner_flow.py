@@ -1,4 +1,5 @@
 """Module containing (outer) flow which runs jobs (inner flows) and records their status."""
+import uuid
 from typing import Coroutine, Union
 
 import prefect
@@ -101,12 +102,12 @@ def job_run_update_started(job_run_id: int) -> None:
 
 
 @task
-async def wait_for_job_flow_run(job_run_flow: objects.FlowRun) -> objects.FlowRun:
+async def wait_for_job_flow_run(job_run_flow_id: uuid.UUID) -> objects.FlowRun:
     """Wait for the inner flow to complete and fetch the final state."""
     logger = prefect.get_run_logger()
-    logger.info(f"Waiting for flow run to complete. {job_run_flow.id=}")
+    logger.info(f"Waiting for flow run to complete. {job_run_flow_id=}")
     flow_run_result: objects.FlowRun = await flow_runs.wait_for_flow_run(
-        flow_run_id=job_run_flow.id
+        flow_run_id=job_run_flow_id
     )
     return flow_run_result
 
@@ -118,16 +119,20 @@ def update_job_run_with_status(job_run_id: int, status: job_runs.schemas.Status)
         job_runs.crud.update_job_run(db=session, job_run_data=job_run_update_completed)
 
 
-@task
-async def job_run_update_completed(job_run_id: int, job_run_flow_result: objects.FlowRun) -> None:
-    """Update the job_runs table with the final state of the job (the inner flow)."""
-    assert job_run_flow_result.state is not None
-    status = (
-        job_runs.schemas.Status.completed_sucessfully
-        if job_run_flow_result.state.is_completed()
-        else job_runs.schemas.Status.failed
-    )
+def get_status_from_flow_run(flow_run: objects.FlowRun) -> job_runs.schemas.Status:
+    """Get the job_runs status from the flow_run.
 
+    This can't be a task other wise prefect will fail.
+    """
+    assert flow_run.state is not None
+    if flow_run.state.is_completed():
+        return job_runs.schemas.Status.completed_sucessfully
+    return job_runs.schemas.Status.failed
+
+
+@task
+async def job_run_update_completed(job_run_id: int, status: job_runs.schemas.Status) -> None:
+    """Update the job_runs table with the final state of the job (the inner flow)."""
     update_job_run_with_status(job_run_id=job_run_id, status=status)
 
 
@@ -169,9 +174,11 @@ async def flow_runner_flow(
         job_params=job_params,
     )
     job_run_update_started(job_run_id=job_run_id)
-    job_run_flow_result = await wait_for_job_flow_run(job_run_flow=job_run_flow)
+    # Gottcha you can't pass a flow_run to task or prefect fails the task
+    job_run_flow_result = await wait_for_job_flow_run(job_run_flow_id=job_run_flow.id)
+    status = get_status_from_flow_run(flow_run=job_run_flow_result)
     # This await is needed or the test does not pass
-    await job_run_update_completed(job_run_id=job_run_id, job_run_flow_result=job_run_flow_result)
+    await job_run_update_completed(job_run_id=job_run_id, status=status)
 
 
 def create_deployments(
