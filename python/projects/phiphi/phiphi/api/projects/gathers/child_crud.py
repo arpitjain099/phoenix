@@ -4,19 +4,14 @@ from typing import Type, TypeVar
 import sqlalchemy.orm
 
 from phiphi.api.projects import crud as project_crud
+from phiphi.api.projects.gathers import child_types
 from phiphi.api.projects.gathers import models as gather_model
 from phiphi.api.projects.gathers import schemas as gather_schema
 from phiphi.api.projects.gathers.apify_facebook_comments import (
     models as facebook_comment_models,  # noqa: F401
 )
-from phiphi.api.projects.gathers.apify_facebook_comments import (
-    schemas as facebook_comment_schema,
-)
 from phiphi.api.projects.gathers.apify_facebook_posts import (
     models as facebook_post_models,  # noqa: F401
-)
-from phiphi.api.projects.gathers.apify_facebook_posts import (
-    schemas as facebook_post_schema,
 )
 
 # Although these are the same as child_route types we need to redefine them here
@@ -93,9 +88,6 @@ def get_child_gather(
     if db_gather is None:
         return None
 
-    if db_gather.child_type == "apify_facebook_posts":
-        return facebook_post_schema.ApifyFacebookPostGatherResponse.model_validate(db_gather)
-    elif db_gather.child_type == "apify_facebook_comments":
-        return facebook_comment_schema.ApifyFacebookCommentGatherResponse.model_validate(db_gather)
-    else:
-        raise ValueError(f"Unknown child type: {db_gather.child_type}")
+    child_type = gather_schema.ChildType(db_gather.child_type)
+    child_reponse_type: child_types.ALL_TYPE = child_types.get_response_type(child_type)
+    return child_reponse_type.model_validate(db_gather)
