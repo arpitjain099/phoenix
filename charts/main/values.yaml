@@ -53,6 +53,9 @@ api:
   forwarded_allow_ips: "*"
   # This should be False for production environments
   use_mock_apify: true
+  prefect_deployments:
+    enabled: false
+    image: "{{ tpl (Values.api.image.repository ) . }}:{{ .Values.api.image.tag }}"
   apify_api_keys:
     enabled: false
     secret_name: "{{ .Release.Name }}-apify-api-keys"

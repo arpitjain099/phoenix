@@ -4,6 +4,8 @@ ingress_cors:
 use_local_insecure_auth: true
 api:
   cors_origins: "http://console.{{ .Values.base_host }}"
+  prefect_deployments:
+    enabled: true
   apify_api_keys:
     enabled: true
     json: |
