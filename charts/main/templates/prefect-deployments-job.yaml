@@ -8,6 +8,7 @@ spec:
     metadata:
       name: {{ .Release.Name }}-prefect-deployments
     spec:
+      backoffLimit: 0
       restartPolicy: Never
       initContainers:
       - name: prefect-deployments
