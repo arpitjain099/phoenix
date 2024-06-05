@@ -33,6 +33,7 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 
 	const breadcrumbs = [
 		{ title: translate("projects.projects"), href: "/projects" },
+		{ title: projectid as string, href: `/projects/show/${projectid}` },
 		{ title: translate("gathers.gathers"), href: "../gathers" },
 		{ title: translate("actions.create"), href: "create" },
 	];
