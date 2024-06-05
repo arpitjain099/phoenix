@@ -117,7 +117,7 @@ def update_job_run_with_status(job_run_id: int, status: job_runs.schemas.Status)
 
 
 @task
-def job_run_update_completed(job_run_id: int, job_run_flow_result: objects.FlowRun) -> None:
+async def job_run_update_completed(job_run_id: int, job_run_flow_result: objects.FlowRun) -> None:
     """Update the job_runs table with the final state of the job (the inner flow)."""
     assert job_run_flow_result.state is not None
     status = (
@@ -168,7 +168,8 @@ async def flow_runner_flow(
     )
     job_run_update_started(job_run_id=job_run_id)
     job_run_flow_result = await wait_for_job_flow_run(job_run_flow=job_run_flow)
-    job_run_update_completed(job_run_id=job_run_id, job_run_flow_result=job_run_flow_result)
+    # This await is needed or the test does not pass
+    await job_run_update_completed(job_run_id=job_run_id, job_run_flow_result=job_run_flow_result)
 
 
 def create_deployments(
