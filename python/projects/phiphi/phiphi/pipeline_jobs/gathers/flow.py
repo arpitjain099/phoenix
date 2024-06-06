@@ -5,7 +5,7 @@ import prefect
 
 from phiphi import constants, utils
 from phiphi.api.projects import gathers
-from phiphi.pipeline_jobs.gathers import apify_scrape, normalisers
+from phiphi.pipeline_jobs.gathers import apify_scrape, normalise
 
 
 @prefect.flow(name="gather_flow")
@@ -23,7 +23,7 @@ def gather_flow(
         bigquery_dataset=bigquery_dataset,
         batch_size=batch_size,
     )
-    normalisers.normalise_batches(
+    normalise.normalise_batches(
         gather=gather,
         job_run_id=job_run_id,
         bigquery_dataset=bigquery_dataset,

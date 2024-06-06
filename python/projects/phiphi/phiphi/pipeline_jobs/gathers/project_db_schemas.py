@@ -23,7 +23,6 @@ def utc_datetime_column(nullable: bool) -> pa.Column:
 # Schema for gather batches
 gather_batches_schema = pa.DataFrameSchema(
     {
-        "project_id": pa.Column(pa.Int, nullable=False),
         "gather_id": pa.Column(pa.Int, nullable=False),
         "job_run_id": pa.Column(pa.Int, nullable=False),
         "source": pa.Column(
@@ -48,7 +47,6 @@ gather_batches_schema = pa.DataFrameSchema(
 # Schema that all messages (of any type and any source) should be normalised to
 generalised_messages_schema = pa.DataFrameSchema(
     {
-        "project_id": pa.Column(pa.Int, nullable=False),
         "gather_id": pa.Column(pa.Int, nullable=False),
         "gather_batch_id": pa.Column(pa.Int, nullable=False),
         "gathered_at": utc_datetime_column(nullable=False),
