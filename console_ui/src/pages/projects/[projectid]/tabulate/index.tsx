@@ -77,6 +77,13 @@ const TabulateList: React.FC<IResourceComponentsProps> = () => {
 	const columns = useMemo<ColumnDef<any>[]>(
 		() => [
 			{
+				id: "created_at",
+				accessorKey: "created_at",
+				header: translate("gathers.fields.started_run_at"),
+				cell: ({ getValue }) =>
+					getValue() ? <DateField format="LLL" value={getValue<any>()} /> : "",
+			},
+			{
 				id: "started_processing_at",
 				accessorKey: "started_processing_at",
 				header: translate("tabulate.fields.started_processing_at"),

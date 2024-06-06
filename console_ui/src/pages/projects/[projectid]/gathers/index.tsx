@@ -4,6 +4,7 @@ import {
 	useTranslate,
 	useMany,
 	useList,
+	useOne,
 } from "@refinedev/core";
 import { useTable } from "@refinedev/react-table";
 import { ColumnDef } from "@tanstack/react-table";
@@ -96,11 +97,27 @@ const GatherList: React.FC<IResourceComponentsProps> = () => {
 				header: translate("gathers.fields.description"),
 			},
 			{
+				id: "created_at",
+				accessorKey: "latest_job_run.created_at",
+				header: translate("gathers.fields.started_run_at"),
+				cell: function render({ getValue }) {
+					return getValue() ? (
+						<DateField format="LLL" value={getValue<any>()} />
+					) : (
+						""
+					);
+				},
+			},
+			{
 				id: "started_processing_at",
 				accessorKey: "latest_job_run.started_processing_at",
 				header: translate("gathers.fields.started_processing_at"),
 				cell: function render({ getValue }) {
-					return getValue() ? <DateField value={getValue<any>()} /> : "";
+					return getValue() ? (
+						<DateField format="LLL" value={getValue<any>()} />
+					) : (
+						""
+					);
 				},
 			},
 			{
@@ -197,29 +214,11 @@ const GatherList: React.FC<IResourceComponentsProps> = () => {
 	const {
 		getHeaderGroups,
 		getRowModel,
-		setOptions,
 		refineCore: { setCurrent, pageCount, current },
 	} = useTable({
 		columns,
 		data: gatherList,
 	});
-
-	const { data: tableData } = apiResponse;
-	const { data: projectData } = useMany({
-		resource: "projects",
-		ids: tableData?.data?.map((item) => item?.project_id) ?? [],
-		queryOptions: {
-			enabled: !!tableData?.data,
-		},
-	});
-
-	setOptions((prev) => ({
-		...prev,
-		meta: {
-			...prev.meta,
-			projectData,
-		},
-	}));
 
 	useEffect(() => {
 		if (apiResponse?.data?.data) {

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
 	IResourceComponentsProps,
 	useCreate,
@@ -10,7 +9,6 @@ import { Select, Textarea, Tooltip } from "@mantine/core";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { IconInfoCircle } from "@tabler/icons";
-import GatherInputs from "@components/inputs/gather-inputs";
 import CreateCommentsGatherForm, {
 	commentFieldsToKeep,
 	getCommentValidationRules,
@@ -25,7 +23,7 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 	const today = new Date();
 	const tomorrow = new Date(today);
 	tomorrow.setDate(tomorrow.getDate() + 1);
-	const { mutate } = useCreate();
+	const { mutate, isLoading } = useCreate();
 	const translate = useTranslate();
 	const router = useRouter();
 	const { projectid } = router.query;
@@ -33,6 +31,7 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 
 	const breadcrumbs = [
 		{ title: translate("projects.projects"), href: "/projects" },
+		{ title: projectid as string, href: `/projects/show/${projectid}` },
 		{ title: translate("gathers.gathers"), href: "../gathers" },
 		{ title: translate("actions.create"), href: "create" },
 	];
@@ -101,7 +100,7 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 	const handleSave = async () => {
 		if (isValid()) {
 			if (formValues.project_id) {
-				const { source, ...filteredValues } = formValues; // Exclude 'source' from values
+				const { source } = formValues; // Exclude 'source' from values
 				if (source === "apify") {
 					// Define the list of fields to keep based on data_type
 					let fieldsToKeep: string[] = [];
@@ -126,7 +125,7 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 								await Promise.all([setInputList([]), reset()]);
 								setTimeout(() => {
 									router.push(`/projects/${formValues.project_id}/gathers`);
-								}, 2000);
+								}, 1000);
 							},
 						}
 					);
@@ -153,7 +152,7 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 	return (
 		<Create
 			breadcrumb={<BreadcrumbsComponent breadcrumbs={breadcrumbs} />}
-			isLoading={formLoading}
+			isLoading={formLoading || isLoading}
 			saveButtonProps={{ ...saveButtonProps, onClick: handleSave }}
 		>
 			<Select

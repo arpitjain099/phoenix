@@ -84,13 +84,13 @@ export const ProjectShow: React.FC<IResourceComponentsProps> = () => {
 				<Title my="xs" order={5}>
 					{translate("projects.fields.created_at")}:
 				</Title>
-				<DateField value={record?.created_at} />
+				<DateField format="LLL" value={record?.created_at} />
 			</Group>
 			<Group>
 				<Title my="xs" order={5}>
 					{translate("projects.fields.updated_at")}:
 				</Title>
-				<DateField value={record?.updated_at} />
+				<DateField format="LLL" value={record?.updated_at} />
 			</Group>
 			<Group className="mt-4 flex flex-col items-start gap-4">
 				<Link
