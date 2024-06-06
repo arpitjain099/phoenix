@@ -4,8 +4,7 @@ microk8s enable dns
 microk8s enable registry
 microk8s enable hostpath-storage
 microk8s config > ~/.kube/microk8s-config
-export KUBECONFIG=~/.kube/config:~/.kube/microk8s-config
-kubectl config use-context microk8s
+source ./use_mircok8s.sh
 
 echo "#######################################################"
 echo "You need to add the following line to your /etc/hosts file"

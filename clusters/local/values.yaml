@@ -4,6 +4,12 @@ ingress_cors:
 use_local_insecure_auth: true
 api:
   cors_origins: "http://console.{{ .Values.base_host }}"
+  apify_api_keys:
+    enabled: true
+    json: |
+      {
+        "main": "dummy_key"
+      }
 cert_issuer:
   enabled: false
 console:
@@ -48,6 +54,18 @@ superset:
 prefect-worker:
   enabled: true
   worker:
-    ## Account and workspace ID in secrets
+    apiConfig: server
     config:
-      workPool: "local-work-pool"
+      workPool: "main-work-pool"
+    serverApiConfig:
+      apiUrl: "http://prefect-server.default.svc.cluster.local:4200/api"
+
+baseJobTemplate:
+  enabled: true
+
+prefect-server:
+  enabled: true
+
+prefect_deployments:
+  enabled: true
+  enable_health_check: true

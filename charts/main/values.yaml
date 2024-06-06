@@ -304,3 +304,25 @@ oauth2-proxy:
 
 prefect-worker:
   enabled: false
+
+baseJobTemplate:
+  enabled: false
+  defaultImage: "registry.gitlab.com/howtobuildup/phoenix/python/phiphi:latest"
+  defaultImagePullPolicy: "Always"
+  defaultPodWatchTimeoutSeconds: 60
+
+# To expose this use the command:
+# kubectl port-forward svc/prefect-server 4200:4200
+prefect-server:
+  enabled: false
+  postgresql:
+    # By defaul this is disabled becuase there are
+    nameOverride: "prefectdb"
+
+
+## Prefect deployment
+prefect_deployments:
+  enabled: false
+  image: "{{ tpl (Values.api.image.repository ) . }}:{{ .Values.api.image.tag }}"
+  enable_health_check: false
+  health_check_deployment_name: "health-check/main"

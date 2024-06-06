@@ -94,6 +94,25 @@ prefect flow and the prefect worker. To do this:
 - you can then create the deployments and run as needed. [Prefect
   tutorial](https://docs.prefect.io/latest/guides/deployment/kubernetes/#define-a-flow)
 
+
+## Prefect server and deployments
+
+- Enable `prefect-server.enabled` and `prefect_deployment.enabled` in the values
+- Prefect worker must not have an api key
+- `make up`
+- In another terminal run `kubectl port-forward svc/prefect-server 4200:4200`
+- Go to `http://localhost:4200` and you will see the prefect server dashboard
+- Update the `main-work-pool`:
+- `kubectl describe configmap phoenix-base-job-template`
+- Copy the json from the config map in to the `main-work-pool` in the prefect server dashboard
+  (edit -> advanded). This is not needed for the helm chart with v3.
+- You should be able to see the status of the health-check flow in the logs of the prefect-deployment
+  pod (in the tilt ui).
+- If you make a change to the code you will then to click the circle arrow in the tilt ui to re
+  build the prefect-deployment. This is because there is no live update. You may also need to
+  update the Tilttile so that `prefect_deployments.image=localhost:32000/phiphi:latest` is replaced
+  with the last image that Tilt build. This will have the tag `tilt-<some-hash>`.
+
 ## Local cluster with authentication and SSL
 
 See [cluster/local_with_auth/README.md](cluster/local_with_auth/README.md) for a local cluster with
