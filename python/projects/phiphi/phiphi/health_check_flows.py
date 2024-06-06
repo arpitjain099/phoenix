@@ -74,7 +74,7 @@ def check_apify_connection() -> bool:
     return False
 
 
-@prefect.flow
+@prefect.flow(name="health_check")
 def health_check(environment_slug: str | None) -> None:
     """Main flow for the health check."""
     logger = prefect.get_run_logger()
@@ -117,7 +117,7 @@ def create_deployments(
     coroutines = []
     for slug in environ_slugs:
         task = health_check.deploy(
-            name=deployment_name_prefix + slug,
+            name=deployment_name_prefix + "health_check-env-" + slug,
             work_pool_name=work_pool_name,
             image=image,
             build=build,

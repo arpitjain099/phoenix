@@ -328,6 +328,6 @@ prefect_deployments:
   # This environment variable is in the api _helpers template
   image: "$(IMAGE_DEPLOYMENT)"
   enable_health_check: false
-  health_check_deployment_name: "health-check/main"
+  health_check_deployment_name: "health_check/health_check-env-main"
   # Default jobs are deleted after 30 minutes
   ttlSecondsAfterFinished: 1800
