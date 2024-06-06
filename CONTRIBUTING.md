@@ -62,7 +62,26 @@ the main branch.
 project's quality standards.
 6. Submit a Merge Request. Go to the original Phoenix repository on GitLab and click on "Merge
 Requests". Click "New Merge Request", and select your fork and branch as the source. Fill in the
-details, explaining your changes and why they should be included.
+details, explaining your changes and why they should be included. Generally MRs should be made on
+to `dev` and not `main`.
+
+## Release Process
+
+The release process is managed by the maintainers of the project. If you have a feature or bug fix
+that you would like to see included in the next release, please submit a Merge Request with `dev` as
+the target branch. The maintainers will review your changes and decide whether to include them in
+the next release.
+
+To make a release, the maintainers will follow these steps:
+- Merge all approved changes in to `dev`
+- Update the version number in:
+  - [./charts/main/Chart.yaml](./charts/main/Chart.yaml), `version` and `appVersion`
+- Commit these changes and tag the commit with the version number
+- Create a MR from `dev` to `main` with the changes and commit with the version change. This will
+  publish the release ready for deployment.
+- Create a MR in `phoenix-infra` to update the version of the chart for dev and prod
+- Apply the tofu environment `dev` and manually test if needed
+- Merge the MRs both in `phoenix` and `phoenix-infra` and apply the tofu environment `prod`
 
 ### Helpful
 
