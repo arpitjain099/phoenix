@@ -323,6 +323,8 @@ prefect-server:
 ## Prefect deployment
 prefect_deployments:
   enabled: false
-  image: "{{ tpl (Values.api.image.repository ) . }}:{{ .Values.api.image.tag }}"
+  # Using IMAGE_DEPLOYMENT as tilt will replace the environment variable with the correct image
+  # This environment variable is in the api _helpers template
+  image: "$(IMAGE_DEPLOYMENT)"
   enable_health_check: false
   health_check_deployment_name: "health-check/main"

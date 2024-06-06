@@ -1,3 +1,6 @@
+phiphiImage:
+  repository: phiphi-dev-image
+  tag: latest
 ingress_cors:
   enabled: true
   allow_origin: "http://console.{{ .Values.base_host }}"

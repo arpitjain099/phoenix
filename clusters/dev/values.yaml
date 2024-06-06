@@ -1,3 +1,6 @@
+phiphiImage:
+  repository: phiphi-dev-image
+  tag: latest
 base_host: "phoenixplatformdev.xyz"
 ingressClassName: "nginx"
 api:

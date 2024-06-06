@@ -36,6 +36,8 @@ imagePullPolicy: {{ .Values.api.image.pullPolicy }}
 ports:
   - containerPort: 80
 env:
+  - name: IMAGE_DEPLOYMENT
+    value: {{ tpl .Values.api.image.repository . }}:{{ tpl .Values.api.image.tag . }}
   - name: SQLALCHEMY_DATABASE_URI
     valueFrom:
       secretKeyRef:
