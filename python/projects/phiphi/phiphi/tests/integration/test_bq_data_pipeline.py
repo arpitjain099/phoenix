@@ -39,10 +39,12 @@ def test_bq_pipeline_integration(session_context, reseed_tables):
     dataset = projects.init_project_db.fn(test_project_namespace)
     assert client.get_dataset(dataset)
 
+    gather_instance = example_gathers.facebook_posts_gather_example()
     # Using patch_settings and mocking APIFY_API_KEYS does not work here
     # You need to set this in the environment
     gather_flow.gather_flow(
-        gather=example_gathers.facebook_posts_gather_example(),
+        gather_dict=gather_instance.dict(),
+        gather_schema_name=gather_instance.__class__.__name__,
         job_run_id=1,
         project_namespace=test_project_namespace,
         batch_size=3,

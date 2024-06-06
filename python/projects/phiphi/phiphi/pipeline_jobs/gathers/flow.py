@@ -7,15 +7,27 @@ from phiphi import constants
 from phiphi.api.projects import gathers
 from phiphi.pipeline_jobs.gathers import apify_scrape, normalise
 
+GATHER_SCHEMA_MAP = {
+    "ApifyFacebookPostGatherResponse": (
+        gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse
+    ),
+    "ApifyFacebookCommentGatherResponse": (
+        gathers.apify_facebook_comments.schemas.ApifyFacebookCommentGatherResponse
+    ),
+}
+
 
 @prefect.flow(name="gather_flow")
 def gather_flow(
-    gather: gathers.schemas.GatherResponse,
+    gather_dict: dict,
+    gather_schema_name: str,
     job_run_id: int,
     project_namespace: str,
     batch_size: int = 100,
 ) -> None:
     """Flow which gathers data."""
+    gather: gathers.schemas.GatherResponse = GATHER_SCHEMA_MAP[gather_schema_name](**gather_dict)
+
     apify_scrape.apify_scrape_and_batch_download_results(
         gather=gather,
         job_run_id=job_run_id,

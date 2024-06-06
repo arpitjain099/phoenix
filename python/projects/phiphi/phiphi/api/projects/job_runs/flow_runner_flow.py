@@ -1,13 +1,19 @@
 """Module containing (outer) flow which runs jobs (inner flows) and records their status."""
-import asyncio
+import uuid
 from typing import Coroutine, Union
 
-from prefect import flow, task
+import prefect
+from prefect import flow, flow_runs, task
 from prefect.client.schemas import objects
 from prefect.deployments import deployments
-from prefect.flow_runs import wait_for_flow_run
 
-from phiphi import constants, platform_db, utils
+from phiphi import (
+    # Need to import the Base for the polymorphic_identity to work
+    all_platform_models,  # noqa: F401
+    constants,
+    platform_db,
+    utils,
+)
 from phiphi.api.projects import gathers, job_runs
 from phiphi.types import PhiphiJobType
 
@@ -26,7 +32,7 @@ def read_job_params(
     """
     if job_type == "gather":
         with platform_db.get_session_context() as session:
-            job_params = gathers.crud.get_gather(
+            job_params = gathers.child_crud.get_child_gather(
                 session=session, project_id=project_id, gather_id=job_source_id
             )
     else:
@@ -38,7 +44,7 @@ def read_job_params(
 
 
 @task
-def start_flow_run(
+async def start_flow_run(
     project_id: int,
     job_type: PhiphiJobType,
     job_source_id: int,
@@ -57,27 +63,26 @@ def start_flow_run(
     project_namespace = utils.get_project_namespace(project_id=project_id)
 
     if job_type == "gather":
-        deployment_name = "gather_flow"
+        deployment_name = "gather_flow/gather_flow"
         params = {
-            "gather_params": job_params,
+            "gather_dict": job_params.model_dump(),
+            "gather_schema_name": job_params.__class__.__name__,
             "job_run_id": job_run_id,
             "project_namespace": project_namespace,
         }
     else:
         raise NotImplementedError(f"Job type {job_type=} not implemented yet.")
-    job_run_flow: objects.FlowRun = asyncio.run(
-        deployments.run_deployment(
-            name=deployment_name,
-            parameters=params,
-            as_subflow=True,
-            timeout=0,  # this means it returns immediately with the metadata
-            tags=[
-                f"project_id:{project_id}",
-                f"job_type:{job_type}",
-                f"job_source_id:{job_source_id}",
-                f"job_run_id:{job_run_id}",
-            ],
-        )
+    job_run_flow: objects.FlowRun = await deployments.run_deployment(
+        name=deployment_name,
+        parameters=params,
+        as_subflow=True,
+        timeout=0,  # this means it returns immediately with the metadata
+        tags=[
+            f"project_id:{project_id}",
+            f"job_type:{job_type}",
+            f"job_source_id:{job_source_id}",
+            f"job_run_id:{job_run_id}",
+        ],
     )
     return job_run_flow
 
@@ -97,9 +102,13 @@ def job_run_update_started(job_run_id: int) -> None:
 
 
 @task
-def wait_for_job_flow_run(job_run_flow: objects.FlowRun) -> objects.FlowRun:
+async def wait_for_job_flow_run(job_run_flow_id: uuid.UUID) -> objects.FlowRun:
     """Wait for the inner flow to complete and fetch the final state."""
-    flow_run_result: objects.FlowRun = asyncio.run(wait_for_flow_run(flow_run_id=job_run_flow.id))
+    logger = prefect.get_run_logger()
+    logger.info(f"Waiting for flow run to complete. {job_run_flow_id=}")
+    flow_run_result: objects.FlowRun = await flow_runs.wait_for_flow_run(
+        flow_run_id=job_run_flow_id
+    )
     return flow_run_result
 
 
@@ -110,16 +119,20 @@ def update_job_run_with_status(job_run_id: int, status: job_runs.schemas.Status)
         job_runs.crud.update_job_run(db=session, job_run_data=job_run_update_completed)
 
 
-@task
-def job_run_update_completed(job_run_id: int, job_run_flow_result: objects.FlowRun) -> None:
-    """Update the job_runs table with the final state of the job (the inner flow)."""
-    assert job_run_flow_result.state is not None
-    status = (
-        job_runs.schemas.Status.completed_sucessfully
-        if job_run_flow_result.state.is_completed()
-        else job_runs.schemas.Status.failed
-    )
+def get_status_from_flow_run(flow_run: objects.FlowRun) -> job_runs.schemas.Status:
+    """Get the job_runs status from the flow_run.
 
+    This can't be a task other wise prefect will fail.
+    """
+    assert flow_run.state is not None
+    if flow_run.state.is_completed():
+        return job_runs.schemas.Status.completed_sucessfully
+    return job_runs.schemas.Status.failed
+
+
+@task
+async def job_run_update_completed(job_run_id: int, status: job_runs.schemas.Status) -> None:
+    """Update the job_runs table with the final state of the job (the inner flow)."""
     update_job_run_with_status(job_run_id=job_run_id, status=status)
 
 
@@ -135,7 +148,7 @@ def non_success_hook(flow: objects.Flow, flow_run: objects.FlowRun, state: objec
     on_cancellation=[non_success_hook],
     on_crashed=[non_success_hook],
 )
-def flow_runner_flow(
+async def flow_runner_flow(
     project_id: int,
     job_type: PhiphiJobType,
     job_source_id: int,
@@ -153,7 +166,7 @@ def flow_runner_flow(
     job_params = read_job_params(
         project_id=project_id, job_type=job_type, job_source_id=job_source_id
     )
-    job_run_flow = start_flow_run(
+    job_run_flow = await start_flow_run(
         project_id=project_id,
         job_type=job_type,
         job_source_id=job_source_id,
@@ -161,8 +174,11 @@ def flow_runner_flow(
         job_params=job_params,
     )
     job_run_update_started(job_run_id=job_run_id)
-    job_run_flow_result = wait_for_job_flow_run(job_run_flow=job_run_flow)
-    job_run_update_completed(job_run_id=job_run_id, job_run_flow_result=job_run_flow_result)
+    # Gottcha you can't pass a flow_run to task or prefect fails the task
+    job_run_flow_result = await wait_for_job_flow_run(job_run_flow_id=job_run_flow.id)
+    status = get_status_from_flow_run(flow_run=job_run_flow_result)
+    # This await is needed or the test does not pass
+    await job_run_update_completed(job_run_id=job_run_id, status=status)
 
 
 def create_deployments(

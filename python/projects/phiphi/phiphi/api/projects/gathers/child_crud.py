@@ -6,6 +6,18 @@ import sqlalchemy.orm
 from phiphi.api.projects import crud as project_crud
 from phiphi.api.projects.gathers import models as gather_model
 from phiphi.api.projects.gathers import schemas as gather_schema
+from phiphi.api.projects.gathers.apify_facebook_comments import (
+    models as facebook_comment_models,  # noqa: F401
+)
+from phiphi.api.projects.gathers.apify_facebook_comments import (
+    schemas as facebook_comment_schema,
+)
+from phiphi.api.projects.gathers.apify_facebook_posts import (
+    models as facebook_post_models,  # noqa: F401
+)
+from phiphi.api.projects.gathers.apify_facebook_posts import (
+    schemas as facebook_post_schema,
+)
 
 # Although these are the same as child_route types we need to redefine them here
 # otherwise we get strange errors
@@ -57,3 +69,33 @@ def create_child_gather(
     session.commit()
     session.refresh(db_apify_facebook_post_gather)
     return response_schema.model_validate(db_apify_facebook_post_gather)
+
+
+def get_child_gather(
+    session: sqlalchemy.orm.Session,
+    project_id: int,
+    gather_id: int,
+) -> gather_schema.GatherResponse | None:
+    """Get a child gather.
+
+    A generalised function to get a child gather. This function is used to get
+    child gathers for different platforms and data types.
+    """
+    db_gather = (
+        session.query(gather_model.Gather)
+        .filter(
+            gather_model.Gather.deleted_at.is_(None),
+            gather_model.Gather.project_id == project_id,
+            gather_model.Gather.id == gather_id,
+        )
+        .first()
+    )
+    if db_gather is None:
+        return None
+
+    if db_gather.child_type == "apify_facebook_posts":
+        return facebook_post_schema.ApifyFacebookPostGatherResponse.model_validate(db_gather)
+    elif db_gather.child_type == "apify_facebook_comments":
+        return facebook_comment_schema.ApifyFacebookCommentGatherResponse.model_validate(db_gather)
+    else:
+        raise ValueError(f"Unknown child type: {db_gather.child_type}")

@@ -59,9 +59,10 @@ class GatherResponse(GatherBase):
 
     def serialize_to_apify_input(self) -> Dict[str, Any]:
         """Serialize the instance to a dictionary suitable for Apify API."""
-        base_fields = set(GatherResponse.__fields__.keys())  # type: ignore[attr-defined]
         instance_dict = self.model_dump(by_alias=True, exclude_unset=True)
-        apify_dict = {key: value for key, value in instance_dict.items() if key not in base_fields}
+        apify_dict = {
+            key: value for key, value in instance_dict.items() if key not in self.model_fields_set
+        }
         return apify_dict
 
 

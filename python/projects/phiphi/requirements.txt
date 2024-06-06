@@ -348,9 +348,12 @@ pyproject-hooks==1.0.0
 pytest==8.0.0
     # via
     #   -r projects/phiphi/../../dev-requirements.txt
+    #   pytest-asyncio
     #   pytest-cov
     #   pytest-freezegun
     #   pytest-mock
+pytest-asyncio==0.23.7
+    # via -r projects/phiphi/requirements.in
 pytest-cov==4.1.0
     # via -r projects/phiphi/../../dev-requirements.txt
 pytest-freezegun==0.4.2
