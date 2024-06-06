@@ -44,7 +44,7 @@ def seed_test_apify_facebook_comment_gathers(session: Session) -> None:
             request_schema=apify_facebook_gather,
             child_model=models.ApifyFacebookCommentGather,
             response_schema=schemas.ApifyFacebookCommentGatherResponse,
-            child_type=gathers_schemas.ChildType.apify_facebook_comments,
+            child_type=gathers_schemas.ChildTypeName.apify_facebook_comments,
         )
 
     gather_child_crud.create_child_gather(
@@ -53,5 +53,5 @@ def seed_test_apify_facebook_comment_gathers(session: Session) -> None:
         request_schema=TEST_APIFY_FACEBOOK_COMMENT_GATHER_CREATE_3,
         child_model=models.ApifyFacebookCommentGather,
         response_schema=schemas.ApifyFacebookCommentGatherResponse,
-        child_type=gathers_schemas.ChildType.apify_facebook_comments,
+        child_type=gathers_schemas.ChildTypeName.apify_facebook_comments,
     )

@@ -42,19 +42,19 @@ create_schema_type = TypeVar("create_schema_type", bound=gather_schema.GatherCre
 child_model_type = TypeVar("child_model_type", bound=gather_model.Gather)
 
 list_of_child_gather_routes: dict[
-    gather_schema.ChildType,
+    gather_schema.ChildTypeName,
     tuple[
         Type[gather_schema.GatherCreate],
         Type[gather_schema.GatherResponse],
         Type[gather_model.Gather],
     ],
 ] = {
-    gather_schema.ChildType.apify_facebook_comments: (
+    gather_schema.ChildTypeName.apify_facebook_comments: (
         facebook_comment_schema.ApifyFacebookCommentGatherCreate,
         facebook_comment_schema.ApifyFacebookCommentGatherResponse,
         facebook_comment_model.ApifyFacebookCommentGather,
     ),
-    gather_schema.ChildType.apify_facebook_posts: (
+    gather_schema.ChildTypeName.apify_facebook_posts: (
         facebook_post_schema.ApifyFacebookPostGatherCreate,
         facebook_post_schema.ApifyFacebookPostGatherResponse,
         facebook_post_model.ApifyFacebookPostGather,
@@ -67,7 +67,7 @@ def make_create_child_gather_route(
     request_schema: Type[create_schema_type],
     response_schema: Type[response_schema_type],
     child_model: Type[child_model_type],
-    child_type: gather_schema.ChildType,
+    child_type: gather_schema.ChildTypeName,
 ) -> Callable[[int, create_schema_type, deps.SessionDep], response_schema_type]:
     """Returns a route function that creates a child gather using specific models.
 

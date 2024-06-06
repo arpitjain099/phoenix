@@ -8,7 +8,7 @@ import pydantic
 from phiphi.api.projects.job_runs import schemas as job_runs_schemas
 
 
-class ChildType(str, Enum):
+class ChildTypeName(str, Enum):
     """Child Type Enum.
 
     Additions to this enum should be reflected in the CHILD_TYPES_MAP in child_types.py file.
@@ -66,7 +66,9 @@ class GatherResponse(GatherBase):
     project_id: int
     deleted_at: datetime.datetime | None = None
     latest_job_run: job_runs_schemas.JobRunResponse | None = None
-    child_type: Annotated[ChildType, pydantic.Field(description="The child type of the gather")]
+    child_type: Annotated[
+        ChildTypeName, pydantic.Field(description="The child type of the gather")
+    ]
 
     def serialize_to_apify_input(self) -> Dict[str, Any]:
         """Serialize the instance to a dictionary suitable for Apify API."""

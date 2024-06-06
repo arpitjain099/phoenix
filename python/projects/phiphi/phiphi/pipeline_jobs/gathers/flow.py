@@ -11,7 +11,7 @@ from phiphi.pipeline_jobs.gathers import apify_scrape, normalise
 @prefect.flow(name="gather_flow")
 def gather_flow(
     gather_dict: dict,
-    gather_child_type: gathers.schemas.ChildType,
+    gather_child_type: gathers.schemas.ChildTypeName,
     job_run_id: int,
     project_namespace: str,
     batch_size: int = 100,

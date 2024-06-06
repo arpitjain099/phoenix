@@ -16,21 +16,21 @@ ALL = Union[
 
 ALL_TYPE = Type[ALL]
 
-CHILD_TYPES_MAP: dict[gather_schemas.ChildType, ALL_TYPE] = {
-    gather_schemas.ChildType.apify_facebook_comments: (
+CHILD_TYPES_MAP: dict[gather_schemas.ChildTypeName, ALL_TYPE] = {
+    gather_schemas.ChildTypeName.apify_facebook_comments: (
         facebook_comment_schema.ApifyFacebookCommentGatherResponse
     ),
-    gather_schemas.ChildType.apify_facebook_posts: (
+    gather_schemas.ChildTypeName.apify_facebook_posts: (
         facebook_post_schema.ApifyFacebookPostGatherResponse
     ),
 }
 
 
-def get_response_type(gather_child_type: gather_schemas.ChildType) -> ALL_TYPE:
+def get_response_type(gather_child_type: gather_schemas.ChildTypeName) -> ALL_TYPE:
     """Get response type.
 
     Args:
-        gather_child_type (gather_schemas.ChildType): Gather child type
+        gather_child_type (gather_schemas.ChildTypeName): Gather child type
 
     Returns:
         response_schema_type: Response schema type

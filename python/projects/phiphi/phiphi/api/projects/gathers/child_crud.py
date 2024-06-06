@@ -27,7 +27,7 @@ def create_child_gather(
     project_id: int,
     request_schema: create_schema_type,
     child_model: Type[child_model_type],
-    child_type: gather_schema.ChildType,
+    child_type: gather_schema.ChildTypeName,
 ) -> response_schema_type:
     """Create child gather.
 
@@ -88,6 +88,6 @@ def get_child_gather(
     if db_gather is None:
         return None
 
-    child_type = gather_schema.ChildType(db_gather.child_type)
+    child_type = gather_schema.ChildTypeName(db_gather.child_type)
     child_reponse_type: child_types.ALL_TYPE = child_types.get_response_type(child_type)
     return child_reponse_type.model_validate(db_gather)
