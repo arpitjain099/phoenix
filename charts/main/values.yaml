@@ -35,7 +35,7 @@ gcp_service_account:
 
 phiphiImage:
   repository: registry.gitlab.com/howtobuildup/phoenix/python/phiphi
-  tag: latest
+  tag: "{{ .Chart.AppVersion }}"
 
 api:
   enabled: true
