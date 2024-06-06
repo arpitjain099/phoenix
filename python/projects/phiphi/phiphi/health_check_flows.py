@@ -35,6 +35,9 @@ def check_sqlalchemy_connection() -> bool:
 def check_bigquery_connection() -> bool:
     """Check the BigQuery connection."""
     logger = prefect.get_run_logger()
+    if config.settings.USE_MOCK_BQ:
+        logger.info("Using mock BigQuery.")
+        return True
     try:
         client = bigquery.Client()
         datasets = list(client.list_datasets())
@@ -54,6 +57,9 @@ def check_bigquery_connection() -> bool:
 def check_apify_connection() -> bool:
     """Check the Apify connection."""
     logger = prefect.get_run_logger()
+    if config.settings.USE_MOCK_APIFY:
+        logger.info("Using mock Apify.")
+        return True
     try:
         client = apify_client.ApifyClient(utils.get_apify_api_key())
         actors_collection = client.actors().list()
