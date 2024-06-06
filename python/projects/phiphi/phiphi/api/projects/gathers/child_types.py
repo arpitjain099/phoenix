@@ -16,13 +16,13 @@ ALL = Union[
 
 ALL_TYPE = Type[ALL]
 
-apify_facebook_comments = gather_schemas.ChildType.apify_facebook_comments
-apify_facebook_posts = gather_schemas.ChildType.apify_facebook_posts
-
 CHILD_TYPES_MAP: dict[gather_schemas.ChildType, ALL_TYPE] = {
-    # This line is too long so we have to use a variable
-    apify_facebook_comments: facebook_comment_schema.ApifyFacebookCommentGatherResponse,
-    apify_facebook_posts: facebook_post_schema.ApifyFacebookPostGatherResponse,
+    gather_schemas.ChildType.apify_facebook_comments: (
+        facebook_comment_schema.ApifyFacebookCommentGatherResponse
+    ),
+    gather_schemas.ChildType.apify_facebook_posts: (
+        facebook_post_schema.ApifyFacebookPostGatherResponse
+    ),
 }
 
 
