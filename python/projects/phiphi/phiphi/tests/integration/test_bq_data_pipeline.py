@@ -1,10 +1,12 @@
 """Integration tests for the data pipeline with big query."""
 import uuid
 
+import pandas as pd
 import pytest
 from google.cloud import bigquery
 
 from phiphi.pipeline_jobs import projects
+from phiphi.pipeline_jobs.gathers import constants
 from phiphi.pipeline_jobs.gathers import flow as gather_flow
 from phiphi.tests.pipeline_jobs.gathers import example_gathers
 
@@ -45,6 +47,11 @@ def test_bq_pipeline_integration(session_context, reseed_tables):
         project_namespace=test_project_namespace,
         batch_size=3,
     )
+
+    messages_df = pd.read_gbq(
+        f"SELECT * FROM {test_project_namespace}.{constants.GENERALISED_MESSAGES_TABLE_NAME}"
+    )
+    assert len(messages_df) == 8
 
     projects.delete_project_db.fn(test_project_namespace)
     with pytest.raises(Exception):
