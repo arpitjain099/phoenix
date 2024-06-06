@@ -7,7 +7,7 @@ from prefect.client.schemas import objects
 from prefect.deployments import deployments
 from prefect.flow_runs import wait_for_flow_run
 
-from phiphi import constants, platform_db
+from phiphi import constants, platform_db, utils
 from phiphi.api.projects import gathers, job_runs
 from phiphi.types import PhiphiJobType
 
@@ -54,11 +54,14 @@ def start_flow_run(
         job_run_id: ID of the row in the job_runs table.
         job_params: Parameters for the job.
     """
+    project_namespace = utils.get_project_namespace(project_id=project_id)
+
     if job_type == "gather":
         deployment_name = "gather_flow"
         params = {
-            "job_run_id": job_run_id,
             "gather_params": job_params,
+            "job_run_id": job_run_id,
+            "project_namespace": project_namespace,
         }
     else:
         raise NotImplementedError(f"Job type {job_type=} not implemented yet.")

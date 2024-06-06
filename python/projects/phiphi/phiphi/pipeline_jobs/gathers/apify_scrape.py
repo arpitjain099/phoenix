@@ -142,6 +142,7 @@ def apify_scrape_and_batch_download_results(
 
     # Insert any remaining items in the final batch if not empty
     if batch_items:
+        prefect_logger.info(f"Inserting final batch {batch_num}")
         update_and_write_batch(
             batch_num,
             batch_items,
@@ -149,11 +150,10 @@ def apify_scrape_and_batch_download_results(
             bigquery_dataset,
             bigquery_table,
         )
-        batch_num += 1
-        prefect_logger.info(f"Inserting final batch {batch_num}")
 
     # Delete the dataset after downloading to save on storage costs
     if dataset_client is not None:
         dataset_client.delete()
 
-    prefect_logger.info(f"Finished scraping. Batches inserted: {batch_num}")
+    # batch_num+1 to account for 0-indexing
+    prefect_logger.info(f"Finished scraping. Batches inserted: {batch_num + 1}")

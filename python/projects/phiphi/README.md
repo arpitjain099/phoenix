@@ -36,11 +36,17 @@ of the development environment.
 
 ### Integration tests
 
-There are integration tests allow for quicker development iteration. To run the integration
+There are integration tests allow for quicker development iteration. To run some of the integration
 tests you need to have your local environment authenticated with gcloud. You can do this by
 running:
 ```bash
 gcloud auth application-default login
+```
+
+And, in the same terminal session as you run the next `make` command, you need to set the
+`GOOGLE_CLOUD_PROJECT` environment variable to the project you want to use. You can do this by`:
+```bash
+export GOOGLE_CLOUD_PROJECT=<project_id>
 ```
 
 Then you can run the integration tests with:

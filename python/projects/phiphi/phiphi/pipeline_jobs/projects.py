@@ -2,13 +2,10 @@
 import prefect
 from google.cloud import bigquery
 
-from phiphi import utils
-
 
 @prefect.task
 def init_project_db(
-    project_id: int,
-    namespace_prefix: str = "",
+    project_namespace: str,
 ) -> str:
     """Initialize the project database.
 
@@ -16,31 +13,24 @@ def init_project_db(
     IE. superset dashboards.
 
     Args:
-        project_id (int): The project id.
-        namespace_prefix (str, optional): The namespace prefix. Defaults to "".
-            Used for testing.
+        project_namespace (str): The project namespace.
 
     Returns:
         str: The project namespace.
     """
     client = bigquery.Client()
-    project_namespace = utils.get_project_namespace(project_id, namespace_prefix)
     client.create_dataset(dataset=project_namespace, exists_ok=True)
     return project_namespace
 
 
 @prefect.task
 def delete_project_db(
-    project_id: int,
-    namespace_prefix: str = "",
+    project_namespace: str,
 ) -> None:
     """Delete the project database.
 
     Args:
-        project_id (int): The project id.
-        namespace_prefix (str, optional): The namespace prefix. Defaults to "".
-            Used for testing.
+        project_namespace (str): The project namespace.
     """
     client = bigquery.Client()
-    project_namespace = utils.get_project_namespace(project_id, namespace_prefix)
     client.delete_dataset(dataset=project_namespace, delete_contents=True, not_found_ok=True)

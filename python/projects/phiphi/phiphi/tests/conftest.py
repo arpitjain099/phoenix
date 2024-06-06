@@ -4,6 +4,7 @@ from typing import Generator, Iterator
 import pydantic_core
 import pytest
 from fastapi.testclient import TestClient
+from prefect.logging import disable_run_logger
 from prefect.testing.utilities import prefect_test_harness
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
@@ -164,4 +165,5 @@ def patch_settings(request: pytest.FixtureRequest) -> Iterator[config.Settings]:
 def prefect_test_fixture():
     """Fixture to run prefect tests without api keys."""
     with prefect_test_harness():
-        yield
+        with disable_run_logger():
+            yield

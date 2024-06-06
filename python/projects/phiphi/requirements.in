@@ -25,3 +25,4 @@ pandas-stubs
 pandera
 pyarrow
 google-cloud-bigquery
+pandas-gbq

@@ -82,6 +82,8 @@ cryptography==42.0.7
     # via prefect
 dateparser==1.2.0
     # via prefect
+db-dtypes==1.2.0
+    # via pandas-gbq
 distlib==0.3.8
     # via
     #   -r projects/phiphi/../../dev-requirements.txt
@@ -113,14 +115,24 @@ google-api-core[grpc]==2.19.0
     #   google-api-core
     #   google-cloud-bigquery
     #   google-cloud-core
+    #   pandas-gbq
 google-auth==2.29.0
     # via
     #   google-api-core
+    #   google-auth-oauthlib
     #   google-cloud-bigquery
     #   google-cloud-core
     #   kubernetes
+    #   pandas-gbq
+    #   pydata-google-auth
+google-auth-oauthlib==1.2.0
+    # via
+    #   pandas-gbq
+    #   pydata-google-auth
 google-cloud-bigquery==3.22.0
-    # via -r projects/phiphi/requirements.in
+    # via
+    #   -r projects/phiphi/requirements.in
+    #   pandas-gbq
 google-cloud-core==2.4.1
     # via google-cloud-bigquery
 google-crc32c==1.5.0
@@ -232,7 +244,9 @@ nodeenv==1.8.0
     #   pre-commit
 numpy==1.26.4
     # via
+    #   db-dtypes
     #   pandas
+    #   pandas-gbq
     #   pandas-stubs
     #   pandera
     #   pyarrow
@@ -248,15 +262,21 @@ packaging==23.2
     # via
     #   -r projects/phiphi/../../dev-requirements.txt
     #   build
+    #   db-dtypes
     #   docker
     #   google-cloud-bigquery
+    #   pandas-gbq
     #   pandera
     #   prefect
     #   pytest
 pandas==2.2.2
     # via
     #   -r projects/phiphi/requirements.in
+    #   db-dtypes
+    #   pandas-gbq
     #   pandera
+pandas-gbq==0.23.0
+    # via -r projects/phiphi/requirements.in
 pandas-stubs==2.2.1.240316
     # via -r projects/phiphi/requirements.in
 pandera==0.19.2
@@ -290,7 +310,10 @@ protobuf==4.25.3
 psycopg==3.1.18
     # via -r projects/phiphi/requirements.in
 pyarrow==16.1.0
-    # via -r projects/phiphi/requirements.in
+    # via
+    #   -r projects/phiphi/requirements.in
+    #   db-dtypes
+    #   pandas-gbq
 pyasn1==0.6.0
     # via
     #   pyasn1-modules
@@ -314,6 +337,8 @@ pydantic-extra-types==2.7.0
     # via fastapi
 pydantic-settings==2.2.1
     # via fastapi
+pydata-google-auth==1.8.2
+    # via pandas-gbq
 pygments==2.18.0
     # via rich
 pyproject-hooks==1.0.0
@@ -390,6 +415,7 @@ requests==2.31.0
 requests-oauthlib==2.0.0
     # via
     #   apprise
+    #   google-auth-oauthlib
     #   kubernetes
 rfc3339-validator==0.1.4
     # via prefect
