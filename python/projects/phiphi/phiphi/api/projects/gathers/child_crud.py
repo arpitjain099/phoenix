@@ -89,5 +89,5 @@ def get_child_gather(
         return None
 
     child_type = gather_schema.ChildTypeName(db_gather.child_type)
-    child_reponse_type: child_types.ALL_TYPE = child_types.get_response_type(child_type)
+    child_reponse_type = child_types.get_response_type(child_type)
     return child_reponse_type.model_validate(db_gather)

@@ -17,9 +17,7 @@ def gather_flow(
     batch_size: int = 100,
 ) -> None:
     """Flow which gathers data."""
-    gather: gathers.child_types.ALL = gathers.child_types.get_response_type(gather_child_type)(
-        **gather_dict
-    )
+    gather = gathers.child_types.get_response_type(gather_child_type)(**gather_dict)
 
     apify_scrape.apify_scrape_and_batch_download_results(
         gather=gather,

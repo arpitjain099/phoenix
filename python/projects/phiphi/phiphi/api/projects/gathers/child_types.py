@@ -1,5 +1,5 @@
 """Child types."""
-from typing import Type, Union
+from typing import Type
 
 from phiphi.api.projects.gathers import schemas as gather_schemas
 from phiphi.api.projects.gathers.apify_facebook_comments import (
@@ -9,14 +9,7 @@ from phiphi.api.projects.gathers.apify_facebook_posts import (
     schemas as facebook_post_schema,
 )
 
-ALL = Union[
-    facebook_comment_schema.ApifyFacebookCommentGatherResponse,
-    facebook_post_schema.ApifyFacebookPostGatherResponse,
-]
-
-ALL_TYPE = Type[ALL]
-
-CHILD_TYPES_MAP: dict[gather_schemas.ChildTypeName, ALL_TYPE] = {
+CHILD_TYPES_MAP: dict[gather_schemas.ChildTypeName, Type[gather_schemas.GatherResponse]] = {
     gather_schemas.ChildTypeName.apify_facebook_comments: (
         facebook_comment_schema.ApifyFacebookCommentGatherResponse
     ),
@@ -26,18 +19,20 @@ CHILD_TYPES_MAP: dict[gather_schemas.ChildTypeName, ALL_TYPE] = {
 }
 
 
-def get_response_type(gather_child_type: gather_schemas.ChildTypeName) -> ALL_TYPE:
+def get_response_type(
+    child_type_name: gather_schemas.ChildTypeName,
+) -> Type[gather_schemas.GatherResponse]:
     """Get response type.
 
     Args:
-        gather_child_type (gather_schemas.ChildTypeName): Gather child type
+        child_type_name (gather_schemas.ChildTypeName): Gather child type
 
     Returns:
-        response_schema_type: Response schema type
+        response_schema_type: Response schema type for the child type.
     """
-    if gather_child_type not in CHILD_TYPES_MAP:
+    if child_type_name not in CHILD_TYPES_MAP:
         raise ValueError(
-            f"Gather child_type: {gather_child_type} has not been added to CHILD_TYPES_MAP."
+            f"Gather child_type: {child_type_name} has not been added to CHILD_TYPES_MAP."
             " This should be done."
         )
-    return CHILD_TYPES_MAP[gather_child_type]
+    return CHILD_TYPES_MAP[child_type_name]
