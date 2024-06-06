@@ -1,11 +1,5 @@
 import { JobRunResponse } from "./job-run";
 
-export interface IGatherRun {
-	project_id: string;
-	gather_id: string;
-	type?: string;
-}
-
 export interface GatherResponse {
 	description: string;
 	id: number;

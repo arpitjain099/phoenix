@@ -22,10 +22,15 @@ import BreadcrumbsComponent from "@components/breadcrumbs";
 import { statusTextStyle } from "src/utils";
 import { IconPlayerPlay, IconRefresh, IconTrash } from "@tabler/icons";
 import GatherRunModal from "@components/modals/gather-run";
-import { gatherService } from "src/services";
+import { jobRunService } from "src/services";
 import { GatherResponse } from "src/interfaces/gather";
+import { GetServerSideProps } from "next";
 
-export const GatherList: React.FC<IResourceComponentsProps> = () => {
+export const getServerSideProps: GetServerSideProps<{}> = async (_context) => ({
+	props: {},
+});
+
+const GatherList: React.FC<IResourceComponentsProps> = () => {
 	const translate = useTranslate();
 	const router = useRouter();
 	const { projectid } = router.query || {};
@@ -38,6 +43,7 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 
 	const breadcrumbs = [
 		{ title: translate("projects.projects"), href: "/projects" },
+		{ title: projectid as string, href: `/projects/show/${projectid}` },
 		{ title: translate("gathers.gathers"), href: "#" },
 	];
 
@@ -48,9 +54,10 @@ export const GatherList: React.FC<IResourceComponentsProps> = () => {
 	const handleGatherRefresh = async (gatherDetail: GatherResponse) => {
 		setLoadingStates((prev) => ({ ...prev, [gatherDetail.id]: true }));
 		try {
-			const { data } = await gatherService.fetchJobRun({
+			const { data } = await jobRunService.fetchJobRun({
 				project_id: gatherDetail.project_id,
 				id: gatherDetail?.latest_job_run?.id,
+				type: "gather",
 			});
 			setGatherList((prevList: GatherResponse[]) =>
 				prevList.map((gather) =>

@@ -87,7 +87,7 @@ const CreateCommentsGatherForm: React.FC<Props> = ({
 					{ label: "Facebook Default", value: "facebook_default" },
 					{ label: "Most Relevant", value: "most_relevant" },
 					{ label: "Newest First", value: "newest_first" },
-					{ label: "None-filtered", value: "none_filtered" },
+					{ label: "Non-filtered", value: "non_filtered" },
 				]}
 			/>
 			<GatherInputs

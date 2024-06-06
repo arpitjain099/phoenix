@@ -99,6 +99,12 @@ export const ProjectShow: React.FC<IResourceComponentsProps> = () => {
 				>
 					<Button>{translate("gathers.gathers")}</Button>
 				</Link>
+				<Link
+					href="/projects/[projectid]/tabulate"
+					as={`/projects/${idFromParams}/tabulate`}
+				>
+					<Button>{translate("tabulate.tabulate")}</Button>
+				</Link>
 				{PLATFORM_DOMAIN_BASE && PLATFORM_SCHEMA_BASE && (
 					<Link
 						href={`${PLATFORM_SCHEMA_BASE}://dashboard.${record?.environment_slug}.${PLATFORM_DOMAIN_BASE}`}

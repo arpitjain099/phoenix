@@ -1,36 +1,13 @@
 /* eslint-disable class-methods-use-this */
 import axios from "@providers/data-provider/axios";
-import { IGatherRun } from "src/interfaces/gather";
+import { IJobRun } from "src/interfaces/job-run";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export interface IFetchJobRun {
-	project_id: number;
-	id: number;
-}
-
 export default class GatherService {
-	async getGatherRunEstimate(data: IGatherRun) {
+	async getGatherRunEstimate(data: IJobRun) {
 		const response = await axios.get(
-			`${API_URL}/projects/${data?.project_id}/gathers/${data?.gather_id}/estimate`
-		);
-		return response;
-	}
-
-	async gatherRun(data: IGatherRun) {
-		const response = await axios.post(
-			`${API_URL}/projects/${data?.project_id}/job_runs/`,
-			{
-				foreign_id: data.gather_id,
-				foreign_job_type: data.type,
-			}
-		);
-		return response;
-	}
-
-	async fetchJobRun(data: IFetchJobRun) {
-		const response = await axios.get(
-			`${API_URL}/projects/${data?.project_id}/job_runs/${data?.id}`
+			`${API_URL}/projects/${data?.project_id}/gathers/${data?.id}/estimate`
 		);
 		return response;
 	}

@@ -1,3 +1,9 @@
+export interface IJobRun {
+	project_id: number;
+	id?: number;
+	type?: string;
+}
+
 export interface JobRunResponse {
 	foreign_id: number;
 	foreign_job_type: string;

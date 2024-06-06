@@ -141,6 +141,16 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
 											},
 										},
 										{
+											name: "",
+											list: "/projects/:projectid/tabulate",
+											create: "/projects/:projectid/tabulate/create",
+											meta: {
+												label: t("tabulate.title"),
+												parent: "projects",
+												hide: true,
+											},
+										},
+										{
 											name: "profile",
 											list: "/profile",
 											meta: {
