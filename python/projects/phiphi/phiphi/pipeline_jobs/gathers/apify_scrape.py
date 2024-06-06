@@ -155,4 +155,5 @@ def apify_scrape_and_batch_download_results(
     if dataset_client is not None:
         dataset_client.delete()
 
-    prefect_logger.info(f"Finished scraping. Batches inserted: {batch_num}")
+    # batch_num+1 to account for 0-indexing
+    prefect_logger.info(f"Finished scraping. Batches inserted: {batch_num + 1}")
