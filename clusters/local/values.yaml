@@ -7,6 +7,7 @@ ingress_cors:
 use_local_insecure_auth: true
 api:
   cors_origins: "http://console.{{ .Values.base_host }}"
+  init_db_command: "/app/projects/phiphi/entrypoint_test_seed.sh"
   apify_api_keys:
     enabled: true
     json: |

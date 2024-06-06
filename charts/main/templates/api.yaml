@@ -21,7 +21,7 @@ spec:
           do echo waiting for database; sleep 2; done;']
       - name: phiphi-init-db
         {{- include "phoenixmain.phiphi_container" . | nindent 8 }}
-        command: ["/app/projects/phiphi/entrypoint_init_db.sh"]
+        command: [{{ .Values.api.init_db_command }}]
         args: ["echo", "'Successfull initialised DB!'"]
       containers:
       - name: phiphi
