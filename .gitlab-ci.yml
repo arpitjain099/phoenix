@@ -222,8 +222,9 @@ publish_phoenix_chart_main:
     - job: package_phoenix_chart_main
       artifacts: true
   rules:
-    # Only run on `main` branch
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    # Adding this so that if we make a release the chart is published
+    - if: $CI_COMMIT_TAG
 
 publish_phoenix_superset_image:
   stage: publish
