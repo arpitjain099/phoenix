@@ -60,6 +60,7 @@ def normalised_facebook_posts_df() -> pd.DataFrame:
             "United Nations",
         ],
         "pi_platform_parent_message_id": [None, None, None, None, None, None, None, None],
+        "pi_platform_root_message_id": [None, None, None, None, None, None, None, None],
         "pi_text": [
             "🗓️✒️ \nhttps://buff.ly/47Bz0N9 👀",
             "... the out! 🚀🎉 \n\n🍿 ",
@@ -111,6 +112,7 @@ def normalised_facebook_posts_df() -> pd.DataFrame:
             normalisers.anonymize("100064381045972"),
         ],
         "phoenix_platform_parent_message_id": [None, None, None, None, None, None, None, None],
+        "phoenix_platform_root_message_id": [None, None, None, None, None, None, None, None],
     }
 
     df = pd.DataFrame(data)  # noqa: PD901
@@ -174,6 +176,17 @@ def normalised_facebook_comments_df() -> pd.DataFrame:
             "823003113189049",
             "823003113189049",
             "Y29tbWVudDo3NjM3MTY1OTE5NjYwMzMyXzc5MTgyMjgxMTQ4OTUwNDY=",
+        ],
+        "pi_platform_root_message_id": [
+            "823689576453736",
+            "823689576453736",
+            "823689576453736",
+            "823689576453736",
+            "823003113189049",
+            "823003113189049",
+            "823003113189049",
+            "823003113189049",
+            "7637165919660332",
         ],
         "pi_text": [
             "Birthday wishes Dr.Jane Goodall. world.",
@@ -252,6 +265,17 @@ def normalised_facebook_comments_df() -> pd.DataFrame:
             normalisers.anonymize("823003113189049"),
             normalisers.anonymize("823003113189049"),
             normalisers.anonymize("Y29tbWVudDo3NjM3MTY1OTE5NjYwMzMyXzc5MTgyMjgxMTQ4OTUwNDY="),
+        ],
+        "phoenix_platform_root_message_id": [
+            normalisers.anonymize("823689576453736"),
+            normalisers.anonymize("823689576453736"),
+            normalisers.anonymize("823689576453736"),
+            normalisers.anonymize("823689576453736"),
+            normalisers.anonymize("823003113189049"),
+            normalisers.anonymize("823003113189049"),
+            normalisers.anonymize("823003113189049"),
+            normalisers.anonymize("823003113189049"),
+            normalisers.anonymize("7637165919660332"),
         ],
     }
 

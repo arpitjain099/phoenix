@@ -75,7 +75,10 @@ generalised_messages_schema = pa.DataFrameSchema(
         "pi_platform_message_id": pa.Column(nullable=True),
         "pi_platform_message_author_id": pa.Column(nullable=True),
         "pi_platform_message_author_name": pa.Column(pa.String, nullable=True),
+        # For comments this is the post that the comment is on OR the comment that the reply is on.
         "pi_platform_parent_message_id": pa.Column(nullable=True),
+        # For comments this is the root post for that comment. For posts this is None.
+        "pi_platform_root_message_id": pa.Column(nullable=True),
         "pi_text": pa.Column(pa.String, nullable=True),
         "pi_platform_message_url": pa.Column(pa.String, nullable=True),
         "platform_message_last_updated_at": utc_datetime_column(nullable=False),
@@ -86,5 +89,6 @@ generalised_messages_schema = pa.DataFrameSchema(
         # Note, no version of the author name, as the id serves as the non-pi identifier.
         # Hash of `pi_platform_parent_message_id`.
         "phoenix_platform_parent_message_id": pa.Column(pa.String, nullable=True),
+        "phoenix_platform_root_message_id": pa.Column(pa.String, nullable=True),
     }
 )
