@@ -33,14 +33,17 @@ gcp_service_account:
   # json : |
     # <JSON>
 
+phiphiImage:
+  repository: registry.gitlab.com/howtobuildup/phoenix/python/phiphi
+  tag: latest
+
 api:
   enabled: true
   replicas: 1
   image:
-    # This is the dev image that is created by tilt
-    repository: phiphi
-    tag: latest
-    pullPolicy: Always
+    repository: "{{ .Values.phiphiImage.repository }}"
+    tag: "{{ tpl (.Values.phiphiImage.tag ) . }}"
+    pullPolicy: Never
   # If you want unicorn to reload for development
   reload: true
   # You can have multiple origins separated by a ", "

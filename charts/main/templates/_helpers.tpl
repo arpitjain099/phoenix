@@ -31,7 +31,7 @@ nginx.ingress.kubernetes.io/cors-allow-origin: {{ tpl .Values.ingress_cors.allow
 Phiphi container
 */}}
 {{- define "phoenixmain.phiphi_container" -}}
-image: {{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}
+image: {{ tpl (.Values.api.image.repository ) . }}:{{ tpl (.Values.api.image.tag) . }}
 imagePullPolicy: {{ .Values.api.image.pullPolicy }}
 ports:
   - containerPort: 80
