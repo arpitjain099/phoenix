@@ -39,6 +39,7 @@ def test_bq_pipeline_integration(session_context, reseed_tables):
     assert client.get_dataset(dataset)
 
     gather_instance = example_gathers.facebook_posts_gather_example()
+    batch_size = 3
     # Using patch_settings and mocking APIFY_API_KEYS does not work here
     # You need to set this in the environment
     gather_flow.gather_flow(
@@ -46,13 +47,34 @@ def test_bq_pipeline_integration(session_context, reseed_tables):
         gather_child_type=gather_instance.child_type,
         job_run_id=1,
         project_namespace=test_project_namespace,
-        batch_size=3,
+        batch_size=batch_size,
     )
 
     messages_df = pd.read_gbq(
         f"SELECT * FROM {test_project_namespace}.{constants.GENERALISED_MESSAGES_TABLE_NAME}"
     )
     assert len(messages_df) == 8
+
+    gather_flow.gather_flow(
+        gather_dict=gather_instance.dict(),
+        gather_child_type=gather_instance.child_type,
+        job_run_id=2,
+        project_namespace=test_project_namespace,
+        batch_size=batch_size,
+    )
+
+    messages_df = pd.read_gbq(
+        f"SELECT * FROM {test_project_namespace}.{constants.GENERALISED_MESSAGES_TABLE_NAME}"
+    )
+    assert len(messages_df) == 16
+    deduped_messages_df = pd.read_gbq(
+        f"""
+        SELECT *
+        FROM {test_project_namespace}.{constants.DEDUPLICATED_GENERALISED_MESSAGES_TABLE_NAME}
+        """
+    )
+
+    assert len(deduped_messages_df) == 8
 
     projects.delete_project_db.fn(test_project_namespace)
     with pytest.raises(Exception):

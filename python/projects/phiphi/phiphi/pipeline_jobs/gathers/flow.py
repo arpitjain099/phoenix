@@ -5,7 +5,7 @@ import prefect
 
 from phiphi import constants
 from phiphi.api.projects import gathers
-from phiphi.pipeline_jobs.gathers import apify_scrape, normalise
+from phiphi.pipeline_jobs.gathers import apify_scrape, deduplicate, normalise
 
 
 @prefect.flow(name="gather_flow")
@@ -16,7 +16,11 @@ def gather_flow(
     project_namespace: str,
     batch_size: int = 100,
 ) -> None:
-    """Flow which gathers data."""
+    """Flow which gathers data.
+
+    Warning: there is a race condition in this flow for the deduplicate step if multiple gathers
+    flow are being run at the same time. Very unlikely though.
+    """
     gather = gathers.child_types.get_response_type(gather_child_type)(**gather_dict)
 
     apify_scrape.apify_scrape_and_batch_download_results(
@@ -28,6 +32,9 @@ def gather_flow(
     normalise.normalise_batches(
         gather=gather,
         job_run_id=job_run_id,
+        bigquery_dataset=project_namespace,
+    )
+    deduplicate.refresh_deduplicated_messages_tables(
         bigquery_dataset=project_namespace,
     )
 
