@@ -7,6 +7,7 @@ from google.cloud import bigquery
 
 from phiphi.pipeline_jobs import constants, projects
 from phiphi.pipeline_jobs.gathers import flow as gather_flow
+from phiphi.pipeline_jobs.tabulate import flow as tabulate_flow
 from phiphi.tests.pipeline_jobs.gathers import example_gathers
 
 
@@ -38,13 +39,12 @@ def test_bq_pipeline_integration(session_context, reseed_tables):
     dataset = projects.init_project_db.fn(test_project_namespace)
     assert client.get_dataset(dataset)
 
-    gather_instance = example_gathers.facebook_posts_gather_example()
-    batch_size = 3
+    batch_size = 20
     # Using patch_settings and mocking APIFY_API_KEYS does not work here
     # You need to set this in the environment
     gather_flow.gather_flow(
-        gather_dict=gather_instance.dict(),
-        gather_child_type=gather_instance.child_type,
+        gather_dict=example_gathers.facebook_posts_gather_example().dict(),
+        gather_child_type=example_gathers.facebook_posts_gather_example().child_type,
         job_run_id=1,
         project_namespace=test_project_namespace,
         batch_size=batch_size,
@@ -56,8 +56,8 @@ def test_bq_pipeline_integration(session_context, reseed_tables):
     assert len(messages_df) == 8
 
     gather_flow.gather_flow(
-        gather_dict=gather_instance.dict(),
-        gather_child_type=gather_instance.child_type,
+        gather_dict=example_gathers.facebook_posts_gather_example().dict(),
+        gather_child_type=example_gathers.facebook_posts_gather_example().child_type,
         job_run_id=2,
         project_namespace=test_project_namespace,
         batch_size=batch_size,
@@ -73,8 +73,36 @@ def test_bq_pipeline_integration(session_context, reseed_tables):
         FROM {test_project_namespace}.{constants.DEDUPLICATED_GENERALISED_MESSAGES_TABLE_NAME}
         """
     )
-
     assert len(deduped_messages_df) == 8
+
+    gather_flow.gather_flow(
+        gather_dict=example_gathers.facebook_comments_gather_example().dict(),
+        gather_child_type=example_gathers.facebook_comments_gather_example().child_type,
+        job_run_id=3,
+        project_namespace=test_project_namespace,
+        batch_size=batch_size,
+    )
+
+    tabulate_flow.tabulate_flow(job_run_id=4, project_namespace=test_project_namespace)
+
+    deduped_messages_df = pd.read_gbq(
+        f"""
+        SELECT *
+        FROM {test_project_namespace}.{constants.DEDUPLICATED_GENERALISED_MESSAGES_TABLE_NAME}
+        """
+    )
+    assert len(deduped_messages_df) == 17
+
+    tabulated_messages_df = pd.read_gbq(
+        f"""
+        SELECT *
+        FROM {test_project_namespace}.{constants.TABULATED_MESSAGES_TABLE_NAME}
+        """
+    )
+    assert len(tabulated_messages_df) == 14
+
+    # Use this to break before deleting the dataset to manually inspect the data
+    # assert False
 
     projects.delete_project_db.fn(test_project_namespace)
     with pytest.raises(Exception):
