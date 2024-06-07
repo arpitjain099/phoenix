@@ -324,9 +324,9 @@ prefect-server:
 ## Prefect deployment
 prefect_deployments:
   enabled: false
-  # Using IMAGE_DEPLOYMENT as tilt will replace the environment variable with the correct image
+  # Using IMAGE_URI as tilt will replace the environment variable with the correct image
   # This environment variable is in the api _helpers template
-  image: "$(IMAGE_DEPLOYMENT)"
+  image: "$(IMAGE_URI)"
   enable_health_check: false
   health_check_deployment_name: "health_check/health_check-env-main"
   # Default jobs are deleted after 30 minutes
