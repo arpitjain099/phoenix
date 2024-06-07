@@ -5,8 +5,7 @@ import pandas as pd
 import pytest
 from google.cloud import bigquery
 
-from phiphi.pipeline_jobs import projects
-from phiphi.pipeline_jobs.gathers import constants
+from phiphi.pipeline_jobs import constants, projects
 from phiphi.pipeline_jobs.gathers import flow as gather_flow
 from phiphi.tests.pipeline_jobs.gathers import example_gathers
 

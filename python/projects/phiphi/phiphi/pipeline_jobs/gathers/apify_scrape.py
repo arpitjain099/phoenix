@@ -14,9 +14,9 @@ import prefect
 
 from phiphi import config, utils
 from phiphi.api.projects import gathers
+from phiphi.pipeline_jobs import constants
 from phiphi.pipeline_jobs import utils as pipeline_jobs_utils
 from phiphi.pipeline_jobs.gathers import (
-    constants,
     project_db_schemas,
 )
 from phiphi.pipeline_jobs.gathers import utils as gather_utils

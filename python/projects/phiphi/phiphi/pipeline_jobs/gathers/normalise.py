@@ -7,8 +7,8 @@ import pandas as pd
 import prefect
 
 from phiphi.api.projects import gathers
-from phiphi.pipeline_jobs import utils
-from phiphi.pipeline_jobs.gathers import constants, normalisers, project_db_schemas
+from phiphi.pipeline_jobs import constants, utils
+from phiphi.pipeline_jobs.gathers import normalisers, project_db_schemas
 
 
 def normalise_batch(
