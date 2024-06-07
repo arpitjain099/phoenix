@@ -82,10 +82,8 @@ async def test_flow_runner_flow(
 
 
 @pytest.mark.asyncio
-@mock.patch(
-    "phiphi.api.projects.job_runs.flow_runner_flow.read_job_params", new_callable=AsyncMock
-)
-async def test_flow_runner_flow_exception(mock_read_job_params, session_context, reseed_tables):
+@mock.patch("phiphi.api.projects.job_runs.flow_runner_flow.start_flow_run", new_callable=AsyncMock)
+async def test_flow_runner_flow_exception(mock_start_flow_run, session_context, reseed_tables):
     """Test the flow_runner_flow if there is an exception."""
     project_id = 1
     gather_id = 2
@@ -97,7 +95,9 @@ async def test_flow_runner_flow_exception(mock_read_job_params, session_context,
         db=session_context, project_id=project_id, job_run_create=job_run_create
     )
 
-    mock_read_job_params.side_effect = Exception("Error")
+    mock_start_flow_run.side_effect = Exception(
+        "Mock (correctly) triggered exception, for testing."
+    )
 
     assert job_run.status == schemas.Status.awaiting_start
 

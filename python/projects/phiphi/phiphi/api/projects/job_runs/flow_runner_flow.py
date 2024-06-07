@@ -1,6 +1,6 @@
 """Module containing (outer) flow which runs jobs (inner flows) and records their status."""
 import uuid
-from typing import Coroutine, Union
+from typing import Coroutine
 
 import prefect
 from prefect import flow, flow_runs, task
@@ -19,37 +19,11 @@ from phiphi.types import PhiphiJobType
 
 
 @task
-def read_job_params(
-    project_id: int, job_type: PhiphiJobType, job_source_id: int
-) -> Union[gathers.schemas.GatherResponse]:
-    """Task to read the job's params from the database.
-
-    Args:
-        project_id: ID of the project.
-        job_type: Type of job to run.
-        job_source_id: ID of the source for the job. I.e., if type is `gather` then
-            `job_source_id` is the ID of the row in the gathers table.
-    """
-    if job_type == "gather":
-        with platform_db.get_session_context() as session:
-            job_params = gathers.child_crud.get_child_gather(
-                session=session, project_id=project_id, gather_id=job_source_id
-            )
-    else:
-        raise NotImplementedError(f"Job type {job_type=} not implemented yet.")
-    if job_params is None:
-        raise ValueError(f"Job with {project_id=}, {job_type=}, {job_source_id=} not found.")
-
-    return job_params
-
-
-@task
 async def start_flow_run(
     project_id: int,
     job_type: PhiphiJobType,
     job_source_id: int,
     job_run_id: int,
-    job_params: Union[gathers.schemas.GatherResponse],
 ) -> objects.FlowRun:
     """Start the (inner) flow for the job.
 
@@ -58,11 +32,18 @@ async def start_flow_run(
         job_type: Type of job to run.
         job_source_id: ID of the source for the job. Corresponds to the job_type table.
         job_run_id: ID of the row in the job_runs table.
-        job_params: Parameters for the job.
     """
     project_namespace = utils.get_project_namespace(project_id=project_id)
 
     if job_type == "gather":
+        with platform_db.get_session_context() as session:
+            job_params = gathers.child_crud.get_child_gather(
+                session=session, project_id=project_id, gather_id=job_source_id
+            )
+        if job_params is None:
+            raise ValueError(
+                f"Gather with {project_id=}, {job_type=}, {job_source_id=} not found."
+            )
         deployment_name = "gather_flow/gather_flow"
         params = {
             "gather_dict": job_params.model_dump(),
@@ -163,15 +144,11 @@ async def flow_runner_flow(
             `job_source_id` is the ID of the row in the gathers table.
         job_run_id: ID of the row in the job_runs table.
     """
-    job_params = read_job_params(
-        project_id=project_id, job_type=job_type, job_source_id=job_source_id
-    )
     job_run_flow = await start_flow_run(
         project_id=project_id,
         job_type=job_type,
         job_source_id=job_source_id,
         job_run_id=job_run_id,
-        job_params=job_params,
     )
     job_run_update_started(job_run_id=job_run_id)
     # Gottcha you can't pass a flow_run to task or prefect fails the task
