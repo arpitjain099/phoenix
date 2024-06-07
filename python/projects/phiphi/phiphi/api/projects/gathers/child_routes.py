@@ -42,19 +42,19 @@ create_schema_type = TypeVar("create_schema_type", bound=gather_schema.GatherCre
 child_model_type = TypeVar("child_model_type", bound=gather_model.Gather)
 
 list_of_child_gather_routes: dict[
-    str,
+    gather_schema.ChildTypeName,
     tuple[
         Type[gather_schema.GatherCreate],
         Type[gather_schema.GatherResponse],
         Type[gather_model.Gather],
     ],
 ] = {
-    "apify_facebook_comments": (
+    gather_schema.ChildTypeName.apify_facebook_comments: (
         facebook_comment_schema.ApifyFacebookCommentGatherCreate,
         facebook_comment_schema.ApifyFacebookCommentGatherResponse,
         facebook_comment_model.ApifyFacebookCommentGather,
     ),
-    "apify_facebook_posts": (
+    gather_schema.ChildTypeName.apify_facebook_posts: (
         facebook_post_schema.ApifyFacebookPostGatherCreate,
         facebook_post_schema.ApifyFacebookPostGatherResponse,
         facebook_post_model.ApifyFacebookPostGather,
@@ -67,7 +67,7 @@ def make_create_child_gather_route(
     request_schema: Type[create_schema_type],
     response_schema: Type[response_schema_type],
     child_model: Type[child_model_type],
-    child_type: str,
+    child_type: gather_schema.ChildTypeName,
 ) -> Callable[[int, create_schema_type, deps.SessionDep], response_schema_type]:
     """Returns a route function that creates a child gather using specific models.
 
@@ -98,7 +98,7 @@ def make_create_child_gather_route(
 # Register all routes in list_of_child_gather_routes so we don't have to rewrite the same code
 for key, (request_schema, response_schema, child_model) in list_of_child_gather_routes.items():
     router.post(
-        f"/projects/{{project_id}}/gathers/{key}",
+        f"/projects/{{project_id}}/gathers/{key.value}",
         response_model=response_schema,
         response_model_by_alias=False,
     )(make_create_child_gather_route(request_schema, response_schema, child_model, key))

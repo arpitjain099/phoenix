@@ -2,9 +2,8 @@
 from sqlalchemy.orm import Session
 
 from phiphi.api.projects.gathers import child_crud as gather_child_crud
+from phiphi.api.projects.gathers import schemas as gathers_schemas
 from phiphi.api.projects.gathers.apify_facebook_comments import models, schemas
-
-CHILD_TYPE = "apify_facebook_comments"
 
 TEST_APIFY_FACEBOOK_COMMENT_GATHER_CREATE = schemas.ApifyFacebookCommentGatherCreate(
     description="Phoenix Apify Facebook COMMENT Gather",
@@ -45,7 +44,7 @@ def seed_test_apify_facebook_comment_gathers(session: Session) -> None:
             request_schema=apify_facebook_gather,
             child_model=models.ApifyFacebookCommentGather,
             response_schema=schemas.ApifyFacebookCommentGatherResponse,
-            child_type=CHILD_TYPE,
+            child_type=gathers_schemas.ChildTypeName.apify_facebook_comments,
         )
 
     gather_child_crud.create_child_gather(
@@ -54,5 +53,5 @@ def seed_test_apify_facebook_comment_gathers(session: Session) -> None:
         request_schema=TEST_APIFY_FACEBOOK_COMMENT_GATHER_CREATE_3,
         child_model=models.ApifyFacebookCommentGather,
         response_schema=schemas.ApifyFacebookCommentGatherResponse,
-        child_type=CHILD_TYPE,
+        child_type=gathers_schemas.ChildTypeName.apify_facebook_comments,
     )
