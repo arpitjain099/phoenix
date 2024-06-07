@@ -35,6 +35,9 @@ def check_sqlalchemy_connection() -> bool:
 def check_bigquery_connection() -> bool:
     """Check the BigQuery connection."""
     logger = prefect.get_run_logger()
+    if config.settings.USE_MOCK_BQ:
+        logger.info("Using mock BigQuery.")
+        return True
     try:
         client = bigquery.Client()
         datasets = list(client.list_datasets())
@@ -54,6 +57,9 @@ def check_bigquery_connection() -> bool:
 def check_apify_connection() -> bool:
     """Check the Apify connection."""
     logger = prefect.get_run_logger()
+    if config.settings.USE_MOCK_APIFY:
+        logger.info("Using mock Apify.")
+        return True
     try:
         client = apify_client.ApifyClient(utils.get_apify_api_key())
         actors_collection = client.actors().list()
@@ -74,7 +80,7 @@ def check_apify_connection() -> bool:
     return False
 
 
-@prefect.flow
+@prefect.flow(name="health_check")
 def health_check(environment_slug: str | None) -> None:
     """Main flow for the health check."""
     logger = prefect.get_run_logger()
@@ -117,7 +123,7 @@ def create_deployments(
     coroutines = []
     for slug in environ_slugs:
         task = health_check.deploy(
-            name=deployment_name_prefix + slug,
+            name=deployment_name_prefix + "health_check-env-" + slug,
             work_pool_name=work_pool_name,
             image=image,
             build=build,

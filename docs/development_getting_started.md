@@ -108,10 +108,8 @@ prefect flow and the prefect worker. To do this:
   (edit -> advanded). This is not needed for the helm chart with v3.
 - You should be able to see the status of the health-check flow in the logs of the prefect-deployment
   pod (in the tilt ui).
-- If you make a change to the code you will then to click the circle arrow in the tilt ui to re
-  build the prefect-deployment. This is because there is no live update. You may also need to
-  update the Tilttile so that `prefect_deployments.image=localhost:32000/phiphi:latest` is replaced
-  with the last image that Tilt build. This will have the tag `tilt-<some-hash>`.
+- If you make a change to the code and you notice your changes are not in the flows you may need to
+  click on the "reload" button to rebuild the `prefect-deployments` resource in the tilt UI.
 
 ## Local cluster with authentication and SSL
 

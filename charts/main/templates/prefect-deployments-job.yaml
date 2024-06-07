@@ -4,6 +4,7 @@ kind: Job
 metadata:
   name: {{ .Release.Name }}-prefect-deployments
 spec:
+  ttlSecondsAfterFinished: {{ .Values.prefect_deployments.ttlSecondsAfterFinished }}
   template:
     metadata:
       name: {{ .Release.Name }}-prefect-deployments

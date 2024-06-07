@@ -23,6 +23,7 @@ services:
       GOOGLE_APPLICATION_CREDENTIALS: /gcp/config/application_default_credentials.json
       # Be careful with the GOOGLE_CLOUD_PROJECT as resources in this project will be created and used.
       GOOGLE_CLOUD_PROJECT: ${GOOGLE_CLOUD_PROJECT}
+    entrypoint: ["/app/projects/phiphi/entrypoint_test_seed.sh"]
     command: [
       "uvicorn",
       "phiphi.api.main:app",

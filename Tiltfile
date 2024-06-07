@@ -13,17 +13,14 @@ docker_build('phoenix_superset', './python/projects/phoenix_superset/', live_upd
 
 sync_phiphi = sync('./python/projects/phiphi/phiphi/', '/app/projects/phiphi/phiphi/')
 docker_build(
-  'phiphi',
+  'phiphi-dev-image',
   './python/',
   build_args={'PROJECT': 'phiphi'},
   live_update=[
     sync_phiphi,
   ],
-  extra_tag='latest',
+  match_in_env_vars=True,
 )
-
-# Needs to push the latest so it can be used by the prefect job
-local("docker push localhost:32000/phiphi:latest")
 
 sync_console_ui = sync('./console_ui/src/', '/app/src/')
 docker_build('phoenix_console', './console_ui/', live_update=[sync_console_ui])
@@ -32,5 +29,4 @@ k8s_yaml(helm(
   './charts/main/',
   name='phoenix',
   values=['./clusters/local/values.yaml', './clusters/local/secrets.yaml'],
-  set=["prefect_deployments.image=localhost:32000/phiphi:latest"],
 ))

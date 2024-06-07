@@ -33,14 +33,17 @@ gcp_service_account:
   # json : |
     # <JSON>
 
+phiphiImage:
+  repository: registry.gitlab.com/howtobuildup/phoenix/python/phiphi
+  tag: latest
+
 api:
   enabled: true
   replicas: 1
   image:
-    # This is the dev image that is created by tilt
-    repository: phiphi
-    tag: latest
-    pullPolicy: Always
+    repository: "{{ .Values.phiphiImage.repository }}"
+    tag: "{{ tpl (.Values.phiphiImage.tag ) . }}"
+    pullPolicy: Never
   # If you want unicorn to reload for development
   reload: true
   # You can have multiple origins separated by a ", "
@@ -53,6 +56,7 @@ api:
   forwarded_allow_ips: "*"
   # This should be False for production environments
   use_mock_apify: true
+  init_db_command: "/app/projects/phiphi/entrypoint_init_db.sh"
   apify_api_keys:
     enabled: false
     secret_name: "{{ .Release.Name }}-apify-api-keys"
@@ -323,6 +327,10 @@ prefect-server:
 ## Prefect deployment
 prefect_deployments:
   enabled: false
-  image: "{{ tpl (Values.api.image.repository ) . }}:{{ .Values.api.image.tag }}"
+  # Using IMAGE_URI as tilt will replace the environment variable with the correct image
+  # This environment variable is in the api _helpers template
+  image: "$(IMAGE_URI)"
   enable_health_check: false
-  health_check_deployment_name: "health-check/main"
+  health_check_deployment_name: "health_check/health_check-env-main"
+  # Default jobs are deleted after 30 minutes
+  ttlSecondsAfterFinished: 1800
