@@ -20,6 +20,7 @@ def utc_datetime_column(nullable: bool) -> pa.Column:
     )
 
 
+# TODO: should add BQ cluster specification on columns: gather_id, job_run_id, gather_batch_id
 # Schema for gather batches
 gather_batches_schema = pa.DataFrameSchema(
     {
@@ -44,7 +45,11 @@ gather_batches_schema = pa.DataFrameSchema(
 )
 
 
-# Schema that all messages (of any type and any source) should be normalised to
+# TODO: should add BQ cluster specification on columns:
+#  - platform, data_type, phoenix_platform_message_id, platform_message_last_updated_at
+# Even better would be including `phoenix_processed_at` on the end, but BQ limits to 4 cols.
+# We could assuming that messages IDs are unique across platforms, but I don't think this is really
+# guaranteed.
 generalised_messages_schema = pa.DataFrameSchema(
     {
         "gather_id": pa.Column(pa.Int, nullable=False),
