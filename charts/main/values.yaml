@@ -196,7 +196,7 @@ superset:
   image:
     repository: registry.gitlab.com/howtobuildup/phoenix/phoenix_superset
     # Default is the chart version of the sub chart :(
-    tag: 2.0.1
+    tag: 2.0.6
   # It is problematic to change the init image
 
 ##############
