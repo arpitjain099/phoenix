@@ -320,6 +320,7 @@ baseJobTemplate:
   defaultImage: "registry.gitlab.com/howtobuildup/phoenix/python/phiphi:latest"
   defaultImagePullPolicy: "Always"
   defaultPodWatchTimeoutSeconds: 60
+  defaultFinishedJobTTL: 1800
 
 # To expose this use the command:
 # kubectl port-forward svc/prefect-server 4200:4200
