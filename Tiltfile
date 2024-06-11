@@ -30,3 +30,9 @@ k8s_yaml(helm(
   name='phoenix',
   values=['./clusters/local/values.yaml', './clusters/local/secrets.yaml'],
 ))
+
+
+has_prefect_server = read_yaml('./clusters/local/values.yaml').get('prefect-server').get('enabled')
+if has_prefect_server:
+  print("Prefect Server is enabled")
+  k8s_resource(workload='prefect-server', port_forwards=4200)

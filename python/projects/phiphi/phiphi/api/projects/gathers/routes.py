@@ -49,6 +49,7 @@ def get_gather_estimate(
     """
     return schemas.GatherEstimate(
         id=gather_id,
-        estimated_credit_cost=100,
-        estimated_duration_minutes=30,
+        # Setting this to 0 to indicate that the estimate is not available.
+        estimated_credit_cost=0,
+        estimated_duration_minutes=0,
     )
