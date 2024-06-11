@@ -57,6 +57,8 @@ env:
     value: {{ .Values.api.forwarded_allow_ips | quote}}
   - name: USE_MOCK_APIFY
     value: {{ .Values.api.use_mock_apify | quote }}
+  - name: VERSION
+    value: {{ tpl (.Values.api.version) . | quote }}
   - name: INCLUDE_INSECURE_AUTH
   {{- if .Values.use_local_insecure_auth }}
     value: "true"

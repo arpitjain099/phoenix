@@ -35,10 +35,11 @@ gcp_service_account:
 
 phiphiImage:
   repository: registry.gitlab.com/howtobuildup/phoenix/python/phiphi
-  tag: latest
+  tag: "{{ .Chart.AppVersion }}"
 
 api:
   enabled: true
+  version: "{{ .Chart.AppVersion }}"
   replicas: 1
   image:
     repository: "{{ .Values.phiphiImage.repository }}"
@@ -192,6 +193,11 @@ cert_issuer:
 # Superset
 superset:
   enabled: true
+  image:
+    repository: registry.gitlab.com/howtobuildup/phoenix/phoenix_superset
+    # Default is the chart version of the sub chart :(
+    tag: 2.0.6
+  # It is problematic to change the init image
 
 ##############
 # Example secrets

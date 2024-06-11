@@ -58,7 +58,8 @@ class Settings(BaseSettings):
     """Settings of the app taken from environment variables."""
 
     TITLE: str = "phiphi"
-    VERSION: str = "v0.0.1"
+    # This should not be changed and should will be set by the helm chart
+    VERSION: str = "0.0.0"
 
     # Cors
     # From https://github.com/tiangolo/full-stack-fastapi-template/blob/master/backend/app/core/config.py#L45

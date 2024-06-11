@@ -32,6 +32,7 @@ stages:
   - test
   - build
   - publish
+  - release
 
 # GLOBAL VARIABLES
 variables:
@@ -45,6 +46,10 @@ variables:
   PHOENIX_SUPERSET_RELEASE_IMAGE: $PHOENIX_SUPERSET_REGISTRY_IMAGE:stable
   PRE_BUILD_IMAGE_FOLDER: pre_build_images
   PYTHON_IMAGE_REGISTRY: $CI_REGISTRY_IMAGE/python
+  # If you don't use this you will get 2-0-0 for the tag 2.0.0
+  # From https://gitlab.com/gitlab-org/gitlab/-/issues/34329#note_1807670358
+  # Unfortunately, this only works if it directly in the script and not a variable
+  # COMMIT_TAG: ${CI_COMMIT_TAG:-$CI_COMMIT_BRANCH}
 
 # Run linting for console_ui
 console_ui_linting:
@@ -222,8 +227,9 @@ publish_phoenix_chart_main:
     - job: package_phoenix_chart_main
       artifacts: true
   rules:
-    # Only run on `main` branch
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    # Adding this so that if we make a release the chart is published
+    - if: $CI_COMMIT_TAG
 
 publish_phoenix_superset_image:
   stage: publish
@@ -243,8 +249,8 @@ publish_phoenix_superset_image_tags:
   extends: .docker_template
   script:
     - docker pull $PHOENIX_SUPERSET_TEST_IMAGE
-    - docker tag $PHOENIX_SUPERSET_TEST_IMAGE $PHOENIX_SUPERSET_REGISTRY_IMAGE:$CI_COMMIT_TAG
-    - docker push $PHOENIX_SUPERSET_REGISTRY_IMAGE:$CI_COMMIT_TAG
+    - docker tag $PHOENIX_SUPERSET_TEST_IMAGE $PHOENIX_SUPERSET_REGISTRY_IMAGE:${CI_COMMIT_TAG:-$CI_COMMIT_BRANCH}
+    - docker push $PHOENIX_SUPERSET_REGISTRY_IMAGE:${CI_COMMIT_TAG:-$CI_COMMIT_BRANCH}
   needs:
     - job: build_phoenix_superset_image
   rules:
@@ -280,8 +286,8 @@ publish_python_images_tags:
   stage: publish
   script:
     - docker load -i $PRE_BUILD_IMAGE_FOLDER/$PROJECT.tar
-    - docker tag $PROJECT $PYTHON_IMAGE_REGISTRY/$PROJECT:$CI_COMMIT_TAG
-    - docker push $PYTHON_IMAGE_REGISTRY/$PROJECT:$CI_COMMIT_TAG
+    - docker tag $PROJECT $PYTHON_IMAGE_REGISTRY/$PROJECT:${CI_COMMIT_TAG:-$CI_COMMIT_BRANCH}
+    - docker push $PYTHON_IMAGE_REGISTRY/$PROJECT:${CI_COMMIT_TAG:-$CI_COMMIT_BRANCH}
   parallel:
     matrix:
       - PROJECT:
@@ -297,35 +303,21 @@ publish_python_images_tags:
   rules:
     - if: $CI_COMMIT_TAG
 
-publish_phiphi_prefect_deployments:
-  extends: .docker_template
-  stage: publish
-  script:
-    - docker load -i $PRE_BUILD_IMAGE_FOLDER/phiphi.tar
-    - apk update && apk add make
-    - cd python/projects/phiphi/
-    # Currently using the branch name slug as the image tag
-    # It might be better to start using git tag or commit hash as the image tag
-    - image=$PYTHON_IMAGE_REGISTRY/phiphi:$CI_COMMIT_REF_SLUG make create_prefect_deployments
-  needs:
-    - job: python_images_pre_build
-      artifacts: true
-      parallel:
-        matrix:
-          - PROJECT: phiphi
-    - job: python_images_build
-      parallel:
-        matrix:
-          - PROJECT: phiphi
+
+#######################
+# Release the repo
+# As in docs: https://docs.gitlab.com/ee/ci/yaml/#release
+# and https://docs.gitlab.com/ee/user/project/releases/release_cicd_examples.html#create-a-release-when-a-git-tag-is-created
+#######################
+release_job:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
   rules:
-    # We are using different API keys for main and dev as we have different prefect accounts
-    # for main and dev. This is because you have to pay for workspaces and it
-    # is too expensive for Build Up (1825 USD per month)
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-      variables:
-        PREFECT_API_KEY: "$MAIN_PREFECT_API_KEY"
-        PREFECT_API_URL: "$MAIN_PREFECT_API_URL"
-    - if: $CI_COMMIT_BRANCH == "dev"
-      variables:
-        PREFECT_API_KEY: "$DEV_PREFECT_API_KEY"
-        PREFECT_API_URL: "$DEV_PREFECT_API_URL"
+    # Only run with tag and on main branch
+    - if: $CI_COMMIT_TAG && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  script:
+    - echo "Running the release job."
+  release:
+    tag_name: $CI_COMMIT_TAG
+    name: 'Release $CI_COMMIT_TAG'
+    description: $CI_COMMIT_TAG_MESSAGE
