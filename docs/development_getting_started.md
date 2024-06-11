@@ -100,7 +100,6 @@ prefect flow and the prefect worker. To do this:
 - Enable `prefect-server.enabled` and `prefect_deployment.enabled` in the values
 - Prefect worker must not have an api key
 - `make up`
-- In another terminal run `kubectl port-forward svc/prefect-server 4200:4200`
 - Go to `http://localhost:4200` and you will see the prefect server dashboard
 - Update the `main-work-pool`:
 - `kubectl describe configmap phoenix-base-job-template`
