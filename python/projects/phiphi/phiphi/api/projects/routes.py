@@ -58,5 +58,11 @@ def get_projects(
 @router.delete("/projects/{project_id}")
 def delete_project(project_id: int, session: deps.SessionDep) -> None:
     """Delete an project."""
-    crud.delete_project(session, project_id, delete_project_db=True)
-    return None
+    try:
+        crud.delete_project(session, project_id, delete_project_db=True)
+        return None
+    except fastapi.HTTPException as e:
+        raise e
+    except Exception as e:
+        logger.error(f"Project deletion failed: {e}")
+        raise fastapi.HTTPException(status_code=500, detail="Project deletion failed")

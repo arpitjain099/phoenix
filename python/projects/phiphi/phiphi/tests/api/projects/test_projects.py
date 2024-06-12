@@ -104,6 +104,21 @@ def test_create_project_error_init(
     assert len(project_list) == len(project_list_after_failed_create)
 
 
+@pytest.mark.patch_settings({"USE_MOCK_BQ": False})
+@mock.patch("phiphi.pipeline_jobs.projects.delete_project_db")
+def test_delete_project_error_init(
+    mock_project_delete_db, reseed_tables, client: TestClient, session, patch_settings
+) -> None:
+    """Test delete project if there is an error in delete_project_db."""
+    project_list = crud.get_projects(session=session)
+    mock_project_delete_db.side_effect = ValueError("Error")
+    response = client.delete("/projects/1")
+    mock_project_delete_db.assert_called_once()
+    assert response.status_code == 500
+    project_list_after_failed_delete = crud.get_projects(session=session)
+    assert len(project_list) == len(project_list_after_failed_delete)
+
+
 @mock.patch("phiphi.pipeline_jobs.projects.init_project_db")
 @pytest.mark.patch_settings({"USE_MOCK_BQ": True})
 def test_create_project_mock_bq(
@@ -121,6 +136,18 @@ def test_create_project_mock_bq(
     }
     response = client.post("/projects/", json=data)
     mock_project_init_db.assert_not_called()
+    assert response.status_code == 200
+
+
+@pytest.mark.patch_settings({"USE_MOCK_BQ": True})
+@mock.patch("phiphi.pipeline_jobs.projects.delete_project_db")
+def test_delete_project_mock_bq(
+    mock_project_delete_db, reseed_tables, client: TestClient, session, patch_settings
+) -> None:
+    """Test delete project if there is an error in delete_project_db."""
+    mock_project_delete_db.side_effect = ValueError("Error")
+    response = client.delete("/projects/1")
+    mock_project_delete_db.assert_not_called()
     assert response.status_code == 200
 
 
