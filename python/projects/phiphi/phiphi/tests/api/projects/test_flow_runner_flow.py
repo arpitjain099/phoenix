@@ -27,6 +27,13 @@ from phiphi.api.projects.job_runs import crud, flow_runner_flow, schemas
             False,
             schemas.Status.failed,
         ),
+        (
+            0,
+            schemas.ForeignJobType.tabulate,
+            "tabulate_flow/tabulate_flow",
+            True,
+            schemas.Status.completed_sucessfully,
+        ),
     ],
 )
 @mock.patch("prefect.flow_runs.wait_for_flow_run", new_callable=AsyncMock)
