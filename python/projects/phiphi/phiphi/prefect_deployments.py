@@ -16,6 +16,7 @@ from typing import Coroutine, Protocol
 from phiphi import constants, health_check_flows
 from phiphi.api.projects.job_runs import flow_runner_flow
 from phiphi.pipeline_jobs.gathers import flow as gather_flow
+from phiphi.pipeline_jobs.tabulate import flow as tabulate_flow
 
 
 class CreateDeploymentsInterface(Protocol):
@@ -38,6 +39,7 @@ list_of_create_deployment_fn: list[CreateDeploymentsInterface] = [
     health_check_flows.create_deployments,
     flow_runner_flow.create_deployments,
     gather_flow.create_deployments,
+    tabulate_flow.create_deployments,
     # Add new create deployment functions here.
 ]
 

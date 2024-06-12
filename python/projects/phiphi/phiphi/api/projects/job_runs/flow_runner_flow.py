@@ -51,6 +51,12 @@ async def start_flow_run(
             "job_run_id": job_run_id,
             "project_namespace": project_namespace,
         }
+    elif job_type == "tabulate":
+        deployment_name = "tabulate_flow/tabulate_flow"
+        params = {
+            "job_run_id": job_run_id,
+            "project_namespace": project_namespace,
+        }
     else:
         raise NotImplementedError(f"Job type {job_type=} not implemented yet.")
     job_run_flow: objects.FlowRun = await deployments.run_deployment(
