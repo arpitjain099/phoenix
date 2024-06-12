@@ -154,7 +154,10 @@ def test_update_project_not_found(client: TestClient, recreate_tables) -> None:
     assert response.json() == {"detail": "Project not found"}
 
 
-def test_environment_defaults_main(client: TestClient, reseed_tables) -> None:
+@mock.patch("phiphi.pipeline_jobs.projects.init_project_db")
+def test_environment_defaults_main(
+    mock_project_init_db, client: TestClient, reseed_tables
+) -> None:
     """Test that environment defaults to main, when nothing is passed as parameter."""
     data = {
         "name": "first project",
@@ -164,13 +167,17 @@ def test_environment_defaults_main(client: TestClient, reseed_tables) -> None:
         "expected_usage": "one_off",
     }
     response = client.post("/projects/", json=data)
+    mock_project_init_db.assert_called_once()
     assert response.status_code == 200
     project = response.json()
     assert project["environment_slug"] == "main"
 
 
+@mock.patch("phiphi.pipeline_jobs.projects.init_project_db")
 @pytest.mark.freeze_time(CREATED_TIME)
-def test_create_project_with_non_existing_env(recreate_tables, client: TestClient) -> None:
+def test_create_project_with_non_existing_env(
+    mock_project_init_db, recreate_tables, client: TestClient
+) -> None:
     """Test create and then get of an project."""
     data = {
         "name": "first project",
@@ -181,5 +188,6 @@ def test_create_project_with_non_existing_env(recreate_tables, client: TestClien
         "expected_usage": "weekly",
     }
     response = client.post("/projects/", json=data)
+    mock_project_init_db.assert_not_called()
     assert response.status_code == 400
     assert response.json() == {"detail": "Environment not found"}
