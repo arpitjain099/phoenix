@@ -11,17 +11,32 @@ from phiphi.api.projects.job_runs import crud, flow_runner_flow, schemas
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
-    "mock_return_wait_flow_run_completed,expected_job_run_status",
+    "foreign_id,foreign_job_type,expected_deployment_name,mock_return_wait_flow_run_completed,expected_job_run_status",
     [
-        (True, schemas.Status.completed_sucessfully),
-        (False, schemas.Status.failed),
+        (
+            2,
+            schemas.ForeignJobType.gather,
+            "gather_flow/gather_flow",
+            True,
+            schemas.Status.completed_sucessfully,
+        ),
+        (
+            2,
+            schemas.ForeignJobType.gather,
+            "gather_flow/gather_flow",
+            False,
+            schemas.Status.failed,
+        ),
     ],
 )
 @mock.patch("prefect.flow_runs.wait_for_flow_run", new_callable=AsyncMock)
-@mock.patch("phiphi.api.projects.job_runs.flow_runner_flow.start_flow_run", new_callable=AsyncMock)
+@mock.patch("prefect.deployments.deployments.run_deployment", new_callable=AsyncMock)
 async def test_flow_runner_flow(
     mock_start_flow_run,
     mock_wait_for_flow_run,
+    foreign_id,
+    foreign_job_type,
+    expected_deployment_name,
     mock_return_wait_flow_run_completed,
     expected_job_run_status,
     session_context,
@@ -29,10 +44,7 @@ async def test_flow_runner_flow(
 ):
     """Test the flow_runner_flow."""
     project_id = 1
-    gather_id = 2
-    job_run_create = schemas.JobRunCreate(
-        foreign_id=gather_id, foreign_job_type=schemas.ForeignJobType.gather
-    )
+    job_run_create = schemas.JobRunCreate(foreign_id=foreign_id, foreign_job_type=foreign_job_type)
 
     job_run = crud.create_job_run(
         db=session_context, project_id=project_id, job_run_create=job_run_create
@@ -69,6 +81,9 @@ async def test_flow_runner_flow(
     # with the async functions it is very hard to test the arguments
     # so we just test that the functions were called
     mock_start_flow_run.assert_called_once()
+    args = mock_start_flow_run.call_args.kwargs
+    assert "name" in args
+    assert args["name"] == expected_deployment_name
     mock_wait_for_flow_run.assert_called_once_with(flow_run_id=mock_return_start_flow_run.id)
 
     job_run_completed = crud.get_job_run(
