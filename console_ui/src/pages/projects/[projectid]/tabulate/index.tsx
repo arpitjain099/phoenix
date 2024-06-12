@@ -61,9 +61,7 @@ const TabulateList: React.FC<IResourceComponentsProps> = () => {
 					type: "tabulate",
 				});
 				setTabulateList((prevList: JobRunResponse[]) =>
-					prevList.map((job) =>
-						job.id === jobDetail.id ? { ...job, latest_job_run: data } : job
-					)
+					prevList.map((job) => (job.id === jobDetail.id ? data : job))
 				);
 			} catch (error) {
 				console.error("Error fetching gather details:", error);
