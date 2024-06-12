@@ -1,4 +1,6 @@
 """Test Projects."""
+from unittest import mock
+
 import pytest
 import sqlalchemy
 from fastapi.testclient import TestClient
@@ -20,8 +22,9 @@ CREATED_TIME = "2024-04-01T12:00:01"
 UPDATE_TIME = "2024-04-01T12:00:02"
 
 
+@mock.patch("phiphi.pipeline_jobs.projects.init_project_db")
 @pytest.mark.freeze_time(CREATED_TIME)
-def test_create_get_project(reseed_tables, client: TestClient) -> None:
+def test_create_get_project(mock_project_init_db, reseed_tables, client: TestClient) -> None:
     """Test create and then get of an project."""
     data = {
         "name": "first project",
@@ -41,6 +44,7 @@ def test_create_get_project(reseed_tables, client: TestClient) -> None:
     assert project["delete_after_days"] == data["delete_after_days"]
     assert project["expected_usage"] == data["expected_usage"]
     assert project["created_at"] == CREATED_TIME
+    mock_project_init_db.assert_called_once_with(f"project_id{project['id']}")
 
     response = client.get(f"/projects/{project['id']}")
     assert response.status_code == 200
