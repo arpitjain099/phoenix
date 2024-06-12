@@ -125,6 +125,7 @@
 	},
 	"projects": {
 		"projects": "Projects",
+		"more_info": "More Information",
 		"fields": {
 			"id": "Unique ID",
 			"name": "Name",
@@ -150,6 +151,8 @@
 			"edit": "Edit Project",
 			"list": "Projects",
 			"show": "Show Project",
+			"gathers": "View Gathers",
+			"tabulates": "View Tabulate Runs",
 			"dashboard": "Go to Dashboard"
 		},
 		"warnings": {

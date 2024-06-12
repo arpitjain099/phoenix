@@ -125,6 +125,7 @@
 	},
 	"projects": {
 		"projects": "Proyectos",
+		"more_info": "Más información",
 		"fields": {
 			"id": "ID único",
 			"name": "Nombre",
@@ -150,6 +151,8 @@
 			"edit": "Editar proyecto",
 			"list": "Proyectos",
 			"show": "Mostrar proyecto",
+			"gathers": "Ver Reuniones",
+			"tabulates": "Ver Correr Tabulado",
 			"dashboard": "Tablero de control"
 		},
 		"warnings": {
