@@ -1,12 +1,14 @@
 """Routes for the projects."""
+import logging
+
 import fastapi
 
-from phiphi import utils
 from phiphi.api import deps
 from phiphi.api.projects import crud, schemas
-from phiphi.pipeline_jobs import projects
 
 router = fastapi.APIRouter()
+
+logger = logging.getLogger(__name__)
 
 
 @router.post("/projects/", response_model=schemas.ProjectResponse)
@@ -14,10 +16,15 @@ def create_project(
     project: schemas.ProjectCreate, session: deps.SessionDep
 ) -> schemas.ProjectResponse:
     """Create a new project."""
-    project_response = crud.create_project(session, project)
-    project_namespace = utils.get_project_namespace(project_response.id)
-    projects.init_project_db(project_namespace)
-    return project_response
+    try:
+        project_response = crud.create_project(session, project, init_project_db=True)
+        return project_response
+    # fastapi.HTTPException have their own status code and detail
+    except fastapi.HTTPException as e:
+        raise e
+    except Exception as e:
+        logger.error(f"Project creation failed: {e}")
+        raise fastapi.HTTPException(status_code=500, detail="Project creation failed")
 
 
 @router.put("/projects/{project_id}", response_model=schemas.ProjectResponse)

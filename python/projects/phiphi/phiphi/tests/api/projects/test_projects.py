@@ -5,7 +5,7 @@ import pytest
 import sqlalchemy
 from fastapi.testclient import TestClient
 
-from phiphi.api.projects import models
+from phiphi.api.projects import crud, models
 
 
 def test_project_seeded(session: sqlalchemy.orm.Session, reseed_tables) -> None:
@@ -57,6 +57,28 @@ def test_create_get_project(mock_project_init_db, reseed_tables, client: TestCli
     assert project["environment_slug"] == data["environment_slug"]
     assert project["pi_deleted_after_days"] == data["pi_deleted_after_days"]
     assert project["delete_after_days"] == data["delete_after_days"]
+
+
+@mock.patch("phiphi.pipeline_jobs.projects.init_project_db")
+def test_create_project_error_init(
+    mock_project_init_db, reseed_tables, client: TestClient, session
+) -> None:
+    """Test create project if there is an error in init_project_db."""
+    project_list = crud.get_projects(session=session)
+    mock_project_init_db.side_effect = ValueError("Error")
+    data = {
+        "name": "first project",
+        "description": "Project 1",
+        "environment_slug": "main",
+        "pi_deleted_after_days": 90,
+        "delete_after_days": 20,
+        "expected_usage": "weekly",
+    }
+    response = client.post("/projects/", json=data)
+    mock_project_init_db.assert_called_once()
+    assert response.status_code == 500
+    project_list_after_failed_create = crud.get_projects(session=session)
+    assert len(project_list) == len(project_list_after_failed_create)
 
 
 def test_get_project_not_found(client: TestClient, recreate_tables) -> None:
