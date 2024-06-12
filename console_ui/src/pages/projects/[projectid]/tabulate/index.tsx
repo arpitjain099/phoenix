@@ -13,6 +13,8 @@ import {
 	Button,
 	Tooltip,
 	Loader,
+	Title,
+	Text,
 } from "@mantine/core";
 import { DateField, List } from "@refinedev/mantine";
 import TableComponent from "@components/table";
@@ -61,9 +63,7 @@ const TabulateList: React.FC<IResourceComponentsProps> = () => {
 					type: "tabulate",
 				});
 				setTabulateList((prevList: JobRunResponse[]) =>
-					prevList.map((job) =>
-						job.id === jobDetail.id ? { ...job, latest_job_run: data } : job
-					)
+					prevList.map((job) => (job.id === jobDetail.id ? data : job))
 				);
 			} catch (error) {
 				console.error("Error fetching gather details:", error);
@@ -103,7 +103,11 @@ const TabulateList: React.FC<IResourceComponentsProps> = () => {
 				header: translate("projects.fields.status"),
 				cell: ({ getValue }) => {
 					const status = getValue() || "";
-					return <span className={statusTextStyle(status)}>{`${status}`}</span>;
+					return (
+						<span className={`${statusTextStyle(status)}`}>
+							{status ? translate(`status.${status}`) : ""}
+						</span>
+					);
 				},
 			},
 			{
@@ -182,6 +186,14 @@ const TabulateList: React.FC<IResourceComponentsProps> = () => {
 		<List
 			canCreate={false}
 			breadcrumb={<BreadcrumbsComponent breadcrumbs={breadcrumbs} />}
+			title={
+				<div className="flex flex-col">
+					<Title order={3}>{translate("tabulate.title")}</Title>
+					<Text fz="sm" c="dimmed">
+						{translate("tabulate.sub_titles.list")}
+					</Text>
+				</div>
+			}
 			headerButtons={({ defaultButtons }) => (
 				<>
 					{defaultButtons}

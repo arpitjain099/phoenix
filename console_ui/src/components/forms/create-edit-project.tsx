@@ -77,6 +77,7 @@ const CreateEditProjectForm: React.FC<Props> = ({ getInputProps }) => {
 				{...getInputProps("delete_after_days")}
 			/>
 			<Select
+				withAsterisk
 				mt="sm"
 				label={translate("projects.fields.expected_usage.title")}
 				data={[

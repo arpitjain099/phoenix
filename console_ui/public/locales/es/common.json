@@ -125,6 +125,7 @@
 	},
 	"projects": {
 		"projects": "Proyectos",
+		"more_info": "Más información",
 		"fields": {
 			"id": "ID único",
 			"name": "Nombre",
@@ -150,6 +151,8 @@
 			"edit": "Editar proyecto",
 			"list": "Proyectos",
 			"show": "Mostrar proyecto",
+			"gathers": "Ver Reuniones",
+			"tabulates": "Ver Correr Tabulado",
 			"dashboard": "Tablero de control"
 		},
 		"warnings": {
@@ -166,6 +169,9 @@
 			"edit": "Editar reunión",
 			"list": "Reuniones",
 			"show": "Mostrar reunión"
+		},
+		"sub_titles": {
+			"list": "Define la plataforma, la fuente y los parámetros de búsqueda para la recopilación de datos. Cree su nueva recopilación y luego ejecútela. Una vez completada, puede ejecutar una tabulación para actualizar el conjunto de datos del tablero."
 		},
 		"fields": {
 			"id": "ID",
@@ -218,9 +224,11 @@
 		}
 	},
 	"tabulate": {
-		"title": "Tabular y producir el conjunto de datos del tablero",
-		"tabulate": "Tabular",
-		"run": "Ejecutar una tabulación",
+		"title": "Tabular",
+		"sub_titles": {
+			"list": "Un tabulado creará y actualizará un conjunto de datos del tablero a partir de los datos recopilados."
+		},
+		"run": "Actualizar los conjuntos de datos del tablero",
 		"fields": {
 			"started_processing_at": "Inicio del procesamiento",
 			"completed_at": "Completado a las"
@@ -246,5 +254,12 @@
 	},
 	"table": {
 		"actions": "Acciones"
+	},
+	"status": {
+		"in_queue": "En cola",
+		"awaiting_start": "En espera de inicio",
+		"processing": "Procesando",
+		"failed": "Fallido",
+		"completed_successfully": "Completado con éxito"
 	}
 }

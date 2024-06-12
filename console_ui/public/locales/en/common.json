@@ -125,6 +125,7 @@
 	},
 	"projects": {
 		"projects": "Projects",
+		"more_info": "More Information",
 		"fields": {
 			"id": "Unique ID",
 			"name": "Name",
@@ -150,6 +151,8 @@
 			"edit": "Edit Project",
 			"list": "Projects",
 			"show": "Show Project",
+			"gathers": "View Gathers",
+			"tabulates": "View Tabulate Runs",
 			"dashboard": "Go to Dashboard"
 		},
 		"warnings": {
@@ -166,6 +169,9 @@
 			"edit": "Edit Gather",
 			"list": "Gathers",
 			"show": "Show Gather"
+		},
+		"sub_titles": {
+			"list": "Defines platform, source and search parameters for data collection. Create your new gather and then run it. Once it has been completed you can run a tabulate to update the dashboard dataset."
 		},
 		"fields": {
 			"id": "ID",
@@ -218,9 +224,12 @@
 		}
 	},
 	"tabulate": {
-		"title": "Tabulate and produce the dashboard dataset",
+		"title": "Tabulate",
+		"sub_titles": {
+			"list": "A tabulate will create and update a dashboard dataset from the gathered data."
+		},
 		"tabulate": "Tabulate",
-		"run": "Run a Tabulate",
+		"run": "Update Dashboard Datasets Tabulate",
 		"fields": {
 			"started_processing_at": "Started Processing At",
 			"completed_at": "Completed At"
@@ -246,5 +255,12 @@
 	},
 	"table": {
 		"actions": "Actions"
+	},
+	"status": {
+		"in_queue": "In Queue",
+		"awaiting_start": "Awaiting Start",
+		"processing": "Processing",
+		"failed": "Failed",
+		"completed_sucessfully": "Completed Sucessfully"
 	}
 }
