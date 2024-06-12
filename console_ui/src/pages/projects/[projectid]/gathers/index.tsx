@@ -176,7 +176,7 @@ const GatherList: React.FC<IResourceComponentsProps> = () => {
 											</Button>
 										</Tooltip>
 									)}
-									{status === "failed" && (
+									{/* {["failed", "completed_sucessfully"].includes(status) && (
 										<Button
 											p={0}
 											variant="subtle"
@@ -189,21 +189,7 @@ const GatherList: React.FC<IResourceComponentsProps> = () => {
 												className="cursor-pointer"
 											/>
 										</Button>
-									)}
-									{status === "completed_sucessfully" && (
-										<Button
-											p={0}
-											variant="subtle"
-											color="red"
-											onClick={() => {}}
-										>
-											<IconTrash
-												size={20}
-												color="red"
-												className="cursor-pointer"
-											/>
-										</Button>
-									)}
+									)} */}
 								</>
 							)}
 						</Group>
