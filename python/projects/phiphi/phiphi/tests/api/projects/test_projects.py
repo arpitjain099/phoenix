@@ -24,10 +24,11 @@ UPDATE_TIME = "2024-04-01T12:00:02"
 
 
 @pytest.mark.patch_settings({"USE_MOCK_BQ": False})
+@mock.patch("phiphi.pipeline_jobs.projects.delete_project_db")
 @mock.patch("phiphi.pipeline_jobs.projects.init_project_db")
 @pytest.mark.freeze_time(CREATED_TIME)
-def test_create_get_project(
-    mock_project_init_db, reseed_tables, client: TestClient, patch_settings
+def test_create_get_delete_project(
+    mock_project_init_db, mock_delete_db, reseed_tables, client: TestClient, patch_settings
 ) -> None:
     """Test create and then get of an project."""
     data = {
@@ -66,6 +67,18 @@ def test_create_get_project(
     assert response.status_code == 200
     projects = response.json()
     assert len(projects) == 4
+
+    response = client.delete(f"/projects/{project['id']}")
+    assert response.status_code == 200
+    mock_delete_db.assert_called_once_with(f"project_id{project['id']}")
+
+    response = client.get(f"/projects/{project['id']}")
+    assert response.status_code == 404
+
+    response = client.get("/projects/")
+    assert response.status_code == 200
+    projects = response.json()
+    assert len(projects) == 3
 
 
 @pytest.mark.patch_settings({"USE_MOCK_BQ": False})

@@ -53,3 +53,10 @@ def get_projects(
 ) -> list[schemas.ProjectResponse]:
     """Get Projects."""
     return crud.get_projects(session, start, end)
+
+
+@router.delete("/projects/{project_id}")
+def delete_project(project_id: int, session: deps.SessionDep) -> None:
+    """Delete an project."""
+    crud.delete_project(session, project_id, delete_project_db=True)
+    return None

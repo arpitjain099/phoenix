@@ -1,4 +1,6 @@
 """Project crud functionality."""
+import datetime
+
 import sqlalchemy.orm
 
 from phiphi import config, utils
@@ -97,3 +99,19 @@ def get_non_deleted_project_model(
         .first()
     )
     return db_project
+
+
+def delete_project(
+    session: sqlalchemy.orm.Session, project_id: int, delete_project_db: bool = False
+) -> None:
+    """Delete an project."""
+    db_project = get_non_deleted_project_model(session, project_id)
+    if db_project is None:
+        raise exceptions.ProjectNotFound()
+    if delete_project_db and not config.settings.USE_MOCK_BQ:
+        project_namespace = utils.get_project_namespace(project_id)
+        projects.delete_project_db(project_namespace)
+    db_project.deleted_at = datetime.datetime.utcnow()
+    session.add(db_project)
+    session.commit()
+    return None
