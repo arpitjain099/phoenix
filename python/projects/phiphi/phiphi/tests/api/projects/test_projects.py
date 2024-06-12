@@ -15,7 +15,8 @@ def test_project_seeded(session: sqlalchemy.orm.Session, reseed_tables) -> None:
     )
     count = response.one()
     assert count
-    assert count[0] == 3
+    # One is deleted
+    assert count[0] == 4
 
 
 CREATED_TIME = "2024-04-01T12:00:01"
@@ -60,6 +61,11 @@ def test_create_get_project(
     assert project["environment_slug"] == data["environment_slug"]
     assert project["pi_deleted_after_days"] == data["pi_deleted_after_days"]
     assert project["delete_after_days"] == data["delete_after_days"]
+
+    response = client.get("/projects/")
+    assert response.status_code == 200
+    projects = response.json()
+    assert len(projects) == 4
 
 
 @pytest.mark.patch_settings({"USE_MOCK_BQ": False})

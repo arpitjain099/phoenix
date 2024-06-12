@@ -41,7 +41,7 @@ def update_project(
     session: sqlalchemy.orm.Session, project_id: int, project: schemas.ProjectUpdate
 ) -> schemas.ProjectResponse | None:
     """Update an project."""
-    db_project = session.get(models.Project, project_id)
+    db_project = get_non_deleted_project_model(session, project_id)
     if db_project is None:
         return None
     for field, value in project.dict(exclude_unset=True).items():
@@ -55,7 +55,7 @@ def get_project(
     session: sqlalchemy.orm.Session, project_id: int
 ) -> schemas.ProjectResponse | None:
     """Get an project."""
-    db_project = session.get(models.Project, project_id)
+    db_project = get_non_deleted_project_model(session, project_id)
     if db_project is None:
         return None
     return schemas.ProjectResponse.model_validate(db_project)
@@ -65,7 +65,12 @@ def get_projects(
     session: sqlalchemy.orm.Session, start: int = 0, end: int = 100
 ) -> list[schemas.ProjectResponse]:
     """Get projects."""
-    query = sqlalchemy.select(models.Project).offset(start).limit(end)
+    query = (
+        sqlalchemy.select(models.Project)
+        .filter(models.Project.deleted_at.is_(None))
+        .offset(start)
+        .limit(end)
+    )
     projects = session.scalars(query).all()
     if not projects:
         return []
@@ -74,6 +79,21 @@ def get_projects(
 
 def get_db_project_with_guard(session: sqlalchemy.orm.Session, project_id: int) -> None:
     """Guard for null instnaces."""
-    db_project = session.query(models.Project).filter(models.Project.id == project_id).first()
+    db_project = get_non_deleted_project_model(session, project_id)
     if db_project is None:
         raise exceptions.ProjectNotFound()
+
+
+def get_non_deleted_project_model(
+    session: sqlalchemy.orm.Session, project_id: int
+) -> models.Project | None:
+    """Get a non-deleted project model."""
+    db_project = (
+        session.query(models.Project)
+        .filter(
+            models.Project.deleted_at.is_(None),
+            models.Project.id == project_id,
+        )
+        .first()
+    )
+    return db_project
