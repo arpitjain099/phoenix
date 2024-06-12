@@ -22,9 +22,12 @@ CREATED_TIME = "2024-04-01T12:00:01"
 UPDATE_TIME = "2024-04-01T12:00:02"
 
 
+@pytest.mark.patch_settings({"USE_MOCK_BQ": False})
 @mock.patch("phiphi.pipeline_jobs.projects.init_project_db")
 @pytest.mark.freeze_time(CREATED_TIME)
-def test_create_get_project(mock_project_init_db, reseed_tables, client: TestClient) -> None:
+def test_create_get_project(
+    mock_project_init_db, reseed_tables, client: TestClient, patch_settings
+) -> None:
     """Test create and then get of an project."""
     data = {
         "name": "first project",
@@ -59,9 +62,10 @@ def test_create_get_project(mock_project_init_db, reseed_tables, client: TestCli
     assert project["delete_after_days"] == data["delete_after_days"]
 
 
+@pytest.mark.patch_settings({"USE_MOCK_BQ": False})
 @mock.patch("phiphi.pipeline_jobs.projects.init_project_db")
 def test_create_project_error_init(
-    mock_project_init_db, reseed_tables, client: TestClient, session
+    mock_project_init_db, reseed_tables, client: TestClient, session, patch_settings
 ) -> None:
     """Test create project if there is an error in init_project_db."""
     project_list = crud.get_projects(session=session)
@@ -79,6 +83,26 @@ def test_create_project_error_init(
     assert response.status_code == 500
     project_list_after_failed_create = crud.get_projects(session=session)
     assert len(project_list) == len(project_list_after_failed_create)
+
+
+@mock.patch("phiphi.pipeline_jobs.projects.init_project_db")
+@pytest.mark.patch_settings({"USE_MOCK_BQ": True})
+def test_create_project_mock_bq(
+    mock_project_init_db, reseed_tables, client: TestClient, session, patch_settings
+) -> None:
+    """Test create project if there is an error in init_project_db."""
+    mock_project_init_db.side_effect = ValueError("Error")
+    data = {
+        "name": "first project",
+        "description": "Project 1",
+        "environment_slug": "main",
+        "pi_deleted_after_days": 90,
+        "delete_after_days": 20,
+        "expected_usage": "weekly",
+    }
+    response = client.post("/projects/", json=data)
+    mock_project_init_db.assert_not_called()
+    assert response.status_code == 200
 
 
 def test_get_project_not_found(client: TestClient, recreate_tables) -> None:

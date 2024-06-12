@@ -1,7 +1,7 @@
 """Project crud functionality."""
 import sqlalchemy.orm
 
-from phiphi import utils
+from phiphi import config, utils
 from phiphi.api import exceptions
 from phiphi.api.environments import models as env_models
 from phiphi.api.projects import models, schemas
@@ -26,7 +26,7 @@ def create_project(
         session.add(db_project)
         # Get the id of the project without commiting the transaction
         session.flush()
-        if init_project_db:
+        if init_project_db and not config.settings.USE_MOCK_BQ:
             project_namespace = utils.get_project_namespace(db_project.id)
             projects.init_project_db(project_namespace)
         session.commit()
