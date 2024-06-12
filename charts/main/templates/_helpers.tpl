@@ -88,6 +88,10 @@ env:
     # This uses the subchart to get the prefect-worker url
     value: {{ include "worker.apiUrl" (index  .Subcharts "prefect-worker") }}
   {{- end }}
+  {{- if .Values.api.bqDefaultLocation }}
+  - name: BQ_DEFAULT_LOCATION
+    value: {{ .Values.api.bqDefaultLocation | quote }}
+  {{- end }}
 ## This is the secret that is used to store the GCP service account json
 {{- if .Values.gcp_service_account.enabled }}
 volumeMounts:

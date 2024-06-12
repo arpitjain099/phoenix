@@ -97,6 +97,10 @@ class Settings(BaseSettings):
     # Root directory for mock BigQuery data, defined relative to this config file, computed by
     # validator function.
     MOCK_BQ_ROOT_DIR: str = "../mock_bq_data"
+    # Default location of big query dataset:
+    # See docs for options: https://cloud.google.com/bigquery/docs/locations
+    # EU is used as default since this means that the data is stored in a GDPR location.
+    BQ_DEFAULT_LOCATION: str = "EU"
 
     def model_post_init(self, __context):  # type: ignore[no-untyped-def]
         """Set the mock bq root directory as an absolute path."""

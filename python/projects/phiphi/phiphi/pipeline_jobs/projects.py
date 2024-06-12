@@ -1,6 +1,9 @@
 """Pipeline jobs for projects."""
 import prefect
+from google import auth
 from google.cloud import bigquery
+
+from phiphi import config
 
 
 @prefect.task
@@ -18,8 +21,18 @@ def init_project_db(
     Returns:
         str: The project namespace.
     """
+    # Get the default project for the credentials.
+    _, project = auth.default()
     client = bigquery.Client()
-    client.create_dataset(dataset=project_namespace, exists_ok=True)
+    # the dataset reference will use the default project or the project in the project_namespace if
+    # has this in the string ie. <project_id>.<dataset_id>
+    dataset_reference = bigquery.DatasetReference.from_string(
+        dataset_id=project_namespace, default_project=project
+    )
+    dataset = bigquery.Dataset(dataset_reference)
+
+    dataset.location = config.settings.BQ_DEFAULT_LOCATION
+    client.create_dataset(dataset=dataset, exists_ok=True)
     return project_namespace
 
 

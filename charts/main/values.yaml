@@ -58,6 +58,8 @@ api:
   # This should be False for production environments
   use_mock_apify: true
   init_db_command: "/app/projects/phiphi/entrypoint_init_db.sh"
+  # ~ will use default
+  bqDefaultLocation: ~
   apify_api_keys:
     enabled: false
     secret_name: "{{ .Release.Name }}-apify-api-keys"
