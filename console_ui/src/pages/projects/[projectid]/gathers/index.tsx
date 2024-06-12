@@ -124,10 +124,12 @@ const GatherList: React.FC<IResourceComponentsProps> = () => {
 				id: "status",
 				accessorKey: "latest_job_run.status",
 				header: translate("projects.fields.status"),
-				cell: function render({ getValue }) {
+				cell: ({ getValue }) => {
 					const status = getValue() || ""; // Default to empty string if getValue() is null or undefined
 					return (
-						<span className={`${statusTextStyle(status)}`}>{`${status}`}</span>
+						<span className={`${statusTextStyle(status)}`}>
+							{status ? translate(`status.${status}`) : ""}
+						</span>
 					);
 				},
 			},

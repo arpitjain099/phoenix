@@ -249,5 +249,12 @@
 	},
 	"table": {
 		"actions": "الإجراءات"
+	},
+	"status": {
+		"in_queue": "في الطابور",
+		"awaiting_start": "في انتظار البدء",
+		"processing": "قيد المعالجة",
+		"failed": "فشل",
+		"completed_successfully": "اكتمل بنجاح"
 	}
 }

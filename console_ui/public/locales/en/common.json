@@ -249,5 +249,12 @@
 	},
 	"table": {
 		"actions": "Actions"
+	},
+	"status": {
+		"in_queue": "In Queue",
+		"awaiting_start": "Awaiting Start",
+		"processing": "Processing",
+		"failed": "Failed",
+		"completed_sucessfully": "Completed Sucessfully"
 	}
 }

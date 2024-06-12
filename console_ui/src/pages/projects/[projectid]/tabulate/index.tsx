@@ -101,7 +101,11 @@ const TabulateList: React.FC<IResourceComponentsProps> = () => {
 				header: translate("projects.fields.status"),
 				cell: ({ getValue }) => {
 					const status = getValue() || "";
-					return <span className={statusTextStyle(status)}>{`${status}`}</span>;
+					return (
+						<span className={`${statusTextStyle(status)}`}>
+							{status ? translate(`status.${status}`) : ""}
+						</span>
+					);
 				},
 			},
 			{
