@@ -51,6 +51,12 @@ export const ProjectShow: React.FC<IResourceComponentsProps> = () => {
 		>
 			<Group>
 				<Title my="xs" order={5}>
+					{translate("projects.fields.description")}:
+				</Title>
+				<TextField value={record?.description} />
+			</Group>
+			<Group>
+				<Title my="xs" order={5}>
 					{translate("projects.fields.environment_slug")}:
 				</Title>
 				<TextField value={record?.environment_slug} />
@@ -85,12 +91,6 @@ export const ProjectShow: React.FC<IResourceComponentsProps> = () => {
 									{translate("projects.fields.id")}:
 								</Title>
 								<NumberField value={record?.id ?? ""} />
-							</Group>
-							<Group>
-								<Title my="xs" order={5}>
-									{translate("projects.fields.description")}:
-								</Title>
-								<TextField value={record?.description} />
 							</Group>
 							<Group>
 								<Title my="xs" order={5}>
