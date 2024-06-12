@@ -170,6 +170,9 @@
 			"list": "Reuniones",
 			"show": "Mostrar reunión"
 		},
+		"sub_titles": {
+			"list": "Define la plataforma, la fuente y los parámetros de búsqueda para la recopilación de datos. Cree su nueva recopilación y luego ejecútela. Una vez completada, puede ejecutar una tabulación para actualizar el conjunto de datos del tablero."
+		},
 		"fields": {
 			"id": "ID",
 			"source": "Fuente",

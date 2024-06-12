@@ -170,6 +170,9 @@
 			"list": "Regroupements",
 			"show": "Afficher le regroupement"
 		},
+		"sub_titles": {
+			"list": "Définit la plateforme, la source et les paramètres de recherche pour la collecte de données. Créez votre nouvelle collecte, puis exécutez-la. Une fois terminée, vous pouvez exécuter une tabulation pour mettre à jour le jeu de données du tableau de bord."
+		},
 		"fields": {
 			"id": "ID",
 			"source": "Source",
