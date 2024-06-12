@@ -224,9 +224,11 @@
 		}
 	},
 	"tabulate": {
-		"title": "Tabuler et produire l'ensemble de données du tableau de bord",
-		"tabulate": "Tabuler",
-		"run": "Lancer une tabulation",
+		"title": "Tabuler",
+		"sub_titles": {
+			"list": "Un tableau créera et mettra à jour un ensemble de données de tableau de bord à partir des données collectées."
+		},
+		"run": "Mettre à jour les jeux de données du tableau de bord",
 		"fields": {
 			"started_processing_at": "Début du traitement",
 			"completed_at": "Terminé à"

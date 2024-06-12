@@ -13,6 +13,8 @@ import {
 	Button,
 	Tooltip,
 	Loader,
+	Title,
+	Text,
 } from "@mantine/core";
 import { DateField, List } from "@refinedev/mantine";
 import TableComponent from "@components/table";
@@ -184,6 +186,14 @@ const TabulateList: React.FC<IResourceComponentsProps> = () => {
 		<List
 			canCreate={false}
 			breadcrumb={<BreadcrumbsComponent breadcrumbs={breadcrumbs} />}
+			title={
+				<div className="flex flex-col">
+					<Title order={3}>{translate("tabulate.title")}</Title>
+					<Text fz="sm" c="dimmed">
+						{translate("tabulate.sub_titles.list")}
+					</Text>
+				</div>
+			}
 			headerButtons={({ defaultButtons }) => (
 				<>
 					{defaultButtons}

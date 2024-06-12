@@ -224,9 +224,12 @@
 		}
 	},
 	"tabulate": {
-		"title": "Tabulate and produce the dashboard dataset",
+		"title": "Tabulate",
+		"sub_titles": {
+			"list": "A tabulate will create and update a dashboard dataset from the gathered data."
+		},
 		"tabulate": "Tabulate",
-		"run": "Run a Tabulate",
+		"run": "Update Dashboard Datasets Tabulate",
 		"fields": {
 			"started_processing_at": "Started Processing At",
 			"completed_at": "Completed At"
