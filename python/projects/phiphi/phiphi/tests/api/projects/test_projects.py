@@ -15,7 +15,8 @@ def test_project_seeded(session: sqlalchemy.orm.Session, reseed_tables) -> None:
     )
     count = response.one()
     assert count
-    assert count[0] == 3
+    # One is deleted
+    assert count[0] == 4
 
 
 CREATED_TIME = "2024-04-01T12:00:01"
@@ -23,10 +24,11 @@ UPDATE_TIME = "2024-04-01T12:00:02"
 
 
 @pytest.mark.patch_settings({"USE_MOCK_BQ": False})
+@mock.patch("phiphi.pipeline_jobs.projects.delete_project_db")
 @mock.patch("phiphi.pipeline_jobs.projects.init_project_db")
 @pytest.mark.freeze_time(CREATED_TIME)
-def test_create_get_project(
-    mock_project_init_db, reseed_tables, client: TestClient, patch_settings
+def test_create_get_delete_project(
+    mock_project_init_db, mock_delete_db, reseed_tables, client: TestClient, patch_settings
 ) -> None:
     """Test create and then get of an project."""
     data = {
@@ -61,6 +63,23 @@ def test_create_get_project(
     assert project["pi_deleted_after_days"] == data["pi_deleted_after_days"]
     assert project["delete_after_days"] == data["delete_after_days"]
 
+    response = client.get("/projects/")
+    assert response.status_code == 200
+    projects = response.json()
+    assert len(projects) == 4
+
+    response = client.delete(f"/projects/{project['id']}")
+    assert response.status_code == 200
+    mock_delete_db.assert_called_once_with(f"project_id{project['id']}")
+
+    response = client.get(f"/projects/{project['id']}")
+    assert response.status_code == 404
+
+    response = client.get("/projects/")
+    assert response.status_code == 200
+    projects = response.json()
+    assert len(projects) == 3
+
 
 @pytest.mark.patch_settings({"USE_MOCK_BQ": False})
 @mock.patch("phiphi.pipeline_jobs.projects.init_project_db")
@@ -85,6 +104,21 @@ def test_create_project_error_init(
     assert len(project_list) == len(project_list_after_failed_create)
 
 
+@pytest.mark.patch_settings({"USE_MOCK_BQ": False})
+@mock.patch("phiphi.pipeline_jobs.projects.delete_project_db")
+def test_delete_project_error_init(
+    mock_project_delete_db, reseed_tables, client: TestClient, session, patch_settings
+) -> None:
+    """Test delete project if there is an error in delete_project_db."""
+    project_list = crud.get_projects(session=session)
+    mock_project_delete_db.side_effect = ValueError("Error")
+    response = client.delete("/projects/1")
+    mock_project_delete_db.assert_called_once()
+    assert response.status_code == 500
+    project_list_after_failed_delete = crud.get_projects(session=session)
+    assert len(project_list) == len(project_list_after_failed_delete)
+
+
 @mock.patch("phiphi.pipeline_jobs.projects.init_project_db")
 @pytest.mark.patch_settings({"USE_MOCK_BQ": True})
 def test_create_project_mock_bq(
@@ -102,6 +136,18 @@ def test_create_project_mock_bq(
     }
     response = client.post("/projects/", json=data)
     mock_project_init_db.assert_not_called()
+    assert response.status_code == 200
+
+
+@pytest.mark.patch_settings({"USE_MOCK_BQ": True})
+@mock.patch("phiphi.pipeline_jobs.projects.delete_project_db")
+def test_delete_project_mock_bq(
+    mock_project_delete_db, reseed_tables, client: TestClient, session, patch_settings
+) -> None:
+    """Test delete project if there is an error in delete_project_db."""
+    mock_project_delete_db.side_effect = ValueError("Error")
+    response = client.delete("/projects/1")
+    mock_project_delete_db.assert_not_called()
     assert response.status_code == 200
 
 
