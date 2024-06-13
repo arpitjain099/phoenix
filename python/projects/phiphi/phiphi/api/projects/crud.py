@@ -1,13 +1,15 @@
 """Project crud functionality."""
 import sqlalchemy.orm
 
+from phiphi import config, utils
 from phiphi.api import exceptions
 from phiphi.api.environments import models as env_models
 from phiphi.api.projects import models, schemas
+from phiphi.pipeline_jobs import projects
 
 
 def create_project(
-    session: sqlalchemy.orm.Session, project: schemas.ProjectCreate
+    session: sqlalchemy.orm.Session, project: schemas.ProjectCreate, init_project_db: bool = False
 ) -> schemas.ProjectResponse:
     """Create a new project."""
     db_environment = (
@@ -19,11 +21,20 @@ def create_project(
     if db_environment is None:
         raise exceptions.EnvironmentNotFound()
 
-    db_project = models.Project(**project.dict())
-    session.add(db_project)
-    session.commit()
-    session.refresh(db_project)
-    return schemas.ProjectResponse.model_validate(db_project)
+    try:
+        db_project = models.Project(**project.dict())
+        session.add(db_project)
+        # Get the id of the project without commiting the transaction
+        session.flush()
+        if init_project_db and not config.settings.USE_MOCK_BQ:
+            project_namespace = utils.get_project_namespace(db_project.id)
+            projects.init_project_db(project_namespace)
+        session.commit()
+        session.refresh(db_project)
+        return schemas.ProjectResponse.model_validate(db_project)
+    except Exception as e:
+        session.rollback()  # Rollback the transaction if any error occurs
+        raise e
 
 
 def update_project(
