@@ -23,6 +23,7 @@ class ProjectBase(platform_db.Base):
     delete_after_days: orm.Mapped[int]
     expected_usage: orm.Mapped[Optional[str]]
     deleted_at: orm.Mapped[Optional[datetime.datetime]]
+    dashboard_id: orm.Mapped[Optional[int]]
 
 
 class Project(ProjectBase, base_models.TimestampModel):
