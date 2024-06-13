@@ -40,6 +40,9 @@ class ProjectBase(pydantic.BaseModel):
     expected_usage: Annotated[
         ExpectedUsage, pydantic.Field(description="The environment expected usage of the project")
     ]
+    dashboard_id: Annotated[
+        int | None, pydantic.Field(description="The dashboard id of the project")
+    ] = None
 
 
 class ProjectCreate(ProjectBase):
@@ -72,3 +75,4 @@ class ProjectUpdate(pydantic.BaseModel):
     delete_after_days: Annotated[int | None, delete_after_days_field]
     expected_usage: ExpectedUsage | None = None
     environment_slug: Annotated[str | None, environment_slug_field]
+    dashboard_id: int | None = None
