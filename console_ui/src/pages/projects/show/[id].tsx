@@ -20,11 +20,8 @@ import {
 	Group,
 	Title,
 } from "@mantine/core";
-import { IconEye } from "@tabler/icons";
 import Link from "next/link";
-
-const PLATFORM_DOMAIN_BASE = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN_BASE!;
-const PLATFORM_SCHEMA_BASE = process.env.NEXT_PUBLIC_PLATFORM_SCHEMA_BASE!;
+import DashboardLinkButton from "@components/buttons/DashboardLinkButton";
 
 export const ProjectShow: React.FC<IResourceComponentsProps> = () => {
 	const translate = useTranslate();
@@ -134,16 +131,10 @@ export const ProjectShow: React.FC<IResourceComponentsProps> = () => {
 				>
 					<Button>{translate("projects.titles.tabulates")}</Button>
 				</Link>
-				{PLATFORM_DOMAIN_BASE && PLATFORM_SCHEMA_BASE && (
-					<Link
-						href={`${PLATFORM_SCHEMA_BASE}://dashboard.${record?.environment_slug}.${PLATFORM_DOMAIN_BASE}`}
-						target="_blank"
-					>
-						<Button leftIcon={<IconEye />}>
-							{translate("projects.titles.dashboard")}
-						</Button>
-					</Link>
-				)}
+				<DashboardLinkButton
+					environmentSlug={record?.environment_slug}
+					dashboardId={record?.dashboard_id}
+				/>
 			</Group>
 		</Show>
 	);
