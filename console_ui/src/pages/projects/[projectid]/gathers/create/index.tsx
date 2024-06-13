@@ -2,6 +2,7 @@
 import {
 	IResourceComponentsProps,
 	useCreate,
+	useOne,
 	useTranslate,
 } from "@refinedev/core";
 import { Create, useForm, useSelect } from "@refinedev/mantine";
@@ -28,10 +29,11 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 	const router = useRouter();
 	const { projectid } = router.query;
 	const [inputList, setInputList] = useState<string[]>([]);
+	const [projectName, setProjectName] = useState("");
 
 	const breadcrumbs = [
 		{ title: translate("projects.projects"), href: "/projects" },
-		{ title: projectid as string, href: `/projects/show/${projectid}` },
+		{ title: projectName, href: `/projects/show/${projectid}` },
 		{ title: translate("gathers.gathers"), href: "../gathers" },
 		{ title: translate("actions.create"), href: "create" },
 	];
@@ -89,6 +91,14 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 		}
 		return commonRules;
 	}
+
+	const { data: projectData } = useOne({
+		resource: "projects",
+		id: projectid as string,
+		queryOptions: {
+			enabled: !!projectid,
+		},
+	});
 
 	const { selectProps: projectSelectProps } = useSelect({
 		resource: "projects",
@@ -148,6 +158,10 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 	useEffect(() => {
 		setFieldValue("project_id", Number(projectid));
 	}, [projectid, setFieldValue]);
+
+	useEffect(() => {
+		if (projectData?.data?.name) setProjectName(projectData.data.name);
+	}, [projectData?.data?.name]);
 
 	return (
 		<Create

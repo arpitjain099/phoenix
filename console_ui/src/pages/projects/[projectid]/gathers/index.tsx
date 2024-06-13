@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
 	IResourceComponentsProps,
 	useTranslate,
-	useMany,
 	useList,
 	useOne,
 } from "@refinedev/core";
@@ -37,6 +36,7 @@ const GatherList: React.FC<IResourceComponentsProps> = () => {
 	const translate = useTranslate();
 	const router = useRouter();
 	const { projectid } = router.query || {};
+	const [projectName, setProjectName] = useState("");
 	const [opened, setOpened] = useState(false);
 	const [selected, setSelected] = useState(null);
 	const [gatherList, setGatherList] = useState<any>([]);
@@ -46,9 +46,17 @@ const GatherList: React.FC<IResourceComponentsProps> = () => {
 
 	const breadcrumbs = [
 		{ title: translate("projects.projects"), href: "/projects" },
-		{ title: projectid as string, href: `/projects/show/${projectid}` },
+		{ title: projectName, href: `/projects/show/${projectid}` },
 		{ title: translate("gathers.gathers"), href: "#" },
 	];
+
+	const { data: projectData } = useOne({
+		resource: "projects",
+		id: projectid as string,
+		queryOptions: {
+			enabled: !!projectid,
+		},
+	});
 
 	const apiResponse = useList({
 		resource: projectid ? `projects/${projectid}/gathers` : "",
@@ -215,6 +223,10 @@ const GatherList: React.FC<IResourceComponentsProps> = () => {
 			setGatherList(apiResponse.data.data);
 		}
 	}, [apiResponse?.data?.data]);
+
+	useEffect(() => {
+		if (projectData?.data?.name) setProjectName(projectData.data.name);
+	}, [projectData?.data?.name]);
 
 	return (
 		<>
