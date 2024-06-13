@@ -131,7 +131,10 @@ export const ProjectShow: React.FC<IResourceComponentsProps> = () => {
 				>
 					<Button>{translate("projects.titles.tabulates")}</Button>
 				</Link>
-				<DashboardLinkButton environmentSlug={record?.environment_slug} />
+				<DashboardLinkButton
+					environmentSlug={record?.environment_slug}
+					dashboardId={record?.dashboard_id}
+				/>
 			</Group>
 		</Show>
 	);
