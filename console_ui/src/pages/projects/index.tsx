@@ -1,12 +1,13 @@
 import React from "react";
+import Link from "next/link";
 import {
 	IResourceComponentsProps,
 	useGetIdentity,
 	useTranslate,
 } from "@refinedev/core";
 import { ColumnDef } from "@tanstack/react-table";
-import { Group, Pagination, ScrollArea } from "@mantine/core";
-import { EditButton, ShowButton, DateField, List } from "@refinedev/mantine";
+import { Pagination, ScrollArea } from "@mantine/core";
+import { DateField, List } from "@refinedev/mantine";
 import { useTable } from "@refinedev/react-table";
 import { UserInfo } from "src/interfaces/user";
 import TableComponent from "../../components/table";
@@ -20,6 +21,17 @@ export const ProjectList: React.FC<IResourceComponentsProps> = () => {
 				id: "name",
 				accessorKey: "name",
 				header: translate("projects.fields.name"),
+				cell: ({ row }) => {
+					const { id, name } = row.original;
+					return (
+						<Link
+							href={`/projects/show/${id}`}
+							className="no-underline text-blue-500"
+						>
+							{name}
+						</Link>
+					);
+				},
 			},
 			{
 				id: "created_at",
@@ -39,19 +51,6 @@ export const ProjectList: React.FC<IResourceComponentsProps> = () => {
 				header: translate("projects.fields.updated_at"),
 				cell: function render({ getValue }) {
 					return getValue() ? <DateField value={getValue<any>()} /> : "";
-				},
-			},
-			{
-				id: "actions",
-				accessorKey: "id",
-				header: translate("table.actions"),
-				cell: function render({ getValue }) {
-					return (
-						<Group spacing="xs" noWrap>
-							<ShowButton hideText recordItemId={getValue() as string} />
-							<EditButton hideText recordItemId={getValue() as string} />
-						</Group>
-					);
 				},
 			},
 		],

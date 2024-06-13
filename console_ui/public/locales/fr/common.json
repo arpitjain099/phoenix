@@ -125,6 +125,7 @@
 	},
 	"projects": {
 		"projects": "Projets",
+		"more_info": "Plus d'informations",
 		"fields": {
 			"id": "Identifiant unique",
 			"name": "Nom",
@@ -150,6 +151,8 @@
 			"edit": "Modifier l'project",
 			"list": "Projects",
 			"show": "Afficher l'project",
+			"gathers": "Voir Rassemblements",
+			"tabulates": "Voir Courir Tabulé",
 			"dashboard": "Tableau de bord"
 		},
 		"warnings": {
@@ -166,6 +169,9 @@
 			"edit": "Modifier le regroupement",
 			"list": "Regroupements",
 			"show": "Afficher le regroupement"
+		},
+		"sub_titles": {
+			"list": "Définit la plateforme, la source et les paramètres de recherche pour la collecte de données. Créez votre nouvelle collecte, puis exécutez-la. Une fois terminée, vous pouvez exécuter une tabulation pour mettre à jour le jeu de données du tableau de bord."
 		},
 		"fields": {
 			"id": "ID",
@@ -218,9 +224,11 @@
 		}
 	},
 	"tabulate": {
-		"title": "Tabuler et produire l'ensemble de données du tableau de bord",
-		"tabulate": "Tabuler",
-		"run": "Lancer une tabulation",
+		"title": "Tabuler",
+		"sub_titles": {
+			"list": "Un tableau créera et mettra à jour un ensemble de données de tableau de bord à partir des données collectées."
+		},
+		"run": "Mettre à jour les jeux de données du tableau de bord",
 		"fields": {
 			"started_processing_at": "Début du traitement",
 			"completed_at": "Terminé à"
@@ -246,5 +254,12 @@
 	},
 	"table": {
 		"actions": "Actions"
+	},
+	"status": {
+		"in_queue": "En file d'attente",
+		"awaiting_start": "En attente de début",
+		"processing": "Traitement",
+		"failed": "Échoué",
+		"completed_successfully": "Terminé avec succès"
 	}
 }

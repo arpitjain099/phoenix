@@ -30,10 +30,26 @@ TEST_PROJECT_CREATE_3 = schemas.ProjectCreate(
     expected_usage=schemas.ExpectedUsage.weekly,
 )
 
+TEST_PROJECT_CREATE_4_DELETED = schemas.ProjectCreate(
+    name="Phoenix Project 3",
+    description="Project 3",
+    environment_slug="test",
+    pi_deleted_after_days=90,
+    delete_after_days=20,
+    expected_usage=schemas.ExpectedUsage.weekly,
+)
+
 
 def seed_test_project(session: Session) -> None:
     """Seed the project."""
-    projects = [TEST_PROJECT_CREATE, TEST_PROJECT_CREATE_2, TEST_PROJECT_CREATE_3]
+    projects = [
+        TEST_PROJECT_CREATE,
+        TEST_PROJECT_CREATE_2,
+        TEST_PROJECT_CREATE_3,
+        TEST_PROJECT_CREATE_4_DELETED,
+    ]
 
     for project in projects:
         crud.create_project(session=session, project=project)
+
+    crud.delete_project(session=session, project_id=4)

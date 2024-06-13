@@ -58,6 +58,8 @@ api:
   # This should be False for production environments
   use_mock_apify: true
   init_db_command: "/app/projects/phiphi/entrypoint_init_db.sh"
+  # ~ will use default
+  bqDefaultLocation: ~
   apify_api_keys:
     enabled: false
     secret_name: "{{ .Release.Name }}-apify-api-keys"
@@ -196,7 +198,7 @@ superset:
   image:
     repository: registry.gitlab.com/howtobuildup/phoenix/phoenix_superset
     # Default is the chart version of the sub chart :(
-    tag: 2.0.8
+    tag: 2.1.0
   # It is problematic to change the init image
 
 ##############

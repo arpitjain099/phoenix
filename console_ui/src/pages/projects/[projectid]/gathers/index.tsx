@@ -15,6 +15,8 @@ import {
 	Button,
 	Tooltip,
 	Loader,
+	Text,
+	Title,
 } from "@mantine/core";
 import { List, DateField } from "@refinedev/mantine";
 import TableComponent from "@components/table";
@@ -124,10 +126,12 @@ const GatherList: React.FC<IResourceComponentsProps> = () => {
 				id: "status",
 				accessorKey: "latest_job_run.status",
 				header: translate("projects.fields.status"),
-				cell: function render({ getValue }) {
+				cell: ({ getValue }) => {
 					const status = getValue() || ""; // Default to empty string if getValue() is null or undefined
 					return (
-						<span className={`${statusTextStyle(status)}`}>{`${status}`}</span>
+						<span className={`${statusTextStyle(status)}`}>
+							{status ? translate(`status.${status}`) : ""}
+						</span>
 					);
 				},
 			},
@@ -174,7 +178,7 @@ const GatherList: React.FC<IResourceComponentsProps> = () => {
 											</Button>
 										</Tooltip>
 									)}
-									{status === "failed" && (
+									{/* {["failed", "completed_sucessfully"].includes(status) && (
 										<Button
 											p={0}
 											variant="subtle"
@@ -187,21 +191,7 @@ const GatherList: React.FC<IResourceComponentsProps> = () => {
 												className="cursor-pointer"
 											/>
 										</Button>
-									)}
-									{status === "completed_sucessfully" && (
-										<Button
-											p={0}
-											variant="subtle"
-											color="red"
-											onClick={() => {}}
-										>
-											<IconTrash
-												size={20}
-												color="red"
-												className="cursor-pointer"
-											/>
-										</Button>
-									)}
+									)} */}
 								</>
 							)}
 						</Group>
@@ -228,7 +218,17 @@ const GatherList: React.FC<IResourceComponentsProps> = () => {
 
 	return (
 		<>
-			<List breadcrumb={<BreadcrumbsComponent breadcrumbs={breadcrumbs} />}>
+			<List
+				breadcrumb={<BreadcrumbsComponent breadcrumbs={breadcrumbs} />}
+				title={
+					<div className="flex flex-col">
+						<Title order={3}>{translate("gathers.titles.list")}</Title>
+						<Text fz="sm" c="dimmed">
+							{translate("gathers.sub_titles.list")}
+						</Text>
+					</div>
+				}
+			>
 				<ScrollArea>
 					<TableComponent
 						headerGroups={getHeaderGroups}
