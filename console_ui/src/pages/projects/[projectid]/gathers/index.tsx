@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
 	IResourceComponentsProps,
 	useTranslate,
-	useMany,
 	useList,
-	useOne,
 } from "@refinedev/core";
 import { useTable } from "@refinedev/react-table";
 import { ColumnDef } from "@tanstack/react-table";
@@ -46,7 +44,11 @@ const GatherList: React.FC<IResourceComponentsProps> = () => {
 
 	const breadcrumbs = [
 		{ title: translate("projects.projects"), href: "/projects" },
-		{ title: projectid as string, href: `/projects/show/${projectid}` },
+		{
+			title: projectid as string,
+			href: `/projects/show/${projectid}`,
+			replaceWithProjectName: true,
+		},
 		{ title: translate("gathers.gathers"), href: "#" },
 	];
 
@@ -219,7 +221,12 @@ const GatherList: React.FC<IResourceComponentsProps> = () => {
 	return (
 		<>
 			<List
-				breadcrumb={<BreadcrumbsComponent breadcrumbs={breadcrumbs} />}
+				breadcrumb={
+					<BreadcrumbsComponent
+						breadcrumbs={breadcrumbs}
+						projectid={projectid as string}
+					/>
+				}
 				title={
 					<div className="flex flex-col">
 						<Title order={3}>{translate("gathers.titles.list")}</Title>

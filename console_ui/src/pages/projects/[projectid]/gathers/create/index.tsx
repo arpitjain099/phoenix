@@ -31,7 +31,11 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 
 	const breadcrumbs = [
 		{ title: translate("projects.projects"), href: "/projects" },
-		{ title: projectid as string, href: `/projects/show/${projectid}` },
+		{
+			title: projectid as string,
+			href: `/projects/show/${projectid}`,
+			replaceWithProjectName: true,
+		},
 		{ title: translate("gathers.gathers"), href: "../gathers" },
 		{ title: translate("actions.create"), href: "create" },
 	];
@@ -151,7 +155,12 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 
 	return (
 		<Create
-			breadcrumb={<BreadcrumbsComponent breadcrumbs={breadcrumbs} />}
+			breadcrumb={
+				<BreadcrumbsComponent
+					breadcrumbs={breadcrumbs}
+					projectid={projectid as string}
+				/>
+			}
 			isLoading={formLoading || isLoading}
 			saveButtonProps={{ ...saveButtonProps, onClick: handleSave }}
 		>
