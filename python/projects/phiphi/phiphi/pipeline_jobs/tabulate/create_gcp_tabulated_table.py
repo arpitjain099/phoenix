@@ -11,12 +11,17 @@ Arguments:
 import argparse
 from typing import Any
 
-from google.cloud import bigquery
+from google.cloud import bigquery, exceptions
 
 from phiphi.pipeline_jobs.tabulate import refresh_gcp_table_schema
 
 
-def create_table(table_id: str, schema_path: str | None = None, with_dummy_rows: int = 0) -> None:
+def create_table(
+    table_id: str,
+    schema_path: str | None = None,
+    with_dummy_rows: int = 0,
+    exists_ok: bool = False,
+) -> None:
     """Create a table with the schema from schema_path.
 
     Args:
@@ -25,6 +30,7 @@ def create_table(table_id: str, schema_path: str | None = None, with_dummy_rows:
             default: "tabulated_messages.schema.json"
         with_dummy_rows (int): The number of dummy rows to insert into the table.
             default: 0
+        exists_ok (bool): If True, do not raise an error if the table already exists.
     """
     if not table_id:
         raise ValueError("table_id is required.")
@@ -36,8 +42,13 @@ def create_table(table_id: str, schema_path: str | None = None, with_dummy_rows:
     schema = client.schema_from_json(schema_path)
 
     table = bigquery.Table(table_id, schema=schema)
-    table = client.create_table(table)  # API request
-    print(f"Created table {table_id}.")
+    try:
+        table = client.create_table(table, exists_ok=exists_ok)  # API request
+        print(f"Created table {table_id}.")
+    except exceptions.Conflict:
+        print(f"Table {table_id} already exists.")
+        print("Will not insert dummy rows.")
+        return None
 
     if with_dummy_rows:
         print(f"Inserting {with_dummy_rows} dummy rows into {table_id}.")
