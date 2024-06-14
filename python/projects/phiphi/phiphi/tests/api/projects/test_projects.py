@@ -49,7 +49,7 @@ def test_create_get_delete_project(
     assert project["delete_after_days"] == data["delete_after_days"]
     assert project["expected_usage"] == data["expected_usage"]
     assert project["created_at"] == CREATED_TIME
-    mock_project_init_db.assert_called_once_with(f"project_id{project['id']}")
+    mock_project_init_db.assert_called_once_with(f"project_id{project['id']}", with_dummy_rows=2)
 
     response = client.get(f"/projects/{project['id']}")
     assert response.status_code == 200

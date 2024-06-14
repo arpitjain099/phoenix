@@ -30,7 +30,8 @@ def create_project(
         session.flush()
         if init_project_db and not config.settings.USE_MOCK_BQ:
             project_namespace = utils.get_project_namespace(db_project.id)
-            projects.init_project_db(project_namespace)
+            # Creating with dummy rows as it is easy to test the dashboard
+            projects.init_project_db(project_namespace, with_dummy_rows=2)
         session.commit()
         session.refresh(db_project)
         return schemas.ProjectResponse.model_validate(db_project)
