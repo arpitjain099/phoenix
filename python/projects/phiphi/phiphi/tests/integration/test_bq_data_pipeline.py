@@ -31,7 +31,7 @@ def test_bq_pipeline_integration(session_context, reseed_tables):
     test_project_namespace = f"test_{temp_project_namespace}"
     print(f"Test project namespace: {test_project_namespace}")
 
-    dataset = projects.init_project_db.fn(test_project_namespace)
+    dataset = projects.init_project_db.fn(test_project_namespace, with_dummy_rows=2)
     client = bigquery.Client()
     assert client.get_dataset(dataset)
 
