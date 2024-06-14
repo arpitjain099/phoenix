@@ -42,7 +42,11 @@ const TabulateList: React.FC<IResourceComponentsProps> = () => {
 
 	const breadcrumbs = [
 		{ title: translate("projects.projects"), href: "/projects" },
-		{ title: projectid as string, href: `/projects/show/${projectid}` },
+		{
+			title: projectid as string,
+			href: `/projects/show/${projectid}`,
+			replaceWithProjectName: true,
+		},
 		{ title: translate("tabulate.tabulate"), href: "#" },
 	];
 
@@ -158,12 +162,6 @@ const TabulateList: React.FC<IResourceComponentsProps> = () => {
 		meta: { ...prev.meta },
 	}));
 
-	useEffect(() => {
-		if (apiResponse?.data?.data) {
-			setTabulateList(apiResponse.data.data);
-		}
-	}, [apiResponse?.data?.data]);
-
 	const handleStartRun = () => {
 		setLoading(true);
 		jobRunService
@@ -182,10 +180,21 @@ const TabulateList: React.FC<IResourceComponentsProps> = () => {
 			});
 	};
 
+	useEffect(() => {
+		if (apiResponse?.data?.data) {
+			setTabulateList(apiResponse.data.data);
+		}
+	}, [apiResponse?.data?.data]);
+
 	return (
 		<List
 			canCreate={false}
-			breadcrumb={<BreadcrumbsComponent breadcrumbs={breadcrumbs} />}
+			breadcrumb={
+				<BreadcrumbsComponent
+					breadcrumbs={breadcrumbs}
+					projectid={projectid as string}
+				/>
+			}
 			title={
 				<div className="flex flex-col">
 					<Title order={3}>{translate("tabulate.title")}</Title>
