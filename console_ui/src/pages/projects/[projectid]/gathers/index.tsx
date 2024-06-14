@@ -3,7 +3,6 @@ import {
 	IResourceComponentsProps,
 	useTranslate,
 	useList,
-	useOne,
 } from "@refinedev/core";
 import { useTable } from "@refinedev/react-table";
 import { ColumnDef } from "@tanstack/react-table";
@@ -36,7 +35,6 @@ const GatherList: React.FC<IResourceComponentsProps> = () => {
 	const translate = useTranslate();
 	const router = useRouter();
 	const { projectid } = router.query || {};
-	const [projectName, setProjectName] = useState("");
 	const [opened, setOpened] = useState(false);
 	const [selected, setSelected] = useState(null);
 	const [gatherList, setGatherList] = useState<any>([]);
@@ -46,17 +44,13 @@ const GatherList: React.FC<IResourceComponentsProps> = () => {
 
 	const breadcrumbs = [
 		{ title: translate("projects.projects"), href: "/projects" },
-		{ title: projectName, href: `/projects/show/${projectid}` },
+		{
+			title: projectid as string,
+			href: `/projects/show/${projectid}`,
+			replaceWithProjectName: true,
+		},
 		{ title: translate("gathers.gathers"), href: "#" },
 	];
-
-	const { data: projectData } = useOne({
-		resource: "projects",
-		id: projectid as string,
-		queryOptions: {
-			enabled: !!projectid,
-		},
-	});
 
 	const apiResponse = useList({
 		resource: projectid ? `projects/${projectid}/gathers` : "",
@@ -224,14 +218,15 @@ const GatherList: React.FC<IResourceComponentsProps> = () => {
 		}
 	}, [apiResponse?.data?.data]);
 
-	useEffect(() => {
-		if (projectData?.data?.name) setProjectName(projectData.data.name);
-	}, [projectData?.data?.name]);
-
 	return (
 		<>
 			<List
-				breadcrumb={<BreadcrumbsComponent breadcrumbs={breadcrumbs} />}
+				breadcrumb={
+					<BreadcrumbsComponent
+						breadcrumbs={breadcrumbs}
+						projectid={projectid as string}
+					/>
+				}
 				title={
 					<div className="flex flex-col">
 						<Title order={3}>{translate("gathers.titles.list")}</Title>

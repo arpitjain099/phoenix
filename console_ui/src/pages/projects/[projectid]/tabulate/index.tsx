@@ -3,7 +3,6 @@ import {
 	IResourceComponentsProps,
 	useTranslate,
 	useList,
-	useOne,
 } from "@refinedev/core";
 import { useTable } from "@refinedev/react-table";
 import { ColumnDef } from "@tanstack/react-table";
@@ -36,7 +35,6 @@ const TabulateList: React.FC<IResourceComponentsProps> = () => {
 	const router = useRouter();
 	const { projectid } = router.query || {};
 	const [loading, setLoading] = useState(false);
-	const [projectName, setProjectName] = useState("");
 	const [tabulateList, setTabulateList] = useState<any>([]);
 	const [loadingStates, setLoadingStates] = useState<{
 		[key: string]: boolean;
@@ -44,17 +42,13 @@ const TabulateList: React.FC<IResourceComponentsProps> = () => {
 
 	const breadcrumbs = [
 		{ title: translate("projects.projects"), href: "/projects" },
-		{ title: projectName, href: `/projects/show/${projectid}` },
+		{
+			title: projectid as string,
+			href: `/projects/show/${projectid}`,
+			replaceWithProjectName: true,
+		},
 		{ title: translate("tabulate.tabulate"), href: "#" },
 	];
-
-	const { data: projectData } = useOne({
-		resource: "projects",
-		id: projectid as string,
-		queryOptions: {
-			enabled: !!projectid,
-		},
-	});
 
 	const apiResponse = useList({
 		resource: projectid
@@ -192,14 +186,15 @@ const TabulateList: React.FC<IResourceComponentsProps> = () => {
 		}
 	}, [apiResponse?.data?.data]);
 
-	useEffect(() => {
-		if (projectData?.data?.name) setProjectName(projectData.data.name);
-	}, [projectData?.data?.name]);
-
 	return (
 		<List
 			canCreate={false}
-			breadcrumb={<BreadcrumbsComponent breadcrumbs={breadcrumbs} />}
+			breadcrumb={
+				<BreadcrumbsComponent
+					breadcrumbs={breadcrumbs}
+					projectid={projectid as string}
+				/>
+			}
 			title={
 				<div className="flex flex-col">
 					<Title order={3}>{translate("tabulate.title")}</Title>
