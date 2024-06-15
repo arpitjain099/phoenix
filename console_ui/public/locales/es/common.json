@@ -228,7 +228,7 @@
 		"sub_titles": {
 			"list": "Un tabulado creará y actualizará un conjunto de datos del tablero a partir de los datos recopilados."
 		},
-		"run": "Actualizar los conjuntos de datos del tablero",
+		"run": "Ejecutar tabular",
 		"fields": {
 			"started_processing_at": "Inicio del procesamiento",
 			"completed_at": "Completado a las"
