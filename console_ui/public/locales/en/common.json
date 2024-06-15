@@ -229,7 +229,7 @@
 			"list": "A tabulate will create and update a dashboard dataset from the gathered data."
 		},
 		"tabulate": "Tabulate",
-		"run": "Update Dashboard Datasets Tabulate",
+		"run": "Run Tabulate",
 		"fields": {
 			"started_processing_at": "Started Processing At",
 			"completed_at": "Completed At"
