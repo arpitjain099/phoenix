@@ -168,6 +168,12 @@ console:
   env_auth_url: "http://oauth.{{ .Values.base_host }}/oauth2/auth"
   env_login_url: "http://oauth.{{ .Values.base_host }}/oauth2/start"
   env_logout_url: "http://oauth.{{ .Values.base_host }}/oauth2/sign_out"
+  ## Sentry
+  sentryDsn: ~
+  sentryDebug: "true"
+  sentryEnvironment: "development"
+  sentryTracesSampleRate: "0.1"
+  sentryReplaysOnErrorSampleRate: "0.1"
 
 # Cert Manager
 #
