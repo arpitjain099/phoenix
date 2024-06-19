@@ -19,6 +19,8 @@ spec:
         ports:
           - containerPort: 3000
         env:
+          - name: NEXT_RUNTIME
+            value: "nodejs"
           - name: NEXT_PUBLIC_API_URL
             value: {{ tpl (.Values.console.api_url) . }}
           - name: NEXT_PUBLIC_ENV
