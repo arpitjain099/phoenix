@@ -51,6 +51,8 @@ spec:
             value: {{ .Values.console.sentryDebug | quote }}
           - name: NEXT_PUBLIC_SENTRY_ENVIRONMENT
             value: {{ .Values.console.sentryEnvironment | quote }}
+          - name: NEXT_PUBLIC_SENTRY_RELEASE
+            value: {{ .Values.console.sentryRelease | quote }}
           - name: NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE
             value: {{ .Values.console.sentryTracesSampleRate | quote }}
           - name: NEXT_PUBLIC_SENTRY_REPLAYS_ON_ERROR_SAMPLE_RATE

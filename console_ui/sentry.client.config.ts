@@ -12,12 +12,15 @@ const SENTRY_REPLAYS_ON_ERROR_SAMPLE_RATE =
 	process.env.NEXT_PUBLIC_SENTRY_REPLAYS_ON_ERROR_SAMPLE_RATE || 1.0;
 const SENTRY_REPLAYS_SESSION_SAMPLE_RATE =
 	process.env.NEXT_PUBLIC_SENTRY_REPLAYS_SESSION_SAMPLE_RATE || 0.1;
+const SENTRY_RELEASE = process.env.NEXT_PUBLIC_SENTRY_RELEASE!;
 
 if (!SENTRY_DSN) {
 	console.warn("NEXT_PUBLIC_SENTRY_DSN is not set");
 } else {
 	Sentry.init({
 		dsn: SENTRY_DSN,
+
+		release: SENTRY_RELEASE,
 
 		// Adjust this value in production, or use tracesSampler for greater control
 		tracesSampleRate: SENTRY_TRACES_SAMPLE_RATE,

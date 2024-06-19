@@ -172,6 +172,7 @@ console:
   sentryDsn: ~
   sentryDebug: "true"
   sentryEnvironment: "development"
+  sentryRelease: "local"
   sentryTracesSampleRate: "0.1"
   sentryReplaysOnErrorSampleRate: "0.1"
 
