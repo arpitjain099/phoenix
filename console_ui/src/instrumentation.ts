@@ -1,4 +1,6 @@
-export default async function register() {
+// If default is used we get an error
+// eslint-disable-next-line import/prefer-default-export
+export async function register() {
 	if (process.env.NEXT_RUNTIME === "nodejs") {
 		await import("../sentry.server.config");
 	}
