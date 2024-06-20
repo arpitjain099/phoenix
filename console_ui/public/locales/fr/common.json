@@ -142,6 +142,9 @@
 					"daily": "Quotidien"
 				}
 			},
+			"inputs": {
+				"description": "Description (Facultatif)"
+			},
 			"status": "Statut",
 			"created_at": "Créé à",
 			"updated_at": "Mis à jour le"
@@ -157,8 +160,8 @@
 		},
 		"warnings": {
 			"create": "Pour étendre 'Les informations personnelles sont supprimées après' ou 'Toutes les données sont supprimées après' jours au-delà de 365, veuillez contacter le support !",
-			"days_until_pi_expiration": "La valeur minimale est 183 et la valeur maximale est 365",
-			"days_until_all_data_expiration": "La valeur minimale est 183 et la valeur maximale est 365"
+			"days_until_pi_expiration": "Les noms de texte et de compte sont considérés comme des informations personnelles et seront supprimés x jours après leur collecte.",
+			"days_until_all_data_expiration": "Il est important pour la conformité à la vie privée que les données ne soient stockées que tant que vous en avez besoin. Les données seront supprimées x jours après leur collecte."
 		}
 	},
 	"gathers": {
@@ -194,6 +197,7 @@
 			"started_run_at": "Démarré à",
 			"input": {
 				"data": "Collecter les données d'entrée",
+				"description": "Description (Facultatif)",
 				"facebook_account_url_list": "URL des comptes Facebook",
 				"facebook_post_url_list": "URL des publications Facebook",
 				"type": "Type de données d'entrée",

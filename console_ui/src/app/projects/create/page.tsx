@@ -14,8 +14,8 @@ export default function ProjectCreate(): JSX.Element {
 			name: "",
 			description: "",
 			environment_slug: "",
-			pi_deleted_after_days: 183,
-			delete_after_days: 183,
+			pi_deleted_after_days: 90,
+			delete_after_days: 90,
 			expected_usage: "",
 		},
 		validate: {
@@ -27,14 +27,14 @@ export default function ProjectCreate(): JSX.Element {
 			pi_deleted_after_days: (value) =>
 				value === undefined
 					? "Required"
-					: value < 183 || value > 365
-						? "Value needs to fall between 183 - 365 days"
+					: value < 90 || value > 365
+						? "Value needs to fall between 90 - 365 days"
 						: null,
 			delete_after_days: (value) =>
 				value === undefined
 					? "Required"
-					: value < 183 || value > 365
-						? "Value needs to fall between 183 - 365 days"
+					: value < 90 || value > 365
+						? "Value needs to fall between 90 - 365 days"
 						: null,
 		},
 	});

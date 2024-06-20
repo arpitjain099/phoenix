@@ -60,7 +60,6 @@ const CreateCommentsGatherForm: React.FC<Props> = ({
 							</span>
 						</Tooltip>
 						{translate("gathers.fields.limit_comments_per_post")}
-						<span className="text-red-500 ml-1">*</span>
 					</div>
 				}
 				{...getInputProps("limit_comments_per_post")}
@@ -80,7 +79,6 @@ const CreateCommentsGatherForm: React.FC<Props> = ({
 							</span>
 						</Tooltip>
 						{translate("gathers.fields.sort_comments_by")}
-						<span className="text-red-500 ml-1">*</span>
 					</div>
 				}
 				{...getInputProps("sort_comments_by")}
@@ -101,7 +99,6 @@ const CreateCommentsGatherForm: React.FC<Props> = ({
 							</span>
 						</Tooltip>
 						{translate("gathers.fields.input.facebook_post_url_list")}
-						<span className="text-red-500 ml-1">*</span>
 						{inputList.length > 0 && (
 							<span className="italic ml-10">
 								{inputList.length} input value{inputList.length > 1 && "s"}

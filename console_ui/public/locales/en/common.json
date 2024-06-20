@@ -134,13 +134,16 @@
 			"days_until_pi_expiration": "Personal Information is deleted after (days)",
 			"days_until_all_data_expiration": "All data is deleted after (days)",
 			"expected_usage": {
-				"title": "How often will you look at your dashboard",
+				"title": "Help us: how often you wil look at the dashboard",
 				"options": {
 					"one_off": "One off analysis",
 					"monthly": "Monthly",
 					"weekly": "Weekly",
 					"daily": "Daily"
 				}
+			},
+			"inputs": {
+				"description": "Description (Optional)"
 			},
 			"status": "Status",
 			"created_at": "Created At",
@@ -157,8 +160,8 @@
 		},
 		"warnings": {
 			"create": "To extend 'Personal Information is deleted after' or 'All data is deleted after' days beyond 365, please contact support!",
-			"days_until_pi_expiration": "Minimum value is 183 and Maximum value is 365",
-			"days_until_all_data_expiration": "Minimum value is 183 and Maximum value is 365"
+			"days_until_pi_expiration": "Text and account names are considered PI infromation and will be deleted x number of days after collection",
+			"days_until_all_data_expiration": "It is important for privacy compliance that data is only stored as long as you need it. Data will be deleted x days after it has been collected"
 		}
 	},
 	"gathers": {
@@ -194,6 +197,7 @@
 			"started_run_at": "Started Run At",
 			"input": {
 				"data": "Gather Input Data",
+				"description": "Description (Optional)",
 				"facebook_account_url_list": "Facebook Account URLs",
 				"facebook_post_url_list": " Facebook Post URLS",
 				"type": "Gather Input Type",

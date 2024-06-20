@@ -163,7 +163,6 @@ export default function GatherCreate(): JSX.Element {
 		>
 			<Select
 				mt="lg"
-				withAsterisk
 				label={translate("gathers.fields.source")}
 				data={[
 					{ label: translate("inputs.select"), value: "" },
@@ -173,7 +172,6 @@ export default function GatherCreate(): JSX.Element {
 			/>
 			<Select
 				mt="lg"
-				withAsterisk
 				label={translate("gathers.fields.platform")}
 				data={[
 					{ label: translate("inputs.select"), value: "" },
@@ -191,7 +189,6 @@ export default function GatherCreate(): JSX.Element {
 							</span>
 						</Tooltip>
 						{translate("gathers.fields.data_type")}
-						<span className="text-red-500 ml-1">*</span>
 					</div>
 				}
 				{...getInputProps("data_type")}
@@ -204,7 +201,6 @@ export default function GatherCreate(): JSX.Element {
 			<Select
 				mt="lg"
 				disabled
-				withAsterisk
 				label={translate("gathers.fields.project_id")}
 				{...getInputProps("project_id")}
 				{...projectSelectProps}
@@ -218,7 +214,7 @@ export default function GatherCreate(): JSX.Element {
 								<IconInfoCircle size={12} />
 							</span>
 						</Tooltip>
-						{translate("gathers.fields.description")}
+						{translate("gathers.fields.input.description")}
 					</div>
 				}
 				{...getInputProps("description")}

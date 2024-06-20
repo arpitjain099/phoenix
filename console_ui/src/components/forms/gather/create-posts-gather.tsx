@@ -85,7 +85,6 @@ const CreatePostsGatherForm: React.FC<Props> = ({
 							</span>
 						</Tooltip>
 						{translate("gathers.fields.only_posts_older_than")}
-						<span className="text-red-500 ml-1">*</span>
 					</div>
 				}
 				{...getInputProps("only_posts_older_than")}
@@ -102,7 +101,6 @@ const CreatePostsGatherForm: React.FC<Props> = ({
 							</span>
 						</Tooltip>
 						{translate("gathers.fields.only_posts_newer_than")}
-						<span className="text-red-500 ml-1">*</span>
 					</div>
 				}
 				{...getInputProps("only_posts_newer_than")}
@@ -119,7 +117,6 @@ const CreatePostsGatherForm: React.FC<Props> = ({
 							</span>
 						</Tooltip>
 						{translate("gathers.fields.limit_posts_per_account")}
-						<span className="text-red-500 ml-1">*</span>
 					</div>
 				}
 				{...getInputProps("limit_posts_per_account")}
@@ -133,7 +130,6 @@ const CreatePostsGatherForm: React.FC<Props> = ({
 							</span>
 						</Tooltip>
 						{translate("gathers.fields.input.facebook_account_url_list")}
-						<span className="text-red-500 ml-1">*</span>
 						{inputList.length > 0 && (
 							<span className="italic ml-10">
 								{inputList.length} input value{inputList.length > 1 && "s"}
