@@ -25,6 +25,7 @@ export default function GatherCreate(): JSX.Element {
 	const router = useRouter();
 	const { projectid } = useParams();
 	const [inputList, setInputList] = useState<string[]>([]);
+	const [loading, setLoading] = useState<boolean>(false);
 
 	const breadcrumbs = [
 		{ title: translate("projects.projects"), href: "/projects" },
@@ -116,10 +117,22 @@ export default function GatherCreate(): JSX.Element {
 							fieldsToKeep.includes(key)
 						)
 					);
+					setLoading(true);
 					mutate(
 						{
 							resource: `projects/${formValues.project_id}/gathers/${formValues.source}_${formValues.platform}_${formValues.data_type}`,
 							values: filteredRequiredFields,
+							errorNotification: (res) => {
+								let message = "Something went wrong while creating";
+								if (res?.response?.data?.detail[0]?.msg) {
+									message = res.response.data.detail[0].msg;
+								}
+								return {
+									message,
+									description: "Error",
+									type: "error",
+								};
+							},
 						},
 						{
 							onSuccess: async () => {
@@ -127,6 +140,9 @@ export default function GatherCreate(): JSX.Element {
 								setTimeout(() => {
 									router.push(`/projects/${formValues.project_id}/gathers`);
 								}, 1000);
+							},
+							onError: () => {
+								setLoading(false);
 							},
 						}
 					);
@@ -158,7 +174,7 @@ export default function GatherCreate(): JSX.Element {
 					projectid={projectid as string}
 				/>
 			}
-			isLoading={formLoading || isLoading}
+			isLoading={formLoading || isLoading || loading}
 			saveButtonProps={{ ...saveButtonProps, onClick: handleSave }}
 		>
 			<Select
