@@ -1,3 +1,5 @@
+"use client";
+
 import { showNotification } from "@mantine/notifications";
 import { AuthProvider } from "@refinedev/core";
 import { UserInfo } from "src/interfaces/user";
