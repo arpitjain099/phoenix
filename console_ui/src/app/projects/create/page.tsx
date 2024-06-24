@@ -1,3 +1,5 @@
+"use client";
+
 import CreateEditProjectForm from "@components/forms/create-edit-project";
 import { IResourceComponentsProps } from "@refinedev/core";
 import { Create, useForm } from "@refinedev/mantine";

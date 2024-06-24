@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { IResourceComponentsProps, useUpdate } from "@refinedev/core";
 import { Edit, useForm } from "@refinedev/mantine";

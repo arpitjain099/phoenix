@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Checkbox, NumberInput, Select, Tooltip } from "@mantine/core";
 import { useTranslate } from "@refinedev/core";

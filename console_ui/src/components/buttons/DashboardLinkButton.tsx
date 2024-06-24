@@ -1,3 +1,5 @@
+"use client";
+
 import { useTranslate } from "@refinedev/core";
 import { Button } from "@mantine/core";
 import { IconEye } from "@tabler/icons";
