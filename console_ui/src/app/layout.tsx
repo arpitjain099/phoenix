@@ -18,7 +18,7 @@ export default function RootLayout({
 	const lang = cookieStore.get("NEXT_LOCALE");
 	return (
 		<html lang={lang?.value || "en"}>
-			<body suppressHydrationWarning>
+			<body>
 				<Suspense>
 					<RefineContext>{children}</RefineContext>
 				</Suspense>
