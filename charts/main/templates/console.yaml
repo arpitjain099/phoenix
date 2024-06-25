@@ -19,6 +19,8 @@ spec:
         ports:
           - containerPort: 3000
         env:
+          - name: NEXT_RUNTIME
+            value: "nodejs"
           - name: NEXT_PUBLIC_API_URL
             value: {{ tpl (.Values.console.api_url) . }}
           - name: NEXT_PUBLIC_ENV
@@ -41,6 +43,22 @@ spec:
             value: {{ .Values.base_host | quote }}
           - name: NEXT_PUBLIC_PLATFORM_DOMAIN_SCHEMA
             value: {{ .Values.base_schema | quote }}
+          {{- if .Values.console.sentryDsn }}
+          - name: NEXT_PUBLIC_SENTRY_DSN
+            value: {{ .Values.console.sentryDsn | quote }}
+          {{- end }}
+          - name: NEXT_PUBLIC_SENTRY_DEBUG
+            value: {{ .Values.console.sentryDebug | quote }}
+          - name: NEXT_PUBLIC_SENTRY_ENVIRONMENT
+            value: {{ .Values.console.sentryEnvironment | quote }}
+          - name: NEXT_PUBLIC_SENTRY_RELEASE
+            value: {{ .Values.console.sentryRelease | quote }}
+          - name: NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE
+            value: {{ .Values.console.sentryTracesSampleRate | quote }}
+          - name: NEXT_PUBLIC_SENTRY_REPLAYS_ON_ERROR_SAMPLE_RATE
+            value: {{ .Values.console.sentryReplaysOnErrorSampleRate | quote }}
+          - name: NEXT_PUBLIC_SENTRY_REPLAYS_SESSION_SAMPLE_RATE
+            value: {{ .Values.console.sentryReplaysSessionSampleRate | quote }}
 ---
 apiVersion: v1
 kind: Service
