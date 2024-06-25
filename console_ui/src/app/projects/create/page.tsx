@@ -1,11 +1,10 @@
 "use client";
 
 import CreateEditProjectForm from "@components/forms/create-edit-project";
-import { IResourceComponentsProps } from "@refinedev/core";
 import { Create, useForm } from "@refinedev/mantine";
 import React from "react";
 
-export const ProjectCreate: React.FC<IResourceComponentsProps> = () => {
+export default function ProjectCreate(): JSX.Element {
 	const {
 		getInputProps,
 		saveButtonProps,
@@ -45,6 +44,4 @@ export const ProjectCreate: React.FC<IResourceComponentsProps> = () => {
 			<CreateEditProjectForm getInputProps={getInputProps} />
 		</Create>
 	);
-};
-
-export default ProjectCreate;
+}

@@ -1,11 +1,6 @@
 "use client";
 
-import {
-	IResourceComponentsProps,
-	useResource,
-	useShow,
-	useTranslate,
-} from "@refinedev/core";
+import { useResource, useShow, useTranslate } from "@refinedev/core";
 import {
 	Show,
 	TextField,
@@ -25,7 +20,7 @@ import {
 import Link from "next/link";
 import DashboardLinkButton from "@components/buttons/DashboardLinkButton";
 
-export const ProjectShow: React.FC<IResourceComponentsProps> = () => {
+export default function ProjectShow(): JSX.Element {
 	const translate = useTranslate();
 	const { queryResult } = useShow();
 	const { data, isLoading } = queryResult;
@@ -140,6 +135,4 @@ export const ProjectShow: React.FC<IResourceComponentsProps> = () => {
 			</Group>
 		</Show>
 	);
-};
-
-export default ProjectShow;
+}

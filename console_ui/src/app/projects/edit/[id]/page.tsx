@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-import { IResourceComponentsProps, useUpdate } from "@refinedev/core";
+import { useUpdate } from "@refinedev/core";
 import { Edit, useForm } from "@refinedev/mantine";
 import CreateEditProjectForm from "@components/forms/create-edit-project";
 
-export const ProjectEdit: React.FC<IResourceComponentsProps> = () => {
+export default function ProjectEdit(): JSX.Element {
 	const { mutate } = useUpdate();
 	const {
 		getInputProps,
@@ -45,6 +45,4 @@ export const ProjectEdit: React.FC<IResourceComponentsProps> = () => {
 			<CreateEditProjectForm getInputProps={getInputProps} />
 		</Edit>
 	);
-};
-
-export default ProjectEdit;
+}

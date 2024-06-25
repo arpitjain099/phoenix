@@ -28,7 +28,7 @@ import GatherRunModal from "@components/modals/gather-run";
 import { jobRunService } from "src/services";
 import { GatherResponse } from "src/interfaces/gather";
 
-const GatherList: React.FC<IResourceComponentsProps> = () => {
+export default function GatherList(): JSX.Element {
 	const translate = useTranslate();
 	const router = useRouter();
 	const { projectid } = useParams();
@@ -259,6 +259,4 @@ const GatherList: React.FC<IResourceComponentsProps> = () => {
 			/>
 		</>
 	);
-};
-
-export default GatherList;
+}

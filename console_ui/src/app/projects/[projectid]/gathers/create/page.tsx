@@ -1,10 +1,6 @@
 "use client";
 
-import {
-	IResourceComponentsProps,
-	useCreate,
-	useTranslate,
-} from "@refinedev/core";
+import { useCreate, useTranslate } from "@refinedev/core";
 import { Create, useForm, useSelect } from "@refinedev/mantine";
 import { Select, Textarea, Tooltip } from "@mantine/core";
 import { useRouter, useParams } from "next/navigation";
@@ -20,7 +16,7 @@ import CreatePostsGatherForm, {
 } from "@components/forms/gather/create-posts-gather";
 import BreadcrumbsComponent from "@components/breadcrumbs";
 
-export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
+export default function GatherCreate(): JSX.Element {
 	const today = new Date();
 	const tomorrow = new Date(today);
 	tomorrow.setDate(tomorrow.getDate() + 1);
@@ -243,6 +239,4 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 			)}
 		</Create>
 	);
-};
-
-export default GatherCreate;
+}
