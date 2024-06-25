@@ -61,6 +61,17 @@ console_ui_linting:
     - npm run lint
   needs: []
 
+# Test the build of the console_ui
+# This matches the build in AWS Amplify
+console_ui_build:
+  image: node:21.6.2
+  stage: test
+  script:
+    - cd console_ui/
+    - npm ci --cache .npm --prefer-offline
+    - npm run build
+  needs: []
+
 
 #######################
 # Pre Build of the images for the python projects
