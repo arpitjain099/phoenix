@@ -11,6 +11,7 @@ const sentry_org = process.env.SENTRY_ORG;
 const sentry_project = process.env.SENTRY_PROJECT;
 
 if (sentry_dsn && sentry_org && sentry_project) {
+	console.log("Sentry DSN found, enabling error monitoring");
 	module.exports = withSentryConfig(module.exports, {
 		// For all available options, see:
 		// https://github.com/getsentry/sentry-webpack-plugin#options
