@@ -6,13 +6,17 @@ module.exports = {
 
 const { withSentryConfig } = require("@sentry/nextjs");
 
-if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
+const sentry_dsn = process.env.NEXT_PUBLIC_SENTRY_DSN;
+const sentry_org = process.env.SENTRY_ORG;
+const sentry_project = process.env.SENTRY_PROJECT;
+
+if (sentry_dsn && sentry_org && sentry_project) {
 	module.exports = withSentryConfig(module.exports, {
 		// For all available options, see:
 		// https://github.com/getsentry/sentry-webpack-plugin#options
 
-		org: "datavaluepeople",
-		project: "console-ui",
+		org: sentry_org,
+		project: sentry_project,
 
 		// Only print logs for uploading source maps in CI
 		silent: !process.env.CI,

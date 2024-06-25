@@ -16,6 +16,8 @@ declare global {
 			NEXT_PUBLIC_SENTRY_DEBUG?: boolean;
 			NEXT_PUBLIC_SENTRY_REPLAYS_ON_ERROR_SAMPLE_RATE?: number;
 			NEXT_PUBLIC_SENTRY_REPLAYS_SESSION_SAMPLE_RATE?: number;
+			SENTRY_ORG?: string;
+			SENTRY_PROJECT?: string;
 		}
 	}
 }

@@ -170,6 +170,9 @@ console:
   env_logout_url: "http://oauth.{{ .Values.base_host }}/oauth2/sign_out"
   ## Sentry
   sentryDsn: ~
+  sentryOrg: ~
+  sentryProject: ~
+  sentryAuthToken: ~
   sentryDebug: "true"
   sentryEnvironment: "development"
   sentryRelease: "local"
