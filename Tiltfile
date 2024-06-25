@@ -23,7 +23,12 @@ docker_build(
 )
 
 sync_console_ui = sync('./console_ui/src/', '/app/src/')
-docker_build('phoenix_console', './console_ui/', live_update=[sync_console_ui])
+docker_build(
+  'phoenix_console',
+  './console_ui/',
+  dockerfile='./console_ui/Dockerfile.dev',
+  live_update=[sync_console_ui]
+)
 
 k8s_yaml(helm(
   './charts/main/',

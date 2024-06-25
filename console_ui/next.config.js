@@ -1,6 +1,5 @@
 module.exports = {
 	transpilePackages: ["@refinedev/nextjs-router"],
-	output: "standalone",
 };
 
 // Injected content via Sentry wizard below
