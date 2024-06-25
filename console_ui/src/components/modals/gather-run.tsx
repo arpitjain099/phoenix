@@ -1,3 +1,5 @@
+"use client";
+
 import { Modal, Button, Text } from "@mantine/core";
 import { useTranslate } from "@refinedev/core";
 import { useEffect, useState } from "react";

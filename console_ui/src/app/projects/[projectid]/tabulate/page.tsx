@@ -1,9 +1,7 @@
+"use client";
+
 import React, { useEffect, useState, useMemo, useCallback } from "react";
-import {
-	IResourceComponentsProps,
-	useTranslate,
-	useList,
-} from "@refinedev/core";
+import { useTranslate, useList } from "@refinedev/core";
 import { useTable } from "@refinedev/react-table";
 import { ColumnDef } from "@tanstack/react-table";
 import {
@@ -18,22 +16,16 @@ import {
 } from "@mantine/core";
 import { DateField, List } from "@refinedev/mantine";
 import TableComponent from "@components/table";
-import { useRouter } from "next/router";
+import { useParams } from "next/navigation";
 import BreadcrumbsComponent from "@components/breadcrumbs";
 import { statusTextStyle } from "src/utils";
 import { IconRefresh } from "@tabler/icons";
 import { jobRunService } from "src/services";
 import { JobRunResponse } from "src/interfaces/job-run";
-import { GetServerSideProps } from "next";
 
-export const getServerSideProps: GetServerSideProps<{}> = async (_context) => ({
-	props: {},
-});
-
-const TabulateList: React.FC<IResourceComponentsProps> = () => {
+export default function TabulateList(): JSX.Element {
 	const translate = useTranslate();
-	const router = useRouter();
-	const { projectid } = router.query || {};
+	const { projectid } = useParams();
 	const [loading, setLoading] = useState(false);
 	const [tabulateList, setTabulateList] = useState<any>([]);
 	const [loadingStates, setLoadingStates] = useState<{
@@ -235,6 +227,4 @@ const TabulateList: React.FC<IResourceComponentsProps> = () => {
 			/>
 		</List>
 	);
-};
-
-export default TabulateList;
+}

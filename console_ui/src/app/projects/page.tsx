@@ -1,10 +1,8 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
-import {
-	IResourceComponentsProps,
-	useGetIdentity,
-	useTranslate,
-} from "@refinedev/core";
+import { useGetIdentity, useTranslate } from "@refinedev/core";
 import { ColumnDef } from "@tanstack/react-table";
 import { Pagination, ScrollArea } from "@mantine/core";
 import { DateField, List } from "@refinedev/mantine";
@@ -12,7 +10,7 @@ import { useTable } from "@refinedev/react-table";
 import { UserInfo } from "src/interfaces/user";
 import TableComponent from "../../components/table";
 
-export const ProjectList: React.FC<IResourceComponentsProps> = () => {
+export default function ProjectList(): JSX.Element {
 	const translate = useTranslate();
 	const { data: user } = useGetIdentity<UserInfo>();
 	const columns = React.useMemo<ColumnDef<any>[]>(
@@ -91,6 +89,4 @@ export const ProjectList: React.FC<IResourceComponentsProps> = () => {
 			/>
 		</List>
 	);
-};
-
-export default ProjectList;
+}

@@ -59,6 +59,18 @@ spec:
             value: {{ .Values.console.sentryReplaysOnErrorSampleRate | quote }}
           - name: NEXT_PUBLIC_SENTRY_REPLAYS_SESSION_SAMPLE_RATE
             value: {{ .Values.console.sentryReplaysSessionSampleRate | quote }}
+          {{- if .Values.console.sentryOrg }}
+          - name: SENTRY_ORG
+            value: {{ .Values.console.sentryOrg | quote }}
+          {{- end }}
+          {{- if .Values.console.sentryProject }}
+          - name: SENTRY_PROJECT
+            value: {{ .Values.console.sentryProject | quote }}
+          {{- end }}
+          {{- if .Values.console.sentryAuthToken }}
+          - name: SENTRY_AUTH_TOKEN
+            value: {{ .Values.console.sentryAuthToken | quote }}
+          {{- end }}
 ---
 apiVersion: v1
 kind: Service

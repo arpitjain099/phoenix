@@ -1,5 +1,8 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/no-array-index-key */
+
+"use client";
+
 import React, {
 	ChangeEvent,
 	KeyboardEvent,

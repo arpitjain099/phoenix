@@ -1,12 +1,9 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
-import {
-	IResourceComponentsProps,
-	useCreate,
-	useTranslate,
-} from "@refinedev/core";
+"use client";
+
+import { useCreate, useTranslate } from "@refinedev/core";
 import { Create, useForm, useSelect } from "@refinedev/mantine";
 import { Select, Textarea, Tooltip } from "@mantine/core";
-import { useRouter } from "next/router";
+import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IconInfoCircle } from "@tabler/icons";
 import CreateCommentsGatherForm, {
@@ -19,14 +16,14 @@ import CreatePostsGatherForm, {
 } from "@components/forms/gather/create-posts-gather";
 import BreadcrumbsComponent from "@components/breadcrumbs";
 
-export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
+export default function GatherCreate(): JSX.Element {
 	const today = new Date();
 	const tomorrow = new Date(today);
 	tomorrow.setDate(tomorrow.getDate() + 1);
 	const { mutate, isLoading } = useCreate();
 	const translate = useTranslate();
 	const router = useRouter();
-	const { projectid } = router.query;
+	const { projectid } = useParams();
 	const [inputList, setInputList] = useState<string[]>([]);
 
 	const breadcrumbs = [
@@ -69,7 +66,7 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 	} = useForm({
 		clearInputErrorOnChange: true,
 		initialValues: initialFormValues,
-		validate: (values) => getValidationRules(values),
+		// validate: (values) => getValidationRules(values),
 	});
 
 	// Define separate validation rules based on data type
@@ -242,6 +239,4 @@ export const GatherCreate: React.FC<IResourceComponentsProps> = () => {
 			)}
 		</Create>
 	);
-};
-
-export default GatherCreate;
+}

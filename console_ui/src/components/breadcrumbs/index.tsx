@@ -1,4 +1,7 @@
 /* eslint-disable react/require-default-props */
+
+"use client";
+
 import React, { useEffect, useState } from "react";
 import { Group, Anchor, Breadcrumbs } from "@mantine/core";
 import { useOne } from "@refinedev/core";

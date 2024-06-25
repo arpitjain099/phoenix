@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import {
 	IResourceComponentsProps,
@@ -18,23 +20,18 @@ import {
 } from "@mantine/core";
 import { List, DateField } from "@refinedev/mantine";
 import TableComponent from "@components/table";
-import { useRouter } from "next/router";
+import { useParams, useRouter } from "next/navigation";
 import BreadcrumbsComponent from "@components/breadcrumbs";
 import { statusTextStyle } from "src/utils";
 import { IconPlayerPlay, IconRefresh, IconTrash } from "@tabler/icons";
 import GatherRunModal from "@components/modals/gather-run";
 import { jobRunService } from "src/services";
 import { GatherResponse } from "src/interfaces/gather";
-import { GetServerSideProps } from "next";
 
-export const getServerSideProps: GetServerSideProps<{}> = async (_context) => ({
-	props: {},
-});
-
-const GatherList: React.FC<IResourceComponentsProps> = () => {
+export default function GatherList(): JSX.Element {
 	const translate = useTranslate();
 	const router = useRouter();
-	const { projectid } = router.query || {};
+	const { projectid } = useParams();
 	const [opened, setOpened] = useState(false);
 	const [selected, setSelected] = useState(null);
 	const [gatherList, setGatherList] = useState<any>([]);
@@ -221,6 +218,9 @@ const GatherList: React.FC<IResourceComponentsProps> = () => {
 	return (
 		<>
 			<List
+				createButtonProps={{
+					onClick: () => router.push(`/projects/${projectid}/gathers/create`),
+				}}
 				breadcrumb={
 					<BreadcrumbsComponent
 						breadcrumbs={breadcrumbs}
@@ -259,6 +259,4 @@ const GatherList: React.FC<IResourceComponentsProps> = () => {
 			/>
 		</>
 	);
-};
-
-export default GatherList;
+}

@@ -1,5 +1,6 @@
 # Dockerfile based on example in blog:
 # https://medium.com/@2018.itsuki/dockerize-a-next-js-app-4b03021e084d
+# The use of builder pattern is needed of the size of the image is very large
 FROM node:18-alpine as base
 RUN apk add --no-cache g++ make py3-pip libc6-compat
 WORKDIR /app
@@ -35,3 +36,4 @@ ENV NODE_ENV=development
 RUN npm install
 COPY . .
 CMD npm run dev
+

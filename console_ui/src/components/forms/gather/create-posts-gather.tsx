@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { NumberInput, Tooltip } from "@mantine/core";
 import { useTranslate } from "@refinedev/core";
