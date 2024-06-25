@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 	description: "Console",
 };
 
-function RootLayout({
+export default function RootLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
@@ -26,5 +26,3 @@ function RootLayout({
 		</html>
 	);
 }
-
-export default RootLayout;
