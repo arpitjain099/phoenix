@@ -41,6 +41,9 @@ api:
   enabled: true
   version: "{{ .Chart.AppVersion }}"
   replicas: 1
+  # --log-config option for uvicorn
+  # https://www.uvicorn.org/settings/#logging
+  uvicornLogConfig: "/app/projects/phiphi/log_configs/uvicorn.prod.yaml"
   image:
     repository: "{{ .Values.phiphiImage.repository }}"
     tag: "{{ tpl (.Values.phiphiImage.tag ) . }}"
