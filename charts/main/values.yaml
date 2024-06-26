@@ -43,6 +43,8 @@ api:
   replicas: 1
   # --log-config option for uvicorn
   # https://www.uvicorn.org/settings/#logging
+  # Others already in image:
+  # - /app/projects/phiphi/log_configs/uvicorn.dev.yaml
   uvicornLogConfig: "/app/projects/phiphi/log_configs/uvicorn.prod.yaml"
   image:
     repository: "{{ .Values.phiphiImage.repository }}"
