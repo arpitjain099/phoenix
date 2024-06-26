@@ -147,7 +147,12 @@
 			},
 			"status": "Status",
 			"created_at": "Created At",
-			"updated_at": "Updated At"
+			"updated_at": "Updated At",
+			"validation": {
+				"required": "",
+				"days_until_pi_expiration": "Value needs to fall between 90 - 365 days",
+				"days_until_all_data_expiration": "Value needs to fall between 90 - 365 days"
+			}
 		},
 		"titles": {
 			"create": "Create Project",

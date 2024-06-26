@@ -147,7 +147,12 @@
 			},
 			"status": "Estado",
 			"created_at": "Creado en",
-			"updated_at": "Actualizado en"
+			"updated_at": "Actualizado en",
+			"validation": {
+				"required": "requerido",
+				"days_until_pi_expiration": "El valor debe estar entre 90 y 365 días",
+				"days_until_all_data_expiration": "El valor debe estar entre 90 y 365 días"
+			}
 		},
 		"titles": {
 			"create": "Crear proyecto",

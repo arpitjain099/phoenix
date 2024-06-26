@@ -20,12 +20,12 @@ export default function GatherCreate(): JSX.Element {
 	const today = new Date();
 	const tomorrow = new Date(today);
 	tomorrow.setDate(tomorrow.getDate() + 1);
-	const { mutate, isLoading } = useCreate();
+	const { mutate, isLoading: createResourceLoading } = useCreate();
 	const translate = useTranslate();
 	const router = useRouter();
 	const { projectid } = useParams();
 	const [inputList, setInputList] = useState<string[]>([]);
-	const [loading, setLoading] = useState<boolean>(false);
+	const [formResetAfterCreateloading, setLoading] = useState<boolean>(false);
 
 	const breadcrumbs = [
 		{ title: translate("projects.projects"), href: "/projects" },
@@ -174,7 +174,9 @@ export default function GatherCreate(): JSX.Element {
 					projectid={projectid as string}
 				/>
 			}
-			isLoading={formLoading || isLoading || loading}
+			isLoading={
+				formLoading || createResourceLoading || formResetAfterCreateloading
+			}
 			saveButtonProps={{ ...saveButtonProps, onClick: handleSave }}
 		>
 			<Select
