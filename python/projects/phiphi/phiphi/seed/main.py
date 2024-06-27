@@ -21,6 +21,7 @@ from phiphi.seed import (
 )
 
 utils.init_logging()
+utils.init_sentry()
 
 main_logger = logging.getLogger(__name__)
 
