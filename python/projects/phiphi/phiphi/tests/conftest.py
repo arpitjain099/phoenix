@@ -13,6 +13,9 @@ from phiphi import config, platform_db
 from phiphi.api import main
 from phiphi.seed import main as seed_main
 
+if config.settings.SENTRY_DSN:
+    raise ValueError("Do not run tests with SENTRY_DSN set or you will get errors in the DSN")
+
 
 #  This fixture has to be used in all tests otherwise database queries will not be done on the
 #  testing database (`settings.TESTING_SQLALCHEMY_DATABASE_URI`) but on the one configured for the
