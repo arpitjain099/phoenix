@@ -89,6 +89,8 @@ def init_sentry(
     dsn: str | None = config.settings.SENTRY_DSN,
     traces_sample_rate: float = config.settings.SENTRY_TRACES_SAMPLE_RATE,
     profiles_sample_rate: float = config.settings.SENTRY_PROFILES_SAMPLE_RATE,
+    environment: str = config.settings.SENTRY_ENVIRONMENT,
+    release: str = config.settings.VERSION,
 ) -> None:
     """Initialize sentry."""
     if dsn:
@@ -96,4 +98,6 @@ def init_sentry(
             dsn=dsn,
             traces_sample_rate=traces_sample_rate,
             profiles_sample_rate=profiles_sample_rate,
+            environment=environment,
+            release=release,
         )

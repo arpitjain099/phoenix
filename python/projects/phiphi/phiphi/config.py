@@ -112,6 +112,7 @@ class Settings(BaseSettings):
     SENTRY_DSN: Optional[str] = None
     SENTRY_TRACES_SAMPLE_RATE: float = 1.0
     SENTRY_PROFILES_SAMPLE_RATE: float = 1.0
+    SENTRY_ENVIRONMENT: str = "local_development"
 
     def model_post_init(self, __context):  # type: ignore[no-untyped-def]
         """Set the mock bq root directory as an absolute path."""

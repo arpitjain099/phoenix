@@ -110,6 +110,10 @@ env:
   - name: SENTRY_PROFILES_SAMPLE_RATE
     value: {{ .Values.api.sentryProfilesSampleRate | quote }}
   {{- end }}
+  {{- if .Values.api.sentryEnvironment }}
+  - name: SENTRY_ENVIRONMENT
+    value: {{ .Values.api.sentryEnvironment | quote }}
+  {{- end }}
 ## This is the secret that is used to store the GCP service account json
 {{- if .Values.gcp_service_account.enabled }}
 volumeMounts:
