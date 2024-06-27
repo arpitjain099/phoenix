@@ -24,6 +24,9 @@ services:
       # Be careful with the GOOGLE_CLOUD_PROJECT as resources in this project will be created and used.
       GOOGLE_CLOUD_PROJECT: ${GOOGLE_CLOUD_PROJECT}
       PHIPHI_LOG_CONFIG: /app/projects/phiphi/log_configs/phiphi.dev.yaml
+      # DO NOT USE SENTRY_DSN in the development environment when running tests
+      # This is only if you want to debug the sentry init code
+      # SENTRY_DSN: ${SENTRY_DSN}
     entrypoint: ["/app/projects/phiphi/entrypoint_test_seed.sh"]
     command: [
       "uvicorn",
