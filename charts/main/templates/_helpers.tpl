@@ -38,6 +38,8 @@ ports:
 env:
   - name: IMAGE_URI
     value: {{ tpl .Values.api.image.repository . }}:{{ tpl .Values.api.image.tag . }}
+  - name: PHIPHI_LOG_CONFIG
+    value: {{ .Values.api.phiphiLogConfig | quote }}
   - name: SQLALCHEMY_DATABASE_URI
     valueFrom:
       secretKeyRef:
