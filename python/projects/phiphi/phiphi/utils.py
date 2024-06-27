@@ -4,6 +4,7 @@ import logging
 import os
 import re
 
+import sentry_sdk
 import yaml
 
 from phiphi import config
@@ -82,3 +83,17 @@ def init_logging(log_config: str | None = config.settings.PHIPHI_LOG_CONFIG) -> 
 
     logger = logging.getLogger(__name__)
     logger.info(f"Logging initialized. Using configuration file: {log_config}")
+
+
+def init_sentry(
+    dsn: str | None = config.settings.SENTRY_DSN,
+    traces_sample_rate: float = config.settings.SENTRY_TRACES_SAMPLE_RATE,
+    profiles_sample_rate: float = config.settings.SENTRY_PROFILES_SAMPLE_RATE,
+) -> None:
+    """Initialize sentry."""
+    if dsn:
+        sentry_sdk.init(
+            dsn=dsn,
+            traces_sample_rate=traces_sample_rate,
+            profiles_sample_rate=profiles_sample_rate,
+        )
