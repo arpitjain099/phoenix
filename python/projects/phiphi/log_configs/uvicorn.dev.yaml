@@ -10,6 +10,7 @@ handlers:
     stream: ext://sys.stdout
 loggers:
   uvicorn:
-    level: DEBUG
+    # Using trace as we can then see all the access and debug logs of uvicorn
+    level: TRACE
     handlers: [default]
     propagate: false
