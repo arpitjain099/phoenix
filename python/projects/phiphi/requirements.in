@@ -18,6 +18,9 @@ sqlalchemy
 psycopg
 prefect
 python-slugify
+PyYAML
+# Stubs :(
+types-PyYAML
 
 ## Pipeline deps
 apify-client
