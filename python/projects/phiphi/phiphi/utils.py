@@ -1,5 +1,10 @@
 """Utils for phiphi."""
+import json
+import logging
+import os
 import re
+
+import yaml
 
 from phiphi import config
 
@@ -54,3 +59,26 @@ def is_valid_bigquery_dataset_name(dataset_name: str) -> bool:
         return False
 
     return True
+
+
+def init_logging(log_config: str | None = config.settings.PHIPHI_LOG_CONFIG) -> None:
+    """Initialize logging with the provided configuration file."""
+    if not log_config:
+        return None
+
+    if not os.path.exists(log_config):
+        raise FileNotFoundError(f"Logging configuration file not found: {log_config}")
+
+    if log_config.endswith(".yaml") or log_config.endswith(".yml"):
+        with open(log_config, "r") as file:
+            logging_config = yaml.safe_load(file)
+        logging.config.dictConfig(logging_config)
+    elif log_config.endswith(".json"):
+        with open(log_config, "r") as file:
+            logging_config = json.load(file)
+        logging.config.dictConfig(logging_config)
+    else:
+        raise ValueError(f"Unsupported logging configuration file type: {log_config}")
+
+    logger = logging.getLogger(__name__)
+    logger.info(f"Logging initialized. Using configuration file: {log_config}")
