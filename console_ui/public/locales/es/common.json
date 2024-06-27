@@ -142,9 +142,17 @@
 					"daily": "Diario"
 				}
 			},
+			"inputs": {
+				"description": "Descripción (Opcional)"
+			},
 			"status": "Estado",
 			"created_at": "Creado en",
-			"updated_at": "Actualizado en"
+			"updated_at": "Actualizado en",
+			"validation": {
+				"required": "requerido",
+				"days_until_pi_expiration": "El valor debe estar entre 90 y 365 días",
+				"days_until_all_data_expiration": "El valor debe estar entre 90 y 365 días"
+			}
 		},
 		"titles": {
 			"create": "Crear proyecto",
@@ -157,8 +165,8 @@
 		},
 		"warnings": {
 			"create": "¡Para extender los días de 'La información personal se eliminará después' o 'Todos los datos se eliminarán después' más allá de 365, por favor, contacte con soporte!",
-			"days_until_pi_expiration": "El valor mínimo es 183 y el valor máximo es 365",
-			"days_until_all_data_expiration": "El valor mínimo es 183 y el valor máximo es 365"
+			"days_until_pi_expiration": "Los nombres de texto y de cuenta se consideran información personal y se eliminarán x días después de su recopilación.",
+			"days_until_all_data_expiration": "Es importante para el cumplimiento de la privacidad que los datos solo se almacenen el tiempo que los necesite. Los datos se eliminarán x días después de haber sido recopilados."
 		}
 	},
 	"gathers": {
@@ -187,13 +195,14 @@
 			"include_comment_replies": "Respuestas a comentarios",
 			"sort_comments_by": "Ordenar comentarios por",
 			"data_type": "Tipo de Datos",
-			"description": "Descripción",
+			"description": "Descripción (Opcional)",
 			"created_at": "Creado En",
 			"updated_at": "Actualizado En",
 			"started_processing_at": "Comenzó el procesamiento a",
 			"started_run_at": "Iniciado a las",
 			"input": {
 				"data": "Recopilar Datos de Entrada",
+				"description": "Descripción (Opcional)",
 				"facebook_account_url_list": "URL de cuentas de Facebook",
 				"facebook_post_url_list": "URL de publicaciones de Facebook",
 				"type": "Tipo de Datos de Entrada",

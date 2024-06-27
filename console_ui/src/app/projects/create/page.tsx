@@ -1,10 +1,12 @@
 "use client";
 
 import CreateEditProjectForm from "@components/forms/create-edit-project";
+import { useTranslate } from "@refinedev/core";
 import { Create, useForm } from "@refinedev/mantine";
 import React from "react";
 
 export default function ProjectCreate(): JSX.Element {
+	const translate = useTranslate();
 	const {
 		getInputProps,
 		saveButtonProps,
@@ -14,27 +16,36 @@ export default function ProjectCreate(): JSX.Element {
 			name: "",
 			description: "",
 			environment_slug: "",
-			pi_deleted_after_days: 183,
-			delete_after_days: 183,
+			pi_deleted_after_days: 90,
+			delete_after_days: 90,
 			expected_usage: "",
 		},
 		validate: {
-			name: (value) => (value.length <= 0 ? "Name is required" : null),
+			name: (value) =>
+				value.length <= 0
+					? translate("projects.fields.validation.required")
+					: null,
 			expected_usage: (value) =>
-				value.length <= 0 ? "Expected usage is required" : null,
+				value.length <= 0
+					? translate("projects.fields.validation.required")
+					: null,
 			environment_slug: (value) =>
-				value.length <= 0 ? "Environment is required" : null,
+				value.length <= 0
+					? translate("projects.fields.validation.required")
+					: null,
 			pi_deleted_after_days: (value) =>
 				value === undefined
-					? "Required"
-					: value < 183 || value > 365
-						? "Value needs to fall between 183 - 365 days"
+					? translate("projects.fields.validation.required")
+					: value < 90 || value > 365
+						? translate("projects.fields.validation.days_until_pi_expiration")
 						: null,
 			delete_after_days: (value) =>
 				value === undefined
-					? "Required"
-					: value < 183 || value > 365
-						? "Value needs to fall between 183 - 365 days"
+					? translate("projects.fields.validation.required")
+					: value < 90 || value > 365
+						? translate(
+								"projects.fields.validation.days_until_all_data_expiration"
+							)
 						: null,
 		},
 	});

@@ -20,11 +20,12 @@ export default function GatherCreate(): JSX.Element {
 	const today = new Date();
 	const tomorrow = new Date(today);
 	tomorrow.setDate(tomorrow.getDate() + 1);
-	const { mutate, isLoading } = useCreate();
+	const { mutate, isLoading: createResourceLoading } = useCreate();
 	const translate = useTranslate();
 	const router = useRouter();
 	const { projectid } = useParams();
 	const [inputList, setInputList] = useState<string[]>([]);
+	const [formResetAfterCreateloading, setLoading] = useState<boolean>(false);
 
 	const breadcrumbs = [
 		{ title: translate("projects.projects"), href: "/projects" },
@@ -116,10 +117,22 @@ export default function GatherCreate(): JSX.Element {
 							fieldsToKeep.includes(key)
 						)
 					);
+					setLoading(true);
 					mutate(
 						{
 							resource: `projects/${formValues.project_id}/gathers/${formValues.source}_${formValues.platform}_${formValues.data_type}`,
 							values: filteredRequiredFields,
+							errorNotification: (res) => {
+								let message = "Something went wrong while creating";
+								if (res?.response?.data?.detail[0]?.msg) {
+									message = res.response.data.detail[0].msg;
+								}
+								return {
+									message,
+									description: "Error",
+									type: "error",
+								};
+							},
 						},
 						{
 							onSuccess: async () => {
@@ -127,6 +140,9 @@ export default function GatherCreate(): JSX.Element {
 								setTimeout(() => {
 									router.push(`/projects/${formValues.project_id}/gathers`);
 								}, 1000);
+							},
+							onError: () => {
+								setLoading(false);
 							},
 						}
 					);
@@ -158,12 +174,13 @@ export default function GatherCreate(): JSX.Element {
 					projectid={projectid as string}
 				/>
 			}
-			isLoading={formLoading || isLoading}
+			isLoading={
+				formLoading || createResourceLoading || formResetAfterCreateloading
+			}
 			saveButtonProps={{ ...saveButtonProps, onClick: handleSave }}
 		>
 			<Select
 				mt="lg"
-				withAsterisk
 				label={translate("gathers.fields.source")}
 				data={[
 					{ label: translate("inputs.select"), value: "" },
@@ -173,7 +190,6 @@ export default function GatherCreate(): JSX.Element {
 			/>
 			<Select
 				mt="lg"
-				withAsterisk
 				label={translate("gathers.fields.platform")}
 				data={[
 					{ label: translate("inputs.select"), value: "" },
@@ -191,7 +207,6 @@ export default function GatherCreate(): JSX.Element {
 							</span>
 						</Tooltip>
 						{translate("gathers.fields.data_type")}
-						<span className="text-red-500 ml-1">*</span>
 					</div>
 				}
 				{...getInputProps("data_type")}
@@ -204,7 +219,6 @@ export default function GatherCreate(): JSX.Element {
 			<Select
 				mt="lg"
 				disabled
-				withAsterisk
 				label={translate("gathers.fields.project_id")}
 				{...getInputProps("project_id")}
 				{...projectSelectProps}
@@ -218,7 +232,7 @@ export default function GatherCreate(): JSX.Element {
 								<IconInfoCircle size={12} />
 							</span>
 						</Tooltip>
-						{translate("gathers.fields.description")}
+						{translate("gathers.fields.input.description")}
 					</div>
 				}
 				{...getInputProps("description")}
