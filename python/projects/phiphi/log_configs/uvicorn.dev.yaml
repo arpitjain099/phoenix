@@ -14,3 +14,7 @@ loggers:
     level: TRACE
     handlers: [default]
     propagate: false
+  fastapi:
+    level: DEBUG
+    handlers: [default]
+    propagate: false

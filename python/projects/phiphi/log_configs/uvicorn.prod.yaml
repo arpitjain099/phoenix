@@ -13,3 +13,7 @@ loggers:
     level: INFO
     handlers: [default]
     propagate: false
+  fastapi:
+    level: INFO
+    handlers: [default]
+    propagate: false
