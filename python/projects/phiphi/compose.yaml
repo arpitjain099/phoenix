@@ -36,6 +36,8 @@ services:
       PREFECT_PROFILE: ${PREFECT_PROFILE:-default}
       PREFECT_API_KEY: ${PREFECT_API_KEY:-none}
       PREFECT_API_URL: ${PREFECT_API_URL:-none}
+      # This is needed otherwise the uvicorn logs will not work as expected
+      PREFECT_LOGGING_SETTINGS_PATH: /app/projects/phiphi/log_configs/prefect.prod.yaml
   postgres:
     image: postgres:15-alpine
     restart: always

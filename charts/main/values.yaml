@@ -65,6 +65,10 @@ api:
   init_db_command: "/app/projects/phiphi/entrypoint_init_db.sh"
   # ~ will use default
   bqDefaultLocation: ~
+  # This override of the default prefect settings is needed for the
+  # uvicornLogConfig to work. Prefects defaults log config overrides the root
+  # and uvicorn :(
+  prefectLoggingSettingsPath: "/app/projects/phiphi/log_configs/prefect.prod.yaml"
   apify_api_keys:
     enabled: false
     secret_name: "{{ .Release.Name }}-apify-api-keys"
