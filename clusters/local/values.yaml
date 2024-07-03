@@ -65,6 +65,13 @@ superset:
 
       # Throw error if got past the auth layer
       LOGIN_REDIRECT_URL = False
+    # Override the default logging
+    logging: |
+      import logging
+      LOG_LEVEL = logging.DEBUG
+      FLASK_DEBUG = True
+      DEBUG = True
+      SILENCE_FAB = False
   extraSecretEnv:
     SUPERSET_SECRET_KEY: "this_is_an_in_secure_secret_key"
 

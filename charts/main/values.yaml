@@ -328,6 +328,20 @@ superset:
 
       CUSTOM_SECURITY_MANAGER = custom_sso_manager.PhoenixCustomSSOSecurityManager
 
+    ## Logging
+    # For some reason that Benjamin really can't find there the root logger gets overridden to
+    # default after the automatically created config has been loaded
+    # This default logging sets it to INFO so that no debug logs are printed
+    logging: |
+      import logging
+      # This seems to set the log level
+      # https://github.com/apache/superset/blob/d5c0506faa3df97601e2003eb3f7bd24a0d41d82/superset/config.py#L898C1-L898C10
+      LOG_LEVEL = logging.INFO
+      # https://github.com/apache/superset/blob/35da6ac2707514aa9b5f203529bd296f91a89d84/superset/config.py#L1185
+      SILENCE_FAB = True
+      # https://github.com/apache/superset/blob/35da6ac2707514aa9b5f203529bd296f91a89d84/superset/config.py#L264
+      FLASK_DEBUG = False
+      DEBUG = False
 
 oauth2-proxy:
   enabled: true
