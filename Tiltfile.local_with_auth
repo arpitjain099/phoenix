@@ -13,12 +13,13 @@ docker_build('phoenix_superset', './python/projects/phoenix_superset/', live_upd
 
 sync_phiphi = sync('./python/projects/phiphi/phiphi/', '/app/projects/phiphi/phiphi/')
 docker_build(
-  'phiphi',
+  'phiphi-dev-image',
   './python/',
   build_args={'PROJECT': 'phiphi'},
   live_update=[
     sync_phiphi,
   ],
+  match_in_env_vars=True,
 )
 
 sync_console_ui = sync('./console_ui/src/', '/app/src/')
