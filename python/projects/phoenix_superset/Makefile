@@ -6,6 +6,10 @@ up:
 	@echo "A rebuild is always done as there is no mount"
 	docker compose up --build
 
+bash_superset:
+	@echo "Starting a bash session in the superset container..."
+	docker compose exec -u root phoenix_superset bash
+
 clean:
 	@echo "Clean the development environment..."
 	docker compose down -v --remove-orphans
