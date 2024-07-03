@@ -13,9 +13,9 @@ dependencies:
   version: 15.5.12
 - name: prefect-worker
   repository: https://prefecthq.github.io/prefect-helm
-  version: 2024.5.29222000
+  version: 2024.6.28162841
 - name: prefect-server
   repository: https://prefecthq.github.io/prefect-helm
-  version: 2024.5.29222000
-digest: sha256:812de3dfb3e2d624003e3cb975903d0c1d503d5af28f6a9a763de4d1e130fccb
-generated: "2024-07-03T06:34:33.261794003+02:00"
+  version: 2024.6.28162841
+digest: sha256:91bd0f2f64bbf5beef6a8f2fc16bb45ffce8b2336a91ea687759fa8dafed1f14
+generated: "2024-07-03T06:35:45.571304085+02:00"
