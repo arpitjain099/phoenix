@@ -161,6 +161,22 @@ class PhoenixCustomSSOSecurityManager(SupersetSecurityManager):  # type: ignore[
         self.update_user_auth_stat(user)
         return user
 
+    def load_user(self, pk: int) -> Union[User, None]:  # type: ignore[no-any-unimported]
+        """Load user.
+
+        Based on:
+        https://github.com/dpgaspar/Flask-AppBuilder/blob/c65e067f09e741c00322221263c8599b8e8811d5/flask_appbuilder/security/manager.py#L2160C1-L2163C24
+
+        But with the fix for if the users is not found.
+        """
+        user = self.get_user_by_id(int(pk))
+        if not user:
+            return None
+        if user.is_active:
+            return user
+
+        return None
+
     @staticmethod
     def before_request():  # type: ignore[no-untyped-def]
         """Method called before each request.
