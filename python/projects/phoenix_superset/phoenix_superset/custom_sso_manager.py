@@ -27,6 +27,7 @@ manager defined in this module.
 import logging
 from typing import Union
 
+import werkzeug
 from flask import current_app, g, redirect, request
 from flask_appbuilder.const import (  # type: ignore[import-untyped]
     LOGMSG_WAR_SEC_LOGIN_FAILED,
@@ -44,6 +45,16 @@ logger = logging.getLogger(__name__)
 ######
 ### Uncomment to see logs in the superset server output
 # logger.setLevel(logging.DEBUG)
+
+
+class NotAuthorised(werkzeug.exceptions.HTTPException):
+    """Not Authorised Exception."""
+
+    code = 401
+    description = (
+        "Not Authorized for this dashboard."
+        " Please try to log in again. If you get really stuck, contact an admin."
+    )
 
 
 class AutheRemoteUserViewCustom(AuthView):  # type: ignore[no-any-unimported]
@@ -79,6 +90,8 @@ class AutheRemoteUserViewCustom(AuthView):  # type: ignore[no-any-unimported]
                 login_user(user)
                 next_url = request.args.get("next", "")
                 return redirect(get_safe_redirect(next_url))
+            if not user:
+                raise NotAuthorised()
 
         login_url = self.appbuilder.app.config.get("LOGIN_REDIRECT_URL")
         if login_url:

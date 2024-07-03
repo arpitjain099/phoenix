@@ -92,8 +92,8 @@ class AuthRemoteUserTestCase(unittest.TestCase):
         # This should go back to home page
         assert response.headers["Location"] == "/"
 
-    def test_login_not_found(self):
-        """Test login not found."""
+    def test_login_user_not_found(self):
+        """Test login user not found."""
         login_redirect_url = "/some_other_url"
         self.app.config["LOGIN_REDIRECT_URL"] = login_redirect_url
         self.appbuilder = self.create_appbuilder()
@@ -107,6 +107,23 @@ class AuthRemoteUserTestCase(unittest.TestCase):
             role=[],
         )
         response = self.client.get("/login/", environ_base={"REMOTE_USER": "NOT_FOUND"})
+        assert response.status_code == 401
+
+    def test_login_no_auth_header(self):
+        """Test login with no auth header."""
+        login_redirect_url = "/some_other_url"
+        self.app.config["LOGIN_REDIRECT_URL"] = login_redirect_url
+        self.appbuilder = self.create_appbuilder()
+        sm = self.appbuilder.sm
+        # register a user
+        _ = sm.add_user(
+            username="alice",
+            first_name="Alice",
+            last_name="Doe",
+            email="alice@example.com",
+            role=[],
+        )
+        response = self.client.get("/login/")
         assert response.status_code == 302
         assert response.headers["Location"] == login_redirect_url
 
@@ -181,5 +198,4 @@ class AuthRemoteUserTestCase(unittest.TestCase):
                 assert "_user_id" not in sess
             # Check that there is no loop
             response = c.get("/login/", environ_base={"REMOTE_USER": "NOT_FOUND"})
-            assert response.status_code == 302
-            assert response.headers["Location"] == login_redirect_url
+            assert response.status_code == 401
