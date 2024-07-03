@@ -21,7 +21,7 @@ dependencies:
   repository: "https://apache.github.io/superset"
 - name: oauth2-proxy
   condition: oauth2-proxy.enabled
-  version: "6.24.1"
+  version: "7.7.8"
   repository: "https://oauth2-proxy.github.io/manifests"
 - name: cert-manager
   version: v1.14.4
