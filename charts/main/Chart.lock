@@ -1,7 +1,7 @@
 dependencies:
 - name: superset
   repository: https://apache.github.io/superset
-  version: 0.12.6
+  version: 0.12.11
 - name: oauth2-proxy
   repository: https://oauth2-proxy.github.io/manifests
   version: 7.7.8
@@ -17,5 +17,5 @@ dependencies:
 - name: prefect-server
   repository: https://prefecthq.github.io/prefect-helm
   version: 2024.6.28162841
-digest: sha256:91bd0f2f64bbf5beef6a8f2fc16bb45ffce8b2336a91ea687759fa8dafed1f14
-generated: "2024-07-03T06:35:45.571304085+02:00"
+digest: sha256:d517564e3fa577d7fa8805197b321726e21ec6804e452cd9ab275c5f9667ffda
+generated: "2024-07-03T07:56:42.913400043+02:00"

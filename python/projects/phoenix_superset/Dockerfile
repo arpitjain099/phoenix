@@ -1,5 +1,5 @@
 # Superset version must be the same as in `requirements.in`
-FROM apache/superset:3.1.1
+FROM apache/superset:4.0.2
 
 # We are not using the default /app/pythonpath directory
 # as in superset helm everything is overwritten there.
