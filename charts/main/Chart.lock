@@ -7,7 +7,7 @@ dependencies:
   version: 7.7.8
 - name: cert-manager
   repository: https://charts.jetstack.io
-  version: v1.14.4
+  version: v1.15.1
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
   version: 15.2.5
@@ -17,5 +17,5 @@ dependencies:
 - name: prefect-server
   repository: https://prefecthq.github.io/prefect-helm
   version: 2024.5.29222000
-digest: sha256:0beacc72fc000b93208b42ebc4cfe006fc3bed56a61015095028bf920ee38754
-generated: "2024-07-03T06:28:11.894871077+02:00"
+digest: sha256:9404977c9c5007a5aff7ee909e62277323e4addb18d9aa7ffc390b411fb55a71
+generated: "2024-07-03T06:32:36.140860829+02:00"
