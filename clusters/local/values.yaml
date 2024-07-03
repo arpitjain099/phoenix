@@ -45,6 +45,17 @@ superset:
   image:
     repository: phoenix_superset
     tag: latest
+  supersetNode:
+    # For debugging it can be useful to remove the Probe
+    # Uncomment to remove the probe
+    # livenessProbe: ""
+    # readinessProbe: ""
+    # startupProbe: ""
+    # This is for auto reload and debugging
+    command:
+      - "/bin/sh"
+      - "-c"
+      - ". {{ .Values.configMountPath }}/superset_bootstrap.sh; flask run --reload --debugger -p 8088 --host=0.0.0.0"
   configOverrides:
     general: |
       APP_NAME = "Dashboard - Phoenix"
