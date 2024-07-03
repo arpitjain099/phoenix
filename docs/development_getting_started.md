@@ -101,10 +101,6 @@ prefect flow and the prefect worker. To do this:
 - Prefect worker must not have an api key
 - `make up`
 - Go to `http://localhost:4200` and you will see the prefect server dashboard
-- Update the `main-work-pool`:
-- `kubectl describe configmap phoenix-base-job-template`
-- Copy the json from the config map in to the `main-work-pool` in the prefect server dashboard
-  (edit -> advanded). This is not needed for the helm chart with v3.
 - You should be able to see the status of the health-check flow in the logs of the prefect-deployment
   pod (in the tilt ui).
 - If you make a change to the code and you notice your changes are not in the flows you may need to
