@@ -141,7 +141,7 @@ class PhoenixCustomSSOSecurityManager(SupersetSecurityManager):  # type: ignore[
         return str(self.appbuilder.get_app.config["AUTH_REMOTE_USER_ENV_VAR"])
 
     @property
-    def auth_remote_key(self) -> str | None:
+    def auth_remote_key(self) -> Union[str, None]:
         """Get the remote user key."""
         return request.environ.get(self.auth_remote_user_env_var)
 
