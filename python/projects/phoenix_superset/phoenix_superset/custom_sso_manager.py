@@ -84,6 +84,8 @@ class AutheRemoteUserViewCustom(AuthView):  # type: ignore[no-any-unimported]
         if g.user is not None and g.user.is_authenticated and g.user.email == email:
             next_url = request.args.get("next", "")
             return redirect(get_safe_redirect(next_url))
+        login_url = self.appbuilder.app.config.get("LOGIN_REDIRECT_URL")
+        logger.debug("Login View: Login URL: %s", login_url)
         if email:
             user = self.appbuilder.sm.auth_user_remote_user(email)
             if user:
@@ -91,9 +93,12 @@ class AutheRemoteUserViewCustom(AuthView):  # type: ignore[no-any-unimported]
                 next_url = request.args.get("next", "")
                 return redirect(get_safe_redirect(next_url))
             if not user:
-                raise NotAuthorised()
+                if "text/html" in request.accept_mimetypes:
+                    # For some stupid reason render_template has type Any rather then response?
+                    return self.render_template("401.html", login_url=login_url)  # type: ignore[no-any-return]
+                else:
+                    raise NotAuthorised()
 
-        login_url = self.appbuilder.app.config.get("LOGIN_REDIRECT_URL")
         if login_url:
             return redirect(login_url)
 
