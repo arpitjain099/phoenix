@@ -6,6 +6,7 @@ from sqlalchemy import ForeignKey, Index, orm
 
 from phiphi import platform_db
 from phiphi.api import base_models
+from phiphi.api.projects.job_runs import models as job_run_models
 
 
 class ProjectBase(platform_db.Base):
@@ -38,3 +39,32 @@ class Project(ProjectBase, base_models.TimestampModel):
             "deleted_at",
         ),
     )
+
+    # Relationship to get all related JobRuns for project, ordered by id descending
+    job_runs = orm.relationship(
+        "JobRuns",
+        order_by="desc(JobRuns.id)",
+        primaryjoin="Project.id == foreign(JobRuns.project_id)",
+        lazy="dynamic",
+    )
+
+    @property
+    def latest_job_run(self) -> job_run_models.JobRuns | None:
+        """Property to get the most recent JobRun."""
+        latest_run: job_run_models.JobRuns | None = self.job_runs.first()
+
+        if latest_run is None:
+            return None
+
+        return latest_run
+
+    @property
+    def last_job_run_completed_at(self) -> datetime.datetime | None:
+        """Property to get the last job run completed at."""
+        last_complete_job_run: job_run_models.JobRuns | None = self.job_runs.filter(
+            job_run_models.JobRuns.completed_at.isnot(None),
+        ).first()
+        if last_complete_job_run is None:
+            return None
+
+        return last_complete_job_run.completed_at
