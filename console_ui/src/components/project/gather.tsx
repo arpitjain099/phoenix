@@ -18,9 +18,8 @@ import {
 import { List, DateField } from "@refinedev/mantine";
 import TableComponent from "@components/table";
 import { useRouter } from "next/navigation";
-import BreadcrumbsComponent from "@components/breadcrumbs";
 import { PHEONIX_MANUAL_URL, statusTextStyle } from "src/utils";
-import { IconPlayerPlay, IconRefresh, IconTrash } from "@tabler/icons";
+import { IconPlayerPlay } from "@tabler/icons";
 import GatherRunModal from "@components/modals/gather-run";
 import { jobRunService } from "src/services";
 import { GatherResponse } from "src/interfaces/gather";
@@ -46,7 +45,6 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 
 	const handleGatherRefresh = useCallback(
 		async (gatherDetail: GatherResponse) => {
-			refetch();
 			setLoadingStates((prev) => ({ ...prev, [gatherDetail.id]: true }));
 			try {
 				const { data } = await jobRunService.fetchJobRun({
@@ -64,6 +62,7 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 			} catch (error) {
 				console.error("Error fetching gather details:", error);
 			} finally {
+				refetch();
 				setLoadingStates((prev) => ({ ...prev, [gatherDetail.id]: false }));
 			}
 		},
@@ -96,9 +95,11 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 				id: "created_at",
 				accessorKey: "latest_job_run.created_at",
 				header: translate("gathers.fields.started_run_at"),
-				cell: function render({ getValue }) {
-					return getValue() ? (
-						<DateField format="LLL" value={getValue<any>()} />
+				cell: function render({ row }) {
+					const { latest_job_run } = row.original;
+					const created_at = latest_job_run ? latest_job_run.created_at : null;
+					return created_at ? (
+						<DateField format="LLL" value={created_at} />
 					) : (
 						""
 					);
@@ -108,9 +109,13 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 				id: "started_processing_at",
 				accessorKey: "latest_job_run.started_processing_at",
 				header: translate("gathers.fields.started_processing_at"),
-				cell: function render({ getValue }) {
-					return getValue() ? (
-						<DateField format="LLL" value={getValue<any>()} />
+				cell: function render({ row }) {
+					const { latest_job_run } = row.original;
+					const started_processing_at = latest_job_run
+						? latest_job_run.started_processing_at
+						: null;
+					return started_processing_at ? (
+						<DateField format="LLL" value={started_processing_at} />
 					) : (
 						""
 					);
@@ -120,8 +125,9 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 				id: "status",
 				accessorKey: "latest_job_run.status",
 				header: translate("projects.fields.status"),
-				cell: ({ getValue }) => {
-					const status = getValue() || ""; // Default to empty string if getValue() is null or undefined
+				cell: function render({ row }) {
+					const { latest_job_run } = row.original;
+					const status = latest_job_run ? latest_job_run.status : null;
 					return (
 						<span className={`${statusTextStyle(status)}`}>
 							{status ? translate(`status.${status}`) : ""}
@@ -161,17 +167,7 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 									)}
 									{["in_queue", "processing", "awaiting_start"].includes(
 										status
-									) && (
-										<Tooltip label="Refresh">
-											<Button
-												p={0}
-												variant="subtle"
-												onClick={() => handleGatherRefresh(row.original)}
-											>
-												<IconRefresh size={20} color="blue" />
-											</Button>
-										</Tooltip>
-									)}
+									) && <Loader size="sm" />}
 								</>
 							)}
 						</Group>
@@ -179,7 +175,7 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 				},
 			},
 		],
-		[translate, loadingStates, handleGatherRefresh]
+		[translate, loadingStates]
 	);
 
 	const {
@@ -196,6 +192,28 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 			setGatherList(apiResponse.data.data);
 		}
 	}, [apiResponse?.data?.data]);
+
+	useEffect(() => {
+		let interval: NodeJS.Timeout | undefined;
+		if (
+			gatherList.some((gather: any) => !gather.latest_job_run?.completed_at)
+		) {
+			interval = setInterval(() => {
+				const pendingGathers = gatherList.filter(
+					(gather: any) =>
+						gather.latest_job_run && !gather.latest_job_run?.completed_at
+				);
+				Promise.all(
+					pendingGathers.map((gather: any) => handleGatherRefresh(gather))
+				).catch((error) => console.error("Error refreshing gathers:", error));
+			}, 10000);
+		}
+		return () => {
+			if (interval) {
+				clearInterval(interval);
+			}
+		};
+	}, [gatherList, handleGatherRefresh]);
 
 	return (
 		<>

@@ -9,7 +9,7 @@ import {
 	EditButtonProps,
 	EditButton,
 } from "@refinedev/mantine";
-import { Group, Loader, Tabs, Title } from "@mantine/core";
+import { Group, Loader, Tabs, Text, Title } from "@mantine/core";
 import OverviewComponent from "@components/project/overview";
 import AboutComponent from "@components/project/about";
 import VisualiseComponent from "@components/project/visualise";
@@ -39,20 +39,6 @@ export default function ProjectShow(): JSX.Element {
 		recordItemId: idFromParams,
 	};
 
-	useEffect(() => {
-		let interval: NodeJS.Timeout | undefined;
-		if (record?.latest_job_run?.status !== "completed") {
-			interval = setInterval(() => {
-				refetch();
-			}, 10000);
-		}
-		return () => {
-			if (interval) {
-				clearInterval(interval);
-			}
-		};
-	}, [record?.latest_job_run?.status, refetch]);
-
 	return (
 		<Show
 			title={<Title order={3}>{record?.name}</Title>}
@@ -68,7 +54,7 @@ export default function ProjectShow(): JSX.Element {
 				{record?.last_job_run_completed_at ? (
 					<DateField format="LLL" value={record?.last_job_run_completed_at} />
 				) : (
-					<Loader size="sm" />
+					<Text>-</Text>
 				)}
 			</Group>
 			<Tabs value={activeTab} onTabChange={setActiveTab}>
