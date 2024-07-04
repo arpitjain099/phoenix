@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { useTranslate, useList } from "@refinedev/core";
 import { useTable } from "@refinedev/react-table";
 import { ColumnDef } from "@tanstack/react-table";
@@ -24,13 +24,13 @@ import { IconPlayerPlay, IconRefresh, IconTrash } from "@tabler/icons";
 import GatherRunModal from "@components/modals/gather-run";
 import { jobRunService } from "src/services";
 import { GatherResponse } from "src/interfaces/gather";
-import Link from "next/link";
 
 interface IGatherProps {
 	projectid: any;
+	refetch: any;
 }
 
-const GatherComponent: React.FC<IGatherProps> = ({ projectid }) => {
+const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 	const translate = useTranslate();
 	const router = useRouter();
 	const [opened, setOpened] = useState(false);
@@ -44,29 +44,33 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid }) => {
 		resource: projectid ? `projects/${projectid}/gathers` : "",
 	});
 
-	const handleGatherRefresh = async (gatherDetail: GatherResponse) => {
-		setLoadingStates((prev) => ({ ...prev, [gatherDetail.id]: true }));
-		try {
-			const { data } = await jobRunService.fetchJobRun({
-				project_id: gatherDetail.project_id,
-				id: gatherDetail?.latest_job_run?.id,
-				type: "gather",
-			});
-			setGatherList((prevList: GatherResponse[]) =>
-				prevList.map((gather) =>
-					gather.id === gatherDetail.id
-						? { ...gather, latest_job_run: data }
-						: gather
-				)
-			);
-		} catch (error) {
-			console.error("Error fetching gather details:", error);
-		} finally {
-			setLoadingStates((prev) => ({ ...prev, [gatherDetail.id]: false }));
-		}
-	};
+	const handleGatherRefresh = useCallback(
+		async (gatherDetail: GatherResponse) => {
+			refetch();
+			setLoadingStates((prev) => ({ ...prev, [gatherDetail.id]: true }));
+			try {
+				const { data } = await jobRunService.fetchJobRun({
+					project_id: gatherDetail.project_id,
+					id: gatherDetail?.latest_job_run?.id,
+					type: "gather",
+				});
+				setGatherList((prevList: GatherResponse[]) =>
+					prevList.map((gather) =>
+						gather.id === gatherDetail.id
+							? { ...gather, latest_job_run: data }
+							: gather
+					)
+				);
+			} catch (error) {
+				console.error("Error fetching gather details:", error);
+			} finally {
+				setLoadingStates((prev) => ({ ...prev, [gatherDetail.id]: false }));
+			}
+		},
+		[refetch]
+	);
 
-	const columns = React.useMemo<ColumnDef<any>[]>(
+	const columns = useMemo<ColumnDef<any>[]>(
 		() => [
 			{
 				id: "source",
@@ -168,20 +172,6 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid }) => {
 											</Button>
 										</Tooltip>
 									)}
-									{/* {["failed", "completed_sucessfully"].includes(status) && (
-										<Button
-											p={0}
-											variant="subtle"
-											color="red"
-											onClick={() => {}}
-										>
-											<IconTrash
-												size={20}
-												color="red"
-												className="cursor-pointer"
-											/>
-										</Button>
-									)} */}
 								</>
 							)}
 						</Group>
@@ -189,8 +179,9 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid }) => {
 				},
 			},
 		],
-		[translate, loadingStates]
+		[translate, loadingStates, handleGatherRefresh]
 	);
+
 	const {
 		getHeaderGroups,
 		getRowModel,

@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
 import { useResource, useShow, useTranslate } from "@refinedev/core";
 import {
 	Show,
@@ -8,13 +9,12 @@ import {
 	EditButtonProps,
 	EditButton,
 } from "@refinedev/mantine";
-import { Group, Tabs, Title } from "@mantine/core";
+import { Group, Loader, Tabs, Title } from "@mantine/core";
 import OverviewComponent from "@components/project/overview";
 import AboutComponent from "@components/project/about";
 import VisualiseComponent from "@components/project/visualise";
 import GatherComponent from "@components/project/gather";
 import ClassifyComponent from "@components/project/classify";
-import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 export default function ProjectShow(): JSX.Element {
@@ -22,7 +22,7 @@ export default function ProjectShow(): JSX.Element {
 	const { queryResult } = useShow();
 	const searchParams = useSearchParams();
 	const activeItem = searchParams.get("activeItem");
-	const { data, isLoading } = queryResult;
+	const { refetch, data, isLoading } = queryResult;
 
 	const record = data?.data;
 
@@ -39,6 +39,20 @@ export default function ProjectShow(): JSX.Element {
 		recordItemId: idFromParams,
 	};
 
+	useEffect(() => {
+		let interval: NodeJS.Timeout | undefined;
+		if (record?.latest_job_run?.status !== "completed") {
+			interval = setInterval(() => {
+				refetch();
+			}, 10000);
+		}
+		return () => {
+			if (interval) {
+				clearInterval(interval);
+			}
+		};
+	}, [record?.latest_job_run?.status, refetch]);
+
 	return (
 		<Show
 			title={<Title order={3}>{record?.name}</Title>}
@@ -51,7 +65,11 @@ export default function ProjectShow(): JSX.Element {
 				<Title my="xs" order={5}>
 					{translate("projects.dataset_last_update")}:
 				</Title>
-				<DateField format="LLL" value={record?.created_at} />
+				{record?.last_job_run_completed_at ? (
+					<DateField format="LLL" value={record?.last_job_run_completed_at} />
+				) : (
+					<Loader size="sm" />
+				)}
 			</Group>
 			<Tabs value={activeTab} onTabChange={setActiveTab}>
 				<Tabs.List>
@@ -67,7 +85,7 @@ export default function ProjectShow(): JSX.Element {
 				</Tabs.Panel>
 
 				<Tabs.Panel value="gather" pt="xs">
-					<GatherComponent projectid={idFromParams} />
+					<GatherComponent projectid={idFromParams} refetch={refetch} />
 				</Tabs.Panel>
 
 				<Tabs.Panel value="classify" pt="xs">
