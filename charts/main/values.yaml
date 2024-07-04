@@ -41,6 +41,9 @@ api:
   enabled: true
   version: "{{ .Chart.AppVersion }}"
   replicas: 1
+  # Other loggers in source code are:
+  # - /app/projects/phiphi/log_configs/phiphi.dev.yaml
+  phiphilogConfig: "/app/projects/phiphi/log_configs/phiphi.prod.yaml"
   # --log-config option for uvicorn
   # https://www.uvicorn.org/settings/#logging
   # Others already in image:

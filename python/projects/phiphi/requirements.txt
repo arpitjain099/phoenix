@@ -393,6 +393,7 @@ pytzdata==2020.1
 pyyaml==6.0.1
     # via
     #   -r projects/phiphi/../../dev-requirements.txt
+    #   -r projects/phiphi/requirements.in
     #   apprise
     #   fastapi
     #   kubernetes
@@ -470,6 +471,8 @@ typer==0.12.3
     #   prefect
 types-pytz==2024.1.0.20240417
     # via pandas-stubs
+types-pyyaml==6.0.12.20240311
+    # via -r projects/phiphi/requirements.in
 typing-extensions==4.9.0
     # via
     #   -r projects/phiphi/../../dev-requirements.txt
