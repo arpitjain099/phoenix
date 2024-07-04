@@ -33,9 +33,13 @@ spec:
           {{- if .Values.api.reload }} "--reload", {{- end }}
           "--host", "0.0.0.0",
           "--port", "80",
+          {{- if .Values.api.uvicornLogConfig }}
+          "--log-config", {{ .Values.api.uvicornLogConfig }},
+          {{- end }}
           # Proxy headers are needed so that the redirects from the API have the correct
           # scheme and host. This is needed for the console to work correctly.
           "--proxy-headers"
+
         ]
       {{- if .Values.gcp_service_account.enabled }}
       volumes:

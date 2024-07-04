@@ -92,6 +92,10 @@ env:
   - name: BQ_DEFAULT_LOCATION
     value: {{ .Values.api.bqDefaultLocation | quote }}
   {{- end }}
+  {{- if .Values.api.prefectLoggingSettingsPath }}
+  - name: PREFECT_LOGGING_SETTINGS_PATH
+    value: {{ .Values.api.prefectLoggingSettingsPath | quote }}
+  {{- end }}
 ## This is the secret that is used to store the GCP service account json
 {{- if .Values.gcp_service_account.enabled }}
 volumeMounts:

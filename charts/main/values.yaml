@@ -41,6 +41,11 @@ api:
   enabled: true
   version: "{{ .Chart.AppVersion }}"
   replicas: 1
+  # --log-config option for uvicorn
+  # https://www.uvicorn.org/settings/#logging
+  # Others already in image:
+  # - /app/projects/phiphi/log_configs/uvicorn.dev.yaml
+  uvicornLogConfig: "/app/projects/phiphi/log_configs/uvicorn.prod.yaml"
   image:
     repository: "{{ .Values.phiphiImage.repository }}"
     tag: "{{ tpl (.Values.phiphiImage.tag ) . }}"
@@ -60,6 +65,10 @@ api:
   init_db_command: "/app/projects/phiphi/entrypoint_init_db.sh"
   # ~ will use default
   bqDefaultLocation: ~
+  # This override of the default prefect settings is needed for the
+  # uvicornLogConfig to work. Prefects defaults log config overrides the root
+  # and uvicorn :(
+  prefectLoggingSettingsPath: "/app/projects/phiphi/log_configs/prefect.prod.yaml"
   apify_api_keys:
     enabled: false
     secret_name: "{{ .Release.Name }}-apify-api-keys"
