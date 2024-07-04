@@ -164,6 +164,9 @@ def test_get_projects(client: TestClient, reseed_tables) -> None:
     assert response.status_code == 200
     projects = response.json()
     assert len(projects) == 3
+    assert projects[0]["id"] == 3
+    assert projects[1]["id"] == 2
+    assert projects[2]["id"] == 1
 
 
 def test_get_projects_pagination(client: TestClient, reseed_tables) -> None:

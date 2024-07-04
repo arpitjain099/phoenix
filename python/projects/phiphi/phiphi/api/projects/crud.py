@@ -71,6 +71,7 @@ def get_projects(
     query = (
         sqlalchemy.select(models.Project)
         .filter(models.Project.deleted_at.is_(None))
+        .order_by(models.Project.id.desc())
         .offset(start)
         .limit(end)
     )
