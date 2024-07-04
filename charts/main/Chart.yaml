@@ -21,15 +21,15 @@ dependencies:
   repository: "https://apache.github.io/superset"
 - name: oauth2-proxy
   condition: oauth2-proxy.enabled
-  version: "6.24.1"
+  version: "7.7.8"
   repository: "https://oauth2-proxy.github.io/manifests"
 - name: cert-manager
-  version: v1.14.4
+  version: v1.15.1
   repository: https://charts.jetstack.io
   alias: cert-manager
   condition: cert-manager.enabled
 - name: postgresql
-  version: 15.2.5
+  version: 15.5.12
   repository: https://charts.bitnami.com/bitnami
   # This is needed or will have name duplication with the postgresql chart in
   # superset
@@ -37,9 +37,9 @@ dependencies:
   condition: platformdb.enabled
 - name: prefect-worker
   repository: https://prefecthq.github.io/prefect-helm
-  version: 2024.5.29222000
+  version: 2024.6.28162841
   condition: prefect-worker.enabled
 - name: prefect-server
   repository: https://prefecthq.github.io/prefect-helm
-  version: 2024.5.29222000
+  version: 2024.6.28162841
   condition: prefect-server.enabled

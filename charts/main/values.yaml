@@ -343,6 +343,10 @@ oauth2-proxy:
 
 prefect-worker:
   enabled: false
+  worker:
+    config:
+      baseJobTemplate:
+        existingConfigMapName: "phoenix-base-job-template"
 
 baseJobTemplate:
   enabled: false

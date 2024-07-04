@@ -4,6 +4,9 @@ ingress_cors:
   enabled: true
   allow_origin: "https://console.{{ .Values.base_host }}"
 use_local_insecure_auth: false
+phiphiImage:
+  repository: phiphi-dev-image
+  tag: latest
 api:
   cors_origins: "https://console.{{ .Values.base_host }}"
 console:
