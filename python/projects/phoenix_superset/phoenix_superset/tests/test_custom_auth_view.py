@@ -93,7 +93,7 @@ class AuthRemoteUserTestCase(unittest.TestCase):
         assert response.headers["Location"] == "/"
 
     def test_login_not_found(self):
-        """Test login authenticated user."""
+        """Test login not found."""
         login_redirect_url = "/some_other_url"
         self.app.config["LOGIN_REDIRECT_URL"] = login_redirect_url
         self.appbuilder = self.create_appbuilder()
@@ -130,6 +130,56 @@ class AuthRemoteUserTestCase(unittest.TestCase):
             c.get("/login/", environ_base={"REMOTE_USER": alice_user.email})
             with c.session_transaction() as sess:
                 sess["_user_id"] = alice_user.id
-            response = self.client.get("/login/", environ_base={"REMOTE_USER": "NOT_FOUND"})
+            response = c.get("/login/", environ_base={"REMOTE_USER": alice_user.email})
             assert response.status_code == 302
             assert response.headers["Location"] == "/"
+            # Check that the before_request works
+            response = c.get("/auth_check/", environ_base={"REMOTE_USER": alice_user.email})
+            assert response.status_code == 200
+            with c.session_transaction() as sess:
+                assert "_user_id" in sess
+                assert sess["_user_id"] == alice_user.id
+
+    def test_login_session_header_change(self):
+        """Test login session with the header changed.
+
+        If the user is logged in and then logs in to a different user.
+        """
+        login_redirect_url = "/some_other_url"
+        self.app.config["LOGIN_REDIRECT_URL"] = login_redirect_url
+        self.appbuilder = self.create_appbuilder()
+        self.client = self.app.test_client()
+        sm = self.appbuilder.sm
+        # register a user
+        alice_user = sm.add_user(
+            username="alice",
+            first_name="Alice",
+            last_name="Doe",
+            email="alice@example.com",
+            role=[],
+        )
+        with self.client as c:
+            c.get("/login/", environ_base={"REMOTE_USER": alice_user.email})
+            with c.session_transaction() as sess:
+                sess["_user_id"] = alice_user.id
+            # This will run the before_request and thus should log out the user
+            response = c.get("/auth_check/", environ_base={"REMOTE_USER": "NOT_FOUND"})
+            assert response.status_code == 302
+            assert response.headers["Location"] == "/login/"
+            # User should be logged out now
+            with c.session_transaction() as sess:
+                assert "_user_id" not in sess
+
+            # Check that the login works again and there are no loop
+            c.get("/login/", environ_base={"REMOTE_USER": alice_user.email})
+            with c.session_transaction() as sess:
+                sess["_user_id"] = alice_user.id
+            response = c.get("/login/", environ_base={"REMOTE_USER": "NOT_FOUND"})
+            assert response.status_code == 302
+            assert response.headers["Location"] == "/login/"
+            with c.session_transaction() as sess:
+                assert "_user_id" not in sess
+            # Check that there is no loop
+            response = c.get("/login/", environ_base={"REMOTE_USER": "NOT_FOUND"})
+            assert response.status_code == 302
+            assert response.headers["Location"] == login_redirect_url

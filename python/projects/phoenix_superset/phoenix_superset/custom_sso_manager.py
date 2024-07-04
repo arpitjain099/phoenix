@@ -90,6 +90,11 @@ class AutheRemoteUserViewCustom(AuthView):  # type: ignore[no-any-unimported]
             "Please configure the {header} header or set a login URL."
         )
 
+    @expose("/auth_check/")
+    def auth_check(self) -> WerkzeugResponse:
+        """Auth check view for remote user authentication."""
+        return WerkzeugResponse("OK")
+
 
 class PhoenixCustomSSOSecurityManager(SupersetSecurityManager):  # type: ignore[no-any-unimported]
     """Custom SSO Security Manager for Superset.
