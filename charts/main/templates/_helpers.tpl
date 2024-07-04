@@ -98,6 +98,22 @@ env:
   - name: PREFECT_LOGGING_SETTINGS_PATH
     value: {{ .Values.api.prefectLoggingSettingsPath | quote }}
   {{- end }}
+  {{- if .Values.api.sentryDsn }}
+  - name: SENTRY_DSN
+    value: {{ .Values.api.sentryDsn | quote }}
+  {{- end }}
+  {{- if .Values.api.sentryTracesSampleRate }}
+  - name: SENTRY_TRACES_SAMPLE_RATE
+    value: {{ .Values.api.sentryTracesSampleRate | quote }}
+  {{- end }}
+  {{- if .Values.api.sentryProfilesSampleRate }}
+  - name: SENTRY_PROFILES_SAMPLE_RATE
+    value: {{ .Values.api.sentryProfilesSampleRate | quote }}
+  {{- end }}
+  {{- if .Values.api.sentryEnvironment }}
+  - name: SENTRY_ENVIRONMENT
+    value: {{ .Values.api.sentryEnvironment | quote }}
+  {{- end }}
 ## This is the secret that is used to store the GCP service account json
 {{- if .Values.gcp_service_account.enabled }}
 volumeMounts:

@@ -72,6 +72,11 @@ api:
   # uvicornLogConfig to work. Prefects defaults log config overrides the root
   # and uvicorn :(
   prefectLoggingSettingsPath: "/app/projects/phiphi/log_configs/prefect.prod.yaml"
+  # Sentry
+  sentryDsn: ~
+  sentryTracesSampleRate: 1.0
+  sentryProfilesSampleRate: 1.0
+  sentryEnvironment: ~
   apify_api_keys:
     enabled: false
     secret_name: "{{ .Release.Name }}-apify-api-keys"

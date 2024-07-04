@@ -13,6 +13,7 @@ from phiphi.api.projects.job_runs import routes as job_runs_routes
 from phiphi.api.users import routes as user_routes
 
 utils.init_logging()
+utils.init_sentry()
 
 logger = logging.getLogger(__name__)
 

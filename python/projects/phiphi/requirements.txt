@@ -49,6 +49,7 @@ certifi==2024.2.2
     #   httpx
     #   kubernetes
     #   requests
+    #   sentry-sdk
 cffi==1.16.0
     # via cryptography
 cfgv==3.4.0
@@ -100,6 +101,7 @@ fastapi[all]==0.111.0
     # via
     #   -r projects/phiphi/requirements.in
     #   fastapi-cli
+    #   sentry-sdk
 fastapi-cli==0.0.3
     # via fastapi
 filelock==3.13.1
@@ -439,6 +441,8 @@ ruamel-yaml-clib==0.2.8
     # via ruamel-yaml
 ruff==0.2.1
     # via -r projects/phiphi/../../dev-requirements.txt
+sentry-sdk[fastapi]==2.7.0
+    # via -r projects/phiphi/requirements.in
 shellingham==1.5.4
     # via typer
 six==1.16.0
@@ -503,6 +507,7 @@ urllib3==2.2.1
     #   docker
     #   kubernetes
     #   requests
+    #   sentry-sdk
 uvicorn[standard]==0.28.1
     # via
     #   fastapi

@@ -108,6 +108,12 @@ class Settings(BaseSettings):
     # EU is used as default since this means that the data is stored in a GDPR location.
     BQ_DEFAULT_LOCATION: str = "EU"
 
+    # Sentry
+    SENTRY_DSN: Optional[str] = None
+    SENTRY_TRACES_SAMPLE_RATE: float = 1.0
+    SENTRY_PROFILES_SAMPLE_RATE: float = 1.0
+    SENTRY_ENVIRONMENT: str = "local_development"
+
     def model_post_init(self, __context):  # type: ignore[no-untyped-def]
         """Set the mock bq root directory as an absolute path."""
         path = pathlib.Path(self.MOCK_BQ_ROOT_DIR)
