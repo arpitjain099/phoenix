@@ -27,4 +27,5 @@ USER superset
 
 ## Assets
 # Copy the assets to the /app/assets directory
-COPY ./assets/* /app/superset/static/assets/images/
+COPY ./assets/images/* /app/superset/static/assets/images/
+COPY ./templates/* /app/superset/templates/
