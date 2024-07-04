@@ -126,6 +126,7 @@
 	"projects": {
 		"projects": "Proyectos",
 		"more_info": "Más información",
+		"dataset_last_update": "Última actualización del conjunto de datos del panel a las",
 		"fields": {
 			"id": "ID único",
 			"name": "Nombre",
@@ -167,6 +168,55 @@
 			"create": "¡Para extender los días de 'La información personal se eliminará después' o 'Todos los datos se eliminarán después' más allá de 365, por favor, contacte con soporte!",
 			"days_until_pi_expiration": "Los nombres de texto y de cuenta se consideran información personal y se eliminarán x días después de su recopilación.",
 			"days_until_all_data_expiration": "Es importante para el cumplimiento de la privacidad que los datos solo se almacenen el tiempo que los necesite. Los datos se eliminarán x días después de haber sido recopilados."
+		},
+		"tabs": {
+			"overview": {
+				"title": "Bienvenido a tu proyecto Phoenix",
+				"description": {
+					"part1": {
+						"a": "Tu proyecto Phoenix te proporciona las herramientas para recopilar datos de las plataformas de redes sociales, crear clasificaciones para organizar esos datos y visualizar los datos que has recopilado y clasificado en un panel interactivo. Encontrarás estas herramientas en las pestañas de arriba para ",
+						"b": "recopilar, clasificar y visualizar."
+					},
+					"part2": {
+						"a": "La escucha de redes sociales no solo requiere estas herramientas, sino que también necesita un proceso de análisis. ¡Puede que ya tengas tu propio proceso! Hemos expuesto nuestro proceso de análisis de redes sociales recomendado para mediadores y constructores de paz en ",
+						"b": "el manual Phoenix."
+					},
+					"part3": "¿No sabes cómo empezar? Utiliza nuestra lista de verificación estándar para guiarte a través de los pasos:"
+				},
+				"problem_statement": "Definir una declaración del problema",
+				"gather": "Recopilar datos de las plataformas de redes sociales",
+				"classify": "Clasificar los datos que has recopilado",
+				"visualise": "Visualizar los datos que has recopilado y clasificado",
+				"insights": "Explora insights utilizando tu panel",
+				"tips": {
+					"manual": "ver consejos en el manual Phoenix",
+					"gather": "haz clic en Recopilar",
+					"classify": "haz clic en Clasificar",
+					"visualise": "haz clic en Visualizar"
+				}
+			},
+			"classify": {
+				"coming_soon": "Próximamente"
+			},
+			"visualise": {
+				"title": "Tu panel interactivo",
+				"description": "Tu proyecto Phoenix crea automáticamente un panel interactivo que está conectado a una base de datos que contiene todos los datos que has recopilado, con todas las clasificaciones que has creado aplicadas a ellos. Para obtener detalles sobre cómo está estructurada esta base de datos, consulta esta sección del manual Phoenix. Cuando lo abres por primera vez, el panel solo muestra algunos gráficos y filtros básicos que hemos creado automáticamente. Puedes crear tantos gráficos y tablas adicionales como desees. Utilizamos Superset para el panel, y puedes leer instrucciones sobre cómo usar Superset aquí. ¿No sabes por dónde empezar? Consulta estos consejos en el manual Phoenix sobre cómo crear gráficos y tablas útiles para constructores de paz y mediadores que realizan análisis de redes sociales."
+			},
+			"gather": {
+				"title": "Recopilar",
+				"description": {
+					"part1": {
+						"a": "En esta página, puedes recopilar datos de las plataformas de redes sociales. Deberás tomar varias decisiones sobre qué datos deseas recopilar. Antes de agregar tu primera recopilación, te recomendamos que leas ",
+						"b": "esta sección",
+						"c": " del manual Phoenix."
+					},
+					"part2": {
+						"a": "Una vez que hayas agregado una recopilación, deberás ejecutar la recopilación utilizando el botón de reproducción en la columna de Acción. Cada vez que ejecutas una recopilación, usas algunos de tus créditos de proyecto (ver ",
+						"b": "aquí",
+						"c": " para más información sobre los créditos de proyecto)."
+					}
+				}
+			}
 		}
 	},
 	"gathers": {
