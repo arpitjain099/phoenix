@@ -15,6 +15,8 @@ const LOGOUT_URL = process.env.NEXT_PUBLIC_ENV_LOGOUT_URL!;
 const ENV = process.env.NEXT_PUBLIC_ENV!;
 const DEV_LOGIN_EMAIL = process.env.NEXT_PUBLIC_DEV_ADMIN_EMAIL!;
 
+let HAVE_RESET_USER_INFO_COOKIE = false;
+
 const getLoginUrl = () => {
 	const current_url = window.location.href;
 	return `${LOGIN_URL}?rd=${current_url}`;
@@ -120,6 +122,11 @@ const authProvider: AuthProvider = {
 		return { success: true };
 	},
 	check: async () => {
+		// Reset the user info cookie on the first load of the page
+		if (!HAVE_RESET_USER_INFO_COOKIE) {
+			HAVE_RESET_USER_INFO_COOKIE = true;
+			storageService.remove(USER_INFO_COOKIE_NAME);
+		}
 		if (ENV === "dev" && storageService.get(DEV_AUTH_COOKIE)) {
 			return { authenticated: true };
 		}
