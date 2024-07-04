@@ -17,7 +17,7 @@ appVersion: "2.1.1"
 dependencies:
 - name: superset
   condition: superset.enabled
-  version: "0.12.6"
+  version: "0.12.11"
   repository: "https://apache.github.io/superset"
 - name: oauth2-proxy
   condition: oauth2-proxy.enabled
