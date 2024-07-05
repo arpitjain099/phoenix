@@ -19,7 +19,7 @@ import { List, DateField } from "@refinedev/mantine";
 import TableComponent from "@components/table";
 import { useRouter } from "next/navigation";
 import BreadcrumbsComponent from "@components/breadcrumbs";
-import { statusTextStyle } from "src/utils";
+import { PHEONIX_MANUAL_URL, statusTextStyle } from "src/utils";
 import { IconPlayerPlay, IconRefresh, IconTrash } from "@tabler/icons";
 import GatherRunModal from "@components/modals/gather-run";
 import { jobRunService } from "src/services";
@@ -214,24 +214,24 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid }) => {
 					onClick: () => router.push(`/projects/${projectid}/gathers/create`),
 				}}
 				title={
-					<div className="flex flex-col">
+					<div className="flex flex-col gap-4">
 						<Title order={3}>{translate("projects.tabs.gather.title")}</Title>
 						<Text fz="sm" c="dimmed">
 							{translate("projects.tabs.gather.description.part1.a")}
 							<Anchor
-								className="underline underline-offset-1"
-								href="https://docs.google.com/document/d/1Rs3WYgvkAtZJ9y1ho68AnGfC8mDuOFE9aG52bkJSG24/edit"
+								className="font-normal text-gray-400 hover:text-blue-500 text-sm underline"
+								href={PHEONIX_MANUAL_URL}
 								target="_blank"
 							>
 								{translate("projects.tabs.gather.description.part1.b")}
 							</Anchor>
 							{translate("projects.tabs.gather.description.part1.c")}
 						</Text>
-						<Text fz="sm" c="dimmed" mt={4}>
+						<Text fz="sm" c="dimmed">
 							{translate("projects.tabs.gather.description.part2.a")}
 							<Anchor
-								className="underline underline-offset-1"
-								href="https://docs.google.com/document/d/1Rs3WYgvkAtZJ9y1ho68AnGfC8mDuOFE9aG52bkJSG24/edit"
+								className="font-normal text-gray-400 hover:text-blue-500 text-sm underline"
+								href={PHEONIX_MANUAL_URL}
 								target="_blank"
 							>
 								{translate("projects.tabs.gather.description.part2.b")}

@@ -184,15 +184,16 @@
 					"part3": "Vous ne savez pas par où commencer ? Utilisez notre liste de contrôle standard pour vous guider à travers les étapes :"
 				},
 				"problem_statement": "Définir un énoncé de problème",
+				"source": "Définissez d'où vous obtiendrez les données",
 				"gather": "Recueillir des données des plateformes de médias sociaux",
 				"classify": "Classifiez les données que vous avez recueillies",
 				"visualise": "Visualisez les données que vous avez recueillies et classées",
 				"insights": "Explorez des insights à l'aide de votre tableau de bord",
 				"tips": {
-					"manual": "voir des conseils dans le manuel Phoenix",
-					"gather": "cliquez sur Recueillir",
-					"classify": "cliquez sur Classifier",
-					"visualise": "cliquez sur Visualiser"
+					"manual": "voir le Manuel Phoenix",
+					"gather": "aller à Collecter",
+					"classify": "aller à Classifier",
+					"visualise": "aller à Visualiser"
 				}
 			},
 			"classify": {

@@ -12,9 +12,9 @@ interface IVisualiseProps {
 const VisualiseComponent: React.FC<IVisualiseProps> = ({ info }) => {
 	const translate = useTranslate();
 	return (
-		<div className="p-4 flex flex-col">
+		<div className="p-4 flex flex-col gap-4">
 			<Title order={3}>{translate("projects.tabs.visualise.title")}</Title>
-			<Text fz="sm" c="dimmed" mb={16}>
+			<Text fz="sm" c="dimmed">
 				{translate("projects.tabs.visualise.description")}
 			</Text>
 			<DashboardLinkButton

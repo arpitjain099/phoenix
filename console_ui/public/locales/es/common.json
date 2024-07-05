@@ -184,15 +184,16 @@
 					"part3": "¿No sabes cómo empezar? Utiliza nuestra lista de verificación estándar para guiarte a través de los pasos:"
 				},
 				"problem_statement": "Definir una declaración del problema",
+				"source": "Defina de dónde obtendrá los datos",
 				"gather": "Recopilar datos de las plataformas de redes sociales",
 				"classify": "Clasificar los datos que has recopilado",
 				"visualise": "Visualizar los datos que has recopilado y clasificado",
 				"insights": "Explora insights utilizando tu panel",
 				"tips": {
-					"manual": "ver consejos en el manual Phoenix",
-					"gather": "haz clic en Recopilar",
-					"classify": "haz clic en Clasificar",
-					"visualise": "haz clic en Visualizar"
+					"manual": "ver el Manual de Phoenix",
+					"gather": "ir a Recopilar",
+					"classify": "ir a Clasificar",
+					"visualise": "ir a Visualizar"
 				}
 			},
 			"classify": {
