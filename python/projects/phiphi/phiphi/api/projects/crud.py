@@ -66,18 +66,19 @@ def get_project(
 
 def get_projects(
     session: sqlalchemy.orm.Session, start: int = 0, end: int = 100
-) -> list[schemas.ProjectResponse]:
+) -> list[schemas.ProjectListResponse]:
     """Get projects."""
     query = (
         sqlalchemy.select(models.Project)
         .filter(models.Project.deleted_at.is_(None))
+        .order_by(models.Project.id.desc())
         .offset(start)
         .limit(end)
     )
     projects = session.scalars(query).all()
     if not projects:
         return []
-    return [schemas.ProjectResponse.model_validate(project) for project in projects]
+    return [schemas.ProjectListResponse.model_validate(project) for project in projects]
 
 
 def get_db_project_with_guard(session: sqlalchemy.orm.Session, project_id: int) -> None:

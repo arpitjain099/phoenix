@@ -49,6 +49,15 @@ def test_create_get_delete_project(
     assert project["delete_after_days"] == data["delete_after_days"]
     assert project["expected_usage"] == data["expected_usage"]
     assert project["created_at"] == CREATED_TIME
+    assert project["last_job_run_completed_at"] is None
+    assert project["latest_job_run"] is None
+    assert project["checked_problem_statement"] is False
+    assert project["checked_sources"] is False
+    assert project["checked_gather"] is False
+    assert project["checked_classify"] is False
+    assert project["checked_visualise"] is False
+    assert project["checked_explore"] is False
+
     mock_project_init_db.assert_called_once_with(f"project_id{project['id']}", with_dummy_rows=2)
 
     response = client.get(f"/projects/{project['id']}")
@@ -62,6 +71,8 @@ def test_create_get_delete_project(
     assert project["environment_slug"] == data["environment_slug"]
     assert project["pi_deleted_after_days"] == data["pi_deleted_after_days"]
     assert project["delete_after_days"] == data["delete_after_days"]
+    assert project["last_job_run_completed_at"] is None
+    assert project["latest_job_run"] is None
 
     response = client.get("/projects/")
     assert response.status_code == 200
@@ -164,6 +175,13 @@ def test_get_projects(client: TestClient, reseed_tables) -> None:
     assert response.status_code == 200
     projects = response.json()
     assert len(projects) == 3
+    assert projects[0]["id"] == 3
+    assert projects[1]["id"] == 2
+    assert projects[2]["id"] == 1
+
+    # The list projects should not get the job data
+    assert "latest_job_run" not in projects[0]
+    assert "last_job_run_completed_at" not in projects[0]
 
 
 def test_get_projects_pagination(client: TestClient, reseed_tables) -> None:
@@ -180,7 +198,7 @@ def test_update_project(
     client: TestClient, reseed_tables, session: sqlalchemy.orm.Session
 ) -> None:
     """Test updating an project."""
-    data = {"description": "New project"}
+    data = {"description": "New project", "checked_problem_statement": True}
     project_id = 1
     response = client.put(f"/projects/{project_id}", json=data)
     assert response.status_code == 200
@@ -189,6 +207,7 @@ def test_update_project(
     db_project = session.get(models.Project, project_id)
     assert db_project
     assert db_project.description == data["description"]
+    assert db_project.checked_problem_statement is True
     assert db_project.updated_at.isoformat() == UPDATE_TIME
 
 
@@ -237,3 +256,25 @@ def test_create_project_with_non_existing_env(
     mock_project_init_db.assert_not_called()
     assert response.status_code == 400
     assert response.json() == {"detail": "Environment not found"}
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
+def test_project_with_latest_job_run(client: TestClient, reseed_tables) -> None:
+    """Test that the latest job run is returned."""
+    response = client.get("/projects/1")
+    assert response.status_code == 200
+    project = response.json()
+    assert project["last_job_run_completed_at"] == "2024-04-01T12:00:01"
+    # The job_run that is completed is not the same as the latest_job_run
+    assert project["latest_job_run"]["id"] == 4
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
+def test_project_with_latest_job_run_2(client: TestClient, reseed_tables) -> None:
+    """Test that the latest job run is returned."""
+    response = client.get("/projects/2")
+    assert response.status_code == 200
+    project = response.json()
+    assert project["last_job_run_completed_at"] is None
+    # This job run is not completed and is the latest
+    assert project["latest_job_run"]["id"] == 5

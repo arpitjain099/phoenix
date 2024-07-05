@@ -5,6 +5,8 @@ from typing import Annotated
 
 import pydantic
 
+from phiphi.api.projects.job_runs import schemas as job_runs_schemas
+
 
 class ExpectedUsage(str, Enum):
     """Expected usage enum."""
@@ -63,7 +65,27 @@ class ProjectResponse(ProjectBase):
     id: int
     created_at: datetime.datetime
     updated_at: datetime.datetime
-    run_status: str | None = None
+    last_job_run_completed_at: datetime.datetime | None
+    latest_job_run: job_runs_schemas.JobRunResponse | None = None
+    checked_problem_statement: bool = False
+    checked_sources: bool = False
+    checked_gather: bool = False
+    checked_classify: bool = False
+    checked_visualise: bool = False
+    checked_explore: bool = False
+
+
+class ProjectListResponse(ProjectBase):
+    """Project List schema.
+
+    Properties to return to client.
+    """
+
+    model_config = pydantic.ConfigDict(from_attributes=True)
+
+    id: int
+    created_at: datetime.datetime
+    updated_at: datetime.datetime
 
 
 class ProjectUpdate(pydantic.BaseModel):
@@ -76,3 +98,9 @@ class ProjectUpdate(pydantic.BaseModel):
     expected_usage: ExpectedUsage | None = None
     environment_slug: Annotated[str | None, environment_slug_field]
     dashboard_id: int | None = None
+    checked_problem_statement: bool = False
+    checked_sources: bool = False
+    checked_gather: bool = False
+    checked_classify: bool = False
+    checked_visualise: bool = False
+    checked_explore: bool = False
