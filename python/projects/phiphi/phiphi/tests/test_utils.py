@@ -11,11 +11,11 @@ APIFY_API_KEYS_STR_1 = (
 )
 SETTINGS_ENV_MAIN = {
     "APIFY_API_KEYS": APIFY_API_KEYS_STR_1,
-    "FIRST_ENVIRONMENT_SLUG": "main_env_slug",
+    "FIRST_WORKSPACE_SLUG": "main_env_slug",
 }
 SETTINGS_ENV_OTHER = {
     "APIFY_API_KEYS": APIFY_API_KEYS_STR_1,
-    "FIRST_ENVIRONMENT_SLUG": OTHER_ENV_SLUG,
+    "FIRST_WORKSPACE_SLUG": OTHER_ENV_SLUG,
 }
 
 
@@ -45,7 +45,7 @@ def test_get_apify_keys_not_found(patch_settings):
 
 
 @pytest.mark.patch_settings(
-    {"APIFY_API_KEYS": APIFY_API_KEYS_STR_1, "FIRST_ENVIRONMENT_SLUG": "not_found"}
+    {"APIFY_API_KEYS": APIFY_API_KEYS_STR_1, "FIRST_WORKSPACE_SLUG": "not_found"}
 )
 def test_get_apify_keys_not_found_env(patch_settings):
     """Test get apify keys."""
