@@ -49,3 +49,6 @@ export const formatToCurrency = (value: number | string): string => {
 		maximumFractionDigits: 2,
 	});
 };
+
+export const PHEONIX_MANUAL_URL =
+	"https://docs.google.com/document/d/1Rs3WYgvkAtZJ9y1ho68AnGfC8mDuOFE9aG52bkJSG24/edit";

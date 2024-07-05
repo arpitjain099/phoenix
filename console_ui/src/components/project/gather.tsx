@@ -1,11 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import {
-	IResourceComponentsProps,
-	useTranslate,
-	useList,
-} from "@refinedev/core";
+import { useTranslate, useList } from "@refinedev/core";
 import { useTable } from "@refinedev/react-table";
 import { ColumnDef } from "@tanstack/react-table";
 import {
@@ -17,37 +13,32 @@ import {
 	Loader,
 	Text,
 	Title,
+	Anchor,
 } from "@mantine/core";
 import { List, DateField } from "@refinedev/mantine";
 import TableComponent from "@components/table";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import BreadcrumbsComponent from "@components/breadcrumbs";
-import { statusTextStyle } from "src/utils";
+import { PHEONIX_MANUAL_URL, statusTextStyle } from "src/utils";
 import { IconPlayerPlay, IconRefresh, IconTrash } from "@tabler/icons";
 import GatherRunModal from "@components/modals/gather-run";
 import { jobRunService } from "src/services";
 import { GatherResponse } from "src/interfaces/gather";
+import Link from "next/link";
 
-export default function GatherList(): JSX.Element {
+interface IGatherProps {
+	projectid: any;
+}
+
+const GatherComponent: React.FC<IGatherProps> = ({ projectid }) => {
 	const translate = useTranslate();
 	const router = useRouter();
-	const { projectid } = useParams();
 	const [opened, setOpened] = useState(false);
 	const [selected, setSelected] = useState(null);
 	const [gatherList, setGatherList] = useState<any>([]);
 	const [loadingStates, setLoadingStates] = useState<{
 		[key: string]: boolean;
 	}>({});
-
-	const breadcrumbs = [
-		{ title: translate("projects.projects"), href: "/projects" },
-		{
-			title: projectid as string,
-			href: `/projects/show/${projectid}`,
-			replaceWithProjectName: true,
-		},
-		{ title: translate("gathers.gathers"), href: "#" },
-	];
 
 	const apiResponse = useList({
 		resource: projectid ? `projects/${projectid}/gathers` : "",
@@ -218,20 +209,34 @@ export default function GatherList(): JSX.Element {
 	return (
 		<>
 			<List
+				breadcrumb={false}
 				createButtonProps={{
 					onClick: () => router.push(`/projects/${projectid}/gathers/create`),
 				}}
-				breadcrumb={
-					<BreadcrumbsComponent
-						breadcrumbs={breadcrumbs}
-						projectid={projectid as string}
-					/>
-				}
 				title={
-					<div className="flex flex-col">
-						<Title order={3}>{translate("gathers.titles.list")}</Title>
+					<div className="flex flex-col gap-4">
+						<Title order={3}>{translate("projects.tabs.gather.title")}</Title>
 						<Text fz="sm" c="dimmed">
-							{translate("gathers.sub_titles.list")}
+							{translate("projects.tabs.gather.description.part1.a")}
+							<Anchor
+								className="font-normal text-gray-400 hover:text-blue-500 text-sm underline"
+								href={PHEONIX_MANUAL_URL}
+								target="_blank"
+							>
+								{translate("projects.tabs.gather.description.part1.b")}
+							</Anchor>
+							{translate("projects.tabs.gather.description.part1.c")}
+						</Text>
+						<Text fz="sm" c="dimmed">
+							{translate("projects.tabs.gather.description.part2.a")}
+							<Anchor
+								className="font-normal text-gray-400 hover:text-blue-500 text-sm underline"
+								href={PHEONIX_MANUAL_URL}
+								target="_blank"
+							>
+								{translate("projects.tabs.gather.description.part2.b")}
+							</Anchor>
+							{translate("projects.tabs.gather.description.part2.c")}
 						</Text>
 					</div>
 				}
@@ -259,4 +264,6 @@ export default function GatherList(): JSX.Element {
 			/>
 		</>
 	);
-}
+};
+
+export default GatherComponent;

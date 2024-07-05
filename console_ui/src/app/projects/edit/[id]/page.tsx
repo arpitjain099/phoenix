@@ -4,9 +4,11 @@ import React from "react";
 import { useUpdate } from "@refinedev/core";
 import { Edit, useForm } from "@refinedev/mantine";
 import CreateEditProjectForm from "@components/forms/create-edit-project";
+import { useRouter } from "next/navigation";
 
 export default function ProjectEdit(): JSX.Element {
 	const { mutate } = useUpdate();
+	const router = useRouter();
 	const {
 		getInputProps,
 		saveButtonProps,
@@ -27,14 +29,21 @@ export default function ProjectEdit(): JSX.Element {
 
 	const handleSave = async () => {
 		if (projectsData?.id)
-			mutate({
-				resource: "projects",
-				id: projectsData.id,
-				values,
-				meta: {
-					method: "put",
+			mutate(
+				{
+					resource: "projects",
+					id: projectsData.id,
+					values,
+					meta: {
+						method: "put",
+					},
 				},
-			});
+				{
+					onSuccess: async () => {
+						router.push(`/projects/show/${projectsData.id}`);
+					},
+				}
+			);
 	};
 
 	return (
