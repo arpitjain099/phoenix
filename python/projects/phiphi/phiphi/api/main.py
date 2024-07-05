@@ -6,11 +6,11 @@ from starlette.middleware.cors import CORSMiddleware
 
 from phiphi import config, utils
 from phiphi.api import health_check, insecure_auth
-from phiphi.api.workspaces import routes as workspace_routes
 from phiphi.api.projects import routes as project_routes
 from phiphi.api.projects.gathers import routes as gather_routes
 from phiphi.api.projects.job_runs import routes as job_runs_routes
 from phiphi.api.users import routes as user_routes
+from phiphi.api.workspaces import routes as workspace_routes
 
 utils.init_logging()
 utils.init_sentry()
