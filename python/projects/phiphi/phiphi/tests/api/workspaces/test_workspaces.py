@@ -1,93 +1,93 @@
-"""Test Environments."""
+"""Test Workspaces."""
 import pytest
 import sqlalchemy
 from fastapi.testclient import TestClient
 
-from phiphi.api.environments import models
+from phiphi.api.workspaces import models
 
 CREATED_TIME = "2024-04-01T12:00:01"
 UPDATE_TIME = "2024-04-01T12:00:02"
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
-def test_create_get_environment(recreate_tables, client: TestClient) -> None:
-    """Test creating and get of an environment."""
-    data = {"description": "My environment", "name": "test", "slug": "test-env"}
-    response = client.post("/environments/", json=data)
+def test_create_get_workspace(recreate_tables, client: TestClient) -> None:
+    """Test creating and get of an workspace."""
+    data = {"description": "My workspace", "name": "test", "slug": "test-env"}
+    response = client.post("/workspaces/", json=data)
     assert response.status_code == 200
-    environment = response.json()
-    assert environment["description"] == data["description"]
-    assert environment["name"] == data["name"]
-    assert environment["slug"] == data["slug"]
-    assert environment["created_at"] == CREATED_TIME
+    workspace = response.json()
+    assert workspace["description"] == data["description"]
+    assert workspace["name"] == data["name"]
+    assert workspace["slug"] == data["slug"]
+    assert workspace["created_at"] == CREATED_TIME
 
-    response = client.get(f"/environments/{environment['slug']}")
+    response = client.get(f"/workspaces/{workspace['slug']}")
     assert response.status_code == 200
 
-    environment = response.json()
+    workspace = response.json()
 
-    assert environment["description"] == data["description"]
-    assert environment["name"] == data["name"]
-    assert environment["slug"] == data["slug"]
-    assert environment["created_at"] == CREATED_TIME
+    assert workspace["description"] == data["description"]
+    assert workspace["name"] == data["name"]
+    assert workspace["slug"] == data["slug"]
+    assert workspace["created_at"] == CREATED_TIME
 
 
-def test_get_environment_not_found(client: TestClient, recreate_tables) -> None:
-    """Test getting an environment that does not exist."""
-    response = client.get("/environments/boys")
+def test_get_workspace_not_found(client: TestClient, recreate_tables) -> None:
+    """Test getting an workspace that does not exist."""
+    response = client.get("/workspaces/boys")
     assert response.status_code == 404
-    assert response.json() == {"detail": "Environment not found"}
+    assert response.json() == {"detail": "Workspace not found"}
 
 
-def test_get_environments(client: TestClient, reseed_tables) -> None:
-    """Test getting environments."""
-    response = client.get("/environments/")
+def test_get_workspaces(client: TestClient, reseed_tables) -> None:
+    """Test getting workspaces."""
+    response = client.get("/workspaces/")
     assert response.status_code == 200
-    environments = response.json()
-    assert len(environments) == 3
+    workspaces = response.json()
+    assert len(workspaces) == 3
 
 
 @pytest.mark.freeze_time(UPDATE_TIME)
-def test_update_environment(
+def test_update_workspace(
     client: TestClient, reseed_tables, session: sqlalchemy.orm.Session
 ) -> None:
-    """Test updating an environment."""
+    """Test updating an workspace."""
     data = {"description": "new_env"}
-    environment_id = 1
-    response = client.put(f"/environments/{environment_id}", json=data)
+    workspace_id = 1
+    response = client.put(f"/workspaces/{workspace_id}", json=data)
     assert response.status_code == 200
-    environment = response.json()
-    assert environment["description"] == data["description"]
-    db_environment = session.get(models.Environment, environment_id)
-    assert db_environment
-    assert db_environment.description == data["description"]
-    assert db_environment.updated_at.isoformat() == UPDATE_TIME
+    workspace = response.json()
+    assert workspace["description"] == data["description"]
+    db_workspace = session.get(models.Workspace, workspace_id)
+    assert db_workspace
+    assert db_workspace.description == data["description"]
+    assert db_workspace.updated_at.isoformat() == UPDATE_TIME
 
 
-def test_update_environment_not_found(client: TestClient, recreate_tables) -> None:
-    """Test updating an environment that does not exist."""
+def test_update_workspace_not_found(client: TestClient, recreate_tables) -> None:
+    """Test updating an workspace that does not exist."""
     data = {"description": "new_env"}
-    response = client.put("/environments/1", json=data)
+    response = client.put("/workspaces/1", json=data)
     assert response.status_code == 404
-    assert response.json() == {"detail": "Environment not found"}
+    assert response.json() == {"detail": "Workspace not found"}
 
 
 def test_slug_already_exists(recreate_tables, client: TestClient) -> None:
     """Test that slug already exists."""
     data = {"description": "test env", "name": "test", "slug": "test"}
-    response = client.post("/environments/", json=data)
+    response = client.post("/workspaces/", json=data)
     assert response.status_code == 200
-    environment_1 = response.json()
-    assert environment_1["description"] == data["description"]
-    assert environment_1["name"] == data["name"]
-    assert environment_1["slug"] == data["slug"]
+    workspace_1 = response.json()
+    assert workspace_1["description"] == data["description"]
+    assert workspace_1["name"] == data["name"]
+    assert workspace_1["slug"] == data["slug"]
 
     data_2 = {"description": "test env 2", "name": "test", "slug": "test"}
-    response = client.post("/environments/", json=data_2)
+    response = client.post("/workspaces/", json=data_2)
     assert response.status_code == 400
 
     ##check if slug changes with an already existing slug
-    response = client.get("/environments/slug/?environment_name=test")
+    response = client.get("/workspaces/slug/?workspace_name=test")
     assert response.status_code == 200
     slug = response.json()
     assert slug["slug"] != "test"
@@ -95,7 +95,7 @@ def test_slug_already_exists(recreate_tables, client: TestClient) -> None:
 
 def test_slug_with_name(recreate_tables, client: TestClient) -> None:
     """Test that slug can be gotten from given name."""
-    response = client.get("/environments/slug/?environment_name=my slug")
+    response = client.get("/workspaces/slug/?workspace_name=my slug")
     assert response.status_code == 200
     slug = response.json()
     assert slug["slug"] == "my-slug"
@@ -103,7 +103,7 @@ def test_slug_with_name(recreate_tables, client: TestClient) -> None:
 
 def test_slug_get_with_name_exsists(reseed_tables, client: TestClient) -> None:
     """Test that slug can be gotten from given name and generates a new slug."""
-    response = client.get("/environments/slug/?environment_name=phoenix")
+    response = client.get("/workspaces/slug/?workspace_name=phoenix")
     assert response.status_code == 200
     slug = response.json()
     assert slug["slug"] != "phoenix"
