@@ -1,30 +1,30 @@
-"""Schemas for the environments."""
+"""Schemas for the workspaces."""
 import datetime
 from typing import Annotated
 
 import pydantic
 
 
-class EnvironmentBase(pydantic.BaseModel):
-    """Environment base schema.
+class WorkspaceBase(pydantic.BaseModel):
+    """Workspace base schema.
 
-    Shared properties of all environment schemas.
+    Shared properties of all workspace schemas.
     """
 
-    description: Annotated[str, pydantic.Field(description="The description of the Environment")]
-    name: Annotated[str, pydantic.Field(description="The name of the Environment")]
-    slug: Annotated[str, pydantic.Field(description="The slug of the Environment")]
+    description: Annotated[str, pydantic.Field(description="The description of the Workspace")]
+    name: Annotated[str, pydantic.Field(description="The name of the Workspace")]
+    slug: Annotated[str, pydantic.Field(description="The slug of the Workspace")]
 
 
-class EnvironmentCreate(EnvironmentBase):
-    """Environment create schema.
+class WorkspaceCreate(WorkspaceBase):
+    """Workspace create schema.
 
     Properties to receive via API on creation.
     """
 
 
-class EnvironmentResponse(EnvironmentBase):
-    """Environment schema.
+class WorkspaceResponse(WorkspaceBase):
+    """Workspace schema.
 
     Properties to return to client.
     """
@@ -37,8 +37,8 @@ class EnvironmentResponse(EnvironmentBase):
     updated_at: datetime.datetime
 
 
-class EnvironmentUpdate(pydantic.BaseModel):
-    """Environment update schema."""
+class WorkspaceUpdate(pydantic.BaseModel):
+    """Workspace update schema."""
 
     name: str | None = None
     description: str | None = None
@@ -46,6 +46,6 @@ class EnvironmentUpdate(pydantic.BaseModel):
 
 
 class SlugResponse(pydantic.BaseModel):
-    """Environment unique slug."""
+    """Workspace unique slug."""
 
     slug: str
