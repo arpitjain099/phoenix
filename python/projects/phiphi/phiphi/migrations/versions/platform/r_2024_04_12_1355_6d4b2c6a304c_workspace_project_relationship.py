@@ -1,4 +1,4 @@
-"""environment_project_relationship.
+"""Add workspace project relationship.
 
 Revision ID: 6d4b2c6a304c
 Revises: df23bee88382
@@ -23,18 +23,18 @@ def upgrade() -> None:
     """Upgrade for 6d4b2c6a304c."""
     op.add_column(
         TABLE_NAME,
-        sa.Column("environment_slug", sa.String(), nullable=False, server_default="main"),
+        sa.Column("workspace_slug", sa.String(), nullable=False, server_default="main"),
     )
     op.create_foreign_key(
-        "fk_environment_slug", TABLE_NAME, "environments", ["environment_slug"], ["slug"]
+        "fk_workspace_slug", TABLE_NAME, "workspaces", ["workspace_slug"], ["slug"]
     )
-    op.drop_column(TABLE_NAME, "environment_id")
+    op.drop_column(TABLE_NAME, "workspace_id")
 
 
 def downgrade() -> None:
     """Downgrade for df23bee88382."""
     op.add_column(
-        TABLE_NAME, sa.Column("environment_id", sa.VARCHAR(), autoincrement=False, nullable=False)
+        TABLE_NAME, sa.Column("workspace_id", sa.VARCHAR(), autoincrement=False, nullable=False)
     )
-    op.drop_constraint("fk_environment_slug", TABLE_NAME, type_="foreignkey")
-    op.drop_column(TABLE_NAME, "environment_slug")
+    op.drop_constraint("fk_workspace_slug", TABLE_NAME, type_="foreignkey")
+    op.drop_column(TABLE_NAME, "workspace_slug")
