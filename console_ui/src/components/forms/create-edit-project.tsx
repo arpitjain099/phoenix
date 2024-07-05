@@ -29,8 +29,8 @@ const CreateEditProjectForm: React.FC<Props> = ({ getInputProps }) => {
 			/>
 			<Select
 				mt="sm"
-				label={translate("projects.fields.environment_slug")}
-				{...getInputProps("environment_slug")}
+				label={translate("projects.fields.workspace_slug")}
+				{...getInputProps("workspace_slug")}
 				data={[
 					{ label: translate("inputs.select"), value: "" },
 					{ label: "Main", value: "main" },
