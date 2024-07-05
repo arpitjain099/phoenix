@@ -10,7 +10,7 @@ import logging
 
 from sqlalchemy.orm import Session
 
-from phiphi import platform_db
+from phiphi import platform_db, utils
 from phiphi.seed import (
     apify_facebook_comments,
     apify_facebook_post_gather,
@@ -20,14 +20,10 @@ from phiphi.seed import (
     users,
 )
 
-main_logger = logging.getLogger("phiphi.seed.main::" + __name__)
-main_logger.setLevel(logging.INFO)
+utils.init_logging()
+utils.init_sentry()
 
-ch = logging.StreamHandler()
-ch.setLevel(logging.INFO)
-formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-ch.setFormatter(formatter)
-main_logger.addHandler(ch)
+main_logger = logging.getLogger(__name__)
 
 
 def main(session: Session, testing: bool = False) -> None:

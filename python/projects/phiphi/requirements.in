@@ -18,6 +18,10 @@ sqlalchemy
 psycopg
 prefect
 python-slugify
+PyYAML
+# Stubs :(
+types-PyYAML
+sentry-sdk[fastapi]
 
 ## Pipeline deps
 apify-client

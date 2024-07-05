@@ -1,21 +1,21 @@
 dependencies:
 - name: superset
   repository: https://apache.github.io/superset
-  version: 0.12.6
+  version: 0.12.11
 - name: oauth2-proxy
   repository: https://oauth2-proxy.github.io/manifests
-  version: 6.24.1
+  version: 7.7.8
 - name: cert-manager
   repository: https://charts.jetstack.io
-  version: v1.14.4
+  version: v1.15.1
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
-  version: 15.2.5
+  version: 15.5.12
 - name: prefect-worker
   repository: https://prefecthq.github.io/prefect-helm
-  version: 2024.5.29222000
+  version: 2024.6.28162841
 - name: prefect-server
   repository: https://prefecthq.github.io/prefect-helm
-  version: 2024.5.29222000
-digest: sha256:dd4ce28f26f4d5e4a29ba52b818a64802b9e209317ddd979be2f27250d4fdc9a
-generated: "2024-06-04T10:19:26.989694566+02:00"
+  version: 2024.6.28162841
+digest: sha256:d517564e3fa577d7fa8805197b321726e21ec6804e452cd9ab275c5f9667ffda
+generated: "2024-07-03T07:56:42.913400043+02:00"

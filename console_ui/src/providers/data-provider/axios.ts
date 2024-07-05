@@ -1,3 +1,5 @@
+"use client";
+
 import { HttpError } from "@refinedev/core";
 import axios from "axios";
 

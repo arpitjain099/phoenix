@@ -41,6 +41,14 @@ api:
   enabled: true
   version: "{{ .Chart.AppVersion }}"
   replicas: 1
+  # Other loggers in source code are:
+  # - /app/projects/phiphi/log_configs/phiphi.dev.yaml
+  phiphilogConfig: "/app/projects/phiphi/log_configs/phiphi.prod.yaml"
+  # --log-config option for uvicorn
+  # https://www.uvicorn.org/settings/#logging
+  # Others already in image:
+  # - /app/projects/phiphi/log_configs/uvicorn.dev.yaml
+  uvicornLogConfig: "/app/projects/phiphi/log_configs/uvicorn.prod.yaml"
   image:
     repository: "{{ .Values.phiphiImage.repository }}"
     tag: "{{ tpl (.Values.phiphiImage.tag ) . }}"
@@ -60,6 +68,15 @@ api:
   init_db_command: "/app/projects/phiphi/entrypoint_init_db.sh"
   # ~ will use default
   bqDefaultLocation: ~
+  # This override of the default prefect settings is needed for the
+  # uvicornLogConfig to work. Prefects defaults log config overrides the root
+  # and uvicorn :(
+  prefectLoggingSettingsPath: "/app/projects/phiphi/log_configs/prefect.prod.yaml"
+  # Sentry
+  sentryDsn: ~
+  sentryTracesSampleRate: 1.0
+  sentryProfilesSampleRate: 1.0
+  sentryEnvironment: ~
   apify_api_keys:
     enabled: false
     secret_name: "{{ .Release.Name }}-apify-api-keys"
@@ -168,6 +185,16 @@ console:
   env_auth_url: "http://oauth.{{ .Values.base_host }}/oauth2/auth"
   env_login_url: "http://oauth.{{ .Values.base_host }}/oauth2/start"
   env_logout_url: "http://oauth.{{ .Values.base_host }}/oauth2/sign_out"
+  ## Sentry
+  sentryDsn: ~
+  sentryOrg: ~
+  sentryProject: ~
+  sentryAuthToken: ~
+  sentryDebug: "true"
+  sentryEnvironment: "development"
+  sentryRelease: "local"
+  sentryTracesSampleRate: "0.1"
+  sentryReplaysOnErrorSampleRate: "0.1"
 
 # Cert Manager
 #
@@ -198,7 +225,7 @@ superset:
   image:
     repository: registry.gitlab.com/howtobuildup/phoenix/phoenix_superset
     # Default is the chart version of the sub chart :(
-    tag: 2.1.1
+    tag: 2.2.0
   # It is problematic to change the init image
 
 ##############
@@ -301,6 +328,20 @@ superset:
 
       CUSTOM_SECURITY_MANAGER = custom_sso_manager.PhoenixCustomSSOSecurityManager
 
+    ## Logging
+    # For some reason that Benjamin really can't find there the root logger gets overridden to
+    # default after the automatically created config has been loaded
+    # This default logging sets it to INFO so that no debug logs are printed
+    logging: |
+      import logging
+      # This seems to set the log level
+      # https://github.com/apache/superset/blob/d5c0506faa3df97601e2003eb3f7bd24a0d41d82/superset/config.py#L898C1-L898C10
+      LOG_LEVEL = logging.INFO
+      # https://github.com/apache/superset/blob/35da6ac2707514aa9b5f203529bd296f91a89d84/superset/config.py#L1185
+      SILENCE_FAB = True
+      # https://github.com/apache/superset/blob/35da6ac2707514aa9b5f203529bd296f91a89d84/superset/config.py#L264
+      FLASK_DEBUG = False
+      DEBUG = False
 
 oauth2-proxy:
   enabled: true
@@ -316,6 +357,10 @@ oauth2-proxy:
 
 prefect-worker:
   enabled: false
+  worker:
+    config:
+      baseJobTemplate:
+        existingConfigMapName: "phoenix-base-job-template"
 
 baseJobTemplate:
   enabled: false

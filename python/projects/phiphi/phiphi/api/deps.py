@@ -1,4 +1,5 @@
 """Api Dependencies."""
+import logging
 from typing import Annotated, Callable
 
 import fastapi
@@ -7,6 +8,8 @@ from sqlalchemy.orm import Session
 from phiphi import config, platform_db
 from phiphi.api.users import crud as user_crud
 from phiphi.api.users import schemas as user_schemas
+
+logger = logging.getLogger(__name__)
 
 SessionDep = Annotated[Session, fastapi.Depends(platform_db.get_session)]
 
@@ -48,6 +51,10 @@ def get_current_user(
     request: fastapi.Request,
 ) -> user_schemas.UserResponse:
     """Get the current user."""
+    logger.debug("Getting current user.")
+    logger.debug(f"Email header: {email}")
+    logger.debug(f"Email cookie: {email_cookie}")
+    logger.debug(f"Request headers: {request.headers}")
     # Header takes precedence over cookie
     if email is None and config.settings.USE_COOKIE_AUTH:
         email = email_cookie

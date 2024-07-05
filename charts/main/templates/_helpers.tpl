@@ -38,6 +38,8 @@ ports:
 env:
   - name: IMAGE_URI
     value: {{ tpl .Values.api.image.repository . }}:{{ tpl .Values.api.image.tag . }}
+  - name: PHIPHI_LOG_CONFIG
+    value: {{ .Values.api.phiphiLogConfig | quote }}
   - name: SQLALCHEMY_DATABASE_URI
     valueFrom:
       secretKeyRef:
@@ -91,6 +93,26 @@ env:
   {{- if .Values.api.bqDefaultLocation }}
   - name: BQ_DEFAULT_LOCATION
     value: {{ .Values.api.bqDefaultLocation | quote }}
+  {{- end }}
+  {{- if .Values.api.prefectLoggingSettingsPath }}
+  - name: PREFECT_LOGGING_SETTINGS_PATH
+    value: {{ .Values.api.prefectLoggingSettingsPath | quote }}
+  {{- end }}
+  {{- if .Values.api.sentryDsn }}
+  - name: SENTRY_DSN
+    value: {{ .Values.api.sentryDsn | quote }}
+  {{- end }}
+  {{- if .Values.api.sentryTracesSampleRate }}
+  - name: SENTRY_TRACES_SAMPLE_RATE
+    value: {{ .Values.api.sentryTracesSampleRate | quote }}
+  {{- end }}
+  {{- if .Values.api.sentryProfilesSampleRate }}
+  - name: SENTRY_PROFILES_SAMPLE_RATE
+    value: {{ .Values.api.sentryProfilesSampleRate | quote }}
+  {{- end }}
+  {{- if .Values.api.sentryEnvironment }}
+  - name: SENTRY_ENVIRONMENT
+    value: {{ .Values.api.sentryEnvironment | quote }}
   {{- end }}
 ## This is the secret that is used to store the GCP service account json
 {{- if .Values.gcp_service_account.enabled }}

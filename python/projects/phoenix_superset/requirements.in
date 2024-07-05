@@ -4,6 +4,6 @@
 
 # Third party deps
 # Superset version must be the same as in Dockerfile
-apache-superset==3.1.1
+apache-superset==4.0.2
 
 -r docker.requirements.in

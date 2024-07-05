@@ -1,3 +1,5 @@
+"use client";
+
 import { getUserRole } from "@providers/auth-provider";
 import { CanParams } from "@refinedev/core";
 

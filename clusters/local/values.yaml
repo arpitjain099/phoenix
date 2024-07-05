@@ -6,6 +6,8 @@ ingress_cors:
   allow_origin: "http://console.{{ .Values.base_host }}"
 use_local_insecure_auth: true
 api:
+  phiphiLogConfig: "/app/projects/phiphi/log_configs/phiphi.dev.yaml"
+  uvicornLogConfig: "/app/projects/phiphi/log_configs/uvicorn.dev.yaml"
   cors_origins: "http://console.{{ .Values.base_host }}"
   init_db_command: "/app/projects/phiphi/entrypoint_test_seed.sh"
   apify_api_keys:
@@ -43,6 +45,17 @@ superset:
   image:
     repository: phoenix_superset
     tag: latest
+  supersetNode:
+    # For debugging it can be useful to remove the Probe
+    # Uncomment to remove the probe
+    # livenessProbe: ""
+    # readinessProbe: ""
+    # startupProbe: ""
+    # This is for auto reload and debugging
+    command:
+      - "/bin/sh"
+      - "-c"
+      - ". {{ .Values.configMountPath }}/superset_bootstrap.sh; flask run --reload --debugger -p 8088 --host=0.0.0.0"
   configOverrides:
     general: |
       APP_NAME = "Dashboard - Phoenix"
@@ -52,6 +65,13 @@ superset:
 
       # Throw error if got past the auth layer
       LOGIN_REDIRECT_URL = False
+    # Override the default logging
+    logging: |
+      import logging
+      LOG_LEVEL = logging.DEBUG
+      FLASK_DEBUG = True
+      DEBUG = True
+      SILENCE_FAB = False
   extraSecretEnv:
     SUPERSET_SECRET_KEY: "this_is_an_in_secure_secret_key"
 

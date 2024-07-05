@@ -22,15 +22,20 @@
 			"@contexts": ["src/contexts"],
 			"@styles/*": ["src/styles/*"],
 			"@styles": ["src/styles"],
-			"@pages/*": ["src/pages/*"],
-			"@pages": ["src/pages"],
+			"@pages/*": ["src/app/*"],
+			"@pages": ["src/app"],
 			"@providers/*": ["src/providers/*"],
 			"@providers": ["src/providers"],
 			"@public/*": ["public/*"],
 			"@public": ["public"]
 		},
-		"incremental": true
+		"incremental": true,
+		"plugins": [
+			{
+				"name": "next"
+			}
+		]
 	},
-	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
 	"exclude": ["node_modules"]
 }

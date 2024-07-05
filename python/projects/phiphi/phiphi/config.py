@@ -61,6 +61,12 @@ class Settings(BaseSettings):
     # This should not be changed and should will be set by the helm chart
     VERSION: str = "0.0.0"
 
+    # Logging
+    # This is the logging configuration file use with phiphi.utils.init_logging
+    # It has been prefix so not to have a conflict with other python modules that might use the
+    # same name.
+    PHIPHI_LOG_CONFIG: Optional[str] = None
+
     # Cors
     # From https://github.com/tiangolo/full-stack-fastapi-template/blob/master/backend/app/core/config.py#L45
     CORS_ORIGINS: Annotated[list[pydantic.AnyUrl] | str, pydantic.BeforeValidator(parse_cors)] = []
@@ -101,6 +107,12 @@ class Settings(BaseSettings):
     # See docs for options: https://cloud.google.com/bigquery/docs/locations
     # EU is used as default since this means that the data is stored in a GDPR location.
     BQ_DEFAULT_LOCATION: str = "EU"
+
+    # Sentry
+    SENTRY_DSN: Optional[str] = None
+    SENTRY_TRACES_SAMPLE_RATE: float = 1.0
+    SENTRY_PROFILES_SAMPLE_RATE: float = 1.0
+    SENTRY_ENVIRONMENT: str = "local_development"
 
     def model_post_init(self, __context):  # type: ignore[no-untyped-def]
         """Set the mock bq root directory as an absolute path."""

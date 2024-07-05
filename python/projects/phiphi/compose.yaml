@@ -18,7 +18,13 @@ services:
     volumes:
       - *default-bind
     entrypoint: /app/projects/phiphi/entrypoint.sh
-    command: ["uvicorn", "phiphi.api.main:app", "--host", "0.0.0.0", "--port", "80"]
+    command: [
+      "uvicorn",
+      "phiphi.api.main:app",
+      "--host", "0.0.0.0",
+      "--port", "80",
+      "--log-config", "/app/projects/phiphi/log_configs/uvicorn.prod.yaml"
+    ]
     ports:
       - "8080:80"
     depends_on:
@@ -30,6 +36,9 @@ services:
       PREFECT_PROFILE: ${PREFECT_PROFILE:-default}
       PREFECT_API_KEY: ${PREFECT_API_KEY:-none}
       PREFECT_API_URL: ${PREFECT_API_URL:-none}
+      # This is needed otherwise the uvicorn logs will not work as expected
+      PREFECT_LOGGING_SETTINGS_PATH: /app/projects/phiphi/log_configs/prefect.prod.yaml
+      PHIPHI_LOG_CONFIG: /app/projects/phiphi/log_configs/phiphi.prod.yaml
   postgres:
     image: postgres:15-alpine
     restart: always

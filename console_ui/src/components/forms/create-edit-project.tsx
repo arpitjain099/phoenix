@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import {
 	TextInput,
@@ -22,13 +24,11 @@ const CreateEditProjectForm: React.FC<Props> = ({ getInputProps }) => {
 		<>
 			<TextInput
 				mt="sm"
-				withAsterisk
 				label={translate("projects.fields.name")}
 				{...getInputProps("name")}
 			/>
 			<Select
 				mt="sm"
-				withAsterisk
 				label={translate("projects.fields.environment_slug")}
 				{...getInputProps("environment_slug")}
 				data={[
@@ -50,7 +50,6 @@ const CreateEditProjectForm: React.FC<Props> = ({ getInputProps }) => {
 							</span>
 						</Tooltip>
 						{translate("projects.fields.days_until_pi_expiration")}
-						<span className="text-red-500">*</span>
 					</div>
 				}
 				{...getInputProps("pi_deleted_after_days")}
@@ -71,13 +70,11 @@ const CreateEditProjectForm: React.FC<Props> = ({ getInputProps }) => {
 							</span>
 						</Tooltip>
 						{translate("projects.fields.days_until_all_data_expiration")}
-						<span className="text-red-500">*</span>
 					</div>
 				}
 				{...getInputProps("delete_after_days")}
 			/>
 			<Select
-				withAsterisk
 				mt="sm"
 				label={translate("projects.fields.expected_usage.title")}
 				data={[
@@ -103,7 +100,7 @@ const CreateEditProjectForm: React.FC<Props> = ({ getInputProps }) => {
 			/>
 			<Textarea
 				mt="sm"
-				label={translate("projects.fields.description")}
+				label={translate("projects.fields.inputs.description")}
 				{...getInputProps("description")}
 			/>
 			<Alert mt="lg" title={translate("note")} color="gray">

@@ -1,3 +1,5 @@
+"use client";
+
 import dataProviderSimpleRest from "@refinedev/simple-rest";
 import axiosInstance from "./axios";
 

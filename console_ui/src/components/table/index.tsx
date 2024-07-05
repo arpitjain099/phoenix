@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { HeaderGroup, RowModel, flexRender } from "@tanstack/react-table";
 import { Table, Skeleton } from "@mantine/core";

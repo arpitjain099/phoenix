@@ -12,6 +12,9 @@ It is important that the version of the superset is the same in both:
 
 Use the development tools generic python development tools in [/python](../../).
 
+There are however some cases where developing in the Local cluster is needed. If you hit problems
+with developing in a virtual machine then use the local cluster.
+
 ### A note about typing
 
 Both libraries `superset` and `flask_appbuilder` don't have stubs :( so we have to use ignore for
@@ -32,6 +35,11 @@ You can then visit [`localhost:8089`](http://localhost:8089), open the browser c
 the output of `make init`: `document.cookie = "phiphi-user-email=admin@admin.com";` and refresh .
 You should then be able to see the superset welcome page.
 
+## Testing in the local cluster
+
+If you are testing authentication it is recommended to use the local cluster. There are some very
+strange behaviours with the use of the phiphi-user-email cookie in the virtual machine and docker
+environment.
 
 ## Adding drivers
 
