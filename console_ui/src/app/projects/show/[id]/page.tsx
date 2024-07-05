@@ -56,6 +56,7 @@ export default function ProjectShow(): JSX.Element {
 				) : (
 					<Text>-</Text>
 				)}
+				{!record?.latest_job_run?.completed_at && <Loader size="xs" />}
 			</Group>
 			<Tabs value={activeTab} onTabChange={setActiveTab}>
 				<Tabs.List>
