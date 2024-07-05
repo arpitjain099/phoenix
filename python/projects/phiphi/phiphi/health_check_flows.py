@@ -81,7 +81,7 @@ def check_apify_connection() -> bool:
 
 
 @prefect.flow(name="health_check")
-def health_check(environment_slug: str | None) -> None:
+def health_check(workspace_slug: str | None) -> None:
     """Main flow for the health check."""
     logger = prefect.get_run_logger()
     logger.info("Health checks started.")
@@ -119,9 +119,9 @@ def create_deployments(
     work_pool_name = str(constants.WorkPool.main)
     if override_work_pool_name:
         work_pool_name = override_work_pool_name
-    environ_slugs = [config.settings.FIRST_ENVIRONMENT_SLUG]
+    workspace_slugs = [config.settings.FIRST_WORKSPACE_SLUG]
     coroutines = []
-    for slug in environ_slugs:
+    for slug in workspace_slugs:
         task = health_check.deploy(
             name=deployment_name_prefix + "health_check-env-" + slug,
             work_pool_name=work_pool_name,
@@ -129,7 +129,7 @@ def create_deployments(
             build=build,
             push=push,
             tags=tags,
-            parameters={"environment_slug": slug},
+            parameters={"workspace_slug": slug},
         )
         coroutines.append(task)
 
