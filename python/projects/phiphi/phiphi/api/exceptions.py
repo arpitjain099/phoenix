@@ -24,7 +24,7 @@ class WorkspaceNotFound(fastapi.HTTPException):
 
     def __init__(self) -> None:
         """Constructor for custom exception."""
-        super().__init__(status_code=400, detail="Workspace Not found")
+        super().__init__(status_code=400, detail="Workspace not found")
 
 
 class GatherNotFound(fastapi.HTTPException):
