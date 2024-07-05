@@ -131,7 +131,7 @@
 			"id": "ID único",
 			"name": "Nombre",
 			"description": "Descripción",
-			"environment_slug": "Entorno",
+			"workspace_slug": "Espacio de trabajo",
 			"days_until_pi_expiration": "La información personal se eliminará después de (días)",
 			"days_until_all_data_expiration": "Todos los datos se eliminarán después de (días)",
 			"expected_usage": {
