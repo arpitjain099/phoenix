@@ -17,8 +17,8 @@ class ProjectBase(platform_db.Base):
     id: orm.Mapped[int] = orm.mapped_column(primary_key=True)
     name: orm.Mapped[str]
     description: orm.Mapped[str]
-    environment_slug: orm.Mapped[str] = orm.mapped_column(
-        ForeignKey("environments.slug"), default="main"
+    workspace_slug: orm.Mapped[str] = orm.mapped_column(
+        ForeignKey("workspaces.slug"), default="main"
     )
     pi_deleted_after_days: orm.Mapped[int]
     delete_after_days: orm.Mapped[int]
