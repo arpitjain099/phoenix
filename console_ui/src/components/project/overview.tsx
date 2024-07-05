@@ -15,23 +15,23 @@ const OverviewComponent: React.FC<IOverviewProps> = ({ setActiveTab }) => {
 		<div className="p-4">
 			<div className="flex flex-col gap-4">
 				<Title order={3}>{translate("projects.tabs.overview.title")}</Title>
-				<Text fz="sm" c="dimmed">
+				<Text fz="sm">
 					{translate("projects.tabs.overview.description.part1.a")}
 					<span className="font-bold">
 						{translate("projects.tabs.overview.description.part1.b")}
 					</span>
 				</Text>
-				<Text fz="sm" c="dimmed">
+				<Text fz="sm">
 					{translate("projects.tabs.overview.description.part2.a")}
 					<Anchor
-						className="font-normal text-gray-400 hover:text-blue-500 text-sm underline"
+						className="font-normal text-inherit hover:text-blue-500 text-sm underline"
 						href={PHEONIX_MANUAL_URL}
 						target="_blank"
 					>
 						{translate("projects.tabs.overview.description.part2.b")}
 					</Anchor>
 				</Text>
-				<Text fz="sm" c="dimmed" mt={4}>
+				<Text fz="sm" mt={4}>
 					{translate("projects.tabs.overview.description.part3")}
 				</Text>
 			</div>
@@ -40,11 +40,11 @@ const OverviewComponent: React.FC<IOverviewProps> = ({ setActiveTab }) => {
 					<Group spacing="xs">
 						{/* <span className="ml-5 mr-2.5 w-1 h-7 bg-blue-500 rounded-r-md" /> */}
 						<Checkbox size="xs" className="cursor-pointer" />
-						<Text fz="sm" c="dimmed">
+						<Text fz="sm">
 							{translate("projects.tabs.overview.problem_statement")}
 						</Text>
 						<Anchor
-							className="font-normal text-gray-400 hover:text-blue-500 text-sm underline"
+							className="font-normal text-inherit hover:text-blue-500 text-sm underline"
 							href={PHEONIX_MANUAL_URL}
 							target="_blank"
 						>
@@ -53,11 +53,9 @@ const OverviewComponent: React.FC<IOverviewProps> = ({ setActiveTab }) => {
 					</Group>
 					<Group spacing="xs">
 						<Checkbox size="xs" className="cursor-pointer" />
-						<Text fz="sm" c="dimmed">
-							{translate("projects.tabs.overview.source")}
-						</Text>
+						<Text fz="sm">{translate("projects.tabs.overview.source")}</Text>
 						<Anchor
-							className="font-normal text-gray-400 hover:text-blue-500 text-sm underline"
+							className="font-normal text-inherit hover:text-blue-500 text-sm underline"
 							href={PHEONIX_MANUAL_URL}
 							target="_blank"
 						>
@@ -66,13 +64,11 @@ const OverviewComponent: React.FC<IOverviewProps> = ({ setActiveTab }) => {
 					</Group>
 					<Group spacing="xs">
 						<Checkbox size="xs" className="cursor-pointer" />
-						<Text fz="sm" c="dimmed">
-							{translate("projects.tabs.overview.gather")}
-						</Text>
+						<Text fz="sm">{translate("projects.tabs.overview.gather")}</Text>
 						<Anchor
 							component="button"
 							type="button"
-							className="font-normal text-gray-400 hover:text-blue-500 text-sm underline"
+							className="font-normal text-inherit hover:text-blue-500 text-sm underline"
 							onClick={() => setActiveTab("gather")}
 							aria-hidden="true"
 						>
@@ -81,13 +77,11 @@ const OverviewComponent: React.FC<IOverviewProps> = ({ setActiveTab }) => {
 					</Group>
 					<Group spacing="xs">
 						<Checkbox size="xs" className="cursor-pointer" />
-						<Text fz="sm" c="dimmed">
-							{translate("projects.tabs.overview.classify")}
-						</Text>
+						<Text fz="sm">{translate("projects.tabs.overview.classify")}</Text>
 						<Anchor
 							component="button"
 							type="button"
-							className="font-normal text-gray-400 hover:text-blue-500 text-sm underline"
+							className="font-normal text-inherit hover:text-blue-500 text-sm underline"
 							onClick={() => setActiveTab("classify")}
 							aria-hidden="true"
 						>
@@ -96,13 +90,11 @@ const OverviewComponent: React.FC<IOverviewProps> = ({ setActiveTab }) => {
 					</Group>
 					<Group spacing="xs">
 						<Checkbox size="xs" className="cursor-pointer" />
-						<Text fz="sm" c="dimmed">
-							{translate("projects.tabs.overview.visualise")}
-						</Text>
+						<Text fz="sm">{translate("projects.tabs.overview.visualise")}</Text>
 						<Anchor
 							component="button"
 							type="button"
-							className="font-normal text-gray-400 hover:text-blue-500 text-sm underline"
+							className="font-normal text-inherit hover:text-blue-500 text-sm underline"
 							onClick={() => setActiveTab("visualise")}
 							aria-hidden="true"
 						>
@@ -112,11 +104,9 @@ const OverviewComponent: React.FC<IOverviewProps> = ({ setActiveTab }) => {
 					<Group spacing="xs">
 						{/* <span className="ml-5 mr-2.5 w-1 h-7 bg-blue-500 rounded-r-md" /> */}
 						<Checkbox size="xs" className="cursor-pointer" />
-						<Text fz="sm" c="dimmed">
-							{translate("projects.tabs.overview.insights")}
-						</Text>
+						<Text fz="sm">{translate("projects.tabs.overview.insights")}</Text>
 						<Anchor
-							className="font-normal text-gray-400 hover:text-blue-500 text-sm underline"
+							className="font-normal text-inherit hover:text-blue-500 text-sm underline"
 							href={PHEONIX_MANUAL_URL}
 							target="_blank"
 						>

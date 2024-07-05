@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { useTranslate, useList } from "@refinedev/core";
 import { useTable } from "@refinedev/react-table";
 import { ColumnDef } from "@tanstack/react-table";
@@ -18,19 +18,18 @@ import {
 import { List, DateField } from "@refinedev/mantine";
 import TableComponent from "@components/table";
 import { useRouter } from "next/navigation";
-import BreadcrumbsComponent from "@components/breadcrumbs";
 import { PHEONIX_MANUAL_URL, statusTextStyle } from "src/utils";
-import { IconPlayerPlay, IconRefresh, IconTrash } from "@tabler/icons";
+import { IconPlayerPlay } from "@tabler/icons";
 import GatherRunModal from "@components/modals/gather-run";
 import { jobRunService } from "src/services";
 import { GatherResponse } from "src/interfaces/gather";
-import Link from "next/link";
 
 interface IGatherProps {
 	projectid: any;
+	refetch: any;
 }
 
-const GatherComponent: React.FC<IGatherProps> = ({ projectid }) => {
+const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 	const translate = useTranslate();
 	const router = useRouter();
 	const [opened, setOpened] = useState(false);
@@ -44,29 +43,33 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid }) => {
 		resource: projectid ? `projects/${projectid}/gathers` : "",
 	});
 
-	const handleGatherRefresh = async (gatherDetail: GatherResponse) => {
-		setLoadingStates((prev) => ({ ...prev, [gatherDetail.id]: true }));
-		try {
-			const { data } = await jobRunService.fetchJobRun({
-				project_id: gatherDetail.project_id,
-				id: gatherDetail?.latest_job_run?.id,
-				type: "gather",
-			});
-			setGatherList((prevList: GatherResponse[]) =>
-				prevList.map((gather) =>
-					gather.id === gatherDetail.id
-						? { ...gather, latest_job_run: data }
-						: gather
-				)
-			);
-		} catch (error) {
-			console.error("Error fetching gather details:", error);
-		} finally {
-			setLoadingStates((prev) => ({ ...prev, [gatherDetail.id]: false }));
-		}
-	};
+	const handleGatherRefresh = useCallback(
+		async (gatherDetail: GatherResponse) => {
+			setLoadingStates((prev) => ({ ...prev, [gatherDetail.id]: true }));
+			try {
+				const { data } = await jobRunService.fetchJobRun({
+					project_id: gatherDetail.project_id,
+					id: gatherDetail?.latest_job_run?.id,
+					type: "gather",
+				});
+				setGatherList((prevList: GatherResponse[]) =>
+					prevList.map((gather) =>
+						gather.id === gatherDetail.id
+							? { ...gather, latest_job_run: data }
+							: gather
+					)
+				);
+			} catch (error) {
+				console.error("Error fetching gather details:", error);
+			} finally {
+				refetch();
+				setLoadingStates((prev) => ({ ...prev, [gatherDetail.id]: false }));
+			}
+		},
+		[refetch]
+	);
 
-	const columns = React.useMemo<ColumnDef<any>[]>(
+	const columns = useMemo<ColumnDef<any>[]>(
 		() => [
 			{
 				id: "source",
@@ -92,9 +95,11 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid }) => {
 				id: "created_at",
 				accessorKey: "latest_job_run.created_at",
 				header: translate("gathers.fields.started_run_at"),
-				cell: function render({ getValue }) {
-					return getValue() ? (
-						<DateField format="LLL" value={getValue<any>()} />
+				cell: function render({ row }) {
+					const { latest_job_run } = row.original;
+					const created_at = latest_job_run ? latest_job_run.created_at : null;
+					return created_at ? (
+						<DateField format="LLL" value={created_at} />
 					) : (
 						""
 					);
@@ -104,9 +109,13 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid }) => {
 				id: "started_processing_at",
 				accessorKey: "latest_job_run.started_processing_at",
 				header: translate("gathers.fields.started_processing_at"),
-				cell: function render({ getValue }) {
-					return getValue() ? (
-						<DateField format="LLL" value={getValue<any>()} />
+				cell: function render({ row }) {
+					const { latest_job_run } = row.original;
+					const started_processing_at = latest_job_run
+						? latest_job_run.started_processing_at
+						: null;
+					return started_processing_at ? (
+						<DateField format="LLL" value={started_processing_at} />
 					) : (
 						""
 					);
@@ -116,8 +125,9 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid }) => {
 				id: "status",
 				accessorKey: "latest_job_run.status",
 				header: translate("projects.fields.status"),
-				cell: ({ getValue }) => {
-					const status = getValue() || ""; // Default to empty string if getValue() is null or undefined
+				cell: function render({ row }) {
+					const { latest_job_run } = row.original;
+					const status = latest_job_run ? latest_job_run.status : null;
 					return (
 						<span className={`${statusTextStyle(status)}`}>
 							{status ? translate(`status.${status}`) : ""}
@@ -157,31 +167,7 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid }) => {
 									)}
 									{["in_queue", "processing", "awaiting_start"].includes(
 										status
-									) && (
-										<Tooltip label="Refresh">
-											<Button
-												p={0}
-												variant="subtle"
-												onClick={() => handleGatherRefresh(row.original)}
-											>
-												<IconRefresh size={20} color="blue" />
-											</Button>
-										</Tooltip>
-									)}
-									{/* {["failed", "completed_sucessfully"].includes(status) && (
-										<Button
-											p={0}
-											variant="subtle"
-											color="red"
-											onClick={() => {}}
-										>
-											<IconTrash
-												size={20}
-												color="red"
-												className="cursor-pointer"
-											/>
-										</Button>
-									)} */}
+									) && <Loader size="sm" />}
 								</>
 							)}
 						</Group>
@@ -191,6 +177,7 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid }) => {
 		],
 		[translate, loadingStates]
 	);
+
 	const {
 		getHeaderGroups,
 		getRowModel,
@@ -206,6 +193,28 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid }) => {
 		}
 	}, [apiResponse?.data?.data]);
 
+	useEffect(() => {
+		let interval: NodeJS.Timeout | undefined;
+		if (
+			gatherList.some((gather: any) => !gather.latest_job_run?.completed_at)
+		) {
+			interval = setInterval(() => {
+				const pendingGathers = gatherList.filter(
+					(gather: any) =>
+						gather.latest_job_run && !gather.latest_job_run?.completed_at
+				);
+				Promise.all(
+					pendingGathers.map((gather: any) => handleGatherRefresh(gather))
+				).catch((error) => console.error("Error refreshing gathers:", error));
+			}, 10000);
+		}
+		return () => {
+			if (interval) {
+				clearInterval(interval);
+			}
+		};
+	}, [gatherList, handleGatherRefresh]);
+
 	return (
 		<>
 			<List
@@ -216,10 +225,10 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid }) => {
 				title={
 					<div className="flex flex-col gap-4">
 						<Title order={3}>{translate("projects.tabs.gather.title")}</Title>
-						<Text fz="sm" c="dimmed">
+						<Text fz="sm">
 							{translate("projects.tabs.gather.description.part1.a")}
 							<Anchor
-								className="font-normal text-gray-400 hover:text-blue-500 text-sm underline"
+								className="font-normal text-inherit hover:text-blue-500 text-sm underline"
 								href={PHEONIX_MANUAL_URL}
 								target="_blank"
 							>
@@ -227,10 +236,10 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid }) => {
 							</Anchor>
 							{translate("projects.tabs.gather.description.part1.c")}
 						</Text>
-						<Text fz="sm" c="dimmed">
+						<Text fz="sm">
 							{translate("projects.tabs.gather.description.part2.a")}
 							<Anchor
-								className="font-normal text-gray-400 hover:text-blue-500 text-sm underline"
+								className="font-normal text-inherit hover:text-blue-500 text-sm underline"
 								href={PHEONIX_MANUAL_URL}
 								target="_blank"
 							>
