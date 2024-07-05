@@ -19,12 +19,12 @@ class ProjectNotFound(fastapi.HTTPException):
         super().__init__(status_code=400, detail="Project not found")
 
 
-class EnvironmentNotFound(fastapi.HTTPException):
-    """Custom exception for null environment."""
+class WorkspaceNotFound(fastapi.HTTPException):
+    """Custom exception for null workspace."""
 
     def __init__(self) -> None:
         """Constructor for custom exception."""
-        super().__init__(status_code=400, detail="Environment not found")
+        super().__init__(status_code=400, detail="Workspace Not found")
 
 
 class GatherNotFound(fastapi.HTTPException):
