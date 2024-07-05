@@ -1,54 +1,54 @@
-"""Routes for the environments."""
+"""Routes for the workspaces."""
 import fastapi
 from phiphi.api import deps
-from phiphi.api.environments import crud, schemas
+from phiphi.api.workspaces import crud, schemas
 
 router = fastapi.APIRouter()
 
 
-@router.post("/environments/", response_model=schemas.EnvironmentResponse)
-def create_environment(
-    environment: schemas.EnvironmentCreate, session: deps.SessionDep
-) -> schemas.EnvironmentResponse:
-    """Create a new environment."""
+@router.post("/workspaces/", response_model=schemas.WorkspaceResponse)
+def create_workspace(
+    workspace: schemas.WorkspaceCreate, session: deps.SessionDep
+) -> schemas.WorkspaceResponse:
+    """Create a new workspace."""
     try:
-        return crud.create_environment(session, environment)
+        return crud.create_workspace(session, workspace)
     except Exception as e:
         raise fastapi.HTTPException(status_code=400, detail=str(e))
 
 
-@router.put("/environments/{environment_id}", response_model=schemas.EnvironmentResponse)
-def update_environment(
-    environment_id: int, environment: schemas.EnvironmentUpdate, session: deps.SessionDep
-) -> schemas.EnvironmentResponse:
-    """Update an environment."""
-    updated_environment = crud.update_environment(session, environment_id, environment)
-    if updated_environment is None:
-        raise fastapi.HTTPException(status_code=404, detail="Environment not found")
-    return updated_environment
+@router.put("/workspaces/{workspace_id}", response_model=schemas.WorkspaceResponse)
+def update_workspace(
+    workspace_id: int, workspace: schemas.WorkspaceUpdate, session: deps.SessionDep
+) -> schemas.WorkspaceResponse:
+    """Update an workspace."""
+    updated_workspace = crud.update_workspace(session, workspace_id, workspace)
+    if updated_workspace is None:
+        raise fastapi.HTTPException(status_code=404, detail="Workspace not found")
+    return updated_workspace
 
 
-@router.get("/environments/{slug}", response_model=schemas.EnvironmentResponse)
-def get_environment(slug: str, session: deps.SessionDep) -> schemas.EnvironmentResponse:
-    """Get an environment."""
-    environment = crud.get_environment(session, slug)
-    if environment is None:
-        raise fastapi.HTTPException(status_code=404, detail="Environment not found")
-    return environment
+@router.get("/workspaces/{slug}", response_model=schemas.WorkspaceResponse)
+def get_workspace(slug: str, session: deps.SessionDep) -> schemas.WorkspaceResponse:
+    """Get an workspace."""
+    workspace = crud.get_workspace(session, slug)
+    if workspace is None:
+        raise fastapi.HTTPException(status_code=404, detail="Workspace not found")
+    return workspace
 
 
-@router.get("/environments/", response_model=list[schemas.EnvironmentResponse])
-def get_environments(
+@router.get("/workspaces/", response_model=list[schemas.WorkspaceResponse])
+def get_workspaces(
     session: deps.SessionDep, start: int = 0, end: int = 100
-) -> list[schemas.EnvironmentResponse]:
-    """Get Environments."""
-    return crud.get_environments(session, start, end)
+) -> list[schemas.WorkspaceResponse]:
+    """Get Workspaces."""
+    return crud.get_workspaces(session, start, end)
 
 
-@router.get("/environments/slug/", response_model=schemas.SlugResponse)
-def get_unique_slug(environment_name: str, session: deps.SessionDep) -> schemas.SlugResponse:
+@router.get("/workspaces/slug/", response_model=schemas.SlugResponse)
+def get_unique_slug(workspace_name: str, session: deps.SessionDep) -> schemas.SlugResponse:
     """Get unique slug."""
     try:
-        return crud.get_unique_slug(session, environment_name)
+        return crud.get_unique_slug(session, workspace_name)
     except Exception as e:
         raise fastapi.HTTPException(status_code=400, detail=str(e))
