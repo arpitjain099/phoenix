@@ -225,10 +225,10 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 				title={
 					<div className="flex flex-col gap-4">
 						<Title order={3}>{translate("projects.tabs.gather.title")}</Title>
-						<Text fz="sm" c="dimmed">
+						<Text fz="sm">
 							{translate("projects.tabs.gather.description.part1.a")}
 							<Anchor
-								className="font-normal text-gray-400 hover:text-blue-500 text-sm underline"
+								className="font-normal text-inherit hover:text-blue-500 text-sm underline"
 								href={PHEONIX_MANUAL_URL}
 								target="_blank"
 							>
@@ -236,10 +236,10 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 							</Anchor>
 							{translate("projects.tabs.gather.description.part1.c")}
 						</Text>
-						<Text fz="sm" c="dimmed">
+						<Text fz="sm">
 							{translate("projects.tabs.gather.description.part2.a")}
 							<Anchor
-								className="font-normal text-gray-400 hover:text-blue-500 text-sm underline"
+								className="font-normal text-inherit hover:text-blue-500 text-sm underline"
 								href={PHEONIX_MANUAL_URL}
 								target="_blank"
 							>
