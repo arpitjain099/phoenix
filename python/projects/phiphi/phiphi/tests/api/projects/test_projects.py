@@ -51,6 +51,13 @@ def test_create_get_delete_project(
     assert project["created_at"] == CREATED_TIME
     assert project["last_job_run_completed_at"] is None
     assert project["latest_job_run"] is None
+    assert project["checked_problem_statement"] is False
+    assert project["checked_sources"] is False
+    assert project["checked_gather"] is False
+    assert project["checked_classify"] is False
+    assert project["checked_visualise"] is False
+    assert project["checked_explore"] is False
+
     mock_project_init_db.assert_called_once_with(f"project_id{project['id']}", with_dummy_rows=2)
 
     response = client.get(f"/projects/{project['id']}")
@@ -191,7 +198,7 @@ def test_update_project(
     client: TestClient, reseed_tables, session: sqlalchemy.orm.Session
 ) -> None:
     """Test updating an project."""
-    data = {"description": "New project"}
+    data = {"description": "New project", "checked_problem_statement": True}
     project_id = 1
     response = client.put(f"/projects/{project_id}", json=data)
     assert response.status_code == 200
@@ -200,6 +207,7 @@ def test_update_project(
     db_project = session.get(models.Project, project_id)
     assert db_project
     assert db_project.description == data["description"]
+    assert db_project.checked_problem_statement is True
     assert db_project.updated_at.isoformat() == UPDATE_TIME
 
 

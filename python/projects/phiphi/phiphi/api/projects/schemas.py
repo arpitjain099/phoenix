@@ -67,6 +67,12 @@ class ProjectResponse(ProjectBase):
     updated_at: datetime.datetime
     last_job_run_completed_at: datetime.datetime | None
     latest_job_run: job_runs_schemas.JobRunResponse | None = None
+    checked_problem_statement: bool = False
+    checked_sources: bool = False
+    checked_gather: bool = False
+    checked_classify: bool = False
+    checked_visualise: bool = False
+    checked_explore: bool = False
 
 
 class ProjectListResponse(ProjectBase):
@@ -92,3 +98,9 @@ class ProjectUpdate(pydantic.BaseModel):
     expected_usage: ExpectedUsage | None = None
     environment_slug: Annotated[str | None, environment_slug_field]
     dashboard_id: int | None = None
+    checked_problem_statement: bool = False
+    checked_sources: bool = False
+    checked_gather: bool = False
+    checked_classify: bool = False
+    checked_visualise: bool = False
+    checked_explore: bool = False

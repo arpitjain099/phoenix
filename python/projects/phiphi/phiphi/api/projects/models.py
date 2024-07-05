@@ -25,6 +25,14 @@ class ProjectBase(platform_db.Base):
     expected_usage: orm.Mapped[Optional[str]]
     deleted_at: orm.Mapped[Optional[datetime.datetime]]
     dashboard_id: orm.Mapped[Optional[int]]
+    # Needs to be optional or problems with the database and we thought that this was better then
+    # using a server_default=sa.sql.expression.false() in the migration.
+    checked_problem_statement: orm.Mapped[Optional[bool]] = orm.mapped_column(default=False)
+    checked_sources: orm.Mapped[Optional[bool]] = orm.mapped_column(default=False)
+    checked_gather: orm.Mapped[Optional[bool]] = orm.mapped_column(default=False)
+    checked_classify: orm.Mapped[Optional[bool]] = orm.mapped_column(default=False)
+    checked_visualise: orm.Mapped[Optional[bool]] = orm.mapped_column(default=False)
+    checked_explore: orm.Mapped[Optional[bool]] = orm.mapped_column(default=False)
 
 
 class Project(ProjectBase, base_models.TimestampModel):
