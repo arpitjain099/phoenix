@@ -1,34 +1,34 @@
-"""Seed the environments."""
+"""Seed the workspaces."""
 from sqlalchemy.orm import Session
 
 from phiphi import config
-from phiphi.api.environments import crud, schemas
+from phiphi.api.workspaces import crud, schemas
 
-TEST_ENVIRONMENT_CREATE = schemas.EnvironmentCreate(
-    name="Phoenix", description="Environment 1", slug="phoenix"
+TEST_WORKSPACE_CREATE = schemas.WorkspaceCreate(
+    name="Phoenix", description="Workspace 1", slug="phoenix"
 )
 
-TEST_ENVIRONMENT_CREATE_2 = schemas.EnvironmentCreate(
+TEST_WORKSPACE_CREATE_2 = schemas.WorkspaceCreate(
     name="Test", description="Testing seed", slug="test"
 )
 
 
-def seed_test_environment(session: Session) -> None:
-    """Seed the environment."""
-    environments = [TEST_ENVIRONMENT_CREATE, TEST_ENVIRONMENT_CREATE_2]
+def seed_test_workspace(session: Session) -> None:
+    """Seed the workspace."""
+    workspaces = [TEST_WORKSPACE_CREATE, TEST_WORKSPACE_CREATE_2]
 
-    for environment in environments:
-        crud.create_environment(session=session, environment=environment)
+    for workspace in workspaces:
+        crud.create_workspace(session=session, workspace=workspace)
 
 
-def init_main_environment(session: Session) -> schemas.EnvironmentResponse:
-    """Create the first environment."""
-    environment = crud.get_environment(session, "main")
-    if not environment:
-        environment_in = schemas.EnvironmentCreate(
-            name=config.settings.FIRST_ENVIRONMENT_NAME,
-            description=config.settings.FIRST_ENVIRONMENT_DESCRIPTION,
-            slug=config.settings.FIRST_ENVIRONMENT_SLUG,
+def init_main_workspace(session: Session) -> schemas.WorkspaceResponse:
+    """Create the first workspace."""
+    workspace = crud.get_workspace(session, "main")
+    if not workspace:
+        workspace_in = schemas.WorkspaceCreate(
+            name=config.settings.FIRST_WORKSPACE_NAME,
+            description=config.settings.FIRST_WORKSPACE_DESCRIPTION,
+            slug=config.settings.FIRST_WORKSPACE_SLUG,
         )
-        environment = crud.create_environment(session=session, environment=environment_in)
-    return environment
+        workspace = crud.create_workspace(session=session, workspace=workspace_in)
+    return workspace
