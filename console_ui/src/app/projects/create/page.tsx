@@ -15,7 +15,7 @@ export default function ProjectCreate(): JSX.Element {
 		initialValues: {
 			name: "",
 			description: "",
-			environment_slug: "",
+			workspace_slug: "",
 			pi_deleted_after_days: 90,
 			delete_after_days: 90,
 			expected_usage: "",
@@ -29,7 +29,7 @@ export default function ProjectCreate(): JSX.Element {
 				value.length <= 0
 					? translate("projects.fields.validation.required")
 					: null,
-			environment_slug: (value) =>
+			workspace_slug: (value) =>
 				value.length <= 0
 					? translate("projects.fields.validation.required")
 					: null,
