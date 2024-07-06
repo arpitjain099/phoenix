@@ -6,7 +6,7 @@ import { IconEye } from "@tabler/icons";
 import Link from "next/link";
 
 interface DashboardLinkButtonProps {
-	environmentSlug: string;
+	workspaceSlug: string;
 	platformDomainBase?: string;
 	platformSchemaBase?: string;
 	dashboardId?: string;
@@ -16,7 +16,7 @@ const PLATFORM_DOMAIN_BASE = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN_BASE!;
 const PLATFORM_SCHEMA_BASE = process.env.NEXT_PUBLIC_PLATFORM_SCHEMA_BASE!;
 
 const DashboardLinkButton: React.FC<DashboardLinkButtonProps> = ({
-	environmentSlug,
+	workspaceSlug,
 	platformDomainBase = PLATFORM_DOMAIN_BASE || "",
 	platformSchemaBase = PLATFORM_SCHEMA_BASE || "",
 	dashboardId,
@@ -27,7 +27,7 @@ const DashboardLinkButton: React.FC<DashboardLinkButtonProps> = ({
 		return null;
 	}
 
-	let href = `${platformSchemaBase}://dashboard.${environmentSlug}.${platformDomainBase}`;
+	let href = `${platformSchemaBase}://dashboard.${workspaceSlug}.${platformDomainBase}`;
 	if (dashboardId) {
 		href += `/superset/dashboard/${dashboardId}/`;
 	}

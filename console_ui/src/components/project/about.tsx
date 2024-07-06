@@ -15,9 +15,9 @@ const AboutComponent: React.FC<IAboutProps> = ({ info }) => {
 		<Container className="mx-0 flex flex-col my-4">
 			<Group>
 				<Title my="xs" order={5}>
-					{translate("projects.fields.environment_slug")}:
+					{translate("projects.fields.workspace_slug")}:
 				</Title>
-				<TextField value={info?.environment_slug} />
+				<TextField value={info?.workspace_slug} />
 			</Group>
 			<Group>
 				<Title my="xs" order={5}>
