@@ -22,8 +22,8 @@ pi_delete_pydantic_field = pydantic.Field(
 delete_after_days_field = pydantic.Field(
     default=183, description="Deletion time in days, min 1, max 365", gt=1, lt=365
 )
-environment_slug_field = pydantic.Field(
-    default="main", description="The environment slug of the project"
+workspace_slug_field = pydantic.Field(
+    default="main", description="The workspace slug of the project"
 )
 
 
@@ -35,12 +35,12 @@ class ProjectBase(pydantic.BaseModel):
 
     name: Annotated[str, pydantic.Field(description="The name of the project")]
     description: Annotated[str, pydantic.Field(description="The description of the project")]
-    environment_slug: Annotated[str, environment_slug_field]
+    workspace_slug: Annotated[str, workspace_slug_field]
 
     pi_deleted_after_days: Annotated[int, pi_delete_pydantic_field]
     delete_after_days: Annotated[int, delete_after_days_field]
     expected_usage: Annotated[
-        ExpectedUsage, pydantic.Field(description="The environment expected usage of the project")
+        ExpectedUsage, pydantic.Field(description="The workspace expected usage of the project")
     ]
     dashboard_id: Annotated[
         int | None, pydantic.Field(description="The dashboard id of the project")
@@ -96,7 +96,7 @@ class ProjectUpdate(pydantic.BaseModel):
     pi_deleted_after_days: Annotated[int | None, pi_delete_pydantic_field]
     delete_after_days: Annotated[int | None, delete_after_days_field]
     expected_usage: ExpectedUsage | None = None
-    environment_slug: Annotated[str | None, environment_slug_field]
+    workspace_slug: Annotated[str | None, workspace_slug_field]
     dashboard_id: int | None = None
     checked_problem_statement: bool = False
     checked_sources: bool = False

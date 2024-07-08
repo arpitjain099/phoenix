@@ -17,7 +17,7 @@ export default function ProjectEdit(): JSX.Element {
 	} = useForm({
 		initialValues: {
 			name: "",
-			environment_slug: "",
+			workspace_slug: "",
 			description: "",
 			pi_deleted_after_days: "",
 			delete_after_days: "",

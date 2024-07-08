@@ -25,7 +25,7 @@ def upgrade() -> None:
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("name", sa.String(), nullable=False),
         sa.Column("description", sa.String(), nullable=False),
-        sa.Column("environment_id", sa.String(), nullable=False),
+        sa.Column("workspace_id", sa.String(), nullable=False),
         sa.Column("pi_deleted_after_days", sa.Integer(), nullable=False),
         sa.Column("delete_after_days", sa.Integer(), nullable=False),
         sa.Column("expected_usage", sa.String(), nullable=True),

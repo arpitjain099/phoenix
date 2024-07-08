@@ -71,16 +71,16 @@ class Settings(BaseSettings):
     # From https://github.com/tiangolo/full-stack-fastapi-template/blob/master/backend/app/core/config.py#L45
     CORS_ORIGINS: Annotated[list[pydantic.AnyUrl] | str, pydantic.BeforeValidator(parse_cors)] = []
 
-    # DB ENVIRONMENT
+    # DB
     SQLALCHEMY_DATABASE_URI: SqliteDsn | pydantic.PostgresDsn
     TESTING_SQLALCHEMY_DATABASE_URI: SqliteDsn | pydantic.PostgresDsn | None = None
 
     # Seed data
     FIRST_ADMIN_USER_EMAIL: pydantic.EmailStr = "admin@admin.com"
     FIRST_ADMIN_USER_DISPLAY_NAME: str = "admin"
-    FIRST_ENVIRONMENT_SLUG: str = "main"
-    FIRST_ENVIRONMENT_NAME: str = "Main environment"
-    FIRST_ENVIRONMENT_DESCRIPTION: str = "Main default environment of phoenix"
+    FIRST_WORKSPACE_SLUG: str = "main"
+    FIRST_WORKSPACE_NAME: str = "Main workspace"
+    FIRST_WORKSPACE_DESCRIPTION: str = "Main default workspace of phoenix"
 
     # Authorization
     # This is the header that will be used to get the user email
