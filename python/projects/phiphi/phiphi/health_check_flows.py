@@ -123,7 +123,7 @@ def create_deployments(
     coroutines = []
     for slug in workspace_slugs:
         task = health_check.deploy(
-            name=deployment_name_prefix + "health_check-env-" + slug,
+            name=deployment_name_prefix + "health_check-workspace-" + slug,
             work_pool_name=work_pool_name,
             image=image,
             build=build,
