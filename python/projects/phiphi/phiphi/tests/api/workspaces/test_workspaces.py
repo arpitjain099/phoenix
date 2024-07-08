@@ -12,7 +12,7 @@ UPDATE_TIME = "2024-04-01T12:00:02"
 @pytest.mark.freeze_time(CREATED_TIME)
 def test_create_get_workspace(recreate_tables, client: TestClient) -> None:
     """Test creating and get of an workspace."""
-    data = {"description": "My workspace", "name": "test", "slug": "test-env"}
+    data = {"description": "My workspace", "name": "test", "slug": "test-workspace"}
     response = client.post("/workspaces/", json=data)
     assert response.status_code == 200
     workspace = response.json()
@@ -52,7 +52,7 @@ def test_update_workspace(
     client: TestClient, reseed_tables, session: sqlalchemy.orm.Session
 ) -> None:
     """Test updating an workspace."""
-    data = {"description": "new_env"}
+    data = {"description": "new_workspace"}
     workspace_id = 1
     response = client.put(f"/workspaces/{workspace_id}", json=data)
     assert response.status_code == 200
@@ -66,7 +66,7 @@ def test_update_workspace(
 
 def test_update_workspace_not_found(client: TestClient, recreate_tables) -> None:
     """Test updating an workspace that does not exist."""
-    data = {"description": "new_env"}
+    data = {"description": "new_workspace"}
     response = client.put("/workspaces/1", json=data)
     assert response.status_code == 404
     assert response.json() == {"detail": "Workspace not found"}
@@ -74,7 +74,7 @@ def test_update_workspace_not_found(client: TestClient, recreate_tables) -> None
 
 def test_slug_already_exists(recreate_tables, client: TestClient) -> None:
     """Test that slug already exists."""
-    data = {"description": "test env", "name": "test", "slug": "test"}
+    data = {"description": "test workspace", "name": "test", "slug": "test"}
     response = client.post("/workspaces/", json=data)
     assert response.status_code == 200
     workspace_1 = response.json()
@@ -82,7 +82,7 @@ def test_slug_already_exists(recreate_tables, client: TestClient) -> None:
     assert workspace_1["name"] == data["name"]
     assert workspace_1["slug"] == data["slug"]
 
-    data_2 = {"description": "test env 2", "name": "test", "slug": "test"}
+    data_2 = {"description": "test workspace 2", "name": "test", "slug": "test"}
     response = client.post("/workspaces/", json=data_2)
     assert response.status_code == 400
 

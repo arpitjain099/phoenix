@@ -238,10 +238,10 @@ def test_workspace_defaults_main(mock_project_init_db, client: TestClient, resee
 
 @mock.patch("phiphi.pipeline_jobs.projects.init_project_db")
 @pytest.mark.freeze_time(CREATED_TIME)
-def test_create_project_with_non_existing_env(
+def test_create_project_with_non_existing_workspace(
     mock_project_init_db, recreate_tables, client: TestClient
 ) -> None:
-    """Test create and then get of an project."""
+    """Test create and then get of an project, with a workspace that doesn't exist."""
     data = {
         "name": "first project",
         "description": "Project 1",
