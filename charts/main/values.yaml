@@ -89,7 +89,7 @@ api:
     # key. Example:
     # {
     #  "main": "<key>",
-    #  "phoenix_env_1": "<key>"
+    #  "phoenix_workspace_1": "<key>"
     # }
     # json : |
       # <JSON>
