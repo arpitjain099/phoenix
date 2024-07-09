@@ -1,7 +1,7 @@
 import { JobRunResponse } from "./job-run";
 
 export interface GatherResponse {
-	description: string;
+	name: string;
 	id: number;
 	platform: string;
 	data_type: string;

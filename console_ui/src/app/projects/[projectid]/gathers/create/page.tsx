@@ -2,7 +2,7 @@
 
 import { useCreate, useTranslate } from "@refinedev/core";
 import { Create, useForm, useSelect } from "@refinedev/mantine";
-import { Select, Textarea, Tooltip } from "@mantine/core";
+import { Select, TextInput, Tooltip } from "@mantine/core";
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IconInfoCircle } from "@tabler/icons";
@@ -47,7 +47,7 @@ export default function GatherCreate(): JSX.Element {
 		platform: "facebook",
 		project_id: Number(projectid),
 		data_type: "",
-		description: "",
+		name: "",
 		account_url_list: [] as string[],
 		only_posts_older_than: today,
 		only_posts_newer_than: tomorrow,
@@ -228,19 +228,19 @@ export default function GatherCreate(): JSX.Element {
 				{...getInputProps("project_id")}
 				{...projectSelectProps}
 			/>
-			<Textarea
-				mt="lg"
+			<TextInput
+				mt="sm"
 				label={
 					<div className="flex items-center">
-						<Tooltip label={translate("gathers.fields.info.description")}>
+						<Tooltip label={translate("gathers.fields.info.name")}>
 							<span className="flex">
 								<IconInfoCircle size={12} />
 							</span>
 						</Tooltip>
-						{translate("gathers.fields.input.description")}
+						{translate("gathers.fields.input.name")}
 					</div>
 				}
-				{...getInputProps("description")}
+				{...getInputProps("name")}
 			/>
 			{formValues.data_type === "posts" && (
 				<CreatePostsGatherForm
