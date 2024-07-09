@@ -27,7 +27,7 @@ def test_get_gather_crud(client: TestClient, reseed_tables) -> None:
 def test_create_apify_facebook_post_gather(reseed_tables, client: TestClient) -> None:
     """Test create apify facebook gather."""
     data = {
-        "description": "First apify gather",
+        "name": "First apify gather",
         "limit_posts_per_account": 1000,
         "only_posts_older_than": "2022-3-5",
         "only_posts_newer_than": "2021-4-8",
@@ -41,7 +41,7 @@ def test_create_apify_facebook_post_gather(reseed_tables, client: TestClient) ->
     assert response.status_code == 200
     gather = response.json()
 
-    assert gather["description"] == data["description"]
+    assert gather["name"] == data["name"]
     assert gather["project_id"] == project_id
     assert gather["account_url_list"] == data["account_url_list"]
     assert gather["limit_posts_per_account"] == data["limit_posts_per_account"]
@@ -56,7 +56,7 @@ def test_create_apify_facebook_post_gather(reseed_tables, client: TestClient) ->
 def test_data_type_apify_facebook_post(reseed_tables, client: TestClient) -> None:
     """Test create apify facebook gather."""
     data = {
-        "description": "First apify gather",
+        "name": "First apify gather",
         "limit_posts_per_account": 1000,
         "only_posts_older_than": "2022-3-5",
         "only_posts_newer_than": "2021-4-8",
@@ -75,7 +75,7 @@ def test_data_type_apify_facebook_post(reseed_tables, client: TestClient) -> Non
 def test_serialize_facebook_post_gather_response_with_all_fields():
     """Test that ApifyFacebookPostGatherResponse serializes correctly."""
     instance = gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse(
-        description="Example",
+        name="Example",
         limit_posts_per_account=10,
         account_url_list=[
             "https://www.facebook.com/humansofnewyork/",
@@ -113,7 +113,7 @@ def test_serialize_facebook_post_gather_response_with_all_fields():
 def test_serialize_facebook_post_gather_response_with_required_fields_only():
     """Test that serialize to Apify correctly omits fields when they are not provided."""
     instance = gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse(
-        description="Example",
+        name="Example",
         limit_posts_per_account=10,
         account_url_list=[
             "https://www.facebook.com/humansofnewyork/",

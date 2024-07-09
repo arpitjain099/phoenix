@@ -27,7 +27,7 @@ def test_get_gather_crud(client: TestClient, reseed_tables) -> None:
 def test_create_apify_facebook_comment_gather(reseed_tables, client: TestClient) -> None:
     """Test create apify facebook comment gather."""
     data = {
-        "description": "First apify gather",
+        "name": "First apify gather",
         "limit_comments_per_post": 1000,
         "sort_comments_by": "facebook_default",
         "post_url_list": ["https://buildup.org/"],
@@ -41,7 +41,7 @@ def test_create_apify_facebook_comment_gather(reseed_tables, client: TestClient)
     assert response.status_code == 200
     gather = response.json()
 
-    assert gather["description"] == data["description"]
+    assert gather["name"] == data["name"]
     assert gather["project_id"] == project_id
     assert gather["sort_comments_by"] == data["sort_comments_by"]
     assert gather["limit_comments_per_post"] == data["limit_comments_per_post"]
@@ -60,7 +60,7 @@ def test_data_type_apify_facebook_comment(reseed_tables, client: TestClient) -> 
     the route and not the payload.
     """
     data = {
-        "description": "First apify gather",
+        "name": "First apify gather",
         "limit_comments_per_post": 1000,
         "sort_comments_by": "facebook_default",
         "post_url_list": ["https://buildup.org/"],
@@ -79,7 +79,7 @@ def test_data_type_apify_facebook_comment(reseed_tables, client: TestClient) -> 
 def test_serialize_facebook_comment_gather_response_with_all_fields():
     """Test that ApifyFacebookCommentGatherResponse serializes correctly."""
     instance = gathers.apify_facebook_comments.schemas.ApifyFacebookCommentGatherResponse(
-        description="Example",
+        name="Example",
         limit_comments_per_post=25,
         post_url_list=[
             "https://www.facebook.com/post1",
@@ -117,7 +117,7 @@ def test_serialize_facebook_comment_gather_response_with_all_fields():
 def test_serialize_facebook_comment_gather_response_with_required_fields_only():
     """Test that serialize to Apify correctly omits fields when they are not provided."""
     instance = gathers.apify_facebook_comments.schemas.ApifyFacebookCommentGatherResponse(
-        description="Example",
+        name="Example",
         limit_comments_per_post=25,
         post_url_list=[
             "https://www.facebook.com/post1",
