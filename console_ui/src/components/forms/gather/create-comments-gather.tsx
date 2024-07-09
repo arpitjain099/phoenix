@@ -14,7 +14,7 @@ export const commentFieldsToKeep = [
 	"platform",
 	"project_id",
 	"data_type",
-	"description",
+	"name",
 	"post_url_list",
 	"limit_comments_per_post",
 	"sort_comments_by",
