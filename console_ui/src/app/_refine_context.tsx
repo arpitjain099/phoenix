@@ -84,19 +84,9 @@ const RefineContext = ({ children }: PropsWithChildren) => {
 									},
 									{
 										name: "",
-										list: "/projects/:projectid/gathers",
 										create: "/projects/:projectid/gathers/create",
 										meta: {
 											label: "Gathers",
-											parent: "projects",
-											hide: true,
-										},
-									},
-									{
-										name: "",
-										list: "/projects/:projectid/tabulate",
-										meta: {
-											label: t("tabulate.title"),
 											parent: "projects",
 											hide: true,
 										},

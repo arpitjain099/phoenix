@@ -34,7 +34,10 @@ export default function GatherCreate(): JSX.Element {
 			href: `/projects/show/${projectid}`,
 			replaceWithProjectName: true,
 		},
-		{ title: translate("gathers.gathers"), href: "../gathers" },
+		{
+			title: translate("gathers.gathers"),
+			href: `/projects/show/${projectid}?activeItem=gather`,
+		},
 		{ title: translate("actions.create"), href: "create" },
 	];
 
@@ -138,7 +141,9 @@ export default function GatherCreate(): JSX.Element {
 							onSuccess: async () => {
 								await Promise.all([setInputList([]), reset()]);
 								setTimeout(() => {
-									router.push(`/projects/${formValues.project_id}/gathers`);
+									router.push(
+										`/projects/show/${formValues.project_id}?activeItem=gather`
+									);
 								}, 1000);
 							},
 							onError: () => {

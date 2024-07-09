@@ -47,10 +47,10 @@ def get_project(project_id: int, session: deps.SessionDep) -> schemas.ProjectRes
     return project
 
 
-@router.get("/projects/", response_model=list[schemas.ProjectResponse])
+@router.get("/projects/", response_model=list[schemas.ProjectListResponse])
 def get_projects(
     session: deps.SessionDep, start: int = 0, end: int = 100
-) -> list[schemas.ProjectResponse]:
+) -> list[schemas.ProjectListResponse]:
     """Get Projects."""
     return crud.get_projects(session, start, end)
 

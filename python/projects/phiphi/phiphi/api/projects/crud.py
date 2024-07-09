@@ -5,8 +5,8 @@ import sqlalchemy.orm
 
 from phiphi import config, utils
 from phiphi.api import exceptions
-from phiphi.api.environments import models as env_models
 from phiphi.api.projects import models, schemas
+from phiphi.api.workspaces import models as workspace_models
 from phiphi.pipeline_jobs import projects
 
 
@@ -14,14 +14,14 @@ def create_project(
     session: sqlalchemy.orm.Session, project: schemas.ProjectCreate, init_project_db: bool = False
 ) -> schemas.ProjectResponse:
     """Create a new project."""
-    db_environment = (
-        session.query(env_models.Environment)
-        .filter(env_models.Environment.slug == project.environment_slug)
+    db_workspace = (
+        session.query(workspace_models.Workspace)
+        .filter(workspace_models.Workspace.slug == project.workspace_slug)
         .first()
     )
 
-    if db_environment is None:
-        raise exceptions.EnvironmentNotFound()
+    if db_workspace is None:
+        raise exceptions.WorkspaceNotFound()
 
     try:
         db_project = models.Project(**project.dict())
@@ -66,18 +66,19 @@ def get_project(
 
 def get_projects(
     session: sqlalchemy.orm.Session, start: int = 0, end: int = 100
-) -> list[schemas.ProjectResponse]:
+) -> list[schemas.ProjectListResponse]:
     """Get projects."""
     query = (
         sqlalchemy.select(models.Project)
         .filter(models.Project.deleted_at.is_(None))
+        .order_by(models.Project.id.desc())
         .offset(start)
         .limit(end)
     )
     projects = session.scalars(query).all()
     if not projects:
         return []
-    return [schemas.ProjectResponse.model_validate(project) for project in projects]
+    return [schemas.ProjectListResponse.model_validate(project) for project in projects]
 
 
 def get_db_project_with_guard(session: sqlalchemy.orm.Session, project_id: int) -> None:

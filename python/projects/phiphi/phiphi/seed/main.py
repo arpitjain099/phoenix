@@ -14,10 +14,10 @@ from phiphi import platform_db, utils
 from phiphi.seed import (
     apify_facebook_comments,
     apify_facebook_post_gather,
-    environments,
     job_runs,
     projects,
     users,
+    workspaces,
 )
 
 utils.init_logging()
@@ -37,11 +37,11 @@ def main(session: Session, testing: bool = False) -> None:
         )  # Drop all tables if --testing flag is provided
         platform_db.Base.metadata.create_all(session.get_bind())  # Create all tables again
     users.init_first_admin_user(session)
-    environments.init_main_environment(session)
+    workspaces.init_main_workspace(session)
 
     if testing:
         users.seed_test_users(session)
-        environments.seed_test_environment(session)
+        workspaces.seed_test_workspace(session)
         projects.seed_test_project(session)
         apify_facebook_post_gather.seed_test_apify_facebook_post_gathers(session)
         apify_facebook_comments.seed_test_apify_facebook_comment_gathers(session)
