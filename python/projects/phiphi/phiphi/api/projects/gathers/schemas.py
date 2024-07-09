@@ -47,7 +47,7 @@ class GatherBase(pydantic.BaseModel):
     data type are part of the child type and are not user defined.
     """
 
-    description: Annotated[str, pydantic.Field(description="The description of the gather")]
+    name: Annotated[str, pydantic.Field(description="The name of the gather")]
 
 
 class GatherResponse(GatherBase):

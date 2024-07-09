@@ -6,7 +6,7 @@ from phiphi.api.projects.gathers import schemas as gathers_schemas
 from phiphi.api.projects.gathers.apify_facebook_comments import models, schemas
 
 TEST_APIFY_FACEBOOK_COMMENT_GATHER_CREATE = schemas.ApifyFacebookCommentGatherCreate(
-    description="Phoenix Apify Facebook COMMENT Gather",
+    name="Phoenix Apify Facebook COMMENT Gather",
     post_url_list=["https://phoenix.com", "https://buildup.org"],
     limit_comments_per_post=1000,
     sort_comments_by=schemas.FacebookCommentSortOption.facebook_default,
@@ -14,7 +14,7 @@ TEST_APIFY_FACEBOOK_COMMENT_GATHER_CREATE = schemas.ApifyFacebookCommentGatherCr
 )
 
 TEST_APIFY_FACEBOOK_COMMENT_GATHER_CREATE_2 = schemas.ApifyFacebookCommentGatherCreate(
-    description="Phoenix Apify Facebook COMMENT Gather 2",
+    name="Phoenix Apify Facebook COMMENT Gather 2",
     post_url_list=["https://phoenix.com", "https://buildup.org"],
     limit_comments_per_post=1000,
     sort_comments_by=schemas.FacebookCommentSortOption.most_relevant,
@@ -22,7 +22,7 @@ TEST_APIFY_FACEBOOK_COMMENT_GATHER_CREATE_2 = schemas.ApifyFacebookCommentGather
 )
 
 TEST_APIFY_FACEBOOK_COMMENT_GATHER_CREATE_3 = schemas.ApifyFacebookCommentGatherCreate(
-    description="Phoenix Apify Facebook COMMENT Gather 3",
+    name="Phoenix Apify Facebook COMMENT Gather 3",
     post_url_list=["https://phoenix.com"],
     limit_comments_per_post=1000,
     sort_comments_by=schemas.FacebookCommentSortOption.newest_first,

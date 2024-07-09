@@ -6,7 +6,7 @@ from phiphi.api.projects.gathers import schemas as gathers_schemas
 from phiphi.api.projects.gathers.apify_facebook_posts import models, schemas
 
 TEST_APIFY_FACEBOOK_POST_GATHER_CREATE = schemas.ApifyFacebookPostGatherCreate(
-    description="Phoenix Apify Facebook Post Gather",
+    name="Phoenix Apify Facebook Post Gather",
     account_url_list=["https://phoenix.com", "https://buildup.org"],
     limit_posts_per_account=1000,
     only_posts_older_than="2024-04-25",
@@ -14,7 +14,7 @@ TEST_APIFY_FACEBOOK_POST_GATHER_CREATE = schemas.ApifyFacebookPostGatherCreate(
 )
 
 TEST_APIFY_FACEBOOK_POST_GATHER_CREATE_2 = schemas.ApifyFacebookPostGatherCreate(
-    description="Phoenix Apify Facebook Post Gather 2",
+    name="Phoenix Apify Facebook Post Gather 2",
     account_url_list=["https://phoenix.com", "https://buildup.org"],
     limit_posts_per_account=1000,
     only_posts_older_than="2024-03-12",
@@ -22,7 +22,7 @@ TEST_APIFY_FACEBOOK_POST_GATHER_CREATE_2 = schemas.ApifyFacebookPostGatherCreate
 )
 
 TEST_APIFY_FACEBOOK_POST_GATHER_CREATE_3 = schemas.ApifyFacebookPostGatherCreate(
-    description="Phoenix Apify Facebook Post Gather 3",
+    name="Phoenix Apify Facebook Post Gather 3",
     account_url_list=["https://phoenix.com"],
     limit_posts_per_account=1000,
     only_posts_older_than="2024-02-25",

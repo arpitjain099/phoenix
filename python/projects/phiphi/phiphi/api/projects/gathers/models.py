@@ -15,7 +15,7 @@ class GatherBase(platform_db.Base):
     __abstract__ = True
 
     id: orm.Mapped[int] = orm.mapped_column(primary_key=True)
-    description: orm.Mapped[str]
+    name: orm.Mapped[str]
     project_id: orm.Mapped[int]
     source: orm.Mapped[str]
     platform: orm.Mapped[str]
