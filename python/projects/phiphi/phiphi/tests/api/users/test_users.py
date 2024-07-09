@@ -52,6 +52,9 @@ def test_create_read_user(recreate_tables, client: TestClient) -> None:
     assert user["display_name"] == data["display_name"]
     assert user["created_at"] == CREATED_TIME
 
+    response = client.post("/users/", json=data)
+    assert response.status_code == 400
+
 
 def test_read_user_not_found(client: TestClient, recreate_tables) -> None:
     """Test reading a user that does not exist."""
