@@ -29,7 +29,7 @@ def test_get_gather(client: TestClient, reseed_tables) -> None:
     response_2 = client.get("/projects/2/gathers/3")
     assert response_2.status_code == 200
     gather_2 = response_2.json()
-    assert gather_1["description"] != gather_2["description"]
+    assert gather_1["name"] != gather_2["name"]
 
     assert gather_1["id"] == 1
     assert gather_1["project_id"] == 1

@@ -87,9 +87,9 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 				header: translate("gathers.fields.data_type"),
 			},
 			{
-				id: "description",
-				accessorKey: "description",
-				header: translate("gathers.fields.description"),
+				id: "name",
+				accessorKey: "name",
+				header: translate("gathers.fields.name"),
 			},
 			{
 				id: "created_at",

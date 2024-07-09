@@ -9,7 +9,7 @@ def facebook_posts_gather_example() -> (
 ):
     """Example for ApifyFacebookPostGatherResponse schema."""
     return gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse(
-        description="Example",
+        name="Example",
         limit_posts_per_account=4,
         account_url_list=[
             "https://www.facebook.com/howtobuildup/",
@@ -35,7 +35,7 @@ def facebook_comments_gather_example() -> (
 ):
     """Example for ApifyFacebookCommentGatherResponse schema."""
     return gathers.apify_facebook_comments.schemas.ApifyFacebookCommentGatherResponse(
-        description="Example",
+        name="Example",
         limit_comments_per_post=4,
         post_url_list=[
             "https://www.facebook.com/unitednations/posts/pfbid045as8QKV2uLVYe2NumDPs7a68Hr4P5cjmoyMRo2e4dj4p3rp2gWNNj948Uu7BVcxl",

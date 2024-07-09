@@ -15,7 +15,7 @@ export const postFieldsToKeep = [
 	"platform",
 	"project_id",
 	"data_type",
-	"description",
+	"name",
 	"account_url_list",
 	"only_posts_older_than",
 	"only_posts_newer_than",
