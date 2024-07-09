@@ -1,11 +1,15 @@
 """User crud functionality."""
 import sqlalchemy.orm
 
+from phiphi.api import exceptions
 from phiphi.api.users import models, schemas
 
 
 def create_user(session: sqlalchemy.orm.Session, user: schemas.UserCreate) -> schemas.UserResponse:
     """Create a new user."""
+    if get_user_by_email(session, user.email):
+        raise exceptions.HttpException400(detail="User already exists")
+
     db_user = models.User(**user.dict())
     session.add(db_user)
     session.commit()
