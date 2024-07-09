@@ -80,7 +80,7 @@ export default function ProjectShow(): JSX.Element {
 				</Tabs.List>
 
 				<Tabs.Panel value="overview" pt="xs">
-					<OverviewComponent setActiveTab={setActiveTab} />
+					<OverviewComponent setActiveTab={setActiveTab} info={record} />
 				</Tabs.Panel>
 
 				<Tabs.Panel value="gather" pt="xs">
