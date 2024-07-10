@@ -89,4 +89,13 @@ def create_deployments(
         tags=tags,
     )
 
-    return [task]
+    task_2 = delete_flow.deploy(
+        name=deployment_name_prefix + delete_flow.name,
+        work_pool_name=work_pool_name,
+        image=image,
+        build=build,
+        push=push,
+        tags=tags,
+    )
+
+    return [task, task_2]
