@@ -1,7 +1,11 @@
 """Test Gathers."""
+from unittest import mock
+
+import pytest
 from fastapi.testclient import TestClient
 
 from phiphi.api.projects.gathers import crud
+from phiphi.api.projects.job_runs import schemas as job_run_schemas
 
 
 def test_get_gather_crud(client: TestClient, reseed_tables) -> None:
@@ -73,3 +77,27 @@ def test_get_gathers_estimate(client: TestClient, reseed_tables) -> None:
     assert gather["id"] == 1
     assert gather["estimated_credit_cost"] == 0
     assert gather["estimated_duration_minutes"] == 0
+
+
+DELETED_TIME = "2024-04-01T12:00:01"
+
+
+@pytest.mark.freeze_time(DELETED_TIME)
+@mock.patch("phiphi.api.projects.job_runs.prefect_deployment.wrapped_run_deployment")
+def test_gather_delete(m_run_deployment, reseed_tables, client: TestClient) -> None:
+    """Test deleting a gather."""
+    response = client.delete("/projects/1/gathers/1")
+    assert response.status_code == 200
+    gather = response.json()
+    assert gather["id"] == 1
+    assert gather["project_id"] == 1
+    assert gather["deleted_at"] == DELETED_TIME
+    m_run_deployment.assert_called_once_with(
+        name="flow_runner_flow/flow_runner_flow",
+        parameters={
+            "project_id": 1,
+            "job_type": job_run_schemas.ForeignJobType.gather_delete,
+            "job_source_id": 1,
+            "job_run_id": 6,
+        },
+    )
