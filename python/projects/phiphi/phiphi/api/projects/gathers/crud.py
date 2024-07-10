@@ -17,7 +17,6 @@ def get_gather(
     db_gather = (
         session.query(models.Gather)
         .filter(
-            models.Gather.deleted_at.is_(None),
             models.Gather.project_id == project_id,
             models.Gather.id == gather_id,
         )

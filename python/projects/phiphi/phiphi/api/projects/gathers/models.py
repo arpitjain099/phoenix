@@ -1,7 +1,7 @@
 """Gather Models."""
-import datetime
 from typing import Optional
 
+import sqlalchemy as sa
 from sqlalchemy import orm
 
 from phiphi import platform_db
@@ -20,8 +20,9 @@ class GatherBase(platform_db.Base):
     source: orm.Mapped[str]
     platform: orm.Mapped[str]
     data_type: orm.Mapped[str]
-    deleted_at: orm.Mapped[Optional[datetime.datetime]]
     child_type: orm.Mapped[str]
+    # In general we don't use foreign keys, but in this case it seemed appropriate
+    delete_job_run_id: orm.Mapped[Optional[int]] = orm.mapped_column(sa.ForeignKey("job_runs.id"))
 
 
 class Gather(GatherBase, base_models.TimestampModel):
@@ -32,6 +33,9 @@ class Gather(GatherBase, base_models.TimestampModel):
         "polymorphic_identity": "gather",
         "polymorphic_on": "child_type",
     }
+
+    # Relationships have to be on non abstract model.
+    delete_job_run: orm.Mapped[job_run_models.JobRuns] = orm.relationship("JobRuns")
 
     # Relationship to get all related JobRuns, ordered by id descending
     job_runs = orm.relationship(
