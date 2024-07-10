@@ -3,8 +3,6 @@ import fastapi
 
 from phiphi.api import deps
 from phiphi.api.projects.gathers import child_routes, crud, schemas
-from phiphi.api.projects.job_runs import crud as job_run_crud
-from phiphi.api.projects.job_runs import schemas as job_run_schemas
 
 router = fastapi.APIRouter()
 router.include_router(child_routes.router)
@@ -66,13 +64,5 @@ async def delete_gather(
     project_id: int, gather_id: int, session: deps.SessionDep
 ) -> schemas.GatherResponse:
     """Delete a gather."""
-    gather_response = crud.delete(session, project_id, gather_id)
-    _ = await job_run_crud.create_and_run_job_run(
-        session,
-        project_id,
-        job_run_schemas.JobRunCreate(
-            foreign_id=gather_id,
-            foreign_job_type=job_run_schemas.ForeignJobType.gather_delete,
-        ),
-    )
+    gather_response = await crud.delete(session, project_id, gather_id)
     return gather_response

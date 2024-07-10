@@ -3,6 +3,7 @@ from unittest import mock
 
 import pytest
 from fastapi.testclient import TestClient
+from prefect.client.schemas import objects
 
 from phiphi.api.projects.gathers import crud
 from phiphi.api.projects.job_runs import schemas as job_run_schemas
@@ -86,18 +87,31 @@ DELETED_TIME = "2024-04-01T12:00:01"
 @mock.patch("phiphi.api.projects.job_runs.prefect_deployment.wrapped_run_deployment")
 def test_gather_delete(m_run_deployment, reseed_tables, client: TestClient) -> None:
     """Test deleting a gather."""
+    # Need to add attributes to the mock object to avoid errors
+    mock_flow_run = mock.MagicMock(spec=objects.FlowRun)
+    mock_flow_run.id = "mock_uuid"
+    mock_flow_run.name = "mock_flow_run"
+    m_run_deployment.return_value = mock_flow_run
     response = client.delete("/projects/1/gathers/1")
     assert response.status_code == 200
     gather = response.json()
     assert gather["id"] == 1
     assert gather["project_id"] == 1
-    assert gather["deleted_at"] == DELETED_TIME
+    assert gather["delete_job_run"] is not None
+    assert gather["delete_job_run"]["status"] == "in_queue"
+    assert gather["delete_job_run"]["created_at"] == DELETED_TIME
     m_run_deployment.assert_called_once_with(
         name="flow_runner_flow/flow_runner_flow",
         parameters={
             "project_id": 1,
             "job_type": job_run_schemas.ForeignJobType.gather_delete,
             "job_source_id": 1,
-            "job_run_id": 6,
+            "job_run_id": gather["delete_job_run"]["id"],
         },
     )
+    # Because we need to get the status of the delete_job_run we don't filter for deleted gathers
+    # on a GET.
+    response = client.get("/projects/1/gathers/1")
+    assert response.status_code == 200
+    gather_2 = response.json()
+    assert gather == gather_2

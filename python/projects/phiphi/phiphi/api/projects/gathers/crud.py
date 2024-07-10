@@ -1,11 +1,11 @@
 """Gather crud functionality."""
-import datetime
-
 import sqlalchemy.orm
 
 from phiphi.api import exceptions
 from phiphi.api.projects import crud as project_crud
 from phiphi.api.projects.gathers import models, schemas
+from phiphi.api.projects.job_runs import crud as job_run_crud
+from phiphi.api.projects.job_runs import schemas as job_run_schemas
 
 
 def get_gather(
@@ -61,23 +61,23 @@ def get_gathers(
     return [schemas.GatherResponse.model_validate(gather) for gather in gathers]
 
 
-def delete(
+async def delete(
     session: sqlalchemy.orm.Session, project_id: int, gather_id: int
 ) -> schemas.GatherResponse:
     """Delete a gather."""
-    project_crud.get_db_project_with_guard(session, project_id)
-
-    db_gather = (
-        session.query(models.Gather)
-        .filter(
-            models.Gather.project_id == project_id,
-            models.Gather.id == gather_id,
-        )
-        .first()
-    )
+    db_gather = get_db_gather(session, project_id, gather_id)
     if db_gather is None:
         raise exceptions.GatherNotFound()
 
-    db_gather.deleted_at = datetime.datetime.utcnow()
+    delete_job_run_response = await job_run_crud.create_and_run_job_run(
+        session,
+        project_id,
+        job_run_schemas.JobRunCreate(
+            foreign_id=gather_id,
+            foreign_job_type=job_run_schemas.ForeignJobType.gather_delete,
+        ),
+    )
+
+    db_gather.delete_job_run_id = delete_job_run_response.id
     session.commit()
     return schemas.GatherResponse.model_validate(db_gather)
