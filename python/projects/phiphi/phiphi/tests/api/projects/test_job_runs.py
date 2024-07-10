@@ -12,7 +12,7 @@ UPDATE_TIME = "2024-04-01T12:00:02"
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
-@mock.patch("phiphi.api.projects.job_runs.routes.wrapped_run_deployment")
+@mock.patch("phiphi.api.projects.job_runs.prefect_deployment.wrapped_run_deployment")
 def test_create_get_job_runs(m_run_deployment, reseed_tables, client: TestClient) -> None:
     """Test create and then get of an job run."""
     data = {
@@ -56,7 +56,7 @@ def test_create_get_job_runs(m_run_deployment, reseed_tables, client: TestClient
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
-@mock.patch("phiphi.api.projects.job_runs.routes.wrapped_run_deployment")
+@mock.patch("phiphi.api.projects.job_runs.prefect_deployment.wrapped_run_deployment")
 def test_create_run_deployments_error(m_run_deployment, reseed_tables, client: TestClient) -> None:
     """Test that if an error occurs in the deployment, the job run is updated."""
     data = {
