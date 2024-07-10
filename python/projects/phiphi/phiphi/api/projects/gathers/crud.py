@@ -12,8 +12,17 @@ def get_gather(
     session: sqlalchemy.orm.Session, project_id: int, gather_id: int
 ) -> schemas.GatherResponse | None:
     """Get an apify gather."""
-    project_crud.get_db_project_with_guard(session, project_id)
+    db_gather = get_db_gather(session, project_id, gather_id)
+    if db_gather is None:
+        return None
+    return schemas.GatherResponse.model_validate(db_gather)
 
+
+def get_db_gather(
+    session: sqlalchemy.orm.Session, project_id: int, gather_id: int
+) -> models.Gather | None:
+    """Get a gather orm model."""
+    project_crud.get_db_project_with_guard(session, project_id)
     db_gather = (
         session.query(models.Gather)
         .filter(
@@ -22,9 +31,7 @@ def get_gather(
         )
         .first()
     )
-    if db_gather is None:
-        return None
-    return schemas.GatherResponse.model_validate(db_gather)
+    return db_gather
 
 
 ## Issues with this implementation
