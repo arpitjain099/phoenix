@@ -43,7 +43,7 @@ def facebook_comments_gather_example() -> (
         ],
         sort_comments_by=gathers.apify_facebook_comments.schemas.FacebookCommentSortOption.facebook_default,
         include_comment_replies=False,
-        id=1,
+        id=2,
         platform=gathers.schemas.Platform.facebook,
         data_type=gathers.schemas.DataType.comments,
         source=gathers.schemas.Source.apify,
