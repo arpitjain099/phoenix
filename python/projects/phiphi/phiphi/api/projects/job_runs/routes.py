@@ -1,11 +1,10 @@
 """JobRun routes."""
 import logging
-from datetime import datetime
 
 import fastapi
 
 from phiphi.api import deps
-from phiphi.api.projects.job_runs import crud, prefect_deployment, schemas
+from phiphi.api.projects.job_runs import crud, schemas
 
 router = fastapi.APIRouter()
 
@@ -23,21 +22,7 @@ async def create_job_run(
     Returns:
         Created Job Run.
     """
-    job_run = crud.create_job_run(session, project_id, job_run_create)
-    try:
-        job_run = await prefect_deployment.start_deployment(
-            session=session, name="flow_runner_flow/flow_runner_flow", job_run=job_run
-        )
-    except Exception as e:
-        job_run = crud.update_job_run(
-            session,
-            schemas.JobRunUpdateCompleted(
-                id=job_run.id,
-                status=schemas.Status.failed,
-                completed_at=datetime.now(),
-            ),
-        )
-        logger.error("Error running deployment", exc_info=e)
+    job_run = await crud.create_and_run_job_run(session, project_id, job_run_create)
     return job_run
 
 
