@@ -83,6 +83,16 @@ def test_bq_pipeline_integration(session_context, reseed_tables):
         batch_size=batch_size,
     )
 
+    batches_df = pd.read_gbq(
+        f"SELECT * FROM {test_project_namespace}.{constants.GATHER_BATCHES_TABLE_NAME}"
+    )
+    assert len(batches_df) == 3
+
+    messages_df = pd.read_gbq(
+        f"SELECT * FROM {test_project_namespace}.{constants.GENERALISED_MESSAGES_TABLE_NAME}"
+    )
+    assert len(messages_df) == 25
+
     tabulate_flow.tabulate_flow(job_run_id=4, project_namespace=test_project_namespace)
 
     deduped_messages_df = pd.read_gbq(
