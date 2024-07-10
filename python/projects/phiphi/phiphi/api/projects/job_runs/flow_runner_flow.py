@@ -56,6 +56,13 @@ async def start_flow_run(
             "job_run_id": job_run_id,
             "project_namespace": project_namespace,
         }
+    elif job_type == job_runs.schemas.ForeignJobType.gather_delete:
+        deployment_name = "gather_delete_flow/gather_delete_flow"
+        params = {
+            "gather_id": job_source_id,
+            "job_run_id": job_run_id,
+            "project_namespace": project_namespace,
+        }
     else:
         raise NotImplementedError(f"Job type {job_type=} not implemented yet.")
     job_run_flow: objects.FlowRun = await deployments.run_deployment(
