@@ -22,6 +22,7 @@ class Platform(str, Enum):
     """Platform enum."""
 
     facebook = "facebook"
+    tiktok = "tiktok"
 
 
 class DataType(str, Enum):
