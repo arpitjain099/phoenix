@@ -15,11 +15,12 @@ import AboutComponent from "@components/project/about";
 import VisualiseComponent from "@components/project/visualise";
 import GatherComponent from "@components/project/gather";
 import ClassifyComponent from "@components/project/classify";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function ProjectShow(): JSX.Element {
 	const translate = useTranslate();
 	const { queryResult } = useShow();
+	const router = useRouter();
 	const searchParams = useSearchParams();
 	const activeItem = searchParams.get("activeItem");
 	const { refetch, data, isLoading } = queryResult;
@@ -38,7 +39,11 @@ export default function ProjectShow(): JSX.Element {
 		resource: identifier,
 		recordItemId: idFromParams,
 	};
-
+	useEffect(() => {
+		if (activeItem) {
+			setActiveTab(activeItem);
+		}
+	}, [activeItem]);
 	return (
 		<Show
 			title={<Title order={3}>{record?.name}</Title>}
@@ -60,7 +65,12 @@ export default function ProjectShow(): JSX.Element {
 					<Loader size="xs" />
 				)}
 			</Group>
-			<Tabs value={activeTab} onTabChange={setActiveTab}>
+			<Tabs
+				value={activeTab}
+				onTabChange={(value) =>
+					router.replace(`/projects/show/${idFromParams}?activeItem=${value}`)
+				}
+			>
 				<Tabs.List>
 					<Tabs.Tab value="overview">Overview</Tabs.Tab>
 					<Tabs.Tab value="gather">Gather</Tabs.Tab>
@@ -70,7 +80,7 @@ export default function ProjectShow(): JSX.Element {
 				</Tabs.List>
 
 				<Tabs.Panel value="overview" pt="xs">
-					<OverviewComponent setActiveTab={setActiveTab} />
+					<OverviewComponent setActiveTab={setActiveTab} info={record} />
 				</Tabs.Panel>
 
 				<Tabs.Panel value="gather" pt="xs">

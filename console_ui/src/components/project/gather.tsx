@@ -15,14 +15,14 @@ import {
 	Title,
 	Anchor,
 } from "@mantine/core";
-import { List, DateField } from "@refinedev/mantine";
+import { DateField } from "@refinedev/mantine";
 import TableComponent from "@components/table";
-import { useRouter } from "next/navigation";
 import { PHEONIX_MANUAL_URL, statusTextStyle } from "src/utils";
-import { IconPlayerPlay } from "@tabler/icons";
+import { IconPlayerPlay, IconSquarePlus } from "@tabler/icons";
 import GatherRunModal from "@components/modals/gather-run";
 import { jobRunService } from "src/services";
 import { GatherResponse } from "src/interfaces/gather";
+import Link from "next/link";
 
 interface IGatherProps {
 	projectid: any;
@@ -31,7 +31,6 @@ interface IGatherProps {
 
 const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 	const translate = useTranslate();
-	const router = useRouter();
 	const [opened, setOpened] = useState(false);
 	const [selected, setSelected] = useState(null);
 	const [gatherList, setGatherList] = useState<any>([]);
@@ -41,6 +40,9 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 
 	const apiResponse = useList({
 		resource: projectid ? `projects/${projectid}/gathers` : "",
+		pagination: {
+			mode: "client",
+		},
 	});
 
 	const handleGatherRefresh = useCallback(
@@ -185,6 +187,11 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 	} = useTable({
 		columns,
 		data: gatherList,
+		refineCoreProps: {
+			pagination: {
+				mode: "off",
+			},
+		},
 	});
 
 	useEffect(() => {
@@ -217,12 +224,8 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 
 	return (
 		<>
-			<List
-				breadcrumb={false}
-				createButtonProps={{
-					onClick: () => router.push(`/projects/${projectid}/gathers/create`),
-				}}
-				title={
+			<div className="p-4">
+				<Group className="mb-4">
 					<div className="flex flex-col gap-4">
 						<Title order={3}>{translate("projects.tabs.gather.title")}</Title>
 						<Text fz="sm">
@@ -248,8 +251,12 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 							{translate("projects.tabs.gather.description.part2.c")}
 						</Text>
 					</div>
-				}
-			>
+					<Link href={`/projects/${projectid}/gathers/create`}>
+						<Button leftIcon={<IconSquarePlus />}>
+							{translate("actions.create")}
+						</Button>
+					</Link>
+				</Group>
 				<ScrollArea>
 					<TableComponent
 						headerGroups={getHeaderGroups}
@@ -264,7 +271,7 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 					page={current}
 					onChange={setCurrent}
 				/>
-			</List>
+			</div>
 			<GatherRunModal
 				opened={opened}
 				setOpened={setOpened}
