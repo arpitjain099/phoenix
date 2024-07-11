@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useMemo, useCallback } from "react";
-import { useTranslate, useList, useGetIdentity } from "@refinedev/core";
+import { useTranslate, useList } from "@refinedev/core";
 import { useTable } from "@refinedev/react-table";
 import { ColumnDef } from "@tanstack/react-table";
 import {
@@ -23,7 +23,6 @@ import GatherRunModal from "@components/modals/gather-run";
 import { jobRunService } from "src/services";
 import { GatherResponse } from "src/interfaces/gather";
 import Link from "next/link";
-import { UserInfo } from "src/interfaces/user";
 
 interface IGatherProps {
 	projectid: any;
@@ -32,7 +31,6 @@ interface IGatherProps {
 
 const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 	const translate = useTranslate();
-	const { data: user } = useGetIdentity<UserInfo>();
 	const [opened, setOpened] = useState(false);
 	const [selected, setSelected] = useState(null);
 	const [gatherList, setGatherList] = useState<any>([]);
@@ -42,6 +40,9 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 
 	const apiResponse = useList({
 		resource: projectid ? `projects/${projectid}/gathers` : "",
+		pagination: {
+			mode: "client",
+		},
 	});
 
 	const handleGatherRefresh = useCallback(
@@ -186,6 +187,11 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 	} = useTable({
 		columns,
 		data: gatherList,
+		refineCoreProps: {
+			pagination: {
+				mode: "off",
+			},
+		},
 	});
 
 	useEffect(() => {
@@ -246,10 +252,7 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 						</Text>
 					</div>
 					<Link href={`/projects/${projectid}/gathers/create`}>
-						<Button
-							leftIcon={<IconSquarePlus />}
-							className={user?.app_role === "admin" ? "" : "hidden"}
-						>
+						<Button leftIcon={<IconSquarePlus />}>
 							{translate("actions.create")}
 						</Button>
 					</Link>
