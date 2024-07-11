@@ -168,11 +168,10 @@ def test_get_job_runs(client: TestClient, reseed_tables) -> None:
     response = client.get("/projects/1/job_runs/")
     assert response.status_code == 200
     job_runs = response.json()
-    assert len(job_runs) == 4
+    assert len(job_runs) == 5
     # Assert desc id
-    assert job_runs[1]["id"] == 3
-    assert job_runs[2]["id"] == 2
-    assert job_runs[3]["id"] == 1
+    assert job_runs[0]["id"] == 6
+    assert job_runs[4]["id"] == 1
 
     response = client.get("/projects/2/job_runs/")
     assert response.status_code == 200
