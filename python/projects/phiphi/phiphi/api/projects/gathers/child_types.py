@@ -8,6 +8,9 @@ from phiphi.api.projects.gathers.apify_facebook_comments import (
 from phiphi.api.projects.gathers.apify_facebook_posts import (
     schemas as facebook_post_schema,
 )
+from phiphi.api.projects.gathers.apify_tiktok_accounts_posts import (
+    schemas as tiktok_accounts_posts_schema,
+)
 from phiphi.api.projects.gathers.apify_tiktok_hashtags_posts import (
     schemas as tiktok_hashtags_posts_schema,
 )
@@ -21,6 +24,9 @@ CHILD_TYPES_MAP: dict[gather_schemas.ChildTypeName, Type[gather_schemas.GatherRe
     ),
     gather_schemas.ChildTypeName.apify_tiktok_hashtags_posts: (
         tiktok_hashtags_posts_schema.ApifyTikTokHashtagsPostsGatherResponse
+    ),
+    gather_schemas.ChildTypeName.apify_tiktok_accounts_posts: (
+        tiktok_accounts_posts_schema.ApifyTikTokAccountsPostsGatherResponse
     ),
 }
 
