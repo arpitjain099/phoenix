@@ -6,25 +6,15 @@ from phiphi.api.projects.gathers import schemas as gather_schemas
 
 
 def load_sample_raw_data(
-    source: gather_schemas.Source,
-    platform: gather_schemas.Platform,
-    data_type: gather_schemas.DataType,
+    child_type_name: gather_schemas.ChildTypeName,
 ) -> list[dict]:
-    """Return a sample raw data JSON blob for a given source, platform, and data type."""
-    if (
-        source == gather_schemas.Source.apify
-        and platform == gather_schemas.Platform.facebook
-        and data_type == gather_schemas.DataType.posts
-    ):
+    """Return a sample raw data JSON blob for a given gather child type."""
+    if child_type_name == gather_schemas.ChildTypeName.apify_facebook_posts:
         relative_path = "apify_sample_data/facebook_posts.json"
-    elif (
-        source == gather_schemas.Source.apify
-        and platform == gather_schemas.Platform.facebook
-        and data_type == gather_schemas.DataType.comments
-    ):
+    elif child_type_name == gather_schemas.ChildTypeName.apify_facebook_comments:
         relative_path = "apify_sample_data/facebook_comments.json"
     else:
-        raise NotImplementedError(f"{source=}, {platform=}, {data_type=} not supported.")
+        raise NotImplementedError(f"{child_type_name=} not supported.")
 
     base_path = pathlib.Path(__file__).parent
     full_path = base_path.joinpath(relative_path).resolve()

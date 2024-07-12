@@ -54,9 +54,7 @@ def mock_apify_scrape(
     """Read mock scraping data and return an iterator."""
     return iter(
         gather_utils.load_sample_raw_data(
-            source=gathers.schemas.Source.apify,
-            platform=gather.platform,
-            data_type=gather.data_type,
+            child_type_name=gather.child_type,
         )
     ), None
 

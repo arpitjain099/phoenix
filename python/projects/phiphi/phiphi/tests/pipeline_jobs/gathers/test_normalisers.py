@@ -16,9 +16,7 @@ def test_normaliser_facebook_posts(normalised_facebook_posts_df, facebook_posts_
     as this is an easy way to test multiple records (and tests in the usage context).
     """
     batch_json = utils.load_sample_raw_data(
-        source=schemas.Source.apify,
-        platform=schemas.Platform.facebook,
-        data_type=schemas.DataType.posts,
+        child_type_name=schemas.ChildTypeName.apify_facebook_posts
     )
 
     processed_df = normalise.normalise_batch(
@@ -42,9 +40,7 @@ def test_normaliser_facebook_comments(
     as this is an easy way to test multiple records (and tests in the usage context).
     """
     batch_json = utils.load_sample_raw_data(
-        source=schemas.Source.apify,
-        platform=schemas.Platform.facebook,
-        data_type=schemas.DataType.comments,
+        child_type_name=schemas.ChildTypeName.apify_facebook_comments,
     )
 
     processed_df = normalise.normalise_batch(
