@@ -280,7 +280,7 @@ def normalised_facebook_comments_df() -> pd.DataFrame:
     }
 
     df = pd.DataFrame(data)  # noqa: PD901
-    df["gather_id"] = 1
+    df["gather_id"] = 2
     df["gather_batch_id"] = 3
     df["gathered_at"] = pd.to_datetime("2024-04-01T12:00:00.000Z")
     df["source"] = gathers.schemas.Source.apify

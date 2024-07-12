@@ -83,6 +83,16 @@ def test_bq_pipeline_integration(session_context, reseed_tables):
         batch_size=batch_size,
     )
 
+    batches_df = pd.read_gbq(
+        f"SELECT * FROM {test_project_namespace}.{constants.GATHER_BATCHES_TABLE_NAME}"
+    )
+    assert len(batches_df) == 3
+
+    messages_df = pd.read_gbq(
+        f"SELECT * FROM {test_project_namespace}.{constants.GENERALISED_MESSAGES_TABLE_NAME}"
+    )
+    assert len(messages_df) == 25
+
     tabulate_flow.tabulate_flow(job_run_id=4, project_namespace=test_project_namespace)
 
     deduped_messages_df = pd.read_gbq(
@@ -100,6 +110,48 @@ def test_bq_pipeline_integration(session_context, reseed_tables):
         """
     )
     assert len(tabulated_messages_df) == 14
+
+    # Delete just the comments
+    gather_id_of_comments = example_gathers.facebook_comments_gather_example().id
+    gather_flow.delete_flow(
+        gather_id=gather_id_of_comments,
+        project_namespace=test_project_namespace,
+    )
+
+    # Checking that the comments are deleted from the batches
+    batches_df = pd.read_gbq(
+        f"SELECT * FROM {test_project_namespace}.{constants.GATHER_BATCHES_TABLE_NAME}"
+    )
+    assert len(batches_df) == 2
+    assert gather_id_of_comments not in batches_df["gather_id"].unique()
+
+    # Now the comments should be out of the generalised message table
+    messages_df = pd.read_gbq(
+        f"SELECT * FROM {test_project_namespace}.{constants.GENERALISED_MESSAGES_TABLE_NAME}"
+    )
+    assert len(messages_df) == 16
+    assert gather_id_of_comments not in messages_df["gather_id"].unique()
+
+    # and the deduplication should be the same as without the comments.
+    deduped_messages_df = pd.read_gbq(
+        f"""
+        SELECT *
+        FROM {test_project_namespace}.{constants.DEDUPLICATED_GENERALISED_MESSAGES_TABLE_NAME}
+        """
+    )
+    assert len(deduped_messages_df) == 8
+    assert gather_id_of_comments not in deduped_messages_df["gather_id"].unique()
+
+    # Tabulate without the comments
+    tabulate_flow.tabulate_flow(job_run_id=4, project_namespace=test_project_namespace)
+
+    tabulated_messages_df = pd.read_gbq(
+        f"""
+        SELECT *
+        FROM {test_project_namespace}.{constants.TABULATED_MESSAGES_TABLE_NAME}
+        """
+    )
+    assert len(tabulated_messages_df) == 8
 
     # Use this to break before deleting the dataset to manually inspect the data
     # assert False

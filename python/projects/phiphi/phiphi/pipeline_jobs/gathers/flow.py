@@ -5,7 +5,7 @@ import prefect
 
 from phiphi import constants
 from phiphi.api.projects import gathers
-from phiphi.pipeline_jobs.gathers import apify_scrape, deduplicate, normalise
+from phiphi.pipeline_jobs.gathers import apify_scrape, deduplicate, delete, normalise
 
 
 @prefect.flow(name="gather_flow")
@@ -32,6 +32,21 @@ def gather_flow(
     normalise.normalise_batches(
         gather=gather,
         job_run_id=job_run_id,
+        bigquery_dataset=project_namespace,
+    )
+    deduplicate.refresh_deduplicated_messages_tables(
+        bigquery_dataset=project_namespace,
+    )
+
+
+@prefect.flow(name="gather_delete_flow")
+def delete_flow(
+    gather_id: int,
+    project_namespace: str,
+) -> None:
+    """Flow which deletes gathered data."""
+    delete.delete_gathered_data(
+        gather_id=gather_id,
         bigquery_dataset=project_namespace,
     )
     deduplicate.refresh_deduplicated_messages_tables(
@@ -74,4 +89,13 @@ def create_deployments(
         tags=tags,
     )
 
-    return [task]
+    task_2 = delete_flow.deploy(
+        name=deployment_name_prefix + delete_flow.name,
+        work_pool_name=work_pool_name,
+        image=image,
+        build=build,
+        push=push,
+        tags=tags,
+    )
+
+    return [task, task_2]
