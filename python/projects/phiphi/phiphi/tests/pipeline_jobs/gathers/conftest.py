@@ -299,3 +299,60 @@ def normalised_facebook_comments_df() -> pd.DataFrame:
         df[column] = df[column].astype("datetime64[ms, UTC]")  # type: ignore[call-overload]
 
     return df
+
+
+@pytest.fixture
+def normalised_tiktok_accounts_posts_df() -> pd.DataFrame:
+    """Return the expected DataFrame based on the processed JSON data."""
+    data = {
+        "pi_platform_message_id": [
+            "id1",
+            "id2",
+            "id3",
+        ],
+        "pi_platform_message_author_id": [
+            "authorMetaId1",
+            "authorMetaId2",
+            "authorMetaId3",
+        ],
+        "pi_platform_message_author_name": ["bbcnews", "bbcnews", "bbcnews"],
+        "pi_platform_parent_message_id": [None, None, None],
+        "pi_platform_root_message_id": [None, None, None],
+        "pi_text": [
+            "US President Joe Biden mistakenly referred ... \\u201cPresident Putin\\u201d ...",
+            "... the son of Asia\\'s richest man, ... \\u00a0#India #Mumbai #IndianWedding ...",
+            "Do you think a deal can be made? #JuniorDoctors #JuniorDoctorStrikes #WesStreeting",
+        ],
+        "pi_platform_message_url": [
+            "https://www.tiktok.com/@bbcnews/video/webVideoUrl1",
+            "https://www.tiktok.com/@bbcnews/video/webVideoUrl2",
+            "https://www.tiktok.com/@bbcnews/video/webVideoUrl3",
+        ],
+        "platform_message_last_updated_at": [1720741311000, 1720731600000, 1720729800000],
+        "phoenix_platform_message_id": [
+            normalisers.anonymize("id1"),
+            normalisers.anonymize("id2"),
+            normalisers.anonymize("id3"),
+        ],
+        "phoenix_platform_message_author_id": [
+            normalisers.anonymize("authorMetaId1"),
+            normalisers.anonymize("authorMetaId2"),
+            normalisers.anonymize("authorMetaId3"),
+        ],
+        "phoenix_platform_parent_message_id": [None, None, None],
+        "phoenix_platform_root_message_id": [None, None, None],
+    }
+    normalised_tiktok_df = pd.DataFrame(data)
+    normalised_tiktok_df["gather_id"] = 3
+    normalised_tiktok_df["gather_batch_id"] = 3
+    normalised_tiktok_df["gathered_at"] = pd.to_datetime("2024-04-01T12:00:00.000Z")
+    normalised_tiktok_df["source"] = gathers.schemas.Source.apify
+    normalised_tiktok_df["platform"] = gathers.schemas.Platform.tiktok
+    normalised_tiktok_df["data_type"] = gathers.schemas.DataType.posts
+    normalised_tiktok_df["phoenix_processed_at"] = datetime.fromisoformat(
+        "2024-04-02T12:10:59.000Z"
+    )
+    for column in ["platform_message_last_updated_at", "gathered_at", "phoenix_processed_at"]:
+        normalised_tiktok_df[column] = normalised_tiktok_df[column].astype("datetime64[ms, UTC]")  # type: ignore[call-overload]
+
+    return normalised_tiktok_df
