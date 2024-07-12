@@ -54,3 +54,24 @@ def facebook_comments_gather_example() -> (
         latest_job_run=None,
         child_type=gathers.schemas.ChildTypeName.apify_facebook_comments,
     )
+
+
+def tiktok_accounts_posts_gather_example() -> (
+    gathers.apify_tiktok_accounts_posts.schemas.ApifyTikTokAccountsPostsGatherResponse
+):
+    """Example for ApifyTiktokAccountsGatherResponse schema."""
+    return gathers.apify_tiktok_accounts_posts.schemas.ApifyTikTokAccountsPostsGatherResponse(
+        name="Example",
+        account_username_list=["@unitednations", "@bbcnews"],
+        limit_posts_per_account=3,
+        id=3,
+        platform=gathers.schemas.Platform.tiktok,
+        data_type=gathers.schemas.DataType.posts,
+        source=gathers.schemas.Source.apify,
+        created_at=datetime.datetime.now(),
+        updated_at=datetime.datetime.now(),
+        project_id=1,
+        deleted_at=None,
+        latest_job_run=None,
+        child_type=gathers.schemas.ChildTypeName.apify_tiktok_accounts_posts,
+    )
