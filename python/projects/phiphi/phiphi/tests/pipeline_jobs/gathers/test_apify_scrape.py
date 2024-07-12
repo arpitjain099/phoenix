@@ -20,7 +20,20 @@ def manual_test_apify_scrape_and_batch_download():
     - ensure that a valid Apify token is set in the config - you should use your personal token not
       the org token ideally
     - change `gather` to the corresponding desired Apify actor to test
-    - run the function manually
+
+    To use with docker environment:
+    - check `python/projects/phiphi/docker_env.dev` for configuration
+    - set up the prefect environment see phiphi/README.md
+    - in terminal `make up`
+    - in new terminal `make bash_in_api`
+    - Run the function:
+    ```
+    python -c \
+        "from phiphi.tests.pipeline_jobs.gathers import test_apify_scrape; \
+        test_apify_scrape.manual_test_apify_scrape_and_batch_download()"
+    ```
+    - With default docker_env.dev the data will be in the location:
+        `/app/projects/phiphi/mock_bq_data/test_dataset/test_table.parquet`
     """
     gather = example_gathers.facebook_comments_gather_example()
     apify_scrape.apify_scrape_and_batch_download_results(
