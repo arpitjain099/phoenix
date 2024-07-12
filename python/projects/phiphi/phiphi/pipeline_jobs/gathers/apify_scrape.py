@@ -25,6 +25,9 @@ gather_apify_actor_map: dict[type[gathers.schemas.GatherResponse], str] = {
     gathers.apify_facebook_comments.schemas.ApifyFacebookCommentGatherResponse: (
         "apify/facebook-comments-scraper"
     ),
+    gathers.apify_tiktok_accounts_posts.schemas.ApifyTikTokAccountsPostsGatherResponse: (
+        "clockworks/tiktok-scraper"
+    ),
 }
 
 
