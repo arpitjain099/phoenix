@@ -198,7 +198,7 @@ def create_deployments(
     if override_work_pool_name:
         work_pool_name = override_work_pool_name
     task = flow_runner_flow.deploy(
-        name=deployment_name_prefix + "flow_runner_flow",
+        name=deployment_name_prefix + flow_runner_flow.name,
         work_pool_name=work_pool_name,
         image=image,
         build=build,
