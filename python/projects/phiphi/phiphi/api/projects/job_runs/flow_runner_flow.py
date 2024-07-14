@@ -81,6 +81,14 @@ async def start_flow_run(
             "gather_dict": job_params.model_dump(),
             "gather_child_type": job_params.child_type.value,
         }
+    elif job_type == job_runs.schemas.ForeignJobType.delete_gather_tabulate:
+        deployment_name = "delete_gather_tabulate_flow/delete_gather_tabulate_flow"
+        params = {
+            "project_id": project_id,
+            "job_source_id": job_source_id,
+            "job_run_id": job_run_id,
+            "project_namespace": project_namespace,
+        }
     else:
         raise NotImplementedError(f"Job type {job_type=} not implemented yet.")
 

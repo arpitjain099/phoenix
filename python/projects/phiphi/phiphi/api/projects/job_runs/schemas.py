@@ -23,6 +23,7 @@ class ForeignJobType(str, Enum):
     delete_gather = "delete_gather"
     tabulate = "tabulate"
     gather_classify_tabulate = "gather_classify_tabulate"
+    delete_gather_tabulate = "delete_gather_tabulate"
 
 
 class JobRunCreate(pydantic.BaseModel):
