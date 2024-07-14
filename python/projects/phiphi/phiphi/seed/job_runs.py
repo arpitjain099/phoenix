@@ -25,7 +25,7 @@ TEST_JOB_RUN_4 = schemas.JobRunCreate(
 )
 
 TEST_GATHER_DELETED_JOB_RUN = schemas.JobRunCreate(
-    foreign_id=2, foreign_job_type=schemas.ForeignJobType.gather_delete
+    foreign_id=2, foreign_job_type=schemas.ForeignJobType.delete_gather
 )
 
 

@@ -20,7 +20,7 @@ class ForeignJobType(str, Enum):
     """The type of job run."""
 
     gather = "gather"
-    gather_delete = "gather_delete"
+    delete_gather = "delete_gather"
     tabulate = "tabulate"
     gather_classify_tabulate = "gather_classify_tabulate"
 

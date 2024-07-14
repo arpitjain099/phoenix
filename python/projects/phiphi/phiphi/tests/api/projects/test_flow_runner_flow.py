@@ -36,8 +36,8 @@ from phiphi.api.projects.job_runs import crud, flow_runner_flow, schemas
         ),
         (
             2,
-            schemas.ForeignJobType.gather_delete,
-            "gather_delete_flow/gather_delete_flow",
+            schemas.ForeignJobType.delete_gather,
+            "delete_gather_flow/delete_gather_flow",
             True,
             schemas.Status.completed_sucessfully,
         ),

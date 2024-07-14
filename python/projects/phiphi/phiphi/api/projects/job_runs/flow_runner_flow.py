@@ -56,8 +56,8 @@ async def start_flow_run(
             "job_run_id": job_run_id,
             "project_namespace": project_namespace,
         }
-    elif job_type == job_runs.schemas.ForeignJobType.gather_delete:
-        deployment_name = "gather_delete_flow/gather_delete_flow"
+    elif job_type == job_runs.schemas.ForeignJobType.delete_gather:
+        deployment_name = "delete_gather_flow/delete_gather_flow"
         params = {
             "gather_id": job_source_id,
             "job_run_id": job_run_id,
