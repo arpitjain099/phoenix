@@ -66,6 +66,7 @@ class GatherResponse(GatherBase):
     project_id: int
     deleted_at: datetime.datetime | None = None
     latest_job_run: job_runs_schemas.JobRunResponse | None = None
+    delete_job_run: job_runs_schemas.JobRunResponse | None = None
     child_type: Annotated[
         ChildTypeName, pydantic.Field(description="The child type of the gather")
     ]

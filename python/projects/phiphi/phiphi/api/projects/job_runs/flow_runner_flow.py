@@ -15,13 +15,12 @@ from phiphi import (
     utils,
 )
 from phiphi.api.projects import gathers, job_runs
-from phiphi.types import PhiphiJobType
 
 
 @task
 async def start_flow_run(
     project_id: int,
-    job_type: PhiphiJobType,
+    job_type: job_runs.schemas.ForeignJobType,
     job_source_id: int,
     job_run_id: int,
 ) -> objects.FlowRun:
@@ -35,7 +34,7 @@ async def start_flow_run(
     """
     project_namespace = utils.get_project_namespace(project_id=project_id)
 
-    if job_type == "gather":
+    if job_type == job_runs.schemas.ForeignJobType.gather:
         with platform_db.get_session_context() as session:
             job_params = gathers.child_crud.get_child_gather(
                 session=session, project_id=project_id, gather_id=job_source_id
@@ -51,9 +50,16 @@ async def start_flow_run(
             "job_run_id": job_run_id,
             "project_namespace": project_namespace,
         }
-    elif job_type == "tabulate":
+    elif job_type == job_runs.schemas.ForeignJobType.tabulate:
         deployment_name = "tabulate_flow/tabulate_flow"
         params = {
+            "job_run_id": job_run_id,
+            "project_namespace": project_namespace,
+        }
+    elif job_type == job_runs.schemas.ForeignJobType.gather_delete:
+        deployment_name = "gather_delete_flow/gather_delete_flow"
+        params = {
+            "gather_id": job_source_id,
             "job_run_id": job_run_id,
             "project_namespace": project_namespace,
         }
@@ -137,7 +143,7 @@ def non_success_hook(flow: objects.Flow, flow_run: objects.FlowRun, state: objec
 )
 async def flow_runner_flow(
     project_id: int,
-    job_type: PhiphiJobType,
+    job_type: job_runs.schemas.ForeignJobType,
     job_source_id: int,
     job_run_id: int,
 ) -> None:

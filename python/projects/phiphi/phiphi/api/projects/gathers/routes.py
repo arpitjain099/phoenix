@@ -53,3 +53,16 @@ def get_gather_estimate(
         estimated_credit_cost=0,
         estimated_duration_minutes=0,
     )
+
+
+@router.delete(
+    "/projects/{project_id}/gathers/{gather_id}",
+    response_model=schemas.GatherResponse,
+    response_model_by_alias=False,
+)
+async def delete_gather(
+    project_id: int, gather_id: int, session: deps.SessionDep
+) -> schemas.GatherResponse:
+    """Delete a gather."""
+    gather_response = await crud.delete(session, project_id, gather_id)
+    return gather_response

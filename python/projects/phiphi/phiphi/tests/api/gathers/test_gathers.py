@@ -1,7 +1,14 @@
 """Test Gathers."""
+from datetime import datetime
+from unittest import mock
+
+import pytest
 from fastapi.testclient import TestClient
+from prefect.client.schemas import objects
 
 from phiphi.api.projects.gathers import crud
+from phiphi.api.projects.job_runs import crud as job_runs_crud
+from phiphi.api.projects.job_runs import schemas as job_run_schemas
 
 
 def test_get_gather_crud(client: TestClient, reseed_tables) -> None:
@@ -57,6 +64,7 @@ def test_get_gathers(client: TestClient, reseed_tables) -> None:
     response = client.get("/projects/1/gathers/")
     assert response.status_code == 200
     gathers = response.json()
+    # Currently this includes even the deleted gathers
     assert len(gathers) == 3
 
     response = client.get("/projects/2/gathers/")
@@ -73,3 +81,77 @@ def test_get_gathers_estimate(client: TestClient, reseed_tables) -> None:
     assert gather["id"] == 1
     assert gather["estimated_credit_cost"] == 0
     assert gather["estimated_duration_minutes"] == 0
+
+
+DELETED_TIME = "2024-04-01T12:00:01"
+
+
+@pytest.mark.freeze_time(DELETED_TIME)
+@mock.patch("phiphi.api.projects.job_runs.prefect_deployment.wrapped_run_deployment")
+def test_gather_delete(m_run_deployment, reseed_tables, client: TestClient, session) -> None:
+    """Test deleting a gather."""
+    # Need to add attributes to the mock object to avoid errors
+    mock_flow_run = mock.MagicMock(spec=objects.FlowRun)
+    mock_flow_run.id = "mock_uuid"
+    mock_flow_run.name = "mock_flow_run"
+    m_run_deployment.return_value = mock_flow_run
+    response = client.delete("/projects/1/gathers/1")
+    assert response.status_code == 200
+    gather = response.json()
+    assert gather["id"] == 1
+    assert gather["project_id"] == 1
+    assert gather["delete_job_run"] is not None
+    assert gather["delete_job_run"]["status"] == "in_queue"
+    assert gather["delete_job_run"]["created_at"] == DELETED_TIME
+    m_run_deployment.assert_called_once_with(
+        name="flow_runner_flow/flow_runner_flow",
+        parameters={
+            "project_id": 1,
+            "job_type": job_run_schemas.ForeignJobType.gather_delete,
+            "job_source_id": 1,
+            "job_run_id": gather["delete_job_run"]["id"],
+        },
+    )
+    # Because we need to get the status of the delete_job_run we don't filter for deleted gathers
+    # on a GET.
+    response = client.get("/projects/1/gathers/1")
+    assert response.status_code == 200
+    gather_2 = response.json()
+    assert gather == gather_2
+    # Test that a second delete job run is called on a deleted gather will return 400 as you can't
+    # have two job runs at the same time.
+    m_run_deployment.reset_mock()
+    response = client.delete("/projects/1/gathers/1")
+    assert response.status_code == 400
+    m_run_deployment.assert_not_called()
+
+    job_runs_crud.update_job_run(
+        session,
+        job_run_data=job_run_schemas.JobRunUpdateCompleted(
+            id=gather["delete_job_run"]["id"],
+            status=job_run_schemas.Status.completed_sucessfully,
+            completed_at=datetime.strptime(DELETED_TIME, "%Y-%m-%dT%H:%M:%S"),
+        ),
+    )
+
+    # Test that a second delete job run is called on a deleted gather when the delete job run is
+    # complete will run
+    # This is so that if the delete job run fails we can try again.
+    m_run_deployment.reset_mock()
+    response = client.delete("/projects/1/gathers/1")
+    assert response.status_code == 200
+    gather = response.json()
+    assert gather["id"] == 1
+    assert gather["project_id"] == 1
+    assert gather["delete_job_run"] is not None
+    assert gather["delete_job_run"]["status"] == "in_queue"
+    assert gather["delete_job_run"]["created_at"] == DELETED_TIME
+    m_run_deployment.assert_called_with(
+        name="flow_runner_flow/flow_runner_flow",
+        parameters={
+            "project_id": 1,
+            "job_type": job_run_schemas.ForeignJobType.gather_delete,
+            "job_source_id": 1,
+            "job_run_id": gather["delete_job_run"]["id"],
+        },
+    )

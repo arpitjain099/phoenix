@@ -79,7 +79,6 @@ def get_child_gather(
     db_gather = (
         session.query(gather_model.Gather)
         .filter(
-            gather_model.Gather.deleted_at.is_(None),
             gather_model.Gather.project_id == project_id,
             gather_model.Gather.id == gather_id,
         )

@@ -1,10 +1,14 @@
 """Crud functionality for job runs."""
+import logging
+from datetime import datetime
 from typing import Union
 
 from sqlalchemy.orm import Session
 
 from phiphi.api import exceptions
-from phiphi.api.projects.job_runs import models, schemas
+from phiphi.api.projects.job_runs import models, prefect_deployment, schemas
+
+logger = logging.getLogger(__name__)
 
 
 def check_valid_gather(db: Session, project_id: int, gather_id: int) -> bool:
@@ -116,3 +120,25 @@ def get_latest_job_run(
     if db_job_run is None:
         return None
     return schemas.JobRunResponse.model_validate(db_job_run)
+
+
+async def create_and_run_job_run(
+    db: Session, project_id: int, job_run_create: schemas.JobRunCreate
+) -> schemas.JobRunResponse:
+    """Create a new job run and run it."""
+    job_run = create_job_run(db, project_id, job_run_create)
+    try:
+        job_run = await prefect_deployment.start_deployment(
+            session=db, name="flow_runner_flow/flow_runner_flow", job_run=job_run
+        )
+    except Exception as e:
+        job_run = update_job_run(
+            db,
+            schemas.JobRunUpdateCompleted(
+                id=job_run.id,
+                status=schemas.Status.failed,
+                completed_at=datetime.now(),
+            ),
+        )
+        logger.error("Error running deployment", exc_info=e)
+    return job_run
