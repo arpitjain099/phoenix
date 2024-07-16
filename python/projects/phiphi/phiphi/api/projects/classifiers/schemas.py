@@ -1,8 +1,15 @@
 """Schemas for classifiers."""
 from datetime import datetime
+from enum import Enum
 from typing import Annotated
 
 import pydantic
+
+
+class ClassifierType(str, Enum):
+    """Classifier type enum."""
+
+    keyword_match = "keyword_match"
 
 
 class ClassifierBase(pydantic.BaseModel):
@@ -14,8 +21,10 @@ class ClassifierBase(pydantic.BaseModel):
     project_id: Annotated[
         int, pydantic.Field(description="The ID of the project which the Classifier is within")
     ]
-    name: Annotated[str, pydantic.Field(description="The name of the Classifier")]
-    type: Annotated[str, pydantic.Field(description="The type of the Classifier")]
+    classifier_name: Annotated[str, pydantic.Field(description="The name of the Classifier")]
+    classifier_type: Annotated[
+        ClassifierType, pydantic.Field(description="The type of the classifier")
+    ]
     params: Annotated[dict, pydantic.Field(description="The params of the Classifier")]
 
 
