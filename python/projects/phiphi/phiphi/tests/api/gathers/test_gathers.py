@@ -32,16 +32,17 @@ def test_get_gather(client: TestClient, reseed_tables) -> None:
     assert gather_1["project_id"] == 1
     assert gather_1["latest_job_run"]["id"] == 4
     assert gather_1["latest_job_run"]["status"] == "awaiting_start"
+    # Get of a gather should includes the child properties
+    assert gather_1["limit_posts_per_account"] == 1000
 
-    response_2 = client.get("/projects/2/gathers/3")
+    response_2 = client.get("/projects/2/gathers/4")
     assert response_2.status_code == 200
     gather_2 = response_2.json()
     assert gather_1["name"] != gather_2["name"]
-
-    assert gather_1["id"] == 1
-    assert gather_1["project_id"] == 1
-    assert gather_2["id"] == 3
+    assert gather_2["id"] == 4
     assert gather_2["project_id"] == 2
+    # Get of a gather should include the comment child properties
+    assert gather_2["limit_comments_per_post"] == 1000
 
     # Check that it is not always the first gather that is gotten
     response_3 = client.get("/projects/1/gathers/2")
