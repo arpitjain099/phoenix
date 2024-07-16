@@ -24,3 +24,20 @@ class Classifiers(ClassifiersBase):
     """Classifiers tables."""
 
     __tablename__ = "classifiers"
+
+
+class ClassesBase(platform_db.Base):
+    """Classes model."""
+
+    __abstract__ = True
+
+    id: orm.Mapped[int] = orm.mapped_column(primary_key=True)
+    project_id: orm.Mapped[int]
+    class_name: orm.Mapped[str]
+    class_description: orm.Mapped[str]
+
+
+class Classes(ClassesBase):
+    """Classes tables."""
+
+    __tablename__ = "classes"

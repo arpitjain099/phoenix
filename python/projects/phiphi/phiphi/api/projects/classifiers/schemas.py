@@ -41,3 +41,46 @@ class ClassifierDelete(pydantic.BaseModel):
     """Classifier delete schema."""
 
     id: int
+
+
+class ClassBase(pydantic.BaseModel):
+    """Class base schema.
+
+    Shared properties of all class schemas.
+    """
+
+    project_id: Annotated[
+        int, pydantic.Field(description="The ID of the project the Class is within")
+    ]
+    name: Annotated[str, pydantic.Field(description="The name of the Class")]
+    description: Annotated[str, pydantic.Field(description="The description of the Class")]
+
+
+class ClassCreate(ClassBase):
+    """Class create schema.
+
+    Properties to receive via API on creation.
+    """
+
+
+class ClassResponse(ClassBase):
+    """Class schema.
+
+    Properties to return to client.
+    """
+
+    id: int
+
+
+class ClassUpdate(pydantic.BaseModel):
+    """Class update schema."""
+
+    id: int
+    name: str | None = None
+    description: str | None = None
+
+
+class ClassDelete(pydantic.BaseModel):
+    """Class delete schema."""
+
+    id: int
