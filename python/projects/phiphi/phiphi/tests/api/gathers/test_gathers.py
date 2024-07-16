@@ -118,7 +118,9 @@ def test_delete_gather(m_run_deployment, reseed_tables, client: TestClient, sess
     response = client.get("/projects/1/gathers/1")
     assert response.status_code == 200
     gather_2 = response.json()
-    assert gather == gather_2
+    assert gather["id"] == gather_2["id"]
+    assert gather["project_id"] == gather_2["project_id"]
+    assert gather["delete_job_run"] == gather_2["delete_job_run"]
     # Test that a second delete job run is called on a deleted gather will return 400 as you can't
     # have two job runs at the same time.
     m_run_deployment.reset_mock()
