@@ -23,7 +23,11 @@ class ApifyTikTokHashtagsPostsGatherBase(gather_schemas.GatherBase):
     # not be returned from serialize_to_apify_input
     hashtag_list: list[str] = pydantic.Field(
         serialization_alias="hashtags",
-        description="List of hashtags to scrape TikTok videos for.",
+        description=(
+            "List of hashtags to scrape TikTok videos for. "
+            " It is recommended to use without # prefix but "
+            "there seems to be no difference when using with."
+        )
     )
     posts_created_after: Optional[str] = pydantic.Field(
         default=None,
