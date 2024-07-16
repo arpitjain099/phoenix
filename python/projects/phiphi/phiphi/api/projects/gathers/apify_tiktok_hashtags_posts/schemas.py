@@ -17,7 +17,7 @@ class ApifyTikTokHashtagsPostsGatherBase(gather_schemas.GatherBase):
     """Input schema for the Apify TikTok Scraper for hashtags."""
 
     limit_posts_per_hashtag: int = pydantic.Field(
-        1, serialization_alias="resultsPerPage", description="Limit results per hashtag"
+        serialization_alias="resultsPerPage", description="Limit results per hashtag"
     )
     # It is important that the name of the property is different from the alias other wise it will
     # not be returned from serialize_to_apify_input
