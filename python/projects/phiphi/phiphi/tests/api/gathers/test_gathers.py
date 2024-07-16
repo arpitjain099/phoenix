@@ -88,7 +88,7 @@ DELETED_TIME = "2024-04-01T12:00:01"
 
 @pytest.mark.freeze_time(DELETED_TIME)
 @mock.patch("phiphi.api.projects.job_runs.prefect_deployment.wrapped_run_deployment")
-def test_gather_delete(m_run_deployment, reseed_tables, client: TestClient, session) -> None:
+def test_delete_gather(m_run_deployment, reseed_tables, client: TestClient, session) -> None:
     """Test deleting a gather."""
     # Need to add attributes to the mock object to avoid errors
     mock_flow_run = mock.MagicMock(spec=objects.FlowRun)
@@ -107,7 +107,7 @@ def test_gather_delete(m_run_deployment, reseed_tables, client: TestClient, sess
         name="flow_runner_flow/flow_runner_flow",
         parameters={
             "project_id": 1,
-            "job_type": job_run_schemas.ForeignJobType.gather_delete,
+            "job_type": job_run_schemas.ForeignJobType.delete_gather,
             "job_source_id": 1,
             "job_run_id": gather["delete_job_run"]["id"],
         },
@@ -150,7 +150,7 @@ def test_gather_delete(m_run_deployment, reseed_tables, client: TestClient, sess
         name="flow_runner_flow/flow_runner_flow",
         parameters={
             "project_id": 1,
-            "job_type": job_run_schemas.ForeignJobType.gather_delete,
+            "job_type": job_run_schemas.ForeignJobType.delete_gather,
             "job_source_id": 1,
             "job_run_id": gather["delete_job_run"]["id"],
         },

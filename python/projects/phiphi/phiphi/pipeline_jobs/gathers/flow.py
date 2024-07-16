@@ -39,7 +39,7 @@ def gather_flow(
     )
 
 
-@prefect.flow(name="gather_delete_flow")
+@prefect.flow(name="delete_gather_flow")
 def delete_flow(
     gather_id: int,
     project_namespace: str,
