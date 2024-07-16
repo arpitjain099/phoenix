@@ -75,6 +75,21 @@ def test_patch_apify_facebook_posts(reseed_tables, client: TestClient) -> None:
         assert json_response[key] == value
 
 
+def test_patch_apify_facebook_posts_optional(reseed_tables, client: TestClient) -> None:
+    """Test patch apify facebook comment gather check optional."""
+    data = {
+        "limit_posts_per_account": 2,
+    }
+    project_id = 1
+    response = client.patch(f"/projects/{project_id}/gathers/apify_facebook_posts/1/", json=data)
+    json_response = response.json()
+    assert response.status_code == 200
+    expected_gather = apify_facebook_post_gather.TEST_APIFY_FACEBOOK_POST_GATHER_CREATE.dict()
+    expected_gather["limit_posts_per_account"] = 2
+    for key, value in expected_gather.items():
+        assert json_response[key] == value
+
+
 @pytest.mark.freeze_time(CREATED_TIME)
 def test_data_type_apify_facebook_post(reseed_tables, client: TestClient) -> None:
     """Test create apify facebook gather."""
