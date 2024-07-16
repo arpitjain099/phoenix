@@ -96,4 +96,24 @@ class ApifyFacebookCommentGatherCreate(
 
 
 class ApifyFacebookCommentGatherUpdate(gather_schemas.GatherUpdate):
-    """Apify Facebook Comments  Gather update schema."""
+    """Apify Facebook Comments Gather update schema.
+
+    Only properties that are set will be updated.
+    """
+
+    limit_comments_per_post: Optional[int] = pydantic.Field(
+        default=None,
+        description="Limit results per post",
+    )
+    post_url_list: Optional[List[UrlStr]] = pydantic.Field(
+        default=None,
+        description="List of Facebook post URLs to scrape comments from",
+    )
+    sort_comments_by: Optional[FacebookCommentSortOption] = pydantic.Field(
+        default=None,
+        description="Sorting option for comments",
+    )
+    include_comment_replies: Optional[bool] = pydantic.Field(
+        default=None,
+        description="If True, includes up to 3 levels of nested comments/replies",
+    )
