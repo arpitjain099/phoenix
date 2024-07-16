@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
+
 "use client";
 
 import { useCreate, useTranslate } from "@refinedev/core";
@@ -70,7 +72,7 @@ export default function GatherCreate(): JSX.Element {
 	} = useForm({
 		clearInputErrorOnChange: true,
 		initialValues: initialFormValues,
-		// validate: (values) => getValidationRules(values),
+		validate: (values) => getValidationRules(values),
 	});
 
 	// Define separate validation rules based on data type
@@ -184,12 +186,26 @@ export default function GatherCreate(): JSX.Element {
 			}
 			saveButtonProps={{ ...saveButtonProps, onClick: handleSave }}
 		>
+			<TextInput
+				mt="sm"
+				label={
+					<div className="flex items-center">
+						<Tooltip label={translate("gathers.fields.info.name")}>
+							<span className="flex">
+								<IconInfoCircle size={12} />
+							</span>
+						</Tooltip>
+						{translate("gathers.fields.input.name")}
+					</div>
+				}
+				{...getInputProps("name")}
+			/>
 			<Select
 				mt="lg"
 				label={translate("gathers.fields.source")}
 				data={[
 					{ label: translate("inputs.select"), value: "" },
-					{ label: "Apify", value: "apify" },
+					{ label: translate("gathers.fields.scraper"), value: "apify" },
 				]}
 				{...getInputProps("source")}
 			/>
@@ -227,20 +243,6 @@ export default function GatherCreate(): JSX.Element {
 				label={translate("gathers.fields.project_id")}
 				{...getInputProps("project_id")}
 				{...projectSelectProps}
-			/>
-			<TextInput
-				mt="sm"
-				label={
-					<div className="flex items-center">
-						<Tooltip label={translate("gathers.fields.info.name")}>
-							<span className="flex">
-								<IconInfoCircle size={12} />
-							</span>
-						</Tooltip>
-						{translate("gathers.fields.input.name")}
-					</div>
-				}
-				{...getInputProps("name")}
 			/>
 			{formValues.data_type === "posts" && (
 				<CreatePostsGatherForm
