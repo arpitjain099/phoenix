@@ -3,6 +3,7 @@ from typing import Type, TypeVar
 
 import sqlalchemy.orm
 
+from phiphi.api import exceptions
 from phiphi.api.projects import crud as project_crud
 from phiphi.api.projects.gathers import child_types
 from phiphi.api.projects.gathers import models as gather_model
@@ -87,6 +88,39 @@ def get_child_gather(
     if db_gather is None:
         return None
 
+    child_type = gather_schema.ChildTypeName(db_gather.child_type)
+    child_reponse_type = child_types.get_response_type(child_type)
+    return child_reponse_type.model_validate(db_gather)
+
+
+def update_child_gather(
+    session: sqlalchemy.orm.Session,
+    project_id: int,
+    gather_id: int,
+    request_schema: gather_schema.GatherUpdate,
+) -> child_types.AllChildTypesUnion | None:
+    """Update a child gather.
+
+    A generalised function to update a child gather. This function is used to update
+    child gathers for different platforms and data types.
+    """
+    db_gather = (
+        session.query(gather_model.Gather)
+        .filter(
+            gather_model.Gather.project_id == project_id,
+            gather_model.Gather.id == gather_id,
+        )
+        .first()
+    )
+    if db_gather is None:
+        raise exceptions.GatherNotFound()
+
+    for field in request_schema.dict(exclude_unset=True):
+        setattr(db_gather, field, request_schema.dict()[field])
+
+    session.add(db_gather)
+    session.commit()
+    session.refresh(db_gather)
     child_type = gather_schema.ChildTypeName(db_gather.child_type)
     child_reponse_type = child_types.get_response_type(child_type)
     return child_reponse_type.model_validate(db_gather)
