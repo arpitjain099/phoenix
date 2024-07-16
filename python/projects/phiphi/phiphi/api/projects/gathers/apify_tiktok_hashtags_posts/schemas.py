@@ -27,14 +27,14 @@ class ApifyTikTokHashtagsPostsGatherBase(gather_schemas.GatherBase):
             "List of hashtags to scrape TikTok videos for. "
             " It is recommended to use without # prefix but "
             "there seems to be no difference when using with."
-        )
+        ),
     )
     posts_created_after: Optional[str] = pydantic.Field(
         default=None,
         serialization_alias="oldestPostDate",
         description="Fetch posts created after this date (YYYY-MM-DD)",
     )
-    posts_created_since_no_days: Optional[int] = pydantic.Field(
+    posts_created_since_num_days: Optional[int] = pydantic.Field(
         default=None,
         serialization_alias="scrapeLastNDays",
         description=(
