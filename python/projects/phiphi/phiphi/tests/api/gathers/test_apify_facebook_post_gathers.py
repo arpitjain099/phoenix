@@ -6,6 +6,7 @@ from fastapi.testclient import TestClient
 
 from phiphi.api.projects import gathers
 from phiphi.api.projects.gathers import child_crud
+from phiphi.seed import apify_facebook_post_gather
 
 CREATED_TIME = "2024-04-01T12:00:01"
 UPDATE_TIME = "2024-04-01T12:00:02"
@@ -50,6 +51,28 @@ def test_create_apify_facebook_post_gather(reseed_tables, client: TestClient) ->
     assert gather["platform"] == "facebook"
     assert gather["data_type"] == "posts"
     assert gather["created_at"] == CREATED_TIME
+
+
+def test_patch_apify_facebook_posts(reseed_tables, client: TestClient) -> None:
+    """Test patch apify facebook comment gather."""
+    data = {
+        "name": "Updated apify gather",
+        "limit_posts_per_account": 1,
+        "account_url_list": ["https://buildup.org/2/"],
+        "only_posts_older_than": "2022-3-5",
+        "only_posts_newer_than": "2021-4-8",
+    }
+    # Check that it is not the same as the seed values
+    # just in case there are changes in the seed
+    expected_gather = apify_facebook_post_gather.TEST_APIFY_FACEBOOK_POST_GATHER_CREATE.dict()
+    for key, value in data.items():
+        assert expected_gather[key] != value
+    project_id = 1
+    response = client.patch(f"/projects/{project_id}/gathers/apify_facebook_posts/1/", json=data)
+    json_response = response.json()
+    assert response.status_code == 200
+    for key, value in data.items():
+        assert json_response[key] == value
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
