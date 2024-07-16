@@ -252,6 +252,7 @@
 			"updated_at": "تم التحديث في",
 			"started_processing_at": "بدأ المعالجة في",
 			"started_run_at": "بدأ التشغيل في",
+			"completed_at": "اكتملت في",
 			"input": {
 				"data": "إضافة منشورات فيسبوك التي ترغب في جمعها من",
 				"name": "اسم",

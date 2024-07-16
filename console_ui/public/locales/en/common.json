@@ -252,6 +252,7 @@
 			"updated_at": "Updated At",
 			"started_processing_at": "Started Processing At",
 			"started_run_at": "Started Run At",
+			"completed_at": "Completed At",
 			"input": {
 				"data": "Add facebook posts would you like to gather from",
 				"name": "Name",

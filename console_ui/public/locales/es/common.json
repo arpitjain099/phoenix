@@ -252,6 +252,7 @@
 			"updated_at": "Actualizado En",
 			"started_processing_at": "Comenzó el procesamiento a",
 			"started_run_at": "Iniciado a las",
+			"completed_at": "Completado a las",
 			"input": {
 				"data": "Añadir publicaciones de Facebook que le gustaría reunir de",
 				"name": "Nombre",
