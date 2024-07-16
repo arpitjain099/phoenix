@@ -90,6 +90,28 @@ def test_patch_apify_facebook_posts_optional(reseed_tables, client: TestClient) 
         assert json_response[key] == value
 
 
+def test_patch_apify_facebook_posts_invalid(reseed_tables, client: TestClient) -> None:
+    """Test patch apify facebook comment gather posts invalid.
+
+    It is important for the user experience that for "source" and "platform" we return a 422
+    otherwise it could be confusing.
+    """
+    data = {
+        # values that we shouldn't be able to set in the model
+        "source": "apify",
+        "platform": "facebook",
+        "data_type": "comments",
+        # Not in any schema
+        "not_included_allowed": 2,
+    }
+    project_id = 1
+    for key, value in data.items():
+        response = client.patch(
+            f"/projects/{project_id}/gathers/apify_facebook_posts/1/", json={key: value}
+        )
+        assert response.status_code == 422
+
+
 @pytest.mark.freeze_time(CREATED_TIME)
 def test_data_type_apify_facebook_post(reseed_tables, client: TestClient) -> None:
     """Test create apify facebook gather."""
