@@ -1,5 +1,5 @@
 """Child types."""
-from typing import Type
+from typing import Type, Union
 
 from phiphi.api.projects.gathers import schemas as gather_schemas
 from phiphi.api.projects.gathers.apify_facebook_comments import (
@@ -15,7 +15,18 @@ from phiphi.api.projects.gathers.apify_tiktok_hashtags_posts import (
     schemas as tiktok_hashtags_posts_schema,
 )
 
-CHILD_TYPES_MAP: dict[gather_schemas.ChildTypeName, Type[gather_schemas.GatherResponse]] = {
+##############################
+# Child Types
+#
+# IMPORTANT:
+# Add AllChildTypesUnion and CHILD_TYPES_MAP.
+##############################
+AllChildTypesUnion = Union[
+    facebook_comment_schema.ApifyFacebookCommentGatherResponse,
+    facebook_post_schema.ApifyFacebookPostGatherResponse,
+]
+
+CHILD_TYPES_MAP: dict[gather_schemas.ChildTypeName, Type[AllChildTypesUnion]] = {
     gather_schemas.ChildTypeName.apify_facebook_comments: (
         facebook_comment_schema.ApifyFacebookCommentGatherResponse
     ),
@@ -33,7 +44,7 @@ CHILD_TYPES_MAP: dict[gather_schemas.ChildTypeName, Type[gather_schemas.GatherRe
 
 def get_response_type(
     child_type_name: gather_schemas.ChildTypeName,
-) -> Type[gather_schemas.GatherResponse]:
+) -> Type[AllChildTypesUnion]:
     """Get response type.
 
     Args:
