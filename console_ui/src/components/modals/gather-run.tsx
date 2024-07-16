@@ -96,7 +96,7 @@ const GatherRunModal: React.FC<Props> = ({
 								{gatherDetail?.source}
 							</Text>
 							<Text className="text-base text-neutral-500 font-normal">
-								{translate("gathers.fields.source")}
+								{translate("gathers.fields.source.label")}
 							</Text>
 						</div>
 						<div className="w-1/2 flex flex-col">
