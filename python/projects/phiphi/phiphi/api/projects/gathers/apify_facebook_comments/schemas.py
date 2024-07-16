@@ -32,7 +32,6 @@ class ApifyFacebookCommentGatherBase(gather_schemas.GatherBase):
     """
 
     limit_comments_per_post: int = pydantic.Field(
-        25,
         serialization_alias="resultsLimit",
         description="Limit results per post; defaults to 50 if not set",
     )

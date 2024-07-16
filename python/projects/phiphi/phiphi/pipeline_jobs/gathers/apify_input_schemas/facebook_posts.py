@@ -13,7 +13,7 @@ class ApifyFacebookPostsInput(pydantic.BaseModel):
     """
 
     results_per_url_limit: int = pydantic.Field(
-        25, serialization_alias="resultsLimit", description="Limit results per account"
+        serialization_alias="resultsLimit", description="Limit results per account"
     )
     account_urls: List[UrlStr] = pydantic.Field(
         serialization_alias="startUrls",
