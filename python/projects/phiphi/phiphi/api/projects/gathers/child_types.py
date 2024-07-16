@@ -24,6 +24,7 @@ from phiphi.api.projects.gathers.apify_tiktok_hashtags_posts import (
 AllChildTypesUnion = Union[
     facebook_comment_schema.ApifyFacebookCommentGatherResponse,
     facebook_post_schema.ApifyFacebookPostGatherResponse,
+    tiktok_hashtags_posts_schema.ApifyTikTokHashtagsPostsGatherResponse,
 ]
 
 CHILD_TYPES_MAP: dict[gather_schemas.ChildTypeName, Type[AllChildTypesUnion]] = {
