@@ -32,18 +32,18 @@ class ApifyTikTokAccountsPostsGatherBase(gather_schemas.GatherBase):
         default=None,
         serialization_alias="scrapeLastNDays",
         description=(
-            "Specify how old the scraped videos should be (in days)."
-            " Putting 1 will get you only today's posts, 2 - yesterday's and today's, and so on."
-            " If the Scrape videos newer than field above was set,"
-            " the most recent videos will be scraped."
+            "Specify how old the scraped videos should be (in days). "
+            "Putting 1 will get you only today's posts, 2 - yesterday's and today's, and so on. "
+            "If the Scrape videos newer than field above was set, "
+            "the most recent videos will be scraped. "
         ),
     )
     proxy_country_to_gather_from: Optional[str] = pydantic.Field(
         default=None,
         serialization_alias="proxyCountryCode",
         description=(
-            "Country to use for the proxy to gather from."
-            " If this is set a RESIDENTIAL group will be used and will increase the price."
+            "Country to use for the proxy to gather from. "
+            "If this is set a RESIDENTIAL group will be used and will increase the price. "
         ),
     )
 
