@@ -49,3 +49,26 @@ def normalise_single_facebook_comments_json(json_blob: Dict) -> Dict:
         "phoenix_platform_parent_message_id": anonymize(parent_message_id),
         "phoenix_platform_root_message_id": anonymize(json_blob["facebookId"]),
     }
+
+
+def normalise_single_tiktok_posts_json(json_blob: Dict) -> Dict:
+    """Extract fields from a single TikTok post JSON blob to normalized form.
+
+    This normaliser can be used for all gathers that use the clockwork/tiktok-scraper with the
+    `searchSection` input as `/video`. Ref:
+    https://apify.com/clockworks/tiktok-scraper/input-schema
+    """
+    return {
+        "pi_platform_message_id": json_blob["id"],
+        "pi_platform_message_author_id": json_blob["authorMeta"]["id"],
+        "pi_platform_message_author_name": json_blob["authorMeta"]["name"],
+        "pi_platform_parent_message_id": None,
+        "pi_platform_root_message_id": None,
+        "pi_text": json_blob["text"],
+        "pi_platform_message_url": json_blob["webVideoUrl"],
+        "platform_message_last_updated_at": datetime.fromisoformat(json_blob["createTimeISO"]),
+        "phoenix_platform_message_id": anonymize(json_blob["id"]),
+        "phoenix_platform_message_author_id": anonymize(json_blob["authorMeta"]["id"]),
+        "phoenix_platform_parent_message_id": None,
+        "phoenix_platform_root_message_id": None,
+    }

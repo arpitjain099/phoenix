@@ -14,9 +14,7 @@ from phiphi.pipeline_jobs.gathers import apify_scrape, normalise, normalisers, u
 def test_normalise_batch(normalised_facebook_posts_df, facebook_posts_gather_fixture):
     """Test normalise_batch function."""
     batch_json = utils.load_sample_raw_data(
-        source=schemas.Source.apify,
-        platform=schemas.Platform.facebook,
-        data_type=schemas.DataType.posts,
+        child_type_name=schemas.ChildTypeName.apify_facebook_posts
     )
 
     processed_df = normalise.normalise_batch(
