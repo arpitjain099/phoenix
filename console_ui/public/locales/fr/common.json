@@ -234,7 +234,6 @@
 		},
 		"fields": {
 			"id": "ID",
-			"source": "Rassembler les données de",
 			"platform": "Plateforme de médias sociaux",
 			"data_type": "Type de données des médias sociaux",
 			"only_posts_older_than": "Publications créées avant",
@@ -247,12 +246,15 @@
 			"include_comment_replies": "Réponses aux commentaires",
 			"sort_comments_by": "Trier les commentaires par",
 			"name": "Nom",
-			"scraper": "Extracteur de données web (Apify)",
 			"created_at": "Créé à",
 			"updated_at": "Mis à jour à",
 			"started_processing_at": "Début du traitement à",
 			"started_run_at": "Démarré à",
 			"completed_at": "Terminé à",
+			"source": {
+				"label": "Rassembler les données de",
+				"apify": "Extracteur de données web (Apify)"
+			},
 			"input": {
 				"data": "Ajouter les publications Facebook que vous souhaitez recueillir de",
 				"name": "Nom",

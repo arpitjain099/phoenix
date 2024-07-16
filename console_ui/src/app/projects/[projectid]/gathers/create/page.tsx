@@ -202,10 +202,10 @@ export default function GatherCreate(): JSX.Element {
 			/>
 			<Select
 				mt="lg"
-				label={translate("gathers.fields.source")}
+				label={translate("gathers.fields.source.label")}
 				data={[
 					{ label: translate("inputs.select"), value: "" },
-					{ label: translate("gathers.fields.scraper"), value: "apify" },
+					{ label: translate("gathers.fields.source.apify"), value: "apify" },
 				]}
 				{...getInputProps("source")}
 			/>
