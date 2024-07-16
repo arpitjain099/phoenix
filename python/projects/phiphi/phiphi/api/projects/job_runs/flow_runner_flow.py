@@ -63,8 +63,27 @@ async def start_flow_run(
             "job_run_id": job_run_id,
             "project_namespace": project_namespace,
         }
+    elif job_type == job_runs.schemas.ForeignJobType.gather_classify_tabulate:
+        with platform_db.get_session_context() as session:
+            job_params = gathers.child_crud.get_child_gather(
+                session=session, project_id=project_id, gather_id=job_source_id
+            )
+        if job_params is None:
+            raise ValueError(
+                f"Gather with {project_id=}, {job_type=}, {job_source_id=} not found."
+            )
+        deployment_name = "gather_classify_tabulate_flow/gather_classify_tabulate_flow"
+        params = {
+            "project_id": project_id,
+            "job_source_id": job_source_id,
+            "job_run_id": job_run_id,
+            "project_namespace": project_namespace,
+            "gather_dict": job_params.model_dump(),
+            "gather_child_type": job_params.child_type.value,
+        }
     else:
         raise NotImplementedError(f"Job type {job_type=} not implemented yet.")
+
     job_run_flow: objects.FlowRun = await deployments.run_deployment(
         name=deployment_name,
         parameters=params,
@@ -197,7 +216,7 @@ def create_deployments(
     if override_work_pool_name:
         work_pool_name = override_work_pool_name
     task = flow_runner_flow.deploy(
-        name=deployment_name_prefix + "flow_runner_flow",
+        name=deployment_name_prefix + flow_runner_flow.name,
         work_pool_name=work_pool_name,
         image=image,
         build=build,

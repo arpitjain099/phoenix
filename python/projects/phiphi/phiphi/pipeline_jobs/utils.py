@@ -3,8 +3,34 @@ import os
 import re
 
 import pandas as pd
+from prefect import task
+from prefect.deployments import deployments
 
 from phiphi import config
+from phiphi.api.projects import job_runs
+
+
+@task
+async def run_flow_deployment_as_subflow(
+    deployment_name: str,
+    flow_params: dict,
+    project_id: int,
+    job_type: job_runs.schemas.ForeignJobType,
+    job_source_id: int,
+    job_run_id: int,
+) -> None:
+    """Run a Prefect flow as a subflow."""
+    await deployments.run_deployment(
+        name=deployment_name,
+        parameters=flow_params,
+        as_subflow=True,
+        tags=[
+            f"project_id:{project_id}",
+            f"job_type:{job_type}",
+            f"job_source_id:{job_source_id}",
+            f"job_run_id:{job_run_id}",
+        ],
+    )
 
 
 def write_data(
