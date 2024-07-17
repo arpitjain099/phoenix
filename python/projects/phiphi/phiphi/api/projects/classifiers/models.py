@@ -37,9 +37,10 @@ class ClassesBase(platform_db.Base):
     project_id: orm.Mapped[int]
     class_name: orm.Mapped[str]
     class_description: orm.Mapped[str]
+    last_updated_at: orm.Mapped[datetime.datetime]
 
 
-class Classes(ClassesBase):
+class Classes(ClassesBase, base_models.TimestampModel):
     """Classes tables."""
 
     __tablename__ = "classes"

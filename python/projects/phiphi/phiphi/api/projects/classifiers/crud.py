@@ -69,7 +69,7 @@ def create_class(
     session: sqlalchemy.orm.Session, class_: schemas.ClassCreate
 ) -> schemas.ClassResponse:
     """Create a new class."""
-    db_class = models.Classes(**class_.dict())
+    db_class = models.Classes(**class_.dict(), last_updated_at=datetime.now())
     session.add(db_class)
     session.commit()
     session.refresh(db_class)
@@ -111,6 +111,7 @@ def update_class(
     if db_class:
         for field, value in class_.dict(exclude={"id"}).items():
             setattr(db_class, field, value)
+        db_class.last_updated_at = datetime.now()
         session.commit()
         session.refresh(db_class)
     return schemas.ClassResponse.model_validate(db_class)
