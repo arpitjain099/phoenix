@@ -27,7 +27,7 @@ def upgrade() -> None:
     op.create_table(
         TABLE_NAME,
         sa.Column("id", sa.Integer(), nullable=False),
-        sa.Column("description", sa.String(), nullable=False),
+        sa.Column("name", sa.String(), nullable=False),
         sa.Column("project_id", sa.Integer(), nullable=False),
         sa.Column("source", sa.String(), nullable=False),
         sa.Column("platform", sa.String(), nullable=False),
