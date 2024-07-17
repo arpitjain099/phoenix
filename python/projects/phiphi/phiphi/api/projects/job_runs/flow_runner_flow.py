@@ -118,7 +118,7 @@ def job_run_update_started(job_run_id: int) -> None:
         id=job_run_id,
     )
     with platform_db.get_session_context() as session:
-        job_runs.crud.update_job_run(db=session, job_run_data=job_run_update_processing)
+        job_runs.crud.update_job_run(session=session, job_run_data=job_run_update_processing)
 
 
 @task
@@ -136,7 +136,7 @@ def update_job_run_with_status(job_run_id: int, status: job_runs.schemas.Status)
     """Update the job_runs table with the given status."""
     job_run_update_completed = job_runs.schemas.JobRunUpdateCompleted(id=job_run_id, status=status)
     with platform_db.get_session_context() as session:
-        job_runs.crud.update_job_run(db=session, job_run_data=job_run_update_completed)
+        job_runs.crud.update_job_run(session=session, job_run_data=job_run_update_completed)
 
 
 def get_status_from_flow_run(flow_run: objects.FlowRun) -> job_runs.schemas.Status:

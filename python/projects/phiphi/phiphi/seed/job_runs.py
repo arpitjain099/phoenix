@@ -38,10 +38,10 @@ def create_deleted_job_run(
 ) -> None:
     """Create a deleted job run."""
     job_run_response = crud.create_job_run(
-        db=session, project_id=project_id, job_run_create=job_run_create
+        session=session, project_id=project_id, job_run_create=job_run_create
     )
     crud.update_job_run(
-        db=session,
+        session=session,
         job_run_data=schemas.JobRunUpdateCompleted(
             id=job_run_response.id,
             completed_at=job_run_response.created_at,
@@ -62,9 +62,11 @@ def seed_test_job_runs(session: Session) -> None:
     job_runs_project_1 = [TEST_JOB_RUN, TEST_JOB_RUN_2, TEST_JOB_RUN_4, TEST_JOB_RUN_5]
 
     for job_run in job_runs_project_1:
-        job_run_response = crud.create_job_run(db=session, project_id=1, job_run_create=job_run)
+        job_run_response = crud.create_job_run(
+            session=session, project_id=1, job_run_create=job_run
+        )
         crud.update_job_run(
-            db=session,
+            session=session,
             job_run_data=schemas.JobRunUpdateCompleted(
                 id=job_run_response.id,
                 completed_at=job_run_response.created_at,
@@ -74,8 +76,8 @@ def seed_test_job_runs(session: Session) -> None:
 
     # Create a second gather run for gather 1
     # This is in status awaiting_start
-    crud.create_job_run(db=session, project_id=1, job_run_create=TEST_JOB_RUN)
+    crud.create_job_run(session=session, project_id=1, job_run_create=TEST_JOB_RUN)
 
-    crud.create_job_run(db=session, project_id=2, job_run_create=TEST_JOB_RUN_3)
+    crud.create_job_run(session=session, project_id=2, job_run_create=TEST_JOB_RUN_3)
     # Deleted job for gather
     create_deleted_job_run(session, 1, TEST_GATHER_DELETED_JOB_RUN)
