@@ -12,6 +12,9 @@ from phiphi.api.projects.gathers.apify_facebook_comments import (
 from phiphi.api.projects.gathers.apify_facebook_posts import (
     models as apify_facebook_posts_models,  # noqa: F401,
 )
+from phiphi.api.projects.gathers.apify_tiktok_accounts_posts import (
+    models as apify_tiktok_accounts_posts_models,  # noqa: F401,
+)
 from phiphi.api.projects.job_runs import models as job_runs_models  # noqa: F401
 from phiphi.api.users import models as user_models  # noqa: F401
 from phiphi.api.workspaces import models as workspace_models  # noqa: F401
