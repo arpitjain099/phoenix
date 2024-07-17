@@ -1,5 +1,6 @@
 """Child types."""
-from typing import Any, Type, Union
+import dataclasses
+from typing import Type, Union
 
 from phiphi.api.projects.gathers import schemas as gather_schemas
 from phiphi.api.projects.gathers.apify_facebook_comments import (
@@ -43,22 +44,37 @@ CHILD_TYPES_MAP: dict[gather_schemas.ChildTypeName, Type[AllChildTypesUnion]] = 
     ),
 }
 
-CHILD_TYPES_MAP_CREATE_DEFAULTS: dict[gather_schemas.ChildTypeName, dict[str, str]] = {
-    gather_schemas.ChildTypeName.apify_facebook_posts: {
-        "source": gather_schemas.Source.apify,
-        "platform": gather_schemas.Platform.facebook,
-        "data_type": gather_schemas.DataType.posts,
-    },
-    gather_schemas.ChildTypeName.apify_facebook_comments: {
-        "source": gather_schemas.Source.apify,
-        "platform": gather_schemas.Platform.facebook,
-        "data_type": gather_schemas.DataType.comments,
-    },
-    gather_schemas.ChildTypeName.apify_tiktok_accounts_posts: {
-        "source": gather_schemas.Source.apify,
-        "platform": gather_schemas.Platform.tiktok,
-        "data_type": gather_schemas.DataType.posts,
-    },
+
+@dataclasses.dataclass
+class CreateDefaults:
+    """Create defaults for a child gather."""
+
+    source: gather_schemas.Source
+    platform: gather_schemas.Platform
+    data_type: gather_schemas.DataType
+
+
+CHILD_TYPES_MAP_CREATE_DEFAULTS: dict[gather_schemas.ChildTypeName, CreateDefaults] = {
+    gather_schemas.ChildTypeName.apify_facebook_comments: CreateDefaults(
+        source=gather_schemas.Source.apify,
+        platform=gather_schemas.Platform.facebook,
+        data_type=gather_schemas.DataType.comments,
+    ),
+    gather_schemas.ChildTypeName.apify_facebook_posts: CreateDefaults(
+        source=gather_schemas.Source.apify,
+        platform=gather_schemas.Platform.facebook,
+        data_type=gather_schemas.DataType.posts,
+    ),
+    gather_schemas.ChildTypeName.apify_tiktok_hashtags_posts: CreateDefaults(
+        source=gather_schemas.Source.apify,
+        platform=gather_schemas.Platform.tiktok,
+        data_type=gather_schemas.DataType.posts,
+    ),
+    gather_schemas.ChildTypeName.apify_tiktok_accounts_posts: CreateDefaults(
+        source=gather_schemas.Source.apify,
+        platform=gather_schemas.Platform.tiktok,
+        data_type=gather_schemas.DataType.posts,
+    ),
 }
 
 
@@ -83,14 +99,14 @@ def get_response_type(
 
 def get_create_defaults(
     child_type_name: gather_schemas.ChildTypeName,
-) -> dict[str, Any]:
+) -> CreateDefaults:
     """Get create defaults for a child gather.
 
     Args:
         child_type_name (gather_schemas.ChildTypeName): Gather child type
 
     Returns:
-        dict[str, str]: Create defaults for the child type.
+        CreateDefaults: Create defaults for the child type.
     """
     if child_type_name not in CHILD_TYPES_MAP_CREATE_DEFAULTS:
         raise ValueError(
