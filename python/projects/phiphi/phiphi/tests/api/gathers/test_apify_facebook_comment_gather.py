@@ -6,6 +6,7 @@ from fastapi.testclient import TestClient
 
 from phiphi.api.projects import gathers
 from phiphi.api.projects.gathers import child_crud
+from phiphi.seed import apify_facebook_comments
 
 CREATED_TIME = "2024-04-01T12:00:01"
 UPDATE_TIME = "2024-04-01T12:00:02"
@@ -74,6 +75,46 @@ def test_data_type_apify_facebook_comment(reseed_tables, client: TestClient) -> 
     json_response = response.json()
     assert response.status_code == 200
     assert json_response["data_type"] == "comments"
+
+
+def test_patch_apify_facebook_comment(reseed_tables, client: TestClient) -> None:
+    """Test patch apify facebook comment gather."""
+    data = {
+        "name": "Updated apify gather",
+        "limit_comments_per_post": 1,
+        "sort_comments_by": "most_relevant",
+        "post_url_list": ["https://buildup.org/2/"],
+        "include_comment_replies": True,
+    }
+    # Check that it is not the same as the seed values
+    # just in case there are changes in the seed
+    expected_gather = apify_facebook_comments.TEST_APIFY_FACEBOOK_COMMENT_GATHER_CREATE.dict()
+    for key, value in data.items():
+        assert expected_gather[key] != value
+    project_id = 2
+    response = client.patch(
+        f"/projects/{project_id}/gathers/apify_facebook_comments/4/", json=data
+    )
+    json_response = response.json()
+    assert response.status_code == 200
+    for key, value in data.items():
+        assert json_response[key] == value
+
+
+def test_patch_apify_facebook_comment_invalid(reseed_tables, client: TestClient) -> None:
+    """Test patch apify facebook comment gather invalid."""
+    data = {
+        "source": "apify",
+        "platform": "facebook",
+        "data_type": "comments",
+        "not_included_allowed": "not_allowed",
+    }
+    project_id = 2
+    for key, value in data.items():
+        response = client.patch(
+            f"/projects/{project_id}/gathers/apify_facebook_comments/4/", json={key: value}
+        )
+        assert response.status_code == 422
 
 
 def test_serialize_facebook_comment_gather_response_with_all_fields():

@@ -93,6 +93,15 @@ class GatherCreate(GatherBase):
 class GatherUpdate(pydantic.BaseModel):
     """Gather update schema."""
 
+    name: Annotated[str | None, pydantic.Field(default=None, description="The name of the gather")]
+
+    class Config:
+        """Config."""
+
+        # Don't allow extra fields on the update so that if a user tries to update a field that is
+        # not allowed they are given an error.
+        extra = pydantic.Extra.forbid
+
 
 class GatherEstimate(pydantic.BaseModel):
     """Gather estimate schema."""
