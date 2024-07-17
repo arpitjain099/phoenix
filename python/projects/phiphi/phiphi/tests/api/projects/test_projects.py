@@ -264,7 +264,7 @@ def test_project_with_latest_job_run(client: TestClient, reseed_tables) -> None:
     project = response.json()
     assert project["last_job_run_completed_at"] == "2024-04-01T12:00:01"
     # The job_run that is completed is not the same as the latest_job_run
-    assert project["latest_job_run"]["id"] == 6
+    assert project["latest_job_run"]["id"] == 7
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
@@ -275,4 +275,4 @@ def test_project_with_latest_job_run_2(client: TestClient, reseed_tables) -> Non
     project = response.json()
     assert project["last_job_run_completed_at"] is None
     # This job run is not completed and is the latest
-    assert project["latest_job_run"]["id"] == 5
+    assert project["latest_job_run"]["id"] == 6
