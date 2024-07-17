@@ -16,7 +16,7 @@ def facebook_posts_gather_example() -> (
             "https://www.facebook.com/unitednations/",
         ],
         posts_created_after="2024-04-04",
-        only_posts_newer_than="2024-01-03",
+        posts_created_before="2024-01-03",
         id=1,
         platform=gathers.schemas.Platform.facebook,
         data_type=gathers.schemas.DataType.posts,

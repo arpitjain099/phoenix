@@ -19,4 +19,4 @@ class ApifyFacebookPostGather(gather_models.Gather):
     limit_posts_per_account: orm.Mapped[int]
     account_url_list: orm.Mapped[str] = orm.mapped_column(base_models.JSONEncodedValue)
     posts_created_after: orm.Mapped[Optional[str]]
-    only_posts_newer_than: orm.Mapped[Optional[str]]
+    posts_created_before: orm.Mapped[Optional[str]]
