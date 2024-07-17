@@ -267,8 +267,8 @@
 				"edit_input_label": "Editar Elemento"
 			},
 			"info": {
-				"posts_created_after": "La fecha desde la cual recopilar datos. Esto será a las 0:00 del día configurado.",
-				"posts_created_before": "La fecha hasta la cual recopilar datos. Esto será a las 0:00 del día configurado.",
+				"posts_created_after": "Reúna publicaciones creadas después de las 0:00 del día configurado.",
+				"posts_created_before": "Reúne publicaciones creadas antes de las 24:00 del día configurado.",
 				"name": "Nombre corto para que sepas cuál era el objetivo de la reunión.",
 				"limit_posts_per_account": "Limita el número de publicaciones que se recopilan para cada cuenta.",
 				"limit_comments_per_post": "Limitar el número de comentarios recopilados por cada publicación.",

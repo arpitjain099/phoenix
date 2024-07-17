@@ -267,8 +267,8 @@
 				"edit_input_label": "Edit Item"
 			},
 			"info": {
-				"posts_created_after": "The date to gather data from. This will be 0:00 of the day configured.",
-				"posts_created_before": "The date to gather data till. This will be 0:00 of the day configured.",
+				"posts_created_after": "Gather posts created after 0:00 of the day configured.",
+				"posts_created_before": "Gather posts created before 24:00 of the day configured.",
 				"name": "Short name so that you know what the goal of the gather was.",
 				"limit_posts_per_account": "Limit the number of posts that are collected for each account.",
 				"limit_comments_per_post": "Limit the number of comments that are collected for each post.",
