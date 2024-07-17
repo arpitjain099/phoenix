@@ -17,30 +17,30 @@ def create_workspace(
         raise Exception("Slug already exists")
 
     workspace.name = slugify.slugify(workspace.name)
-    db_workspace = models.Workspace(**workspace.dict())
-    session.add(db_workspace)
+    orm_workspace = models.Workspace(**workspace.dict())
+    session.add(orm_workspace)
     session.commit()
-    session.refresh(db_workspace)
-    return schemas.WorkspaceResponse.model_validate(db_workspace)
+    session.refresh(orm_workspace)
+    return schemas.WorkspaceResponse.model_validate(orm_workspace)
 
 
 def get_workspace(session: sqlalchemy.orm.Session, slug: str) -> schemas.WorkspaceResponse | None:
     """Get an workspace."""
-    db_workspace = session.query(models.Workspace).filter(models.Workspace.slug == slug).first()
+    orm_workspace = session.query(models.Workspace).filter(models.Workspace.slug == slug).first()
 
-    if db_workspace is None:
+    if orm_workspace is None:
         return None
-    return schemas.WorkspaceResponse.model_validate(db_workspace)
+    return schemas.WorkspaceResponse.model_validate(orm_workspace)
 
 
 def get_workspace_by_slug(
     session: sqlalchemy.orm.Session, slug: str
 ) -> schemas.WorkspaceResponse | None:
     """Get an workspace."""
-    db_workspace = session.query(models.Workspace).filter(models.Workspace.slug == slug).first()
-    if db_workspace is None:
+    orm_workspace = session.query(models.Workspace).filter(models.Workspace.slug == slug).first()
+    if orm_workspace is None:
         return None
-    return schemas.WorkspaceResponse.model_validate(db_workspace)
+    return schemas.WorkspaceResponse.model_validate(orm_workspace)
 
 
 def get_workspaces(
@@ -58,14 +58,14 @@ def update_workspace(
     session: sqlalchemy.orm.Session, workspace_id: int, workspace: schemas.WorkspaceUpdate
 ) -> schemas.WorkspaceResponse | None:
     """Update an workspace."""
-    db_workspace = session.get(models.Workspace, workspace_id)
-    if db_workspace is None:
+    orm_workspace = session.get(models.Workspace, workspace_id)
+    if orm_workspace is None:
         return None
     for field, value in workspace.dict(exclude_unset=True).items():
-        setattr(db_workspace, field, value)
+        setattr(orm_workspace, field, value)
     session.commit()
-    session.refresh(db_workspace)
-    return schemas.WorkspaceResponse.model_validate(db_workspace)
+    session.refresh(orm_workspace)
+    return schemas.WorkspaceResponse.model_validate(orm_workspace)
 
 
 def get_unique_slug(session: sqlalchemy.orm.Session, workspace_name: str) -> schemas.SlugResponse:
