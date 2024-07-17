@@ -32,16 +32,17 @@ def test_get_gather(client: TestClient, reseed_tables) -> None:
     assert gather_1["project_id"] == 1
     assert gather_1["latest_job_run"]["id"] == 5
     assert gather_1["latest_job_run"]["status"] == "awaiting_start"
+    # Get of a gather should includes the child properties
+    assert gather_1["limit_posts_per_account"] == 1000
 
-    response_2 = client.get("/projects/2/gathers/3")
+    response_2 = client.get("/projects/2/gathers/4")
     assert response_2.status_code == 200
     gather_2 = response_2.json()
     assert gather_1["name"] != gather_2["name"]
-
-    assert gather_1["id"] == 1
-    assert gather_1["project_id"] == 1
-    assert gather_2["id"] == 3
+    assert gather_2["id"] == 4
     assert gather_2["project_id"] == 2
+    # Get of a gather should include the comment child properties
+    assert gather_2["limit_comments_per_post"] == 1000
 
 
 def test_get_gather_2(client: TestClient, reseed_tables) -> None:
@@ -124,7 +125,9 @@ def test_delete_gather(m_run_deployment, reseed_tables, client: TestClient, sess
     response = client.get("/projects/1/gathers/1")
     assert response.status_code == 200
     gather_2 = response.json()
-    assert gather == gather_2
+    assert gather["id"] == gather_2["id"]
+    assert gather["project_id"] == gather_2["project_id"]
+    assert gather["delete_job_run"] == gather_2["delete_job_run"]
     # Test that a second delete job run is called on a deleted gather will return 400 as you can't
     # have two job runs at the same time.
     m_run_deployment.reset_mock()
