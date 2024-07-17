@@ -7,6 +7,7 @@ from sqlalchemy import orm
 from phiphi import platform_db
 from phiphi.api import base_models
 from phiphi.api.projects.job_runs import models as job_run_models
+from phiphi.api.projects.job_runs import schemas as job_run_schemas
 
 
 class GatherBase(platform_db.Base):
@@ -25,6 +26,10 @@ class GatherBase(platform_db.Base):
     delete_job_run_id: orm.Mapped[Optional[int]] = orm.mapped_column(sa.ForeignKey("job_runs.id"))
 
 
+job_run_foreign_type_query = (
+    f"JobRuns.foreign_job_type=='{job_run_schemas.ForeignJobType.gather.value}'"
+)
+
 class Gather(GatherBase, base_models.TimestampModel):
     """Gather model that can inherit from multiple models."""
 
@@ -42,7 +47,7 @@ class Gather(GatherBase, base_models.TimestampModel):
         "JobRuns",
         order_by="desc(JobRuns.id)",
         primaryjoin=(
-            "and_(JobRuns.foreign_job_type=='gather', foreign(JobRuns.foreign_id)==Gather.id)"
+            f"and_({job_run_foreign_type_query}, foreign(JobRuns.foreign_id)==Gather.id)"
         ),
         lazy="dynamic",
     )
