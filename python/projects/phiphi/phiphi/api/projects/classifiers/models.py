@@ -1,4 +1,5 @@
 """Models for classifiers tables."""
+import datetime
 from typing import Optional
 
 from sqlalchemy import orm
@@ -17,10 +18,11 @@ class ClassifiersBase(platform_db.Base):
     classifier_name: orm.Mapped[str]
     classifier_type: orm.Mapped[str]
     classifier_params: orm.Mapped[Optional[str]] = orm.mapped_column(base_models.JSONEncodedValue)
-    deleted: orm.Mapped[bool]
+    created_at: orm.Mapped[datetime.datetime]
+    archived_at: orm.Mapped[Optional[datetime.datetime]]
 
 
-class Classifiers(ClassifiersBase):
+class Classifiers(ClassifiersBase, base_models.TimestampModel):
     """Classifiers tables."""
 
     __tablename__ = "classifiers"

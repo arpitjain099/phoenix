@@ -1,4 +1,5 @@
 """Schemas for classifiers."""
+from datetime import datetime
 from typing import Annotated
 
 import pydantic
@@ -34,13 +35,12 @@ class ClassifierResponse(ClassifierBase):
     model_config = pydantic.ConfigDict(from_attributes=True)
 
     id: int
-    deleted: bool
+    created_at: datetime
+    archived_at: datetime | None
 
 
-class ClassifierDelete(pydantic.BaseModel):
-    """Classifier delete schema."""
-
-    id: int
+class ClassifierArchive(pydantic.BaseModel):
+    """Classifier archive schema."""
 
 
 class ClassBase(pydantic.BaseModel):
