@@ -7,6 +7,7 @@ import sqlalchemy.orm
 from phiphi.api import exceptions
 from phiphi.api.projects import crud as project_crud
 from phiphi.api.projects.gathers import child_types
+from phiphi.api.projects.gathers import crud as gather_crud
 from phiphi.api.projects.gathers import models as gather_model
 from phiphi.api.projects.gathers import schemas as gather_schema
 from phiphi.api.projects.gathers.apify_facebook_comments import (
@@ -74,14 +75,7 @@ def get_child_gather(
     A generalised function to get a child gather. This function is used to get
     child gathers for different platforms and data types.
     """
-    orm_gather = (
-        session.query(gather_model.Gather)
-        .filter(
-            gather_model.Gather.project_id == project_id,
-            gather_model.Gather.id == gather_id,
-        )
-        .first()
-    )
+    orm_gather = gather_crud.get_orm_gather(session, project_id, gather_id)
     if orm_gather is None:
         return None
 
@@ -101,14 +95,7 @@ def update_child_gather(
     A generalised function to update a child gather. This function is used to update
     child gathers for different platforms and data types.
     """
-    orm_gather = (
-        session.query(gather_model.Gather)
-        .filter(
-            gather_model.Gather.project_id == project_id,
-            gather_model.Gather.id == gather_id,
-        )
-        .first()
-    )
+    orm_gather = gather_crud.get_orm_gather(session, project_id, gather_id)
     if orm_gather is None:
         raise exceptions.GatherNotFound()
 
