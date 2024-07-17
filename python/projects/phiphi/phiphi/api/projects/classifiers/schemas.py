@@ -75,12 +75,9 @@ class ClassResponse(ClassBase):
 class ClassUpdate(pydantic.BaseModel):
     """Class update schema."""
 
-    id: int
     name: str | None = None
     description: str | None = None
 
 
 class ClassDelete(pydantic.BaseModel):
     """Class delete schema."""
-
-    id: int
