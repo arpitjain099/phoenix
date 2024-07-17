@@ -22,7 +22,7 @@ gather_apify_actor_map: dict[type[gathers.schemas.GatherResponse], str] = {
     gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse: (
         "apify/facebook-posts-scraper"
     ),
-    gathers.apify_facebook_comments.schemas.ApifyFacebookCommentGatherResponse: (
+    gathers.apify_facebook_comments.schemas.ApifyFacebookCommentsGatherResponse: (
         "apify/facebook-comments-scraper"
     ),
     gathers.apify_tiktok_accounts_posts.schemas.ApifyTikTokAccountsPostsGatherResponse: (

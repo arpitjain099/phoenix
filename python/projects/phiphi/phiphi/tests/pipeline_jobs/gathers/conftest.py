@@ -19,7 +19,7 @@ def facebook_posts_gather_fixture() -> (
 
 @pytest.fixture
 def facebook_comments_gather_fixture() -> (
-    gathers.apify_facebook_comments.schemas.ApifyFacebookCommentGatherResponse
+    gathers.apify_facebook_comments.schemas.ApifyFacebookCommentsGatherResponse
 ):
     """Fixture for the Facebook comments gather example."""
     return example_gathers.facebook_comments_gather_example()

@@ -31,10 +31,10 @@ def facebook_posts_gather_example() -> (
 
 
 def facebook_comments_gather_example() -> (
-    gathers.apify_facebook_comments.schemas.ApifyFacebookCommentGatherResponse
+    gathers.apify_facebook_comments.schemas.ApifyFacebookCommentsGatherResponse
 ):
-    """Example for ApifyFacebookCommentGatherResponse schema."""
-    return gathers.apify_facebook_comments.schemas.ApifyFacebookCommentGatherResponse(
+    """Example for ApifyFacebookCommentsGatherResponse schema."""
+    return gathers.apify_facebook_comments.schemas.ApifyFacebookCommentsGatherResponse(
         name="Example",
         limit_comments_per_post=4,
         post_url_list=[

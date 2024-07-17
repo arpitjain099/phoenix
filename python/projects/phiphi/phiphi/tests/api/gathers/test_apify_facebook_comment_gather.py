@@ -118,8 +118,8 @@ def test_patch_apify_facebook_comment_invalid(reseed_tables, client: TestClient)
 
 
 def test_serialize_facebook_comment_gather_response_with_all_fields():
-    """Test that ApifyFacebookCommentGatherResponse serializes correctly."""
-    instance = gathers.apify_facebook_comments.schemas.ApifyFacebookCommentGatherResponse(
+    """Test that ApifyFacebookCommentsGatherResponse serializes correctly."""
+    instance = gathers.apify_facebook_comments.schemas.ApifyFacebookCommentsGatherResponse(
         name="Example",
         limit_comments_per_post=25,
         post_url_list=[
@@ -157,7 +157,7 @@ def test_serialize_facebook_comment_gather_response_with_all_fields():
 
 def test_serialize_facebook_comment_gather_response_with_required_fields_only():
     """Test that serialize to Apify correctly omits fields when they are not provided."""
-    instance = gathers.apify_facebook_comments.schemas.ApifyFacebookCommentGatherResponse(
+    instance = gathers.apify_facebook_comments.schemas.ApifyFacebookCommentsGatherResponse(
         name="Example",
         limit_comments_per_post=25,
         post_url_list=[

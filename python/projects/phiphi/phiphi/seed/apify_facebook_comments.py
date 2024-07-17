@@ -5,7 +5,7 @@ from phiphi.api.projects.gathers import child_crud as gather_child_crud
 from phiphi.api.projects.gathers import schemas as gathers_schemas
 from phiphi.api.projects.gathers.apify_facebook_comments import models, schemas
 
-TEST_APIFY_FACEBOOK_COMMENT_GATHER_CREATE = schemas.ApifyFacebookCommentGatherCreate(
+TEST_APIFY_FACEBOOK_COMMENT_GATHER_CREATE = schemas.ApifyFacebookCommentsGatherCreate(
     name="Phoenix Apify Facebook COMMENT Gather",
     post_url_list=["https://phoenix.com", "https://buildup.org"],
     limit_comments_per_post=1000,
@@ -13,7 +13,7 @@ TEST_APIFY_FACEBOOK_COMMENT_GATHER_CREATE = schemas.ApifyFacebookCommentGatherCr
     include_comment_replies=False,
 )
 
-TEST_APIFY_FACEBOOK_COMMENT_GATHER_CREATE_2 = schemas.ApifyFacebookCommentGatherCreate(
+TEST_APIFY_FACEBOOK_COMMENT_GATHER_CREATE_2 = schemas.ApifyFacebookCommentsGatherCreate(
     name="Phoenix Apify Facebook COMMENT Gather 2",
     post_url_list=["https://phoenix.com", "https://buildup.org"],
     limit_comments_per_post=1000,
@@ -21,7 +21,7 @@ TEST_APIFY_FACEBOOK_COMMENT_GATHER_CREATE_2 = schemas.ApifyFacebookCommentGather
     include_comment_replies=True,
 )
 
-TEST_APIFY_FACEBOOK_COMMENT_GATHER_CREATE_3 = schemas.ApifyFacebookCommentGatherCreate(
+TEST_APIFY_FACEBOOK_COMMENT_GATHER_CREATE_3 = schemas.ApifyFacebookCommentsGatherCreate(
     name="Phoenix Apify Facebook COMMENT Gather 3",
     post_url_list=["https://phoenix.com"],
     limit_comments_per_post=1000,
@@ -42,8 +42,8 @@ def seed_test_apify_facebook_comment_gathers(session: Session) -> None:
             session=session,
             project_id=2,
             request_schema=apify_facebook_gather,
-            child_model=models.ApifyFacebookCommentGather,
-            response_schema=schemas.ApifyFacebookCommentGatherResponse,
+            child_model=models.ApifyFacebookCommentsGather,
+            response_schema=schemas.ApifyFacebookCommentsGatherResponse,
             child_type=gathers_schemas.ChildTypeName.apify_facebook_comments,
         )
 
@@ -51,7 +51,7 @@ def seed_test_apify_facebook_comment_gathers(session: Session) -> None:
         session=session,
         project_id=1,
         request_schema=TEST_APIFY_FACEBOOK_COMMENT_GATHER_CREATE_3,
-        child_model=models.ApifyFacebookCommentGather,
-        response_schema=schemas.ApifyFacebookCommentGatherResponse,
+        child_model=models.ApifyFacebookCommentsGather,
+        response_schema=schemas.ApifyFacebookCommentsGatherResponse,
         child_type=gathers_schemas.ChildTypeName.apify_facebook_comments,
     )
