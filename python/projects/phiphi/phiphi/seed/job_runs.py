@@ -48,7 +48,7 @@ def create_deleted_job_run(
             status=schemas.Status.completed_sucessfully,
         ),
     )
-    gather_db = gather_crud.get_db_gather(
+    gather_db = gather_crud.get_orm_gather(
         session=session, project_id=project_id, gather_id=job_run_create.foreign_id
     )
     if gather_db is None:
