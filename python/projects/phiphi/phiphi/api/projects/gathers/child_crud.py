@@ -47,7 +47,7 @@ def create_child_gather(
     Returns:
         response_schema_type: Response schema
     """
-    project_crud.get_db_project_with_guard(session, project_id)
+    project_crud.get_orm_project_with_guard(session, project_id)
 
     defaults = child_types.get_gather_creation_defaults(child_type)
     defaults_dict = dataclasses.asdict(defaults)

@@ -22,7 +22,7 @@ def get_db_gather(
     session: sqlalchemy.orm.Session, project_id: int, gather_id: int
 ) -> models.Gather | None:
     """Get a gather orm model."""
-    project_crud.get_db_project_with_guard(session, project_id)
+    project_crud.get_orm_project_with_guard(session, project_id)
     db_gather = (
         session.query(models.Gather)
         .filter(
@@ -43,7 +43,7 @@ def get_gathers(
     Currently this implementation only supports ApifyGathers.
     When new polymorphic model are needed this should be refactored.
     """
-    project_crud.get_db_project_with_guard(session, project_id)
+    project_crud.get_orm_project_with_guard(session, project_id)
 
     gathers = (
         session.query(models.Gather)

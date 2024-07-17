@@ -14,27 +14,27 @@ def create_project(
     session: sqlalchemy.orm.Session, project: schemas.ProjectCreate, init_project_db: bool = False
 ) -> schemas.ProjectResponse:
     """Create a new project."""
-    db_workspace = (
+    orm_workspace = (
         session.query(workspace_models.Workspace)
         .filter(workspace_models.Workspace.slug == project.workspace_slug)
         .first()
     )
 
-    if db_workspace is None:
+    if orm_workspace is None:
         raise exceptions.WorkspaceNotFound()
 
     try:
-        db_project = models.Project(**project.dict())
-        session.add(db_project)
+        orm_project = models.Project(**project.dict())
+        session.add(orm_project)
         # Get the id of the project without commiting the transaction
         session.flush()
         if init_project_db and not config.settings.USE_MOCK_BQ:
-            project_namespace = utils.get_project_namespace(db_project.id)
+            project_namespace = utils.get_project_namespace(orm_project.id)
             # Creating with dummy rows as it is easy to test the dashboard
             projects.init_project_db(project_namespace, with_dummy_rows=2)
         session.commit()
-        session.refresh(db_project)
-        return schemas.ProjectResponse.model_validate(db_project)
+        session.refresh(orm_project)
+        return schemas.ProjectResponse.model_validate(orm_project)
     except Exception as e:
         session.rollback()  # Rollback the transaction if any error occurs
         raise e
@@ -44,24 +44,24 @@ def update_project(
     session: sqlalchemy.orm.Session, project_id: int, project: schemas.ProjectUpdate
 ) -> schemas.ProjectResponse | None:
     """Update an project."""
-    db_project = get_non_deleted_project_model(session, project_id)
-    if db_project is None:
+    orm_project = get_non_deleted_project_model(session, project_id)
+    if orm_project is None:
         return None
     for field, value in project.dict(exclude_unset=True).items():
-        setattr(db_project, field, value)
+        setattr(orm_project, field, value)
     session.commit()
-    session.refresh(db_project)
-    return schemas.ProjectResponse.model_validate(db_project)
+    session.refresh(orm_project)
+    return schemas.ProjectResponse.model_validate(orm_project)
 
 
 def get_project(
     session: sqlalchemy.orm.Session, project_id: int
 ) -> schemas.ProjectResponse | None:
     """Get an project."""
-    db_project = get_non_deleted_project_model(session, project_id)
-    if db_project is None:
+    orm_project = get_non_deleted_project_model(session, project_id)
+    if orm_project is None:
         return None
-    return schemas.ProjectResponse.model_validate(db_project)
+    return schemas.ProjectResponse.model_validate(orm_project)
 
 
 def get_projects(
@@ -81,10 +81,10 @@ def get_projects(
     return [schemas.ProjectListResponse.model_validate(project) for project in projects]
 
 
-def get_db_project_with_guard(session: sqlalchemy.orm.Session, project_id: int) -> None:
+def get_orm_project_with_guard(session: sqlalchemy.orm.Session, project_id: int) -> None:
     """Guard for null instnaces."""
-    db_project = get_non_deleted_project_model(session, project_id)
-    if db_project is None:
+    orm_project = get_non_deleted_project_model(session, project_id)
+    if orm_project is None:
         raise exceptions.ProjectNotFound()
 
 
@@ -92,7 +92,7 @@ def get_non_deleted_project_model(
     session: sqlalchemy.orm.Session, project_id: int
 ) -> models.Project | None:
     """Get a non-deleted project model."""
-    db_project = (
+    orm_project = (
         session.query(models.Project)
         .filter(
             models.Project.deleted_at.is_(None),
@@ -100,20 +100,20 @@ def get_non_deleted_project_model(
         )
         .first()
     )
-    return db_project
+    return orm_project
 
 
 def delete_project(
     session: sqlalchemy.orm.Session, project_id: int, delete_project_db: bool = False
 ) -> None:
     """Delete an project."""
-    db_project = get_non_deleted_project_model(session, project_id)
-    if db_project is None:
+    orm_project = get_non_deleted_project_model(session, project_id)
+    if orm_project is None:
         raise exceptions.ProjectNotFound()
     if delete_project_db and not config.settings.USE_MOCK_BQ:
         project_namespace = utils.get_project_namespace(project_id)
         projects.delete_project_db(project_namespace)
-    db_project.deleted_at = datetime.datetime.utcnow()
-    session.add(db_project)
+    orm_project.deleted_at = datetime.datetime.utcnow()
+    session.add(orm_project)
     session.commit()
     return None
