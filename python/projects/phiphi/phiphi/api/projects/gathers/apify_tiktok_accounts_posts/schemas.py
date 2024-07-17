@@ -17,7 +17,7 @@ class ApifyTikTokAccountsPostsGatherBase(gather_schemas.GatherBase):
     """Input schema for the Apify TikTok Scraper for accounts."""
 
     limit_posts_per_account: int = pydantic.Field(
-        1, serialization_alias="resultsPerPage", description="Limit results per account"
+        serialization_alias="resultsPerPage", description="Limit results per account"
     )
     account_username_list: list[str] = pydantic.Field(
         serialization_alias="profiles",

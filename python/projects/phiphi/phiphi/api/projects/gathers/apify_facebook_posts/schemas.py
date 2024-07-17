@@ -15,7 +15,7 @@ class ApifyFacebookPostsGatherBase(gather_schemas.GatherBase):
     """
 
     limit_posts_per_account: int = pydantic.Field(
-        25, serialization_alias="resultsLimit", description="Limit results per account"
+        serialization_alias="resultsLimit", description="Limit results per account"
     )
     account_url_list: List[UrlStr] = pydantic.Field(
         serialization_alias="startUrls",
