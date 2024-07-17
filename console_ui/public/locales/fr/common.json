@@ -237,7 +237,7 @@
 			"platform": "Plateforme de médias sociaux",
 			"data_type": "Type de données des médias sociaux",
 			"posts_created_after": "Publications créées avant",
-			"only_posts_newer_than": "Publications créées après",
+			"posts_created_before": "Publications créées après",
 			"project_id": "Projet",
 			"limit_posts_per_account": "Limite de publications par compte",
 			"limit_replies": "Limite de réponses",
@@ -268,7 +268,7 @@
 			},
 			"info": {
 				"posts_created_after": "La date à partir de laquelle collecter des données. Ce sera 00:00 du jour configuré.",
-				"only_posts_newer_than": "La date jusqu'à laquelle collecter des données. Ce sera 00:00 du jour configuré.",
+				"posts_created_before": "La date jusqu'à laquelle collecter des données. Ce sera 00:00 du jour configuré.",
 				"name": "Nom court pour que vous sachiez quel était le but du rassemblement.",
 				"limit_posts_per_account": "Limite du nombre de publications collectées pour chaque compte.",
 				"limit_comments_per_post": "Limitez le nombre de commentaires collectés pour chaque publication.",

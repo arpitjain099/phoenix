@@ -237,7 +237,7 @@
 			"platform": "Social Media Platform",
 			"data_type": "Type of Social Media Data",
 			"posts_created_after": "Posts Created Before",
-			"only_posts_newer_than": "Posts Created After",
+			"posts_created_before": "Posts Created After",
 			"project_id": "Project",
 			"limit_posts_per_account": "Limit Posts Per Account",
 			"limit_replies": "Limit Replies",
@@ -268,7 +268,7 @@
 			},
 			"info": {
 				"posts_created_after": "The date to gather data from. This will be 0:00 of the day configured.",
-				"only_posts_newer_than": "The date to gather data till. This will be 0:00 of the day configured.",
+				"posts_created_before": "The date to gather data till. This will be 0:00 of the day configured.",
 				"name": "Short name so that you know what the goal of the gather was.",
 				"limit_posts_per_account": "Limit the number of posts that are collected for each account.",
 				"limit_comments_per_post": "Limit the number of comments that are collected for each post.",

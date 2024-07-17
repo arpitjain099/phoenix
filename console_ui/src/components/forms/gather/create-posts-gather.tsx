@@ -18,7 +18,7 @@ export const postFieldsToKeep = [
 	"name",
 	"account_url_list",
 	"posts_created_after",
-	"only_posts_newer_than",
+	"posts_created_before",
 	"limit_posts_per_account",
 ];
 
@@ -32,15 +32,15 @@ export function getPostValidationRules(data: any, today: Date) {
 		validationRules.posts_created_after = !data.posts_created_after
 			? "Required"
 			: null;
-		validationRules.only_posts_newer_than = !data.only_posts_newer_than
+		validationRules.posts_created_before = !data.posts_created_before
 			? "Required"
 			: null;
 		validationRules.limit_posts_per_account =
 			data.limit_posts_per_account === undefined ? "Required" : null;
 
-		if (data.posts_created_after && data.only_posts_newer_than) {
+		if (data.posts_created_after && data.posts_created_before) {
 			const startDate = new Date(data.posts_created_after);
-			const endDate = new Date(data.only_posts_newer_than);
+			const endDate = new Date(data.posts_created_before);
 
 			if (startDate > today) {
 				validationRules.posts_created_after =
@@ -49,7 +49,7 @@ export function getPostValidationRules(data: any, today: Date) {
 			if (startDate > endDate) {
 				validationRules.posts_created_after =
 					"Start date cannot be after end date";
-				validationRules.only_posts_newer_than =
+				validationRules.posts_created_before =
 					"End date cannot be before start date";
 			}
 		}
@@ -94,16 +94,16 @@ const CreatePostsGatherForm: React.FC<Props> = ({
 				label={
 					<div className="flex items-center">
 						<Tooltip
-							label={translate("gathers.fields.info.only_posts_newer_than")}
+							label={translate("gathers.fields.info.posts_created_before")}
 						>
 							<span className="flex">
 								<IconInfoCircle size={12} />
 							</span>
 						</Tooltip>
-						{translate("gathers.fields.only_posts_newer_than")}
+						{translate("gathers.fields.posts_created_before")}
 					</div>
 				}
-				{...getInputProps("only_posts_newer_than")}
+				{...getInputProps("posts_created_before")}
 			/>
 			<NumberInput
 				mt="lg"
