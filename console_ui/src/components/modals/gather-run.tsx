@@ -14,6 +14,8 @@ interface Props {
 	handleRefresh: (value: GatherResponse) => void;
 }
 
+const GATHER_RUN_JOB_TYPE = "gather_classify_tabulate";
+
 const GatherRunModal: React.FC<Props> = ({
 	opened,
 	setOpened,
@@ -55,7 +57,7 @@ const GatherRunModal: React.FC<Props> = ({
 			.jobRun({
 				project_id: gatherDetail.project_id,
 				id: gatherDetail.id,
-				type: "gather",
+				type: GATHER_RUN_JOB_TYPE,
 			})
 			.then((res) => {
 				handleRefresh({

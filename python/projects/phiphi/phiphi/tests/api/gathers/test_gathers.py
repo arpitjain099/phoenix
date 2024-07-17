@@ -18,19 +18,19 @@ def test_get_gather_crud(client: TestClient, reseed_tables) -> None:
     assert gather.id == 1
     assert gather.project_id == 1
     assert gather.latest_job_run
-    assert gather.latest_job_run.id == 4
+    assert gather.latest_job_run.id == 5
     assert gather.latest_job_run.status == "awaiting_start"
 
 
 def test_get_gather(client: TestClient, reseed_tables) -> None:
-    """Test getting gathers."""
+    """Test getting gather."""
     response = client.get("/projects/1/gathers/1")
     assert response.status_code == 200
     gather_1 = response.json()
 
     assert gather_1["id"] == 1
     assert gather_1["project_id"] == 1
-    assert gather_1["latest_job_run"]["id"] == 4
+    assert gather_1["latest_job_run"]["id"] == 5
     assert gather_1["latest_job_run"]["status"] == "awaiting_start"
 
     response_2 = client.get("/projects/2/gathers/3")
@@ -43,11 +43,18 @@ def test_get_gather(client: TestClient, reseed_tables) -> None:
     assert gather_2["id"] == 3
     assert gather_2["project_id"] == 2
 
+
+def test_get_gather_2(client: TestClient, reseed_tables) -> None:
+    """Test getting gather 2."""
     # Check that it is not always the first gather that is gotten
     response_3 = client.get("/projects/1/gathers/2")
     gather_3 = response_3.json()
     assert gather_3["id"] == 2
     assert gather_3["project_id"] == 1
+    assert gather_3["latest_job_run"]["id"] == 4
+    assert gather_3["latest_job_run"]["status"] == "completed_sucessfully"
+    # Gather 2 has a foreign job type of gather_classify_tabulate
+    assert gather_3["latest_job_run"]["foreign_job_type"] == "gather_classify_tabulate"
 
 
 def test_get_gather_with_no_job_run(client: TestClient, reseed_tables) -> None:
