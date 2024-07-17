@@ -6,7 +6,7 @@ from fastapi.testclient import TestClient
 
 from phiphi.api.projects import gathers
 from phiphi.api.projects.gathers import child_crud
-from phiphi.seed import apify_facebook_comments
+from phiphi.seed import apify_facebook_comments_gather
 
 CREATED_TIME = "2024-04-01T12:00:01"
 UPDATE_TIME = "2024-04-01T12:00:02"
@@ -88,7 +88,9 @@ def test_patch_apify_facebook_comments(reseed_tables, client: TestClient) -> Non
     }
     # Check that it is not the same as the seed values
     # just in case there are changes in the seed
-    expected_gather = apify_facebook_comments.TEST_APIFY_FACEBOOK_COMMENTS_GATHER_CREATE.dict()
+    expected_gather = (
+        apify_facebook_comments_gather.TEST_APIFY_FACEBOOK_COMMENTS_GATHER_CREATE.dict()
+    )
     for key, value in data.items():
         assert expected_gather[key] != value
     project_id = 2
