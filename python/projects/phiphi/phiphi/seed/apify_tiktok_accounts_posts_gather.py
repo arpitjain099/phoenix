@@ -14,6 +14,8 @@ TEST_APIFY_TIKTOK_ACCOUNTS_POSTS_GATHER_CREATE = schemas.ApifyTikTokAccountsPost
     proxy_country_to_gather_from="US",
 )
 
+TEST_APIFY_TIKTOK_ACCOUNTS_POSTS_GATHERS = []
+
 
 def seed_test_apify_tiktok_accounts_posts_gathers(session: Session) -> None:
     """Seed the gathers."""
@@ -22,7 +24,7 @@ def seed_test_apify_tiktok_accounts_posts_gathers(session: Session) -> None:
     ]
 
     for apify_tiktok_gather in apify_tiktok_gathers:
-        gather_child_crud.create_child_gather(
+        tiktok_gather = gather_child_crud.create_child_gather(
             session=session,
             project_id=2,
             request_schema=apify_tiktok_gather,
@@ -30,3 +32,4 @@ def seed_test_apify_tiktok_accounts_posts_gathers(session: Session) -> None:
             response_schema=schemas.ApifyTikTokAccountsPostsGatherResponse,
             child_type=gathers_schemas.ChildTypeName.apify_tiktok_accounts_posts,
         )
+        TEST_APIFY_TIKTOK_ACCOUNTS_POSTS_GATHERS.append(tiktok_gather)
