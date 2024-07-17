@@ -47,15 +47,15 @@ def create_job_run(
     invalid_foreign_object_guard(
         db, project_id, job_run_create.foreign_id, job_run_create.foreign_job_type
     )
-    db_job_run = models.JobRuns(
+    orm_job_run = models.JobRuns(
         **job_run_create.dict(),
         status=schemas.Status.awaiting_start,
         project_id=project_id,
     )
-    db.add(db_job_run)
+    db.add(orm_job_run)
     db.commit()
-    db.refresh(db_job_run)
-    return schemas.JobRunResponse.model_validate(db_job_run)
+    db.refresh(orm_job_run)
+    return schemas.JobRunResponse.model_validate(orm_job_run)
 
 
 def update_job_run(
@@ -68,25 +68,25 @@ def update_job_run(
 
     Note that only the schemas giving in the signature are allowed to be passed in.
     """
-    db_job_run = db.query(models.JobRuns).filter(models.JobRuns.id == job_run_data.id).first()
-    if db_job_run:
+    orm_job_run = db.query(models.JobRuns).filter(models.JobRuns.id == job_run_data.id).first()
+    if orm_job_run:
         for field, value in job_run_data.dict(exclude={"id"}).items():
-            setattr(db_job_run, field, value)
+            setattr(orm_job_run, field, value)
         db.commit()
 
-    return schemas.JobRunResponse.model_validate(db_job_run)
+    return schemas.JobRunResponse.model_validate(orm_job_run)
 
 
 def get_job_run(db: Session, project_id: int, job_run_id: int) -> schemas.JobRunResponse | None:
     """Get a job run."""
-    db_job_run = (
+    orm_job_run = (
         db.query(models.JobRuns)
         .filter(models.JobRuns.project_id == project_id, models.JobRuns.id == job_run_id)
         .first()
     )
-    if db_job_run is None:
+    if orm_job_run is None:
         return None
-    return schemas.JobRunResponse.model_validate(db_job_run)
+    return schemas.JobRunResponse.model_validate(orm_job_run)
 
 
 def get_job_runs(
@@ -100,8 +100,8 @@ def get_job_runs(
     query = db.query(models.JobRuns).filter(models.JobRuns.project_id == project_id)
     if foreign_job_type:
         query = query.filter(models.JobRuns.foreign_job_type == foreign_job_type)
-    db_job_runs = query.order_by(models.JobRuns.id.desc()).slice(start, end).all()
-    return [schemas.JobRunResponse.model_validate(db_job_run) for db_job_run in db_job_runs]
+    orm_job_runs = query.order_by(models.JobRuns.id.desc()).slice(start, end).all()
+    return [schemas.JobRunResponse.model_validate(orm_job_run) for orm_job_run in orm_job_runs]
 
 
 def get_latest_job_run(
@@ -116,10 +116,10 @@ def get_latest_job_run(
         query = query.filter(models.JobRuns.foreign_id == foreign_id)
     if foreign_job_type:
         query = query.filter(models.JobRuns.foreign_job_type == foreign_job_type)
-    db_job_run = query.order_by(models.JobRuns.id.desc()).first()
-    if db_job_run is None:
+    orm_job_run = query.order_by(models.JobRuns.id.desc()).first()
+    if orm_job_run is None:
         return None
-    return schemas.JobRunResponse.model_validate(db_job_run)
+    return schemas.JobRunResponse.model_validate(orm_job_run)
 
 
 async def create_and_run_job_run(
