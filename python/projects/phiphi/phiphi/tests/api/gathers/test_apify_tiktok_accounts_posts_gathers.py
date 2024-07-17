@@ -1,9 +1,40 @@
 """Tes Apify TikTok Accounts Posts Gathers."""
 import datetime
 
+import pytest
+from fastapi.testclient import TestClient
+
 from phiphi.api.projects.gathers import constants
 from phiphi.api.projects.gathers import schemas as gather_schemas
 from phiphi.api.projects.gathers.apify_tiktok_accounts_posts import schemas
+
+CREATED_TIME = "2024-04-01T12:00:01"
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
+def test_create_apify_tiktok_accounts_posts_gather(reseed_tables, client: TestClient) -> None:
+    """Test create apify TikTok accounts posts gather."""
+    data = {
+        "name": "First apify gather",
+        "limit_posts_per_account": 1000,
+        "account_username_list": ["example"],
+    }
+    project_id = 1
+    response = client.post(
+        f"/projects/{project_id}/gathers/apify_tiktok_accounts_posts", json=data
+    )
+    assert response.status_code == 200
+    gather = response.json()
+
+    assert gather["name"] == data["name"]
+    assert gather["project_id"] == project_id
+    assert gather["account_username_list"] == data["account_username_list"]
+    assert gather["limit_posts_per_account"] == data["limit_posts_per_account"]
+    # These are automatically set
+    assert gather["source"] == "apify"
+    assert gather["platform"] == "tiktok"
+    assert gather["data_type"] == "posts"
+    assert gather["created_at"] == CREATED_TIME
 
 
 def test_serialize_tiktok_accounts_posts_gather_response_with_all_fields():
