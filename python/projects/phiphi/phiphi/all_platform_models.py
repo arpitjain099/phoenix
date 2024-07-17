@@ -10,7 +10,7 @@ from phiphi.api.projects.gathers.apify_facebook_comments import (
     models as apify_facebook_comments_models,  # noqa: F401,
 )
 from phiphi.api.projects.gathers.apify_facebook_posts import (
-    models as apify_facebook_post_models,  # noqa: F401,
+    models as apify_facebook_posts_models,  # noqa: F401,
 )
 from phiphi.api.projects.job_runs import models as job_runs_models  # noqa: F401
 from phiphi.api.users import models as user_models  # noqa: F401

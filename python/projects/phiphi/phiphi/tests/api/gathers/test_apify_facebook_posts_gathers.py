@@ -6,7 +6,7 @@ from fastapi.testclient import TestClient
 
 from phiphi.api.projects import gathers
 from phiphi.api.projects.gathers import child_crud
-from phiphi.seed import apify_facebook_post_gather
+from phiphi.seed import apify_facebook_posts_gather
 
 CREATED_TIME = "2024-04-01T12:00:01"
 UPDATE_TIME = "2024-04-01T12:00:02"
@@ -25,7 +25,7 @@ def test_get_gather_crud(client: TestClient, reseed_tables) -> None:
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
-def test_create_apify_facebook_post_gather(reseed_tables, client: TestClient) -> None:
+def test_create_apify_facebook_posts_gather(reseed_tables, client: TestClient) -> None:
     """Test create apify facebook gather."""
     data = {
         "name": "First apify gather",
@@ -64,7 +64,7 @@ def test_patch_apify_facebook_posts(reseed_tables, client: TestClient) -> None:
     }
     # Check that it is not the same as the seed values
     # just in case there are changes in the seed
-    expected_gather = apify_facebook_post_gather.TEST_APIFY_FACEBOOK_POST_GATHER_CREATE.dict()
+    expected_gather = apify_facebook_posts_gather.TEST_APIFY_FACEBOOK_POSTS_GATHER_CREATE.dict()
     for key, value in data.items():
         assert expected_gather[key] != value
     project_id = 1
@@ -84,7 +84,7 @@ def test_patch_apify_facebook_posts_optional(reseed_tables, client: TestClient) 
     response = client.patch(f"/projects/{project_id}/gathers/apify_facebook_posts/1/", json=data)
     json_response = response.json()
     assert response.status_code == 200
-    expected_gather = apify_facebook_post_gather.TEST_APIFY_FACEBOOK_POST_GATHER_CREATE.dict()
+    expected_gather = apify_facebook_posts_gather.TEST_APIFY_FACEBOOK_POSTS_GATHER_CREATE.dict()
     expected_gather["limit_posts_per_account"] = 2
     for key, value in expected_gather.items():
         assert json_response[key] == value
@@ -113,7 +113,7 @@ def test_patch_apify_facebook_posts_invalid(reseed_tables, client: TestClient) -
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
-def test_data_type_apify_facebook_post(reseed_tables, client: TestClient) -> None:
+def test_data_type_apify_facebook_posts(reseed_tables, client: TestClient) -> None:
     """Test create apify facebook gather."""
     data = {
         "name": "First apify gather",
