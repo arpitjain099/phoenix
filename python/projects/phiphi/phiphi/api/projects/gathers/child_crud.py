@@ -48,16 +48,11 @@ def create_child_gather(
     """
     project_crud.get_db_project_with_guard(session, project_id)
 
-    split_child_type = child_type.split("_")
-    source = split_child_type[0]
-    platform = split_child_type[1]
-    data_type = split_child_type[2]
+    defaults = child_types.get_create_defaults(child_type)
 
     db_apify_facebook_posts_gather = child_model(
         **request_schema.dict(),
-        platform=platform,
-        data_type=data_type,
-        source=source,
+        **defaults,
         project_id=project_id,
         child_type=child_type,
     )
