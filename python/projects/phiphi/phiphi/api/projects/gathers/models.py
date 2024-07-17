@@ -27,8 +27,12 @@ class GatherBase(platform_db.Base):
 
 
 job_run_foreign_type_query = (
-    f"JobRuns.foreign_job_type=='{job_run_schemas.ForeignJobType.gather.value}'"
+    "or_("
+    f"JobRuns.foreign_job_type=='{job_run_schemas.ForeignJobType.gather.value}',"
+    f"JobRuns.foreign_job_type=='{job_run_schemas.ForeignJobType.gather_classify_tabulate.value}'"
+    ")"
 )
+
 
 class Gather(GatherBase, base_models.TimestampModel):
     """Gather model that can inherit from multiple models."""
