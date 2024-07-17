@@ -51,7 +51,7 @@ export default function GatherCreate(): JSX.Element {
 		data_type: "",
 		name: "",
 		account_url_list: [] as string[],
-		only_posts_older_than: today,
+		posts_created_after: today,
 		only_posts_newer_than: tomorrow,
 		limit_posts_per_account: 1000,
 		limit_comments_per_post: 1000,

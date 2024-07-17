@@ -17,7 +17,7 @@ export const postFieldsToKeep = [
 	"data_type",
 	"name",
 	"account_url_list",
-	"only_posts_older_than",
+	"posts_created_after",
 	"only_posts_newer_than",
 	"limit_posts_per_account",
 ];
@@ -29,7 +29,7 @@ export function getPostValidationRules(data: any, today: Date) {
 
 		validationRules.account_url_list =
 			data.account_url_list.length <= 0 ? "Required" : null;
-		validationRules.only_posts_older_than = !data.only_posts_older_than
+		validationRules.posts_created_after = !data.posts_created_after
 			? "Required"
 			: null;
 		validationRules.only_posts_newer_than = !data.only_posts_newer_than
@@ -38,16 +38,16 @@ export function getPostValidationRules(data: any, today: Date) {
 		validationRules.limit_posts_per_account =
 			data.limit_posts_per_account === undefined ? "Required" : null;
 
-		if (data.only_posts_older_than && data.only_posts_newer_than) {
-			const startDate = new Date(data.only_posts_older_than);
+		if (data.posts_created_after && data.only_posts_newer_than) {
+			const startDate = new Date(data.posts_created_after);
 			const endDate = new Date(data.only_posts_newer_than);
 
 			if (startDate > today) {
-				validationRules.only_posts_older_than =
+				validationRules.posts_created_after =
 					"Start date cannot be in the future";
 			}
 			if (startDate > endDate) {
-				validationRules.only_posts_older_than =
+				validationRules.posts_created_after =
 					"Start date cannot be after end date";
 				validationRules.only_posts_newer_than =
 					"End date cannot be before start date";
@@ -78,16 +78,16 @@ const CreatePostsGatherForm: React.FC<Props> = ({
 				label={
 					<div className="flex items-center">
 						<Tooltip
-							label={translate("gathers.fields.info.only_posts_older_than")}
+							label={translate("gathers.fields.info.posts_created_after")}
 						>
 							<span className="flex">
 								<IconInfoCircle size={12} />
 							</span>
 						</Tooltip>
-						{translate("gathers.fields.only_posts_older_than")}
+						{translate("gathers.fields.posts_created_after")}
 					</div>
 				}
-				{...getInputProps("only_posts_older_than")}
+				{...getInputProps("posts_created_after")}
 			/>
 			<DatePicker
 				mt="lg"

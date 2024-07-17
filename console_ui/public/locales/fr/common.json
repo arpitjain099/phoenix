@@ -236,7 +236,7 @@
 			"id": "ID",
 			"platform": "Plateforme de médias sociaux",
 			"data_type": "Type de données des médias sociaux",
-			"only_posts_older_than": "Publications créées avant",
+			"posts_created_after": "Publications créées avant",
 			"only_posts_newer_than": "Publications créées après",
 			"project_id": "Projet",
 			"limit_posts_per_account": "Limite de publications par compte",
@@ -267,7 +267,7 @@
 				"edit_input_label": "Modifier l'élément"
 			},
 			"info": {
-				"only_posts_older_than": "La date à partir de laquelle collecter des données. Ce sera 00:00 du jour configuré.",
+				"posts_created_after": "La date à partir de laquelle collecter des données. Ce sera 00:00 du jour configuré.",
 				"only_posts_newer_than": "La date jusqu'à laquelle collecter des données. Ce sera 00:00 du jour configuré.",
 				"name": "Nom court pour que vous sachiez quel était le but du rassemblement.",
 				"limit_posts_per_account": "Limite du nombre de publications collectées pour chaque compte.",
