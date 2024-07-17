@@ -8,7 +8,7 @@ from phiphi.api.projects.gathers import schemas as gather_schemas
 from phiphi.pydantic_types import UrlStr
 
 
-class ApifyFacebookPostGatherBase(gather_schemas.GatherBase):
+class ApifyFacebookPostsGatherBase(gather_schemas.GatherBase):
     """Input schema for the Apify Facebook posts scraper.
 
     Ref to relevant Apify actor docs: https://apify.com/apify/facebook-posts-scraper/input-schema
@@ -33,7 +33,9 @@ class ApifyFacebookPostGatherBase(gather_schemas.GatherBase):
     )
 
 
-class ApifyFacebookPostGatherResponse(gather_schemas.GatherResponse, ApifyFacebookPostGatherBase):
+class ApifyFacebookPostsGatherResponse(
+    gather_schemas.GatherResponse, ApifyFacebookPostsGatherBase
+):
     """Apify Gather schema.
 
     Properties to return to client.
@@ -54,14 +56,14 @@ class ApifyFacebookPostGatherResponse(gather_schemas.GatherResponse, ApifyFacebo
         return [{"url": str(url)} for url in urls]
 
 
-class ApifyFacebookPostGatherCreate(gather_schemas.GatherCreate, ApifyFacebookPostGatherBase):
+class ApifyFacebookPostsGatherCreate(gather_schemas.GatherCreate, ApifyFacebookPostsGatherBase):
     """Apify Gather create schema.
 
     Properties to receive via API on creation.
     """
 
 
-class ApifyFacebookPostGatherUpdate(gather_schemas.GatherUpdate):
+class ApifyFacebookPostsGatherUpdate(gather_schemas.GatherUpdate):
     """Apify Gather update schema."""
 
     limit_posts_per_account: Optional[int] = pydantic.Field(

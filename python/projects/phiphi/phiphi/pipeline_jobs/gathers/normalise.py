@@ -38,7 +38,7 @@ def normalise_batch(
 
 
 gather_normalisation_map: Dict[type[gathers.schemas.GatherResponse], Callable[[Dict], Dict]] = {
-    gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse: (
+    gathers.apify_facebook_posts.schemas.ApifyFacebookPostsGatherResponse: (
         normalisers.normalise_single_facebook_posts_json
     ),
     gathers.apify_facebook_comments.schemas.ApifyFacebookCommentsGatherResponse: (

@@ -11,7 +11,7 @@ from phiphi.tests.pipeline_jobs.gathers import example_gathers
 
 @pytest.fixture
 def facebook_posts_gather_fixture() -> (
-    gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse
+    gathers.apify_facebook_posts.schemas.ApifyFacebookPostsGatherResponse
 ):
     """Fixture for the Facebook posts gather example."""
     return example_gathers.facebook_posts_gather_example()

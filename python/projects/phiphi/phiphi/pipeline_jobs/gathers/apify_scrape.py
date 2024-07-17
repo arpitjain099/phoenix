@@ -19,7 +19,7 @@ from phiphi.pipeline_jobs import utils as pipeline_jobs_utils
 from phiphi.pipeline_jobs.gathers import utils as gather_utils
 
 gather_apify_actor_map: dict[type[gathers.schemas.GatherResponse], str] = {
-    gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse: (
+    gathers.apify_facebook_posts.schemas.ApifyFacebookPostsGatherResponse: (
         "apify/facebook-posts-scraper"
     ),
     gathers.apify_facebook_comments.schemas.ApifyFacebookCommentsGatherResponse: (

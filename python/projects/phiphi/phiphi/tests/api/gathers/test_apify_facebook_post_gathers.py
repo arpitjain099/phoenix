@@ -133,8 +133,8 @@ def test_data_type_apify_facebook_post(reseed_tables, client: TestClient) -> Non
 
 
 def test_serialize_facebook_post_gather_response_with_all_fields():
-    """Test that ApifyFacebookPostGatherResponse serializes correctly."""
-    instance = gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse(
+    """Test that ApifyFacebookPostsGatherResponse serializes correctly."""
+    instance = gathers.apify_facebook_posts.schemas.ApifyFacebookPostsGatherResponse(
         name="Example",
         limit_posts_per_account=10,
         account_url_list=[
@@ -172,7 +172,7 @@ def test_serialize_facebook_post_gather_response_with_all_fields():
 
 def test_serialize_facebook_post_gather_response_with_required_fields_only():
     """Test that serialize to Apify correctly omits fields when they are not provided."""
-    instance = gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse(
+    instance = gathers.apify_facebook_posts.schemas.ApifyFacebookPostsGatherResponse(
         name="Example",
         limit_posts_per_account=10,
         account_url_list=[

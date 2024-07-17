@@ -5,10 +5,10 @@ from phiphi.api.projects import gathers
 
 
 def facebook_posts_gather_example() -> (
-    gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse
+    gathers.apify_facebook_posts.schemas.ApifyFacebookPostsGatherResponse
 ):
-    """Example for ApifyFacebookPostGatherResponse schema."""
-    return gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse(
+    """Example for ApifyFacebookPostsGatherResponse schema."""
+    return gathers.apify_facebook_posts.schemas.ApifyFacebookPostsGatherResponse(
         name="Example",
         limit_posts_per_account=4,
         account_url_list=[
