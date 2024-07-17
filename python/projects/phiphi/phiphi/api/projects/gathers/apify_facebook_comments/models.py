@@ -8,7 +8,7 @@ from phiphi.api.projects.gathers import models as gather_models
 class ApifyFacebookCommentsGather(gather_models.Gather):
     """Apify Gather model."""
 
-    __tablename__ = "apify_facebook_comment_gathers"
+    __tablename__ = "apify_facebook_comments_gathers"
     __mapper_args__ = {
         "polymorphic_identity": "apify_facebook_comments",
     }
