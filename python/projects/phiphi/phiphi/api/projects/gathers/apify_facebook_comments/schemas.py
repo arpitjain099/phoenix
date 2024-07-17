@@ -17,7 +17,7 @@ class FacebookCommentSortOption(str, enum.Enum):
     non_filtered = "non_filtered"
 
 
-apify_facebook_comment_sort_option_mapping = {
+apify_facebook_comments_sort_option_mapping = {
     FacebookCommentSortOption.facebook_default: "RANKED_UNFILTERED",
     FacebookCommentSortOption.most_relevant: "RANKED_THREADED",
     FacebookCommentSortOption.newest_first: "RECENT_ACTIVITY",
@@ -83,7 +83,7 @@ class ApifyFacebookCommentsGatherResponse(
     @staticmethod
     def serialize_sort_comments_by(value: Optional[FacebookCommentSortOption]) -> Optional[str]:
         """Serialize sort_comments_by."""
-        return apify_facebook_comment_sort_option_mapping[value] if value else None
+        return apify_facebook_comments_sort_option_mapping[value] if value else None
 
 
 class ApifyFacebookCommentsGatherCreate(

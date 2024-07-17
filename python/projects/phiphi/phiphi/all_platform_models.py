@@ -7,7 +7,7 @@ from phiphi import platform_db
 from phiphi.api.projects import models as project_models  # noqa: F401
 from phiphi.api.projects.gathers import models as gather_models  # noqa: F401
 from phiphi.api.projects.gathers.apify_facebook_comments import (
-    models as apify_facebook_comment_models,  # noqa: F401,
+    models as apify_facebook_comments_models,  # noqa: F401,
 )
 from phiphi.api.projects.gathers.apify_facebook_posts import (
     models as apify_facebook_post_models,  # noqa: F401,

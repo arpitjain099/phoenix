@@ -44,7 +44,7 @@ def main(session: Session, testing: bool = False) -> None:
         workspaces.seed_test_workspace(session)
         projects.seed_test_project(session)
         apify_facebook_post_gather.seed_test_apify_facebook_post_gathers(session)
-        apify_facebook_comments.seed_test_apify_facebook_comment_gathers(session)
+        apify_facebook_comments.seed_test_apify_facebook_comments_gathers(session)
         job_runs.seed_test_job_runs(session)
 
 
