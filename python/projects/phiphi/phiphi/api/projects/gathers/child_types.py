@@ -25,6 +25,7 @@ AllChildTypesUnion = Union[
     facebook_comment_schema.ApifyFacebookCommentGatherResponse,
     facebook_post_schema.ApifyFacebookPostGatherResponse,
     tiktok_hashtags_posts_schema.ApifyTikTokHashtagsPostsGatherResponse,
+    tiktok_accounts_posts_schema.ApifyTikTokAccountsPostsGatherResponse,
 ]
 
 CHILD_TYPES_MAP: dict[gather_schemas.ChildTypeName, Type[AllChildTypesUnion]] = {
