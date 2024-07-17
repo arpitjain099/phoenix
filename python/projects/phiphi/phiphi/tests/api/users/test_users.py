@@ -89,10 +89,10 @@ def test_update_user(client: TestClient, reseed_tables, session: sqlalchemy.orm.
     assert response.status_code == 200
     user = response.json()
     assert user["display_name"] == data["display_name"]
-    db_user = session.get(models.User, user_id)
-    assert db_user
-    assert db_user.display_name == data["display_name"]
-    assert db_user.updated_at.isoformat() == UPDATE_TIME
+    orm_user = session.get(models.User, user_id)
+    assert orm_user
+    assert orm_user.display_name == data["display_name"]
+    assert orm_user.updated_at.isoformat() == UPDATE_TIME
 
 
 def test_update_user_not_found(client: TestClient, recreate_tables) -> None:
@@ -122,6 +122,6 @@ def test_app_role_put(client: TestClient, reseed_tables, session: sqlalchemy.orm
     assert response.status_code == 200
     user = response.json()
     assert user["app_role"] == data["app_role"]
-    db_user = session.get(models.User, user_id)
-    assert db_user
-    assert db_user.app_role == data["app_role"]
+    orm_user = session.get(models.User, user_id)
+    assert orm_user
+    assert orm_user.app_role == data["app_role"]
