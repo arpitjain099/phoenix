@@ -30,7 +30,7 @@ def test_create_apify_facebook_post_gather(reseed_tables, client: TestClient) ->
     data = {
         "name": "First apify gather",
         "limit_posts_per_account": 1000,
-        "only_posts_older_than": "2022-3-5",
+        "posts_created_after": "2022-3-5",
         "only_posts_newer_than": "2021-4-8",
         "account_url_list": ["https://buildup.org/"],
         "source": "apify",
@@ -46,7 +46,7 @@ def test_create_apify_facebook_post_gather(reseed_tables, client: TestClient) ->
     assert gather["project_id"] == project_id
     assert gather["account_url_list"] == data["account_url_list"]
     assert gather["limit_posts_per_account"] == data["limit_posts_per_account"]
-    assert gather["only_posts_older_than"] == data["only_posts_older_than"]
+    assert gather["posts_created_after"] == data["posts_created_after"]
     assert gather["only_posts_newer_than"] == data["only_posts_newer_than"]
     assert gather["platform"] == "facebook"
     assert gather["data_type"] == "posts"
@@ -59,7 +59,7 @@ def test_patch_apify_facebook_posts(reseed_tables, client: TestClient) -> None:
         "name": "Updated apify gather",
         "limit_posts_per_account": 1,
         "account_url_list": ["https://buildup.org/2/"],
-        "only_posts_older_than": "2022-3-5",
+        "posts_created_after": "2022-3-5",
         "only_posts_newer_than": "2021-4-8",
     }
     # Check that it is not the same as the seed values
@@ -118,7 +118,7 @@ def test_data_type_apify_facebook_post(reseed_tables, client: TestClient) -> Non
     data = {
         "name": "First apify gather",
         "limit_posts_per_account": 1000,
-        "only_posts_older_than": "2022-3-5",
+        "posts_created_after": "2022-3-5",
         "only_posts_newer_than": "2021-4-8",
         "account_url_list": ["https://buildup.org/"],
         "source": "apify",
@@ -141,7 +141,7 @@ def test_serialize_facebook_post_gather_response_with_all_fields():
             "https://www.facebook.com/humansofnewyork/",
             "https://www.facebook.com/example_account/",
         ],
-        only_posts_older_than="2024-04-04",
+        posts_created_after="2024-04-04",
         only_posts_newer_than="2024-04-03",
         id=1,
         platform=gathers.schemas.Platform.facebook,
