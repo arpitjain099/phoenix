@@ -18,7 +18,6 @@ class ClassifiersBase(platform_db.Base):
     classifier_name: orm.Mapped[str]
     classifier_type: orm.Mapped[str]
     classifier_params: orm.Mapped[Optional[str]] = orm.mapped_column(base_models.JSONEncodedValue)
-    created_at: orm.Mapped[datetime.datetime]
     archived_at: orm.Mapped[Optional[datetime.datetime]]
 
 
@@ -37,7 +36,6 @@ class ClassesBase(platform_db.Base):
     project_id: orm.Mapped[int]
     class_name: orm.Mapped[str]
     class_description: orm.Mapped[str]
-    last_updated_at: orm.Mapped[datetime.datetime]
 
 
 class Classes(ClassesBase, base_models.TimestampModel):

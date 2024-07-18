@@ -10,9 +10,7 @@ def create_classifier(
     session: sqlalchemy.orm.Session, classifier: schemas.ClassifierCreate
 ) -> schemas.ClassifierResponse:
     """Create a new classifier."""
-    orm_classifier = models.Classifiers(
-        **classifier.dict(), created_at=datetime.now(), archived_at=None
-    )
+    orm_classifier = models.Classifiers(**classifier.dict(), archived_at=None)
     session.add(orm_classifier)
     session.commit()
     session.refresh(orm_classifier)
@@ -111,7 +109,6 @@ def update_class(
     if orm_class:
         for field, value in class_.dict(exclude={"id"}).items():
             setattr(orm_class, field, value)
-        orm_class.last_updated_at = datetime.now()
         session.commit()
         session.refresh(orm_class)
     return schemas.ClassResponse.model_validate(orm_class)
