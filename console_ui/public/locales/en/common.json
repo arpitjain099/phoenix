@@ -236,8 +236,8 @@
 			"id": "ID",
 			"platform": "Social Media Platform",
 			"data_type": "Type of Social Media Data",
-			"only_posts_older_than": "Posts Created Before",
-			"only_posts_newer_than": "Posts Created After",
+			"posts_created_after": "Posts Created After",
+			"posts_created_before": "Posts Created Before",
 			"project_id": "Project",
 			"limit_posts_per_account": "Limit Posts Per Account",
 			"limit_replies": "Limit Replies",
@@ -267,8 +267,8 @@
 				"edit_input_label": "Edit Item"
 			},
 			"info": {
-				"only_posts_older_than": "The date to gather data from. This will be 0:00 of the day configured.",
-				"only_posts_newer_than": "The date to gather data till. This will be 0:00 of the day configured.",
+				"posts_created_after": "Gather posts created after 0:00 of the day configured.",
+				"posts_created_before": "Gather posts created before 0:00 of the day configured.",
 				"name": "Short name so that you know what the goal of the gather was.",
 				"limit_posts_per_account": "Limit the number of posts that are collected for each account.",
 				"limit_comments_per_post": "Limit the number of comments that are collected for each post.",

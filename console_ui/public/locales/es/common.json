@@ -236,8 +236,8 @@
 			"id": "ID",
 			"platform": "Plataforma de redes sociales",
 			"data_type": "Tipo de datos de redes sociales",
-			"only_posts_older_than": "Publicaciones creadas antes de",
-			"only_posts_newer_than": "Publicaciones creadas después de",
+			"posts_created_after": "Publicaciones creadas después de",
+			"posts_created_before": "Publicaciones creadas antes de",
 			"project_id": "Proyecto",
 			"limit_posts_per_account": "Límite de Publicaciones por Cuenta",
 			"limit_replies": "Límite de Respuestas",
@@ -267,8 +267,8 @@
 				"edit_input_label": "Editar Elemento"
 			},
 			"info": {
-				"only_posts_older_than": "La fecha desde la cual recopilar datos. Esto será a las 0:00 del día configurado.",
-				"only_posts_newer_than": "La fecha hasta la cual recopilar datos. Esto será a las 0:00 del día configurado.",
+				"posts_created_after": "Reúna publicaciones creadas después de las 0:00 del día configurado.",
+				"posts_created_before": "Reúne publicaciones creadas antes de las 0:00 día configurado.",
 				"name": "Nombre corto para que sepas cuál era el objetivo de la reunión.",
 				"limit_posts_per_account": "Limita el número de publicaciones que se recopilan para cada cuenta.",
 				"limit_comments_per_post": "Limitar el número de comentarios recopilados por cada publicación.",

@@ -21,15 +21,15 @@ class ApifyFacebookPostGatherBase(gather_schemas.GatherBase):
         serialization_alias="startUrls",
         description="List of Facebook page/profile URLs to scrape from",
     )
-    only_posts_older_than: Optional[str] = pydantic.Field(
-        default=None,
-        serialization_alias="onlyPostsOlderThan",
-        description="Fetch posts only older than this date (YYYY-MM-DD)",
-    )
-    only_posts_newer_than: Optional[str] = pydantic.Field(
+    posts_created_after: Optional[str] = pydantic.Field(
         default=None,
         serialization_alias="onlyPostsNewerThan",
-        description="Fetch posts only newer than this date (YYYY-MM-DD)",
+        description="Fetch posts created after this date (YYYY-MM-DD)",
+    )
+    posts_created_before: Optional[str] = pydantic.Field(
+        default=None,
+        serialization_alias="onlyPostsOlderThan",
+        description="Fetch posts created before this date (YYYY-MM-DD)",
     )
 
 
@@ -70,9 +70,9 @@ class ApifyFacebookPostGatherUpdate(gather_schemas.GatherUpdate):
     account_url_list: Optional[List[UrlStr]] = pydantic.Field(
         default=None, description="List of Facebook page/profile URLs to scrape from"
     )
-    only_posts_older_than: Optional[str] = pydantic.Field(
-        default=None, description="Fetch posts only older than this date (YYYY-MM-DD)"
+    posts_created_after: Optional[str] = pydantic.Field(
+        default=None, description="Fetch posts created after this date (YYYY-MM-DD)"
     )
-    only_posts_newer_than: Optional[str] = pydantic.Field(
-        default=None, description="Fetch posts only newer than this date (YYYY-MM-DD)"
+    posts_created_before: Optional[str] = pydantic.Field(
+        default=None, description="Fetch posts created before this date (YYYY-MM-DD)"
     )

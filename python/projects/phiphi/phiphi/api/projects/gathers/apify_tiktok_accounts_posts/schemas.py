@@ -28,7 +28,7 @@ class ApifyTikTokAccountsPostsGatherBase(gather_schemas.GatherBase):
         serialization_alias="oldestPostDate",
         description="Fetch posts created after this date (YYYY-MM-DD)",
     )
-    posts_created_since_no_days: Optional[int] = pydantic.Field(
+    posts_created_since_num_days: Optional[int] = pydantic.Field(
         default=None,
         serialization_alias="scrapeLastNDays",
         description=(

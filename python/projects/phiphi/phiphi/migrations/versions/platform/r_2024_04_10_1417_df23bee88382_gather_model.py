@@ -27,7 +27,7 @@ def upgrade() -> None:
     op.create_table(
         TABLE_NAME,
         sa.Column("id", sa.Integer(), nullable=False),
-        sa.Column("description", sa.String(), nullable=False),
+        sa.Column("name", sa.String(), nullable=False),
         sa.Column("project_id", sa.Integer(), nullable=False),
         sa.Column("source", sa.String(), nullable=False),
         sa.Column("platform", sa.String(), nullable=False),
@@ -42,8 +42,8 @@ def upgrade() -> None:
         APIFY_TABLE_NAME,
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("limit_posts_per_account", sa.Integer(), nullable=False),
-        sa.Column("only_posts_older_than", sa.String(), nullable=True),
-        sa.Column("only_posts_newer_than", sa.String(), nullable=True),
+        sa.Column("posts_created_after", sa.String(), nullable=True),
+        sa.Column("posts_created_before", sa.String(), nullable=True),
         sa.Column("account_url_list", base_models.JSONEncodedValue(), nullable=False),
         sa.ForeignKeyConstraint(
             ["id"],
