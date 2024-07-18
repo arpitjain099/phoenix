@@ -49,7 +49,7 @@ def create_child_gather(
     """
     project_crud.get_db_project_with_guard(session, project_id)
 
-    defaults = child_types.get_create_defaults(child_type)
+    defaults = child_types.get_gather_creation_defaults(child_type)
     defaults_dict = dataclasses.asdict(defaults)
 
     db_apify_facebook_posts_gather = child_model(

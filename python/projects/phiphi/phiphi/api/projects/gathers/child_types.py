@@ -46,31 +46,31 @@ CHILD_TYPES_MAP: dict[gather_schemas.ChildTypeName, Type[AllChildTypesUnion]] = 
 
 
 @dataclasses.dataclass
-class CreateDefaults:
-    """Create defaults for a child gather."""
+class GatherCreationDefaults:
+    """Gather creation defaults for a child gather."""
 
     source: gather_schemas.Source
     platform: gather_schemas.Platform
     data_type: gather_schemas.DataType
 
 
-CHILD_TYPES_MAP_CREATE_DEFAULTS: dict[gather_schemas.ChildTypeName, CreateDefaults] = {
-    gather_schemas.ChildTypeName.apify_facebook_comments: CreateDefaults(
+CHILD_TYPES_MAP_CREATE_DEFAULTS: dict[gather_schemas.ChildTypeName, GatherCreationDefaults] = {
+    gather_schemas.ChildTypeName.apify_facebook_comments: GatherCreationDefaults(
         source=gather_schemas.Source.apify,
         platform=gather_schemas.Platform.facebook,
         data_type=gather_schemas.DataType.comments,
     ),
-    gather_schemas.ChildTypeName.apify_facebook_posts: CreateDefaults(
+    gather_schemas.ChildTypeName.apify_facebook_posts: GatherCreationDefaults(
         source=gather_schemas.Source.apify,
         platform=gather_schemas.Platform.facebook,
         data_type=gather_schemas.DataType.posts,
     ),
-    gather_schemas.ChildTypeName.apify_tiktok_hashtags_posts: CreateDefaults(
+    gather_schemas.ChildTypeName.apify_tiktok_hashtags_posts: GatherCreationDefaults(
         source=gather_schemas.Source.apify,
         platform=gather_schemas.Platform.tiktok,
         data_type=gather_schemas.DataType.posts,
     ),
-    gather_schemas.ChildTypeName.apify_tiktok_accounts_posts: CreateDefaults(
+    gather_schemas.ChildTypeName.apify_tiktok_accounts_posts: GatherCreationDefaults(
         source=gather_schemas.Source.apify,
         platform=gather_schemas.Platform.tiktok,
         data_type=gather_schemas.DataType.posts,
@@ -97,16 +97,16 @@ def get_response_type(
     return CHILD_TYPES_MAP[child_type_name]
 
 
-def get_create_defaults(
+def get_gather_creation_defaults(
     child_type_name: gather_schemas.ChildTypeName,
-) -> CreateDefaults:
-    """Get create defaults for a child gather.
+) -> GatherCreationDefaults:
+    """Get gather creation defaults for a child gather.
 
     Args:
         child_type_name (gather_schemas.ChildTypeName): Gather child type
 
     Returns:
-        CreateDefaults: Create defaults for the child type.
+        GatherCreationDefaults: Create defaults for the child type.
     """
     if child_type_name not in CHILD_TYPES_MAP_CREATE_DEFAULTS:
         raise ValueError(
