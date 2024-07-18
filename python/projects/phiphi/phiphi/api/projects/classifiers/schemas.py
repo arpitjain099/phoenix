@@ -21,10 +21,8 @@ class ClassifierBase(pydantic.BaseModel):
     project_id: Annotated[
         int, pydantic.Field(description="The ID of the project which the Classifier is within")
     ]
-    classifier_name: Annotated[str, pydantic.Field(description="The name of the Classifier")]
-    classifier_type: Annotated[
-        ClassifierType, pydantic.Field(description="The type of the classifier")
-    ]
+    name: Annotated[str, pydantic.Field(description="The name of the Classifier")]
+    type: Annotated[ClassifierType, pydantic.Field(description="The type of the classifier")]
     params: Annotated[dict, pydantic.Field(description="The params of the Classifier")]
 
 
@@ -45,6 +43,7 @@ class ClassifierResponse(ClassifierBase):
 
     id: int
     created_at: datetime
+    updated_at: datetime
     archived_at: datetime | None
 
 
@@ -79,6 +78,8 @@ class ClassResponse(ClassBase):
     """
 
     id: int
+    created_at: datetime
+    updated_at: datetime
 
 
 class ClassUpdate(pydantic.BaseModel):

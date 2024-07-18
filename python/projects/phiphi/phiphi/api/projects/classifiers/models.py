@@ -15,9 +15,9 @@ class ClassifiersBase(platform_db.Base):
 
     id: orm.Mapped[int] = orm.mapped_column(primary_key=True)
     project_id: orm.Mapped[int]
-    classifier_name: orm.Mapped[str]
-    classifier_type: orm.Mapped[str]
-    classifier_params: orm.Mapped[Optional[str]] = orm.mapped_column(base_models.JSONEncodedValue)
+    name: orm.Mapped[str]
+    type: orm.Mapped[str]
+    params: orm.Mapped[Optional[str]] = orm.mapped_column(base_models.JSONEncodedValue)
     archived_at: orm.Mapped[Optional[datetime.datetime]]
 
 
@@ -34,8 +34,8 @@ class ClassesBase(platform_db.Base):
 
     id: orm.Mapped[int] = orm.mapped_column(primary_key=True)
     project_id: orm.Mapped[int]
-    class_name: orm.Mapped[str]
-    class_description: orm.Mapped[str]
+    name: orm.Mapped[str]
+    description: orm.Mapped[str]
 
 
 class Classes(ClassesBase, base_models.TimestampModel):

@@ -16,11 +16,11 @@ def classify_flow(
     """Flow which runs classifier on all (as yet unclassified by this classifier) messages."""
     classifier = schemas.ClassifierResponse(**classifier_dict)
 
-    if classifier.classifier_type == "keyword_match":
+    if classifier.type == schemas.ClassifierType.keyword_match:
         # Run keyword_match classifier
         pass
     else:
-        raise ValueError(f"{classifier.classifier_type=} not implemented.")
+        raise ValueError(f"{classifier.type=} not implemented.")
 
 
 def create_deployments(
