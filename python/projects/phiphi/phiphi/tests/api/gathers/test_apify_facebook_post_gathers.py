@@ -163,8 +163,8 @@ def test_serialize_facebook_post_gather_response_with_all_fields():
             {"url": "https://www.facebook.com/humansofnewyork/"},
             {"url": "https://www.facebook.com/example_account/"},
         ],
-        "onlyPostsOlderThan": "2024-04-04",
         "onlyPostsNewerThan": "2024-04-03",
+        "onlyPostsOlderThan": "2024-04-04",
     }
 
     assert expected_output_dict == output_dict

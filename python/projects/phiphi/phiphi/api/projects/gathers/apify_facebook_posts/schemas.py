@@ -23,12 +23,12 @@ class ApifyFacebookPostGatherBase(gather_schemas.GatherBase):
     )
     posts_created_after: Optional[str] = pydantic.Field(
         default=None,
-        serialization_alias="onlyPostsOlderThan",
+        serialization_alias="onlyPostsNewerThan",
         description="Fetch posts created after this date (YYYY-MM-DD)",
     )
     posts_created_before: Optional[str] = pydantic.Field(
         default=None,
-        serialization_alias="onlyPostsNewerThan",
+        serialization_alias="onlyPostsOlderThan",
         description="Fetch posts created before this date (YYYY-MM-DD)",
     )
 
