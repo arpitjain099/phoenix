@@ -1,9 +1,68 @@
 """Tes Apify TikTok Accounts Posts Gathers."""
 import datetime
 
+import pytest
+from fastapi.testclient import TestClient
+
 from phiphi.api.projects.gathers import constants
 from phiphi.api.projects.gathers import schemas as gather_schemas
 from phiphi.api.projects.gathers.apify_tiktok_accounts_posts import schemas
+from phiphi.seed import apify_tiktok_accounts_posts_gather
+
+CREATED_TIME = "2024-04-01T12:00:01"
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
+def test_create_apify_tiktok_accounts_posts_gather(reseed_tables, client: TestClient) -> None:
+    """Test create apify TikTok accounts posts gather."""
+    data = {
+        "name": "First apify gather",
+        "limit_posts_per_account": 1000,
+        "account_username_list": ["example"],
+    }
+    project_id = 1
+    response = client.post(
+        f"/projects/{project_id}/gathers/apify_tiktok_accounts_posts", json=data
+    )
+    assert response.status_code == 200
+    gather = response.json()
+
+    assert gather["name"] == data["name"]
+    assert gather["project_id"] == project_id
+    assert gather["account_username_list"] == data["account_username_list"]
+    assert gather["limit_posts_per_account"] == data["limit_posts_per_account"]
+    # These are automatically set
+    assert gather["source"] == "apify"
+    assert gather["platform"] == "tiktok"
+    assert gather["data_type"] == "posts"
+    assert gather["created_at"] == CREATED_TIME
+
+
+def test_patch_apify_tiktok_accounts_posts(reseed_tables, client: TestClient) -> None:
+    """Test patch apify TikTok accounts posts gather."""
+    data = {
+        "name": "Updated apify gather",
+        "account_username_list": ["example"],
+        "limit_posts_per_account": 1,
+        # Check can set to None
+        "posts_created_after": None,
+    }
+    test_gather = apify_tiktok_accounts_posts_gather.TEST_APIFY_TIKTOK_ACCOUNTS_POSTS_GATHERS[0]
+    project_id = test_gather.project_id
+    gather_id = test_gather.id
+    dict_test_gather = test_gather.dict()
+    for key, value in data.items():
+        assert dict_test_gather[key] != value
+    response = client.patch(
+        f"/projects/{project_id}/gathers/apify_tiktok_accounts_posts/{gather_id}", json=data
+    )
+    assert response.status_code == 200
+    gather = response.json()
+
+    assert gather["name"] == data["name"]
+    assert gather["account_username_list"] == data["account_username_list"]
+    assert gather["limit_posts_per_account"] == data["limit_posts_per_account"]
+    assert gather["posts_created_after"] == data["posts_created_after"]
 
 
 def test_serialize_tiktok_accounts_posts_gather_response_with_all_fields():

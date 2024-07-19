@@ -14,6 +14,7 @@ from phiphi import platform_db, utils
 from phiphi.seed import (
     apify_facebook_comments_gather,
     apify_facebook_posts_gather,
+    apify_tiktok_accounts_posts_gather,
     job_runs,
     projects,
     users,
@@ -45,6 +46,7 @@ def main(session: Session, testing: bool = False) -> None:
         projects.seed_test_project(session)
         apify_facebook_posts_gather.seed_test_apify_facebook_posts_gathers(session)
         apify_facebook_comments_gather.seed_test_apify_facebook_comments_gathers(session)
+        apify_tiktok_accounts_posts_gather.seed_test_apify_tiktok_accounts_posts_gathers(session)
         job_runs.seed_test_job_runs(session)
 
 

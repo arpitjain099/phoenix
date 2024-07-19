@@ -32,6 +32,12 @@ from phiphi.api.projects.gathers.apify_facebook_posts import (
 from phiphi.api.projects.gathers.apify_facebook_posts import (
     schemas as facebook_post_schema,
 )
+from phiphi.api.projects.gathers.apify_tiktok_accounts_posts import (
+    models as tiktok_accounts_posts_models,
+)
+from phiphi.api.projects.gathers.apify_tiktok_accounts_posts import (
+    schemas as tiktok_accounts_posts_schema,
+)
 
 router = fastapi.APIRouter()
 
@@ -62,6 +68,12 @@ list_of_child_gather_routes: dict[
         facebook_post_schema.ApifyFacebookPostsGatherUpdate,
         facebook_post_schema.ApifyFacebookPostsGatherResponse,
         facebook_post_model.ApifyFacebookPostsGather,
+    ),
+    gather_schema.ChildTypeName.apify_tiktok_accounts_posts: (
+        tiktok_accounts_posts_schema.ApifyTikTokAccountsPostsGatherCreate,
+        tiktok_accounts_posts_schema.ApifyTikTokAccountsPostsGatherUpdate,
+        tiktok_accounts_posts_schema.ApifyTikTokAccountsPostsGatherResponse,
+        tiktok_accounts_posts_models.ApifyTikTokAccountsPostsGather,
     ),
     # Add more routes as needed
 }
