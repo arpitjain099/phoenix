@@ -17,7 +17,7 @@ class FacebookCommentSortOption(str, enum.Enum):
     non_filtered = "non_filtered"
 
 
-apify_facebook_comment_sort_option_mapping = {
+apify_facebook_comments_sort_option_mapping = {
     FacebookCommentSortOption.facebook_default: "RANKED_UNFILTERED",
     FacebookCommentSortOption.most_relevant: "RANKED_THREADED",
     FacebookCommentSortOption.newest_first: "RECENT_ACTIVITY",
@@ -25,7 +25,7 @@ apify_facebook_comment_sort_option_mapping = {
 }
 
 
-class ApifyFacebookCommentGatherBase(gather_schemas.GatherBase):
+class ApifyFacebookCommentsGatherBase(gather_schemas.GatherBase):
     """Input schema for the Apify Facebook comments scraper.
 
     Ref to relevant Apify actor docs: https://apify.com/apify/facebook-comments-scraper/input-schema
@@ -56,8 +56,8 @@ class ApifyFacebookCommentGatherBase(gather_schemas.GatherBase):
     )
 
 
-class ApifyFacebookCommentGatherResponse(
-    gather_schemas.GatherResponse, ApifyFacebookCommentGatherBase
+class ApifyFacebookCommentsGatherResponse(
+    gather_schemas.GatherResponse, ApifyFacebookCommentsGatherBase
 ):
     """Apify Facebook Comments Gather schema.
 
@@ -83,11 +83,11 @@ class ApifyFacebookCommentGatherResponse(
     @staticmethod
     def serialize_sort_comments_by(value: Optional[FacebookCommentSortOption]) -> Optional[str]:
         """Serialize sort_comments_by."""
-        return apify_facebook_comment_sort_option_mapping[value] if value else None
+        return apify_facebook_comments_sort_option_mapping[value] if value else None
 
 
-class ApifyFacebookCommentGatherCreate(
-    ApifyFacebookCommentGatherBase, gather_schemas.GatherCreate
+class ApifyFacebookCommentsGatherCreate(
+    ApifyFacebookCommentsGatherBase, gather_schemas.GatherCreate
 ):
     """Apify Facebook Comments  Gather create schema.
 
@@ -95,7 +95,7 @@ class ApifyFacebookCommentGatherCreate(
     """
 
 
-class ApifyFacebookCommentGatherUpdate(gather_schemas.GatherUpdate):
+class ApifyFacebookCommentsGatherUpdate(gather_schemas.GatherUpdate):
     """Apify Facebook Comments Gather update schema.
 
     Only properties that are set will be updated.

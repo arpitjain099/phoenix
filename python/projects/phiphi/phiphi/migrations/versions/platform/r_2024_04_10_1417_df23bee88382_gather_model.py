@@ -19,7 +19,7 @@ branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
 TABLE_NAME = "gathers"
-APIFY_TABLE_NAME = "apify_facebook_post_gathers"
+APIFY_TABLE_NAME = "apify_facebook_posts_gathers"
 
 
 def upgrade() -> None:

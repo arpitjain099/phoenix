@@ -7,10 +7,10 @@ from phiphi.api import base_models
 from phiphi.api.projects.gathers import models as gather_models
 
 
-class ApifyFacebookPostGather(gather_models.Gather):
+class ApifyFacebookPostsGather(gather_models.Gather):
     """Apify Gather model."""
 
-    __tablename__ = "apify_facebook_post_gathers"
+    __tablename__ = "apify_facebook_posts_gathers"
     __mapper_args__ = {
         "polymorphic_identity": "apify_facebook_posts",
     }

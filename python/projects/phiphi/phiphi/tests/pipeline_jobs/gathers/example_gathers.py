@@ -5,10 +5,10 @@ from phiphi.api.projects import gathers
 
 
 def facebook_posts_gather_example() -> (
-    gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse
+    gathers.apify_facebook_posts.schemas.ApifyFacebookPostsGatherResponse
 ):
-    """Example for ApifyFacebookPostGatherResponse schema."""
-    return gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse(
+    """Example for ApifyFacebookPostsGatherResponse schema."""
+    return gathers.apify_facebook_posts.schemas.ApifyFacebookPostsGatherResponse(
         name="Example",
         limit_posts_per_account=4,
         account_url_list=[
@@ -31,10 +31,10 @@ def facebook_posts_gather_example() -> (
 
 
 def facebook_comments_gather_example() -> (
-    gathers.apify_facebook_comments.schemas.ApifyFacebookCommentGatherResponse
+    gathers.apify_facebook_comments.schemas.ApifyFacebookCommentsGatherResponse
 ):
-    """Example for ApifyFacebookCommentGatherResponse schema."""
-    return gathers.apify_facebook_comments.schemas.ApifyFacebookCommentGatherResponse(
+    """Example for ApifyFacebookCommentsGatherResponse schema."""
+    return gathers.apify_facebook_comments.schemas.ApifyFacebookCommentsGatherResponse(
         name="Example",
         limit_comments_per_post=4,
         post_url_list=[

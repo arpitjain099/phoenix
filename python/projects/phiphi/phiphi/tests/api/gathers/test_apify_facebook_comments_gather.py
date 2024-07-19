@@ -6,7 +6,7 @@ from fastapi.testclient import TestClient
 
 from phiphi.api.projects import gathers
 from phiphi.api.projects.gathers import child_crud
-from phiphi.seed import apify_facebook_comments
+from phiphi.seed import apify_facebook_comments_gather
 
 CREATED_TIME = "2024-04-01T12:00:01"
 UPDATE_TIME = "2024-04-01T12:00:02"
@@ -25,7 +25,7 @@ def test_get_gather_crud(client: TestClient, reseed_tables) -> None:
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
-def test_create_apify_facebook_comment_gather(reseed_tables, client: TestClient) -> None:
+def test_create_apify_facebook_comments_gather(reseed_tables, client: TestClient) -> None:
     """Test create apify facebook comment gather."""
     data = {
         "name": "First apify gather",
@@ -54,7 +54,7 @@ def test_create_apify_facebook_comment_gather(reseed_tables, client: TestClient)
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
-def test_data_type_apify_facebook_comment(reseed_tables, client: TestClient) -> None:
+def test_data_type_apify_facebook_comments(reseed_tables, client: TestClient) -> None:
     """Test create apify facebook comment gather.
 
     This test checks that if the source, platform and data type of the child gather are taken from
@@ -77,7 +77,7 @@ def test_data_type_apify_facebook_comment(reseed_tables, client: TestClient) -> 
     assert json_response["data_type"] == "comments"
 
 
-def test_patch_apify_facebook_comment(reseed_tables, client: TestClient) -> None:
+def test_patch_apify_facebook_comments(reseed_tables, client: TestClient) -> None:
     """Test patch apify facebook comment gather."""
     data = {
         "name": "Updated apify gather",
@@ -88,7 +88,9 @@ def test_patch_apify_facebook_comment(reseed_tables, client: TestClient) -> None
     }
     # Check that it is not the same as the seed values
     # just in case there are changes in the seed
-    expected_gather = apify_facebook_comments.TEST_APIFY_FACEBOOK_COMMENT_GATHER_CREATE.dict()
+    expected_gather = (
+        apify_facebook_comments_gather.TEST_APIFY_FACEBOOK_COMMENTS_GATHER_CREATE.dict()
+    )
     for key, value in data.items():
         assert expected_gather[key] != value
     project_id = 2
@@ -101,7 +103,7 @@ def test_patch_apify_facebook_comment(reseed_tables, client: TestClient) -> None
         assert json_response[key] == value
 
 
-def test_patch_apify_facebook_comment_invalid(reseed_tables, client: TestClient) -> None:
+def test_patch_apify_facebook_comments_invalid(reseed_tables, client: TestClient) -> None:
     """Test patch apify facebook comment gather invalid."""
     data = {
         "source": "apify",
@@ -118,8 +120,8 @@ def test_patch_apify_facebook_comment_invalid(reseed_tables, client: TestClient)
 
 
 def test_serialize_facebook_comment_gather_response_with_all_fields():
-    """Test that ApifyFacebookCommentGatherResponse serializes correctly."""
-    instance = gathers.apify_facebook_comments.schemas.ApifyFacebookCommentGatherResponse(
+    """Test that ApifyFacebookCommentsGatherResponse serializes correctly."""
+    instance = gathers.apify_facebook_comments.schemas.ApifyFacebookCommentsGatherResponse(
         name="Example",
         limit_comments_per_post=25,
         post_url_list=[
@@ -157,7 +159,7 @@ def test_serialize_facebook_comment_gather_response_with_all_fields():
 
 def test_serialize_facebook_comment_gather_response_with_required_fields_only():
     """Test that serialize to Apify correctly omits fields when they are not provided."""
-    instance = gathers.apify_facebook_comments.schemas.ApifyFacebookCommentGatherResponse(
+    instance = gathers.apify_facebook_comments.schemas.ApifyFacebookCommentsGatherResponse(
         name="Example",
         limit_comments_per_post=25,
         post_url_list=[

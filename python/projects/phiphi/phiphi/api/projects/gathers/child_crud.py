@@ -53,7 +53,7 @@ def create_child_gather(
     platform = split_child_type[1]
     data_type = split_child_type[2]
 
-    db_apify_facebook_post_gather = child_model(
+    db_apify_facebook_posts_gather = child_model(
         **request_schema.dict(),
         platform=platform,
         data_type=data_type,
@@ -61,10 +61,10 @@ def create_child_gather(
         project_id=project_id,
         child_type=child_type,
     )
-    session.add(db_apify_facebook_post_gather)
+    session.add(db_apify_facebook_posts_gather)
     session.commit()
-    session.refresh(db_apify_facebook_post_gather)
-    return response_schema.model_validate(db_apify_facebook_post_gather)
+    session.refresh(db_apify_facebook_posts_gather)
+    return response_schema.model_validate(db_apify_facebook_posts_gather)
 
 
 def get_child_gather(

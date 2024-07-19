@@ -52,16 +52,16 @@ list_of_child_gather_routes: dict[
     ],
 ] = {
     gather_schema.ChildTypeName.apify_facebook_comments: (
-        facebook_comment_schema.ApifyFacebookCommentGatherCreate,
-        facebook_comment_schema.ApifyFacebookCommentGatherUpdate,
-        facebook_comment_schema.ApifyFacebookCommentGatherResponse,
-        facebook_comment_model.ApifyFacebookCommentGather,
+        facebook_comment_schema.ApifyFacebookCommentsGatherCreate,
+        facebook_comment_schema.ApifyFacebookCommentsGatherUpdate,
+        facebook_comment_schema.ApifyFacebookCommentsGatherResponse,
+        facebook_comment_model.ApifyFacebookCommentsGather,
     ),
     gather_schema.ChildTypeName.apify_facebook_posts: (
-        facebook_post_schema.ApifyFacebookPostGatherCreate,
-        facebook_post_schema.ApifyFacebookPostGatherUpdate,
-        facebook_post_schema.ApifyFacebookPostGatherResponse,
-        facebook_post_model.ApifyFacebookPostGather,
+        facebook_post_schema.ApifyFacebookPostsGatherCreate,
+        facebook_post_schema.ApifyFacebookPostsGatherUpdate,
+        facebook_post_schema.ApifyFacebookPostsGatherResponse,
+        facebook_post_model.ApifyFacebookPostsGather,
     ),
     # Add more routes as needed
 }
