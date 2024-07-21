@@ -58,10 +58,10 @@ def test_update_workspace(
     assert response.status_code == 200
     workspace = response.json()
     assert workspace["description"] == data["description"]
-    db_workspace = session.get(models.Workspace, workspace_id)
-    assert db_workspace
-    assert db_workspace.description == data["description"]
-    assert db_workspace.updated_at.isoformat() == UPDATE_TIME
+    orm_workspace = session.get(models.Workspace, workspace_id)
+    assert orm_workspace
+    assert orm_workspace.description == data["description"]
+    assert orm_workspace.updated_at.isoformat() == UPDATE_TIME
 
 
 def test_update_workspace_not_found(client: TestClient, recreate_tables) -> None:

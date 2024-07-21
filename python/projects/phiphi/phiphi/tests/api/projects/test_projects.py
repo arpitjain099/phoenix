@@ -204,11 +204,11 @@ def test_update_project(
     assert response.status_code == 200
     project = response.json()
     assert project["description"] == data["description"]
-    db_project = session.get(models.Project, project_id)
-    assert db_project
-    assert db_project.description == data["description"]
-    assert db_project.checked_problem_statement is True
-    assert db_project.updated_at.isoformat() == UPDATE_TIME
+    orm_project = session.get(models.Project, project_id)
+    assert orm_project
+    assert orm_project.description == data["description"]
+    assert orm_project.checked_problem_statement is True
+    assert orm_project.updated_at.isoformat() == UPDATE_TIME
 
 
 def test_update_project_not_found(client: TestClient, recreate_tables) -> None:

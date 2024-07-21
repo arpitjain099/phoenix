@@ -12,18 +12,18 @@ def get_gather(
     session: sqlalchemy.orm.Session, project_id: int, gather_id: int
 ) -> schemas.GatherResponse | None:
     """Get an apify gather."""
-    db_gather = get_db_gather(session, project_id, gather_id)
-    if db_gather is None:
+    orm_gather = get_orm_gather(session, project_id, gather_id)
+    if orm_gather is None:
         return None
-    return schemas.GatherResponse.model_validate(db_gather)
+    return schemas.GatherResponse.model_validate(orm_gather)
 
 
-def get_db_gather(
+def get_orm_gather(
     session: sqlalchemy.orm.Session, project_id: int, gather_id: int
 ) -> models.Gather | None:
     """Get a gather orm model."""
-    project_crud.get_db_project_with_guard(session, project_id)
-    db_gather = (
+    project_crud.get_orm_project_with_guard(session, project_id)
+    orm_gather = (
         session.query(models.Gather)
         .filter(
             models.Gather.project_id == project_id,
@@ -31,7 +31,7 @@ def get_db_gather(
         )
         .first()
     )
-    return db_gather
+    return orm_gather
 
 
 ## Issues with this implementation
@@ -43,7 +43,7 @@ def get_gathers(
     Currently this implementation only supports ApifyGathers.
     When new polymorphic model are needed this should be refactored.
     """
-    project_crud.get_db_project_with_guard(session, project_id)
+    project_crud.get_orm_project_with_guard(session, project_id)
 
     gathers = (
         session.query(models.Gather)
@@ -65,8 +65,8 @@ async def delete(
     session: sqlalchemy.orm.Session, project_id: int, gather_id: int
 ) -> schemas.GatherResponse:
     """Delete a gather."""
-    db_gather = get_db_gather(session, project_id, gather_id)
-    if db_gather is None:
+    orm_gather = get_orm_gather(session, project_id, gather_id)
+    if orm_gather is None:
         raise exceptions.GatherNotFound()
 
     delete_job_run_response = await job_run_crud.create_and_run_job_run(
@@ -78,6 +78,6 @@ async def delete(
         ),
     )
 
-    db_gather.delete_job_run_id = delete_job_run_response.id
+    orm_gather.delete_job_run_id = delete_job_run_response.id
     session.commit()
-    return schemas.GatherResponse.model_validate(db_gather)
+    return schemas.GatherResponse.model_validate(orm_gather)

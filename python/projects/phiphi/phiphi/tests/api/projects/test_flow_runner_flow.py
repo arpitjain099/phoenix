@@ -61,7 +61,7 @@ async def test_flow_runner_flow(
     job_run_create = schemas.JobRunCreate(foreign_id=foreign_id, foreign_job_type=foreign_job_type)
 
     job_run = crud.create_job_run(
-        db=session_context, project_id=project_id, job_run_create=job_run_create
+        session=session_context, project_id=project_id, job_run_create=job_run_create
     )
 
     mock_start_flow_state = mock.MagicMock()
@@ -101,7 +101,7 @@ async def test_flow_runner_flow(
     mock_wait_for_flow_run.assert_called_once_with(flow_run_id=mock_return_start_flow_run.id)
 
     job_run_completed = crud.get_job_run(
-        db=session_context, project_id=project_id, job_run_id=job_run.id
+        session=session_context, project_id=project_id, job_run_id=job_run.id
     )
 
     assert job_run_completed
@@ -121,7 +121,7 @@ async def test_flow_runner_flow_exception(mock_start_flow_run, session_context, 
     )
 
     job_run = crud.create_job_run(
-        db=session_context, project_id=project_id, job_run_create=job_run_create
+        session=session_context, project_id=project_id, job_run_create=job_run_create
     )
 
     mock_start_flow_run.side_effect = Exception(
@@ -139,7 +139,7 @@ async def test_flow_runner_flow_exception(mock_start_flow_run, session_context, 
         )
 
     job_run_completed = crud.get_job_run(
-        db=session_context, project_id=project_id, job_run_id=job_run.id
+        session=session_context, project_id=project_id, job_run_id=job_run.id
     )
 
     assert job_run_completed
