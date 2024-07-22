@@ -34,6 +34,8 @@ def test_bq_pipeline_integration(session_context, reseed_tables):
     dataset = projects.init_project_db.fn(test_project_namespace, with_dummy_rows=2)
     client = bigquery.Client()
     assert client.get_dataset(dataset)
+    # Check that the dummy tabulated messages has been created
+    assert client.get_table(f"{dataset}.{constants.TABULATED_MESSAGES_TABLE_NAME}")
 
     # Check that will not fail if the dataset already exists.
     dataset = projects.init_project_db.fn(test_project_namespace)
