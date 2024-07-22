@@ -1,5 +1,4 @@
 """Generic gather crud."""
-import dataclasses
 from typing import Type, TypeVar
 
 import sqlalchemy.orm
@@ -50,12 +49,8 @@ def create_child_gather(
     """
     project_crud.get_orm_project_with_guard(session, project_id)
 
-    defaults = child_types.get_gather_creation_defaults(child_type)
-    defaults_dict = dataclasses.asdict(defaults)
-
     orm_apify_facebook_posts_gather = child_model(
         **request_schema.dict(),
-        **defaults_dict,
         project_id=project_id,
         child_type=child_type,
     )

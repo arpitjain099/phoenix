@@ -49,29 +49,24 @@ CHILD_TYPES_MAP: dict[gather_schemas.ChildTypeName, Type[AllChildTypesUnion]] = 
 class GatherCreationDefaults:
     """Gather creation defaults for a child gather."""
 
-    source: gather_schemas.Source
     platform: gather_schemas.Platform
     data_type: gather_schemas.DataType
 
 
 CHILD_TYPES_MAP_CREATE_DEFAULTS: dict[gather_schemas.ChildTypeName, GatherCreationDefaults] = {
     gather_schemas.ChildTypeName.apify_facebook_comments: GatherCreationDefaults(
-        source=gather_schemas.Source.apify,
         platform=gather_schemas.Platform.facebook,
         data_type=gather_schemas.DataType.comments,
     ),
     gather_schemas.ChildTypeName.apify_facebook_posts: GatherCreationDefaults(
-        source=gather_schemas.Source.apify,
         platform=gather_schemas.Platform.facebook,
         data_type=gather_schemas.DataType.posts,
     ),
     gather_schemas.ChildTypeName.apify_tiktok_hashtags_posts: GatherCreationDefaults(
-        source=gather_schemas.Source.apify,
         platform=gather_schemas.Platform.tiktok,
         data_type=gather_schemas.DataType.posts,
     ),
     gather_schemas.ChildTypeName.apify_tiktok_accounts_posts: GatherCreationDefaults(
-        source=gather_schemas.Source.apify,
         platform=gather_schemas.Platform.tiktok,
         data_type=gather_schemas.DataType.posts,
     ),
