@@ -103,7 +103,9 @@ def apify_scrape_and_batch_download_results(
     batch_num = 0
     batch_items: List[Dict] = []
 
-    gather_creation_defaults = gathers.child_types.get_gather_creation_defaults(gather.child_type)
+    gather_creation_defaults = gathers.child_types.get_gather_project_db_defaults(
+        gather.child_type
+    )
 
     static_data = {
         "gather_id": gather.id,

@@ -46,27 +46,29 @@ CHILD_TYPES_MAP: dict[gather_schemas.ChildTypeName, Type[AllChildTypesUnion]] = 
 
 
 @dataclasses.dataclass
-class GatherCreationDefaults:
-    """Gather creation defaults for a child gather."""
+class GatherProjectDBDefaults:
+    """Gather project db defaults for a child gather."""
 
     platform: gather_schemas.Platform
     data_type: gather_schemas.DataType
 
 
-CHILD_TYPES_MAP_CREATE_DEFAULTS: dict[gather_schemas.ChildTypeName, GatherCreationDefaults] = {
-    gather_schemas.ChildTypeName.apify_facebook_comments: GatherCreationDefaults(
+CHILD_TYPES_MAP_PROJECT_DB_DEFAULTS: dict[
+    gather_schemas.ChildTypeName, GatherProjectDBDefaults
+] = {
+    gather_schemas.ChildTypeName.apify_facebook_comments: GatherProjectDBDefaults(
         platform=gather_schemas.Platform.facebook,
         data_type=gather_schemas.DataType.comments,
     ),
-    gather_schemas.ChildTypeName.apify_facebook_posts: GatherCreationDefaults(
+    gather_schemas.ChildTypeName.apify_facebook_posts: GatherProjectDBDefaults(
         platform=gather_schemas.Platform.facebook,
         data_type=gather_schemas.DataType.posts,
     ),
-    gather_schemas.ChildTypeName.apify_tiktok_hashtags_posts: GatherCreationDefaults(
+    gather_schemas.ChildTypeName.apify_tiktok_hashtags_posts: GatherProjectDBDefaults(
         platform=gather_schemas.Platform.tiktok,
         data_type=gather_schemas.DataType.posts,
     ),
-    gather_schemas.ChildTypeName.apify_tiktok_accounts_posts: GatherCreationDefaults(
+    gather_schemas.ChildTypeName.apify_tiktok_accounts_posts: GatherProjectDBDefaults(
         platform=gather_schemas.Platform.tiktok,
         data_type=gather_schemas.DataType.posts,
     ),
@@ -92,21 +94,21 @@ def get_response_type(
     return CHILD_TYPES_MAP[child_type_name]
 
 
-def get_gather_creation_defaults(
+def get_gather_project_db_defaults(
     child_type_name: gather_schemas.ChildTypeName,
-) -> GatherCreationDefaults:
-    """Get gather creation defaults for a child gather.
+) -> GatherProjectDBDefaults:
+    """Get gather project db defaults for a child gather.
 
     Args:
         child_type_name (gather_schemas.ChildTypeName): Gather child type
 
     Returns:
-        GatherCreationDefaults: Create defaults for the child type.
+        GatherProjectDBDefaults: Create defaults for the child type.
     """
-    if child_type_name not in CHILD_TYPES_MAP_CREATE_DEFAULTS:
+    if child_type_name not in CHILD_TYPES_MAP_PROJECT_DB_DEFAULTS:
         raise ValueError(
             f"Gather child_type: {child_type_name} has not been added to "
-            "CHILD_TYPES_MAP_CREATE_DEFAULTS. "
+            "CHILD_TYPES_MAP_PROJECT_DB_DEFAULTS. "
             "This should be done."
         )
-    return CHILD_TYPES_MAP_CREATE_DEFAULTS[child_type_name]
+    return CHILD_TYPES_MAP_PROJECT_DB_DEFAULTS[child_type_name]

@@ -22,7 +22,9 @@ def normalise_batch(
     normalized_records = [normaliser(blob) for blob in batch_json]
     messages_df = pd.DataFrame(normalized_records)
 
-    gather_creation_defaults = gathers.child_types.get_gather_creation_defaults(gather.child_type)
+    gather_creation_defaults = gathers.child_types.get_gather_project_db_defaults(
+        gather.child_type
+    )
 
     # Add constant columns to the DataFrame
     messages_df["gather_id"] = gather.id
