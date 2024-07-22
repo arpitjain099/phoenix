@@ -127,7 +127,7 @@ def normalised_facebook_posts_df() -> pd.DataFrame:
     df["gather_id"] = 1
     df["gather_batch_id"] = 3
     df["gathered_at"] = pd.to_datetime("2024-04-01T12:00:00.000Z")
-    df["source"] = gathers.schemas.Source.apify
+    df["gather_type"] = gathers.schemas.ChildTypeName.apify_facebook_posts.value
     df["platform"] = gathers.schemas.Platform.facebook
     df["data_type"] = gathers.schemas.DataType.posts
     df["phoenix_processed_at"] = datetime.fromisoformat("2024-04-02T12:10:59.000Z")
@@ -291,7 +291,7 @@ def normalised_facebook_comments_df() -> pd.DataFrame:
     df["gather_id"] = 2
     df["gather_batch_id"] = 3
     df["gathered_at"] = pd.to_datetime("2024-04-01T12:00:00.000Z")
-    df["source"] = gathers.schemas.Source.apify
+    df["gather_type"] = gathers.schemas.ChildTypeName.apify_facebook_comments.value
     df["platform"] = gathers.schemas.Platform.facebook
     df["data_type"] = gathers.schemas.DataType.comments
     df["phoenix_processed_at"] = datetime.fromisoformat("2024-04-02T12:10:59.000Z")
@@ -346,7 +346,9 @@ def normalised_tiktok_accounts_posts_df() -> pd.DataFrame:
     normalised_tiktok_df["gather_id"] = 3
     normalised_tiktok_df["gather_batch_id"] = 3
     normalised_tiktok_df["gathered_at"] = pd.to_datetime("2024-04-01T12:00:00.000Z")
-    normalised_tiktok_df["source"] = gathers.schemas.Source.apify
+    normalised_tiktok_df[
+        "gather_type"
+    ] = gathers.schemas.ChildTypeName.apify_tiktok_accounts_posts.value
     normalised_tiktok_df["platform"] = gathers.schemas.Platform.tiktok
     normalised_tiktok_df["data_type"] = gathers.schemas.DataType.posts
     normalised_tiktok_df["phoenix_processed_at"] = datetime.fromisoformat(

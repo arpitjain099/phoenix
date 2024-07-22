@@ -26,8 +26,10 @@ gather_batches_schema = pa.DataFrameSchema(
     {
         "gather_id": pa.Column(pa.Int, nullable=False),
         "job_run_id": pa.Column(pa.Int, nullable=False),
-        "source": pa.Column(
-            pa.String, checks=pa.Check.isin([e.value for e in schemas.Source]), nullable=False
+        "gather_type": pa.Column(
+            pa.String,
+            checks=pa.Check.isin([e.value for e in schemas.ChildTypeName]),
+            nullable=False,
         ),
         "platform": pa.Column(
             pa.String,
@@ -56,8 +58,10 @@ generalised_messages_schema = pa.DataFrameSchema(
         "gather_batch_id": pa.Column(pa.Int, nullable=False),
         "gathered_at": utc_datetime_column(nullable=False),
         "phoenix_processed_at": utc_datetime_column(nullable=False),
-        "source": pa.Column(
-            pa.String, checks=pa.Check.isin([e.value for e in schemas.Source]), nullable=False
+        "gather_type": pa.Column(
+            pa.String,
+            checks=pa.Check.isin([e.value for e in schemas.ChildTypeName]),
+            nullable=False,
         ),
         # NOTE: combination of (platform, data_type, pi_platform_message_id) should give a unique
         # message, but it won't be a unique row as we process the same message multiple times.

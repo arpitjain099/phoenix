@@ -22,13 +22,15 @@ def normalise_batch(
     normalized_records = [normaliser(blob) for blob in batch_json]
     messages_df = pd.DataFrame(normalized_records)
 
+    gather_creation_defaults = gathers.child_types.get_gather_creation_defaults(gather.child_type)
+
     # Add constant columns to the DataFrame
     messages_df["gather_id"] = gather.id
     messages_df["gather_batch_id"] = gather_batch_id
     messages_df["gathered_at"] = gathered_at
-    messages_df["source"] = gather.source
-    messages_df["platform"] = gather.platform
-    messages_df["data_type"] = gather.data_type
+    messages_df["gather_type"] = gather.child_type
+    messages_df["platform"] = gather_creation_defaults.platform
+    messages_df["data_type"] = gather_creation_defaults.data_type
     messages_df["phoenix_processed_at"] = datetime.utcnow()
 
     # Validate the DataFrame using the schema
