@@ -232,6 +232,20 @@
 		"sub_titles": {
 			"list": "Définit la plateforme, la source et les paramètres de recherche pour la collecte de données. Créez votre nouvelle collecte, puis exécutez-la. Une fois terminée, vous pouvez exécuter une tabulation pour mettre à jour le jeu de données du tableau de bord."
 		},
+		"types": {
+			"apify_facebook_posts": {
+				"title": "Publications Facebook",
+				"description": "Rassemblez des publications à partir de comptes Facebook en utilisant le scraper web Apify"
+			},
+			"apify_facebook_comments": {
+				"title": "Commentaires Facebook",
+				"description": "Rassemblez des commentaires à partir de publications Facebook en utilisant le scraper web Apify"
+			},
+			"apify_tiktok_accounts_posts": {
+				"title": "Publications de Comptes TikTok",
+				"description": "Rassemblez des publications (vidéos) à partir de comptes TikTok (noms d'utilisateur) en utilisant le scraper web Apify"
+			}
+		},
 		"fields": {
 			"id": "ID",
 			"platform": "Plateforme de médias sociaux",

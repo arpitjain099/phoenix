@@ -232,6 +232,20 @@
 		"sub_titles": {
 			"list": "Defines platform, source and search parameters for data collection. Create your new gather and then run it. Once it has been completed you can run a tabulate to update the dashboard dataset."
 		},
+		"types": {
+			"apify_facebook_posts": {
+				"title": "Facebook Posts",
+				"description": "Gather posts from facebook accounts using the web scraper apify"
+			},
+			"apify_facebook_comments": {
+				"title": "Facebook Comments",
+				"description": "Gather comments from facebook posts using the web scraper Apify"
+			},
+			"apify_tiktok_accounts_posts": {
+				"title": "TikTok Accounts Posts",
+				"description": "Gather posts (videos) from TikTok accounts (usernames) using the web scraper apify"
+			}
+		},
 		"fields": {
 			"id": "ID",
 			"platform": "Social Media Platform",

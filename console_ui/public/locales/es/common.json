@@ -232,6 +232,20 @@
 		"sub_titles": {
 			"list": "Define la plataforma, la fuente y los parámetros de búsqueda para la recopilación de datos. Cree su nueva recopilación y luego ejecútela. Una vez completada, puede ejecutar una tabulación para actualizar el conjunto de datos del tablero."
 		},
+		"types": {
+			"apify_facebook_posts": {
+				"title": "Publicaciones de Facebook",
+				"description": "Recopila publicaciones de cuentas de Facebook utilizando el scraper web Apify"
+			},
+			"apify_facebook_comments": {
+				"title": "Comentarios de Facebook",
+				"description": "Recopila comentarios de publicaciones de Facebook utilizando el scraper web Apify"
+			},
+			"apify_tiktok_accounts_posts": {
+				"title": "Publicaciones de Cuentas de TikTok",
+				"description": "Recopila publicaciones (videos) de cuentas de TikTok (nombres de usuario) utilizando el scraper web Apify"
+			}
+		},
 		"fields": {
 			"id": "ID",
 			"platform": "Plataforma de redes sociales",
