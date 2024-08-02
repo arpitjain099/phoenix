@@ -83,10 +83,13 @@ const RefineContext = ({ children }: PropsWithChildren) => {
 										},
 									},
 									{
-										name: "",
-										create: "/projects/:projectid/gathers/create",
+										name: "apify_facebook_posts",
+										create:
+											"/projects/:projectid/gathers/apify_facebook_posts/create",
+										edit: "/projects/:projectid/gathers/apify_facebook_posts/edit/:id",
+										show: "/projects/:projectid/gathers/apify_facebook_posts/:id",
 										meta: {
-											label: "Gathers",
+											label: "Apify Facebook Posts",
 											parent: "projects",
 											hide: true,
 										},

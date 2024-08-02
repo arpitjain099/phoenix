@@ -77,6 +77,17 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 				id: "name",
 				accessorKey: "name",
 				header: translate("gathers.fields.name"),
+				cell: ({ row }) => {
+					const { id, name, child_type, project_id } = row.original;
+					return (
+						<Link
+							href={`/projects/${project_id}/gathers/${child_type}/${id}`}
+							className="no-underline text-blue-500"
+						>
+							{name}
+						</Link>
+					);
+				},
 			},
 			{
 				id: "started_processing_at",
@@ -238,7 +249,7 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 							{translate("projects.tabs.gather.description.part2.c")}
 						</Text>
 					</div>
-					<Link href={`/projects/${projectid}/gathers/create`}>
+					<Link href={`/projects/${projectid}/gathers/select_type`}>
 						<Button leftIcon={<IconSquarePlus />}>
 							{translate("actions.create")}
 						</Button>

@@ -234,8 +234,13 @@
 		},
 		"types": {
 			"apify_facebook_posts": {
-				"title": "Facebook Posts from public pages and groups",
-				"description": "Gather posts from facebook accounts using the web scraper apify"
+				"title": "Facebook Posts",
+				"description": "Gather posts from facebook accounts using the web scraper apify",
+				"view": "This is a Facebook posts gather. It gathers posts from facebook accounts using the apify web scraper.",
+				"create": "Configure a new Facebook posts gather",
+				"create_description": "Create a gather of posts from facebook accounts using the web scraper apify. Once you have created your gather your will be able to run it to collect the data.",
+				"edit": "Edit new Facebook posts gather",
+				"edit_description": "Edit a gather of posts from facebook accounts using the web scraper apify. Once you have created your gather your will be able to run it to collect the data."
 			},
 			"apify_facebook_comments": {
 				"title": "Facebook Comments from public posts",
@@ -299,6 +304,17 @@
 			"estimated_credit_cost": "Estimated credits for this run",
 			"estimated_duration_minutes": "Estimated time",
 			"cost": "Estimated Cost"
+		},
+		"view": {
+			"accordion": {
+				"status": "Status",
+				"general": "General",
+				"posts_source": "Facebook posts come from these accounts",
+				"comments_source": "Facebook comments come from these posts"
+			},
+			"status": "Run status",
+			"started_processing_at": "Started Processing At",
+			"from": "From"
 		}
 	},
 	"tabulate": {

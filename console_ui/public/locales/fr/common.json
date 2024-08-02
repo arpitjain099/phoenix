@@ -234,8 +234,13 @@
 		},
 		"types": {
 			"apify_facebook_posts": {
-				"title": "Publications Facebook des pages et groupes publics",
-				"description": "Recueillez des publications des comptes Facebook en utilisant le web scraper Apify"
+				"title": "Publications Facebook",
+				"description": "Collectez des publications à partir de comptes Facebook en utilisant le scraper web Apify",
+				"view": "Ceci est une collecte de publications Facebook. Il collecte des publications à partir de comptes Facebook en utilisant le scraper web Apify.",
+				"create": "Configurer une nouvelle collecte de publications Facebook",
+				"create_description": "Créez une collecte de publications à partir de comptes Facebook en utilisant le scraper web Apify. Une fois votre collecte créée, vous pourrez l'exécuter pour collecter les données.",
+				"edit": "Modifier la nouvelle collecte de publications Facebook",
+				"edit_description": "Modifiez une collecte de publications à partir de comptes Facebook en utilisant le scraper web Apify. Une fois votre collecte créée, vous pourrez l'exécuter pour collecter les données."
 			},
 			"apify_facebook_comments": {
 				"title": "Commentaires Facebook sur les publications publiques",
@@ -299,6 +304,17 @@
 			"estimated_credit_cost": "Crédits estimés pour cette exécution",
 			"estimated_duration_minutes": "Temps estimé",
 			"cost": "Coût estimé"
+		},
+		"view": {
+			"accordion": {
+				"status": "Statut",
+				"general": "Général",
+				"posts_source": "Les publications Facebook proviennent de ces comptes",
+				"comments_source": "Les commentaires Facebook proviennent de ces publications"
+			},
+			"status": "Statut d'exécution",
+			"started_processing_at": "Début du traitement à",
+			"from": "De"
 		}
 	},
 	"tabulate": {
