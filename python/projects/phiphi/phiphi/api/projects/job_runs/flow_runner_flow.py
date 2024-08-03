@@ -1,6 +1,6 @@
 """Module containing (outer) flow which runs jobs (inner flows) and records their status."""
 import uuid
-from typing import Coroutine
+from typing import Any, Coroutine
 
 import prefect
 from prefect import flow, flow_runs, task
@@ -15,12 +15,40 @@ from phiphi import (
     utils,
 )
 from phiphi.api.projects import classifiers, gathers, job_runs
+from phiphi.api.projects.job_runs import schemas
+
+
+def get_gather_flow_params(project_id: int, gather_id: int) -> dict[str, Any]:
+    """Get the parameters for the gather flow."""
+    with platform_db.get_session_context() as session:
+        gather = gathers.child_crud.get_child_gather(
+            session=session, project_id=project_id, gather_id=gather_id
+        )
+    if gather is None:
+        raise ValueError(f"Gather with {project_id=}, {gather_id=} not found.")
+    params = {
+        "gather_dict": gather.model_dump(),
+        "gather_child_type": gather.child_type.value,
+    }
+    return params
+
+
+def get_classify_flow_params(project_id: int, classifier_id: int) -> dict[str, Any]:
+    """Get the parameters for the classify flow."""
+    with platform_db.get_session_context() as session:
+        classifier = classifiers.crud.get_classifier(session=session, classifier_id=classifier_id)
+    if classifier is None:
+        raise ValueError(f"Classifier with {project_id=}, {classifier_id=} not found.")
+    params = {
+        "classifier_dict": classifier.model_dump(),
+    }
+    return params
 
 
 @task
 async def start_flow_run(
     project_id: int,
-    job_type: job_runs.schemas.ForeignJobType,
+    job_type: schemas.ForeignJobType,
     job_source_id: int,
     job_run_id: int,
 ) -> objects.FlowRun:
@@ -29,83 +57,54 @@ async def start_flow_run(
     Args:
         project_id: ID of the project.
         job_type: Type of job to run.
-        job_source_id: ID of the source for the job. Corresponds to the job_type table.
+        job_source_id: ID of the source for the job. Corresponds to the table corresponding to
+            job_type.
         job_run_id: ID of the row in the job_runs table.
     """
     project_namespace = utils.get_project_namespace(project_id=project_id)
+    params = {
+        "job_run_id": job_run_id,
+        "project_namespace": project_namespace,
+    }
 
-    if job_type == job_runs.schemas.ForeignJobType.gather:
-        with platform_db.get_session_context() as session:
-            job_params = gathers.child_crud.get_child_gather(
-                session=session, project_id=project_id, gather_id=job_source_id
+    match job_type:
+        case schemas.ForeignJobType.gather:
+            deployment_name = "gather_flow/gather_flow"
+            params = params | get_gather_flow_params(
+                project_id=project_id, gather_id=job_source_id
             )
-        if job_params is None:
-            raise ValueError(
-                f"Gather with {project_id=}, {job_type=}, {job_source_id=} not found."
+        case schemas.ForeignJobType.classify:
+            deployment_name = "classify_flow/classify_flow"
+            params = params | get_classify_flow_params(
+                project_id=project_id, classifier_id=job_source_id
             )
-        deployment_name = "gather_flow/gather_flow"
-        params = {
-            "gather_dict": job_params.model_dump(),
-            "gather_child_type": job_params.child_type.value,
-            "job_run_id": job_run_id,
-            "project_namespace": project_namespace,
-        }
-    elif job_type == job_runs.schemas.ForeignJobType.classify:
-        with platform_db.get_session_context() as session:
-            classifier = classifiers.crud.get_classifier(
-                session=session, classifier_id=job_source_id
+        case schemas.ForeignJobType.tabulate:
+            deployment_name = "tabulate_flow/tabulate_flow"
+        case schemas.ForeignJobType.delete_gather:
+            deployment_name = "delete_gather_flow/delete_gather_flow"
+            params = params | {
+                "gather_id": job_source_id,
+            }
+        case schemas.ForeignJobType.gather_classify_tabulate:
+            deployment_name = "gather_classify_tabulate_flow/gather_classify_tabulate_flow"
+            params = params | get_gather_flow_params(
+                project_id=project_id, gather_id=job_source_id
             )
-        if classifier is None:
-            raise ValueError(
-                f"Classifier with {project_id=}, {job_source_id=}, {job_type=},  not found."
-            )
-        deployment_name = "classify_flow/classify_flow"
-        params = {
-            "classifier_dict": classifier.model_dump(),
-            "job_run_id": job_run_id,
-            "project_namespace": project_namespace,
-        }
-    elif job_type == job_runs.schemas.ForeignJobType.tabulate:
-        deployment_name = "tabulate_flow/tabulate_flow"
-        params = {
-            "job_run_id": job_run_id,
-            "project_namespace": project_namespace,
-        }
-    elif job_type == job_runs.schemas.ForeignJobType.delete_gather:
-        deployment_name = "delete_gather_flow/delete_gather_flow"
-        params = {
-            "gather_id": job_source_id,
-            "job_run_id": job_run_id,
-            "project_namespace": project_namespace,
-        }
-    elif job_type == job_runs.schemas.ForeignJobType.gather_classify_tabulate:
-        with platform_db.get_session_context() as session:
-            job_params = gathers.child_crud.get_child_gather(
-                session=session, project_id=project_id, gather_id=job_source_id
-            )
-        if job_params is None:
-            raise ValueError(
-                f"Gather with {project_id=}, {job_type=}, {job_source_id=} not found."
-            )
-        deployment_name = "gather_classify_tabulate_flow/gather_classify_tabulate_flow"
-        params = {
-            "project_id": project_id,
-            "job_source_id": job_source_id,
-            "job_run_id": job_run_id,
-            "project_namespace": project_namespace,
-            "gather_dict": job_params.model_dump(),
-            "gather_child_type": job_params.child_type.value,
-        }
-    elif job_type == job_runs.schemas.ForeignJobType.delete_gather_tabulate:
-        deployment_name = "delete_gather_tabulate_flow/delete_gather_tabulate_flow"
-        params = {
-            "project_id": project_id,
-            "job_source_id": job_source_id,
-            "job_run_id": job_run_id,
-            "project_namespace": project_namespace,
-        }
-    else:
-        raise NotImplementedError(f"Job type {job_type=} not implemented yet.")
+        case schemas.ForeignJobType.delete_gather_tabulate:
+            deployment_name = "delete_gather_tabulate_flow/delete_gather_tabulate_flow"
+        case _:
+            raise NotImplementedError(f"Job type {job_type=} not implemented yet.")
+
+    # Add params for composite flows
+    match job_type:
+        case (
+            schemas.ForeignJobType.gather_classify_tabulate
+            | schemas.ForeignJobType.delete_gather_tabulate
+        ):
+            params = params | {
+                "project_id": project_id,
+                "job_source_id": job_source_id,
+            }
 
     job_run_flow: objects.FlowRun = await deployments.run_deployment(
         name=deployment_name,
@@ -129,7 +128,7 @@ def job_run_update_started(job_run_id: int) -> None:
     Args:
         job_run_id: ID of the row in the job_runs table.
     """
-    job_run_update_processing = job_runs.schemas.JobRunUpdateProcessing(
+    job_run_update_processing = schemas.JobRunUpdateProcessing(
         id=job_run_id,
     )
     with platform_db.get_session_context() as session:
@@ -147,26 +146,26 @@ async def wait_for_job_flow_run(job_run_flow_id: uuid.UUID) -> objects.FlowRun:
     return flow_run_result
 
 
-def update_job_run_with_status(job_run_id: int, status: job_runs.schemas.Status) -> None:
+def update_job_run_with_status(job_run_id: int, status: schemas.Status) -> None:
     """Update the job_runs table with the given status."""
-    job_run_update_completed = job_runs.schemas.JobRunUpdateCompleted(id=job_run_id, status=status)
+    job_run_update_completed = schemas.JobRunUpdateCompleted(id=job_run_id, status=status)
     with platform_db.get_session_context() as session:
         job_runs.crud.update_job_run(session=session, job_run_data=job_run_update_completed)
 
 
-def get_status_from_flow_run(flow_run: objects.FlowRun) -> job_runs.schemas.Status:
+def get_status_from_flow_run(flow_run: objects.FlowRun) -> schemas.Status:
     """Get the job_runs status from the flow_run.
 
     This can't be a task other wise prefect will fail.
     """
     assert flow_run.state is not None
     if flow_run.state.is_completed():
-        return job_runs.schemas.Status.completed_sucessfully
-    return job_runs.schemas.Status.failed
+        return schemas.Status.completed_sucessfully
+    return schemas.Status.failed
 
 
 @task
-async def job_run_update_completed(job_run_id: int, status: job_runs.schemas.Status) -> None:
+async def job_run_update_completed(job_run_id: int, status: schemas.Status) -> None:
     """Update the job_runs table with the final state of the job (the inner flow)."""
     update_job_run_with_status(job_run_id=job_run_id, status=status)
 
@@ -174,7 +173,7 @@ async def job_run_update_completed(job_run_id: int, status: job_runs.schemas.Sta
 def non_success_hook(flow: objects.Flow, flow_run: objects.FlowRun, state: objects.State) -> None:
     """Hook to run when the flow fails."""
     job_run_id = flow_run.parameters["job_run_id"]
-    update_job_run_with_status(job_run_id=job_run_id, status=job_runs.schemas.Status.failed)
+    update_job_run_with_status(job_run_id=job_run_id, status=schemas.Status.failed)
 
 
 @flow(
@@ -185,7 +184,7 @@ def non_success_hook(flow: objects.Flow, flow_run: objects.FlowRun, state: objec
 )
 async def flow_runner_flow(
     project_id: int,
-    job_type: job_runs.schemas.ForeignJobType,
+    job_type: schemas.ForeignJobType,
     job_source_id: int,
     job_run_id: int,
 ) -> None:
