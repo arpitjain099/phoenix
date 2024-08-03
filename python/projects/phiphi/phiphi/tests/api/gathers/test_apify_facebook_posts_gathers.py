@@ -16,11 +16,13 @@ def test_get_gather_crud(client: TestClient, reseed_tables) -> None:
     """Test getting gathers."""
     gather = child_crud.get_child_gather(reseed_tables, 1, 1)
     assert gather
+    # Needed for mypy to pass
+    assert isinstance(
+        gather, gathers.apify_facebook_posts.schemas.ApifyFacebookPostsGatherResponse
+    )
     assert gather.id == 1
     assert gather.project_id == 1
-    assert gather.source == "apify"
-    assert gather.platform == "facebook"
-    assert gather.data_type == "posts"
+    assert gather.child_type == "apify_facebook_posts"
     assert gather.limit_posts_per_account == 1000
 
 
@@ -33,9 +35,6 @@ def test_create_apify_facebook_posts_gather(reseed_tables, client: TestClient) -
         "posts_created_after": "2021-4-8",
         "posts_created_before": "2022-3-5",
         "account_url_list": ["https://buildup.org/"],
-        "source": "apify",
-        "platform": "facebook",
-        "data_type": "posts",
     }
     project_id = 1
     response = client.post(f"/projects/{project_id}/gathers/apify_facebook_posts", json=data)
@@ -48,8 +47,6 @@ def test_create_apify_facebook_posts_gather(reseed_tables, client: TestClient) -
     assert gather["limit_posts_per_account"] == data["limit_posts_per_account"]
     assert gather["posts_created_after"] == data["posts_created_after"]
     assert gather["posts_created_before"] == data["posts_created_before"]
-    assert gather["platform"] == "facebook"
-    assert gather["data_type"] == "posts"
     assert gather["created_at"] == CREATED_TIME
 
 
@@ -91,16 +88,11 @@ def test_patch_apify_facebook_posts_optional(reseed_tables, client: TestClient) 
 
 
 def test_patch_apify_facebook_posts_invalid(reseed_tables, client: TestClient) -> None:
-    """Test patch apify facebook comment gather posts invalid.
-
-    It is important for the user experience that for "source" and "platform" we return a 422
-    otherwise it could be confusing.
-    """
+    """Test patch apify facebook comment gather posts invalid."""
     data = {
         # values that we shouldn't be able to set in the model
-        "source": "apify",
-        "platform": "facebook",
-        "data_type": "comments",
+        "child_type": "apify",
+        "created_at": "2024-01-01",
         # Not in any schema
         "not_included_allowed": 2,
     }
@@ -121,15 +113,12 @@ def test_data_type_apify_facebook_posts(reseed_tables, client: TestClient) -> No
         "posts_created_after": "2022-3-5",
         "posts_created_before": "2021-4-8",
         "account_url_list": ["https://buildup.org/"],
-        "source": "apify",
-        "platform": "facebook",
-        "data_type": "comments",
     }
     project_id = 1
     response = client.post(f"/projects/{project_id}/gathers/apify_facebook_posts", json=data)
     json_response = response.json()
     assert response.status_code == 200
-    assert json_response["data_type"] == "posts"
+    assert json_response["child_type"] == "apify_facebook_posts"
 
 
 def test_serialize_facebook_post_gather_response_with_all_fields():
@@ -144,9 +133,6 @@ def test_serialize_facebook_post_gather_response_with_all_fields():
         posts_created_after="2024-04-03",
         posts_created_before="2024-04-04",
         id=1,
-        platform=gathers.schemas.Platform.facebook,
-        data_type=gathers.schemas.DataType.posts,
-        source=gathers.schemas.Source.apify,
         created_at=datetime.datetime.now(),
         updated_at=datetime.datetime.now(),
         project_id=123,
@@ -180,9 +166,6 @@ def test_serialize_facebook_post_gather_response_with_required_fields_only():
             "https://www.facebook.com/example_account/",
         ],
         id=1,
-        platform=gathers.schemas.Platform.facebook,
-        data_type=gathers.schemas.DataType.posts,
-        source=gathers.schemas.Source.apify,
         created_at=datetime.datetime.now(),
         updated_at=datetime.datetime.now(),
         project_id=123,

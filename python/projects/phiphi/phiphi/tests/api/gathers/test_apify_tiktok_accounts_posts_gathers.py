@@ -32,9 +32,6 @@ def test_create_apify_tiktok_accounts_posts_gather(reseed_tables, client: TestCl
     assert gather["account_username_list"] == data["account_username_list"]
     assert gather["limit_posts_per_account"] == data["limit_posts_per_account"]
     # These are automatically set
-    assert gather["source"] == "apify"
-    assert gather["platform"] == "tiktok"
-    assert gather["data_type"] == "posts"
     assert gather["created_at"] == CREATED_TIME
 
 
@@ -75,9 +72,6 @@ def test_serialize_tiktok_accounts_posts_gather_response_with_all_fields():
         posts_created_since_num_days=7,
         proxy_country_to_gather_from="US",
         id=1,
-        platform=gather_schemas.Platform.tiktok,
-        data_type=gather_schemas.DataType.posts,
-        source=gather_schemas.Source.apify,
         created_at=datetime.datetime.now(),
         updated_at=datetime.datetime.now(),
         project_id=123,
@@ -107,9 +101,6 @@ def test_serialize_tiktok_accounts_posts_gather_response_with_required_fields_on
         limit_posts_per_account=10,
         account_username_list=["example", "test"],
         id=1,
-        platform=gather_schemas.Platform.tiktok,
-        data_type=gather_schemas.DataType.posts,
-        source=gather_schemas.Source.apify,
         created_at=datetime.datetime.now(),
         updated_at=datetime.datetime.now(),
         project_id=123,

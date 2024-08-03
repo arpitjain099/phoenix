@@ -54,7 +54,7 @@ def tabulate(
         c.gather_id AS comment_gather_id,
         c.gather_batch_id AS comment_gather_batch_id,
         c.gathered_at AS comment_gathered_at,
-        c.source AS comment_source,
+        c.gather_type AS comment_gather_type,
         c.platform AS comment_platform,
         c.data_type AS comment_data_type,
         c.phoenix_processed_at AS comment_phoenix_processed_at

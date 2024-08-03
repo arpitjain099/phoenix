@@ -76,7 +76,7 @@
   },
   {
     "mode": "NULLABLE",
-    "name": "source",
+    "name": "gather_type",
     "type": "STRING"
   },
   {
@@ -161,7 +161,7 @@
   },
   {
     "mode": "NULLABLE",
-    "name": "comment_source",
+    "name": "comment_gather_type",
     "type": "STRING"
   },
   {

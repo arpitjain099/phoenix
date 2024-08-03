@@ -18,9 +18,6 @@ class GatherBase(platform_db.Base):
     id: orm.Mapped[int] = orm.mapped_column(primary_key=True)
     name: orm.Mapped[str]
     project_id: orm.Mapped[int]
-    source: orm.Mapped[str]
-    platform: orm.Mapped[str]
-    data_type: orm.Mapped[str]
     child_type: orm.Mapped[str]
     # In general we don't use foreign keys, but in this case it seemed appropriate
     delete_job_run_id: orm.Mapped[Optional[int]] = orm.mapped_column(sa.ForeignKey("job_runs.id"))

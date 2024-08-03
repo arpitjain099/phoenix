@@ -26,7 +26,6 @@ def test_normalise_batch(normalised_facebook_posts_df, facebook_posts_gather_fix
     )
 
     pd.testing.assert_frame_equal(processed_df, normalised_facebook_posts_df)
-    assert processed_df["source"].iloc[0] == "apify"
 
 
 @pytest.mark.patch_settings(
@@ -82,4 +81,3 @@ def test_normalise_batches(
     # Load the parquet file and verify its contents
     processed_df = pd.read_parquet(parquet_file_path)
     pd.testing.assert_frame_equal(processed_df, normalised_facebook_posts_df)
-    assert processed_df["source"].iloc[0] == "apify"

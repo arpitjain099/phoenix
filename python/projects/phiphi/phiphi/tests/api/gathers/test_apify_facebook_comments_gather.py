@@ -16,11 +16,13 @@ def test_get_gather_crud(client: TestClient, reseed_tables) -> None:
     """Test getting gathers."""
     gather = child_crud.get_child_gather(reseed_tables, 2, 4)
     assert gather
+    # Needed for mypy to pass
+    assert isinstance(
+        gather, gathers.apify_facebook_comments.schemas.ApifyFacebookCommentsGatherResponse
+    )
     assert gather.id == 4
     assert gather.project_id == 2
-    assert gather.source == "apify"
-    assert gather.platform == "facebook"
-    assert gather.data_type == "comments"
+    assert gather.child_type == "apify_facebook_comments"
     assert gather.limit_comments_per_post == 1000
 
 
@@ -33,9 +35,6 @@ def test_create_apify_facebook_comments_gather(reseed_tables, client: TestClient
         "sort_comments_by": "facebook_default",
         "post_url_list": ["https://buildup.org/"],
         "include_comment_replies": True,
-        "source": "apify",
-        "platform": "facebook",
-        "data_type": "comments",
     }
     project_id = 1
     response = client.post(f"/projects/{project_id}/gathers/apify_facebook_comments", json=data)
@@ -48,33 +47,24 @@ def test_create_apify_facebook_comments_gather(reseed_tables, client: TestClient
     assert gather["limit_comments_per_post"] == data["limit_comments_per_post"]
     assert gather["include_comment_replies"] == data["include_comment_replies"]
     assert gather["post_url_list"] == data["post_url_list"]
-    assert gather["platform"] == "facebook"
-    assert gather["data_type"] == "comments"
     assert gather["created_at"] == CREATED_TIME
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
-def test_data_type_apify_facebook_comments(reseed_tables, client: TestClient) -> None:
-    """Test create apify facebook comment gather.
-
-    This test checks that if the source, platform and data type of the child gather are taken from
-    the route and not the payload.
-    """
+def test_child_type_type_apify_facebook_comments(reseed_tables, client: TestClient) -> None:
+    """Test create apify facebook comment gather."""
     data = {
         "name": "First apify gather",
         "limit_comments_per_post": 1000,
         "sort_comments_by": "facebook_default",
         "post_url_list": ["https://buildup.org/"],
         "include_comment_replies": True,
-        "source": "apify",
-        "platform": "facebook",
-        "data_type": "posts",
     }
     project_id = 1
     response = client.post(f"/projects/{project_id}/gathers/apify_facebook_comments", json=data)
     json_response = response.json()
     assert response.status_code == 200
-    assert json_response["data_type"] == "comments"
+    assert json_response["child_type"] == "apify_facebook_comments"
 
 
 def test_patch_apify_facebook_comments(reseed_tables, client: TestClient) -> None:
@@ -106,9 +96,7 @@ def test_patch_apify_facebook_comments(reseed_tables, client: TestClient) -> Non
 def test_patch_apify_facebook_comments_invalid(reseed_tables, client: TestClient) -> None:
     """Test patch apify facebook comment gather invalid."""
     data = {
-        "source": "apify",
-        "platform": "facebook",
-        "data_type": "comments",
+        "child_type": "apify_facebook_comments",
         "not_included_allowed": "not_allowed",
     }
     project_id = 2
@@ -131,9 +119,6 @@ def test_serialize_facebook_comment_gather_response_with_all_fields():
         sort_comments_by=gathers.apify_facebook_comments.schemas.FacebookCommentSortOption.most_relevant,
         include_comment_replies=True,
         id=1,
-        platform=gathers.schemas.Platform.facebook,
-        data_type=gathers.schemas.DataType.comments,
-        source=gathers.schemas.Source.apify,
         created_at=datetime.datetime.now(),
         updated_at=datetime.datetime.now(),
         project_id=123,
@@ -167,9 +152,6 @@ def test_serialize_facebook_comment_gather_response_with_required_fields_only():
             "https://www.facebook.com/post2",
         ],
         id=1,
-        platform=gathers.schemas.Platform.facebook,
-        data_type=gathers.schemas.DataType.comments,
-        source=gathers.schemas.Source.apify,
         created_at=datetime.datetime.now(),
         updated_at=datetime.datetime.now(),
         project_id=123,

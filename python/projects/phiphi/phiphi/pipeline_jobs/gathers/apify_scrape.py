@@ -103,12 +103,16 @@ def apify_scrape_and_batch_download_results(
     batch_num = 0
     batch_items: List[Dict] = []
 
+    gather_creation_defaults = gathers.child_types.get_gather_project_db_defaults(
+        gather.child_type
+    )
+
     static_data = {
         "gather_id": gather.id,
         "job_run_id": job_run_id,
-        "source": "apify",
-        "platform": gather.platform,
-        "data_type": gather.data_type,
+        "gather_type": gather.child_type,
+        "platform": gather_creation_defaults.platform,
+        "data_type": gather_creation_defaults.data_type,
         "batch_id": 0,  # This will be updated for each batch
         "gathered_at": datetime.utcnow(),  # This will be updated for each batch
         "json_data": "",  # This will be updated for each batch
