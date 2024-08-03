@@ -66,36 +66,41 @@ async def start_flow_run(
         "project_namespace": project_namespace,
     }
 
-    if job_type == job_runs.schemas.ForeignJobType.gather:
-        deployment_name = "gather_flow/gather_flow"
-        params = params | get_gather_flow_params(project_id=project_id, gather_id=job_source_id)
-    elif job_type == job_runs.schemas.ForeignJobType.classify:
-        deployment_name = "classify_flow/classify_flow"
-        params = params | get_classify_flow_params(
-            project_id=project_id, classifier_id=job_source_id
-        )
-    elif job_type == job_runs.schemas.ForeignJobType.tabulate:
-        deployment_name = "tabulate_flow/tabulate_flow"
-    elif job_type == job_runs.schemas.ForeignJobType.delete_gather:
-        deployment_name = "delete_gather_flow/delete_gather_flow"
-        params = params | {
-            "gather_id": job_source_id,
-        }
-    elif job_type == job_runs.schemas.ForeignJobType.gather_classify_tabulate:
-        deployment_name = "gather_classify_tabulate_flow/gather_classify_tabulate_flow"
-        params = params | get_gather_flow_params(project_id=project_id, gather_id=job_source_id)
-        params = params | {
-            "project_id": project_id,
-            "job_source_id": job_source_id,
-        }
-    elif job_type == job_runs.schemas.ForeignJobType.delete_gather_tabulate:
-        deployment_name = "delete_gather_tabulate_flow/delete_gather_tabulate_flow"
-        params = params | {
-            "project_id": project_id,
-            "job_source_id": job_source_id,
-        }
-    else:
-        raise NotImplementedError(f"Job type {job_type=} not implemented yet.")
+    match job_type:
+        case job_runs.schemas.ForeignJobType.gather:
+            deployment_name = "gather_flow/gather_flow"
+            params = params | get_gather_flow_params(
+                project_id=project_id, gather_id=job_source_id
+            )
+        case job_runs.schemas.ForeignJobType.classify:
+            deployment_name = "classify_flow/classify_flow"
+            params = params | get_classify_flow_params(
+                project_id=project_id, classifier_id=job_source_id
+            )
+        case job_runs.schemas.ForeignJobType.tabulate:
+            deployment_name = "tabulate_flow/tabulate_flow"
+        case job_runs.schemas.ForeignJobType.delete_gather:
+            deployment_name = "delete_gather_flow/delete_gather_flow"
+            params = params | {
+                "gather_id": job_source_id,
+            }
+        case job_runs.schemas.ForeignJobType.gather_classify_tabulate:
+            deployment_name = "gather_classify_tabulate_flow/gather_classify_tabulate_flow"
+            params = params | get_gather_flow_params(
+                project_id=project_id, gather_id=job_source_id
+            )
+            params = params | {
+                "project_id": project_id,
+                "job_source_id": job_source_id,
+            }
+        case job_runs.schemas.ForeignJobType.delete_gather_tabulate:
+            deployment_name = "delete_gather_tabulate_flow/delete_gather_tabulate_flow"
+            params = params | {
+                "project_id": project_id,
+                "job_source_id": job_source_id,
+            }
+        case _:
+            raise NotImplementedError(f"Job type {job_type=} not implemented yet.")
 
     job_run_flow: objects.FlowRun = await deployments.run_deployment(
         name=deployment_name,
