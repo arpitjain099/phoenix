@@ -15,6 +15,7 @@ from phiphi import (
     utils,
 )
 from phiphi.api.projects import classifiers, gathers, job_runs
+from phiphi.api.projects.job_runs import schemas
 
 
 def get_gather_flow_params(project_id: int, gather_id: int) -> dict[str, Any]:
@@ -47,7 +48,7 @@ def get_classify_flow_params(project_id: int, classifier_id: int) -> dict[str, A
 @task
 async def start_flow_run(
     project_id: int,
-    job_type: job_runs.schemas.ForeignJobType,
+    job_type: schemas.ForeignJobType,
     job_source_id: int,
     job_run_id: int,
 ) -> objects.FlowRun:
@@ -67,24 +68,24 @@ async def start_flow_run(
     }
 
     match job_type:
-        case job_runs.schemas.ForeignJobType.gather:
+        case schemas.ForeignJobType.gather:
             deployment_name = "gather_flow/gather_flow"
             params = params | get_gather_flow_params(
                 project_id=project_id, gather_id=job_source_id
             )
-        case job_runs.schemas.ForeignJobType.classify:
+        case schemas.ForeignJobType.classify:
             deployment_name = "classify_flow/classify_flow"
             params = params | get_classify_flow_params(
                 project_id=project_id, classifier_id=job_source_id
             )
-        case job_runs.schemas.ForeignJobType.tabulate:
+        case schemas.ForeignJobType.tabulate:
             deployment_name = "tabulate_flow/tabulate_flow"
-        case job_runs.schemas.ForeignJobType.delete_gather:
+        case schemas.ForeignJobType.delete_gather:
             deployment_name = "delete_gather_flow/delete_gather_flow"
             params = params | {
                 "gather_id": job_source_id,
             }
-        case job_runs.schemas.ForeignJobType.gather_classify_tabulate:
+        case schemas.ForeignJobType.gather_classify_tabulate:
             deployment_name = "gather_classify_tabulate_flow/gather_classify_tabulate_flow"
             params = params | get_gather_flow_params(
                 project_id=project_id, gather_id=job_source_id
@@ -93,7 +94,7 @@ async def start_flow_run(
                 "project_id": project_id,
                 "job_source_id": job_source_id,
             }
-        case job_runs.schemas.ForeignJobType.delete_gather_tabulate:
+        case schemas.ForeignJobType.delete_gather_tabulate:
             deployment_name = "delete_gather_tabulate_flow/delete_gather_tabulate_flow"
             params = params | {
                 "project_id": project_id,
@@ -124,7 +125,7 @@ def job_run_update_started(job_run_id: int) -> None:
     Args:
         job_run_id: ID of the row in the job_runs table.
     """
-    job_run_update_processing = job_runs.schemas.JobRunUpdateProcessing(
+    job_run_update_processing = schemas.JobRunUpdateProcessing(
         id=job_run_id,
     )
     with platform_db.get_session_context() as session:
@@ -142,26 +143,26 @@ async def wait_for_job_flow_run(job_run_flow_id: uuid.UUID) -> objects.FlowRun:
     return flow_run_result
 
 
-def update_job_run_with_status(job_run_id: int, status: job_runs.schemas.Status) -> None:
+def update_job_run_with_status(job_run_id: int, status: schemas.Status) -> None:
     """Update the job_runs table with the given status."""
-    job_run_update_completed = job_runs.schemas.JobRunUpdateCompleted(id=job_run_id, status=status)
+    job_run_update_completed = schemas.JobRunUpdateCompleted(id=job_run_id, status=status)
     with platform_db.get_session_context() as session:
         job_runs.crud.update_job_run(session=session, job_run_data=job_run_update_completed)
 
 
-def get_status_from_flow_run(flow_run: objects.FlowRun) -> job_runs.schemas.Status:
+def get_status_from_flow_run(flow_run: objects.FlowRun) -> schemas.Status:
     """Get the job_runs status from the flow_run.
 
     This can't be a task other wise prefect will fail.
     """
     assert flow_run.state is not None
     if flow_run.state.is_completed():
-        return job_runs.schemas.Status.completed_sucessfully
-    return job_runs.schemas.Status.failed
+        return schemas.Status.completed_sucessfully
+    return schemas.Status.failed
 
 
 @task
-async def job_run_update_completed(job_run_id: int, status: job_runs.schemas.Status) -> None:
+async def job_run_update_completed(job_run_id: int, status: schemas.Status) -> None:
     """Update the job_runs table with the final state of the job (the inner flow)."""
     update_job_run_with_status(job_run_id=job_run_id, status=status)
 
@@ -169,7 +170,7 @@ async def job_run_update_completed(job_run_id: int, status: job_runs.schemas.Sta
 def non_success_hook(flow: objects.Flow, flow_run: objects.FlowRun, state: objects.State) -> None:
     """Hook to run when the flow fails."""
     job_run_id = flow_run.parameters["job_run_id"]
-    update_job_run_with_status(job_run_id=job_run_id, status=job_runs.schemas.Status.failed)
+    update_job_run_with_status(job_run_id=job_run_id, status=schemas.Status.failed)
 
 
 @flow(
@@ -180,7 +181,7 @@ def non_success_hook(flow: objects.Flow, flow_run: objects.FlowRun, state: objec
 )
 async def flow_runner_flow(
     project_id: int,
-    job_type: job_runs.schemas.ForeignJobType,
+    job_type: schemas.ForeignJobType,
     job_source_id: int,
     job_run_id: int,
 ) -> None:
