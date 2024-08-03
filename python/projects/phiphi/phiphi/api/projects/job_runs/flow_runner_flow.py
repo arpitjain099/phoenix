@@ -14,7 +14,7 @@ from phiphi import (
     platform_db,
     utils,
 )
-from phiphi.api.projects import gathers, job_runs
+from phiphi.api.projects import classifiers, gathers, job_runs
 
 
 @task
@@ -47,6 +47,21 @@ async def start_flow_run(
         params = {
             "gather_dict": job_params.model_dump(),
             "gather_child_type": job_params.child_type.value,
+            "job_run_id": job_run_id,
+            "project_namespace": project_namespace,
+        }
+    elif job_type == job_runs.schemas.ForeignJobType.classify:
+        with platform_db.get_session_context() as session:
+            classifier = classifiers.crud.get_classifier(
+                session=session, classifier_id=job_source_id
+            )
+        if classifier is None:
+            raise ValueError(
+                f"Classifier with {project_id=}, {job_source_id=}, {job_type=},  not found."
+            )
+        deployment_name = "classify_flow/classify_flow"
+        params = {
+            "classifier_dict": classifier.model_dump(),
             "job_run_id": job_run_id,
             "project_namespace": project_namespace,
         }
