@@ -90,18 +90,21 @@ async def start_flow_run(
             params = params | get_gather_flow_params(
                 project_id=project_id, gather_id=job_source_id
             )
-            params = params | {
-                "project_id": project_id,
-                "job_source_id": job_source_id,
-            }
         case schemas.ForeignJobType.delete_gather_tabulate:
             deployment_name = "delete_gather_tabulate_flow/delete_gather_tabulate_flow"
+        case _:
+            raise NotImplementedError(f"Job type {job_type=} not implemented yet.")
+
+    # Add params for composite flows
+    match job_type:
+        case (
+            schemas.ForeignJobType.gather_classify_tabulate
+            | schemas.ForeignJobType.delete_gather_tabulate
+        ):
             params = params | {
                 "project_id": project_id,
                 "job_source_id": job_source_id,
             }
-        case _:
-            raise NotImplementedError(f"Job type {job_type=} not implemented yet.")
 
     job_run_flow: objects.FlowRun = await deployments.run_deployment(
         name=deployment_name,
