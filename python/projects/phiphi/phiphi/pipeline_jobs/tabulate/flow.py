@@ -12,6 +12,7 @@ from phiphi.pipeline_jobs import constants as pipeline_jobs_constants
 def tabulate(
     job_run_id: int,
     bigquery_dataset: str,
+    class_id_name_map: dict[int, str],
 ) -> None:
     """Task which tabulates data."""
     client = bigquery.Client()
@@ -20,14 +21,43 @@ def tabulate(
     tabulate_table_name = (
         f"{bigquery_dataset}.{pipeline_jobs_constants.TABULATED_MESSAGES_TABLE_NAME}"
     )
+    classified_messages_table_name = (
+        f"{bigquery_dataset}.{pipeline_jobs_constants.CLASSIFIED_MESSAGES_TABLE_NAME}"
+    )
+
+    if class_id_name_map:
+        # Generate the CASE statement for class names mapping from their IDs
+        class_name_case_statements = [
+            f"WHEN cm.class_id = {class_id} THEN '{class_name}'"
+            for class_id, class_name in class_id_name_map.items()
+        ]
+        class_name_case_statement_sql = (
+            "CASE "
+            + " ".join(class_name_case_statements)
+            + " WHEN cm.class_id IS NULL THEN NULL"
+            + " ELSE 'missing_class_name' END AS class"
+        )
+    else:
+        class_name_case_statement_sql = "NULL AS class"
 
     tabulate_query = f"""
     CREATE OR REPLACE TABLE `{tabulate_table_name}` AS
-    WITH posts AS (
+    WITH messages_classes AS (
+        SELECT
+            m.*,
+            {class_name_case_statement_sql}
+        FROM
+            `{source_table_name}` m
+        LEFT JOIN
+            `{classified_messages_table_name}` cm
+        ON
+            m.phoenix_platform_message_id = cm.phoenix_platform_message_id
+    ),
+    posts AS (
         SELECT
             *
         FROM
-            `{source_table_name}`
+            messages_classes
         WHERE
             data_type = 'posts'
     ),
@@ -35,7 +65,7 @@ def tabulate(
         SELECT
             *
         FROM
-            `{source_table_name}`
+            messages_classes
         WHERE
             data_type = 'comments'
     )
@@ -57,7 +87,8 @@ def tabulate(
         c.gather_type AS comment_gather_type,
         c.platform AS comment_platform,
         c.data_type AS comment_data_type,
-        c.phoenix_processed_at AS comment_phoenix_processed_at
+        c.phoenix_processed_at AS comment_phoenix_processed_at,
+        c.class AS comment_class
     FROM
         posts p
     LEFT JOIN
@@ -74,9 +105,14 @@ def tabulate(
 def tabulate_flow(
     job_run_id: int,
     project_namespace: str,
+    class_id_name_map: dict[int, str],
 ) -> None:
     """Flow which tabulates data - producing the dataset for the dashboard to use."""
-    tabulate(job_run_id=job_run_id, bigquery_dataset=project_namespace)
+    tabulate(
+        job_run_id=job_run_id,
+        bigquery_dataset=project_namespace,
+        class_id_name_map=class_id_name_map,
+    )
 
 
 def create_deployments(

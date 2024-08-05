@@ -17,6 +17,7 @@ async def gather_classify_tabulate_flow(
     project_namespace: str,
     gather_dict: dict,
     gather_child_type: gathers.schemas.ChildTypeName,
+    class_id_name_map: dict[int, str],
     batch_size: int = 100,
 ) -> None:
     """Flow which gathers, classifies, and tabulates data.
@@ -43,6 +44,7 @@ async def gather_classify_tabulate_flow(
     await pipeline_jobs_utils.run_flow_deployment_as_subflow(
         deployment_name="tabulate_flow/tabulate_flow",
         flow_params={
+            "class_id_name_map": class_id_name_map,
             "job_run_id": job_run_id,
             "project_namespace": project_namespace,
         },

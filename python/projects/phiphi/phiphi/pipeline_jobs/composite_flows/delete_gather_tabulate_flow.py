@@ -15,6 +15,7 @@ async def delete_gather_tabulate_flow(
     job_source_id: int,
     job_run_id: int,
     project_namespace: str,
+    class_id_name_map: dict[int, str],
 ) -> None:
     """Flow which deletes a gather's data, and tabulates all data."""
     await pipeline_jobs_utils.run_flow_deployment_as_subflow(
@@ -33,6 +34,7 @@ async def delete_gather_tabulate_flow(
     await pipeline_jobs_utils.run_flow_deployment_as_subflow(
         deployment_name="tabulate_flow/tabulate_flow",
         flow_params={
+            "class_id_name_map": class_id_name_map,
             "job_run_id": job_run_id,
             "project_namespace": project_namespace,
         },
