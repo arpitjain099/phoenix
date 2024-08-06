@@ -1,24 +1,21 @@
-"""Create a table with the schema from schema_path.
+"""Create a GCP BigQuery table from schema.
 
 Usage:
-    python create_gcp_tabulated_table.py <table_id>
+    python create_gcp_table.py <table_id> --schema_path <schema_path>
 
 Arguments:
     table_id (str): The table id.
-    schema_path (str|None): The path read the schema from.
-            default: "tabulated_messages.schema.json"
+    schema_path (str): The path read the schema from.
 """
 import argparse
 from typing import Any
 
 from google.cloud import bigquery, exceptions
 
-from phiphi.pipeline_jobs.tabulate import refresh_gcp_table_schema
-
 
 def create_table(
     table_id: str,
-    schema_path: str | None = None,
+    schema_path: str,
     with_dummy_rows: int = 0,
     exists_ok: bool = False,
 ) -> None:
@@ -26,8 +23,7 @@ def create_table(
 
     Args:
         table_id (str): The table id.
-        schema_path (str|None): The path read the schema from.
-            default: "tabulated_messages.schema.json"
+        schema_path (str): The path to the schema file.
         with_dummy_rows (int): The number of dummy rows to insert into the table.
             default: 0
         exists_ok (bool): If True, do not raise an error if the table already exists.
@@ -35,7 +31,7 @@ def create_table(
     if not table_id:
         raise ValueError("table_id is required.")
     if not schema_path:
-        schema_path = refresh_gcp_table_schema.get_default_schema_path()
+        raise ValueError("schema_path is required.")
 
     client = bigquery.Client()
 

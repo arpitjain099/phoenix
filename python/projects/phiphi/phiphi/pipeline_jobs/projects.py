@@ -4,8 +4,10 @@ from google import auth
 from google.cloud import bigquery
 
 from phiphi import config
-from phiphi.pipeline_jobs import constants
-from phiphi.pipeline_jobs.tabulate import create_gcp_tabulated_table
+from phiphi.pipeline_jobs import constants, create_gcp_table
+from phiphi.pipeline_jobs.tabulate import (
+    refresh_gcp_table_schema as tabulate_refresh_gcp_table_schema,
+)
 
 
 @prefect.task
@@ -39,8 +41,9 @@ def init_project_db(
     client.create_dataset(dataset=dataset, exists_ok=True)
 
     # Create the tabulated table.
-    create_gcp_tabulated_table.create_table(
+    create_gcp_table.create_table(
         table_id=str(dataset_reference.table(constants.TABULATED_MESSAGES_TABLE_NAME)),
+        schema_path=tabulate_refresh_gcp_table_schema.get_default_schema_path(),
         with_dummy_rows=with_dummy_rows,
         exists_ok=True,
     )
