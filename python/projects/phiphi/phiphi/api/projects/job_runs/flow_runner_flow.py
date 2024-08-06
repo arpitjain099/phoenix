@@ -45,6 +45,16 @@ def get_classify_flow_params(project_id: int, classifier_id: int) -> dict[str, A
     return params
 
 
+def get_all_classifiers_params(project_id: int) -> dict[str, Any]:
+    """Get list of specs for all classifiers."""
+    with platform_db.get_session_context() as session:
+        classifiers_list = classifiers.crud.get_classifiers(session=session, project_id=project_id)
+    params = {
+        "classifiers_dict_list": [_classifier.model_dump() for _classifier in classifiers_list],
+    }
+    return params
+
+
 def get_tabulate_flow_params(project_id: int) -> dict[str, Any]:
     """Get the parameters for the tabulate flow."""
     with platform_db.get_session_context() as session:
@@ -101,6 +111,7 @@ async def start_flow_run(
             params = params | get_gather_flow_params(
                 project_id=project_id, gather_id=job_source_id
             )
+            params = params | get_all_classifiers_params(project_id=project_id)
             params = params | get_tabulate_flow_params(project_id=project_id)
         case schemas.ForeignJobType.delete_gather_tabulate:
             deployment_name = "delete_gather_tabulate_flow/delete_gather_tabulate_flow"
