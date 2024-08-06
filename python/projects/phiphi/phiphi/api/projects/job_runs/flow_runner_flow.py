@@ -113,6 +113,12 @@ async def start_flow_run(
             )
             params = params | get_all_classifiers_params(project_id=project_id)
             params = params | get_tabulate_flow_params(project_id=project_id)
+        case schemas.ForeignJobType.classify_tabulate:
+            deployment_name = "classify_tabulate_flow/classify_tabulate_flow"
+            params = params | get_classify_flow_params(
+                project_id=project_id, classifier_id=job_source_id
+            )
+            params = params | get_tabulate_flow_params(project_id=project_id)
         case schemas.ForeignJobType.delete_gather_tabulate:
             deployment_name = "delete_gather_tabulate_flow/delete_gather_tabulate_flow"
             params = params | get_tabulate_flow_params(project_id=project_id)
@@ -123,6 +129,7 @@ async def start_flow_run(
     match job_type:
         case (
             schemas.ForeignJobType.gather_classify_tabulate
+            | schemas.ForeignJobType.classify_tabulate
             | schemas.ForeignJobType.delete_gather_tabulate
         ):
             params = params | {
