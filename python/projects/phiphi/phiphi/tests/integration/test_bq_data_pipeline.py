@@ -11,7 +11,7 @@ from phiphi.pipeline_jobs.tabulate import flow as tabulate_flow
 from phiphi.tests.pipeline_jobs.gathers import example_gathers
 
 
-def test_bq_pipeline_integration(session_context, reseed_tables):
+def test_bq_pipeline_integration():
     """Test pipeline integration with bigquery.
 
     WARNING: !!!!!!!!!!!!!!
