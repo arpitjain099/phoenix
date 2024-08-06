@@ -14,6 +14,8 @@ PROJECT_NAMESPACE_STRING = "project_id{project_id}"
 
 def get_apify_api_key(workspace_slug: str | None = None) -> str:
     """Get the apify api key for the workspace."""
+    if config.settings.USE_MOCK_APIFY:
+        return "mock_apify_api_key"
     if not workspace_slug:
         workspace_slug = config.settings.FIRST_WORKSPACE_SLUG
     if workspace_slug not in config.settings.APIFY_API_KEYS:
