@@ -1,5 +1,5 @@
 """Module containing flow which combines gather, run all classifiers, and tabulate flows."""
-
+import asyncio
 from typing import Coroutine
 
 import prefect
@@ -17,6 +17,7 @@ async def gather_classify_tabulate_flow(
     project_namespace: str,
     gather_dict: dict,
     gather_child_type: gathers.schemas.ChildTypeName,
+    classifiers_dict_list: list[dict],
     class_id_name_map: dict[int, str],
     batch_size: int = 100,
 ) -> None:
@@ -39,7 +40,24 @@ async def gather_classify_tabulate_flow(
         job_run_id=job_run_id,
     )
 
-    # For each active classifier, classify the data.
+    # For each classifier, classify the data.
+    classify_tasks: list[Coroutine] = []
+    for classifier_dict in classifiers_dict_list:
+        task = pipeline_jobs_utils.run_flow_deployment_as_subflow(
+            deployment_name="classify_flow/classify_flow",
+            flow_params={
+                "classifier_dict": classifier_dict,
+                "job_run_id": job_run_id,
+                "project_namespace": project_namespace,
+            },
+            project_id=project_id,
+            job_type=job_runs.schemas.ForeignJobType.classify,
+            job_source_id=job_source_id,
+            job_run_id=job_run_id,
+        )
+        classify_tasks.append(task)
+    # Run all tasks (flows) concurrently and capture (and ignore) exceptions.
+    _ = await asyncio.gather(*classify_tasks, return_exceptions=True)
 
     await pipeline_jobs_utils.run_flow_deployment_as_subflow(
         deployment_name="tabulate_flow/tabulate_flow",
