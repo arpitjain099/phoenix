@@ -17,10 +17,20 @@ def test_bq_pipeline_integration():
     WARNING: !!!!!!!!!!!!!!
     The patch settings fixture/monkey patching env vars does not work with Prefect flows.
 
-    This creates a Bigquery dataset with name `test_<random_prefix>`.
+    Instructions on running this test using venv (not using docker):
+     - In `phiphi/config.py`:
+        - Set `USE_MOCK_APIFY: bool = True`
+        - Add `None` default to `SQLALCHEMY_DATABASE_URI: ... | None = None`
+     - Login to Prefect cloud via CLI using API key from `Phoenix Dev` workspace
+     - Delete everything in `tests/confest.py` and the line `engine = create_engine(...`
+        in `phiphi/platform_db.py`
+
+    This test creates a Bigquery dataset with name `test_<random_prefix>`.
 
     Then runs a gather flow using sample example data (no Apify calls, unless you override the
     projects settings to disable using Mock apify).
+
+    It then checks a number of other flows and pipeline processes.
 
     Finally, it deletes the dataset.
 
