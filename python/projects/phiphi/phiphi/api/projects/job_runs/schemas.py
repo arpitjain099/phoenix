@@ -24,6 +24,7 @@ class ForeignJobType(str, Enum):
     classify = "classify"
     tabulate = "tabulate"
     gather_classify_tabulate = "gather_classify_tabulate"
+    classify_tabulate = "classify_tabulate"
     delete_gather_tabulate = "delete_gather_tabulate"
 
 
