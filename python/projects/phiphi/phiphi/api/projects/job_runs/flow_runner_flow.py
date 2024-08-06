@@ -45,6 +45,16 @@ def get_classify_flow_params(project_id: int, classifier_id: int) -> dict[str, A
     return params
 
 
+def get_tabulate_flow_params(project_id: int) -> dict[str, Any]:
+    """Get the parameters for the tabulate flow."""
+    with platform_db.get_session_context() as session:
+        classes = classifiers.crud.get_classes(session=session, project_id=project_id)
+    params = {
+        "class_id_name_map": {class_.id: class_.name for class_ in classes},
+    }
+    return params
+
+
 @task
 async def start_flow_run(
     project_id: int,
@@ -80,6 +90,7 @@ async def start_flow_run(
             )
         case schemas.ForeignJobType.tabulate:
             deployment_name = "tabulate_flow/tabulate_flow"
+            params = params | get_tabulate_flow_params(project_id=project_id)
         case schemas.ForeignJobType.delete_gather:
             deployment_name = "delete_gather_flow/delete_gather_flow"
             params = params | {
@@ -90,8 +101,10 @@ async def start_flow_run(
             params = params | get_gather_flow_params(
                 project_id=project_id, gather_id=job_source_id
             )
+            params = params | get_tabulate_flow_params(project_id=project_id)
         case schemas.ForeignJobType.delete_gather_tabulate:
             deployment_name = "delete_gather_tabulate_flow/delete_gather_tabulate_flow"
+            params = params | get_tabulate_flow_params(project_id=project_id)
         case _:
             raise NotImplementedError(f"Job type {job_type=} not implemented yet.")
 

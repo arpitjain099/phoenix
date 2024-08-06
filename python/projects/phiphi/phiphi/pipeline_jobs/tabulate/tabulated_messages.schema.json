@@ -96,6 +96,11 @@
   },
   {
     "mode": "NULLABLE",
+    "name": "class",
+    "type": "STRING"
+  },
+  {
+    "mode": "NULLABLE",
     "name": "comment_pi_platform_message_id",
     "type": "STRING"
   },
@@ -178,5 +183,10 @@
     "mode": "NULLABLE",
     "name": "comment_phoenix_processed_at",
     "type": "TIMESTAMP"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "comment_class",
+    "type": "STRING"
   }
 ]
