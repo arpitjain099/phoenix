@@ -120,11 +120,9 @@ const GatherRunModal: React.FC<Props> = ({
 							</Text>
 						</div>
 						<div className="w-1/2 flex flex-col">
-							<Text className="font-medium text-lg">
-								{gatherDetail?.description}
-							</Text>
+							<Text className="font-medium text-lg">{gatherDetail?.name}</Text>
 							<Text className="text-base text-neutral-500 font-normal">
-								{translate("gathers.fields.description")}
+								{translate("gathers.fields.name")}
 							</Text>
 						</div>
 					</div>
