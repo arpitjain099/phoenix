@@ -186,7 +186,7 @@
 				"problem_statement": "Define a problem statement",
 				"source": "Define where you will get data from",
 				"gather": "Gather data from social media platforms",
-				"classify": "Classify the data you have gather",
+				"classify": "Classify the data you have gathered",
 				"visualise": "Visualise the data you have gathered and classified",
 				"insights": "Explore insights using your dashboard",
 				"tips": {
