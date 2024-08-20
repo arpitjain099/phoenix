@@ -178,7 +178,7 @@
 						"b": "gather, classify and visualise."
 					},
 					"part2": {
-						"a": "Social media listening doesn't just require these tools, it also needs an analysis process. You may have your own process already! We have laid out our recommended social media analysis process for mediators and peacebuidels in ",
+						"a": "Social media listening doesn't just require these tools, it also needs an analysis process. You may have your own process already! We have laid out our recommended social media analysis process for mediators and peacebuilders in ",
 						"b": "the Phoenix manual."
 					},
 					"part3": "Not sure how to get started? Use our standard checklist to guide you through the steps:"
@@ -234,15 +234,15 @@
 		},
 		"types": {
 			"apify_facebook_posts": {
-				"title": "Facebook Posts",
+				"title": "Facebook Posts from public pages and groups",
 				"description": "Gather posts from facebook accounts using the web scraper apify"
 			},
 			"apify_facebook_comments": {
-				"title": "Facebook Comments",
+				"title": "Facebook Comments from public posts",
 				"description": "Gather comments from facebook posts using the web scraper Apify"
 			},
 			"apify_tiktok_accounts_posts": {
-				"title": "TikTok Accounts Posts",
+				"title": "TikTok Posts from Users",
 				"description": "Gather posts (videos) from TikTok accounts (usernames) using the web scraper apify"
 			}
 		},

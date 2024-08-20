@@ -178,7 +178,7 @@
 						"b": "recueillir, classifier et visualiser."
 					},
 					"part2": {
-						"a": "L'écoute des médias sociaux ne nécessite pas seulement ces outils, elle a également besoin d'un processus d'analyse. Vous avez peut-être déjà votre propre processus ! Nous avons exposé notre processus d'analyse des médias sociaux recommandé pour les médiateurs et les constructeurs de paix dans ",
+						"a": "L'écoute des médias sociaux ne nécessite pas seulement ces outils, elle a également besoin d'un processus d'analyse. Vous avez peut-être déjà votre propre processus ! Nous avons exposé notre processus d'analyse des médias sociaux recommandé pour les médiateurs et les bâtisseurs de paix dans ",
 						"b": "le manuel Phoenix."
 					},
 					"part3": "Vous ne savez pas par où commencer ? Utilisez notre liste de contrôle standard pour vous guider à travers les étapes :"
@@ -234,16 +234,16 @@
 		},
 		"types": {
 			"apify_facebook_posts": {
-				"title": "Publications Facebook",
-				"description": "Rassemblez des publications à partir de comptes Facebook en utilisant le scraper web Apify"
+				"title": "Publications Facebook des pages et groupes publics",
+				"description": "Recueillez des publications des comptes Facebook en utilisant le web scraper Apify"
 			},
 			"apify_facebook_comments": {
-				"title": "Commentaires Facebook",
-				"description": "Rassemblez des commentaires à partir de publications Facebook en utilisant le scraper web Apify"
+				"title": "Commentaires Facebook sur les publications publiques",
+				"description": "Recueillez des commentaires des publications Facebook en utilisant le web scraper Apify"
 			},
 			"apify_tiktok_accounts_posts": {
-				"title": "Publications de Comptes TikTok",
-				"description": "Rassemblez des publications (vidéos) à partir de comptes TikTok (noms d'utilisateur) en utilisant le scraper web Apify"
+				"title": "Publications TikTok des utilisateurs",
+				"description": "Recueillez des publications (vidéos) des comptes TikTok (noms d'utilisateur) en utilisant le web scraper Apify"
 			}
 		},
 		"fields": {

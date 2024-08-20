@@ -234,16 +234,16 @@
 		},
 		"types": {
 			"apify_facebook_posts": {
-				"title": "Publicaciones de Facebook",
-				"description": "Recopila publicaciones de cuentas de Facebook utilizando el scraper web Apify"
+				"title": "Publicaciones de Facebook de páginas y grupos públicos",
+				"description": "Recopila publicaciones de cuentas de Facebook utilizando el web scraper Apify"
 			},
 			"apify_facebook_comments": {
-				"title": "Comentarios de Facebook",
-				"description": "Recopila comentarios de publicaciones de Facebook utilizando el scraper web Apify"
+				"title": "Comentarios de Facebook en publicaciones públicas",
+				"description": "Recopila comentarios de publicaciones de Facebook utilizando el web scraper Apify"
 			},
 			"apify_tiktok_accounts_posts": {
-				"title": "Publicaciones de Cuentas de TikTok",
-				"description": "Recopila publicaciones (videos) de cuentas de TikTok (nombres de usuario) utilizando el scraper web Apify"
+				"title": "Publicaciones de TikTok de usuarios",
+				"description": "Recopila publicaciones (videos) de cuentas de TikTok (nombres de usuario) utilizando el web scraper Apify"
 			}
 		},
 		"fields": {
