@@ -23,6 +23,8 @@ def test_bq_pipeline_integration():
      - In `phiphi/config.py`:
         - Set `USE_MOCK_APIFY: bool = True`
         - Add `None` default to `SQLALCHEMY_DATABASE_URI: ... | None = None`
+        - `USE_MOCK_BQ` must be false this requires a change in
+          python/projects/phiphi/docker_env.dev if using `make test_integration`.
      - Login to Prefect cloud via CLI using API key from `Phoenix Dev` workspace
      - Delete everything in `tests/confest.py` and the line `engine = create_engine(...`
         in `phiphi/platform_db.py`
