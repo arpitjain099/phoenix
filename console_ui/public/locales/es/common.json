@@ -186,7 +186,7 @@
 				"problem_statement": "Definir una declaración del problema",
 				"source": "Defina de dónde obtendrá los datos",
 				"gather": "Recopilar datos de las plataformas de redes sociales",
-				"classify": "Clasificar los datos que has recopilado",
+				"classify": "Clasifica los datos que has recopilado",
 				"visualise": "Visualizar los datos que has recopilado y clasificado",
 				"insights": "Explora insights utilizando tu panel",
 				"tips": {
@@ -231,6 +231,20 @@
 		},
 		"sub_titles": {
 			"list": "Define la plataforma, la fuente y los parámetros de búsqueda para la recopilación de datos. Cree su nueva recopilación y luego ejecútela. Una vez completada, puede ejecutar una tabulación para actualizar el conjunto de datos del tablero."
+		},
+		"types": {
+			"apify_facebook_posts": {
+				"title": "Publicaciones de Facebook de páginas y grupos públicos",
+				"description": "Recopila publicaciones de cuentas de Facebook utilizando el web scraper Apify"
+			},
+			"apify_facebook_comments": {
+				"title": "Comentarios de Facebook en publicaciones públicas",
+				"description": "Recopila comentarios de publicaciones de Facebook utilizando el web scraper Apify"
+			},
+			"apify_tiktok_accounts_posts": {
+				"title": "Publicaciones de TikTok de usuarios",
+				"description": "Recopila publicaciones (videos) de cuentas de TikTok (nombres de usuario) utilizando el web scraper Apify"
+			}
 		},
 		"fields": {
 			"id": "ID",
