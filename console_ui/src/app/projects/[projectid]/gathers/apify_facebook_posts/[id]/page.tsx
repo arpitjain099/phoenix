@@ -62,7 +62,9 @@ export default function ApifyFacebookPostShow(): JSX.Element {
 				</>
 			)}
 		>
-			<TextField value={translate("gathers.types.apify_facebook_posts.view")} />
+			<TextField
+				value={translate("gathers.types.apify_facebook_posts.view.text")}
+			/>
 			<div className="w-full">
 				<Accordion
 					styles={{
@@ -80,14 +82,16 @@ export default function ApifyFacebookPostShow(): JSX.Element {
 					<Accordion.Item value="status" className="mb-4">
 						<Accordion.Control>
 							<Title order={5}>
-								{translate("gathers.view.accordion.status")}
+								{translate(
+									"gathers.types.apify_facebook_posts.view.accordion.status"
+								)}
 							</Title>
 						</Accordion.Control>
 						<Accordion.Panel>
 							<Container className="mx-0 flex flex-col my-4">
 								<Group>
 									<Title my="xs" order={5}>
-										{translate("gathers.view.status")}:
+										{translate("gathers.fields.status")}:
 									</Title>
 									<span
 										className={`${statusTextStyle(record?.latest_job_run?.status)}`}
@@ -99,7 +103,7 @@ export default function ApifyFacebookPostShow(): JSX.Element {
 								</Group>
 								<Group>
 									<Title my="xs" order={5}>
-										{translate("gathers.view.started_processing_at")}:
+										{translate("gathers.fields.started_processing_at")}:
 									</Title>
 									{record?.latest_job_run?.started_processing_at ? (
 										<DateField
@@ -116,18 +120,20 @@ export default function ApifyFacebookPostShow(): JSX.Element {
 					<Accordion.Item value="general" mb="md">
 						<Accordion.Control>
 							<Title order={5}>
-								{translate("gathers.view.accordion.general")}
+								{translate(
+									"gathers.types.apify_facebook_posts.view.accordion.general"
+								)}
 							</Title>
 						</Accordion.Control>
 						<Accordion.Panel>
 							<Container className="mx-0 flex flex-col my-4">
 								<Group>
 									<Title my="xs" order={5}>
-										{translate("gathers.view.from")}:
+										{translate("gathers.fields.from")}:
 									</Title>
 									<TextField
 										className="capitalize"
-										value={translate(`gathers.fields.source.${record?.source}`)}
+										value={translate(`gathers.fields.source.apify`)}
 									/>
 								</Group>
 								<Group>
@@ -140,29 +146,38 @@ export default function ApifyFacebookPostShow(): JSX.Element {
 									<Title my="xs" order={5}>
 										{translate("gathers.fields.data_type")}:
 									</Title>
-									<TextField className="capitalize" value={record?.data_type} />
-								</Group>
-								<Group>
-									<Title my="xs" order={5}>
-										{translate("gathers.fields.only_posts_newer_than")}:
-									</Title>
-									<DateField
-										format="LLL"
-										value={record?.only_posts_newer_than}
+									<TextField
+										className="capitalize"
+										value={record?.child_type}
 									/>
 								</Group>
 								<Group>
 									<Title my="xs" order={5}>
-										{translate("gathers.fields.only_posts_older_than")}:
+										{translate(
+											"gathers.types.apify_facebook_posts.fields.posts_created_after"
+										)}
+										:
+									</Title>
+									<DateField format="LLL" value={record?.posts_created_after} />
+								</Group>
+								<Group>
+									<Title my="xs" order={5}>
+										{translate(
+											"gathers.types.apify_facebook_posts.fields.posts_created_before"
+										)}
+										:
 									</Title>
 									<DateField
 										format="LLL"
-										value={record?.only_posts_older_than}
+										value={record?.posts_created_before}
 									/>
 								</Group>
 								<Group>
 									<Title my="xs" order={5}>
-										{translate("gathers.fields.limit_posts_per_account")}:
+										{translate(
+											"gathers.types.apify_facebook_posts.fields.limit_posts_per_account"
+										)}
+										:
 									</Title>
 									<NumberField value={record?.limit_posts_per_account} />
 								</Group>
@@ -173,7 +188,7 @@ export default function ApifyFacebookPostShow(): JSX.Element {
 						<Accordion.Control>
 							<Title order={5}>
 								{translate(
-									`gathers.view.accordion.${record?.data_type}_source`
+									`gathers.types.apify_facebook_posts.view.accordion.source`
 								)}
 							</Title>
 						</Accordion.Control>

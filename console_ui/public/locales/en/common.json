@@ -234,39 +234,45 @@
 		},
 		"types": {
 			"apify_facebook_posts": {
-				"title": "Facebook Posts",
+				"title": "Facebook Posts from public pages and groups",
 				"description": "Gather posts from facebook accounts using the web scraper apify",
-				"view": "This is a Facebook posts gather. It gathers posts from facebook accounts using the apify web scraper.",
 				"create": "Configure a new Facebook posts gather",
 				"create_description": "Create a gather of posts from facebook accounts using the web scraper apify. Once you have created your gather your will be able to run it to collect the data.",
 				"edit": "Edit new Facebook posts gather",
-				"edit_description": "Edit a gather of posts from facebook accounts using the web scraper apify. Once you have created your gather your will be able to run it to collect the data."
-			},
-			"apify_facebook_comments": {
-				"title": "Facebook Comments from public posts",
-				"description": "Gather comments from facebook posts using the web scraper Apify"
-			},
-			"apify_tiktok_accounts_posts": {
-				"title": "TikTok Posts from Users",
-				"description": "Gather posts (videos) from TikTok accounts (usernames) using the web scraper apify"
+				"edit_description": "Edit a gather of posts from facebook accounts using the web scraper apify. Once you have created your gather your will be able to run it to collect the data.",
+				"fields": {
+					"posts_created_after": "Posts Created After",
+					"posts_created_before": "Posts Created Before",
+					"limit_posts_per_account": "Limit Posts Per Account",
+					"input": {
+						"url_list": "Add facebook accounts would you like to gather from"
+					},
+					"info": {
+						"limit_posts_per_account": "Limit the number of posts that are collected for each account.",
+						"posts_created_after": "Gather posts created after 0:00 of the day configured.",
+						"posts_created_before": "Gather posts created before 0:00 of the day configured."
+					}
+				},
+				"view": {
+					"text": "This is a Facebook posts gather. It gathers posts from facebook accounts using the apify web scraper.",
+					"accordion": {
+						"status": "Status",
+						"general": "General",
+						"source": "Facebook posts come from these accounts"
+					}
+				}
 			}
 		},
 		"fields": {
 			"id": "ID",
+			"name": "Name",
 			"platform": "Social Media Platform",
 			"data_type": "Type of Social Media Data",
-			"posts_created_after": "Posts Created After",
-			"posts_created_before": "Posts Created Before",
 			"project_id": "Project",
-			"limit_posts_per_account": "Limit Posts Per Account",
-			"limit_replies": "Limit Replies",
-			"nested_replies": "Nested Replies",
-			"limit_comments_per_post": "Limit Comments Per Post",
-			"include_comment_replies": "Comment Replies",
-			"sort_comments_by": "Sort Comments By",
-			"name": "Name",
 			"created_at": "Created At",
 			"updated_at": "Updated At",
+			"status": "Run status",
+			"from": "From",
 			"started_processing_at": "Started Processing At",
 			"started_run_at": "Started Run At",
 			"completed_at": "Completed At",
@@ -275,27 +281,17 @@
 				"apify": "Web scraper (Apify)"
 			},
 			"input": {
-				"data": "Add facebook posts would you like to gather from",
 				"name": "Name",
-				"facebook_account_url_list": "Add facebook accounts would you like to gather from",
-				"facebook_post_url_list": " Add facebook posts would you like to gather from",
-				"type": "Gather Input Type",
-				"data_placeholder": "Type/paste inputs separated by ` ` (space) or `,` or ``",
+				"data_placeholder": "Type/paste inputs separated by   (space) or , or `",
 				"button_text": "Add to inputs",
 				"search_placeholder": "Search for an input",
 				"edit_input_label": "Edit Item"
 			},
 			"info": {
-				"posts_created_after": "Gather posts created after 0:00 of the day configured.",
-				"posts_created_before": "Gather posts created before 0:00 of the day configured.",
 				"name": "Short name so that you know what the goal of the gather was.",
-				"limit_posts_per_account": "Limit the number of posts that are collected for each account.",
-				"limit_comments_per_post": "Limit the number of comments that are collected for each post.",
-				"sort_comments_by": "Sort Comments By.",
-				"data_type": "Type of data you would like to gather.",
 				"input": {
 					"type": "The type of input data that you want to gather on. See manual for more information.",
-					"data": "Add the input data you would like to gather. Type/paste inputs separated by ` ` (space)"
+					"data": "Add the input data you would like to gather. Type/paste inputs separated by   (space)"
 				}
 			}
 		},
@@ -304,17 +300,6 @@
 			"estimated_credit_cost": "Estimated credits for this run",
 			"estimated_duration_minutes": "Estimated time",
 			"cost": "Estimated Cost"
-		},
-		"view": {
-			"accordion": {
-				"status": "Status",
-				"general": "General",
-				"posts_source": "Facebook posts come from these accounts",
-				"comments_source": "Facebook comments come from these posts"
-			},
-			"status": "Run status",
-			"started_processing_at": "Started Processing At",
-			"from": "From"
 		}
 	},
 	"tabulate": {

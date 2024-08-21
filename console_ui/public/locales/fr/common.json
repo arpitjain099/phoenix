@@ -221,102 +221,88 @@
 		}
 	},
 	"gathers": {
-		"gathers": "Regroupements",
-		"details": "Détails",
+		"gathers": "Rassemblements",
+		"details": "Rassembler des détails",
 		"titles": {
-			"create": "Créer un regroupement",
-			"edit": "Modifier le regroupement",
-			"list": "Regroupements",
-			"show": "Afficher le regroupement"
+			"create": "Créer un rassemblement",
+			"edit": "Modifier un rassemblement",
+			"list": "Rassemblements",
+			"show": "Afficher le rassemblement"
 		},
 		"sub_titles": {
-			"list": "Définit la plateforme, la source et les paramètres de recherche pour la collecte de données. Créez votre nouvelle collecte, puis exécutez-la. Une fois terminée, vous pouvez exécuter une tabulation pour mettre à jour le jeu de données du tableau de bord."
+			"list": "Définit la plateforme, la source et les paramètres de recherche pour la collecte de données. Créez votre nouveau rassemblement, puis exécutez-le. Une fois terminé, vous pouvez exécuter un tableau pour mettre à jour l'ensemble de données du tableau de bord."
 		},
 		"types": {
 			"apify_facebook_posts": {
-				"title": "Publications Facebook",
-				"description": "Collectez des publications à partir de comptes Facebook en utilisant le scraper web Apify",
-				"view": "Ceci est une collecte de publications Facebook. Il collecte des publications à partir de comptes Facebook en utilisant le scraper web Apify.",
-				"create": "Configurer une nouvelle collecte de publications Facebook",
-				"create_description": "Créez une collecte de publications à partir de comptes Facebook en utilisant le scraper web Apify. Une fois votre collecte créée, vous pourrez l'exécuter pour collecter les données.",
-				"edit": "Modifier la nouvelle collecte de publications Facebook",
-				"edit_description": "Modifiez une collecte de publications à partir de comptes Facebook en utilisant le scraper web Apify. Une fois votre collecte créée, vous pourrez l'exécuter pour collecter les données."
-			},
-			"apify_facebook_comments": {
-				"title": "Commentaires Facebook sur les publications publiques",
-				"description": "Recueillez des commentaires des publications Facebook en utilisant le web scraper Apify"
-			},
-			"apify_tiktok_accounts_posts": {
-				"title": "Publications TikTok des utilisateurs",
-				"description": "Recueillez des publications (vidéos) des comptes TikTok (noms d'utilisateur) en utilisant le web scraper Apify"
+				"title": "Publications Facebook de pages et groupes publics",
+				"description": "Rassembler des publications de comptes Facebook à l'aide du scraper web Apify",
+				"create": "Configurer un nouveau rassemblement de publications Facebook",
+				"create_description": "Créez un rassemblement de publications de comptes Facebook en utilisant le scraper web Apify. Une fois votre rassemblement créé, vous pourrez l'exécuter pour collecter les données.",
+				"edit": "Modifier un nouveau rassemblement de publications Facebook",
+				"edit_description": "Modifier un rassemblement de publications de comptes Facebook en utilisant le scraper web Apify. Une fois votre rassemblement créé, vous pourrez l'exécuter pour collecter les données.",
+				"fields": {
+					"posts_created_after": "Publications créées après",
+					"posts_created_before": "Publications créées avant",
+					"limit_posts_per_account": "Limiter les publications par compte",
+					"input": {
+						"url_list": "Ajouter les comptes Facebook que vous souhaitez rassembler"
+					},
+					"info": {
+						"limit_posts_per_account": "Limiter le nombre de publications collectées pour chaque compte.",
+						"posts_created_after": "Rassembler les publications créées après 00h00 du jour configuré.",
+						"posts_created_before": "Rassembler les publications créées avant 00h00 du jour configuré."
+					}
+				},
+				"view": {
+					"text": "Ceci est un rassemblement de publications Facebook. Il rassemble des publications de comptes Facebook en utilisant le scraper web Apify.",
+					"accordion": {
+						"status": "Statut",
+						"general": "Général",
+						"source": "Les publications Facebook proviennent de ces comptes"
+					}
+				}
 			}
 		},
 		"fields": {
 			"id": "ID",
-			"platform": "Plateforme de médias sociaux",
-			"data_type": "Type de données des médias sociaux",
-			"posts_created_after": "Publications créées après",
-			"posts_created_before": "Publications créées avant",
-			"project_id": "Projet",
-			"limit_posts_per_account": "Limite de publications par compte",
-			"limit_replies": "Limite de réponses",
-			"nested_replies": "Réponses imbriquées",
-			"limit_comments_per_post": "Limite de commentaires par publication",
-			"include_comment_replies": "Réponses aux commentaires",
-			"sort_comments_by": "Trier les commentaires par",
 			"name": "Nom",
+			"platform": "Plateforme de médias sociaux",
+			"data_type": "Type de données de médias sociaux",
+			"project_id": "Projet",
 			"created_at": "Créé à",
 			"updated_at": "Mis à jour à",
+			"status": "Statut de l'exécution",
+			"from": "De",
 			"started_processing_at": "Début du traitement à",
-			"started_run_at": "Démarré à",
+			"started_run_at": "Début de l'exécution à",
 			"completed_at": "Terminé à",
 			"source": {
-				"label": "Rassembler les données de",
-				"apify": "Extracteur de données web (Apify)"
+				"label": "Rassembler des données de",
+				"apify": "Scraper web (Apify)"
 			},
 			"input": {
-				"data": "Ajouter les publications Facebook que vous souhaitez recueillir de",
 				"name": "Nom",
-				"facebook_account_url_list": "Ajouter les comptes Facebook que vous souhaitez recueillir de",
-				"facebook_post_url_list": "Ajouter les publications Facebook que vous souhaitez recueillir de",
-				"type": "Type de données d'entrée",
-				"data_placeholder": "Tapez/collez les entrées séparées par un ` ` (espace) ou une `,` ou ``",
+				"data_placeholder": "Tapez/coller des entrées séparées par ` ` (espace) ou `,` ou ``",
 				"button_text": "Ajouter aux entrées",
 				"search_placeholder": "Rechercher une entrée",
 				"edit_input_label": "Modifier l'élément"
 			},
 			"info": {
-				"posts_created_after": "Rassemblez les publications créées après 0h00 du jour configuré.",
-				"posts_created_before": "Rassemblez les publications créées avant 0h00 de la journée configurée.",
-				"name": "Nom court pour que vous sachiez quel était le but du rassemblement.",
-				"limit_posts_per_account": "Limite du nombre de publications collectées pour chaque compte.",
-				"limit_comments_per_post": "Limitez le nombre de commentaires collectés pour chaque publication.",
-				"sort_comments_by": "Trier les commentaires par",
-				"data_type": "Type de données que vous souhaitez collecter",
+				"name": "Nom court pour que vous sachiez quel était l'objectif du rassemblement.",
 				"input": {
-					"type": "Le type de données d'entrée que vous souhaitez collecter. Voir le manuel pour plus d'informations.",
-					"data": "Ajoutez les données d'entrée que vous souhaitez collecter. Tapez / collez les entrées séparées par ` ` (espace)"
+					"type": "Le type de données d'entrée que vous souhaitez rassembler. Voir le manuel pour plus d'informations.",
+					"data": "Ajouter les données d'entrée que vous souhaitez rassembler. Tapez/coller des entrées séparées par ` ` (espace)"
 				}
 			}
 		},
 		"run_estimate": {
-			"title": "Êtes-vous sûr de vouloir exécuter cette collecte ?",
+			"title": "Êtes-vous sûr de vouloir exécuter ce rassemblement?",
 			"estimated_credit_cost": "Crédits estimés pour cette exécution",
 			"estimated_duration_minutes": "Temps estimé",
 			"cost": "Coût estimé"
-		},
-		"view": {
-			"accordion": {
-				"status": "Statut",
-				"general": "Général",
-				"posts_source": "Les publications Facebook proviennent de ces comptes",
-				"comments_source": "Les commentaires Facebook proviennent de ces publications"
-			},
-			"status": "Statut d'exécution",
-			"started_processing_at": "Début du traitement à",
-			"from": "De"
 		}
 	},
+
 	"tabulate": {
 		"title": "Tabuler",
 		"sub_titles": {
