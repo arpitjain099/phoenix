@@ -4,4 +4,4 @@ CORS_ORIGINS="http://localhost:3000"
 APIFY_API_KEYS='{"main":"dummy_key"}'
 USE_MOCK_APIFY="true"
 USE_MOCK_BQ="true"
-MOCK_BQ_ROOT_DIR="/app/project/phiphi/mock_bq_data"
+MOCK_BQ_ROOT_DIR="/app/projects/phiphi/mock_bq_data"
