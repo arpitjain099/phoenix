@@ -258,7 +258,8 @@
 					"accordion": {
 						"status": "Statut",
 						"general": "Général",
-						"source": "Les publications Facebook proviennent de ces comptes"
+						"source": "Les publications Facebook proviennent de ces comptes",
+						"source_title": "URL des comptes Facebook"
 					}
 				}
 			}
@@ -278,7 +279,8 @@
 			"completed_at": "Terminé à",
 			"source": {
 				"label": "Rassembler des données de",
-				"apify": "Scraper web (Apify)"
+				"apify": "Scraper web (Apify)",
+				"input_values": "valeurs d'entrée"
 			},
 			"input": {
 				"name": "Nom",

@@ -10,20 +10,13 @@ import {
 	EditButton,
 	NumberField,
 } from "@refinedev/mantine";
-import {
-	Accordion,
-	Box,
-	Button,
-	Container,
-	Divider,
-	Group,
-	Text,
-	Title,
-} from "@mantine/core";
+import { Accordion, Button, Container, Group, Title } from "@mantine/core";
 import { useParams } from "next/navigation";
 import { statusTextStyle } from "src/utils";
-import { IconCopy, IconExternalLink } from "@tabler/icons";
+import { IconCopy } from "@tabler/icons";
 import Link from "next/link";
+import URLInputList from "@components/gather/url-list";
+import BreadcrumbsComponent from "@components/breadcrumbs";
 
 export default function ApifyFacebookPostShow(): JSX.Element {
 	const { projectid, id } = useParams();
@@ -47,9 +40,29 @@ export default function ApifyFacebookPostShow(): JSX.Element {
 			: {}),
 	};
 
+	const breadcrumbs = [
+		{ title: translate("projects.projects"), href: "/projects" },
+		{
+			title: projectid as string,
+			href: `/projects/show/${projectid}`,
+			replaceWithProjectName: true,
+		},
+		{
+			title: translate("gathers.gathers"),
+			href: `/projects/show/${projectid}?activeItem=gather`,
+		},
+		{ title: record?.name, href: "" },
+	];
+
 	return (
 		<Show
 			title={<Title order={3}>{record?.name}</Title>}
+			breadcrumb={
+				<BreadcrumbsComponent
+					breadcrumbs={breadcrumbs}
+					projectid={projectid as string}
+				/>
+			}
 			isLoading={isLoading}
 			headerButtons={() => (
 				<>
@@ -209,44 +222,16 @@ export default function ApifyFacebookPostShow(): JSX.Element {
 							<Container className="mx-0 flex flex-col my-4">
 								<Group>
 									<Title my="xs" order={5}>
-										Facebook account urLs:
+										{translate(
+											`gathers.types.apify_facebook_posts.view.accordion.source_title`
+										)}
+										:
 									</Title>
-									{record?.account_url_list?.length} input values
+									{record?.account_url_list?.length}{" "}
+									{translate(`gathers.fields.source.input_values`)}
 								</Group>
 								{record?.account_url_list?.length > 0 && (
-									<Box
-										py={16}
-										sx={{
-											border: "1px solid rgba(0, 0, 0, 0.1)",
-											maxWidth: "fit-content",
-										}}
-									>
-										{record?.account_url_list.length > 0 &&
-											record?.account_url_list.map(
-												(item: string, idx: number) => (
-													<div key={item} className="pt-2">
-														<div className="flex items-center justify-between gap-10 px-4">
-															<Text>{item}</Text>
-															<Group>
-																<Button
-																	component="a"
-																	href={item}
-																	target="_blank"
-																	rel="noopener noreferrer"
-																	p={0}
-																	variant="subtle"
-																>
-																	<IconExternalLink size={16} />
-																</Button>
-															</Group>
-														</div>
-														{idx < record.account_url_list.length - 1 && (
-															<Divider className="mt-2" />
-														)}
-													</div>
-												)
-											)}
-									</Box>
+									<URLInputList list={record?.account_url_list} />
 								)}
 							</Container>
 						</Accordion.Panel>

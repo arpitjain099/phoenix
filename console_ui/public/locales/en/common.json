@@ -258,7 +258,8 @@
 					"accordion": {
 						"status": "Status",
 						"general": "General",
-						"source": "Facebook posts come from these accounts"
+						"source": "Facebook posts come from these accounts",
+						"source_title": "Facebook account URLs"
 					}
 				}
 			}
@@ -278,7 +279,8 @@
 			"completed_at": "Completed At",
 			"source": {
 				"label": "Gather Data From",
-				"apify": "Web scraper (Apify)"
+				"apify": "Web scraper (Apify)",
+				"input_values": "input values"
 			},
 			"input": {
 				"name": "Name",
