@@ -114,6 +114,19 @@ export default function ApifyFacebookPostShow(): JSX.Element {
 										"-"
 									)}
 								</Group>
+								<Group>
+									<Title my="xs" order={5}>
+										{translate("gathers.fields.completed_at")}:
+									</Title>
+									{record?.latest_job_run?.completed_at ? (
+										<DateField
+											format="LLL"
+											value={record?.latest_job_run.completed_at}
+										/>
+									) : (
+										"-"
+									)}
+								</Group>
 							</Container>
 						</Accordion.Panel>
 					</Accordion.Item>
