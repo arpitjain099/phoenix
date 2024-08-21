@@ -34,6 +34,14 @@ def tiktok_accounts_posts_gather_fixture() -> (
 
 
 @pytest.fixture
+def tiktok_hashtags_posts_gather_fixture() -> (
+    gathers.apify_tiktok_hashtags_posts.schemas.ApifyTikTokHashtagsPostsGatherResponse
+):
+    """Fixture for the TikTok hashtags posts gather example."""
+    return example_gathers.tiktok_hashtags_posts_gather_example()
+
+
+@pytest.fixture
 def normalised_facebook_posts_df() -> pd.DataFrame:
     """Return the expected DataFrame based on the processed JSON data."""
     data = {
