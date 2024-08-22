@@ -24,60 +24,53 @@ export const initialFormValues = {
 
 // Define separate validation rules for posts
 export function getPostValidationRules(data: any, translate: any) {
-	if (data.data_type === "posts") {
-		const validationRules: any = {};
+	const validationRules: any = {};
 
-		validationRules.name =
-			data.name.length <= 0
-				? translate(
-						"gathers.types.apify_facebook_posts.fields.validation.required"
-					)
-				: null;
-		validationRules.account_url_list =
-			data.account_url_list.length <= 0
-				? translate(
-						"gathers.types.apify_facebook_posts.fields.validation.required"
-					)
-				: null;
-		validationRules.limit_posts_per_account =
-			data.limit_posts_per_account === undefined
-				? translate(
-						"gathers.types.apify_facebook_posts.fields.validation.required"
-					)
-				: null;
-		validationRules.posts_created_after = !data.posts_created_after
+	validationRules.name =
+		data.name.length <= 0
 			? translate(
 					"gathers.types.apify_facebook_posts.fields.validation.required"
 				)
 			: null;
-		validationRules.posts_created_before = !data.posts_created_before
+	validationRules.account_url_list =
+		data.account_url_list.length <= 0
 			? translate(
 					"gathers.types.apify_facebook_posts.fields.validation.required"
 				)
 			: null;
+	validationRules.limit_posts_per_account =
+		data.limit_posts_per_account === undefined
+			? translate(
+					"gathers.types.apify_facebook_posts.fields.validation.required"
+				)
+			: null;
+	validationRules.posts_created_after = !data.posts_created_after
+		? translate("gathers.types.apify_facebook_posts.fields.validation.required")
+		: null;
+	validationRules.posts_created_before = !data.posts_created_before
+		? translate("gathers.types.apify_facebook_posts.fields.validation.required")
+		: null;
 
-		if (data.posts_created_after && data.posts_created_before) {
-			const startDate = new Date(data.posts_created_after);
-			const endDate = new Date(data.posts_created_before);
+	if (data.posts_created_after && data.posts_created_before) {
+		const startDate = new Date(data.posts_created_after);
+		const endDate = new Date(data.posts_created_before);
 
-			if (startDate > today) {
-				validationRules.posts_created_after = translate(
-					"gathers.types.apify_facebook_posts.fields.validation.posts_created_after.less_than_today"
-				);
-			}
-			if (startDate > endDate) {
-				validationRules.posts_created_after = translate(
-					"gathers.types.apify_facebook_posts.fields.validation.posts_created_after.less_than_end"
-				);
-				validationRules.posts_created_before = translate(
-					"gathers.types.apify_facebook_posts.fields.validation.posts_created_before.greater_than_start"
-				);
-			}
+		if (startDate > today) {
+			validationRules.posts_created_after = translate(
+				"gathers.types.apify_facebook_posts.fields.validation.posts_created_after.less_than_today"
+			);
 		}
-
-		return validationRules;
+		if (startDate > endDate) {
+			validationRules.posts_created_after = translate(
+				"gathers.types.apify_facebook_posts.fields.validation.posts_created_after.less_than_end"
+			);
+			validationRules.posts_created_before = translate(
+				"gathers.types.apify_facebook_posts.fields.validation.posts_created_before.greater_than_start"
+			);
+		}
 	}
-	return {};
+
+	return validationRules;
 }
 
 interface Props {

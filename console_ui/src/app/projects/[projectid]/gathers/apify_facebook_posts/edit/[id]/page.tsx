@@ -24,20 +24,6 @@ export default function ApifyFacebookPostEdit(): JSX.Element {
 	const { id } = useParsed();
 	const [inputList, setInputList] = useState<string[]>([]);
 
-	const breadcrumbs = [
-		{ title: translate("projects.projects"), href: "/projects" },
-		{
-			title: projectid as string,
-			href: `/projects/show/${projectid}`,
-			replaceWithProjectName: true,
-		},
-		{
-			title: translate("gathers.gathers"),
-			href: `/projects/show/${projectid}?activeItem=gather`,
-		},
-		{ title: translate("actions.edit"), href: "" },
-	];
-
 	const {
 		getInputProps,
 		saveButtonProps,
@@ -119,12 +105,7 @@ export default function ApifyFacebookPostEdit(): JSX.Element {
 
 	return (
 		<Edit
-			breadcrumb={
-				<BreadcrumbsComponent
-					breadcrumbs={breadcrumbs}
-					projectid={projectid as string}
-				/>
-			}
+			breadcrumb={null}
 			title={
 				<Title order={3}>
 					{translate("gathers.types.apify_facebook_posts.edit")}

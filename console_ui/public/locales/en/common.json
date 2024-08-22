@@ -290,7 +290,9 @@
 			"source": {
 				"label": "Gather Data From",
 				"apify": "Web scraper (Apify)",
-				"input_values": "input values"
+				"input_values": "input values",
+				"facebook": "Facebook",
+				"posts": "Post"
 			},
 			"input": {
 				"name": "Name",
