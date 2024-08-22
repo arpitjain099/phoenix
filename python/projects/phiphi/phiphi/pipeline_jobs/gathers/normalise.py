@@ -48,6 +48,12 @@ gather_normalisation_map: Dict[type[gathers.schemas.GatherResponse], Callable[[D
     gathers.apify_facebook_comments.schemas.ApifyFacebookCommentsGatherResponse: (
         normalisers.normalise_single_facebook_comments_json
     ),
+    gathers.apify_tiktok_accounts_posts.schemas.ApifyTikTokAccountsPostsGatherResponse: (
+        normalisers.normalise_single_tiktok_posts_json
+    ),
+    gathers.apify_tiktok_hashtags_posts.schemas.ApifyTikTokHashtagsPostsGatherResponse: (
+        normalisers.normalise_single_tiktok_posts_json
+    ),
     # Add other gather types and their corresponding normalization functions here
 }
 
