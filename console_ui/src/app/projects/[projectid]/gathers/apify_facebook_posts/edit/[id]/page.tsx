@@ -3,14 +3,15 @@
 "use client";
 
 import { useParsed, useTranslate, useUpdate } from "@refinedev/core";
-import { Edit, TextField, useForm } from "@refinedev/mantine";
-import { NumberInput, TextInput, Title, Tooltip } from "@mantine/core";
+import { Edit, useForm } from "@refinedev/mantine";
+import { Title } from "@mantine/core";
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { IconInfoCircle } from "@tabler/icons";
 import BreadcrumbsComponent from "@components/breadcrumbs";
-import { DatePicker } from "@mantine/dates";
-import GatherInputs from "@components/inputs/gather-inputs";
+import ApifyFacebookPostsForm, {
+	getPostValidationRules,
+	initialFormValues,
+} from "@components/forms/gather/apify_facebook_posts_form";
 
 export default function ApifyFacebookPostEdit(): JSX.Element {
 	const today = new Date();
@@ -37,14 +38,6 @@ export default function ApifyFacebookPostEdit(): JSX.Element {
 		{ title: translate("actions.edit"), href: "" },
 	];
 
-	const initialFormValues = {
-		name: "",
-		limit_posts_per_account: 1000,
-		account_url_list: [] as string[],
-		only_posts_older_than: today,
-		only_posts_newer_than: tomorrow,
-	};
-
 	const {
 		getInputProps,
 		saveButtonProps,
@@ -52,7 +45,6 @@ export default function ApifyFacebookPostEdit(): JSX.Element {
 		setFieldValue,
 		isValid,
 		validate,
-		reset,
 		refineCore: { formLoading, queryResult },
 	} = useForm({
 		refineCoreProps: {
@@ -62,27 +54,7 @@ export default function ApifyFacebookPostEdit(): JSX.Element {
 		},
 		clearInputErrorOnChange: true,
 		initialValues: initialFormValues,
-		validate: {
-			name: (value) => (value.length <= 0 ? "Required" : null),
-			only_posts_older_than: (value) => {
-				if (!value) return "Required";
-				const startDate = new Date(value);
-				const endDate = new Date(formValues.only_posts_newer_than);
-				if (startDate > today) return "Start date cannot be in the future";
-				if (startDate > endDate) return "Start date cannot be after end date";
-				return null;
-			},
-			only_posts_newer_than: (value) => {
-				if (!value) return "End date is required";
-				const endDate = new Date(value);
-				const startDate = new Date(formValues.only_posts_older_than);
-				if (endDate < startDate) return "End date cannot be before start date";
-				return null;
-			},
-			limit_posts_per_account: (value) =>
-				value === undefined ? "Required" : null,
-			account_url_list: (value) => (value.length <= 0 ? "Required" : null),
-		},
+		validate: (values) => getPostValidationRules(values, translate),
 	});
 
 	const projectsData = queryResult?.data?.data;
@@ -112,9 +84,10 @@ export default function ApifyFacebookPostEdit(): JSX.Element {
 					},
 					{
 						onSuccess: async () => {
-							await Promise.all([setInputList([]), reset()]);
 							setTimeout(() => {
-								router.push(`/projects/show/${projectid}?activeItem=gather`);
+								router.push(
+									`/projects/${projectid}/gathers/${projectsData?.child_type}/${projectsData?.id}`
+								);
 							}, 1000);
 						},
 						onError: () => {},
@@ -130,7 +103,15 @@ export default function ApifyFacebookPostEdit(): JSX.Element {
 		if (projectsData?.account_url_list) {
 			setInputList(projectsData.account_url_list);
 		}
-	}, [projectsData]);
+		setFieldValue(
+			"posts_created_before",
+			new Date(projectsData?.posts_created_before)
+		);
+		setFieldValue(
+			"posts_created_after",
+			new Date(projectsData?.posts_created_after)
+		);
+	}, [projectsData, setFieldValue]);
 
 	useEffect(() => {
 		setFieldValue("account_url_list", inputList);
@@ -153,91 +134,10 @@ export default function ApifyFacebookPostEdit(): JSX.Element {
 			headerButtons={() => null}
 			saveButtonProps={{ ...saveButtonProps, onClick: handleSave }}
 		>
-			<TextField
-				value={translate("gathers.types.apify_facebook_posts.edit_description")}
-			/>
-			<TextInput
-				mt="sm"
-				label={
-					<div className="flex items-center">
-						<Tooltip label={translate("gathers.fields.info.name")}>
-							<span className="flex">
-								<IconInfoCircle size={12} />
-							</span>
-						</Tooltip>
-						{translate("gathers.fields.input.name")}
-					</div>
-				}
-				{...getInputProps("name")}
-			/>
-			<DatePicker
-				mt="lg"
-				label={
-					<div className="flex items-center">
-						<Tooltip
-							label={translate("gathers.fields.info.only_posts_older_than")}
-						>
-							<span className="flex">
-								<IconInfoCircle size={12} />
-							</span>
-						</Tooltip>
-						{translate("gathers.fields.only_posts_older_than")}
-					</div>
-				}
-				{...getInputProps("only_posts_older_than")}
-			/>
-			<DatePicker
-				mt="lg"
-				label={
-					<div className="flex items-center">
-						<Tooltip
-							label={translate("gathers.fields.info.only_posts_newer_than")}
-						>
-							<span className="flex">
-								<IconInfoCircle size={12} />
-							</span>
-						</Tooltip>
-						{translate("gathers.fields.only_posts_newer_than")}
-					</div>
-				}
-				{...getInputProps("only_posts_newer_than")}
-			/>
-			<NumberInput
-				mt="lg"
-				label={
-					<div className="flex items-center">
-						<Tooltip
-							label={translate("gathers.fields.info.limit_posts_per_account")}
-						>
-							<span className="flex">
-								<IconInfoCircle size={12} />
-							</span>
-						</Tooltip>
-						{translate("gathers.fields.limit_posts_per_account")}
-					</div>
-				}
-				{...getInputProps("limit_posts_per_account")}
-			/>
-			<GatherInputs
-				label={
-					<div className="flex items-center">
-						<Tooltip label={translate("gathers.fields.input.data_placeholder")}>
-							<span className="flex">
-								<IconInfoCircle size={12} />
-							</span>
-						</Tooltip>
-						{translate("gathers.fields.input.facebook_account_url_list")}
-						{inputList.length > 0 && (
-							<span className="italic ml-10">
-								{inputList.length} input value{inputList.length > 1 && "s"}
-							</span>
-						)}
-					</div>
-				}
-				placeholder={translate("gathers.fields.input.data_placeholder")}
-				data={inputList}
-				setData={setInputList}
-				{...getInputProps("account_url_list")}
+			<ApifyFacebookPostsForm
+				getInputProps={getInputProps}
+				inputList={inputList}
+				setInputList={setInputList}
 			/>
 		</Edit>
 	);

@@ -251,6 +251,16 @@
 						"limit_posts_per_account": "Limit the number of posts that are collected for each account.",
 						"posts_created_after": "Gather posts created after 0:00 of the day configured.",
 						"posts_created_before": "Gather posts created before 0:00 of the day configured."
+					},
+					"validation": {
+						"required": "Required",
+						"posts_created_after": {
+							"less_than_today": "Start date cannot be in the future",
+							"less_than_end": "Start date cannot be after end date"
+						},
+						"posts_created_before": {
+							"greater_than_start": "End date cannot be before start date"
+						}
 					}
 				},
 				"view": {

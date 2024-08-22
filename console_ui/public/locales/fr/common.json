@@ -251,6 +251,16 @@
 						"limit_posts_per_account": "Limiter le nombre de publications collectées pour chaque compte.",
 						"posts_created_after": "Rassembler les publications créées après 00h00 du jour configuré.",
 						"posts_created_before": "Rassembler les publications créées avant 00h00 du jour configuré."
+					},
+					"validation": {
+						"required": "Requis",
+						"posts_created_after": {
+							"less_than_today": "La date de début ne peut pas être dans le futur",
+							"less_than_end": "La date de début ne peut pas être après la date de fin"
+						},
+						"posts_created_before": {
+							"greater_than_start": "La date de fin ne peut pas être avant la date de début"
+						}
 					}
 				},
 				"view": {

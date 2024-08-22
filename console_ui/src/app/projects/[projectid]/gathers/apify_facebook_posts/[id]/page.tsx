@@ -166,7 +166,7 @@ export default function ApifyFacebookPostShow(): JSX.Element {
 									<Title my="xs" order={5}>
 										{translate("gathers.fields.platform")}:
 									</Title>
-									<TextField className="capitalize" value={record?.platform} />
+									<TextField className="capitalize" value="Facebook" />
 								</Group>
 								<Group>
 									<Title my="xs" order={5}>
