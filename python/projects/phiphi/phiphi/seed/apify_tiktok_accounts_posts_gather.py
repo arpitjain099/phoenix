@@ -1,4 +1,4 @@
-"""Seed the apify facebook post gathers."""
+"""Seed the apify tiktok accounts post gathers."""
 from sqlalchemy.orm import Session
 
 from phiphi.api.projects.gathers import child_crud as gather_child_crud
