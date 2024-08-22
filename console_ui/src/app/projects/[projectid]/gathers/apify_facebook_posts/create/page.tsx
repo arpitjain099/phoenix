@@ -11,6 +11,7 @@ import ApifyFacebookPostsForm, {
 	getPostValidationRules,
 	initialFormValues,
 } from "@components/forms/gather/apify_facebook_posts_form";
+import { handleGatherSave } from "src/utils/constants";
 
 export default function ApifyFacebookPostCreate(): JSX.Element {
 	const { mutate, isLoading: createResourceLoading } = useCreate();
@@ -35,45 +36,8 @@ export default function ApifyFacebookPostCreate(): JSX.Element {
 		validate: (values) => getPostValidationRules(values, translate),
 	});
 
-	const handleSave = async () => {
-		if (isValid()) {
-			if (projectid) {
-				setLoading(true);
-				mutate(
-					{
-						resource: `projects/${projectid}/gathers/apify_facebook_posts`,
-						values: formValues,
-						errorNotification: (res) => {
-							let message = "Something went wrong while creating";
-							if (res?.response?.data?.detail[0]?.msg) {
-								message = res.response.data.detail[0].msg;
-							}
-							return {
-								message,
-								description: "Error",
-								type: "error",
-							};
-						},
-					},
-					{
-						onSuccess: async () => {
-							await Promise.all([setInputList([]), reset()]);
-							setTimeout(() => {
-								router.push(`/projects/show/${projectid}?activeItem=gather`);
-							}, 1000);
-						},
-						onError: () => {
-							setLoading(false);
-						},
-					}
-				);
-			}
-		} else {
-			validate();
-		}
-	};
-
 	useEffect(() => {
+		// Updating the "account_url_list" with values from local state
 		setFieldValue("account_url_list", inputList);
 	}, [inputList, setFieldValue]);
 
@@ -88,7 +52,23 @@ export default function ApifyFacebookPostCreate(): JSX.Element {
 			isLoading={
 				formLoading || createResourceLoading || formResetAfterCreateloading
 			}
-			saveButtonProps={{ ...saveButtonProps, onClick: handleSave }}
+			saveButtonProps={{
+				...saveButtonProps,
+				onClick: () =>
+					handleGatherSave(
+						`projects/${projectid}/gathers/apify_facebook_posts`,
+						`/projects/show/${projectid}?activeItem=gather`,
+						isValid,
+						projectid as string,
+						setLoading,
+						mutate,
+						formValues,
+						setInputList,
+						reset,
+						router,
+						validate
+					),
+			}}
 		>
 			<ApifyFacebookPostsForm
 				getInputProps={getInputProps}

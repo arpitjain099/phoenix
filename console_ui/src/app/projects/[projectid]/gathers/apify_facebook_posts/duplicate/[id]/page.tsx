@@ -11,6 +11,7 @@ import ApifyFacebookPostsForm, {
 	getPostValidationRules,
 	initialFormValues,
 } from "@components/forms/gather/apify_facebook_posts_form";
+import { handleGatherSave } from "src/utils/constants";
 
 export default function ApifyFacebookPostDuplicate(): JSX.Element {
 	const { mutate, isLoading: createResourceLoading } = useCreate();
@@ -41,56 +42,22 @@ export default function ApifyFacebookPostDuplicate(): JSX.Element {
 
 	const projectsData = data?.data;
 
-	const handleSave = async () => {
-		if (isValid()) {
-			if (projectid) {
-				setLoading(true);
-				mutate(
-					{
-						resource: `projects/${projectid}/gathers/apify_facebook_posts`,
-						values: formValues,
-						errorNotification: (res) => {
-							let message = "Something went wrong while creating";
-							if (res?.response?.data?.detail[0]?.msg) {
-								message = res.response.data.detail[0].msg;
-							}
-							return {
-								message,
-								description: "Error",
-								type: "error",
-							};
-						},
-					},
-					{
-						onSuccess: async () => {
-							await Promise.all([setInputList([]), reset()]);
-							setTimeout(() => {
-								router.push(`/projects/show/${projectid}?activeItem=gather`);
-							}, 1000);
-						},
-						onError: () => {
-							setLoading(false);
-						},
-					}
-				);
-			}
-		} else {
-			validate();
-		}
-	};
-
 	useEffect(() => {
+		// Updating the "account_url_list" with values from local state
 		if (projectsData?.account_url_list) {
 			setInputList(projectsData.account_url_list);
 		}
+		// Setting the value for "limit_posts_per_account" with value from API call
 		setFieldValue(
 			"limit_posts_per_account",
 			projectsData?.limit_posts_per_account
 		);
+		// Setting the value for "posts_created_before" with value from API call
 		setFieldValue(
 			"posts_created_before",
 			new Date(projectsData?.posts_created_before)
 		);
+		// Setting the value for "posts_created_after" with value from API call
 		setFieldValue(
 			"posts_created_after",
 			new Date(projectsData?.posts_created_after)
@@ -112,7 +79,23 @@ export default function ApifyFacebookPostDuplicate(): JSX.Element {
 			isLoading={
 				formLoading || createResourceLoading || formResetAfterCreateloading
 			}
-			saveButtonProps={{ ...saveButtonProps, onClick: handleSave }}
+			saveButtonProps={{
+				...saveButtonProps,
+				onClick: () =>
+					handleGatherSave(
+						`projects/${projectid}/gathers/apify_facebook_posts`,
+						`/projects/show/${projectid}?activeItem=gather`,
+						isValid,
+						projectid as string,
+						setLoading,
+						mutate,
+						formValues,
+						setInputList,
+						reset,
+						router,
+						validate
+					),
+			}}
 		>
 			<ApifyFacebookPostsForm
 				getInputProps={getInputProps}

@@ -7,11 +7,11 @@ import { Edit, useForm } from "@refinedev/mantine";
 import { Title } from "@mantine/core";
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import BreadcrumbsComponent from "@components/breadcrumbs";
 import ApifyFacebookPostsForm, {
 	getPostValidationRules,
 	initialFormValues,
 } from "@components/forms/gather/apify_facebook_posts_form";
+import { handleGatherSave } from "src/utils/constants";
 
 export default function ApifyFacebookPostEdit(): JSX.Element {
 	const today = new Date();
@@ -23,6 +23,7 @@ export default function ApifyFacebookPostEdit(): JSX.Element {
 	const { projectid } = useParams();
 	const { id } = useParsed();
 	const [inputList, setInputList] = useState<string[]>([]);
+	const [formResetAfterEditloading, setLoading] = useState<boolean>(false);
 
 	const {
 		getInputProps,
@@ -31,6 +32,7 @@ export default function ApifyFacebookPostEdit(): JSX.Element {
 		setFieldValue,
 		isValid,
 		validate,
+		reset,
 		refineCore: { formLoading, queryResult },
 	} = useForm({
 		refineCoreProps: {
@@ -45,54 +47,17 @@ export default function ApifyFacebookPostEdit(): JSX.Element {
 
 	const projectsData = queryResult?.data?.data;
 
-	const handleSave = async () => {
-		if (isValid()) {
-			if (projectid && projectsData?.id) {
-				mutate(
-					{
-						resource: `projects/${projectid}/gathers/apify_facebook_posts`,
-						id: projectsData.id,
-						values: formValues,
-						meta: {
-							method: "patch",
-						},
-						errorNotification: (res) => {
-							let message = "Something went wrong while creating";
-							if (res?.response?.data?.detail[0]?.msg) {
-								message = res.response.data.detail[0].msg;
-							}
-							return {
-								message,
-								description: "Error",
-								type: "error",
-							};
-						},
-					},
-					{
-						onSuccess: async () => {
-							setTimeout(() => {
-								router.push(
-									`/projects/${projectid}/gathers/${projectsData?.child_type}/${projectsData?.id}`
-								);
-							}, 1000);
-						},
-						onError: () => {},
-					}
-				);
-			}
-		} else {
-			validate();
-		}
-	};
-
 	useEffect(() => {
+		// Updating the "account_url_list" with values from local state
 		if (projectsData?.account_url_list) {
 			setInputList(projectsData.account_url_list);
 		}
+		// Setting the value for "posts_created_before" with value from API call
 		setFieldValue(
 			"posts_created_before",
 			new Date(projectsData?.posts_created_before)
 		);
+		// Setting the value for "posts_created_after" with value from API call
 		setFieldValue(
 			"posts_created_after",
 			new Date(projectsData?.posts_created_after)
@@ -111,9 +76,28 @@ export default function ApifyFacebookPostEdit(): JSX.Element {
 					{translate("gathers.types.apify_facebook_posts.edit")}
 				</Title>
 			}
-			isLoading={formLoading || editResourceLoading}
+			isLoading={
+				formLoading || editResourceLoading || formResetAfterEditloading
+			}
 			headerButtons={() => null}
-			saveButtonProps={{ ...saveButtonProps, onClick: handleSave }}
+			saveButtonProps={{
+				...saveButtonProps,
+				onClick: () =>
+					handleGatherSave(
+						`projects/${projectid}/gathers/apify_facebook_posts`,
+						`/projects/${projectid}/gathers/${projectsData?.child_type}/${projectsData?.id}`,
+						isValid,
+						projectid as string,
+						setLoading,
+						mutate,
+						formValues,
+						setInputList,
+						reset,
+						router,
+						validate,
+						projectsData?.id as string
+					),
+			}}
 		>
 			<ApifyFacebookPostsForm
 				getInputProps={getInputProps}
