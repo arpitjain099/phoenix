@@ -53,7 +53,7 @@ def facebook_comments_gather_example() -> (
 def tiktok_accounts_posts_gather_example() -> (
     gathers.apify_tiktok_accounts_posts.schemas.ApifyTikTokAccountsPostsGatherResponse
 ):
-    """Example for ApifyTiktokAccountsGatherResponse schema."""
+    """Example for ApifyTiktokAccountsPostsGatherResponse schema."""
     return gathers.apify_tiktok_accounts_posts.schemas.ApifyTikTokAccountsPostsGatherResponse(
         name="Example",
         account_username_list=["@unitednations", "@bbcnews"],
@@ -65,4 +65,22 @@ def tiktok_accounts_posts_gather_example() -> (
         deleted_at=None,
         latest_job_run=None,
         child_type=gathers.schemas.ChildTypeName.apify_tiktok_accounts_posts,
+    )
+
+
+def tiktok_hashtags_posts_gather_example() -> (
+    gathers.apify_tiktok_hashtags_posts.schemas.ApifyTikTokHashtagsPostsGatherResponse
+):
+    """Example for ApifyTiktokHashtagsGatherPostsResponse schema."""
+    return gathers.apify_tiktok_hashtags_posts.schemas.ApifyTikTokHashtagsPostsGatherResponse(
+        name="Example",
+        hashtag_list=["unitednations", "bbcnews"],
+        limit_posts_per_hashtag=3,
+        id=4,
+        created_at=datetime.datetime.now(),
+        updated_at=datetime.datetime.now(),
+        project_id=1,
+        deleted_at=None,
+        latest_job_run=None,
+        child_type=gathers.schemas.ChildTypeName.apify_tiktok_hashtags_posts,
     )

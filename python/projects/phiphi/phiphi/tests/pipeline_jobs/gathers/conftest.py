@@ -34,6 +34,14 @@ def tiktok_accounts_posts_gather_fixture() -> (
 
 
 @pytest.fixture
+def tiktok_hashtags_posts_gather_fixture() -> (
+    gathers.apify_tiktok_hashtags_posts.schemas.ApifyTikTokHashtagsPostsGatherResponse
+):
+    """Fixture for the TikTok hashtags posts gather example."""
+    return example_gathers.tiktok_hashtags_posts_gather_example()
+
+
+@pytest.fixture
 def normalised_facebook_posts_df() -> pd.DataFrame:
     """Return the expected DataFrame based on the processed JSON data."""
     data = {
@@ -349,6 +357,97 @@ def normalised_tiktok_accounts_posts_df() -> pd.DataFrame:
     normalised_tiktok_df[
         "gather_type"
     ] = gathers.schemas.ChildTypeName.apify_tiktok_accounts_posts.value
+    normalised_tiktok_df["platform"] = gathers.schemas.Platform.tiktok
+    normalised_tiktok_df["data_type"] = gathers.schemas.DataType.posts
+    normalised_tiktok_df["phoenix_processed_at"] = datetime.fromisoformat(
+        "2024-04-02T12:10:59.000Z"
+    )
+    for column in ["platform_message_last_updated_at", "gathered_at", "phoenix_processed_at"]:
+        normalised_tiktok_df[column] = normalised_tiktok_df[column].astype("datetime64[ms, UTC]")  # type: ignore[call-overload]
+
+    return normalised_tiktok_df
+
+
+@pytest.fixture
+def normalised_tiktok_hashtags_posts_df() -> pd.DataFrame:
+    """Return the expected DataFrame based on the processed JSON data."""
+    data = {
+        "pi_platform_message_id": [
+            "id1",
+            "id2",
+            "id3",
+            "id4",
+            "id5",
+            "id6",
+        ],
+        "pi_platform_message_author_id": [
+            "authorMetaId1",
+            "authorMetaId2",
+            "authorMetaId3",
+            "authorMetaId4",
+            "authorMetaId5",
+            "authorMetaId6",
+        ],
+        "pi_platform_message_author_name": [
+            "bbcnews",
+            "bbcnews",
+            "bbcnews",
+            "authorMetaName4",
+            "unitednations",
+            "cbsnews",
+        ],
+        "pi_platform_parent_message_id": [None] * 6,
+        "pi_platform_root_message_id": [None] * 6,
+        "pi_text": [
+            "There's still time to see it! #BBCNews",
+            "At the Democratic National Convention",
+            "A major crackdown on smokers and vapers #BBCNews",
+            "The #unitednations #knowledge",
+            "The war in #Sudan has displaced 10 million people. #UnitedNations",
+            "President Biden tells the U.N. #news #biden #unitednations ",
+        ],
+        "pi_platform_message_url": [
+            "https://www.tiktok.com/@bbcnews/video/webVideoUrl1",
+            "https://www.tiktok.com/@bbcnews/video/webVideoUrl2",
+            "https://www.tiktok.com/@bbcnews/video/webVideoUrl3",
+            "https://www.tiktok.com/@authorMetaName4/video/webVideoUrl4",
+            "https://www.tiktok.com/@unitednations/video/webVideoUrl5",
+            "https://www.tiktok.com/@cbsnews/video/webVideoUrl6",
+        ],
+        "platform_message_last_updated_at": [
+            1724086800000,
+            1724219490000,
+            1721216700000,
+            1716304501000,
+            1721748028000,
+            1663784721000,
+        ],
+        "phoenix_platform_message_id": [
+            normalisers.anonymize("id1"),
+            normalisers.anonymize("id2"),
+            normalisers.anonymize("id3"),
+            normalisers.anonymize("id4"),
+            normalisers.anonymize("id5"),
+            normalisers.anonymize("id6"),
+        ],
+        "phoenix_platform_message_author_id": [
+            normalisers.anonymize("authorMetaId1"),
+            normalisers.anonymize("authorMetaId2"),
+            normalisers.anonymize("authorMetaId3"),
+            normalisers.anonymize("authorMetaId4"),
+            normalisers.anonymize("authorMetaId5"),
+            normalisers.anonymize("authorMetaId6"),
+        ],
+        "phoenix_platform_parent_message_id": [None] * 6,
+        "phoenix_platform_root_message_id": [None] * 6,
+    }
+    normalised_tiktok_df = pd.DataFrame(data)
+    normalised_tiktok_df["gather_id"] = 4
+    normalised_tiktok_df["gather_batch_id"] = 3
+    normalised_tiktok_df["gathered_at"] = pd.to_datetime("2024-04-01T12:00:00.000Z")
+    normalised_tiktok_df[
+        "gather_type"
+    ] = gathers.schemas.ChildTypeName.apify_tiktok_hashtags_posts.value
     normalised_tiktok_df["platform"] = gathers.schemas.Platform.tiktok
     normalised_tiktok_df["data_type"] = gathers.schemas.DataType.posts
     normalised_tiktok_df["phoenix_processed_at"] = datetime.fromisoformat(
