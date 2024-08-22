@@ -53,7 +53,7 @@ def facebook_comments_gather_example() -> (
 def tiktok_accounts_posts_gather_example() -> (
     gathers.apify_tiktok_accounts_posts.schemas.ApifyTikTokAccountsPostsGatherResponse
 ):
-    """Example for ApifyTiktokAccountsGatherResponse schema."""
+    """Example for ApifyTiktokAccountsPostsGatherResponse schema."""
     return gathers.apify_tiktok_accounts_posts.schemas.ApifyTikTokAccountsPostsGatherResponse(
         name="Example",
         account_username_list=["@unitednations", "@bbcnews"],
@@ -71,7 +71,7 @@ def tiktok_accounts_posts_gather_example() -> (
 def tiktok_hashtags_posts_gather_example() -> (
     gathers.apify_tiktok_hashtags_posts.schemas.ApifyTikTokHashtagsPostsGatherResponse
 ):
-    """Example for ApifyTiktokHashtagsGatherResponse schema."""
+    """Example for ApifyTiktokHashtagsGatherPostsResponse schema."""
     return gathers.apify_tiktok_hashtags_posts.schemas.ApifyTikTokHashtagsPostsGatherResponse(
         name="Example",
         hashtag_list=["unitednations", "bbcnews"],
