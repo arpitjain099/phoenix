@@ -11,6 +11,7 @@ export const handleGatherSave = async (
 	projectid: string,
 	setLoading: (value: SetStateAction<boolean>) => void,
 	mutate: any,
+	translate: any,
 	formValues: any,
 	setInputList: (value: SetStateAction<string[]>) => void,
 	reset: () => void,
@@ -27,7 +28,7 @@ export const handleGatherSave = async (
 					id,
 					values: formValues,
 					errorNotification: (res: any) => {
-						let message = "Something went wrong while creating";
+						let message = translate("gathers.errors.create");
 						if (res?.response?.data?.detail[0]?.msg) {
 							message = res.response.data.detail[0].msg;
 						}

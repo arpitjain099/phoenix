@@ -312,6 +312,9 @@
 			"estimated_credit_cost": "Créditos estimados para esta ejecución",
 			"estimated_duration_minutes": "Tiempo estimado",
 			"cost": "Costo estimado"
+		},
+		"errors": {
+			"create": "Algo salió mal durante la creación"
 		}
 	},
 	"tabulate": {

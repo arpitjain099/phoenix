@@ -90,6 +90,7 @@ export default function ApifyFacebookPostEdit(): JSX.Element {
 						projectid as string,
 						setLoading,
 						mutate,
+						translate,
 						formValues,
 						setInputList,
 						reset,

@@ -62,6 +62,7 @@ export default function ApifyFacebookPostCreate(): JSX.Element {
 						projectid as string,
 						setLoading,
 						mutate,
+						translate,
 						formValues,
 						setInputList,
 						reset,

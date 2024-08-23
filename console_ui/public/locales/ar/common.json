@@ -312,6 +312,9 @@
 			"estimated_credit_cost": "التكاليف المقدرة لهذا التشغيل",
 			"estimated_duration_minutes": "المدة المقدرة",
 			"cost": "التكلفة المقدرة"
+		},
+		"errors": {
+			"create": "Quelque chose s'est mal passé lors de la création"
 		}
 	},
 	"tabulate": {

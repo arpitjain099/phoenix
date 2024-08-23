@@ -312,6 +312,9 @@
 			"estimated_credit_cost": "Crédits estimés pour cette exécution",
 			"estimated_duration_minutes": "Temps estimé",
 			"cost": "Coût estimé"
+		},
+		"errors": {
+			"create": "Quelque chose s'est mal passé lors de la création"
 		}
 	},
 

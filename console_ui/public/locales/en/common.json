@@ -314,6 +314,9 @@
 			"estimated_credit_cost": "Estimated credits for this run",
 			"estimated_duration_minutes": "Estimated time",
 			"cost": "Estimated Cost"
+		},
+		"errors": {
+			"create": "Something went wrong while creating"
 		}
 	},
 	"tabulate": {
