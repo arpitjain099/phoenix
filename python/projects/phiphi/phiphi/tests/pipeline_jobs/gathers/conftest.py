@@ -314,14 +314,14 @@ def normalised_tiktok_accounts_posts_df() -> pd.DataFrame:
     """Return the expected DataFrame based on the processed JSON data."""
     data = {
         "pi_platform_message_id": [
-            "id1",
-            "id2",
-            "id3",
+            "tiktok-accounts-id1",
+            "tiktok-accounts-id2",
+            "tiktok-accounts-id3",
         ],
         "pi_platform_message_author_id": [
-            "authorMetaId1",
-            "authorMetaId2",
-            "authorMetaId3",
+            "tiktok-accounts-authorMetaId1",
+            "tiktok-accounts-authorMetaId2",
+            "tiktok-accounts-authorMetaId3",
         ],
         "pi_platform_message_author_name": ["bbcnews", "bbcnews", "bbcnews"],
         "pi_platform_parent_message_id": [None, None, None],
@@ -338,14 +338,14 @@ def normalised_tiktok_accounts_posts_df() -> pd.DataFrame:
         ],
         "platform_message_last_updated_at": [1720741311000, 1720731600000, 1720729800000],
         "phoenix_platform_message_id": [
-            normalisers.anonymize("id1"),
-            normalisers.anonymize("id2"),
-            normalisers.anonymize("id3"),
+            normalisers.anonymize("tiktok-accounts-id1"),
+            normalisers.anonymize("tiktok-accounts-id2"),
+            normalisers.anonymize("tiktok-accounts-id3"),
         ],
         "phoenix_platform_message_author_id": [
-            normalisers.anonymize("authorMetaId1"),
-            normalisers.anonymize("authorMetaId2"),
-            normalisers.anonymize("authorMetaId3"),
+            normalisers.anonymize("tiktok-accounts-authorMetaId1"),
+            normalisers.anonymize("tiktok-accounts-authorMetaId2"),
+            normalisers.anonymize("tiktok-accounts-authorMetaId3"),
         ],
         "phoenix_platform_parent_message_id": [None, None, None],
         "phoenix_platform_root_message_id": [None, None, None],
