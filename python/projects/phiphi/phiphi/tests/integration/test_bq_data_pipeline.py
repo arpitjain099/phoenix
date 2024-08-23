@@ -1,5 +1,6 @@
 """Integration tests for the data pipeline with big query."""
 import uuid
+from unittest.mock import patch
 
 import pandas as pd
 import pytest
@@ -56,6 +57,29 @@ def test_bq_pipeline_integration():
     assert client.get_dataset(dataset)
 
     batch_size = 20
+
+    # Check that if the first gather is run with no data, the table is not created This is
+    # important as if we try to produce generalised_messages without any data, it will fail. We
+    # could have the Apify scrape insert a gather batch that is empty but then this creates the
+    # wrong schema for the generalised_messages table.
+    with patch("phiphi.pipeline_jobs.gathers.utils.load_sample_raw_data", return_value=[]):
+        gather_flow.gather_flow(
+            gather_dict=example_gathers.facebook_posts_gather_example().dict(),
+            gather_child_type=example_gathers.facebook_posts_gather_example().child_type,
+            job_run_id=1,
+            project_namespace=test_project_namespace,
+            batch_size=batch_size,
+        )
+
+    messages_exists = pd.read_gbq(
+        f"""
+        SELECT COUNT(1) AS table_exists
+        FROM `{test_project_namespace}.INFORMATION_SCHEMA.TABLES`
+        WHERE table_name = '{constants.GENERALISED_MESSAGES_TABLE_NAME}'
+        """
+    )
+    assert messages_exists["table_exists"][0] == 0
+
     # Using patch_settings and mocking APIFY_API_KEYS does not work here
     # You need to set this in the environment
     gather_flow.gather_flow(

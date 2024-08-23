@@ -23,12 +23,19 @@ def gather_flow(
     """
     gather = gathers.child_types.get_response_type(gather_child_type)(**gather_dict)
 
-    apify_scrape.apify_scrape_and_batch_download_results(
+    scrape_response = apify_scrape.apify_scrape_and_batch_download_results(
         gather=gather,
         job_run_id=job_run_id,
         bigquery_dataset=project_namespace,
         batch_size=batch_size,
     )
+    # If nothing has been scraped then there is no need to normalise.
+    # This is important because the table is only created when scrape processes results
+    # the normalise will throw an error if the table does not exist.
+    # We could have the Apify scrape insert a gather batch that is empty but then this
+    # creates the wrong schema for the generalised_messages table.
+    if scrape_response.total_items == 0:
+        return
     normalise.normalise_batches(
         gather=gather,
         job_run_id=job_run_id,
