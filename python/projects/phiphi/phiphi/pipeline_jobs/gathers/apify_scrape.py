@@ -17,6 +17,7 @@ from phiphi import config, utils
 from phiphi.api.projects import gathers
 from phiphi.pipeline_jobs import constants, project_db_schemas
 from phiphi.pipeline_jobs import utils as pipeline_jobs_utils
+from phiphi.pipeline_jobs.gathers import types as gather_types
 from phiphi.pipeline_jobs.gathers import utils as gather_utils
 
 gather_apify_actor_map: dict[type[gathers.schemas.GatherResponse], str] = {
@@ -93,7 +94,7 @@ def apify_scrape_and_batch_download_results(
     bigquery_dataset: str,
     bigquery_table: str = constants.GATHER_BATCHES_TABLE_NAME,
     batch_size: int = 100,
-) -> None:
+) -> gather_types.ScrapeResponse:
     """Scrape data using the Apify API and save them to a GCP BigQuery table or Parquet."""
     prefect_logger = prefect.get_run_logger()
 
@@ -174,3 +175,4 @@ def apify_scrape_and_batch_download_results(
     prefect_logger.info("Finished scraping.")
     prefect_logger.info(f"Batches inserted: {batch_num}.")
     prefect_logger.info(f"Items scraped: {item_count}.")
+    return gather_types.ScrapeResponse(total_items=item_count, total_batches=batch_num)
