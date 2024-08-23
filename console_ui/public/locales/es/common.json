@@ -272,6 +272,51 @@
 						"source_title": "URLs de cuentas de Facebook"
 					}
 				}
+			},
+			"apify_facebook_comments": {
+				"title": "Comentarios de Facebook",
+				"description": "Recopilar comentarios de publicaciones de Facebook utilizando el scraper web Apify",
+				"create": "Configurar una nueva recopilación de comentarios de Facebook",
+				"create_description": "Crea una recopilación de comentarios de publicaciones de Facebook utilizando el scraper web Apify. Una vez creada la recopilación, podrás ejecutarla para recoger los datos.",
+				"edit": "Editar la nueva recopilación de comentarios de Facebook",
+				"edit_description": "Edita una recopilación de comentarios de publicaciones de Facebook utilizando el scraper web Apify. Una vez creada la recopilación, podrás ejecutarla para recoger los datos.",
+				"fields": {
+					"limit_replies": "Limitar respuestas",
+					"nested_replies": "Respuestas anidadas",
+					"limit_comments_per_post": "Limitar comentarios por publicación",
+					"include_comment_replies": "Incluir respuestas a comentarios",
+					"sort_comments_by": "Ordenar comentarios por",
+					"input": {
+						"url_list": "Agregar las publicaciones de Facebook de las que desea recopilar los comentarios"
+					},
+					"info": {
+						"limit_comments_per_post": "Limitar el número de comentarios que se recogen para cada publicación.",
+						"sort_comments_by": "Ordenar comentarios por."
+					},
+					"validation": {
+						"required": "Obligatorio",
+						"posts_created_after": {
+							"less_than_today": "La fecha de inicio no puede ser en el futuro",
+							"less_than_end": "La fecha de inicio no puede ser después de la fecha de finalización"
+						},
+						"posts_created_before": {
+							"greater_than_start": "La fecha de finalización no puede ser antes de la fecha de inicio"
+						}
+					}
+				},
+				"view": {
+					"text": "Esta es una recopilación de comentarios de Facebook. Recopila comentarios de publicaciones de Facebook utilizando el scraper web Apify.",
+					"accordion": {
+						"status": "Estado",
+						"general": "General",
+						"source": "Los comentarios de Facebook provienen de estas publicaciones",
+						"source_title": "URLs de publicaciones de Facebook"
+					}
+				}
+			},
+			"apify_tiktok_accounts_posts": {
+				"title": "Publicaciones de cuentas de TikTok",
+				"description": "Recopilar publicaciones (videos) de cuentas de TikTok (nombres de usuario) utilizando el scraper web Apify"
 			}
 		},
 		"fields": {

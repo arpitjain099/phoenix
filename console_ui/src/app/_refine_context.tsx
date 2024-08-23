@@ -95,6 +95,18 @@ const RefineContext = ({ children }: PropsWithChildren) => {
 										},
 									},
 									{
+										name: "apify_facebook_comments",
+										create:
+											"/projects/:projectid/gathers/apify_facebook_comments/create",
+										edit: "/projects/:projectid/gathers/apify_facebook_comments/edit/:id",
+										show: "/projects/:projectid/gathers/apify_facebook_comments/:id",
+										meta: {
+											label: "Apify Facebook Comments",
+											parent: "projects",
+											hide: true,
+										},
+									},
+									{
 										name: "profile",
 										list: "/profile",
 										meta: {

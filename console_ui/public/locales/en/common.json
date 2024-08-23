@@ -272,6 +272,51 @@
 						"source_title": "Facebook account URLs"
 					}
 				}
+			},
+			"apify_facebook_comments": {
+				"title": "Facebook Comments",
+				"description": "Gather comments from facebook commnets using the web scraper Apify",
+				"create": "Configure a new Facebook comments gather",
+				"create_description": "Create a gather of comments from facebook posts using the web scraper apify. Once you have created your gather your will be able to run it to collect the data.",
+				"edit": "Edit new Facebook comments gather",
+				"edit_description": "Edit a gather of comments from facebook posts using the web scraper apify. Once you have created your gather your will be able to run it to collect the data.",
+				"fields": {
+					"limit_replies": "Limit Replies",
+					"nested_replies": "Nested Replies",
+					"limit_comments_per_post": "Limit Comments Per Post",
+					"include_comment_replies": "Comment Replies",
+					"sort_comments_by": "Sort Comments By",
+					"input": {
+						"url_list": "Add facebook posts would you like to gather from"
+					},
+					"info": {
+						"limit_comments_per_post": "Limit the number of comments that are collected for each post.",
+						"sort_comments_by": "Sort Comments By."
+					},
+					"validation": {
+						"required": "Required",
+						"posts_created_after": {
+							"less_than_today": "Start date cannot be in the future",
+							"less_than_end": "Start date cannot be after end date"
+						},
+						"posts_created_before": {
+							"greater_than_start": "End date cannot be before start date"
+						}
+					}
+				},
+				"view": {
+					"text": "This is a Facebook comments gather. It gathers comments from facebook posts using the apify web scraper.",
+					"accordion": {
+						"status": "Status",
+						"general": "General",
+						"source": "Facebook comments come from these posts",
+						"source_title": "Facebook post URLs"
+					}
+				}
+			},
+			"apify_tiktok_accounts_posts": {
+				"title": "TikTok Accounts Posts",
+				"description": "Gather posts (videos) from TikTok accounts (usernames) using the web scraper apify"
 			}
 		},
 		"fields": {
@@ -292,7 +337,8 @@
 				"apify": "Web scraper (Apify)",
 				"input_values": "input values",
 				"facebook": "Facebook",
-				"posts": "Post"
+				"posts": "Post",
+				"comments": "Comment"
 			},
 			"input": {
 				"name": "Name",
