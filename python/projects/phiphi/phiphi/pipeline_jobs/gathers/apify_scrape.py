@@ -5,6 +5,7 @@ Single flow that all Apify scrapers use.
 Includes switch for using mock data read directly from file for testing purposes.
 """
 import json
+import logging
 from datetime import datetime
 from typing import Dict, Iterator, List, Tuple
 
@@ -38,11 +39,15 @@ def apify_scrape(
     apify_token: str,
     actor_name: str,
     gather: gathers.schemas.GatherResponse,
+    logger: None | logging.Logger | logging.LoggerAdapter = None,
 ) -> Tuple[Iterator[Dict], apify_client.clients.DatasetClient]:
     """Scrape data using the Apify API and return an iterator."""
     client = apify_client.ApifyClient(apify_token)
     # Run the Apify actor
     run_info = client.actor(actor_name).call(run_input=gather.serialize_to_apify_input())
+    if logger is not None:
+        logger.info("Apify actor run info returned from call:")
+        logger.info(run_info)
     assert run_info is not None
     # Access the dataset client associated with the actor's results
     dataset_client = client.dataset(run_info["defaultDatasetId"])
@@ -100,9 +105,12 @@ def apify_scrape_and_batch_download_results(
         dataset_iterator, dataset_client = mock_apify_scrape(apify_token, apify_actor_name, gather)
     else:
         prefect_logger.info("Making Apify call.")
-        dataset_iterator, dataset_client = apify_scrape(apify_token, apify_actor_name, gather)
+        dataset_iterator, dataset_client = apify_scrape(
+            apify_token, apify_actor_name, gather, prefect_logger
+        )
 
     # Initialize batch tracking
+    item_count = 0
     batch_num = 0
     batch_items: List[Dict] = []
 
@@ -130,6 +138,7 @@ def apify_scrape_and_batch_download_results(
 
     # Iterate over dataset items and insert into BigQuery or Parquet in batches
     for item in dataset_iterator:
+        item_count += 1
         batch_items.append(item)
 
         # Insert the batch into BigQuery or Parquet when reaching the batch size
@@ -155,10 +164,13 @@ def apify_scrape_and_batch_download_results(
             bigquery_dataset,
             bigquery_table,
         )
+        # Add a batch number if there are items in the final batch
+        batch_num += 1
 
     # Delete the dataset after downloading to save on storage costs
     if dataset_client is not None:
         dataset_client.delete()
 
-    # batch_num+1 to account for 0-indexing
-    prefect_logger.info(f"Finished scraping. Batches inserted: {batch_num + 1}")
+    prefect_logger.info("Finished scraping.")
+    prefect_logger.info(f"Batches inserted: {batch_num}.")
+    prefect_logger.info(f"Items scraped: {item_count}.")
