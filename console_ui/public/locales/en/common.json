@@ -274,10 +274,10 @@
 				}
 			},
 			"apify_facebook_comments": {
-				"title": "Facebook Comments",
-				"description": "Gather comments from facebook commnets using the web scraper Apify",
+				"title": "Facebook Comments from public Facebook posts",
+				"description": "Gather comments from Facebook posts using the web scraper Apify",
 				"create": "Configure a new Facebook comments gather",
-				"create_description": "Create a gather of comments from facebook posts using the web scraper apify. Once you have created your gather your will be able to run it to collect the data.",
+				"create_description": "Create a gather of comments from Facebook posts using the web scraper Apify. Once you have created your gather you will be able to run it to collect the data.",
 				"edit": "Edit new Facebook comments gather",
 				"edit_description": "Edit a gather of comments from facebook posts using the web scraper apify. Once you have created your gather your will be able to run it to collect the data.",
 				"fields": {
@@ -305,7 +305,7 @@
 					}
 				},
 				"view": {
-					"text": "This is a Facebook comments gather. It gathers comments from facebook posts using the apify web scraper.",
+					"text": "This is a Facebook comments gather. It gathers comments from facebook posts using the Apify web scraper.",
 					"accordion": {
 						"status": "Status",
 						"general": "General",
@@ -316,7 +316,7 @@
 			},
 			"apify_tiktok_accounts_posts": {
 				"title": "TikTok Accounts Posts",
-				"description": "Gather posts (videos) from TikTok accounts (usernames) using the web scraper apify"
+				"description": "Gather posts (videos) from TikTok accounts (usernames) using the web scraper Apify"
 			}
 		},
 		"fields": {
