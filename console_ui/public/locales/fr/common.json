@@ -178,7 +178,7 @@
 						"b": "recueillir, classifier et visualiser."
 					},
 					"part2": {
-						"a": "L'écoute des médias sociaux ne nécessite pas seulement ces outils, elle a également besoin d'un processus d'analyse. Vous avez peut-être déjà votre propre processus ! Nous avons exposé notre processus d'analyse des médias sociaux recommandé pour les médiateurs et les constructeurs de paix dans ",
+						"a": "L'écoute des médias sociaux ne nécessite pas seulement ces outils, elle a également besoin d'un processus d'analyse. Vous avez peut-être déjà votre propre processus ! Nous avons exposé notre processus d'analyse des médias sociaux recommandé pour les médiateurs et les bâtisseurs de paix dans ",
 						"b": "le manuel Phoenix."
 					},
 					"part3": "Vous ne savez pas par où commencer ? Utilisez notre liste de contrôle standard pour vous guider à travers les étapes :"
@@ -221,68 +221,154 @@
 		}
 	},
 	"gathers": {
-		"gathers": "Regroupements",
-		"details": "Détails",
+		"gathers": "Rassemblements",
+		"details": "Rassembler des détails",
 		"titles": {
-			"create": "Créer un regroupement",
-			"edit": "Modifier le regroupement",
-			"list": "Regroupements",
-			"show": "Afficher le regroupement"
+			"create": "Créer un rassemblement",
+			"edit": "Modifier un rassemblement",
+			"list": "Rassemblements",
+			"show": "Afficher le rassemblement"
 		},
 		"sub_titles": {
-			"list": "Définit la plateforme, la source et les paramètres de recherche pour la collecte de données. Créez votre nouvelle collecte, puis exécutez-la. Une fois terminée, vous pouvez exécuter une tabulation pour mettre à jour le jeu de données du tableau de bord."
+			"list": "Définit la plateforme, la source et les paramètres de recherche pour la collecte de données. Créez votre nouveau rassemblement, puis exécutez-le. Une fois terminé, vous pouvez exécuter un tableau pour mettre à jour l'ensemble de données du tableau de bord."
+		},
+		"types": {
+			"apify_facebook_posts": {
+				"title": "Publications Facebook de pages et groupes publics",
+				"description": "Rassembler des publications de comptes Facebook à l'aide du scraper web Apify",
+				"create": "Configurer un nouveau rassemblement de publications Facebook",
+				"create_description": "Créez un rassemblement de publications de comptes Facebook en utilisant le scraper web Apify. Une fois votre rassemblement créé, vous pourrez l'exécuter pour collecter les données.",
+				"edit": "Modifier un nouveau rassemblement de publications Facebook",
+				"edit_description": "Modifier un rassemblement de publications de comptes Facebook en utilisant le scraper web Apify. Une fois votre rassemblement créé, vous pourrez l'exécuter pour collecter les données.",
+				"fields": {
+					"posts_created_after": "Publications créées après",
+					"posts_created_before": "Publications créées avant",
+					"limit_posts_per_account": "Limiter les publications par compte",
+					"input": {
+						"url_list": "Ajouter les comptes Facebook que vous souhaitez rassembler"
+					},
+					"info": {
+						"limit_posts_per_account": "Limiter le nombre de publications collectées pour chaque compte.",
+						"posts_created_after": "Rassembler les publications créées après 00h00 du jour configuré.",
+						"posts_created_before": "Rassembler les publications créées avant 00h00 du jour configuré."
+					},
+					"validation": {
+						"required": "Requis",
+						"posts_created_after": {
+							"less_than_today": "La date de début ne peut pas être dans le futur",
+							"less_than_end": "La date de début ne peut pas être après la date de fin"
+						},
+						"posts_created_before": {
+							"greater_than_start": "La date de fin ne peut pas être avant la date de début"
+						}
+					}
+				},
+				"view": {
+					"text": "Ceci est un rassemblement de publications Facebook. Il rassemble des publications de comptes Facebook en utilisant le scraper web Apify.",
+					"accordion": {
+						"status": "Statut",
+						"general": "Général",
+						"source": "Les publications Facebook proviennent de ces comptes",
+						"source_title": "URL des comptes Facebook"
+					}
+				}
+			},
+			"apify_facebook_comments": {
+				"title": "Commentaires Facebook",
+				"description": "Rassembler les commentaires de Facebook en utilisant le web scraper Apify",
+				"create": "Configurer une nouvelle collecte de commentaires Facebook",
+				"create_description": "Créez une collecte de commentaires des publications Facebook en utilisant le web scraper Apify. Une fois que vous aurez créé votre collecte, vous pourrez l'exécuter pour collecter les données.",
+				"edit": "Modifier la collecte de nouveaux commentaires Facebook",
+				"edit_description": "Modifiez une collecte de commentaires des publications Facebook en utilisant le web scraper Apify. Une fois que vous aurez créé votre collecte, vous pourrez l'exécuter pour collecter les données.",
+				"fields": {
+					"limit_replies": "Limiter les réponses",
+					"nested_replies": "Réponses imbriquées",
+					"limit_comments_per_post": "Limiter les commentaires par publication",
+					"include_comment_replies": "Inclure les réponses aux commentaires",
+					"sort_comments_by": "Trier les commentaires par",
+					"sort_comments_by_options": {
+						"facebook_default": "Défaut Facebook",
+						"most_relevant": "Le plus pertinent",
+						"newest_first": "Le plus récent en premier",
+						"non_filtered": "Non filtré"
+					},
+					"input": {
+						"url_list": "Ajouter les publications Facebook dont vous souhaitez collecter les commentaires"
+					},
+					"info": {
+						"limit_comments_per_post": "Limiter le nombre de commentaires collectés pour chaque publication.",
+						"sort_comments_by": "Trier les commentaires par."
+					},
+					"validation": {
+						"required": "Requis",
+						"posts_created_after": {
+							"less_than_today": "La date de début ne peut pas être dans le futur",
+							"less_than_end": "La date de début ne peut pas être après la date de fin"
+						},
+						"posts_created_before": {
+							"greater_than_start": "La date de fin ne peut pas être avant la date de début"
+						}
+					}
+				},
+				"view": {
+					"text": "Ceci est une collecte de commentaires Facebook. Il rassemble les commentaires des publications Facebook en utilisant le web scraper Apify.",
+					"accordion": {
+						"status": "Statut",
+						"general": "Général",
+						"source": "Les commentaires Facebook proviennent de ces publications",
+						"source_title": "URL des publications Facebook"
+					}
+				}
+			},
+			"apify_tiktok_accounts_posts": {
+				"title": "Publications des comptes TikTok",
+				"description": "Rassembler les publications (vidéos) des comptes TikTok (noms d'utilisateur) en utilisant le web scraper Apify"
+			}
 		},
 		"fields": {
 			"id": "ID",
-			"source": "Source",
-			"only_posts_older_than": "Uniquement les publications antérieures à",
-			"only_posts_newer_than": "Uniquement les publications plus récentes que",
-			"platform": "Plateforme",
+			"name": "Nom",
+			"platform": "Plateforme de médias sociaux",
+			"data_type": "Type de données de médias sociaux",
 			"project_id": "Projet",
-			"limit_posts_per_account": "Limite de publications par compte",
-			"limit_replies": "Limite de réponses",
-			"nested_replies": "Réponses imbriquées",
-			"limit_comments_per_post": "Limite de commentaires par publication",
-			"include_comment_replies": "Réponses aux commentaires",
-			"sort_comments_by": "Trier les commentaires par",
-			"data_type": "Type de données",
-			"description": "Description",
 			"created_at": "Créé à",
 			"updated_at": "Mis à jour à",
+			"status": "Statut de l'exécution",
+			"from": "De",
 			"started_processing_at": "Début du traitement à",
-			"started_run_at": "Démarré à",
+			"started_run_at": "Début de l'exécution à",
+			"completed_at": "Terminé à",
+			"source": {
+				"label": "Rassembler des données de",
+				"apify": "Scraper web (Apify)",
+				"input_values": "valeurs d'entrée"
+			},
 			"input": {
-				"data": "Collecter les données d'entrée",
-				"description": "Description (Facultatif)",
-				"facebook_account_url_list": "URL des comptes Facebook",
-				"facebook_post_url_list": "URL des publications Facebook",
-				"type": "Type de données d'entrée",
-				"data_placeholder": "Tapez/collez les entrées séparées par ` ` (espace)",
+				"name": "Nom",
+				"data_placeholder": "Tapez/coller des entrées séparées par ` ` (espace) ou `,` ou ``",
 				"button_text": "Ajouter aux entrées",
 				"search_placeholder": "Rechercher une entrée",
 				"edit_input_label": "Modifier l'élément"
 			},
 			"info": {
-				"only_posts_older_than": "La date à partir de laquelle collecter des données. Ce sera 00:00 du jour configuré.",
-				"only_posts_newer_than": "La date jusqu'à laquelle collecter des données. Ce sera 00:00 du jour configuré.",
-				"description": "Brève description pour que vous sachiez quel est l'objectif de la collecte.",
-				"limit_posts_per_account": "Limite du nombre de publications collectées pour chaque compte.",
-				"limit_comments_per_post": "Limitez le nombre de commentaires collectés pour chaque publication.",
-				"sort_comments_by": "Trier les commentaires par",
-				"data_type": "Type de données que vous souhaitez collecter",
+				"name": "Nom court pour que vous sachiez quel était l'objectif du rassemblement.",
 				"input": {
-					"type": "Le type de données d'entrée que vous souhaitez collecter. Voir le manuel pour plus d'informations.",
-					"data": "Ajoutez les données d'entrée que vous souhaitez collecter. Tapez / collez les entrées séparées par ` ` (espace)"
+					"type": "Le type de données d'entrée que vous souhaitez rassembler. Voir le manuel pour plus d'informations.",
+					"data": "Ajouter les données d'entrée que vous souhaitez rassembler. Tapez/coller des entrées séparées par ` ` (espace)"
 				}
 			}
 		},
 		"run_estimate": {
-			"title": "Êtes-vous sûr de vouloir exécuter cette collecte ?",
+			"title": "Êtes-vous sûr de vouloir exécuter ce rassemblement?",
 			"estimated_credit_cost": "Crédits estimés pour cette exécution",
 			"estimated_duration_minutes": "Temps estimé",
 			"cost": "Coût estimé"
+		},
+		"errors": {
+			"create": "Quelque chose s'est mal passé lors de la création"
 		}
 	},
+
 	"tabulate": {
 		"title": "Tabuler",
 		"sub_titles": {

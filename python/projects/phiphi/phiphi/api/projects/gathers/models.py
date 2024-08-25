@@ -1,12 +1,13 @@
 """Gather Models."""
-import datetime
 from typing import Optional
 
+import sqlalchemy as sa
 from sqlalchemy import orm
 
 from phiphi import platform_db
 from phiphi.api import base_models
 from phiphi.api.projects.job_runs import models as job_run_models
+from phiphi.api.projects.job_runs import schemas as job_run_schemas
 
 
 class GatherBase(platform_db.Base):
@@ -15,13 +16,19 @@ class GatherBase(platform_db.Base):
     __abstract__ = True
 
     id: orm.Mapped[int] = orm.mapped_column(primary_key=True)
-    description: orm.Mapped[str]
+    name: orm.Mapped[str]
     project_id: orm.Mapped[int]
-    source: orm.Mapped[str]
-    platform: orm.Mapped[str]
-    data_type: orm.Mapped[str]
-    deleted_at: orm.Mapped[Optional[datetime.datetime]]
     child_type: orm.Mapped[str]
+    # In general we don't use foreign keys, but in this case it seemed appropriate
+    delete_job_run_id: orm.Mapped[Optional[int]] = orm.mapped_column(sa.ForeignKey("job_runs.id"))
+
+
+job_run_foreign_type_query = (
+    "or_("
+    f"JobRuns.foreign_job_type=='{job_run_schemas.ForeignJobType.gather.value}',"
+    f"JobRuns.foreign_job_type=='{job_run_schemas.ForeignJobType.gather_classify_tabulate.value}'"
+    ")"
+)
 
 
 class Gather(GatherBase, base_models.TimestampModel):
@@ -33,12 +40,15 @@ class Gather(GatherBase, base_models.TimestampModel):
         "polymorphic_on": "child_type",
     }
 
+    # Relationships have to be on non abstract model.
+    delete_job_run: orm.Mapped[job_run_models.JobRuns] = orm.relationship("JobRuns")
+
     # Relationship to get all related JobRuns, ordered by id descending
     job_runs = orm.relationship(
         "JobRuns",
         order_by="desc(JobRuns.id)",
         primaryjoin=(
-            "and_(JobRuns.foreign_job_type=='gather', foreign(JobRuns.foreign_id)==Gather.id)"
+            f"and_({job_run_foreign_type_query}, foreign(JobRuns.foreign_id)==Gather.id)"
         ),
         lazy="dynamic",
     )

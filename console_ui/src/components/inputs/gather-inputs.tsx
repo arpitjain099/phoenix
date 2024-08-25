@@ -114,12 +114,10 @@ const GatherInputs: React.FC<Props> = ({
 				value={inputValue}
 				onChange={handleInputChange}
 				onKeyDown={handleKeyDown}
+				onBlur={handleAddInput}
 				placeholder={placeholder}
 				error={error}
 			/>
-			<Button onClick={handleAddInput} variant="light" mb="md">
-				{translate("gathers.fields.input.button_text")}
-			</Button>
 			{data.length > 0 && (
 				<Box
 					py={16}
@@ -128,22 +126,6 @@ const GatherInputs: React.FC<Props> = ({
 						maxWidth: "fit-content",
 					}}
 				>
-					<div className="flex items-center p-4">
-						<TextInput
-							mb="sm"
-							value={searchQuery}
-							onChange={(e) => setSearchQuery(e.currentTarget.value)}
-							icon={<IconSearch size={16} />}
-							placeholder={translate("gathers.fields.input.search_placeholder")}
-							rightSection={
-								<IconX
-									size={16}
-									className="cursor-pointer"
-									onClick={() => setSearchQuery("")}
-								/>
-							}
-						/>
-					</div>
 					{filteredItems.map((item: string, idx: number) => (
 						<div key={item} className="pt-2">
 							{editIndex === idx ? (

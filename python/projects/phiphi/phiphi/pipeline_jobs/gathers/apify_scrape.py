@@ -5,6 +5,7 @@ Single flow that all Apify scrapers use.
 Includes switch for using mock data read directly from file for testing purposes.
 """
 import json
+import logging
 from datetime import datetime
 from typing import Dict, Iterator, List, Tuple
 
@@ -16,14 +17,21 @@ from phiphi import config, utils
 from phiphi.api.projects import gathers
 from phiphi.pipeline_jobs import constants, project_db_schemas
 from phiphi.pipeline_jobs import utils as pipeline_jobs_utils
+from phiphi.pipeline_jobs.gathers import types as gather_types
 from phiphi.pipeline_jobs.gathers import utils as gather_utils
 
 gather_apify_actor_map: dict[type[gathers.schemas.GatherResponse], str] = {
-    gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse: (
+    gathers.apify_facebook_posts.schemas.ApifyFacebookPostsGatherResponse: (
         "apify/facebook-posts-scraper"
     ),
-    gathers.apify_facebook_comments.schemas.ApifyFacebookCommentGatherResponse: (
+    gathers.apify_facebook_comments.schemas.ApifyFacebookCommentsGatherResponse: (
         "apify/facebook-comments-scraper"
+    ),
+    gathers.apify_tiktok_accounts_posts.schemas.ApifyTikTokAccountsPostsGatherResponse: (
+        "clockworks/tiktok-scraper"
+    ),
+    gathers.apify_tiktok_hashtags_posts.schemas.ApifyTikTokHashtagsPostsGatherResponse: (
+        "clockworks/tiktok-scraper"
     ),
 }
 
@@ -32,11 +40,15 @@ def apify_scrape(
     apify_token: str,
     actor_name: str,
     gather: gathers.schemas.GatherResponse,
+    logger: None | logging.Logger | logging.LoggerAdapter = None,
 ) -> Tuple[Iterator[Dict], apify_client.clients.DatasetClient]:
     """Scrape data using the Apify API and return an iterator."""
     client = apify_client.ApifyClient(apify_token)
     # Run the Apify actor
     run_info = client.actor(actor_name).call(run_input=gather.serialize_to_apify_input())
+    if logger is not None:
+        logger.info("Apify actor run info returned from call:")
+        logger.info(run_info)
     assert run_info is not None
     # Access the dataset client associated with the actor's results
     dataset_client = client.dataset(run_info["defaultDatasetId"])
@@ -51,9 +63,7 @@ def mock_apify_scrape(
     """Read mock scraping data and return an iterator."""
     return iter(
         gather_utils.load_sample_raw_data(
-            source=gathers.schemas.Source.apify,
-            platform=gather.platform,
-            data_type=gather.data_type,
+            child_type_name=gather.child_type,
         )
     ), None
 
@@ -84,7 +94,7 @@ def apify_scrape_and_batch_download_results(
     bigquery_dataset: str,
     bigquery_table: str = constants.GATHER_BATCHES_TABLE_NAME,
     batch_size: int = 100,
-) -> None:
+) -> gather_types.ScrapeResponse:
     """Scrape data using the Apify API and save them to a GCP BigQuery table or Parquet."""
     prefect_logger = prefect.get_run_logger()
 
@@ -96,18 +106,25 @@ def apify_scrape_and_batch_download_results(
         dataset_iterator, dataset_client = mock_apify_scrape(apify_token, apify_actor_name, gather)
     else:
         prefect_logger.info("Making Apify call.")
-        dataset_iterator, dataset_client = apify_scrape(apify_token, apify_actor_name, gather)
+        dataset_iterator, dataset_client = apify_scrape(
+            apify_token, apify_actor_name, gather, prefect_logger
+        )
 
     # Initialize batch tracking
+    item_count = 0
     batch_num = 0
     batch_items: List[Dict] = []
+
+    gather_creation_defaults = gathers.child_types.get_gather_project_db_defaults(
+        gather.child_type
+    )
 
     static_data = {
         "gather_id": gather.id,
         "job_run_id": job_run_id,
-        "source": "apify",
-        "platform": gather.platform,
-        "data_type": gather.data_type,
+        "gather_type": gather.child_type,
+        "platform": gather_creation_defaults.platform,
+        "data_type": gather_creation_defaults.data_type,
         "batch_id": 0,  # This will be updated for each batch
         "gathered_at": datetime.utcnow(),  # This will be updated for each batch
         "json_data": "",  # This will be updated for each batch
@@ -122,6 +139,7 @@ def apify_scrape_and_batch_download_results(
 
     # Iterate over dataset items and insert into BigQuery or Parquet in batches
     for item in dataset_iterator:
+        item_count += 1
         batch_items.append(item)
 
         # Insert the batch into BigQuery or Parquet when reaching the batch size
@@ -147,10 +165,14 @@ def apify_scrape_and_batch_download_results(
             bigquery_dataset,
             bigquery_table,
         )
+        # Add a batch number if there are items in the final batch
+        batch_num += 1
 
     # Delete the dataset after downloading to save on storage costs
     if dataset_client is not None:
         dataset_client.delete()
 
-    # batch_num+1 to account for 0-indexing
-    prefect_logger.info(f"Finished scraping. Batches inserted: {batch_num + 1}")
+    prefect_logger.info("Finished scraping.")
+    prefect_logger.info(f"Batches inserted: {batch_num}.")
+    prefect_logger.info(f"Items scraped: {item_count}.")
+    return gather_types.ScrapeResponse(total_items=item_count, total_batches=batch_num)

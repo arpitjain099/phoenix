@@ -76,7 +76,7 @@
   },
   {
     "mode": "NULLABLE",
-    "name": "source",
+    "name": "gather_type",
     "type": "STRING"
   },
   {
@@ -93,6 +93,11 @@
     "mode": "NULLABLE",
     "name": "phoenix_processed_at",
     "type": "TIMESTAMP"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "class",
+    "type": "STRING"
   },
   {
     "mode": "NULLABLE",
@@ -161,7 +166,7 @@
   },
   {
     "mode": "NULLABLE",
-    "name": "comment_source",
+    "name": "comment_gather_type",
     "type": "STRING"
   },
   {
@@ -178,5 +183,10 @@
     "mode": "NULLABLE",
     "name": "comment_phoenix_processed_at",
     "type": "TIMESTAMP"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "comment_class",
+    "type": "STRING"
   }
 ]

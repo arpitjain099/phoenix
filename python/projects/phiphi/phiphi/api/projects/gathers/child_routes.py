@@ -32,6 +32,12 @@ from phiphi.api.projects.gathers.apify_facebook_posts import (
 from phiphi.api.projects.gathers.apify_facebook_posts import (
     schemas as facebook_post_schema,
 )
+from phiphi.api.projects.gathers.apify_tiktok_accounts_posts import (
+    models as tiktok_accounts_posts_models,
+)
+from phiphi.api.projects.gathers.apify_tiktok_accounts_posts import (
+    schemas as tiktok_accounts_posts_schema,
+)
 
 router = fastapi.APIRouter()
 
@@ -39,25 +45,35 @@ router = fastapi.APIRouter()
 # otherwise we get strange errors
 response_schema_type = TypeVar("response_schema_type", bound=gather_schema.GatherResponse)
 create_schema_type = TypeVar("create_schema_type", bound=gather_schema.GatherCreate)
+update_schema_type = TypeVar("update_schema_type", bound=gather_schema.GatherUpdate)
 child_model_type = TypeVar("child_model_type", bound=gather_model.Gather)
 
 list_of_child_gather_routes: dict[
     gather_schema.ChildTypeName,
     tuple[
         Type[gather_schema.GatherCreate],
+        Type[gather_schema.GatherUpdate],
         Type[gather_schema.GatherResponse],
         Type[gather_model.Gather],
     ],
 ] = {
     gather_schema.ChildTypeName.apify_facebook_comments: (
-        facebook_comment_schema.ApifyFacebookCommentGatherCreate,
-        facebook_comment_schema.ApifyFacebookCommentGatherResponse,
-        facebook_comment_model.ApifyFacebookCommentGather,
+        facebook_comment_schema.ApifyFacebookCommentsGatherCreate,
+        facebook_comment_schema.ApifyFacebookCommentsGatherUpdate,
+        facebook_comment_schema.ApifyFacebookCommentsGatherResponse,
+        facebook_comment_model.ApifyFacebookCommentsGather,
     ),
     gather_schema.ChildTypeName.apify_facebook_posts: (
-        facebook_post_schema.ApifyFacebookPostGatherCreate,
-        facebook_post_schema.ApifyFacebookPostGatherResponse,
-        facebook_post_model.ApifyFacebookPostGather,
+        facebook_post_schema.ApifyFacebookPostsGatherCreate,
+        facebook_post_schema.ApifyFacebookPostsGatherUpdate,
+        facebook_post_schema.ApifyFacebookPostsGatherResponse,
+        facebook_post_model.ApifyFacebookPostsGather,
+    ),
+    gather_schema.ChildTypeName.apify_tiktok_accounts_posts: (
+        tiktok_accounts_posts_schema.ApifyTikTokAccountsPostsGatherCreate,
+        tiktok_accounts_posts_schema.ApifyTikTokAccountsPostsGatherUpdate,
+        tiktok_accounts_posts_schema.ApifyTikTokAccountsPostsGatherResponse,
+        tiktok_accounts_posts_models.ApifyTikTokAccountsPostsGather,
     ),
     # Add more routes as needed
 }
@@ -95,10 +111,51 @@ def make_create_child_gather_route(
     return create_child_gather
 
 
+def make_patch_child_gather_route(
+    update_schema: Type[update_schema_type],
+    response_schema: Type[response_schema_type],
+    child_type: gather_schema.ChildTypeName,
+) -> Callable[[int, int, update_schema_type, deps.SessionDep], response_schema_type]:
+    """Returns a route function that patches a child gather.
+
+    This function is used so that the given types for the route can be passed in as arguments to
+    the function. If we don't use this wrapper function we the types of the last item in
+    list_of_child_gather_routes will be used for all routes.
+    """
+
+    # We decided to do type ignore here, because the typing was getting complex
+    def patch_child_gather(
+        project_id: int,
+        gather_id: int,
+        gather: update_schema,  # type: ignore[valid-type]
+        session: deps.SessionDep,
+    ) -> response_schema:  # type: ignore[valid-type]
+        """Generic route for child gather updating."""
+        return child_crud.update_child_gather(
+            project_id=project_id,
+            gather_id=gather_id,
+            session=session,
+            request_schema=gather,
+        )
+
+    return patch_child_gather
+
+
 # Register all routes in list_of_child_gather_routes so we don't have to rewrite the same code
-for key, (request_schema, response_schema, child_model) in list_of_child_gather_routes.items():
+for key, (
+    request_schema,
+    update_schema,
+    response_schema,
+    child_model,
+) in list_of_child_gather_routes.items():
     router.post(
         f"/projects/{{project_id}}/gathers/{key.value}",
         response_model=response_schema,
         response_model_by_alias=False,
     )(make_create_child_gather_route(request_schema, response_schema, child_model, key))
+
+    router.patch(
+        f"/projects/{{project_id}}/gathers/{key.value}/{{gather_id}}",
+        response_model=response_schema,
+        response_model_by_alias=False,
+    )(make_patch_child_gather_route(update_schema, response_schema, key))

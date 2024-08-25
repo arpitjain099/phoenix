@@ -225,7 +225,7 @@ superset:
   image:
     repository: registry.gitlab.com/howtobuildup/phoenix/phoenix_superset
     # Default is the chart version of the sub chart :(
-    tag: 2.3.0
+    tag: 2.4.0
   # It is problematic to change the init image
 
 ##############
@@ -385,6 +385,6 @@ prefect_deployments:
   # This environment variable is in the api _helpers template
   image: "$(IMAGE_URI)"
   enable_health_check: false
-  health_check_deployment_name: "health_check/health_check-env-main"
+  health_check_deployment_name: "health_check/health_check-workspace-main"
   # Default jobs are deleted after 30 minutes
   ttlSecondsAfterFinished: 1800

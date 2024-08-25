@@ -5,22 +5,19 @@ from phiphi.api.projects import gathers
 
 
 def facebook_posts_gather_example() -> (
-    gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse
+    gathers.apify_facebook_posts.schemas.ApifyFacebookPostsGatherResponse
 ):
-    """Example for ApifyFacebookPostGatherResponse schema."""
-    return gathers.apify_facebook_posts.schemas.ApifyFacebookPostGatherResponse(
-        description="Example",
+    """Example for ApifyFacebookPostsGatherResponse schema."""
+    return gathers.apify_facebook_posts.schemas.ApifyFacebookPostsGatherResponse(
+        name="Example",
         limit_posts_per_account=4,
         account_url_list=[
             "https://www.facebook.com/howtobuildup/",
             "https://www.facebook.com/unitednations/",
         ],
-        only_posts_older_than="2024-04-04",
-        only_posts_newer_than="2024-01-03",
+        posts_created_after="2024-01-03",
+        posts_created_before="2024-04-04",
         id=1,
-        platform=gathers.schemas.Platform.facebook,
-        data_type=gathers.schemas.DataType.posts,
-        source=gathers.schemas.Source.apify,
         created_at=datetime.datetime.now(),
         updated_at=datetime.datetime.now(),
         project_id=1,
@@ -31,11 +28,11 @@ def facebook_posts_gather_example() -> (
 
 
 def facebook_comments_gather_example() -> (
-    gathers.apify_facebook_comments.schemas.ApifyFacebookCommentGatherResponse
+    gathers.apify_facebook_comments.schemas.ApifyFacebookCommentsGatherResponse
 ):
-    """Example for ApifyFacebookCommentGatherResponse schema."""
-    return gathers.apify_facebook_comments.schemas.ApifyFacebookCommentGatherResponse(
-        description="Example",
+    """Example for ApifyFacebookCommentsGatherResponse schema."""
+    return gathers.apify_facebook_comments.schemas.ApifyFacebookCommentsGatherResponse(
+        name="Example",
         limit_comments_per_post=4,
         post_url_list=[
             "https://www.facebook.com/unitednations/posts/pfbid045as8QKV2uLVYe2NumDPs7a68Hr4P5cjmoyMRo2e4dj4p3rp2gWNNj948Uu7BVcxl",
@@ -43,14 +40,47 @@ def facebook_comments_gather_example() -> (
         ],
         sort_comments_by=gathers.apify_facebook_comments.schemas.FacebookCommentSortOption.facebook_default,
         include_comment_replies=False,
-        id=1,
-        platform=gathers.schemas.Platform.facebook,
-        data_type=gathers.schemas.DataType.comments,
-        source=gathers.schemas.Source.apify,
+        id=2,
         created_at=datetime.datetime.now(),
         updated_at=datetime.datetime.now(),
         project_id=1,
         deleted_at=None,
         latest_job_run=None,
         child_type=gathers.schemas.ChildTypeName.apify_facebook_comments,
+    )
+
+
+def tiktok_accounts_posts_gather_example() -> (
+    gathers.apify_tiktok_accounts_posts.schemas.ApifyTikTokAccountsPostsGatherResponse
+):
+    """Example for ApifyTiktokAccountsPostsGatherResponse schema."""
+    return gathers.apify_tiktok_accounts_posts.schemas.ApifyTikTokAccountsPostsGatherResponse(
+        name="Example",
+        account_username_list=["@unitednations", "@bbcnews"],
+        limit_posts_per_account=3,
+        id=3,
+        created_at=datetime.datetime.now(),
+        updated_at=datetime.datetime.now(),
+        project_id=1,
+        deleted_at=None,
+        latest_job_run=None,
+        child_type=gathers.schemas.ChildTypeName.apify_tiktok_accounts_posts,
+    )
+
+
+def tiktok_hashtags_posts_gather_example() -> (
+    gathers.apify_tiktok_hashtags_posts.schemas.ApifyTikTokHashtagsPostsGatherResponse
+):
+    """Example for ApifyTiktokHashtagsGatherPostsResponse schema."""
+    return gathers.apify_tiktok_hashtags_posts.schemas.ApifyTikTokHashtagsPostsGatherResponse(
+        name="Example",
+        hashtag_list=["unitednations", "bbcnews"],
+        limit_posts_per_hashtag=3,
+        id=4,
+        created_at=datetime.datetime.now(),
+        updated_at=datetime.datetime.now(),
+        project_id=1,
+        deleted_at=None,
+        latest_job_run=None,
+        child_type=gathers.schemas.ChildTypeName.apify_tiktok_hashtags_posts,
     )

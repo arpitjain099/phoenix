@@ -15,14 +15,14 @@ import {
 	Title,
 	Anchor,
 } from "@mantine/core";
-import { List, DateField } from "@refinedev/mantine";
+import { DateField } from "@refinedev/mantine";
 import TableComponent from "@components/table";
-import { useRouter } from "next/navigation";
 import { PHEONIX_MANUAL_URL, statusTextStyle } from "src/utils";
-import { IconPlayerPlay } from "@tabler/icons";
+import { IconPlayerPlay, IconSquarePlus } from "@tabler/icons";
 import GatherRunModal from "@components/modals/gather-run";
 import { jobRunService } from "src/services";
 import { GatherResponse } from "src/interfaces/gather";
+import Link from "next/link";
 
 interface IGatherProps {
 	projectid: any;
@@ -31,7 +31,6 @@ interface IGatherProps {
 
 const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 	const translate = useTranslate();
-	const router = useRouter();
 	const [opened, setOpened] = useState(false);
 	const [selected, setSelected] = useState(null);
 	const [gatherList, setGatherList] = useState<any>([]);
@@ -41,6 +40,9 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 
 	const apiResponse = useList({
 		resource: projectid ? `projects/${projectid}/gathers` : "",
+		pagination: {
+			mode: "client",
+		},
 	});
 
 	const handleGatherRefresh = useCallback(
@@ -72,43 +74,25 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 	const columns = useMemo<ColumnDef<any>[]>(
 		() => [
 			{
-				id: "source",
-				accessorKey: "source",
-				header: translate("gathers.fields.source"),
-			},
-			{
-				id: "platform",
-				accessorKey: "platform",
-				header: translate("gathers.fields.platform"),
-			},
-			{
-				id: "data_type",
-				accessorKey: "data_type",
-				header: translate("gathers.fields.data_type"),
-			},
-			{
-				id: "description",
-				accessorKey: "description",
-				header: translate("gathers.fields.description"),
-			},
-			{
-				id: "created_at",
-				accessorKey: "latest_job_run.created_at",
-				header: translate("gathers.fields.started_run_at"),
-				cell: function render({ row }) {
-					const { latest_job_run } = row.original;
-					const created_at = latest_job_run ? latest_job_run.created_at : null;
-					return created_at ? (
-						<DateField format="LLL" value={created_at} />
-					) : (
-						""
+				id: "name",
+				accessorKey: "name",
+				header: translate("gathers.fields.name"),
+				cell: ({ row }) => {
+					const { id, name, child_type, project_id } = row.original;
+					return (
+						<Link
+							href={`/projects/${project_id}/gathers/${child_type}/${id}`}
+							className="no-underline text-blue-500"
+						>
+							{name}
+						</Link>
 					);
 				},
 			},
 			{
 				id: "started_processing_at",
 				accessorKey: "latest_job_run.started_processing_at",
-				header: translate("gathers.fields.started_processing_at"),
+				header: translate("gathers.fields.started_run_at"),
 				cell: function render({ row }) {
 					const { latest_job_run } = row.original;
 					const started_processing_at = latest_job_run
@@ -116,6 +100,22 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 						: null;
 					return started_processing_at ? (
 						<DateField format="LLL" value={started_processing_at} />
+					) : (
+						""
+					);
+				},
+			},
+			{
+				id: "completed_at",
+				accessorKey: "latest_job_run.completed_at",
+				header: translate("gathers.fields.completed_at"),
+				cell: function render({ row }) {
+					const { latest_job_run } = row.original;
+					const completed_at = latest_job_run
+						? latest_job_run.completed_at
+						: null;
+					return completed_at ? (
+						<DateField format="LLL" value={completed_at} />
 					) : (
 						""
 					);
@@ -185,6 +185,11 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 	} = useTable({
 		columns,
 		data: gatherList,
+		refineCoreProps: {
+			pagination: {
+				mode: "off",
+			},
+		},
 	});
 
 	useEffect(() => {
@@ -217,12 +222,8 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 
 	return (
 		<>
-			<List
-				breadcrumb={false}
-				createButtonProps={{
-					onClick: () => router.push(`/projects/${projectid}/gathers/create`),
-				}}
-				title={
+			<div className="p-4">
+				<Group className="mb-4">
 					<div className="flex flex-col gap-4">
 						<Title order={3}>{translate("projects.tabs.gather.title")}</Title>
 						<Text fz="sm">
@@ -248,8 +249,12 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 							{translate("projects.tabs.gather.description.part2.c")}
 						</Text>
 					</div>
-				}
-			>
+					<Link href={`/projects/${projectid}/gathers/select_type`}>
+						<Button leftIcon={<IconSquarePlus />}>
+							{translate("actions.create")}
+						</Button>
+					</Link>
+				</Group>
 				<ScrollArea>
 					<TableComponent
 						headerGroups={getHeaderGroups}
@@ -264,7 +269,7 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 					page={current}
 					onChange={setCurrent}
 				/>
-			</List>
+			</div>
 			<GatherRunModal
 				opened={opened}
 				setOpened={setOpened}

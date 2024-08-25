@@ -34,7 +34,8 @@ all:
 
 test:
 	@echo "Running `format` in ci environment"
-	docker compose run api make test path=$(default_path)
+	@echo "Running tests for path $(path) with args $(PYTEST_ARGS_OVERRIDE)"
+	docker compose run -e PYTEST_ARGS_OVERRIDE="$(PYTEST_ARGS_OVERRIDE)" api make test path=$(default_path)
 
 test_integration:
 	@echo "Running `tests/integration` in dev environment"

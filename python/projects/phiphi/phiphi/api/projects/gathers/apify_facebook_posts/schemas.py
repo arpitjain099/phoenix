@@ -8,32 +8,34 @@ from phiphi.api.projects.gathers import schemas as gather_schemas
 from phiphi.pydantic_types import UrlStr
 
 
-class ApifyFacebookPostGatherBase(gather_schemas.GatherBase):
+class ApifyFacebookPostsGatherBase(gather_schemas.GatherBase):
     """Input schema for the Apify Facebook posts scraper.
 
     Ref to relevant Apify actor docs: https://apify.com/apify/facebook-posts-scraper/input-schema
     """
 
     limit_posts_per_account: int = pydantic.Field(
-        25, serialization_alias="resultsLimit", description="Limit results per account"
+        serialization_alias="resultsLimit", description="Limit results per account"
     )
     account_url_list: List[UrlStr] = pydantic.Field(
         serialization_alias="startUrls",
         description="List of Facebook page/profile URLs to scrape from",
     )
-    only_posts_older_than: Optional[str] = pydantic.Field(
-        default=None,
-        serialization_alias="onlyPostsOlderThan",
-        description="Fetch posts only older than this date (YYYY-MM-DD)",
-    )
-    only_posts_newer_than: Optional[str] = pydantic.Field(
+    posts_created_after: Optional[str] = pydantic.Field(
         default=None,
         serialization_alias="onlyPostsNewerThan",
-        description="Fetch posts only newer than this date (YYYY-MM-DD)",
+        description="Fetch posts created after this date (YYYY-MM-DD)",
+    )
+    posts_created_before: Optional[str] = pydantic.Field(
+        default=None,
+        serialization_alias="onlyPostsOlderThan",
+        description="Fetch posts created before this date (YYYY-MM-DD)",
     )
 
 
-class ApifyFacebookPostGatherResponse(gather_schemas.GatherResponse, ApifyFacebookPostGatherBase):
+class ApifyFacebookPostsGatherResponse(
+    gather_schemas.GatherResponse, ApifyFacebookPostsGatherBase
+):
     """Apify Gather schema.
 
     Properties to return to client.
@@ -54,12 +56,25 @@ class ApifyFacebookPostGatherResponse(gather_schemas.GatherResponse, ApifyFacebo
         return [{"url": str(url)} for url in urls]
 
 
-class ApifyFacebookPostGatherCreate(gather_schemas.GatherCreate, ApifyFacebookPostGatherBase):
+class ApifyFacebookPostsGatherCreate(gather_schemas.GatherCreate, ApifyFacebookPostsGatherBase):
     """Apify Gather create schema.
 
     Properties to receive via API on creation.
     """
 
 
-class ApifyFacebookPostGatherUpdate(gather_schemas.GatherUpdate):
+class ApifyFacebookPostsGatherUpdate(gather_schemas.GatherUpdate):
     """Apify Gather update schema."""
+
+    limit_posts_per_account: Optional[int] = pydantic.Field(
+        default=None, description="Limit results per account"
+    )
+    account_url_list: Optional[List[UrlStr]] = pydantic.Field(
+        default=None, description="List of Facebook page/profile URLs to scrape from"
+    )
+    posts_created_after: Optional[str] = pydantic.Field(
+        default=None, description="Fetch posts created after this date (YYYY-MM-DD)"
+    )
+    posts_created_before: Optional[str] = pydantic.Field(
+        default=None, description="Fetch posts created before this date (YYYY-MM-DD)"
+    )

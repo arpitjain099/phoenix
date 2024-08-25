@@ -204,11 +204,11 @@ def test_update_project(
     assert response.status_code == 200
     project = response.json()
     assert project["description"] == data["description"]
-    db_project = session.get(models.Project, project_id)
-    assert db_project
-    assert db_project.description == data["description"]
-    assert db_project.checked_problem_statement is True
-    assert db_project.updated_at.isoformat() == UPDATE_TIME
+    orm_project = session.get(models.Project, project_id)
+    assert orm_project
+    assert orm_project.description == data["description"]
+    assert orm_project.checked_problem_statement is True
+    assert orm_project.updated_at.isoformat() == UPDATE_TIME
 
 
 def test_update_project_not_found(client: TestClient, recreate_tables) -> None:
@@ -264,7 +264,7 @@ def test_project_with_latest_job_run(client: TestClient, reseed_tables) -> None:
     project = response.json()
     assert project["last_job_run_completed_at"] == "2024-04-01T12:00:01"
     # The job_run that is completed is not the same as the latest_job_run
-    assert project["latest_job_run"]["id"] == 4
+    assert project["latest_job_run"]["id"] == 7
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
@@ -275,4 +275,4 @@ def test_project_with_latest_job_run_2(client: TestClient, reseed_tables) -> Non
     project = response.json()
     assert project["last_job_run_completed_at"] is None
     # This job run is not completed and is the latest
-    assert project["latest_job_run"]["id"] == 5
+    assert project["latest_job_run"]["id"] == 6

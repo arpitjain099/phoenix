@@ -34,6 +34,13 @@ from phiphi.api.projects.job_runs import crud, flow_runner_flow, schemas
             True,
             schemas.Status.completed_sucessfully,
         ),
+        (
+            2,
+            schemas.ForeignJobType.delete_gather,
+            "delete_gather_flow/delete_gather_flow",
+            True,
+            schemas.Status.completed_sucessfully,
+        ),
     ],
 )
 @mock.patch("prefect.flow_runs.wait_for_flow_run", new_callable=AsyncMock)
@@ -54,7 +61,7 @@ async def test_flow_runner_flow(
     job_run_create = schemas.JobRunCreate(foreign_id=foreign_id, foreign_job_type=foreign_job_type)
 
     job_run = crud.create_job_run(
-        db=session_context, project_id=project_id, job_run_create=job_run_create
+        session=session_context, project_id=project_id, job_run_create=job_run_create
     )
 
     mock_start_flow_state = mock.MagicMock()
@@ -80,7 +87,7 @@ async def test_flow_runner_flow(
     with disable_run_logger():
         await flow_runner_flow.flow_runner_flow.fn(
             project_id=project_id,
-            job_type=job_run.foreign_job_type.value,
+            job_type=job_run.foreign_job_type,
             job_source_id=job_run.foreign_id,
             job_run_id=job_run.id,
         )
@@ -94,7 +101,7 @@ async def test_flow_runner_flow(
     mock_wait_for_flow_run.assert_called_once_with(flow_run_id=mock_return_start_flow_run.id)
 
     job_run_completed = crud.get_job_run(
-        db=session_context, project_id=project_id, job_run_id=job_run.id
+        session=session_context, project_id=project_id, job_run_id=job_run.id
     )
 
     assert job_run_completed
@@ -114,7 +121,7 @@ async def test_flow_runner_flow_exception(mock_start_flow_run, session_context, 
     )
 
     job_run = crud.create_job_run(
-        db=session_context, project_id=project_id, job_run_create=job_run_create
+        session=session_context, project_id=project_id, job_run_create=job_run_create
     )
 
     mock_start_flow_run.side_effect = Exception(
@@ -126,13 +133,13 @@ async def test_flow_runner_flow_exception(mock_start_flow_run, session_context, 
     with pytest.raises(Exception):
         await flow_runner_flow.flow_runner_flow(
             project_id=project_id,
-            job_type=job_run.foreign_job_type.value,
+            job_type=job_run.foreign_job_type,
             job_source_id=job_run.foreign_id,
             job_run_id=job_run.id,
         )
 
     job_run_completed = crud.get_job_run(
-        db=session_context, project_id=project_id, job_run_id=job_run.id
+        session=session_context, project_id=project_id, job_run_id=job_run.id
     )
 
     assert job_run_completed

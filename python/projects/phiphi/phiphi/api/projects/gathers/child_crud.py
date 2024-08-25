@@ -3,8 +3,10 @@ from typing import Type, TypeVar
 
 import sqlalchemy.orm
 
+from phiphi.api import exceptions
 from phiphi.api.projects import crud as project_crud
 from phiphi.api.projects.gathers import child_types
+from phiphi.api.projects.gathers import crud as gather_crud
 from phiphi.api.projects.gathers import models as gather_model
 from phiphi.api.projects.gathers import schemas as gather_schema
 from phiphi.api.projects.gathers.apify_facebook_comments import (
@@ -45,49 +47,59 @@ def create_child_gather(
     Returns:
         response_schema_type: Response schema
     """
-    project_crud.get_db_project_with_guard(session, project_id)
+    project_crud.get_orm_project_with_guard(session, project_id)
 
-    split_child_type = child_type.split("_")
-    source = split_child_type[0]
-    platform = split_child_type[1]
-    data_type = split_child_type[2]
-
-    db_apify_facebook_post_gather = child_model(
+    orm_apify_facebook_posts_gather = child_model(
         **request_schema.dict(),
-        platform=platform,
-        data_type=data_type,
-        source=source,
         project_id=project_id,
         child_type=child_type,
     )
-    session.add(db_apify_facebook_post_gather)
+    session.add(orm_apify_facebook_posts_gather)
     session.commit()
-    session.refresh(db_apify_facebook_post_gather)
-    return response_schema.model_validate(db_apify_facebook_post_gather)
+    session.refresh(orm_apify_facebook_posts_gather)
+    return response_schema.model_validate(orm_apify_facebook_posts_gather)
 
 
 def get_child_gather(
     session: sqlalchemy.orm.Session,
     project_id: int,
     gather_id: int,
-) -> gather_schema.GatherResponse | None:
+) -> child_types.AllChildTypesUnion | None:
     """Get a child gather.
 
     A generalised function to get a child gather. This function is used to get
     child gathers for different platforms and data types.
     """
-    db_gather = (
-        session.query(gather_model.Gather)
-        .filter(
-            gather_model.Gather.deleted_at.is_(None),
-            gather_model.Gather.project_id == project_id,
-            gather_model.Gather.id == gather_id,
-        )
-        .first()
-    )
-    if db_gather is None:
+    orm_gather = gather_crud.get_orm_gather(session, project_id, gather_id)
+    if orm_gather is None:
         return None
 
-    child_type = gather_schema.ChildTypeName(db_gather.child_type)
+    child_type = gather_schema.ChildTypeName(orm_gather.child_type)
     child_reponse_type = child_types.get_response_type(child_type)
-    return child_reponse_type.model_validate(db_gather)
+    return child_reponse_type.model_validate(orm_gather)
+
+
+def update_child_gather(
+    session: sqlalchemy.orm.Session,
+    project_id: int,
+    gather_id: int,
+    request_schema: gather_schema.GatherUpdate,
+) -> child_types.AllChildTypesUnion | None:
+    """Update a child gather.
+
+    A generalised function to update a child gather. This function is used to update
+    child gathers for different platforms and data types.
+    """
+    orm_gather = gather_crud.get_orm_gather(session, project_id, gather_id)
+    if orm_gather is None:
+        raise exceptions.GatherNotFound()
+
+    for field in request_schema.dict(exclude_unset=True):
+        setattr(orm_gather, field, request_schema.dict()[field])
+
+    session.add(orm_gather)
+    session.commit()
+    session.refresh(orm_gather)
+    child_type = gather_schema.ChildTypeName(orm_gather.child_type)
+    child_reponse_type = child_types.get_response_type(child_type)
+    return child_reponse_type.model_validate(orm_gather)

@@ -5,7 +5,7 @@ import prefect
 
 from phiphi import constants
 from phiphi.api.projects import gathers
-from phiphi.pipeline_jobs.gathers import apify_scrape, deduplicate, normalise
+from phiphi.pipeline_jobs.gathers import apify_scrape, deduplicate, delete, normalise
 
 
 @prefect.flow(name="gather_flow")
@@ -23,15 +23,37 @@ def gather_flow(
     """
     gather = gathers.child_types.get_response_type(gather_child_type)(**gather_dict)
 
-    apify_scrape.apify_scrape_and_batch_download_results(
+    scrape_response = apify_scrape.apify_scrape_and_batch_download_results(
         gather=gather,
         job_run_id=job_run_id,
         bigquery_dataset=project_namespace,
         batch_size=batch_size,
     )
+    # If nothing has been scraped then there is no need to normalise.
+    # This is important because the table is only created when scrape processes results
+    # the normalise will throw an error if the table does not exist.
+    # We could have the Apify scrape insert a gather batch that is empty but then this
+    # creates the wrong schema for the generalised_messages table.
+    if scrape_response.total_items == 0:
+        return
     normalise.normalise_batches(
         gather=gather,
         job_run_id=job_run_id,
+        bigquery_dataset=project_namespace,
+    )
+    deduplicate.refresh_deduplicated_messages_tables(
+        bigquery_dataset=project_namespace,
+    )
+
+
+@prefect.flow(name="delete_gather_flow")
+def delete_flow(
+    gather_id: int,
+    project_namespace: str,
+) -> None:
+    """Flow which deletes gathered data."""
+    delete.delete_gathered_data(
+        gather_id=gather_id,
         bigquery_dataset=project_namespace,
     )
     deduplicate.refresh_deduplicated_messages_tables(
@@ -74,4 +96,13 @@ def create_deployments(
         tags=tags,
     )
 
-    return [task]
+    task_2 = delete_flow.deploy(
+        name=deployment_name_prefix + delete_flow.name,
+        work_pool_name=work_pool_name,
+        image=image,
+        build=build,
+        push=push,
+        tags=tags,
+    )
+
+    return [task, task_2]
