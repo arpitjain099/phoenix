@@ -189,7 +189,9 @@ export default function ApifyFacebookPostShow(): JSX.Element {
 									</Title>
 									<TextField
 										className="capitalize"
-										value={record?.sort_comments_by}
+										value={translate(
+											`gathers.types.apify_facebook_comments.fields.sort_comments_by_options.${record?.sort_comments_by}`
+										)}
 									/>
 								</Group>
 								<Group>
