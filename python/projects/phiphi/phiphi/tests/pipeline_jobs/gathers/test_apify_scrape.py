@@ -59,13 +59,15 @@ def test_mock_apify_scrape_and_batch_download_results(
     mocker.patch.object(config.settings, "MOCK_BQ_ROOT_DIR", str(tmpdir))
 
     with disable_prefect_run_logger():
-        apify_scrape.apify_scrape_and_batch_download_results.fn(
+        scrape_response = apify_scrape.apify_scrape_and_batch_download_results.fn(
             gather=facebook_posts_gather_fixture,
             job_run_id=1,
             batch_size=3,
             bigquery_dataset="test_dataset",
             bigquery_table="test_table",
         )
+        assert scrape_response.total_items == 8
+        assert scrape_response.total_batches == 3
 
     # Check that the parquet file was written
     parquet_file_path = tmpdir.join("test_dataset", "test_table.parquet")
