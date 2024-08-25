@@ -139,10 +139,30 @@ const ApifyFacebookCommentsForm: React.FC<Props> = ({
 				{...getInputProps("sort_comments_by")}
 				data={[
 					{ label: translate("inputs.select"), value: "" },
-					{ label: "Facebook Default", value: "facebook_default" },
-					{ label: "Most Relevant", value: "most_relevant" },
-					{ label: "Newest First", value: "newest_first" },
-					{ label: "Non-filtered", value: "non_filtered" },
+					{
+						label: translate(
+							"gathers.types.apify_facebook_comments.fields.sort_comments_by_options.facebook_default"
+						),
+						value: "facebook_default",
+					},
+					{
+						label: translate(
+							"gathers.types.apify_facebook_comments.fields.sort_comments_by_options.most_relevant"
+						),
+						value: "most_relevant",
+					},
+					{
+						label: translate(
+							"gathers.types.apify_facebook_comments.fields.sort_comments_by_options.newest_first"
+						),
+						value: "newest_first",
+					},
+					{
+						label: translate(
+							"gathers.types.apify_facebook_comments.fields.sort_comments_by_options.non_filtered"
+						),
+						value: "non_filtered",
+					},
 				]}
 			/>
 			<GatherInputs

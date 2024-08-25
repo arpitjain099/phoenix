@@ -286,6 +286,12 @@
 					"limit_comments_per_post": "Limit Comments Per Post",
 					"include_comment_replies": "Comment Replies",
 					"sort_comments_by": "Sort Comments By",
+					"sort_comments_by_options": {
+						"facebook_default": "Facebook Default",
+						"most_relevant": "Most Relevant",
+						"newest_first": "Newest First",
+						"non_filtered": "Non Filtered"
+					},
 					"input": {
 						"url_list": "Add facebook posts would you like to gather from"
 					},

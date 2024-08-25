@@ -286,6 +286,12 @@
 					"limit_comments_per_post": "Limitar comentarios por publicación",
 					"include_comment_replies": "Incluir respuestas a comentarios",
 					"sort_comments_by": "Ordenar comentarios por",
+					"sort_comments_by_options": {
+						"facebook_default": "Predeterminado de Facebook",
+						"most_relevant": "Más relevante",
+						"newest_first": "Más recientes primero",
+						"non_filtered": "Sin filtrar"
+					},
 					"input": {
 						"url_list": "Agregar las publicaciones de Facebook de las que desea recopilar los comentarios"
 					},

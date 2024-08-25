@@ -286,6 +286,12 @@
 					"limit_comments_per_post": "تحديد التعليقات لكل منشور",
 					"include_comment_replies": "شمل الردود على التعليقات",
 					"sort_comments_by": "ترتيب التعليقات حسب",
+					"sort_comments_by_options": {
+						"facebook_default": "إفتراضي فيسبوك",
+						"most_relevant": "الأكثر صلة",
+						"newest_first": "الأحدث أولا",
+						"non_filtered": "غير مفلتر"
+					},
 					"input": {
 						"url_list": "إضافة منشورات فيسبوك التي ترغب في جمع التعليقات منها"
 					},
