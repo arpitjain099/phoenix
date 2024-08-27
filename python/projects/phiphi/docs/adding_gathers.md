@@ -98,3 +98,45 @@ add this integration test as if `manual_test_apify_scrape_and_download` runs and
 pass things should work.
 
 It is however a good idea to make a MR so others can see the changes and give feedback.
+
+## Steps - Stage 3
+
+### Add models and migrations
+
+Add the models to `api/projects/gathers/<child_type_name>/models.py`. Create the alembic migration following the docs in `phiphi/README.md`. You will need to import the models in `phiphi/all_platform_models.py`.
+
+### Add the schemas for Create and Update
+
+Add the schemas for `<child_type_name>Create` and `<child_type_name>Update` to
+`api/projects/gathers/<child_type_name>/schemas.py`.
+
+See other examples for more information.
+
+### Add a seed
+
+Add a seed file `phiphi/seed/<child_type_name>_gather.py` that creates an gather of the type you
+are adding. Add the call of the seed to
+`phiphi/seed/main.py`. You may need to change other tests like the `test_get_gathers`.
+
+### Add child routes
+
+Add schemas for the gather type to the variable `list_of_child_gather_routes` in
+`phiphi/api/projects/gathers/child_routes.py` to create the child routes.
+
+Add the tests for create and update routes to `phiphi/tests/api/gathers/test_<child_type_name>.py`
+
+### Run a full check on local cluster
+
+To run the cluster see `README.md`. Then runs checks:
+- create the gather of the new type from the API docs `http://api.phoenix.local/docs`
+- run the gather of the new type by making a `POST` to `job_runs` with the correct gather id and
+  gather type
+- that the gather run completes successfully. Checking that the `GET` `gather` for that gather has
+  the correct status and that the flows in prefect server `http://localhost:4200` are completed
+  successfully.
+- Check that the output data was correct in Big Query project that the local cluster is connected
+  to. It should use the sample data that was added in the previous steps.
+
+### Make an MR
+
+This is the final MR for the functionality for Phiphi.
