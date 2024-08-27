@@ -118,3 +118,7 @@ This is done by:
 
 Be aware that if more then one developer use the same `dev_id` the flows and images will overwrite
 each other.
+
+## Adding a new gather
+
+See the [Adding Gathers](./docs/adding_gathers.md) document for more information.
