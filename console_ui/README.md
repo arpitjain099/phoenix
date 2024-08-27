@@ -157,3 +157,7 @@ For more detailed instructions, refer to [Vercel's documentation](https://vercel
 
 - Once the deployment is complete, AWS Amplify Console will provide you with a unique URL where your Next.js application is hosted.
 - Click on the provided URL to access your deployed Next.js application.
+
+## Adding a new Gather Type
+
+TODO

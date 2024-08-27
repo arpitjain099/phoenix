@@ -140,3 +140,7 @@ To run the cluster see `README.md`. Then runs checks:
 ### Make an MR
 
 This is the final MR for the functionality for Phiphi.
+
+## Steps - Stage 4
+
+Add Console UI additions, see `console_ui/README.md`.
