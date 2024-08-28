@@ -9,7 +9,7 @@ from typing import Any, Optional
 
 import pydantic
 
-from phiphi.api.projects.gathers import constants
+from phiphi.api.projects.gathers import constants, utils
 from phiphi.api.projects.gathers import schemas as gather_schemas
 
 
@@ -54,6 +54,10 @@ class ApifyTikTokHashtagsPostsGatherBase(gather_schemas.GatherBase):
             "If this is set a RESIDENTIAL group will be used and will increase the price."
         ),
     )
+
+    _validate_dependency_posts_created_since_num_days = pydantic.field_validator(
+        "posts_created_since_num_days"
+    )(utils.validate_dependency("posts_created_after"))
 
 
 class ApifyTikTokHashtagsPostsGatherResponse(
@@ -119,3 +123,6 @@ class ApifyTikTokHashtagsPostsGatherUpdate(gather_schemas.GatherUpdate):
             "If this is set a RESIDENTIAL group will be used and will increase the price."
         ),
     )
+    _validate_dependency_posts_created_since_num_days = pydantic.field_validator(
+        "posts_created_since_num_days"
+    )(utils.validate_dependency("posts_created_after"))
