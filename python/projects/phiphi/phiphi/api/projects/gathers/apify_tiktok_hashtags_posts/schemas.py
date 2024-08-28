@@ -40,8 +40,10 @@ class ApifyTikTokHashtagsPostsGatherBase(gather_schemas.GatherBase):
         description=(
             "Specify how old the scraped videos should be (in days). "
             "Putting 1 will get you only today's posts, 2 - yesterday's and today's, and so on. "
-            "If the Scrape videos newer than field above was set, "
-            "the most recent videos will be scraped."
+            "If the posts_created_after field was set, "
+            "the most recent videos will be scraped. "
+            "See docs of field for more information: "
+            "https://apify.com/clockworks/tiktok-scraper/input-schema#scrapeLastNDays"
         ),
     )
     proxy_country_to_gather_from: Optional[str] = pydantic.Field(
@@ -103,8 +105,10 @@ class ApifyTikTokHashtagsPostsGatherUpdate(gather_schemas.GatherUpdate):
         description=(
             "Specify how old the scraped videos should be (in days). "
             "Putting 1 will get you only today's posts, 2 - yesterday's and today's, and so on. "
-            "If the Scrape videos newer than field above was set, "
-            "the most recent videos will be scraped."
+            "If the posts_created_after field was set, "
+            "the most recent videos will be scraped. "
+            "See docs of field for more information: "
+            "https://apify.com/clockworks/tiktok-scraper/input-schema#scrapeLastNDays"
         ),
     )
     proxy_country_to_gather_from: Optional[str] = pydantic.Field(
