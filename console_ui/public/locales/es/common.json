@@ -364,6 +364,15 @@
 			"estimated_duration_minutes": "Tiempo estimado",
 			"cost": "Costo estimado"
 		},
+		"delete": {
+			"message": "¿Está seguro de que desea eliminar esta recopilación?",
+			"note": "Tenga en cuenta que al eliminar esta recopilación:",
+			"list": {
+				"a": "Los datos recopilados para esta recopilación se eliminarán del panel de control.",
+				"b": "Esta acción no se puede deshacer.",
+				"c": "Esta recopilación seguirá estando disponible para duplicar."
+			}
+		},
 		"errors": {
 			"create": "Algo salió mal durante la creación"
 		}
@@ -405,6 +414,13 @@
 		"awaiting_start": "En espera de inicio",
 		"processing": "Procesando",
 		"failed": "Fallido",
-		"completed_successfully": "Completado con éxito"
+		"completed_successfully": "Completado con éxito",
+		"delete_status": {
+			"in_queue": "Eliminación en cola",
+			"awaiting_start": "Eliminación en espera de inicio",
+			"processing": "Eliminación en proceso",
+			"failed": "Eliminación fallida",
+			"completed_sucessfully": "Eliminado"
+		}
 	}
 }

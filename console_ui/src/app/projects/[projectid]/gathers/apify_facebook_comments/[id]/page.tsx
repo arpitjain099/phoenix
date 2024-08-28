@@ -34,6 +34,7 @@ export default function ApifyFacebookPostShow(): JSX.Element {
 		resource: `apify_facebook_comments`,
 		recordItemId: id as string,
 		...(isLoading ||
+		record?.deleted_at ||
 		(record?.latest_job_run &&
 			record?.latest_job_run?.status !== "awaiting_start")
 			? { disabled: true }
@@ -135,6 +136,22 @@ export default function ApifyFacebookPostShow(): JSX.Element {
 										<DateField
 											format="LLL"
 											value={record?.latest_job_run.completed_at}
+										/>
+									) : (
+										"-"
+									)}
+								</Group>
+								<Group>
+									<Title my="xs" order={5}>
+										{translate("buttons.delete")}{" "}
+										{translate("projects.fields.status")}:
+									</Title>
+									{record?.delete_job_run ? (
+										<TextField
+											className={`capitalize ${statusTextStyle(record?.deleted_at ? "deleted" : record?.delete_job_run?.status)}`}
+											value={translate(
+												`status.delete_status.${record.delete_job_run.status}`
+											)}
 										/>
 									) : (
 										"-"

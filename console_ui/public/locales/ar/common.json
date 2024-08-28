@@ -364,6 +364,15 @@
 			"estimated_duration_minutes": "المدة المقدرة",
 			"cost": "التكلفة المقدرة"
 		},
+		"delete": {
+			"message": "هل أنت متأكد أنك تريد حذف هذا التجميع؟",
+			"note": "يرجى ملاحظة أنه بحذف هذا التجميع:",
+			"list": {
+				"a": "سيتم حذف البيانات التي تم جمعها لهذا التجميع من لوحة التحكم.",
+				"b": "لا يمكن التراجع عن هذا الإجراء.",
+				"c": "سيظل هذا التجميع متاحًا للتكرار."
+			}
+		},
 		"errors": {
 			"create": "Quelque chose s'est mal passé lors de la création"
 		}
@@ -405,6 +414,13 @@
 		"awaiting_start": "في انتظار البدء",
 		"processing": "قيد المعالجة",
 		"failed": "فشل",
-		"completed_successfully": "اكتمل بنجاح"
+		"completed_successfully": "اكتمل بنجاح",
+		"delete_status": {
+			"in_queue": "الحذف في قائمة الانتظار",
+			"awaiting_start": "الحذف بانتظار البدء",
+			"processing": "جاري الحذف",
+			"failed": "فشل الحذف",
+			"completed_sucessfully": "تم الحذف"
+		}
 	}
 }

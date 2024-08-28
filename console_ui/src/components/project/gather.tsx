@@ -18,11 +18,12 @@ import {
 import { DateField } from "@refinedev/mantine";
 import TableComponent from "@components/table";
 import { PHEONIX_MANUAL_URL, statusTextStyle } from "src/utils";
-import { IconPlayerPlay, IconSquarePlus } from "@tabler/icons";
+import { IconPlayerPlay, IconSquarePlus, IconTrash } from "@tabler/icons";
 import GatherRunModal from "@components/modals/gather-run";
 import { jobRunService } from "src/services";
 import { GatherResponse } from "src/interfaces/gather";
 import Link from "next/link";
+import GatherDeleteModal from "@components/modals/delete-gather";
 
 interface IGatherProps {
 	projectid: any;
@@ -32,6 +33,7 @@ interface IGatherProps {
 const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 	const translate = useTranslate();
 	const [opened, setOpened] = useState(false);
+	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 	const [selected, setSelected] = useState(null);
 	const [gatherList, setGatherList] = useState<any>([]);
 	const [loadingStates, setLoadingStates] = useState<{
@@ -71,6 +73,25 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 		[refetch]
 	);
 
+	const handleGatherUpdate = useCallback(
+		async (gatherDetail: GatherResponse) => {
+			setLoadingStates((prev) => ({ ...prev, [gatherDetail.id]: true }));
+			try {
+				setGatherList((prevList: GatherResponse[]) =>
+					prevList.map((gather) =>
+						gather.id === gatherDetail.id ? gatherDetail : gather
+					)
+				);
+			} catch (error) {
+				console.error("Error fetching gather details:", error);
+			} finally {
+				refetch();
+				setLoadingStates((prev) => ({ ...prev, [gatherDetail.id]: false }));
+			}
+		},
+		[refetch]
+	);
+
 	const columns = useMemo<ColumnDef<any>[]>(
 		() => [
 			{
@@ -94,12 +115,14 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 				accessorKey: "latest_job_run.started_processing_at",
 				header: translate("gathers.fields.started_run_at"),
 				cell: function render({ row }) {
-					const { latest_job_run } = row.original;
+					const { latest_job_run, deleted_at } = row.original;
 					const started_processing_at = latest_job_run
 						? latest_job_run.started_processing_at
 						: null;
 					return started_processing_at ? (
-						<DateField format="LLL" value={started_processing_at} />
+						<span className={`${deleted_at ? statusTextStyle("deleted") : ""}`}>
+							<DateField format="LLL" value={started_processing_at} />
+						</span>
 					) : (
 						""
 					);
@@ -110,12 +133,14 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 				accessorKey: "latest_job_run.completed_at",
 				header: translate("gathers.fields.completed_at"),
 				cell: function render({ row }) {
-					const { latest_job_run } = row.original;
+					const { latest_job_run, deleted_at } = row.original;
 					const completed_at = latest_job_run
 						? latest_job_run.completed_at
 						: null;
 					return completed_at ? (
-						<DateField format="LLL" value={completed_at} />
+						<span className={`${deleted_at ? statusTextStyle("deleted") : ""}`}>
+							<DateField format="LLL" value={completed_at} />
+						</span>
 					) : (
 						""
 					);
@@ -126,11 +151,17 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 				accessorKey: "latest_job_run.status",
 				header: translate("projects.fields.status"),
 				cell: function render({ row }) {
-					const { latest_job_run } = row.original;
+					const { latest_job_run, delete_job_run, deleted_at } = row.original;
 					const status = latest_job_run ? latest_job_run.status : null;
 					return (
-						<span className={`${statusTextStyle(status)}`}>
-							{status ? translate(`status.${status}`) : ""}
+						<span
+							className={`${statusTextStyle(deleted_at ? "deleted" : delete_job_run?.status ? delete_job_run?.status : status)}`}
+						>
+							{delete_job_run
+								? translate(`status.delete_status.${delete_job_run.status}`)
+								: status
+									? translate(`status.${status}`)
+									: ""}
 						</span>
 					);
 				},
@@ -141,7 +172,7 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 				header: translate("table.actions"),
 				cell: function render({ row }) {
 					const gatherId = row.original.id;
-					const { latest_job_run } = row.original;
+					const { latest_job_run, delete_job_run, deleted_at } = row.original;
 					const status = latest_job_run ? latest_job_run.status : null;
 					const isLoading = loadingStates[gatherId];
 					return (
@@ -165,9 +196,29 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 											</Button>
 										</Tooltip>
 									)}
-									{["in_queue", "processing", "awaiting_start"].includes(
+									{(["in_queue", "processing", "awaiting_start"].includes(
 										status
-									) && <Loader size="sm" />}
+									) ||
+										(delete_job_run &&
+											["in_queue", "processing", "awaiting_start"].includes(
+												delete_job_run.status
+											))) && <Loader size="sm" />}
+									{["completed_sucessfully", "failed"].includes(status) &&
+										!deleted_at && (
+											<Tooltip label="Delete">
+												<Button
+													p={0}
+													variant="subtle"
+													color="red"
+													onClick={() => {
+														setSelected(row.original);
+														setDeleteModalOpen(true);
+													}}
+												>
+													<IconTrash size={20} color="red" />
+												</Button>
+											</Tooltip>
+										)}
 								</>
 							)}
 						</Group>
@@ -275,6 +326,12 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 				setOpened={setOpened}
 				gatherDetail={selected}
 				handleRefresh={handleGatherRefresh}
+			/>
+			<GatherDeleteModal
+				opened={deleteModalOpen}
+				setOpened={setDeleteModalOpen}
+				gatherDetail={selected}
+				handleUpdate={handleGatherUpdate}
 			/>
 		</>
 	);

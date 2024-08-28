@@ -364,6 +364,15 @@
 			"estimated_duration_minutes": "Temps estimé",
 			"cost": "Coût estimé"
 		},
+		"delete": {
+			"message": "Êtes-vous sûr de vouloir supprimer cette collecte ?",
+			"note": "Veuillez noter qu'en supprimant cette collecte :",
+			"list": {
+				"a": "Les données recueillies pour cette collecte seront supprimées du tableau de bord.",
+				"b": "Cette action ne peut pas être annulée.",
+				"c": "Cette collecte restera disponible pour être dupliquée."
+			}
+		},
 		"errors": {
 			"create": "Quelque chose s'est mal passé lors de la création"
 		}
@@ -406,6 +415,13 @@
 		"awaiting_start": "En attente de début",
 		"processing": "Traitement",
 		"failed": "Échoué",
-		"completed_successfully": "Terminé avec succès"
+		"completed_successfully": "Terminé avec succès",
+		"delete_status": {
+			"in_queue": "Suppression en attente",
+			"awaiting_start": "Suppression en attente de démarrage",
+			"processing": "Suppression en cours",
+			"failed": "Échec de la suppression",
+			"completed_sucessfully": "Supprimé"
+		}
 	}
 }

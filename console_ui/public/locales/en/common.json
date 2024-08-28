@@ -367,6 +367,15 @@
 			"estimated_duration_minutes": "Estimated time",
 			"cost": "Estimated Cost"
 		},
+		"delete": {
+			"message": "Are you sure you want to delete this gather?",
+			"note": "Please note that by deleting this gather:",
+			"list": {
+				"a": "The gathered data for this gather will be deleted from the dashboard.",
+				"b": "This action can not be undone.",
+				"c": "This gather will still be left available to duplicate."
+			}
+		},
 		"errors": {
 			"create": "Something went wrong while creating"
 		}
@@ -409,6 +418,13 @@
 		"awaiting_start": "Awaiting Start",
 		"processing": "Processing",
 		"failed": "Failed",
-		"completed_sucessfully": "Completed Sucessfully"
+		"completed_sucessfully": "Completed Sucessfully",
+		"delete_status": {
+			"in_queue": "Delete In Queue",
+			"awaiting_start": "Delete Awaiting Start",
+			"processing": "Delete Processing",
+			"failed": "Delete Failed",
+			"completed_sucessfully": "Deleted"
+		}
 	}
 }
