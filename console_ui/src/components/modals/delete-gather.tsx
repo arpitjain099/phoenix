@@ -37,7 +37,7 @@ const GatherDeleteModal: React.FC<Props> = ({
 			.then((res) => {
 				showNotification({
 					title: "Success",
-					message: "Deleting gather.",
+					message: translate("gathers.success.delete"),
 				});
 				handleUpdate(res?.data);
 				handleClose();
@@ -46,7 +46,7 @@ const GatherDeleteModal: React.FC<Props> = ({
 			.catch((err) => {
 				showNotification({
 					title: "Error",
-					message: err.message || "An error occurred while deleting gather.",
+					message: err.message || translate("gathers.error.delete"),
 					color: "red",
 				});
 				setLoading(false);

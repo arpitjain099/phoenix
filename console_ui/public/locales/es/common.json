@@ -373,8 +373,12 @@
 				"c": "Esta recopilación seguirá estando disponible para duplicar."
 			}
 		},
+		"success": {
+			"delete": "Eliminando la recopilación."
+		},
 		"errors": {
-			"create": "Algo salió mal durante la creación"
+			"create": "Algo salió mal al crear",
+			"delete": "Ocurrió un error al eliminar la recopilación."
 		}
 	},
 	"tabulate": {

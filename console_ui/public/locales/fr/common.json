@@ -373,8 +373,12 @@
 				"c": "Cette collecte restera disponible pour être dupliquée."
 			}
 		},
+		"success": {
+			"delete": "Suppression de la collecte."
+		},
 		"errors": {
-			"create": "Quelque chose s'est mal passé lors de la création"
+			"create": "Une erreur s'est produite lors de la création",
+			"delete": "Une erreur s'est produite lors de la suppression de la collecte."
 		}
 	},
 

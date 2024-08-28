@@ -373,8 +373,12 @@
 				"c": "سيظل هذا التجميع متاحًا للتكرار."
 			}
 		},
+		"success": {
+			"delete": "جارٍ حذف التجميع."
+		},
 		"errors": {
-			"create": "Quelque chose s'est mal passé lors de la création"
+			"create": "حدث خطأ أثناء الإنشاء",
+			"delete": "حدث خطأ أثناء حذف التجميع."
 		}
 	},
 	"tabulate": {

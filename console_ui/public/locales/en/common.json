@@ -376,8 +376,12 @@
 				"c": "This gather will still be left available to duplicate."
 			}
 		},
+		"success": {
+			"delete": "Deleting gather."
+		},
 		"errors": {
-			"create": "Something went wrong while creating"
+			"create": "Something went wrong while creating",
+			"delete": "An error occurred while deleting gather."
 		}
 	},
 	"tabulate": {
