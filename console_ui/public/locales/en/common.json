@@ -89,6 +89,7 @@
 		"save": "Save",
 		"logout": "Logout",
 		"delete": "Delete",
+		"duplicate": "Duplicate",
 		"edit": "Edit",
 		"cancel": "Cancel",
 		"confirm": "Are you sure?",
@@ -323,7 +324,38 @@
 			},
 			"apify_tiktok_accounts_posts": {
 				"title": "TikTok Accounts Posts",
-				"description": "Gather posts (videos) from TikTok accounts (usernames) using the web scraper Apify"
+				"description": "Gather posts (videos) from TikTok accounts (usernames) using the web scraper Apify",
+				"create": "Configure a new TikTok Accounts posts gather:",
+				"create_description": "Create a gather of posts (videos) from TikTok accounts (usernames) using the web scraper Apify. Once you have created your gather your will be able to run it to collect the data.",
+				"edit": "Edit new TikTok Accounts posts gather",
+				"edit_description": "Edit a gather of posts (videos) from TikTok accounts (usernames) using the web scraper Apify. Once you have created your gather your will be able to run it to collect the data.",
+				"fields": {
+					"posts_created_after": "Posts Created After",
+					"limit_posts_per_account": "Limit Posts Per Account",
+					"posts_created_since_num_days": "Posts created since (Number of days)",
+					"proxy_country_to_gather_from": "Country to Gather From",
+					"input": {
+						"url_list": "Add TikTok accounts (usernames) you would like to gather from"
+					},
+					"info": {
+						"posts_created_after": "Gather posts created after 0:00 of the day configured.",
+						"limit_posts_per_account": "Limit the number of posts that are collected for each account.",
+						"posts_created_since_num_days": "Specify how old the scraped videos should be (in days). Putting 1 will get you only today's posts, 2 - yesterday's and today's, and so on. If the 'Posts Created After' field was set, the most recent videos will be scraped.",
+						"proxy_country_to_gather_from": "Country to Gather From"
+					},
+					"validation": {
+						"required": "Required"
+					}
+				},
+				"view": {
+					"text": "This is a Tiktok Accounts posts gather. It gathers posts from tiktok accounts using the Apify web scraper.",
+					"accordion": {
+						"status": "Status",
+						"general": "General",
+						"source": "Tiktok posts come from these accounts",
+						"source_title": "Tiktok account URLs"
+					}
+				}
 			}
 		},
 		"fields": {
@@ -345,7 +377,8 @@
 				"input_values": "input values",
 				"facebook": "Facebook",
 				"posts": "Post",
-				"comments": "Comment"
+				"comments": "Comment",
+				"tiktok": "Tiktok"
 			},
 			"input": {
 				"name": "Name",

@@ -65,7 +65,9 @@ export default function ApifyFacebookPostShow(): JSX.Element {
 					<Link
 						href={`/projects/${projectid}/gathers/apify_facebook_posts/duplicate/${id}`}
 					>
-						<Button leftIcon={<IconCopy size={18} />}>Duplicate</Button>
+						<Button leftIcon={<IconCopy size={18} />}>
+							{translate("buttons.duplicate")}
+						</Button>
 					</Link>
 					<EditButton {...editButtonProps} />
 				</>
