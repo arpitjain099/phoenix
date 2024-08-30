@@ -58,14 +58,12 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 				const latest_job_run_fetch = await jobRunService.fetchJobRun({
 					project_id: gatherDetail.project_id,
 					id: gatherDetail?.latest_job_run?.id,
-					type: "gather",
 				});
 				let delete_job_run_fetch = { data: null };
 				if (gatherDetail?.delete_job_run) {
 					delete_job_run_fetch = await jobRunService.fetchJobRun({
 						project_id: gatherDetail.project_id,
 						id: gatherDetail?.delete_job_run?.id,
-						type: "delete_gather",
 					});
 				}
 				setGatherList((prevList: GatherResponse[]) =>
