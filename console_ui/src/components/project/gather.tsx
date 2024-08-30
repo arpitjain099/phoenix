@@ -17,7 +17,11 @@ import {
 } from "@mantine/core";
 import { DateField } from "@refinedev/mantine";
 import TableComponent from "@components/table";
-import { PHEONIX_MANUAL_URL, statusTextStyle } from "src/utils";
+import {
+	isJobRunRunning,
+	PHEONIX_MANUAL_URL,
+	statusTextStyle,
+} from "src/utils";
 import { IconPlayerPlay, IconSquarePlus, IconTrash } from "@tabler/icons";
 import GatherRunModal from "@components/modals/gather-run";
 import { jobRunService } from "src/services";
@@ -133,7 +137,7 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 						: null;
 					return started_processing_at ? (
 						<span
-							className={`${delete_job_run?.status === "completed_successfully" ? statusTextStyle("deleted") : ""}`}
+							className={`${delete_job_run?.status === "completed_sucessfully" ? statusTextStyle("deleted") : ""}`}
 						>
 							<DateField format="LLL" value={started_processing_at} />
 						</span>
@@ -153,7 +157,7 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 						: null;
 					return completed_at ? (
 						<span
-							className={`${delete_job_run?.status === "completed_successfully" ? statusTextStyle("deleted") : ""}`}
+							className={`${delete_job_run?.status === "completed_sucessfully" ? statusTextStyle("deleted") : ""}`}
 						>
 							<DateField format="LLL" value={completed_at} />
 						</span>
@@ -171,7 +175,7 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 					const status = latest_job_run ? latest_job_run.status : null;
 					return (
 						<span
-							className={`${statusTextStyle(delete_job_run?.status === "completed_successfully" ? "deleted" : delete_job_run?.status ? delete_job_run?.status : status)}`}
+							className={`${statusTextStyle(delete_job_run?.status === "completed_sucessfully" ? "deleted" : delete_job_run?.status ? delete_job_run?.status : status)}`}
 						>
 							{delete_job_run
 								? translate(`status.delete_status.${delete_job_run.status}`)
@@ -212,16 +216,11 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 											</Button>
 										</Tooltip>
 									)}
-									{(["in_queue", "processing", "awaiting_start"].includes(
-										status
-									) ||
-										(delete_job_run &&
-											["in_queue", "processing", "awaiting_start"].includes(
-												delete_job_run.status
-											))) && <Loader size="sm" />}
-									{["completed_sucessfully", "failed"].includes(status) &&
-										delete_job_run?.completed_at &&
-										delete_job_run?.status !== "completed_successfully" && (
+									{(isJobRunRunning(latest_job_run) ||
+										isJobRunRunning(delete_job_run)) && <Loader size="sm" />}
+									{latest_job_run?.completed_at &&
+										!isJobRunRunning(delete_job_run) &&
+										delete_job_run?.status !== "completed_sucessfully" && (
 											<Tooltip label="Delete">
 												<Button
 													p={0}

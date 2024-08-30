@@ -1,4 +1,7 @@
 /* eslint-disable import/prefer-default-export */
+
+import { JobRunResponse } from "src/interfaces/job-run";
+
 /**
  * Formats the given date string into a human-readable date format.
  * @param {string} date - The date string to be formatted.
@@ -25,6 +28,9 @@ export const statusTextStyle = (type: any): string => {
 			return "text-neutral-500";
 	}
 };
+
+export const isJobRunRunning = (jobRun: JobRunResponse | null): boolean =>
+	jobRun !== null && !jobRun.completed_at;
 
 export const formatToCurrency = (value: number | string): string => {
 	let numberValue: number;
