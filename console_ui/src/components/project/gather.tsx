@@ -204,7 +204,8 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 												delete_job_run.status
 											))) && <Loader size="sm" />}
 									{["completed_sucessfully", "failed"].includes(status) &&
-										!deleted_at && (
+										!deleted_at &&
+										delete_job_run?.completed_at && (
 											<Tooltip label="Delete">
 												<Button
 													p={0}
