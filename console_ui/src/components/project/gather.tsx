@@ -51,15 +51,27 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 		async (gatherDetail: GatherResponse) => {
 			setLoadingStates((prev) => ({ ...prev, [gatherDetail.id]: true }));
 			try {
-				const { data } = await jobRunService.fetchJobRun({
+				const latest_job_run_fetch = await jobRunService.fetchJobRun({
 					project_id: gatherDetail.project_id,
 					id: gatherDetail?.latest_job_run?.id,
 					type: "gather",
 				});
+				let delete_job_run_fetch = { data: null };
+				if (gatherDetail?.delete_job_run) {
+					delete_job_run_fetch = await jobRunService.fetchJobRun({
+						project_id: gatherDetail.project_id,
+						id: gatherDetail?.delete_job_run?.id,
+						type: "delete_gather",
+					});
+				}
 				setGatherList((prevList: GatherResponse[]) =>
 					prevList.map((gather) =>
 						gather.id === gatherDetail.id
-							? { ...gather, latest_job_run: data }
+							? {
+									...gather,
+									latest_job_run: latest_job_run_fetch.data,
+									delete_job_run: delete_job_run_fetch.data,
+								}
 							: gather
 					)
 				);
