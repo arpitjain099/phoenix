@@ -6,6 +6,7 @@ import pandas as pd
 import pytest
 from google.cloud import bigquery
 
+from phiphi import config
 from phiphi.pipeline_jobs import constants, projects
 from phiphi.pipeline_jobs import utils as pipeline_jobs_utils
 from phiphi.pipeline_jobs.composite_flows import delete_gather_tabulate_flow
@@ -42,6 +43,11 @@ def test_bq_pipeline_integration():
 
     If the test fails you may need to manually clean up (delete) the dataset within Bigquery.
     """
+    if config.settings.USE_MOCK_BQ:
+        raise Exception(
+            "This test requires USE_MOCK_BQ to be set to False. "
+            "Please change this in python/projects/phiphi/docker_env.dev."
+        )
     temp_project_namespace = str(uuid.uuid4())[:10]
     temp_project_namespace = temp_project_namespace.replace("-", "")
     test_project_namespace = f"test_{temp_project_namespace}"
