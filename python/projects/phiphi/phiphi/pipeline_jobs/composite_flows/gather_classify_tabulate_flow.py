@@ -5,8 +5,8 @@ from typing import Coroutine
 import prefect
 
 from phiphi import constants
-from phiphi.api.projects import gathers, job_runs
-from phiphi.pipeline_jobs import utils as pipeline_jobs_utils
+from phiphi.api.projects import gathers
+from phiphi.pipeline_jobs.classify import flow as classify_flow
 from phiphi.pipeline_jobs.gathers import flow as gather_flow
 from phiphi.pipeline_jobs.tabulate import flow as tabulate_flow
 
@@ -36,20 +36,15 @@ async def gather_classify_tabulate_flow(
     )
 
     # For each classifier, classify the data.
-    # Classify will be refactored in to running a flow rather then a deployment later
     classify_tasks: list[Coroutine] = []
     for classifier_dict in classifiers_dict_list:
-        task = pipeline_jobs_utils.run_flow_deployment_as_subflow(
-            deployment_name="classify_flow/classify_flow",
-            flow_params={
-                "classifier_dict": classifier_dict,
-                "job_run_id": job_run_id,
-                "project_namespace": project_namespace,
-            },
-            project_id=project_id,
-            job_type=job_runs.schemas.ForeignJobType.classify,
-            job_source_id=job_source_id,
+        # Running in parallel so that if we are going to run as classifier as a deployment in the
+        # future it is an easy change. As well as it being a small optimisation.
+        task = asyncio.to_thread(
+            classify_flow.classify_flow,
+            classifier_dict=classifier_dict,
             job_run_id=job_run_id,
+            project_namespace=project_namespace,
         )
         classify_tasks.append(task)
     # Run all tasks (flows) concurrently and capture (and ignore) exceptions.
