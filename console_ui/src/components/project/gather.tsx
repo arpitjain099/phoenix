@@ -252,12 +252,17 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 	useEffect(() => {
 		let interval: NodeJS.Timeout | undefined;
 		if (
-			gatherList.some((gather: any) => !gather.latest_job_run?.completed_at)
+			gatherList.some(
+				(gather: any) =>
+					!gather.latest_job_run?.completed_at ||
+					(gather.delete_job_run && !gather.delete_job_run?.completed_at)
+			)
 		) {
 			interval = setInterval(() => {
 				const pendingGathers = gatherList.filter(
 					(gather: any) =>
-						gather.latest_job_run && !gather.latest_job_run?.completed_at
+						(gather.latest_job_run && !gather.latest_job_run?.completed_at) ||
+						(gather.delete_job_run && !gather.delete_job_run?.completed_at)
 				);
 				Promise.all(
 					pendingGathers.map((gather: any) => handleGatherRefresh(gather))
@@ -269,7 +274,7 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 				clearInterval(interval);
 			}
 		};
-	}, [gatherList, handleGatherRefresh]);
+	}, [gatherList, handleGatherRefresh, handleGatherUpdate]);
 
 	return (
 		<>
