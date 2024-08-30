@@ -7,6 +7,8 @@ import prefect
 from phiphi import constants
 from phiphi.api.projects import gathers, job_runs
 from phiphi.pipeline_jobs import utils as pipeline_jobs_utils
+from phiphi.pipeline_jobs.gathers import flow as gather_flow
+from phiphi.pipeline_jobs.tabulate import flow as tabulate_flow
 
 
 @prefect.flow(name="gather_classify_tabulate_flow")
@@ -25,22 +27,16 @@ async def gather_classify_tabulate_flow(
 
     Note: classify is not implemented yet.
     """
-    await pipeline_jobs_utils.run_flow_deployment_as_subflow(
-        deployment_name="gather_flow/gather_flow",
-        flow_params={
-            "gather_dict": gather_dict,
-            "gather_child_type": gather_child_type,
-            "job_run_id": job_run_id,
-            "project_namespace": project_namespace,
-            "batch_size": batch_size,
-        },
-        project_id=project_id,
-        job_type=job_runs.schemas.ForeignJobType.gather,
-        job_source_id=job_source_id,
+    gather_flow.gather_flow(
+        gather_dict=gather_dict,
+        gather_child_type=gather_child_type,
         job_run_id=job_run_id,
+        project_namespace=project_namespace,
+        batch_size=batch_size,
     )
 
     # For each classifier, classify the data.
+    # Classify will be refactored in to running a flow rather then a deployment later
     classify_tasks: list[Coroutine] = []
     for classifier_dict in classifiers_dict_list:
         task = pipeline_jobs_utils.run_flow_deployment_as_subflow(
@@ -59,17 +55,10 @@ async def gather_classify_tabulate_flow(
     # Run all tasks (flows) concurrently and capture (and ignore) exceptions.
     _ = await asyncio.gather(*classify_tasks, return_exceptions=True)
 
-    await pipeline_jobs_utils.run_flow_deployment_as_subflow(
-        deployment_name="tabulate_flow/tabulate_flow",
-        flow_params={
-            "class_id_name_map": class_id_name_map,
-            "job_run_id": job_run_id,
-            "project_namespace": project_namespace,
-        },
-        project_id=project_id,
-        job_type=job_runs.schemas.ForeignJobType.tabulate,
-        job_source_id=job_source_id,
+    tabulate_flow.tabulate_flow(
+        class_id_name_map=class_id_name_map,
         job_run_id=job_run_id,
+        project_namespace=project_namespace,
     )
 
 
