@@ -49,6 +49,8 @@ def gather_flow(
 @prefect.flow(name="delete_gather_flow")
 def delete_flow(
     gather_id: int,
+    # To be consistent with other flows we keep the job_run_id even though it is not used.
+    job_run_id: int,
     project_namespace: str,
 ) -> None:
     """Flow which deletes gathered data."""

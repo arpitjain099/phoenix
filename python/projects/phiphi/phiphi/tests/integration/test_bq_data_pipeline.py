@@ -214,6 +214,7 @@ def test_bq_pipeline_integration():
     gather_id_of_comments = example_gathers.facebook_comments_gather_example().id
     gather_flow.delete_flow(
         gather_id=gather_id_of_comments,
+        job_run_id=5,
         project_namespace=test_project_namespace,
     )
 
