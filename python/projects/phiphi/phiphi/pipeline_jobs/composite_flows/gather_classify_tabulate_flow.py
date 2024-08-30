@@ -48,6 +48,9 @@ async def gather_classify_tabulate_flow(
         )
         classify_tasks.append(task)
     # Run all tasks (flows) concurrently and capture (and ignore) exceptions.
+    # It is important that the gather is not deemed failed if a classifier fails.
+    # As otherwise the user will think the gather has not been complete and will re-run.
+    # We will find an other way to handle this in the future.
     _ = await asyncio.gather(*classify_tasks, return_exceptions=True)
 
     tabulate_flow.tabulate_flow(
