@@ -127,12 +127,14 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 				accessorKey: "latest_job_run.started_processing_at",
 				header: translate("gathers.fields.started_run_at"),
 				cell: function render({ row }) {
-					const { latest_job_run, deleted_at } = row.original;
+					const { latest_job_run, delete_job_run } = row.original;
 					const started_processing_at = latest_job_run
 						? latest_job_run.started_processing_at
 						: null;
 					return started_processing_at ? (
-						<span className={`${deleted_at ? statusTextStyle("deleted") : ""}`}>
+						<span
+							className={`${delete_job_run?.status === "completed_successfully" ? statusTextStyle("deleted") : ""}`}
+						>
 							<DateField format="LLL" value={started_processing_at} />
 						</span>
 					) : (
@@ -145,12 +147,14 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 				accessorKey: "latest_job_run.completed_at",
 				header: translate("gathers.fields.completed_at"),
 				cell: function render({ row }) {
-					const { latest_job_run, deleted_at } = row.original;
+					const { latest_job_run, delete_job_run } = row.original;
 					const completed_at = latest_job_run
 						? latest_job_run.completed_at
 						: null;
 					return completed_at ? (
-						<span className={`${deleted_at ? statusTextStyle("deleted") : ""}`}>
+						<span
+							className={`${delete_job_run?.status === "completed_successfully" ? statusTextStyle("deleted") : ""}`}
+						>
 							<DateField format="LLL" value={completed_at} />
 						</span>
 					) : (
@@ -163,11 +167,11 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 				accessorKey: "latest_job_run.status",
 				header: translate("projects.fields.status"),
 				cell: function render({ row }) {
-					const { latest_job_run, delete_job_run, deleted_at } = row.original;
+					const { latest_job_run, delete_job_run } = row.original;
 					const status = latest_job_run ? latest_job_run.status : null;
 					return (
 						<span
-							className={`${statusTextStyle(deleted_at ? "deleted" : delete_job_run?.status ? delete_job_run?.status : status)}`}
+							className={`${statusTextStyle(delete_job_run?.status === "completed_successfully" ? "deleted" : delete_job_run?.status ? delete_job_run?.status : status)}`}
 						>
 							{delete_job_run
 								? translate(`status.delete_status.${delete_job_run.status}`)
@@ -184,7 +188,7 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 				header: translate("table.actions"),
 				cell: function render({ row }) {
 					const gatherId = row.original.id;
-					const { latest_job_run, delete_job_run, deleted_at } = row.original;
+					const { latest_job_run, delete_job_run } = row.original;
 					const status = latest_job_run ? latest_job_run.status : null;
 					const isLoading = loadingStates[gatherId];
 					return (
@@ -216,8 +220,8 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 												delete_job_run.status
 											))) && <Loader size="sm" />}
 									{["completed_sucessfully", "failed"].includes(status) &&
-										!deleted_at &&
-										delete_job_run?.completed_at && (
+										delete_job_run?.completed_at &&
+										delete_job_run?.status !== "completed_successfully" && (
 											<Tooltip label="Delete">
 												<Button
 													p={0}
