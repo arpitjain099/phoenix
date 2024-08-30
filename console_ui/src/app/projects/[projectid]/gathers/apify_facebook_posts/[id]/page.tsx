@@ -33,12 +33,7 @@ export default function ApifyFacebookPostShow(): JSX.Element {
 	const editButtonProps: EditButtonProps = {
 		resource: `apify_facebook_posts`,
 		recordItemId: id as string,
-		...(isLoading ||
-		record?.deleted_at ||
-		(record?.latest_job_run &&
-			record?.latest_job_run?.status !== "awaiting_start")
-			? { disabled: true }
-			: {}),
+		...(isLoading || record?.latest_job_run ? { disabled: true } : {}),
 	};
 
 	const breadcrumbs = [
@@ -148,7 +143,7 @@ export default function ApifyFacebookPostShow(): JSX.Element {
 									</Title>
 									{record?.delete_job_run ? (
 										<TextField
-											className={`capitalize ${statusTextStyle(record?.deleted_at ? "deleted" : record?.delete_job_run?.status)}`}
+											className={`capitalize ${statusTextStyle(record?.delete_job_run?.status === "completed_sucessfully" ? "deleted" : record?.delete_job_run?.status)}`}
 											value={translate(
 												`status.delete_status.${record.delete_job_run.status}`
 											)}
