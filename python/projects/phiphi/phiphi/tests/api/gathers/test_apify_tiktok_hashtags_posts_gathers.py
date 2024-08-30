@@ -109,7 +109,6 @@ def test_serialize_tiktok_hashtags_posts_gather_response_with_all_fields_1():
         created_at=datetime.datetime.now(),
         updated_at=datetime.datetime.now(),
         project_id=123,
-        deleted_at=None,
         latest_job_run=None,
         child_type=gathers.schemas.ChildTypeName.apify_tiktok_hashtags_posts,
     )
@@ -139,7 +138,6 @@ def test_serialize_tiktok_hashtags_posts_gather_response_with_all_fields_2():
         created_at=datetime.datetime.now(),
         updated_at=datetime.datetime.now(),
         project_id=123,
-        deleted_at=None,
         latest_job_run=None,
         child_type=gathers.schemas.ChildTypeName.apify_tiktok_hashtags_posts,
     )
@@ -167,7 +165,6 @@ def test_serialize_tiktok_hashtags_posts_gather_response_with_required_fields_on
         created_at=datetime.datetime.now(),
         updated_at=datetime.datetime.now(),
         project_id=123,
-        deleted_at=None,
         latest_job_run=None,
         child_type=gathers.schemas.ChildTypeName.apify_tiktok_hashtags_posts,
     )

@@ -75,7 +75,6 @@ def test_serialize_tiktok_accounts_posts_gather_response_with_all_fields():
         created_at=datetime.datetime.now(),
         updated_at=datetime.datetime.now(),
         project_id=123,
-        deleted_at=None,
         latest_job_run=None,
         child_type=gather_schemas.ChildTypeName.apify_tiktok_hashtags_posts,
     )
@@ -104,7 +103,6 @@ def test_serialize_tiktok_accounts_posts_gather_response_with_required_fields_on
         created_at=datetime.datetime.now(),
         updated_at=datetime.datetime.now(),
         project_id=123,
-        deleted_at=None,
         latest_job_run=None,
         child_type=gather_schemas.ChildTypeName.apify_tiktok_hashtags_posts,
     )
