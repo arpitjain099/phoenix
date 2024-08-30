@@ -8,6 +8,7 @@ from google.cloud import bigquery
 
 from phiphi.pipeline_jobs import constants, projects
 from phiphi.pipeline_jobs import utils as pipeline_jobs_utils
+from phiphi.pipeline_jobs.composite_flows import delete_gather_tabulate_flow
 from phiphi.pipeline_jobs.gathers import flow as gather_flow
 from phiphi.pipeline_jobs.gathers import normalisers
 from phiphi.pipeline_jobs.tabulate import flow as tabulate_flow
@@ -212,10 +213,12 @@ def test_bq_pipeline_integration():
 
     # Delete just the comments
     gather_id_of_comments = example_gathers.facebook_comments_gather_example().id
-    gather_flow.delete_flow(
-        gather_id=gather_id_of_comments,
+    delete_gather_tabulate_flow.delete_gather_tabulate_flow(
+        project_id=1,
+        job_source_id=gather_id_of_comments,
         job_run_id=5,
         project_namespace=test_project_namespace,
+        class_id_name_map=class_id_name_map,
     )
 
     # Checking that the comments are deleted from the batches
@@ -241,11 +244,6 @@ def test_bq_pipeline_integration():
     )
     assert len(deduped_messages_df) == 8
     assert gather_id_of_comments not in deduped_messages_df["gather_id"].unique()
-
-    # Tabulate without the comments
-    tabulate_flow.tabulate_flow(
-        job_run_id=4, project_namespace=test_project_namespace, class_id_name_map=class_id_name_map
-    )
 
     tabulated_messages_df = pd.read_gbq(
         f"""
