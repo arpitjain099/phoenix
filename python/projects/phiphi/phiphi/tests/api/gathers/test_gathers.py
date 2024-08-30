@@ -115,7 +115,7 @@ def test_delete_gather(m_run_deployment, reseed_tables, client: TestClient, sess
         name="flow_runner_flow/flow_runner_flow",
         parameters={
             "project_id": 1,
-            "job_type": job_run_schemas.ForeignJobType.delete_gather,
+            "job_type": job_run_schemas.ForeignJobType.delete_gather_tabulate,
             "job_source_id": 1,
             "job_run_id": gather["delete_job_run"]["id"],
         },
@@ -160,7 +160,7 @@ def test_delete_gather(m_run_deployment, reseed_tables, client: TestClient, sess
         name="flow_runner_flow/flow_runner_flow",
         parameters={
             "project_id": 1,
-            "job_type": job_run_schemas.ForeignJobType.delete_gather,
+            "job_type": job_run_schemas.ForeignJobType.delete_gather_tabulate,
             "job_source_id": 1,
             "job_run_id": gather["delete_job_run"]["id"],
         },
