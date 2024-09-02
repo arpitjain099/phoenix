@@ -1,5 +1,4 @@
 """Integration tests for the data pipeline with big query."""
-import uuid
 from unittest.mock import patch
 
 import pandas as pd
@@ -16,7 +15,7 @@ from phiphi.pipeline_jobs.tabulate import flow as tabulate_flow
 from phiphi.tests.pipeline_jobs.gathers import example_gathers
 
 
-def test_bq_pipeline_integration():
+def test_bq_pipeline_integration(tmp_bq_project):
     """Test pipeline integration with bigquery.
 
     WARNING: !!!!!!!!!!!!!!
@@ -48,16 +47,12 @@ def test_bq_pipeline_integration():
             "This test requires USE_MOCK_BQ to be set to False. "
             "Please change this in python/projects/phiphi/docker_env.dev."
         )
-    temp_project_namespace = str(uuid.uuid4())[:10]
-    temp_project_namespace = temp_project_namespace.replace("-", "")
-    test_project_namespace = f"test_{temp_project_namespace}"
-    print(f"Test project namespace: {test_project_namespace}")
 
-    dataset = projects.init_project_db.fn(test_project_namespace, with_dummy_rows=2)
+    test_project_namespace = tmp_bq_project
     client = bigquery.Client()
-    assert client.get_dataset(dataset)
+    assert client.get_dataset(test_project_namespace)
     # Check that the dummy tabulated messages has been created
-    assert client.get_table(f"{dataset}.{constants.TABULATED_MESSAGES_TABLE_NAME}")
+    assert client.get_table(f"{test_project_namespace}.{constants.TABULATED_MESSAGES_TABLE_NAME}")
 
     # Check that will not fail if the dataset already exists.
     dataset = projects.init_project_db.fn(test_project_namespace)
@@ -263,5 +258,6 @@ def test_bq_pipeline_integration():
     # assert False
 
     projects.delete_project_db.fn(test_project_namespace)
+
     with pytest.raises(Exception):
         client.get_dataset(dataset)
