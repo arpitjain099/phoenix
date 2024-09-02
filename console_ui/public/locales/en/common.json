@@ -235,11 +235,11 @@
 		"types": {
 			"apify_facebook_posts": {
 				"title": "Facebook Posts from public pages and groups",
-				"description": "Gather posts from facebook accounts using the web scraper apify",
+				"description": "Gather posts from facebook accounts using the web scraper Apify",
 				"create": "Configure a new Facebook posts gather",
-				"create_description": "Create a gather of posts from facebook accounts using the web scraper apify. Once you have created your gather your will be able to run it to collect the data.",
+				"create_description": "Create a gather of posts from facebook accounts using the web scraper Apify. Once you have created your gather your will be able to run it to collect the data.",
 				"edit": "Edit new Facebook posts gather",
-				"edit_description": "Edit a gather of posts from facebook accounts using the web scraper apify. Once you have created your gather your will be able to run it to collect the data.",
+				"edit_description": "Edit a gather of posts from facebook accounts using the web scraper Apify. Once you have created your gather your will be able to run it to collect the data.",
 				"fields": {
 					"posts_created_after": "Posts Created After",
 					"posts_created_before": "Posts Created Before",
@@ -264,7 +264,7 @@
 					}
 				},
 				"view": {
-					"text": "This is a Facebook posts gather. It gathers posts from facebook accounts using the apify web scraper.",
+					"text": "This is a Facebook posts gather. It gathers posts from facebook accounts using the Apify web scraper.",
 					"accordion": {
 						"status": "Status",
 						"general": "General",
@@ -279,7 +279,7 @@
 				"create": "Configure a new Facebook comments gather",
 				"create_description": "Create a gather of comments from Facebook posts using the web scraper Apify. Once you have created your gather you will be able to run it to collect the data.",
 				"edit": "Edit new Facebook comments gather",
-				"edit_description": "Edit a gather of comments from facebook posts using the web scraper apify. Once you have created your gather your will be able to run it to collect the data.",
+				"edit_description": "Edit a gather of comments from facebook posts using the web scraper Apify. Once you have created your gather your will be able to run it to collect the data.",
 				"fields": {
 					"limit_replies": "Limit Replies",
 					"nested_replies": "Nested Replies",
