@@ -227,7 +227,8 @@
 			"create": "Create Gather",
 			"edit": "Edit Gather",
 			"list": "Gathers",
-			"show": "Show Gather"
+			"show": "Show Gather",
+			"select_type": "Select the type of gather you would like to do"
 		},
 		"sub_titles": {
 			"list": "Defines platform, source and search parameters for data collection. Create your new gather and then run it. Once it has been completed you can run a tabulate to update the dashboard dataset."

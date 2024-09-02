@@ -227,7 +227,8 @@
 			"create": "Créer un rassemblement",
 			"edit": "Modifier un rassemblement",
 			"list": "Rassemblements",
-			"show": "Afficher le rassemblement"
+			"show": "Afficher le rassemblement",
+			"select_type": "Sélectionnez le type de collecte que vous souhaitez effectuer"
 		},
 		"sub_titles": {
 			"list": "Définit la plateforme, la source et les paramètres de recherche pour la collecte de données. Créez votre nouveau rassemblement, puis exécutez-le. Une fois terminé, vous pouvez exécuter un tableau pour mettre à jour l'ensemble de données du tableau de bord."

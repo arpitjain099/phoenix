@@ -227,7 +227,8 @@
 			"create": "Crear reunión",
 			"edit": "Editar reunión",
 			"list": "Reuniones",
-			"show": "Mostrar reunión"
+			"show": "Mostrar reunión",
+			"select_type": "Seleccione el tipo de recopilación que le gustaría hacer"
 		},
 		"sub_titles": {
 			"list": "Define la plataforma, la fuente y los parámetros de búsqueda para la recopilación de datos. Crea tu nueva reunión y luego ejecútala. Una vez que se haya completado, puedes ejecutar una tabulación para actualizar el conjunto de datos del tablero."
