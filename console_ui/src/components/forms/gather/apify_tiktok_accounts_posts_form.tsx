@@ -15,7 +15,7 @@ export const initialFormValues = {
 	name: "",
 	limit_posts_per_account: 100,
 	account_username_list: [] as string[],
-	posts_created_after: null,
+	posts_created_after: null as Date | null,
 	posts_created_since_num_days: 7,
 	proxy_country_to_gather_from: "None",
 };
