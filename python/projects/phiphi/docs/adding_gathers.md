@@ -12,15 +12,16 @@ steps are then specific to Apify gathers.
 
 ## Steps - Stage 1
 
-### Decided which Apify actor
+### Decide which Apify actor
 
 Look at the possible actors here: https://apify.com/actors
 
-### Decided on a `child_type_name`
+### Decide on a `child_type_name`
 
-This name should follow the conventions of the other child names. However, since there are lots of
-different types of actors please feel free to come up with a name that seems to make sense but can
-be breaks convention with the other gathers.
+This name should follow the conventions of the other child gather names. However, since there are
+lots of different types of actors please feel free to come up with a name that make sense and
+possibly breaks the naming convention of child gathers. This name can be discussed with others in
+the MR.
 
 Make the additions:
 - Add the `child_type_name` to `ChildTypeName` in `phiphi/api/projects/gathers/schemas.py`.
@@ -29,7 +30,7 @@ Make the additions:
 ### Make base schemas
 
 Make schemas in `phiphi/api/projects/gathers/<child_type_name>/schemas.py` for the
-`<child_type_name>Base` and <child_type_name>Response`. For class names use `CamelCase` and
+`<child_type_name>Base` and `<child_type_name>Response`. For class names use `CamelCase` and
 for the fields use `snake_case`.
 
 These schemas should use attribute names that are clear to a technical peace builder. They can be
@@ -37,9 +38,11 @@ different from the names that are used in the Apify actor. If they are then use 
 parameter `serialization_alias` to map the Apify attribute name.
 
 Add test for the serialization of the Response schema in
-`phiphi/tests/api/projects/gathers/test_<child_type_name>_schemas.py`.
+`phiphi/tests/api/projects/gathers/test_<child_type_name>_schemas.py`. See other examples for more
+information.
 
-See other examples for more information.
+Add the import of the schemas to the `__init__.py` file in the folder for the new gather type. See
+other `__init__.py` of other child gathers for examples.
 
 ### Make an MR
 
@@ -54,6 +57,9 @@ Add the `Base` and `Response` schemas and `child_type_name` to the config maps i
 `phiphi/api/projects/gathers/child_type.py`. This includes making the correct additions to
 the variable `CHILD_TYPES_MAP_PROJECT_DB_DEFAULTS`.
 
+Add `child_type_name` to `gather_apify_actor_map` in
+`python/projects/phiphi/phiphi/pipeline_jobs/gathers/apify_scrape.py`.
+
 ### Make an example gather
 
 Add an example gather in `phiphi/tests/pipeline_jobs/gathers/example_gathers.py`. Do not use PI
@@ -65,6 +71,7 @@ Apify as this will be used to make a real request to Apify.
 Using the example gather you made in the previous step, make a real request to the gather service to
 get real output data for the example gather. This can be done by running the integration tests with
 `phiphi/tests/pipeline_jobs/gathers/test_apify_scrape.py::manual_test_apify_scrape_and_batch_download`.
+Don't forget to read the test docstring and change the test to use the correct example gather.
 Using this test will mean that you will also test the batch download functionality for the gather
 you are adding.
 
@@ -76,7 +83,7 @@ Add the real output data that you received from the request as the json sample d
 It is important to remove PI data. List of things that should be removed:
 - Ids
 - Ids or usernames of accounts
-- People's names or usernames in the text of a post or comments
+- People's names or usernames in the text of a post or comment
 - URLs
 
 One option is to replace this with the attribute name and an index. e.g.
@@ -135,11 +142,11 @@ the database.
 
 ### Add child routes
 
-To have the console UI and the admin UI to be able to create and update the gathers of the new type
-you will need to add routes to the API. In Phiphi these routes are called child routes because the
-child gather routes. Adding the child routes will allow the UI to make the correct http requests to
-the API to create and update the gathers. These routes for the API can be added automagically if
-you follow the conventions of adding correct config to the `child_routes.py` file.
+To have the console UI and the admin UI able to create and update the gathers of the new type
+you will need to add routes to the API. In Phiphi these routes are called child routes because they
+are the child gather API routes. Adding the child routes will allow the UI to make the correct http
+requests to the API to create and update the gathers. These child routes can be added automagically
+if you follow the conventions of adding correct config to the `child_routes.py` file.
 
 Add schemas for the gather type to the variable `list_of_child_gather_routes` in
 `phiphi/api/projects/gathers/child_routes.py` to create the child routes.
@@ -153,7 +160,7 @@ To run the cluster see `README.md`. Then runs checks:
 - create the gather of the new type from the API docs `http://api.phoenix.local/docs`
 - run the gather of the new type by making a `POST` to `job_runs` with the correct gather id and
   gather type
-- check that the gather run completes successfully. Checking that the `GET` `gather` for that
+- check that the gather run completes successfully. Check that the `GET` `gather` for that
   gather has the correct status and that the flows in prefect server `http://localhost:4200` are
   completed successfully.
 - Check that the output data was correct in the BigQuery project that the local cluster is connected
