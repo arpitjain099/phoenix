@@ -16,7 +16,7 @@ import { IconCopy } from "@tabler/icons";
 import Link from "next/link";
 import URLInputList from "@components/gather/url-list";
 import BreadcrumbsComponent from "@components/breadcrumbs";
-import GatherViewStatus from "@components/forms/gather/view_status";
+import GatherViewStatus from "@components/gather/view_status";
 
 export default function ApifyTiktokPostShow(): JSX.Element {
 	const { projectid, id } = useParams();
