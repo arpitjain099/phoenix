@@ -344,7 +344,9 @@
 						"proxy_country_to_gather_from": "Pays de collecte"
 					},
 					"validation": {
-						"required": "Requis"
+						"required": "Requis",
+						"created_since_num_days_and_created_after": "Les champs 'Pays à recueillir' et 'Publications créées depuis (Nombre de jours)' ne peuvent pas être définis simultanément",
+						"created_since_num_days_or_created_after": "Définissez soit 'Pays à recueillir', soit 'Publications créées depuis (Nombre de jours)'"
 					}
 				},
 				"view": {

@@ -344,7 +344,9 @@
 						"proxy_country_to_gather_from": "البلد الذي سيتم الجمع منه"
 					},
 					"validation": {
-						"required": "مطلوب"
+						"required": "مطلوب",
+						"created_since_num_days_and_created_after": "لا يمكن تعيين كلا من 'الدولة للجمع منها' و 'المنشورات التي تم إنشاؤها منذ (عدد الأيام)'",
+						"created_since_num_days_or_created_after": "قم بتعيين إما 'الدولة للجمع منها' أو 'المنشورات التي تم إنشاؤها منذ (عدد الأيام)'"
 					}
 				},
 				"view": {

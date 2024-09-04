@@ -344,7 +344,9 @@
 						"proxy_country_to_gather_from": "País para recopilar"
 					},
 					"validation": {
-						"required": "Requerido"
+						"required": "Requerido",
+						"created_since_num_days_and_created_after": "Ambos 'País para recopilar' y 'Publicaciones creadas desde (Número de días)' no pueden estar configurados",
+						"created_since_num_days_or_created_after": "Configura 'País para recopilar' o 'Publicaciones creadas desde (Número de días)'"
 					}
 				},
 				"view": {

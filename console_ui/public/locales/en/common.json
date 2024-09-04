@@ -344,7 +344,9 @@
 						"proxy_country_to_gather_from": "Country to Gather From"
 					},
 					"validation": {
-						"required": "Required"
+						"required": "Required",
+						"created_since_num_days_and_created_after": "Both 'Country to Gather From' and 'Posts created since (Number of days)' cannot be set",
+						"created_since_num_days_or_created_after": "Set either 'Country to Gather From' or 'Posts created since (Number of days)'"
 					}
 				},
 				"view": {

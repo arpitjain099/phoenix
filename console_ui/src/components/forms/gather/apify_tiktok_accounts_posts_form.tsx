@@ -15,8 +15,8 @@ export const initialFormValues = {
 	name: "",
 	limit_posts_per_account: 100,
 	account_username_list: [] as string[],
-	posts_created_after: new Date(),
-	posts_created_since_num_days: 1,
+	posts_created_after: null,
+	posts_created_since_num_days: 7,
 	proxy_country_to_gather_from: "None",
 };
 
@@ -42,23 +42,30 @@ export function getPostValidationRules(data: any, translate: any) {
 					"gathers.types.apify_tiktok_accounts_posts.fields.validation.required"
 				)
 			: null;
-	validationRules.posts_created_since_num_days =
-		data.posts_created_since_num_days === undefined
-			? translate(
-					"gathers.types.apify_tiktok_accounts_posts.fields.validation.required"
-				)
-			: null;
-	validationRules.posts_created_after = !data.posts_created_after
-		? translate(
-				"gathers.types.apify_tiktok_accounts_posts.fields.validation.required"
-			)
-		: null;
 	validationRules.proxy_country_to_gather_from =
 		!data.proxy_country_to_gather_from
 			? translate(
 					"gathers.types.apify_tiktok_accounts_posts.fields.validation.required"
 				)
 			: null;
+
+	if (!data.posts_created_since_num_days && !data.posts_created_after) {
+		validationRules.posts_created_after = translate(
+			"gathers.types.apify_tiktok_accounts_posts.fields.validation.created_since_num_days_or_created_after"
+		);
+		validationRules.posts_created_since_num_days = translate(
+			"gathers.types.apify_tiktok_accounts_posts.fields.validation.created_since_num_days_or_created_after"
+		);
+	}
+
+	if (data.posts_created_since_num_days && data.posts_created_after) {
+		validationRules.posts_created_after = translate(
+			"gathers.types.apify_tiktok_accounts_posts.fields.validation.created_since_num_days_and_created_after"
+		);
+		validationRules.posts_created_since_num_days = translate(
+			"gathers.types.apify_tiktok_accounts_posts.fields.validation.created_since_num_days_and_created_after"
+		);
+	}
 
 	return validationRules;
 }
@@ -114,6 +121,7 @@ const ApifyTiktokAccountsPostsForm: React.FC<Props> = ({
 						)}
 					</div>
 				}
+				disabled={getInputProps("posts_created_since_num_days").value}
 				{...getInputProps("posts_created_after")}
 			/>
 			<NumberInput
@@ -134,6 +142,7 @@ const ApifyTiktokAccountsPostsForm: React.FC<Props> = ({
 						)}
 					</div>
 				}
+				disabled={getInputProps("posts_created_after").value}
 				{...getInputProps("posts_created_since_num_days")}
 			/>
 			<NumberInput
