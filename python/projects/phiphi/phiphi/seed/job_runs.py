@@ -10,6 +10,8 @@ apify_facebook_gathers:
 - 2 job runs in project 1
 - 1 job run in project 2
 """
+import datetime
+
 from sqlalchemy.orm import Session
 
 from phiphi.api.projects.gathers import crud as gather_crud
@@ -68,7 +70,9 @@ def create_deleted_job_run(
             session=session,
             job_run_data=schemas.JobRunUpdateCompleted(
                 id=job_run_response.id,
-                completed_at=job_run_response.created_at,
+                # Making the completed at related to the id of the job run
+                completed_at=job_run_response.created_at
+                + datetime.timedelta(seconds=job_run_response.id),
                 status=status,
             ),
         )
@@ -92,7 +96,9 @@ def create_job_run_and_complete(
         session=session,
         job_run_data=schemas.JobRunUpdateCompleted(
             id=job_run_response.id,
-            completed_at=job_run_response.created_at,
+            # Making the completed at related to the id of the job run
+            completed_at=job_run_response.created_at
+            + datetime.timedelta(seconds=job_run_response.id),
             status=schemas.Status.completed_sucessfully,
         ),
     )
