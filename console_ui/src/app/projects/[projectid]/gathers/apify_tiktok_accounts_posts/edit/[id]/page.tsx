@@ -55,7 +55,9 @@ export default function ApifyFacebookPostEdit(): JSX.Element {
 		// Setting the value for "posts_created_after" with value from API call
 		setFieldValue(
 			"posts_created_after",
-			new Date(projectsData?.posts_created_after)
+			projectsData?.posts_created_after
+				? new Date(projectsData.posts_created_after)
+				: null
 		);
 	}, [projectsData, setFieldValue]);
 

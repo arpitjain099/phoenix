@@ -11,12 +11,21 @@ import GatherInputs from "@components/inputs/gather-inputs";
 import { TextField } from "@refinedev/mantine";
 import { countryList } from "src/utils/constants";
 
-export const initialFormValues = {
+interface FormValues {
+	name: string;
+	limit_posts_per_account: number;
+	account_username_list: string[];
+	posts_created_after: Date | null;
+	posts_created_since_num_days: number | null;
+	proxy_country_to_gather_from: string;
+}
+
+export const initialFormValues: FormValues = {
 	name: "",
 	limit_posts_per_account: 100,
-	account_username_list: [] as string[],
-	posts_created_after: null as Date | null,
-	posts_created_since_num_days: 7,
+	account_username_list: [],
+	posts_created_after: null,
+	posts_created_since_num_days: null,
 	proxy_country_to_gather_from: "None",
 };
 
@@ -144,6 +153,12 @@ const ApifyTiktokAccountsPostsForm: React.FC<Props> = ({
 				}
 				disabled={getInputProps("posts_created_after").value}
 				{...getInputProps("posts_created_since_num_days")}
+				onChange={(value) => {
+					// Convert value to a number or null if empty
+					const numericValue = value === undefined ? null : Number(value);
+					// Trigger the onChange handler from getInputProps
+					getInputProps("posts_created_since_num_days").onChange(numericValue);
+				}}
 			/>
 			<NumberInput
 				mt="lg"
