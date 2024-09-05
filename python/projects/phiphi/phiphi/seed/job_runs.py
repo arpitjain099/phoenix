@@ -59,7 +59,7 @@ def create_deleted_job_run(
     session: Session,
     project_id: int,
     job_run_create: schemas.JobRunCreate,
-    status: schemas.Status | None = schemas.Status.completed_sucessfully,
+    status: schemas.Status | None = schemas.Status.completed_successfully,
 ) -> None:
     """Create a deleted job run."""
     job_run_response = crud.create_job_run(
@@ -99,7 +99,7 @@ def create_job_run_and_complete(
             # Making the completed at related to the id of the job run
             completed_at=job_run_response.created_at
             + datetime.timedelta(seconds=job_run_response.id),
-            status=schemas.Status.completed_sucessfully,
+            status=schemas.Status.completed_successfully,
         ),
     )
 

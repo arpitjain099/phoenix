@@ -53,7 +53,7 @@ def test_get_gather_2(client: TestClient, reseed_tables) -> None:
     assert gather_3["id"] == 2
     assert gather_3["project_id"] == 1
     assert gather_3["latest_job_run"]["id"] == 4
-    assert gather_3["latest_job_run"]["status"] == "completed_sucessfully"
+    assert gather_3["latest_job_run"]["status"] == "completed_successfully"
     # Gather 2 has a foreign job type of gather_classify_tabulate
     assert gather_3["latest_job_run"]["foreign_job_type"] == "gather_classify_tabulate"
 
@@ -139,7 +139,7 @@ def test_delete_gather(m_run_deployment, reseed_tables, client: TestClient, sess
         session,
         job_run_data=job_run_schemas.JobRunUpdateCompleted(
             id=gather["delete_job_run"]["id"],
-            status=job_run_schemas.Status.completed_sucessfully,
+            status=job_run_schemas.Status.completed_successfully,
             completed_at=datetime.strptime(DELETED_TIME, "%Y-%m-%dT%H:%M:%S"),
         ),
     )

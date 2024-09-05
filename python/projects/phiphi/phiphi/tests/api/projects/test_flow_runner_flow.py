@@ -18,7 +18,7 @@ from phiphi.api.projects.job_runs import crud, flow_runner_flow, schemas
             schemas.ForeignJobType.gather,
             "gather_flow/gather_flow",
             True,
-            schemas.Status.completed_sucessfully,
+            schemas.Status.completed_successfully,
         ),
         (
             2,
@@ -32,14 +32,14 @@ from phiphi.api.projects.job_runs import crud, flow_runner_flow, schemas
             schemas.ForeignJobType.tabulate,
             "tabulate_flow/tabulate_flow",
             True,
-            schemas.Status.completed_sucessfully,
+            schemas.Status.completed_successfully,
         ),
         (
             2,
             schemas.ForeignJobType.delete_gather,
             "delete_gather_flow/delete_gather_flow",
             True,
-            schemas.Status.completed_sucessfully,
+            schemas.Status.completed_successfully,
         ),
     ],
 )
