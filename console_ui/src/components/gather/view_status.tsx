@@ -51,7 +51,7 @@ const GatherViewStatus: React.FC<Props> = ({ record }) => {
 				</Title>
 				{record?.delete_job_run ? (
 					<TextField
-						className={`capitalize ${statusTextStyle(record?.delete_job_run?.status === "completed_sucessfully" ? "deleted" : record?.delete_job_run?.status)}`}
+						className={`capitalize ${statusTextStyle(record?.delete_job_run?.status === "completed_successfully" ? "deleted" : record?.delete_job_run?.status)}`}
 						value={translate(
 							`status.delete_status.${record.delete_job_run.status}`
 						)}

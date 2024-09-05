@@ -459,7 +459,7 @@
 			"awaiting_start": "Eliminación en espera de inicio",
 			"processing": "Eliminación en proceso",
 			"failed": "Eliminación fallida",
-			"completed_sucessfully": "Eliminado"
+			"completed_successfully": "Eliminado"
 		}
 	}
 }

@@ -416,7 +416,6 @@
 			"delete": "Une erreur s'est produite lors de la suppression de la collecte."
 		}
 	},
-
 	"tabulate": {
 		"title": "Tabuler",
 		"sub_titles": {
@@ -460,7 +459,7 @@
 			"awaiting_start": "Suppression en attente de démarrage",
 			"processing": "Suppression en cours",
 			"failed": "Échec de la suppression",
-			"completed_sucessfully": "Supprimé"
+			"completed_successfully": "Supprimé"
 		}
 	}
 }

@@ -459,7 +459,7 @@
 			"awaiting_start": "الحذف بانتظار البدء",
 			"processing": "جاري الحذف",
 			"failed": "فشل الحذف",
-			"completed_sucessfully": "تم الحذف"
+			"completed_successfully": "تم الحذف"
 		}
 	}
 }

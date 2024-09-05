@@ -22,7 +22,7 @@ export const statusTextStyle = (type: any): string => {
 			return "text-orange-500";
 		case "failed":
 			return "text-red-500";
-		case "completed_sucessfully":
+		case "completed_successfully":
 			return "text-green-500";
 		default:
 			return "text-neutral-500";

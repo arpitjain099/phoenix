@@ -458,13 +458,13 @@
 		"awaiting_start": "Awaiting Start",
 		"processing": "Processing",
 		"failed": "Failed",
-		"completed_sucessfully": "Completed Sucessfully",
+		"completed_successfully": "Completed Successfully",
 		"delete_status": {
 			"in_queue": "Delete In Queue",
 			"awaiting_start": "Delete Awaiting Start",
 			"processing": "Delete Processing",
 			"failed": "Delete Failed",
-			"completed_sucessfully": "Deleted"
+			"completed_successfully": "Deleted"
 		}
 	}
 }
