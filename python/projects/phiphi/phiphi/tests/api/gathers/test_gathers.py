@@ -73,7 +73,7 @@ def test_get_gathers(client: TestClient, reseed_tables) -> None:
     assert response.status_code == 200
     gathers = response.json()
     # Currently this includes even the deleted gathers
-    assert len(gathers) == 3
+    assert len(gathers) == 4
 
     response = client.get("/projects/2/gathers/")
     assert response.status_code == 200

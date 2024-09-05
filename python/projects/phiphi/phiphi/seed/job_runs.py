@@ -32,6 +32,10 @@ TEST_JOB_RUN_5 = schemas.JobRunCreate(
     foreign_id=2, foreign_job_type=schemas.ForeignJobType.gather_classify_tabulate
 )
 
+TEST_JOB_RUN_6 = schemas.JobRunCreate(
+    foreign_id=7, foreign_job_type=schemas.ForeignJobType.gather_classify_tabulate
+)
+
 
 def create_deleted_job_run(
     session: Session, project_id: int, job_run_create: schemas.JobRunCreate
@@ -57,22 +61,34 @@ def create_deleted_job_run(
     session.commit()
 
 
+def create_job_run_and_complete(
+    session: Session, project_id: int, job_run_create: schemas.JobRunCreate
+) -> None:
+    """Create a job run and complete it."""
+    job_run_response = crud.create_job_run(
+        session=session, project_id=project_id, job_run_create=job_run_create
+    )
+    crud.update_job_run(
+        session=session,
+        job_run_data=schemas.JobRunUpdateCompleted(
+            id=job_run_response.id,
+            completed_at=job_run_response.created_at,
+            status=schemas.Status.completed_sucessfully,
+        ),
+    )
+
+
 def seed_test_job_runs(session: Session) -> None:
     """Seed the job runs."""
-    job_runs_project_1 = [TEST_JOB_RUN, TEST_JOB_RUN_2, TEST_JOB_RUN_4, TEST_JOB_RUN_5]
+    job_runs_project_1 = [
+        TEST_JOB_RUN,
+        TEST_JOB_RUN_2,
+        TEST_JOB_RUN_4,
+        TEST_JOB_RUN_5,
+    ]
 
     for job_run in job_runs_project_1:
-        job_run_response = crud.create_job_run(
-            session=session, project_id=1, job_run_create=job_run
-        )
-        crud.update_job_run(
-            session=session,
-            job_run_data=schemas.JobRunUpdateCompleted(
-                id=job_run_response.id,
-                completed_at=job_run_response.created_at,
-                status=schemas.Status.completed_sucessfully,
-            ),
-        )
+        create_job_run_and_complete(session, 1, job_run)
 
     # Create a second gather run for gather 1
     # This is in status awaiting_start
@@ -81,3 +97,6 @@ def seed_test_job_runs(session: Session) -> None:
     crud.create_job_run(session=session, project_id=2, job_run_create=TEST_JOB_RUN_3)
     # Deleted job for gather
     create_deleted_job_run(session, 1, TEST_GATHER_DELETED_JOB_RUN)
+
+    # Create a second gather run for gather 7 so we have a completed gather that is not deleted
+    create_job_run_and_complete(session, 1, TEST_JOB_RUN_6)

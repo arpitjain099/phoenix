@@ -29,6 +29,14 @@ TEST_APIFY_FACEBOOK_COMMENTS_GATHER_CREATE_3 = schemas.ApifyFacebookCommentsGath
     include_comment_replies=False,
 )
 
+TEST_APIFY_FACEBOOK_COMMENTS_GATHER_CREATE_4 = schemas.ApifyFacebookCommentsGatherCreate(
+    name="Phoenix Apify Facebook COMMENT Gather 4",
+    post_url_list=["https://phoenix.com"],
+    limit_comments_per_post=10,
+    sort_comments_by=schemas.FacebookCommentSortOption.newest_first,
+    include_comment_replies=False,
+)
+
 
 def seed_test_apify_facebook_comments_gathers(session: Session) -> None:
     """Seed the gathers."""
@@ -47,11 +55,16 @@ def seed_test_apify_facebook_comments_gathers(session: Session) -> None:
             child_type=gathers_schemas.ChildTypeName.apify_facebook_comments,
         )
 
-    gather_child_crud.create_child_gather(
-        session=session,
-        project_id=1,
-        request_schema=TEST_APIFY_FACEBOOK_COMMENTS_GATHER_CREATE_3,
-        child_model=models.ApifyFacebookCommentsGather,
-        response_schema=schemas.ApifyFacebookCommentsGatherResponse,
-        child_type=gathers_schemas.ChildTypeName.apify_facebook_comments,
-    )
+    apify_facebook_gathers = [
+        TEST_APIFY_FACEBOOK_COMMENTS_GATHER_CREATE_3,
+        TEST_APIFY_FACEBOOK_COMMENTS_GATHER_CREATE_4,
+    ]
+    for apify_facebook_gather in apify_facebook_gathers:
+        gather_child_crud.create_child_gather(
+            session=session,
+            project_id=1,
+            request_schema=apify_facebook_gather,
+            child_model=models.ApifyFacebookCommentsGather,
+            response_schema=schemas.ApifyFacebookCommentsGatherResponse,
+            child_type=gathers_schemas.ChildTypeName.apify_facebook_comments,
+        )
