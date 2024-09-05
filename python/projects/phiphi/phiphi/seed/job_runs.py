@@ -44,25 +44,34 @@ TEST_GATHER_FAILED_DELETED_JOB_RUN = schemas.JobRunCreate(
     foreign_id=8, foreign_job_type=schemas.ForeignJobType.delete_gather
 )
 
+TEST_GATHER_RUNNING_DELETED_GATHER_RUN = schemas.JobRunCreate(
+    foreign_id=9, foreign_job_type=schemas.ForeignJobType.gather_classify_tabulate
+)
+
+TEST_GATHER_RUNNING_DELETED_JOB_RUN = schemas.JobRunCreate(
+    foreign_id=9, foreign_job_type=schemas.ForeignJobType.delete_gather
+)
+
 
 def create_deleted_job_run(
     session: Session,
     project_id: int,
     job_run_create: schemas.JobRunCreate,
-    status: schemas.Status = schemas.Status.completed_sucessfully,
+    status: schemas.Status | None = schemas.Status.completed_sucessfully,
 ) -> None:
     """Create a deleted job run."""
     job_run_response = crud.create_job_run(
         session=session, project_id=project_id, job_run_create=job_run_create
     )
-    crud.update_job_run(
-        session=session,
-        job_run_data=schemas.JobRunUpdateCompleted(
-            id=job_run_response.id,
-            completed_at=job_run_response.created_at,
-            status=status,
-        ),
-    )
+    if status:
+        crud.update_job_run(
+            session=session,
+            job_run_data=schemas.JobRunUpdateCompleted(
+                id=job_run_response.id,
+                completed_at=job_run_response.created_at,
+                status=status,
+            ),
+        )
     gather_db = gather_crud.get_orm_gather(
         session=session, project_id=project_id, gather_id=job_run_create.foreign_id
     )
@@ -118,3 +127,7 @@ def seed_test_job_runs(session: Session) -> None:
     # Make gather id 5 completed gather and have a failed deleted gather run
     create_job_run_and_complete(session, 1, TEST_GATHER_FAILED_DELETED_GATHER_RUN)
     create_deleted_job_run(session, 1, TEST_GATHER_FAILED_DELETED_JOB_RUN, schemas.Status.failed)
+
+    # Make gather id 9 completed gather and have a running deleted gather run
+    create_job_run_and_complete(session, 1, TEST_GATHER_RUNNING_DELETED_GATHER_RUN)
+    create_deleted_job_run(session, 1, TEST_GATHER_RUNNING_DELETED_JOB_RUN, None)

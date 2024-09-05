@@ -46,6 +46,15 @@ TEST_APIFY_FACEBOOK_COMMENTS_GATHER_CREATE_5 = schemas.ApifyFacebookCommentsGath
 )
 
 
+TEST_APIFY_FACEBOOK_COMMENTS_GATHER_CREATE_6 = schemas.ApifyFacebookCommentsGatherCreate(
+    name="Phoenix Apify Facebook COMMENT Gather 6",
+    post_url_list=["https://phoenix.com"],
+    limit_comments_per_post=10,
+    sort_comments_by=schemas.FacebookCommentSortOption.newest_first,
+    include_comment_replies=False,
+)
+
+
 def seed_test_apify_facebook_comments_gathers(session: Session) -> None:
     """Seed the gathers."""
     apify_facebook_gathers = [
@@ -67,6 +76,7 @@ def seed_test_apify_facebook_comments_gathers(session: Session) -> None:
         TEST_APIFY_FACEBOOK_COMMENTS_GATHER_CREATE_3,
         TEST_APIFY_FACEBOOK_COMMENTS_GATHER_CREATE_4,
         TEST_APIFY_FACEBOOK_COMMENTS_GATHER_CREATE_5,
+        TEST_APIFY_FACEBOOK_COMMENTS_GATHER_CREATE_6,
     ]
     for apify_facebook_gather in apify_facebook_gathers:
         gather_child_crud.create_child_gather(
