@@ -158,6 +158,52 @@ For more detailed instructions, refer to [Vercel's documentation](https://vercel
 - Once the deployment is complete, AWS Amplify Console will provide you with a unique URL where your Next.js application is hosted.
 - Click on the provided URL to access your deployed Next.js application.
 
-## Adding a new Gather Type
+## Adding a New Gather Type
 
-TODO
+To add a new gather type, follow the steps below:
+
+1. **Replicate an Existing Gather Type**
+
+- Navigate to the gathers folder path:  
+  `console_ui/src/app/projects/[projectid]/gathers/apify_facebook_posts`
+- This folder contains 4 subfolders: `[id]`, `create`, `duplicate`, and `edit`.
+- Replicate this folder structure to create a new type of gather.
+
+2. **Rename the Folder**
+
+- Rename the replicated folder to the desired new type, e.g., `apify_facebook_comments`.
+
+3. **Edit the `[id]` Folder (View Page)**
+
+- Open the `page.tsx` file located in the `[id]` folder.
+- Add/Remove Fields: Modify the form fields as necessary.
+- Update Resource Routes: Replace all occurrences of `apify_facebook_posts` with `apify_facebook_comments` or your new gather type.
+- Translation:
+  - Create the required translation objects in `console_ui/public/locales`.
+  - Update the translation paths in `page.tsx` to align with the new gather type.
+
+4. **Edit the Create Page**
+
+a. Replicate a Form Component:
+
+- Go to `console_ui/src/components/forms/gather`.
+- Replicate any file and rename it according to your new gather type.
+- Update `InitialFormValues` and the `Rules` function to meet the requirements of the new gather type.
+
+b. Update Create Page (`page.tsx`):
+
+- Open the `page.tsx` file in the `create` folder from the replicated folder:  
+  `console_ui/src/app/projects/[projectid]/gathers/`.
+- Add/Remove fields as needed.
+- Update resource routes in the `handleGatherSave` function to match the new gather type, e.g., change:  
+  `projects/${projectid}/gathers/apify_facebook_posts` to  
+  `projects/${projectid}/gathers/apify_facebook_comments`.
+
+c. Translation:
+
+- Create the necessary translation objects in `console_ui/public/locales`.
+- Adjust translation paths in `page.tsx` to match the newly created translation files.
+
+5. **Repeat Same Actions For Edit Page**
+
+6. **Repeat Same Actions For Duplicate Page**
