@@ -31,3 +31,6 @@ pandera
 pyarrow
 google-cloud-bigquery
 pandas-gbq
+
+## Hidden requirement for pandera
+hypothesis
