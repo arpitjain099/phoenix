@@ -36,9 +36,20 @@ TEST_JOB_RUN_6 = schemas.JobRunCreate(
     foreign_id=7, foreign_job_type=schemas.ForeignJobType.gather_classify_tabulate
 )
 
+TEST_GATHER_FAILED_DELETED_GATHER_RUN = schemas.JobRunCreate(
+    foreign_id=8, foreign_job_type=schemas.ForeignJobType.gather_classify_tabulate
+)
+
+TEST_GATHER_FAILED_DELETED_JOB_RUN = schemas.JobRunCreate(
+    foreign_id=8, foreign_job_type=schemas.ForeignJobType.delete_gather
+)
+
 
 def create_deleted_job_run(
-    session: Session, project_id: int, job_run_create: schemas.JobRunCreate
+    session: Session,
+    project_id: int,
+    job_run_create: schemas.JobRunCreate,
+    status: schemas.Status = schemas.Status.completed_sucessfully,
 ) -> None:
     """Create a deleted job run."""
     job_run_response = crud.create_job_run(
@@ -49,7 +60,7 @@ def create_deleted_job_run(
         job_run_data=schemas.JobRunUpdateCompleted(
             id=job_run_response.id,
             completed_at=job_run_response.created_at,
-            status=schemas.Status.completed_sucessfully,
+            status=status,
         ),
     )
     gather_db = gather_crud.get_orm_gather(
@@ -94,9 +105,16 @@ def seed_test_job_runs(session: Session) -> None:
     # This is in status awaiting_start
     crud.create_job_run(session=session, project_id=1, job_run_create=TEST_JOB_RUN)
 
+    # This needs to be the only job in project 2 other wise we can't check that
+    # `last_job_run_completed_at` is None for project 2
     crud.create_job_run(session=session, project_id=2, job_run_create=TEST_JOB_RUN_3)
+
     # Deleted job for gather
     create_deleted_job_run(session, 1, TEST_GATHER_DELETED_JOB_RUN)
 
     # Create a second gather run for gather 7 so we have a completed gather that is not deleted
     create_job_run_and_complete(session, 1, TEST_JOB_RUN_6)
+
+    # Make gather id 5 completed gather and have a failed deleted gather run
+    create_job_run_and_complete(session, 1, TEST_GATHER_FAILED_DELETED_GATHER_RUN)
+    create_deleted_job_run(session, 1, TEST_GATHER_FAILED_DELETED_JOB_RUN, schemas.Status.failed)
