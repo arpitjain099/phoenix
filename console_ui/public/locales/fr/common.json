@@ -323,39 +323,39 @@
 				}
 			},
 			"apify_tiktok_accounts_posts": {
-				"title": "Publications des Comptes TikTok",
-				"description": "Récupérer les publications (vidéos) des comptes TikTok (noms d'utilisateur) en utilisant le web scraper Apify",
-				"create": "Configurer une nouvelle collecte de publications des Comptes TikTok :",
-				"create_description": "Créer une collecte de publications (vidéos) à partir de comptes TikTok (noms d'utilisateur) en utilisant le web scraper Apify. Une fois que vous avez créé votre collecte, vous pourrez la lancer pour collecter les données.",
-				"edit": "Modifier la collecte de nouvelles publications des Comptes TikTok",
-				"edit_description": "Modifier une collecte de publications (vidéos) à partir de comptes TikTok (noms d'utilisateur) en utilisant le web scraper Apify. Une fois que vous avez créé votre collecte, vous pourrez la lancer pour collecter les données.",
+				"title": "Publications de Comptes TikTok",
+				"description": "Récupérer les publications (vidéos) des comptes TikTok (noms d'utilisateur) en utilisant le scraper web Apify",
+				"create": "Configurer une nouvelle collecte de publications de comptes TikTok :",
+				"create_description": "Créez une collecte de publications (vidéos) de comptes TikTok (noms d'utilisateur) en utilisant le scraper web Apify. Une fois que vous aurez créé votre collecte, vous pourrez l'exécuter pour collecter les données.",
+				"edit": "Modifier une nouvelle collecte de publications de comptes TikTok",
+				"edit_description": "Modifiez une collecte de publications (vidéos) de comptes TikTok (noms d'utilisateur) en utilisant le scraper web Apify. Une fois que vous aurez créé votre collecte, vous pourrez l'exécuter pour collecter les données.",
 				"fields": {
-					"posts_created_after": "Publications créées après",
+					"posts_created_after": "Publications créées après - modifiable uniquement si 'Publications créées depuis (Nombre de jours)' est vide",
 					"limit_posts_per_account": "Limiter les publications par compte",
-					"posts_created_since_num_days": "Publications créées depuis (Nombre de jours)",
-					"proxy_country_to_gather_from": "Pays de collecte",
+					"posts_created_since_num_days": "Publications créées depuis (Nombre de jours) - modifiable uniquement si 'Publications créées après' est vide",
+					"proxy_country_to_gather_from": "Pays à collecter",
 					"input": {
 						"url_list": "Ajoutez les comptes TikTok (noms d'utilisateur) à partir desquels vous souhaitez collecter"
 					},
 					"info": {
-						"posts_created_after": "Récupérer les publications créées après 0:00 du jour configuré.",
-						"limit_posts_per_account": "Limiter le nombre de publications collectées pour chaque compte.",
-						"posts_created_since_num_days": "Spécifiez l'ancienneté des vidéos extraites (en jours). Mettre 1 vous donnera uniquement les posts d'aujourd'hui, 2 - ceux d'hier et d'aujourd'hui, etc. Si le champ 'Publications créées après' a été défini, les vidéos les plus récentes seront extraites.",
-						"proxy_country_to_gather_from": "Pays de collecte"
+						"posts_created_after": "Récupérez les publications créées après 00h00 du jour configuré. Utilisez `x` à l'extrême droite pour vider le champ.",
+						"limit_posts_per_account": "Limitez le nombre de publications collectées pour chaque compte.",
+						"posts_created_since_num_days": "Spécifiez l'ancienneté des vidéos extraites (en jours). En mettant 1, vous obtiendrez uniquement les publications d'aujourd'hui, 2 - celles d'hier et d'aujourd'hui, etc. Si le champ 'Publications créées après' est défini, les vidéos les plus récentes seront extraites.",
+						"proxy_country_to_gather_from": "Pays à collecter"
 					},
 					"validation": {
 						"required": "Requis",
-						"created_since_num_days_and_created_after": "Les champs 'Pays à recueillir' et 'Publications créées depuis (Nombre de jours)' ne peuvent pas être définis simultanément",
-						"created_since_num_days_or_created_after": "Définissez soit 'Pays à recueillir', soit 'Publications créées depuis (Nombre de jours)'"
+						"created_since_num_days_and_created_after": "'Publications créées après' et 'Publications créées depuis (Nombre de jours)' ne peuvent pas être définis simultanément",
+						"created_since_num_days_or_created_after": "Définissez soit 'Publications créées après', soit 'Publications créées depuis (Nombre de jours)'"
 					}
 				},
 				"view": {
-					"text": "Ceci est une collecte de publications des Comptes TikTok. Elle collecte les publications des comptes TikTok en utilisant le web scraper Apify.",
+					"text": "Ceci est une collecte de publications de comptes TikTok. Elle récupère les publications des comptes TikTok à l'aide du scraper web Apify.",
 					"accordion": {
 						"status": "Statut",
 						"general": "Général",
 						"source": "Les publications TikTok proviennent de ces comptes",
-						"source_title": "URL des comptes TikTok"
+						"source_title": "URLs des comptes TikTok"
 					}
 				}
 			}

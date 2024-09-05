@@ -330,23 +330,23 @@
 				"edit": "Edit new TikTok Accounts posts gather",
 				"edit_description": "Edit a gather of posts (videos) from TikTok accounts (usernames) using the web scraper Apify. Once you have created your gather your will be able to run it to collect the data.",
 				"fields": {
-					"posts_created_after": "Posts Created After",
+					"posts_created_after": "Posts Created After - only editable if 'Posts created since (Number of days)' is empty",
 					"limit_posts_per_account": "Limit Posts Per Account",
-					"posts_created_since_num_days": "Posts created since (Number of days)",
+					"posts_created_since_num_days": "Posts created since (Number of days) - only editable if 'Posts Created After' is empty",
 					"proxy_country_to_gather_from": "Country to Gather From",
 					"input": {
 						"url_list": "Add TikTok accounts (usernames) you would like to gather from"
 					},
 					"info": {
-						"posts_created_after": "Gather posts created after 0:00 of the day configured.",
+						"posts_created_after": "Gather posts created after 0:00 of the day configured. Use `x` on the far right to make the input empty. ",
 						"limit_posts_per_account": "Limit the number of posts that are collected for each account.",
 						"posts_created_since_num_days": "Specify how old the scraped videos should be (in days). Putting 1 will get you only today's posts, 2 - yesterday's and today's, and so on. If the 'Posts Created After' field was set, the most recent videos will be scraped.",
 						"proxy_country_to_gather_from": "Country to Gather From"
 					},
 					"validation": {
 						"required": "Required",
-						"created_since_num_days_and_created_after": "Both 'Country to Gather From' and 'Posts created since (Number of days)' cannot be set",
-						"created_since_num_days_or_created_after": "Set either 'Country to Gather From' or 'Posts created since (Number of days)'"
+						"created_since_num_days_and_created_after": "Both 'Posts created after' and 'Posts created since (Number of days)' cannot be set",
+						"created_since_num_days_or_created_after": "Set either 'Posts created after' or 'Posts created since (Number of days)'"
 					}
 				},
 				"view": {
