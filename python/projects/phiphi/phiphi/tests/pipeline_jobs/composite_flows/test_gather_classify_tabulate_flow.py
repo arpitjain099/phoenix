@@ -79,6 +79,8 @@ async def test_gather_classify_tabulate_flow_exception_propagate(
             batch_size=1,
         )
         mock_apify_scrape_and_batch_download_results.assert_called_once()
+        mock_bigquery_client.assert_not_called()
+        mock_classify_flow.assert_not_called()
 
 
 @mock.patch("phiphi.pipeline_jobs.gathers.apify_scrape.apify_scrape_and_batch_download_results")
