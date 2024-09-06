@@ -18,6 +18,7 @@ class ChildTypeName(str, Enum):
     apify_facebook_comments = "apify_facebook_comments"
     apify_tiktok_hashtags_posts = "apify_tiktok_hashtags_posts"
     apify_tiktok_accounts_posts = "apify_tiktok_accounts_posts"
+    apify_tiktok_searches_posts = "apify_tiktok_searches_posts"
 
 
 class Platform(str, Enum):
