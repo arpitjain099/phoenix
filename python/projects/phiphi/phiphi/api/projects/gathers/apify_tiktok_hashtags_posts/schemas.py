@@ -4,12 +4,16 @@ This schemas is a subset of the available inputs for the Apify TikTok Scraper.
 
 For reference see the Apify actor docs:
 https://apify.com/clockworks/tiktok-scraper/input-schema
+
+Note on `posts_created_after` and `posts_created_since_num_days` that these fields don't work for
+searches. See issue:
+https://apify.com/clockworks/tiktok-scraper/issues/trying-to-set-a-time-RYR6bQdcvzc52hwnO
 """
 from typing import Any, Optional
 
 import pydantic
 
-from phiphi.api.projects.gathers import constants, utils
+from phiphi.api.projects.gathers import constants
 from phiphi.api.projects.gathers import schemas as gather_schemas
 
 
@@ -29,23 +33,6 @@ class ApifyTikTokHashtagsPostsGatherBase(gather_schemas.GatherBase):
             "there seems to be no difference when using with."
         ),
     )
-    posts_created_after: Optional[str] = pydantic.Field(
-        default=None,
-        serialization_alias="oldestPostDate",
-        description="Fetch posts created after this date (YYYY-MM-DD)",
-    )
-    posts_created_since_num_days: Optional[int] = pydantic.Field(
-        default=None,
-        serialization_alias="scrapeLastNDays",
-        description=(
-            "Specify how old the scraped videos should be (in days). "
-            "Putting 1 will get you only today's posts, 2 - yesterday's and today's, and so on. "
-            "If the posts_created_after field was set, "
-            "the most recent videos will be scraped. "
-            "See docs of field for more information: "
-            "https://apify.com/clockworks/tiktok-scraper/input-schema#scrapeLastNDays"
-        ),
-    )
     proxy_country_to_gather_from: Optional[str] = pydantic.Field(
         default=None,
         serialization_alias="proxyCountryCode",
@@ -54,10 +41,6 @@ class ApifyTikTokHashtagsPostsGatherBase(gather_schemas.GatherBase):
             "If this is set a RESIDENTIAL group will be used and will increase the price."
         ),
     )
-
-    _validate_dependency_posts_created_since_num_days = pydantic.field_validator(
-        "posts_created_since_num_days"
-    )(utils.validate_dependency("posts_created_after"))
 
 
 class ApifyTikTokHashtagsPostsGatherResponse(
@@ -98,23 +81,6 @@ class ApifyTikTokHashtagsPostsGatherUpdate(gather_schemas.GatherUpdate):
             "there seems to be no difference when using with."
         ),
     )
-    posts_created_after: Optional[str] = pydantic.Field(
-        default=None,
-        serialization_alias="oldestPostDate",
-        description="Fetch posts created after this date (YYYY-MM-DD)",
-    )
-    posts_created_since_num_days: Optional[int] = pydantic.Field(
-        default=None,
-        serialization_alias="scrapeLastNDays",
-        description=(
-            "Specify how old the scraped videos should be (in days). "
-            "Putting 1 will get you only today's posts, 2 - yesterday's and today's, and so on. "
-            "If the posts_created_after field was set, "
-            "the most recent videos will be scraped. "
-            "See docs of field for more information: "
-            "https://apify.com/clockworks/tiktok-scraper/input-schema#scrapeLastNDays"
-        ),
-    )
     proxy_country_to_gather_from: Optional[str] = pydantic.Field(
         default=None,
         serialization_alias="proxyCountryCode",
@@ -123,6 +89,3 @@ class ApifyTikTokHashtagsPostsGatherUpdate(gather_schemas.GatherUpdate):
             "If this is set a RESIDENTIAL group will be used and will increase the price."
         ),
     )
-    _validate_dependency_posts_created_since_num_days = pydantic.field_validator(
-        "posts_created_since_num_days"
-    )(utils.validate_dependency("posts_created_after"))

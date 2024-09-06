@@ -18,6 +18,4 @@ class ApifyTikTokHashtagsPostsGather(gather_models.Gather):
     id: orm.Mapped[int] = orm.mapped_column(ForeignKey("gathers.id"), primary_key=True)
     limit_posts_per_hashtag: orm.Mapped[int]
     hashtag_list: orm.Mapped[str] = orm.mapped_column(base_models.JSONEncodedValue)
-    posts_created_after: orm.Mapped[Optional[str]]
-    posts_created_since_num_days: orm.Mapped[Optional[int]]
     proxy_country_to_gather_from: orm.Mapped[Optional[str]]

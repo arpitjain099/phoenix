@@ -9,7 +9,6 @@ TEST_APIFY_TIKTOK_HASHTAGS_POSTS_GATHER_CREATE = schemas.ApifyTikTokHashtagsPost
     name="Phoenix Apify TikTok Hashtags Posts Gather",
     hashtag_list=["hashtag1", "hashtag2"],
     limit_posts_per_hashtag=1000,
-    posts_created_after="2024-04-25",
     proxy_country_to_gather_from="US",
 )
 
