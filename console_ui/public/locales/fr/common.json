@@ -358,6 +358,37 @@
 						"source_title": "URLs des comptes TikTok"
 					}
 				}
+			},
+			"apify_tiktok_hashtags_posts": {
+				"title": "Publications TikTok Hashtags",
+				"description": "Récupérez des publications (vidéos) à partir des hashtags TikTok en utilisant le web scraper Apify",
+				"create": "Configurer une nouvelle récupération de publications TikTok Hashtags:",
+				"create_description": "Créez une récupération de publications (vidéos) à partir des hashtags TikTok en utilisant le web scraper Apify. Une fois que vous avez créé votre récupération, vous pourrez l'exécuter pour collecter les données.",
+				"edit": "Modifier la nouvelle récupération de publications TikTok Hashtags",
+				"edit_description": "Modifiez une récupération de publications (vidéos) à partir des comptes TikTok (noms d'utilisateur) en utilisant le web scraper Apify. Une fois que vous avez créé votre récupération, vous pourrez l'exécuter pour collecter les données.",
+				"fields": {
+					"limit_posts_per_hashtag": "Limiter les publications par hashtag",
+					"proxy_country_to_gather_from": "Pays à partir duquel recueillir",
+					"input": {
+						"url_list": "Ajoutez les hashtags TikTok à partir desquels vous souhaitez récupérer"
+					},
+					"info": {
+						"limit_posts_per_account": "Limitez le nombre de publications collectées pour chaque hashtag.",
+						"proxy_country_to_gather_from": "Pays à partir duquel recueillir"
+					},
+					"validation": {
+						"required": "Requis"
+					}
+				},
+				"view": {
+					"text": "Ceci est une récupération de publications TikTok Hashtags. Il récupère des publications à partir des hashtags TikTok en utilisant le web scraper Apify.",
+					"accordion": {
+						"status": "Statut",
+						"general": "Général",
+						"source": "Les publications TikTok proviennent de ces hashtags",
+						"source_title": "URLs des hashtags TikTok"
+					}
+				}
 			}
 		},
 		"fields": {

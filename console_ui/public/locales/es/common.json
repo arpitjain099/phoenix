@@ -358,6 +358,37 @@
 						"source_title": "URLs de las cuentas de TikTok"
 					}
 				}
+			},
+			"apify_tiktok_hashtags_posts": {
+				"title": "Publicaciones de Hashtags de TikTok",
+				"description": "Recoge publicaciones (videos) de hashtags de TikTok usando el web scraper Apify",
+				"create": "Configurar una nueva recopilación de publicaciones de Hashtags de TikTok:",
+				"create_description": "Crea una recopilación de publicaciones (videos) de hashtags de TikTok usando el web scraper Apify. Una vez que hayas creado tu recopilación, podrás ejecutarla para recolectar los datos.",
+				"edit": "Editar nueva recopilación de publicaciones de Hashtags de TikTok",
+				"edit_description": "Edita una recopilación de publicaciones (videos) de cuentas de TikTok (nombres de usuario) usando el web scraper Apify. Una vez que hayas creado tu recopilación, podrás ejecutarla para recolectar los datos.",
+				"fields": {
+					"limit_posts_per_hashtag": "Limitar publicaciones por hashtag",
+					"proxy_country_to_gather_from": "País desde el que recopilar",
+					"input": {
+						"url_list": "Añade los hashtags de TikTok de los que deseas recopilar"
+					},
+					"info": {
+						"limit_posts_per_account": "Limita la cantidad de publicaciones que se recogen por cada hashtag.",
+						"proxy_country_to_gather_from": "País desde el que recopilar"
+					},
+					"validation": {
+						"required": "Requerido"
+					}
+				},
+				"view": {
+					"text": "Esta es una recopilación de publicaciones de hashtags de TikTok. Recoge publicaciones de hashtags de TikTok usando el web scraper Apify.",
+					"accordion": {
+						"status": "Estado",
+						"general": "General",
+						"source": "Las publicaciones de TikTok provienen de estos hashtags",
+						"source_title": "URLs de hashtags de TikTok"
+					}
+				}
 			}
 		},
 		"fields": {
