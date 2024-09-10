@@ -1,9 +1,11 @@
 """Utils for the gather."""
+from typing import Any, Callable
+
 import pydantic
 
 
-def validate_dependency(dependency_key: str):  # type: ignore[no-untyped-def]
-    """Utility function to validate dependency between one attribute and an other.
+def validate_both_not_set(attribute_2: str) -> Callable[[Any, Any, pydantic.ValidationInfo], Any]:
+    """Utility function to validate both attributes are not set.
 
     For example, if attribute_1 is set, the attribute_2 should be None.
 
@@ -15,13 +17,13 @@ def validate_dependency(dependency_key: str):  # type: ignore[no-untyped-def]
     ```
 
     Args:
-        dependency_key (str): The key of the attribute that should be None.
+        attribute_2 (str): The attribute that should be None.
     """
 
-    def fn(cls, v, info: pydantic.ValidationInfo):  # type: ignore[no-untyped-def]
-        if v is not None and info.data[dependency_key] is not None:
+    def fn(cls: Any, v: Any, info: pydantic.ValidationInfo) -> Any:
+        if v is not None and info.data[attribute_2] is not None:
             raise ValueError(
-                f"{info.field_name} can only be set if {dependency_key} is not set (None)"
+                f"{info.field_name} can only be set if {attribute_2} is not set (None)"
             )
 
         return v

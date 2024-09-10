@@ -49,9 +49,9 @@ class ApifyTikTokAccountsPostsGatherBase(gather_schemas.GatherBase):
         ),
     )
 
-    _validate_dependency_posts_created_since_num_days = pydantic.field_validator(
+    _validate_both_filters_by_date_not_set = pydantic.field_validator(
         "posts_created_since_num_days"
-    )(utils.validate_dependency("posts_created_after"))
+    )(utils.validate_both_not_set("posts_created_after"))
 
 
 class ApifyTikTokAccountsPostsGatherResponse(
@@ -107,6 +107,6 @@ class ApifyTikTokAccountsPostsGatherUpdate(gather_schemas.GatherUpdate):
         ),
     )
 
-    _validate_dependency_posts_created_since_num_days = pydantic.field_validator(
+    _validate_both_filters_by_date_not_set = pydantic.field_validator(
         "posts_created_since_num_days"
-    )(utils.validate_dependency("posts_created_after"))
+    )(utils.validate_both_not_set("posts_created_after"))
