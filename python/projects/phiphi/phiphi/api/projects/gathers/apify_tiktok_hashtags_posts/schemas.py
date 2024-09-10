@@ -8,6 +8,10 @@ https://apify.com/clockworks/tiktok-scraper/input-schema
 Note on `posts_created_after` and `posts_created_since_num_days` that these fields don't work for
 searches. See issue:
 https://apify.com/clockworks/tiktok-scraper/issues/trying-to-set-a-time-RYR6bQdcvzc52hwnO
+
+It is thought (but not 100% sure) that the `apify_tiktok_hashtags_posts_gather` has the same
+functionality as the `apify_searches_posts_gather` but it normalises all the inputs in
+`hashtag_list` to have a `#` at the begging.
 """
 from typing import Any, Optional
 
