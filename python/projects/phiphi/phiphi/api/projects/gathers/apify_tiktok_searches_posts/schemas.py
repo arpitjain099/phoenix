@@ -27,11 +27,7 @@ class ApifyTikTokSearchesPostsGatherBase(gather_schemas.GatherBase):
     # not be returned from serialize_to_apify_input
     search_list: list[str] = pydantic.Field(
         serialization_alias="searchQueries",
-        description=(
-            "List of searches to scrape TikTok videos for. "
-            " It is recommended to use without # prefix but "
-            "there seems to be no difference when using with."
-        ),
+        description=("List of searches to scrape TikTok videos for."),
     )
     proxy_country_to_gather_from: Optional[str] = pydantic.Field(
         default=None,
