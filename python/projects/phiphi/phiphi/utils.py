@@ -6,6 +6,7 @@ import re
 
 import sentry_sdk
 import yaml
+from google import auth
 
 from phiphi import config
 
@@ -103,3 +104,10 @@ def init_sentry(
             environment=environment,
             release=release,
         )
+
+
+def get_default_bigquery_project() -> str:
+    """Get the default BigQuery project based on the current environment."""
+    _, project = auth.default()
+    # Cast needed for typing
+    return str(project)
