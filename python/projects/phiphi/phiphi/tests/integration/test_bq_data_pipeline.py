@@ -8,7 +8,10 @@ from google.cloud import bigquery
 from phiphi import config
 from phiphi.pipeline_jobs import constants, projects
 from phiphi.pipeline_jobs import utils as pipeline_jobs_utils
-from phiphi.pipeline_jobs.composite_flows import delete_gather_tabulate_flow
+from phiphi.pipeline_jobs.composite_flows import (
+    delete_gather_tabulate_flow,
+    recompute_all_batches_tabulate_flow,
+)
 from phiphi.pipeline_jobs.gathers import flow as gather_flow
 from phiphi.pipeline_jobs.gathers import normalisers
 from phiphi.pipeline_jobs.tabulate import flow as tabulate_flow
@@ -155,6 +158,38 @@ def test_bq_pipeline_integration(tmp_bq_project):
     # Test that "class"/"comment_class" columns exists in the tabulated messages and has NaN values
     assert tabulated_messages_df["class"].isna().all()
     assert tabulated_messages_df["comment_class"].isna().all()
+
+    ## Recompute all batches and tabulate flow
+
+    recompute_all_batches_tabulate_flow.recompute_all_batches_tabulate_flow(
+        project_id=1,
+        job_run_id=4,
+        project_namespace=test_project_namespace,
+        gathers_dict_list=[
+            example_gathers.facebook_posts_gather_example().dict(),
+            example_gathers.facebook_comments_gather_example().dict(),
+        ],
+        gather_child_type_list=[
+            example_gathers.facebook_posts_gather_example().child_type,
+            example_gathers.facebook_comments_gather_example().child_type,
+        ],
+        class_id_name_map={},
+    )
+
+    messages_after_recompute_df = pd.read_gbq(
+        f"SELECT * FROM {test_project_namespace}.{constants.GENERALISED_MESSAGES_TABLE_NAME}"
+    )
+
+    pd.testing.assert_frame_equal(
+        pd.concat([messages_df, messages_df]), messages_after_recompute_df
+    )
+    tabulated_messages_after_recompute_df = pd.read_gbq(
+        f"""
+        SELECT *
+        FROM {test_project_namespace}.{constants.TABULATED_MESSAGES_TABLE_NAME}
+        """
+    )
+    pd.testing.assert_frame_equal(tabulated_messages_df, tabulated_messages_after_recompute_df)
 
     # Manually create and add some classified_messages
     # Grab rows just to make a dataframe
