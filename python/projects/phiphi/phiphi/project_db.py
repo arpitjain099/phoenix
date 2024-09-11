@@ -13,5 +13,25 @@ See docs: https://googleapis.dev/python/sqlalchemy-bigquery/latest/README.html
 """
 import sqlalchemy as sa
 
+from phiphi import utils
+
 # DO NOT USE ORM MODELS FOR BIGQUERY TABLES. See file docstring.
 metadata = sa.MetaData()
+
+
+def form_bigquery_sqlalchmey_uri(
+    project_namespace: str, google_cloud_project: None | str = None
+) -> str:
+    """Form the bigquery sqlalchemy uri.
+
+    Args:
+        project_namespace (str): The project namespace.
+        google_cloud_project (None | str, optional): The google cloud project. If None then this
+            will be inferred from the google cloud auth configuration.
+
+    Returns:
+        str: The sqlalchemy uri.
+    """
+    if google_cloud_project is None:
+        google_cloud_project = utils.get_default_bigquery_project()
+    return f"bigquery://{google_cloud_project}/{project_namespace}"
