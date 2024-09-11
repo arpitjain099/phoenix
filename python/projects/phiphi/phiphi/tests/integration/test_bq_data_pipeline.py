@@ -295,7 +295,10 @@ def test_bq_pipeline_integration(tmp_bq_project):
     messages_df = pd.read_gbq(
         f"SELECT * FROM {test_project_namespace}.{constants.GENERALISED_MESSAGES_TABLE_NAME}"
     )
-    assert len(messages_df) == 16
+    # There where 50 messages before the comments were deleted
+    # There was double of the gathers due to the recompute_all_batches_tabulate_flow
+    # So there should be 50 - (2 * 9) = 32 messages
+    assert len(messages_df) == 32
     assert gather_id_of_comments not in messages_df["gather_id"].unique()
 
     # and the deduplication should be the same as without the comments.
