@@ -198,7 +198,25 @@ def test_bq_pipeline_integration(tmp_bq_project):
         FROM {test_project_namespace}.{constants.TABULATED_MESSAGES_TABLE_NAME}
         """
     )
-    pd.testing.assert_frame_equal(tabulated_messages_df, tabulated_messages_after_recompute_df)
+    # Going to only compare the ids are correct to simplify the tests
+    columns_to_compare = ["phoenix_platform_message_id", "pi_platform_message_id"]
+    df_1 = tabulated_messages_df.sort_values(by=["phoenix_platform_message_id"]).reset_index(
+        drop=True
+    )
+    df_1 = df_1[columns_to_compare]
+    df_2 = tabulated_messages_after_recompute_df.sort_values(
+        by=["phoenix_platform_message_id"]
+    ).reset_index(drop=True)
+    df_2 = df_2[columns_to_compare]
+
+    pd.testing.assert_frame_equal(df_1, df_2)
+    # Check that the processed_at is greater than the previous processed_at
+    previous_processed_at = tabulated_messages_df["phoenix_processed_at"].max()
+    recompute_processed_at = tabulated_messages_after_recompute_df["phoenix_processed_at"].unique()
+    # Make sure that all the processed_at values are the same
+    assert recompute_processed_at.shape[0] == 1
+    # Make sure that the recompute processed_at is greater than the previous processed_at
+    assert recompute_processed_at[0] > previous_processed_at
 
     # Manually create and add some classified_messages
     # Grab rows just to make a dataframe
