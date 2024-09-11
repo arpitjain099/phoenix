@@ -181,10 +181,17 @@ def test_bq_pipeline_integration(tmp_bq_project):
     messages_after_recompute_df = pd.read_gbq(
         f"SELECT * FROM {test_project_namespace}.{constants.GENERALISED_MESSAGES_TABLE_NAME}"
     )
+    duplicated_messages = pd.concat([messages_df, messages_df], ignore_index=True)
+    assert len(messages_after_recompute_df) == len(duplicated_messages)
 
-    pd.testing.assert_frame_equal(
-        pd.concat([messages_df, messages_df]), messages_after_recompute_df
-    )
+    # Due to the ordering of the data not being consistent we do group by the message ID
+    # and check that the counts are the same.
+    grouped_messages = duplicated_messages.groupby("phoenix_platform_message_id").count()
+    grouped_messages_after_recompute = messages_after_recompute_df.groupby(
+        "phoenix_platform_message_id"
+    ).count()
+    pd.testing.assert_frame_equal(grouped_messages, grouped_messages_after_recompute)
+
     tabulated_messages_after_recompute_df = pd.read_gbq(
         f"""
         SELECT *
