@@ -39,3 +39,30 @@ class ApifyTikTokCommentsGatherResponse(
     """Apify TikTok searches posts gather schema."""
 
     pass
+
+
+class ApifyTikTokCommentsGatherCreate(ApifyTikTokCommentsGatherBase, gather_schemas.GatherCreate):
+    """Apify TikTok Comments Gather create schema.
+
+    Properties to receive via API on creation.
+    """
+
+
+class ApifyTikTokCommentsGatherUpdate(gather_schemas.GatherUpdate):
+    """Apify TikTok Comments Gather update schema.
+
+    Only properties that are set will be updated.
+    """
+
+    limit_comments_per_post: Optional[int] = pydantic.Field(
+        default=None,
+        description="Limit comments (including replies) per post (video)",
+    )
+    post_url_list: Optional[list[UrlStr]] = pydantic.Field(
+        default=None,
+        description="List of TikTok post (video) URLs to scrape comments from",
+    )
+    include_comment_replies: Optional[bool] = pydantic.Field(
+        default=None,
+        description="If True, includes replies to comments.",
+    )
