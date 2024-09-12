@@ -55,7 +55,7 @@ for feedback and discussion on the `child_type_name` and what is being proposed 
 
 Add the `Base` and `Response` schemas and `child_type_name` to the config maps in
 `phiphi/api/projects/gathers/child_type.py`. This includes making the correct additions to
-the variable `CHILD_TYPES_MAP_PROJECT_DB_DEFAULTS`.
+the variables `AllChildTypesUnion`, `CHILD_TYPES_MAP` and `CHILD_TYPES_MAP_PROJECT_DB_DEFAULTS`.
 
 Add `child_type_name` to `gather_apify_actor_map` in
 `python/projects/phiphi/phiphi/pipeline_jobs/gathers/apify_scrape.py`.
