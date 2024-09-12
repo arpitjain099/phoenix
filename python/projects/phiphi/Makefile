@@ -24,6 +24,8 @@ build:
 clean:
 	@echo "Clean the development environment..."
 	docker compose down -v --remove-orphans
+	@echo "Clean the projects db for migrations..."
+	rm -rf local_project_dbs/alembic.db
 
 bash_in_api:
 	@echo "Starting bash in the dev api environment"
