@@ -58,6 +58,9 @@ gather_normalisation_map: Dict[type[gathers.schemas.GatherResponse], NormaliserF
     gathers.apify_tiktok_hashtags_posts.schemas.ApifyTikTokHashtagsPostsGatherResponse: (
         normalisers.normalise_single_tiktok_posts_json
     ),
+    gathers.apify_tiktok_comments.schemas.ApifyTikTokCommentsGatherResponse: (
+        normalisers.normalise_single_tiktok_comments_json
+    ),
     # Add other gather types and their corresponding normalization functions here
 }
 

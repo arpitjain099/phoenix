@@ -102,3 +102,25 @@ def test_normaliser_tiktok_hashtags_posts(
     )
 
     pd.testing.assert_frame_equal(processed_df, normalised_tiktok_hashtags_posts_df)
+
+
+@pytest.mark.freeze_time("2024-04-02T12:10:59.000Z")
+def test_normaliser_tiktok_comments(normalised_tiktok_comments_df, tiktok_comments_gather_fixture):
+    """Test normaliser for tiktok comments function.
+
+    Note: we use the `normalise_batch` function from the `normalise` module to test the normaliser,
+    as this is an easy way to test multiple records (and tests in the usage context).
+    """
+    batch_json = utils.load_sample_raw_data(
+        child_type_name=schemas.ChildTypeName.apify_tiktok_comments,
+    )
+
+    processed_df = normalise.normalise_batch(
+        normaliser=normalisers.normalise_single_tiktok_comments_json,
+        batch_json=batch_json,
+        gather=tiktok_comments_gather_fixture,
+        gather_batch_id=3,
+        gathered_at=datetime.fromisoformat("2024-04-01T12:00:00.000Z"),
+    )
+
+    pd.testing.assert_frame_equal(processed_df, normalised_tiktok_comments_df)

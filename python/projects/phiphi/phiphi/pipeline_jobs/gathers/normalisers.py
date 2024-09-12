@@ -92,3 +92,26 @@ def normalise_single_tiktok_posts_json(json_blob: Dict) -> Dict | None:
         "phoenix_platform_parent_message_id": None,
         "phoenix_platform_root_message_id": None,
     }
+
+
+def normalise_single_tiktok_comments_json(json_blob: Dict) -> Dict:
+    """Extract fields from a single TikTok comment JSON blob to normalized form.
+
+    This normaliser can be used for all gathers that use the apidojo/tiktok-comments-scraper actor.
+    https://apify.com/apidojo/tiktok-comments-scraper/input-schema
+    """
+    return {
+        "pi_platform_message_id": json_blob["id"],
+        "pi_platform_message_author_id": json_blob["user"]["id"],
+        "pi_platform_message_author_name": json_blob["user"]["username"],
+        "pi_platform_parent_message_id": None,
+        "pi_platform_root_message_id": json_blob["awemeId"],
+        "pi_text": json_blob["text"],
+        # Tiktok has no url for comments
+        "pi_platform_message_url": None,
+        "platform_message_last_updated_at": datetime.fromisoformat(json_blob["createdAt"]),
+        "phoenix_platform_message_id": anonymize(json_blob["id"]),
+        "phoenix_platform_message_author_id": anonymize(json_blob["user"]["id"]),
+        "phoenix_platform_parent_message_id": None,
+        "phoenix_platform_root_message_id": anonymize(json_blob["awemeId"]),
+    }

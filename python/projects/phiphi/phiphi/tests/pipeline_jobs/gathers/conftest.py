@@ -42,6 +42,14 @@ def tiktok_hashtags_posts_gather_fixture() -> (
 
 
 @pytest.fixture
+def tiktok_comments_gather_fixture() -> (
+    gathers.apify_tiktok_comments.schemas.ApifyTikTokCommentsGatherResponse
+):
+    """Fixture for the TikTok comments gather example."""
+    return example_gathers.tiktok_comments_gather_example()
+
+
+@pytest.fixture
 def normalised_facebook_posts_df() -> pd.DataFrame:
     """Return the expected DataFrame based on the processed JSON data."""
     data = {
@@ -456,4 +464,75 @@ def normalised_tiktok_hashtags_posts_df() -> pd.DataFrame:
     for column in ["platform_message_last_updated_at", "gathered_at", "phoenix_processed_at"]:
         normalised_tiktok_df[column] = normalised_tiktok_df[column].astype("datetime64[ms, UTC]")  # type: ignore[call-overload]
 
+    return normalised_tiktok_df
+
+
+@pytest.fixture
+def normalised_tiktok_comments_df() -> pd.DataFrame:
+    """Return the expected DataFrame based on the processed JSON data."""
+    data = {
+        "pi_platform_message_id": [
+            "anonymizedID1",
+            "anonymizedID2",
+            "anonymizedID3",
+        ],
+        "pi_platform_message_author_id": [
+            "anonymizedUserID1",
+            "anonymizedUserID2",
+            "anonymizedUserID3",
+        ],
+        "pi_platform_message_author_name": [
+            "anonymizedUsername1",
+            "anonymizedUsername2",
+            "anonymizedUsername3",
+        ],
+        "pi_platform_parent_message_id": [None] * 3,
+        "pi_platform_root_message_id": [
+            "anonymizedAwemeID1",
+            "anonymizedAwemeID2",
+            "anonymizedAwemeID3",
+        ],
+        "pi_text": [
+            (
+                "please help save [country's] water bodies. "
+                "they are being destroyed by illegal mining activities"
+            ),
+            "",
+            "[International organization], please take care of the foreigners in [country]",
+        ],
+        "pi_platform_message_url": [None] * 3,
+        "platform_message_last_updated_at": [
+            datetime.fromisoformat("2024-09-09T18:40:45.000Z"),
+            datetime.fromisoformat("2024-09-10T06:29:28.000Z"),
+            datetime.fromisoformat("2024-09-09T23:46:51.000Z"),
+        ],
+        "phoenix_platform_message_id": [
+            normalisers.anonymize("anonymizedID1"),
+            normalisers.anonymize("anonymizedID2"),
+            normalisers.anonymize("anonymizedID3"),
+        ],
+        "phoenix_platform_message_author_id": [
+            normalisers.anonymize("anonymizedUserID1"),
+            normalisers.anonymize("anonymizedUserID2"),
+            normalisers.anonymize("anonymizedUserID3"),
+        ],
+        "phoenix_platform_parent_message_id": [None] * 3,
+        "phoenix_platform_root_message_id": [
+            normalisers.anonymize("anonymizedAwemeID1"),
+            normalisers.anonymize("anonymizedAwemeID2"),
+            normalisers.anonymize("anonymizedAwemeID3"),
+        ],
+    }
+    normalised_tiktok_df = pd.DataFrame(data)
+    normalised_tiktok_df["gather_id"] = 5
+    normalised_tiktok_df["gather_batch_id"] = 3
+    normalised_tiktok_df["gathered_at"] = pd.to_datetime("2024-04-01T12:00:00.000Z")
+    normalised_tiktok_df["gather_type"] = gathers.schemas.ChildTypeName.apify_tiktok_comments.value
+    normalised_tiktok_df["platform"] = gathers.schemas.Platform.tiktok
+    normalised_tiktok_df["data_type"] = gathers.schemas.DataType.comments
+    normalised_tiktok_df["phoenix_processed_at"] = datetime.fromisoformat(
+        "2024-04-02T12:10:59.000Z"
+    )
+    for column in ["platform_message_last_updated_at", "gathered_at", "phoenix_processed_at"]:
+        normalised_tiktok_df[column] = normalised_tiktok_df[column].astype("datetime64[ms, UTC]")  # type: ignore[call-overload]
     return normalised_tiktok_df
