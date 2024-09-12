@@ -16,6 +16,9 @@ from phiphi.api.projects.gathers.apify_facebook_posts import (
 from phiphi.api.projects.gathers.apify_tiktok_accounts_posts import (
     models as apify_tiktok_accounts_posts_models,  # noqa: F401,
 )
+from phiphi.api.projects.gathers.apify_tiktok_comments import (
+    models as apify_tiktok_comments_models,  # noqa: F401,
+)
 from phiphi.api.projects.gathers.apify_tiktok_hashtags_posts import (
     models as apify_tiktok_hashtags_posts_models,  # noqa: F401,
 )
