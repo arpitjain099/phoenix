@@ -17,6 +17,8 @@ def load_sample_raw_data(
         relative_path = "apify_sample_data/tiktok_accounts_posts.json"
     elif child_type_name == gather_schemas.ChildTypeName.apify_tiktok_hashtags_posts:
         relative_path = "apify_sample_data/tiktok_hashtags_posts.json"
+    elif child_type_name == gather_schemas.ChildTypeName.apify_tiktok_comments:
+        relative_path = "apify_sample_data/tiktok_comments.json"
     else:
         raise NotImplementedError(f"{child_type_name=} not supported.")
 
