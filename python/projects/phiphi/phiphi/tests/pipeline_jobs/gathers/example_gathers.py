@@ -80,3 +80,25 @@ def tiktok_hashtags_posts_gather_example() -> (
         latest_job_run=None,
         child_type=gathers.schemas.ChildTypeName.apify_tiktok_hashtags_posts,
     )
+
+
+def tiktok_comments_gather_example() -> (
+    gathers.apify_tiktok_comments.schemas.ApifyTikTokCommentsGatherResponse
+):
+    """Example for ApifyTiktokCommentsGatherResponse schema."""
+    return gathers.apify_tiktok_comments.schemas.ApifyTikTokCommentsGatherResponse(
+        name="Example",
+        post_url_list=[
+            # These are real URLs but from public organisations
+            "https://www.tiktok.com/@unitednations/video/7412700631284141355",
+            "https://www.tiktok.com/@bbc/video/7413716097670630689",
+        ],
+        limit_comments_per_post=3,
+        include_comment_replies=True,
+        id=5,
+        created_at=datetime.datetime.now(),
+        updated_at=datetime.datetime.now(),
+        project_id=1,
+        latest_job_run=None,
+        child_type=gathers.schemas.ChildTypeName.apify_tiktok_comments,
+    )
