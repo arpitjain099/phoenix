@@ -90,6 +90,9 @@ One option is to replace this with the attribute name and an index. e.g.
 tiktok-hashtags-authorMetaId1 for an author's id. See tiktok_hashtags_posts.json for more
 examples.
 
+A good trick is to use ChatGPT for the anonymisation. Ask ChatGPT to anonymise the json file and
+check the output.
+
 ### Add normalizer
 
 Add normaliser to `phiphi/pipeline_jobs/gathers/normalisers.py` including tests and fixtures to
