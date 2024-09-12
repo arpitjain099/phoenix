@@ -5,6 +5,7 @@ tag ?= latest
 image ?= "$(phiphi_gitlab_repo):$(tag)"
 override_work_pool_name ?= local-work-pool
 group_name ?= local
+project_db_alembic_ini ?= project_db.alembic.ini
 
 DEV_COMPOSE_COMMAND=docker compose -f compose.yaml -f compose.dev.yaml
 
@@ -105,6 +106,32 @@ DOWNGRADE_REVISION ?= -1
 # Default is -1
 alembic_downgrade:
 	$(ALEMBIC_DOCKER_COMPOSE_COMMAND) alembic downgrade $(DOWNGRADE_REVISION)
+
+# Project alembic
+project_alembic_revision:
+	@if [ -z "$(message)" ]; then \
+		echo "message argument is required; add \`message=...\` to the make command."; \
+		exit 1; \
+	fi
+	echo "WARNING: something is wrong with the processing the command and so you can't have spaces in the message."
+	$(ALEMBIC_DOCKER_COMPOSE_COMMAND) alembic -c $(project_db_alembic_ini) revision --autogenerate -m "$(message)"
+
+# Usage: make project_alembic_upgrade UPGRADE_REVISION=base
+# Default is head
+project_alembic_upgrade:
+	@echo "Upgrading the project database"
+	@echo "UPGRADE_REVISION=$(UPGRADE_REVISION)"
+	@echo "The migrations will be applied to an SQLite database that is only used for migrations."
+	@echo "See sqlalchemy.url in the project_db.alembic.ini for more information."
+	$(ALEMBIC_DOCKER_COMPOSE_COMMAND) alembic -c $(project_db_alembic_ini) upgrade $(UPGRADE_REVISION)
+
+DOWNGRADE_REVISION ?= -1
+# Usage: make project_alembic_downgrade DOWNGRADE_REVISION=base
+# or
+# make alembic_downgrade DOWNGRADE_REVISION=-1
+# Default is -1
+project_alembic_downgrade:
+	$(ALEMBIC_DOCKER_COMPOSE_COMMAND) alembic -c $(project_db_alembic_ini) downgrade $(DOWNGRADE_REVISION)
 
 
 psql_dev:
