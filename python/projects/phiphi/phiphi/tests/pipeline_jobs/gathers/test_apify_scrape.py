@@ -22,7 +22,9 @@ def manual_test_apify_scrape_and_batch_download():
     - change `gather` to the corresponding desired Apify actor to test
 
     To use with docker environment:
-    - check `python/projects/phiphi/docker_env.dev` for configuration
+    - check `python/projects/phiphi/docker_env.dev` for configuration.
+        If you want to make an actual call to Apify, you will need to set `USE_MOCK_APIFY` to
+        `False`.
     - set up the prefect environment see phiphi/README.md
     - in terminal `make up`
     - in new terminal `make bash_in_api`
