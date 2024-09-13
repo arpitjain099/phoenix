@@ -18,7 +18,6 @@ class ApifyTikTokCommentsGatherBase(gather_schemas.GatherBase):
     """Input schema for the Apify TikTok Scraper for comments."""
 
     post_url_list: list[UrlStr] = pydantic.Field(
-        ...,
         serialization_alias="startUrls",
         description="List of TikTok post (video) URLs to scrape comments from",
     )
@@ -26,10 +25,10 @@ class ApifyTikTokCommentsGatherBase(gather_schemas.GatherBase):
         serialization_alias="maxItems",
         description="Limit comments (including replies) per post (video)",
     )
-    include_comment_replies: Optional[bool] = pydantic.Field(
-        default=None,
+    include_comment_replies: bool = pydantic.Field(
+        default=False,
         serialization_alias="includeReplies",
-        description="If True, includes replies to comments.",
+        description="If True, includes replies to comments. Default is False.",
     )
 
 
