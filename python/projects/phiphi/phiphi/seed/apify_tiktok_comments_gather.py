@@ -7,7 +7,10 @@ from phiphi.api.projects.gathers.apify_tiktok_comments import models, schemas
 
 TEST_APIFY_TIKTOK_COMMENTS_GATHER_CREATE = schemas.ApifyTikTokCommentsGatherCreate(
     name="Phoenix Apify TikTok COMMENT Gather",
-    post_url_list=["https://phoenix.com/", "https://buildup.org"],
+    post_url_list=[
+        "https://www.tiktok.com/@phoenix/video/1234567890123456789",
+        "https://www.tiktok.com/@howtobuildup/video/0987654321098765432",
+    ],
     limit_comments_per_post=1000,
     include_comment_replies=False,
 )
