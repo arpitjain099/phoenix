@@ -74,7 +74,17 @@ you can you can run the following before running a `make` or `docker compose` co
 source set_host_uid_unix.sh
 ```
 
-### Database migrations
+## Databases
+
+In phiphi there are two database:
+- platform: This is the main database for the project. It contains configurations for the all
+  projects. For test and production Postgres is used.
+- project: This is the database for the project. It contains the data for the project. For
+  production bigquery is used, for test a mix of sqlite and bigquery is used.
+
+Both databases are managed by alembic and use SQLAlchemy to define the tables/ORM models.
+
+### Platform database migration
 
 If you have created a new file with a new model, you will need to add this to
 `phiphi/all_platform_models.py` so that alembic has it in the table metadata.
@@ -102,6 +112,36 @@ addition to `version_locations` in `alembic.ini` separating new additions with t
 `version_path_separator`.
 
 See the `Makefile` for more commands.
+
+### Project database migration
+
+For project data migrations an sqlite database is used for testing. For production the migrations
+are applied to a bigquery dataset that is spesific to a project. See project_db.
+alembic.ini `sqlalchmey.url` for more information about test migration db.
+
+To create and test new tables and their migrations:
+
+A `sqlalchmey.Table` should be create and not an `ORM` model. See docstring in
+[phiphi/project_db.py](phiphi/project_db.py) for more information for gottchas and best practices.
+
+Create new tables in a new file and add it as an import to `phiphi/all_project_tables.py`.
+
+Upgrade the test migration db: `make project_alembic_upgrade`.
+
+Use make commands to create a revision/file with migration. Be aware that by default the revision
+will be created with the user `root`. See "Problems with files created in the container" for more
+information.
+WARNING: The revision description must not contain spaces. (The commands get messed up, so use _.)
+```bash
+message="<revision description>" make project_alembic_revision
+```
+
+This will create a new migration file in the `phiphi/project_db_migrations/versions/project`
+directory. The file will be `r_$datetime_$revision_slug_$description`.
+
+Check and edit the migration file as needed and fixing any linting issues.
+
+Apply the migration to the test database: `make project_alembic_upgrade` to see if it works.
 
 ## Running deployments locally for testing full flow runs
 
