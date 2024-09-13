@@ -10,8 +10,22 @@ def anonymize(input_value: Union[str, int]) -> str:
     return str(uuid.UUID(hashlib.md5(str(input_value).encode()).hexdigest()))
 
 
-def normalise_single_facebook_posts_json(json_blob: Dict) -> Dict:
+def is_apify_scraping_error(json_blob: Dict) -> bool:
+    """When apify's scraping fails, it returns a json blob with an 'error' key.
+
+    This is undocumented, but we've seen that blobs have an "error" key, with differing extra
+    keys depending on the scraper.
+    """
+    if "error" in json_blob:
+        return True
+    return False
+
+
+def normalise_single_facebook_posts_json(json_blob: Dict) -> Dict | None:
     """Extract fields from a single Facebook post JSON blob to normalized form."""
+    if is_apify_scraping_error(json_blob):
+        return None
+
     return {
         "pi_platform_message_id": json_blob["postId"],
         "pi_platform_message_author_id": json_blob["user"]["id"],
@@ -28,8 +42,11 @@ def normalise_single_facebook_posts_json(json_blob: Dict) -> Dict:
     }
 
 
-def normalise_single_facebook_comments_json(json_blob: Dict) -> Dict:
+def normalise_single_facebook_comments_json(json_blob: Dict) -> Dict | None:
     """Extract fields from a single Facebook comment JSON blob to normalized form."""
+    if is_apify_scraping_error(json_blob):
+        return None
+
     if "replyToCommentId" in json_blob:
         parent_message_id = json_blob["replyToCommentId"]
     else:
@@ -51,13 +68,16 @@ def normalise_single_facebook_comments_json(json_blob: Dict) -> Dict:
     }
 
 
-def normalise_single_tiktok_posts_json(json_blob: Dict) -> Dict:
+def normalise_single_tiktok_posts_json(json_blob: Dict) -> Dict | None:
     """Extract fields from a single TikTok post JSON blob to normalized form.
 
     This normaliser can be used for all gathers that use the clockwork/tiktok-scraper with the
     `searchSection` input as `/video`. Ref:
     https://apify.com/clockworks/tiktok-scraper/input-schema
     """
+    if is_apify_scraping_error(json_blob):
+        return None
+
     return {
         "pi_platform_message_id": json_blob["id"],
         "pi_platform_message_author_id": json_blob["authorMeta"]["id"],

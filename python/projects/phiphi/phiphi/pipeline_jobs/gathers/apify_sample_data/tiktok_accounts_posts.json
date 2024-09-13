@@ -348,5 +348,10 @@
       "isSlideshow":false,
       "isPinned":false,
       "input":"@bbcnews"
+   },
+   {
+      "url":"https://www.tiktok.com/channel/@12312",
+      "input":"https://www.tiktok.com/channel/@12312",
+      "error":"The provided profile URL is not a valid TikTok profile URL: https://www.tiktok.com/channel/@12312"
    }
 ]

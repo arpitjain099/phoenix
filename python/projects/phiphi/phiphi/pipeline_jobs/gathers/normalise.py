@@ -10,16 +10,20 @@ from phiphi.api.projects import gathers
 from phiphi.pipeline_jobs import constants, project_db_schemas, utils
 from phiphi.pipeline_jobs.gathers import normalisers
 
+NormaliserFuncType = Callable[[Dict], Dict | None]
+
 
 def normalise_batch(
-    normaliser: Callable[[Dict], Dict],
+    normaliser: NormaliserFuncType,
     batch_json: List[Dict],
     gather: gathers.schemas.GatherResponse,
     gather_batch_id: int,
     gathered_at: datetime,
 ) -> pd.DataFrame:
     """Process a list of JSON blobs and normalize them into a DataFrame."""
-    normalized_records = [normaliser(blob) for blob in batch_json]
+    normalized_records = [
+        result for blob in batch_json if (result := normaliser(blob)) is not None
+    ]
     messages_df = pd.DataFrame(normalized_records)
 
     gather_creation_defaults = gathers.child_types.get_gather_project_db_defaults(
@@ -41,7 +45,7 @@ def normalise_batch(
     return validated_df
 
 
-gather_normalisation_map: Dict[type[gathers.schemas.GatherResponse], Callable[[Dict], Dict]] = {
+gather_normalisation_map: Dict[type[gathers.schemas.GatherResponse], NormaliserFuncType] = {
     gathers.apify_facebook_posts.schemas.ApifyFacebookPostsGatherResponse: (
         normalisers.normalise_single_facebook_posts_json
     ),

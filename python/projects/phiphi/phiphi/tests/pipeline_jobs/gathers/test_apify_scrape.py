@@ -66,7 +66,7 @@ def test_mock_apify_scrape_and_batch_download_results(
             bigquery_dataset="test_dataset",
             bigquery_table="test_table",
         )
-        assert scrape_response.total_items == 8
+        assert scrape_response.total_items == 9
         assert scrape_response.total_batches == 3
 
     # Check that the parquet file was written

@@ -173,5 +173,10 @@
          "is_business_page_active":false,
          "id":"102665082649895"
       }
+   },
+   {
+      "url":"https://www.facebook.com/1234567865",
+      "error":"not_available",
+      "errorDescription":"This content isn't available because the owner only shared it with a small group of people or changed who can see it, or it's been deleted."
    }
 ]
