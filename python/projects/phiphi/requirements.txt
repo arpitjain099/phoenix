@@ -122,6 +122,7 @@ google-api-core[grpc]==2.19.2
     #   google-cloud-bigquery
     #   google-cloud-core
     #   pandas-gbq
+    #   sqlalchemy-bigquery
 google-auth==2.34.0
     # via
     #   google-api-core
@@ -131,6 +132,7 @@ google-auth==2.34.0
     #   kubernetes
     #   pandas-gbq
     #   pydata-google-auth
+    #   sqlalchemy-bigquery
 google-auth-oauthlib==1.2.1
     # via
     #   pandas-gbq
@@ -139,6 +141,7 @@ google-cloud-bigquery==3.25.0
     # via
     #   -r projects/phiphi/requirements.in
     #   pandas-gbq
+    #   sqlalchemy-bigquery
 google-cloud-core==2.4.1
     # via google-cloud-bigquery
 google-crc32c==1.5.0
@@ -276,6 +279,7 @@ packaging==23.2
     #   pandera
     #   prefect
     #   pytest
+    #   sqlalchemy-bigquery
 pandas==2.2.2
     # via
     #   -r projects/phiphi/requirements.in
@@ -468,6 +472,9 @@ sqlalchemy[asyncio]==2.0.32
     #   -r projects/phiphi/requirements.in
     #   alembic
     #   prefect
+    #   sqlalchemy-bigquery
+sqlalchemy-bigquery==1.11.0
+    # via -r projects/phiphi/requirements.in
 starlette==0.38.2
     # via fastapi
 text-unidecode==1.3
