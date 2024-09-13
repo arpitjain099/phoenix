@@ -28,7 +28,7 @@ bash_in_api:
 	@echo "Starting bash in the dev api environment"
 	$(DEV_COMPOSE_COMMAND) exec api bash
 
-all:
+all: check_alembic_heads
 	@echo "Running `all` in ci environment"
 	docker compose run api make all path=$(default_path)
 
@@ -79,6 +79,10 @@ fix_local_permissions:
 # because there are a few differences in the environment setup
 # when running an alembic command.
 ALEMBIC_DOCKER_COMPOSE_COMMAND=docker compose -f compose.yaml -f compose.alembic.yaml run api
+
+check_alembic_heads:
+	@echo "Checking for multiple Alembic heads..."
+	$(ALEMBIC_DOCKER_COMPOSE_COMMAND) python check_alembic_heads.py
 
 alembic_revision:
 	@if [ -z "$(message)" ]; then \
