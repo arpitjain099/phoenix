@@ -35,6 +35,7 @@ interface Props {
 	placeholder: string;
 	data: string[];
 	setData: React.Dispatch<React.SetStateAction<string[]>>;
+	template_url?: string;
 }
 
 const GatherInputs: React.FC<Props> = ({
@@ -43,6 +44,7 @@ const GatherInputs: React.FC<Props> = ({
 	placeholder,
 	data,
 	setData,
+	template_url,
 }) => {
 	const translate = useTranslate();
 	const [inputValue, setInputValue] = useState<string>("");
@@ -159,7 +161,7 @@ const GatherInputs: React.FC<Props> = ({
 										</Button>
 										<Button
 											component="a"
-											href={item}
+											href={template_url ? `${template_url}${item}` : item}
 											target="_blank"
 											rel="noopener noreferrer"
 											p={0}

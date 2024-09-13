@@ -311,3 +311,6 @@ export const countryList = [
 	{ value: "ZW", label: "Zimbabwe" },
 	{ value: "AX", label: "Åland Islands" },
 ];
+
+// Hashtag BaseURL
+export const hashTagPostBaseLink = "https://www.tiktok.com/search/video?q=%23";

@@ -6,10 +6,9 @@ import { useTranslate } from "@refinedev/core";
 import { IconInfoCircle } from "@tabler/icons";
 import { GetInputProps } from "@mantine/form/lib/types";
 import { ProjectSchema } from "src/interfaces/project";
-import { DatePicker } from "@mantine/dates";
 import GatherInputs from "@components/inputs/gather-inputs";
 import { TextField } from "@refinedev/mantine";
-import { countryList } from "src/utils/constants";
+import { countryList, hashTagPostBaseLink } from "src/utils/constants";
 
 interface FormValues {
 	name: string;
@@ -146,7 +145,8 @@ const ApifyTiktokHashtagsPostsForm: React.FC<Props> = ({
 						)}
 						{inputList.length > 0 && (
 							<span className="italic ml-10">
-								{inputList.length} input value{inputList.length > 1 && "s"}
+								{inputList.length}{" "}
+								{translate(`gathers.fields.source.input_values`)}
 							</span>
 						)}
 					</div>
@@ -154,6 +154,7 @@ const ApifyTiktokHashtagsPostsForm: React.FC<Props> = ({
 				placeholder={translate("gathers.fields.input.data_placeholder")}
 				data={inputList}
 				setData={setInputList}
+				template_url={hashTagPostBaseLink}
 				{...getInputProps("hashtag_list")}
 			/>
 		</>
