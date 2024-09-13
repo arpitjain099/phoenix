@@ -475,22 +475,31 @@ def normalised_tiktok_comments_df() -> pd.DataFrame:
             "anonymizedID1",
             "anonymizedID2",
             "anonymizedID3",
+            "anonymizedID4",
         ],
         "pi_platform_message_author_id": [
             "anonymizedUserID1",
             "anonymizedUserID2",
             "anonymizedUserID3",
+            "anonymizedUserID4",
         ],
         "pi_platform_message_author_name": [
             "anonymizedUsername1",
             "anonymizedUsername2",
             "anonymizedUsername3",
+            "anonymizedUsername4",
         ],
-        "pi_platform_parent_message_id": [None] * 3,
+        "pi_platform_parent_message_id": [
+            "anonymizedAwemeID1",
+            "anonymizedAwemeID2",
+            "anonymizedAwemeID3",
+            "anonymizedParentID4",
+        ],
         "pi_platform_root_message_id": [
             "anonymizedAwemeID1",
             "anonymizedAwemeID2",
             "anonymizedAwemeID3",
+            "anonymizedAwemeID4",
         ],
         "pi_text": [
             (
@@ -499,28 +508,38 @@ def normalised_tiktok_comments_df() -> pd.DataFrame:
             ),
             "",
             "[International organization], please take care of the foreigners in [country]",
+            "womp womp",
         ],
-        "pi_platform_message_url": [None] * 3,
+        "pi_platform_message_url": [None] * 4,
         "platform_message_last_updated_at": [
             datetime.fromisoformat("2024-09-09T18:40:45.000Z"),
             datetime.fromisoformat("2024-09-10T06:29:28.000Z"),
             datetime.fromisoformat("2024-09-09T23:46:51.000Z"),
+            datetime.fromisoformat("2024-06-02T07:09:12.000Z"),
         ],
         "phoenix_platform_message_id": [
             normalisers.anonymize("anonymizedID1"),
             normalisers.anonymize("anonymizedID2"),
             normalisers.anonymize("anonymizedID3"),
+            normalisers.anonymize("anonymizedID4"),
         ],
         "phoenix_platform_message_author_id": [
             normalisers.anonymize("anonymizedUserID1"),
             normalisers.anonymize("anonymizedUserID2"),
             normalisers.anonymize("anonymizedUserID3"),
+            normalisers.anonymize("anonymizedUserID4"),
         ],
-        "phoenix_platform_parent_message_id": [None] * 3,
+        "phoenix_platform_parent_message_id": [
+            normalisers.anonymize("anonymizedAwemeID1"),
+            normalisers.anonymize("anonymizedAwemeID2"),
+            normalisers.anonymize("anonymizedAwemeID3"),
+            normalisers.anonymize("anonymizedParentID4"),
+        ],
         "phoenix_platform_root_message_id": [
             normalisers.anonymize("anonymizedAwemeID1"),
             normalisers.anonymize("anonymizedAwemeID2"),
             normalisers.anonymize("anonymizedAwemeID3"),
+            normalisers.anonymize("anonymizedAwemeID4"),
         ],
     }
     normalised_tiktok_df = pd.DataFrame(data)

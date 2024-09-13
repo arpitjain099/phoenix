@@ -67,5 +67,28 @@
       "hasPhone": false,
       "coverImage": null
     }
+  },
+  {
+    "parentId": "anonymizedParentID4",
+    "id": "anonymizedID4",
+    "text": "womp womp",
+    "createdAt": "2024-06-02T07:09:12.000Z",
+    "likeCount": 3,
+    "commentLanguage": "en",
+    "awemeId": "anonymizedAwemeID4",
+    "isAuthorLiked": false,
+    "user": {
+      "id": "anonymizedUserID4",
+      "username": "anonymizedUsername4",
+      "displayName": "anonymizedDisplayName4",
+      "url": "https://www.tiktok.com/@anonymizedUsername4",
+      "bio": "anonymizedBio4",
+      "avatarUrl": "https://p77-sg.tiktokcdn.com/anonymizedAvatarUrl4",
+      "region": "anonymizedRegion4",
+      "language": "en",
+      "hasEmail": false,
+      "hasPhone": false,
+      "coverImage": null
+    }
   }
 ]
