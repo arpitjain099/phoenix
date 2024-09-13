@@ -370,7 +370,7 @@
 					"limit_posts_per_hashtag": "Limiter les publications par hashtag",
 					"proxy_country_to_gather_from": "Pays à partir duquel recueillir",
 					"input": {
-						"url_list": "Ajoutez les hashtags TikTok à partir desquels vous souhaitez récupérer"
+						"url_list": "Ajoutez les hashtags TikTok que vous souhaitez collecter (sans '#')"
 					},
 					"info": {
 						"limit_posts_per_account": "Limitez le nombre de publications collectées pour chaque hashtag.",
@@ -386,7 +386,7 @@
 						"status": "Statut",
 						"general": "Général",
 						"source": "Les publications TikTok proviennent de ces hashtags",
-						"source_title": "URLs des hashtags TikTok"
+						"source_title": "Hashtag TikTok (sans '#')"
 					}
 				}
 			}

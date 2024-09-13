@@ -370,7 +370,7 @@
 					"limit_posts_per_hashtag": "Limit Posts Per Hashtag",
 					"proxy_country_to_gather_from": "Country to Gather From",
 					"input": {
-						"url_list": "Add TikTok hashtags you would like to gather from"
+						"url_list": "Add TikTok hashtags you would like to gather from (without '#')"
 					},
 					"info": {
 						"limit_posts_per_account": "Limit the number of posts that are collected for each hashtag.",
@@ -386,7 +386,7 @@
 						"status": "Status",
 						"general": "General",
 						"source": "Tiktok posts come from these hashtags",
-						"source_title": "Tiktok hashtag URLs"
+						"source_title": "Tiktok hashtag (without '#')"
 					}
 				}
 			}
