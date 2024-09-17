@@ -11,6 +11,9 @@ https://googleapis.dev/python/sqlalchemy-bigquery/latest/alembic.html
 
 See docs: https://googleapis.dev/python/sqlalchemy-bigquery/latest/README.html
 """
+import contextlib
+from typing import Generator
+
 import sqlalchemy as sa
 
 from phiphi import utils
@@ -35,3 +38,21 @@ def form_bigquery_sqlalchmey_uri(
     if google_cloud_project is None:
         google_cloud_project = utils.get_default_bigquery_project()
     return f"bigquery://{google_cloud_project}/{project_namespace}"
+
+
+@contextlib.contextmanager
+def init_connection(sqlalchemy_uri: str) -> Generator[sa.Connection, None, None]:
+    """Initialize a connection.
+
+    In general Sessions are used for ORM and Connections are used for raw SQL. Since it is not
+    recommended to use ORM for bigquery tables, this function is provided to get a connection.
+
+    Args:
+        sqlalchemy_uri (str): The sqlalchemy uri.
+
+    Yields:
+        Generator[Connection, None, None]: The connection.
+    """
+    engine = sa.create_engine(sqlalchemy_uri)
+    with engine.connect() as connection:
+        yield connection
