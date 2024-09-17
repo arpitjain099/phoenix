@@ -18,6 +18,24 @@ from phiphi.pipeline_jobs.tabulate import flow as tabulate_flow
 from phiphi.tests.pipeline_jobs.gathers import example_gathers
 
 
+def assert_tabulated_messages_are_equal(
+    tabulated_messages_df: pd.DataFrame, tabulated_messages_after_recompute_df: pd.DataFrame
+):
+    """Assert that the tabulated messages are equal."""
+    assert len(tabulated_messages_after_recompute_df) == len(tabulated_messages_df)
+    columns_to_compare = ["phoenix_platform_message_id", "pi_platform_message_id"]
+    df_1 = tabulated_messages_df.sort_values(by=["phoenix_platform_message_id"]).reset_index(
+        drop=True
+    )
+    df_1 = df_1[columns_to_compare]
+    df_2 = tabulated_messages_after_recompute_df.sort_values(
+        by=["phoenix_platform_message_id"]
+    ).reset_index(drop=True)
+    df_2 = df_2[columns_to_compare]
+
+    pd.testing.assert_frame_equal(df_1, df_2)
+
+
 def test_bq_pipeline_integration(tmp_bq_project):
     """Test pipeline integration with bigquery.
 
@@ -188,18 +206,9 @@ def test_bq_pipeline_integration(tmp_bq_project):
         FROM {test_project_namespace}.{constants.TABULATED_MESSAGES_TABLE_NAME}
         """
     )
-    # Going to only compare the ids are correct to simplify the tests
-    columns_to_compare = ["phoenix_platform_message_id", "pi_platform_message_id"]
-    df_1 = tabulated_messages_df.sort_values(by=["phoenix_platform_message_id"]).reset_index(
-        drop=True
+    assert_tabulated_messages_are_equal(
+        tabulated_messages_df, tabulated_messages_after_recompute_df
     )
-    df_1 = df_1[columns_to_compare]
-    df_2 = tabulated_messages_after_recompute_df.sort_values(
-        by=["phoenix_platform_message_id"]
-    ).reset_index(drop=True)
-    df_2 = df_2[columns_to_compare]
-
-    pd.testing.assert_frame_equal(df_1, df_2)
     # Check that the processed_at is greater than the previous processed_at
     previous_processed_at = tabulated_messages_df["phoenix_processed_at"].max()
     recompute_processed_at = tabulated_messages_after_recompute_df["phoenix_processed_at"].unique()
@@ -207,6 +216,43 @@ def test_bq_pipeline_integration(tmp_bq_project):
     assert recompute_processed_at.shape[0] == 1
     # Make sure that the recompute processed_at is greater than the previous processed_at
     assert recompute_processed_at[0] > previous_processed_at
+
+    # Recompute with a drop
+    recompute_all_batches_tabulate_flow.recompute_all_batches_tabulate_flow(
+        job_run_id=4,
+        project_id=1,
+        project_namespace=test_project_namespace,
+        class_id_name_map={},
+        drop_downstream_tables=True,
+    )
+
+    messages_after_recompute_df = pd.read_gbq(
+        f"SELECT * FROM {test_project_namespace}.{constants.GENERALISED_MESSAGES_TABLE_NAME}"
+    )
+    assert len(messages_after_recompute_df) == len(messages_df)
+    grouped_messages = messages_df.groupby("phoenix_platform_message_id").count()
+    grouped_messages_after_recompute = messages_after_recompute_df.groupby(
+        "phoenix_platform_message_id"
+    ).count()
+    pd.testing.assert_frame_equal(grouped_messages, grouped_messages_after_recompute)
+
+    tabulated_messages_after_recompute_2_df = pd.read_gbq(
+        f"""
+        SELECT *
+        FROM {test_project_namespace}.{constants.TABULATED_MESSAGES_TABLE_NAME}
+        """
+    )
+    assert_tabulated_messages_are_equal(
+        tabulated_messages_df, tabulated_messages_after_recompute_2_df
+    )
+    # Check that the processed_at is greater than the previous processed_at
+    recompute_2_processed_at = tabulated_messages_after_recompute_2_df[
+        "phoenix_processed_at"
+    ].unique()
+    # Make sure that all the processed_at values are the same
+    assert recompute_2_processed_at.shape[0] == 1
+    # Make sure that the recompute processed_at is greater than the previous recompute processed_at
+    assert recompute_2_processed_at[0] > recompute_processed_at[0]
 
     # Manually create and add some classified_messages
     # Grab rows just to make a dataframe
@@ -285,10 +331,9 @@ def test_bq_pipeline_integration(tmp_bq_project):
     messages_df = pd.read_gbq(
         f"SELECT * FROM {test_project_namespace}.{constants.GENERALISED_MESSAGES_TABLE_NAME}"
     )
-    # There where 50 messages before the comments were deleted
-    # There was double of the gathers due to the recompute_all_batches_tabulate_flow
-    # So there should be 50 - (2 * 9) = 32 messages
-    assert len(messages_df) == 32
+    # There where 25 messages before the comments were deleted
+    # So there should be 25 - 9 = 16 messages
+    assert len(messages_df) == 16
     assert gather_id_of_comments not in messages_df["gather_id"].unique()
 
     # and the deduplication should be the same as without the comments.
