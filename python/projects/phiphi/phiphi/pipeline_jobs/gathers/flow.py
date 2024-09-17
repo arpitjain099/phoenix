@@ -39,7 +39,7 @@ def gather_flow(
     if scrape_response.total_items == 0:
         return
     normalise.normalise_batches(
-        gather=gather,
+        gather_id=gather.id,
         job_run_id=job_run_id,
         bigquery_dataset=project_namespace,
     )

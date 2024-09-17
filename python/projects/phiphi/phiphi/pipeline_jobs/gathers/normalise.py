@@ -46,20 +46,20 @@ def normalise_batch(
     return validated_df
 
 
-gather_normalisation_map: Dict[type[gathers.schemas.GatherResponse], NormaliserFuncType] = {
-    gathers.apify_facebook_posts.schemas.ApifyFacebookPostsGatherResponse: (
+gather_normalisation_map: Dict[gathers.schemas.ChildTypeName, NormaliserFuncType] = {
+    gathers.schemas.ChildTypeName.apify_facebook_posts: (
         normalisers.normalise_single_facebook_posts_json
     ),
-    gathers.apify_facebook_comments.schemas.ApifyFacebookCommentsGatherResponse: (
+    gathers.schemas.ChildTypeName.apify_facebook_comments: (
         normalisers.normalise_single_facebook_comments_json
     ),
-    gathers.apify_tiktok_accounts_posts.schemas.ApifyTikTokAccountsPostsGatherResponse: (
+    gathers.schemas.ChildTypeName.apify_tiktok_accounts_posts: (
         normalisers.normalise_single_tiktok_posts_json
     ),
-    gathers.apify_tiktok_hashtags_posts.schemas.ApifyTikTokHashtagsPostsGatherResponse: (
+    gathers.schemas.ChildTypeName.apify_tiktok_hashtags_posts: (
         normalisers.normalise_single_tiktok_posts_json
     ),
-    gathers.apify_tiktok_comments.schemas.ApifyTikTokCommentsGatherResponse: (
+    gathers.schemas.ChildTypeName.apify_tiktok_comments: (
         normalisers.normalise_single_tiktok_comments_json
     ),
     # Add other gather types and their corresponding normalization functions here
@@ -68,19 +68,18 @@ gather_normalisation_map: Dict[type[gathers.schemas.GatherResponse], NormaliserF
 
 @prefect.task
 def normalise_batches(
-    gather: gathers.schemas.GatherResponse,
+    gather_id: int,
     job_run_id: int,
     bigquery_dataset: str,
 ) -> None:
     """Normalize batches and write to a BigQuery table."""
     prefect_logger = prefect.get_run_logger()
-    norm_func = gather_normalisation_map[type(gather)]
 
     batch_id = 0
     while True:
         query = f"""
             SELECT * FROM {bigquery_dataset}.{constants.GATHER_BATCHES_TABLE_NAME}
-            WHERE gather_id = {gather.id} AND job_run_id = {job_run_id} AND batch_id = {batch_id}
+            WHERE gather_id = {gather_id} AND job_run_id = {job_run_id} AND batch_id = {batch_id}
         """
         batches_df = utils.read_data(
             query, dataset=bigquery_dataset, table=constants.GATHER_BATCHES_TABLE_NAME
@@ -94,12 +93,13 @@ def normalise_batches(
         for _, batch in validated_batches_df.iterrows():
             prefect_logger.info(f"Normalizing batch {batch.batch_id}")
             child_type_name = gathers.schemas.ChildTypeName(batch.gather_type)
+            norm_func = gather_normalisation_map[child_type_name]
 
             batch_json = json.loads(batch.json_data)
             normalized_df = normalise_batch(
                 normaliser=norm_func,
                 batch_json=batch_json,
-                gather_id=gather.id,
+                gather_id=gather_id,
                 gather_child_type=child_type_name,
                 gather_batch_id=batch.batch_id,
                 gathered_at=batch.gathered_at,

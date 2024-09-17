@@ -43,7 +43,7 @@ def recompute_all_batches_tabulate_flow(
     ):
         gather = gathers.child_types.get_response_type(gather_child_type)(**gather_dict)
         normalise.normalise_batches(
-            gather=gather,
+            gather_id=gather.id,
             job_run_id=job_run_id,
             bigquery_dataset=project_namespace,
         )

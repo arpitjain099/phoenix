@@ -67,7 +67,7 @@ def test_normalise_batches(
     # Now, run the normalise_batches function
     with disable_prefect_run_logger():
         normalise.normalise_batches.fn(
-            gather=facebook_posts_gather_fixture,
+            gather_id=facebook_posts_gather_fixture.id,
             job_run_id=1,
             bigquery_dataset="test_dataset",
         )
