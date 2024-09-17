@@ -18,7 +18,7 @@ def temp_project_namespace():
 def tmp_bq_project(temp_project_namespace):
     """Setup and breakdown of a test project namespace wrapper for integration tests."""
     print(f"Test project namespace: {temp_project_namespace}")
-    projects.init_project_db.fn(temp_project_namespace, with_dummy_rows=2)
+    projects.init_project_db.fn(temp_project_namespace, with_dummy_data=True)
 
     yield temp_project_namespace
 

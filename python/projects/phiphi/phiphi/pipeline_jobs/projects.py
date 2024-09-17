@@ -9,7 +9,7 @@ from phiphi.pipeline_jobs import constants, tabulated_messages
 @prefect.task
 def init_project_db(
     project_namespace: str,
-    with_dummy_rows: int = 0,
+    with_dummy_data: bool = False,
 ) -> str:
     """Initialize the project database.
 
@@ -18,7 +18,8 @@ def init_project_db(
 
     Args:
         project_namespace (str): The project namespace.
-        with_dummy_rows (int): The number of dummy rows to insert into the table.
+        with_dummy_data (bool, optional): If True then dummy data will be seeded.
+            Defaults to False.
 
     Returns:
         str: The project namespace.
@@ -39,7 +40,7 @@ def init_project_db(
         project_db.form_bigquery_sqlalchmey_uri(project_namespace)
     ) as connection:
         project_db.alembic_upgrade(connection)
-        if with_dummy_rows:
+        if with_dummy_data:
             tabulated_messages.seed_dummy_data(connection)
 
     return project_namespace

@@ -10,7 +10,7 @@ def test_bq_project_init(temp_project_namespace):
 
     If the test fails you may need to manually clean up (delete) the dataset within Bigquery.
     """
-    projects.init_project_db.fn(temp_project_namespace, with_dummy_rows=2)
+    projects.init_project_db.fn(temp_project_namespace, with_dummy_data=True)
 
     client = bigquery.Client()
     assert client.get_dataset(temp_project_namespace)
