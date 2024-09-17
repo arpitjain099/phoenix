@@ -16,7 +16,8 @@ NormaliserFuncType = Callable[[Dict], Dict | None]
 def normalise_batch(
     normaliser: NormaliserFuncType,
     batch_json: List[Dict],
-    gather: gathers.schemas.GatherResponse,
+    gather_id: int,
+    gather_child_type: gathers.schemas.ChildTypeName,
     gather_batch_id: int,
     gathered_at: datetime,
 ) -> pd.DataFrame:
@@ -27,14 +28,14 @@ def normalise_batch(
     messages_df = pd.DataFrame(normalized_records)
 
     gather_creation_defaults = gathers.child_types.get_gather_project_db_defaults(
-        gather.child_type
+        gather_child_type
     )
 
     # Add constant columns to the DataFrame
-    messages_df["gather_id"] = gather.id
+    messages_df["gather_id"] = gather_id
     messages_df["gather_batch_id"] = gather_batch_id
     messages_df["gathered_at"] = gathered_at
-    messages_df["gather_type"] = gather.child_type
+    messages_df["gather_type"] = gather_child_type
     messages_df["platform"] = gather_creation_defaults.platform
     messages_df["data_type"] = gather_creation_defaults.data_type
     messages_df["phoenix_processed_at"] = datetime.utcnow()
@@ -92,12 +93,14 @@ def normalise_batches(
 
         for _, batch in validated_batches_df.iterrows():
             prefect_logger.info(f"Normalizing batch {batch.batch_id}")
+            child_type_name = gathers.schemas.ChildTypeName(batch.gather_type)
 
             batch_json = json.loads(batch.json_data)
             normalized_df = normalise_batch(
                 normaliser=norm_func,
                 batch_json=batch_json,
-                gather=gather,
+                gather_id=gather.id,
+                gather_child_type=child_type_name,
                 gather_batch_id=batch.batch_id,
                 gathered_at=batch.gathered_at,
             )
