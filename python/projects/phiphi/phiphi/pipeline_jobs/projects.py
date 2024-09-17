@@ -2,12 +2,8 @@
 import prefect
 from google.cloud import bigquery
 
-from phiphi import config, utils
-from phiphi.pipeline_jobs import constants, create_gcp_table
-from phiphi.pipeline_jobs.classify import bq_table_schema as classify_bq_table_schema
-from phiphi.pipeline_jobs.tabulate import (
-    refresh_gcp_table_schema as tabulate_refresh_gcp_table_schema,
-)
+from phiphi import config, project_db, utils
+from phiphi.pipeline_jobs import constants, tabulated_messages
 
 
 @prefect.task
@@ -39,20 +35,12 @@ def init_project_db(
     dataset.location = config.settings.BQ_DEFAULT_LOCATION
     client.create_dataset(dataset=dataset, exists_ok=True)
 
-    # Create the tabulated table.
-    create_gcp_table.create_table(
-        table_id=str(dataset_reference.table(constants.TABULATED_MESSAGES_TABLE_NAME)),
-        schema_path=tabulate_refresh_gcp_table_schema.get_default_schema_path(),
-        with_dummy_rows=with_dummy_rows,
-        exists_ok=True,
-    )
-    # Create classified_messages table.
-    create_gcp_table.create_table(
-        table_id=str(dataset_reference.table(constants.CLASSIFIED_MESSAGES_TABLE_NAME)),
-        schema_path=classify_bq_table_schema.get_path(),
-        with_dummy_rows=0,
-        exists_ok=True,
-    )
+    with project_db.init_connection(
+        project_db.form_bigquery_sqlalchmey_uri(project_namespace)
+    ) as connection:
+        project_db.alembic_upgrade(connection)
+        if with_dummy_rows:
+            tabulated_messages.seed_dummy_data(connection)
 
     return project_namespace
 
