@@ -123,7 +123,7 @@ project_alembic_revision:
 project_alembic_upgrade:
 	@echo "Upgrading the project database"
 	@echo "UPGRADE_REVISION=$(UPGRADE_REVISION)"
-	@echo "The migrations will be applied to an SQLite database that is only used for migrations."
+	@echo "The migrations will be applied to an SQLite database which is only used for development of migrations."
 	@echo "See sqlalchemy.url in the project_db.alembic.ini for more information."
 	$(ALEMBIC_DOCKER_COMPOSE_COMMAND) alembic -c $(project_db_alembic_ini) upgrade $(UPGRADE_REVISION)
 
