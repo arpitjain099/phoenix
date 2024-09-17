@@ -162,19 +162,9 @@ def test_bq_pipeline_integration(tmp_bq_project):
     ## Recompute all batches and tabulate flow
 
     recompute_all_batches_tabulate_flow.recompute_all_batches_tabulate_flow(
+        job_run_id=4,
         project_id=1,
         project_namespace=test_project_namespace,
-        gather_job_run_ids=[1, 2, 3],
-        gathers_dict_list=[
-            example_gathers.facebook_posts_gather_example().dict(),
-            example_gathers.facebook_posts_gather_example().dict(),
-            example_gathers.facebook_comments_gather_example().dict(),
-        ],
-        gather_child_type_list=[
-            example_gathers.facebook_posts_gather_example().child_type,
-            example_gathers.facebook_posts_gather_example().child_type,
-            example_gathers.facebook_comments_gather_example().child_type,
-        ],
         class_id_name_map={},
     )
 

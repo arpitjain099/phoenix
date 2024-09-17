@@ -128,3 +128,20 @@ def normalise_batches(
             prefect_logger.info(f"Batch {batch.batch_id} normalized and written.")
 
         batch_id += 1
+
+
+def get_gather_batches_metadata(bigquery_dataset: str) -> pd.DataFrame:
+    """Get the gather ID and job run ID for all gather batches.
+
+    Args:
+        bigquery_dataset: The BigQuery dataset.
+
+    Returns:
+        DataFrame: The gather ID and job run ID for all gather batches.
+    """
+    query = f"""
+        SELECT gather_id, job_run_id FROM {bigquery_dataset}.{constants.GATHER_BATCHES_TABLE_NAME}
+    """
+    return utils.read_data(
+        query, dataset=bigquery_dataset, table=constants.GATHER_BATCHES_TABLE_NAME
+    )
