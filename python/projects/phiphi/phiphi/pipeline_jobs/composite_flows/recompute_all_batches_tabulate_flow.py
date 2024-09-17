@@ -35,7 +35,7 @@ def recompute_all_batches_tabulate_flow(
             project_namespace=project_namespace,
         )
 
-    gather_batches_metadata = normalise.get_gather_batches_metadata(
+    gather_batches_metadata = normalise.get_all_gather_and_job_run_ids(
         bigquery_dataset=project_namespace
     )
     for _, gather_batch_metadata in gather_batches_metadata.iterrows():

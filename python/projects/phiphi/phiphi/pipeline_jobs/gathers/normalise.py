@@ -130,7 +130,7 @@ def normalise_batches(
         batch_id += 1
 
 
-def get_gather_batches_metadata(bigquery_dataset: str) -> pd.DataFrame:
+def get_all_gather_and_job_run_ids(bigquery_dataset: str) -> pd.DataFrame:
     """Get the gather ID and job run ID for all gather batches.
 
     Args:
