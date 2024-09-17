@@ -76,11 +76,14 @@ source set_host_uid_unix.sh
 
 ## Databases
 
-In phiphi there are two database:
-- platform: This is the main database for the project. It contains configurations for the all
-  projects. For test and production Postgres is used.
-- project: This is the database for the project. It contains the data for the project. For
-  production bigquery is used, for test a mix of sqlite and bigquery is used.
+In phiphi there are two types of database:
+- platform: This is the main database for the user platform. It contains contains
+configurations for users, workspaces, and projects. There is a single test and single
+production Postgres database.
+- project: There is a separate database for every project. This contains the scraped
+and processed data for the project. There are as many project DBs as there are
+projects, plus more testing and development. Bigquery is used for project databases in
+production, and a mixture of sqlite and bigquery is used for testing and development.
 
 Both databases are managed by alembic and use SQLAlchemy to define the tables/ORM models.
 
@@ -116,12 +119,13 @@ See the `Makefile` for more commands.
 ### Project database migration
 
 For project data migrations an sqlite database is used for testing. For production the migrations
-are applied to a bigquery dataset that is spesific to a project. See project_db.
-alembic.ini `sqlalchmey.url` for more information about test migration db.
+are applied to a bigquery dataset that is specific to a project. See the file
+[`project_db.alembic.ini`](./project_db.alembic.ini) `sqlalchemy.url` for more information about
+test migration db.
 
 To create and test new tables and their migrations:
 
-A `sqlalchmey.Table` should be create and not an `ORM` model. See docstring in
+A `sqlalchemy.Table` should be create and not an `ORM` model. See docstring in
 [phiphi/project_db.py](phiphi/project_db.py) for more information for gottchas and best practices.
 
 Create new tables in a new file and add it as an import to `phiphi/all_project_tables.py`.
