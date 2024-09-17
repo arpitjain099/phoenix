@@ -74,7 +74,7 @@ async def delete(
         project_id,
         job_run_schemas.JobRunCreate(
             foreign_id=gather_id,
-            foreign_job_type=job_run_schemas.ForeignJobType.delete_gather,
+            foreign_job_type=job_run_schemas.ForeignJobType.delete_gather_tabulate,
         ),
     )
 

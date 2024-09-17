@@ -36,13 +36,13 @@ export default function ProjectCreate(): JSX.Element {
 			pi_deleted_after_days: (value) =>
 				value === undefined
 					? translate("projects.fields.validation.required")
-					: value < 90 || value > 365
+					: value < 30 || value > 365
 						? translate("projects.fields.validation.days_until_pi_expiration")
 						: null,
 			delete_after_days: (value) =>
 				value === undefined
 					? translate("projects.fields.validation.required")
-					: value < 90 || value > 365
+					: value < 30 || value > 365
 						? translate(
 								"projects.fields.validation.days_until_all_data_expiration"
 							)

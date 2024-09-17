@@ -191,7 +191,7 @@ def get_status_from_flow_run(flow_run: objects.FlowRun) -> schemas.Status:
     """
     assert flow_run.state is not None
     if flow_run.state.is_completed():
-        return schemas.Status.completed_sucessfully
+        return schemas.Status.completed_successfully
     return schemas.Status.failed
 
 

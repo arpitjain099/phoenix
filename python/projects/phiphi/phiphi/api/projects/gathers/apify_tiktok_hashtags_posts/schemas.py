@@ -4,6 +4,14 @@ This schemas is a subset of the available inputs for the Apify TikTok Scraper.
 
 For reference see the Apify actor docs:
 https://apify.com/clockworks/tiktok-scraper/input-schema
+
+Note on `posts_created_after` and `posts_created_since_num_days` that these fields don't work for
+searches. See issue:
+https://apify.com/clockworks/tiktok-scraper/issues/trying-to-set-a-time-RYR6bQdcvzc52hwnO
+
+It is thought (but not 100% sure) that the `apify_tiktok_hashtags_posts_gather` has the same
+functionality as the `apify_searches_posts_gather` but it normalises all the inputs in
+`hashtag_list` to have a `#` at the begging.
 """
 from typing import Any, Optional
 
@@ -29,21 +37,6 @@ class ApifyTikTokHashtagsPostsGatherBase(gather_schemas.GatherBase):
             "there seems to be no difference when using with."
         ),
     )
-    posts_created_after: Optional[str] = pydantic.Field(
-        default=None,
-        serialization_alias="oldestPostDate",
-        description="Fetch posts created after this date (YYYY-MM-DD)",
-    )
-    posts_created_since_num_days: Optional[int] = pydantic.Field(
-        default=None,
-        serialization_alias="scrapeLastNDays",
-        description=(
-            "Specify how old the scraped videos should be (in days). "
-            "Putting 1 will get you only today's posts, 2 - yesterday's and today's, and so on. "
-            "If the Scrape videos newer than field above was set, "
-            "the most recent videos will be scraped."
-        ),
-    )
     proxy_country_to_gather_from: Optional[str] = pydantic.Field(
         default=None,
         serialization_alias="proxyCountryCode",
@@ -65,3 +58,38 @@ class ApifyTikTokHashtagsPostsGatherResponse(
         # We are adding searchSection to the dictionary as it is a constant for gathering posts.
         apify_dict["searchSection"] = constants.TIKTOK_POST_SEARCH_SECTION
         return apify_dict
+
+
+class ApifyTikTokHashtagsPostsGatherCreate(
+    gather_schemas.GatherCreate, ApifyTikTokHashtagsPostsGatherBase
+):
+    """Apify Gather create schema.
+
+    Properties to receive via API on creation.
+    """
+
+
+class ApifyTikTokHashtagsPostsGatherUpdate(gather_schemas.GatherUpdate):
+    """Apify Gather update schema."""
+
+    limit_posts_per_hashtag: Optional[int] = pydantic.Field(
+        serialization_alias="resultsPerPage", description="Limit results per hashtag"
+    )
+    # It is important that the name of the property is different from the alias other wise it will
+    # not be returned from serialize_to_apify_input
+    hashtag_list: Optional[list[str]] = pydantic.Field(
+        serialization_alias="hashtags",
+        description=(
+            "List of hashtags to scrape TikTok videos for. "
+            " It is recommended to use without # prefix but "
+            "there seems to be no difference when using with."
+        ),
+    )
+    proxy_country_to_gather_from: Optional[str] = pydantic.Field(
+        default=None,
+        serialization_alias="proxyCountryCode",
+        description=(
+            "Country to use for the proxy to gather from. "
+            "If this is set a RESIDENTIAL group will be used and will increase the price."
+        ),
+    )

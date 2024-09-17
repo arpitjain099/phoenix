@@ -89,6 +89,7 @@
 		"save": "Save",
 		"logout": "Logout",
 		"delete": "Delete",
+		"duplicate": "Duplicate",
 		"edit": "Edit",
 		"cancel": "Cancel",
 		"confirm": "Are you sure?",
@@ -227,7 +228,8 @@
 			"create": "Create Gather",
 			"edit": "Edit Gather",
 			"list": "Gathers",
-			"show": "Show Gather"
+			"show": "Show Gather",
+			"select_type": "Select the type of gather you would like to do"
 		},
 		"sub_titles": {
 			"list": "Defines platform, source and search parameters for data collection. Create your new gather and then run it. Once it has been completed you can run a tabulate to update the dashboard dataset."
@@ -235,11 +237,11 @@
 		"types": {
 			"apify_facebook_posts": {
 				"title": "Facebook Posts from public pages and groups",
-				"description": "Gather posts from facebook accounts using the web scraper apify",
+				"description": "Gather posts from facebook accounts using the web scraper Apify",
 				"create": "Configure a new Facebook posts gather",
-				"create_description": "Create a gather of posts from facebook accounts using the web scraper apify. Once you have created your gather your will be able to run it to collect the data.",
+				"create_description": "Create a gather of posts from facebook accounts using the web scraper Apify. Once you have created your gather your will be able to run it to collect the data.",
 				"edit": "Edit new Facebook posts gather",
-				"edit_description": "Edit a gather of posts from facebook accounts using the web scraper apify. Once you have created your gather your will be able to run it to collect the data.",
+				"edit_description": "Edit a gather of posts from facebook accounts using the web scraper Apify. Once you have created your gather your will be able to run it to collect the data.",
 				"fields": {
 					"posts_created_after": "Posts Created After",
 					"posts_created_before": "Posts Created Before",
@@ -264,7 +266,7 @@
 					}
 				},
 				"view": {
-					"text": "This is a Facebook posts gather. It gathers posts from facebook accounts using the apify web scraper.",
+					"text": "This is a Facebook posts gather. It gathers posts from facebook accounts using the Apify web scraper.",
 					"accordion": {
 						"status": "Status",
 						"general": "General",
@@ -279,7 +281,7 @@
 				"create": "Configure a new Facebook comments gather",
 				"create_description": "Create a gather of comments from Facebook posts using the web scraper Apify. Once you have created your gather you will be able to run it to collect the data.",
 				"edit": "Edit new Facebook comments gather",
-				"edit_description": "Edit a gather of comments from facebook posts using the web scraper apify. Once you have created your gather your will be able to run it to collect the data.",
+				"edit_description": "Edit a gather of comments from facebook posts using the web scraper Apify. Once you have created your gather your will be able to run it to collect the data.",
 				"fields": {
 					"limit_replies": "Limit Replies",
 					"nested_replies": "Nested Replies",
@@ -322,7 +324,40 @@
 			},
 			"apify_tiktok_accounts_posts": {
 				"title": "TikTok Accounts Posts",
-				"description": "Gather posts (videos) from TikTok accounts (usernames) using the web scraper Apify"
+				"description": "Gather posts (videos) from TikTok accounts (usernames) using the web scraper Apify",
+				"create": "Configure a new TikTok Accounts posts gather:",
+				"create_description": "Create a gather of posts (videos) from TikTok accounts (usernames) using the web scraper Apify. Once you have created your gather your will be able to run it to collect the data.",
+				"edit": "Edit new TikTok Accounts posts gather",
+				"edit_description": "Edit a gather of posts (videos) from TikTok accounts (usernames) using the web scraper Apify. Once you have created your gather your will be able to run it to collect the data.",
+				"fields": {
+					"posts_created_after": "Posts Created After - only editable if 'Posts created since (Number of days)' is empty",
+					"limit_posts_per_account": "Limit Posts Per Account",
+					"posts_created_since_num_days": "Posts created since (Number of days) - only editable if 'Posts Created After' is empty",
+					"proxy_country_to_gather_from": "Country to Gather From",
+					"input": {
+						"url_list": "Add TikTok accounts (usernames) you would like to gather from"
+					},
+					"info": {
+						"posts_created_after": "Gather posts created after 0:00 of the day configured. Use `x` on the far right to make the input empty. ",
+						"limit_posts_per_account": "Limit the number of posts that are collected for each account.",
+						"posts_created_since_num_days": "Specify how old the scraped videos should be (in days). Putting 1 will get you only today's posts, 2 - yesterday's and today's, and so on. If the 'Posts Created After' field was set, the most recent videos will be scraped.",
+						"proxy_country_to_gather_from": "Country to Gather From"
+					},
+					"validation": {
+						"required": "Required",
+						"created_since_num_days_and_created_after": "Both 'Posts created after' and 'Posts created since (Number of days)' cannot be set",
+						"created_since_num_days_or_created_after": "Set either 'Posts created after' or 'Posts created since (Number of days)'"
+					}
+				},
+				"view": {
+					"text": "This is a Tiktok Accounts posts gather. It gathers posts from tiktok accounts using the Apify web scraper.",
+					"accordion": {
+						"status": "Status",
+						"general": "General",
+						"source": "Tiktok posts come from these accounts",
+						"source_title": "Tiktok account URLs"
+					}
+				}
 			}
 		},
 		"fields": {
@@ -344,7 +379,8 @@
 				"input_values": "input values",
 				"facebook": "Facebook",
 				"posts": "Post",
-				"comments": "Comment"
+				"comments": "Comment",
+				"tiktok": "Tiktok"
 			},
 			"input": {
 				"name": "Name",
@@ -367,8 +403,21 @@
 			"estimated_duration_minutes": "Estimated time",
 			"cost": "Estimated Cost"
 		},
+		"delete": {
+			"message": "Are you sure you want to delete this gather?",
+			"note": "Please note that by deleting this gather:",
+			"list": {
+				"a": "The gathered data for this gather will be deleted from the dashboard.",
+				"b": "This action can not be undone.",
+				"c": "This gather will still be left available to duplicate."
+			}
+		},
+		"success": {
+			"delete": "Deleting gather."
+		},
 		"errors": {
-			"create": "Something went wrong while creating"
+			"create": "Something went wrong while creating",
+			"delete": "An error occurred while deleting gather."
 		}
 	},
 	"tabulate": {
@@ -409,6 +458,13 @@
 		"awaiting_start": "Awaiting Start",
 		"processing": "Processing",
 		"failed": "Failed",
-		"completed_sucessfully": "Completed Sucessfully"
+		"completed_successfully": "Completed Successfully",
+		"delete_status": {
+			"in_queue": "Delete In Queue",
+			"awaiting_start": "Delete Awaiting Start",
+			"processing": "Delete Processing",
+			"failed": "Delete Failed",
+			"completed_successfully": "Deleted"
+		}
 	}
 }

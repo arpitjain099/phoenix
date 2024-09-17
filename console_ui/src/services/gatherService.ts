@@ -11,4 +11,11 @@ export default class GatherService {
 		);
 		return response;
 	}
+
+	async deleteGather(data: IJobRun) {
+		const response = await axios.delete(
+			`${API_URL}/projects/${data?.project_id}/gathers/${data?.id}`
+		);
+		return response;
+	}
 }

@@ -122,7 +122,6 @@ def test_serialize_facebook_comment_gather_response_with_all_fields():
         created_at=datetime.datetime.now(),
         updated_at=datetime.datetime.now(),
         project_id=123,
-        deleted_at=None,
         latest_job_run=None,
         child_type=gathers.schemas.ChildTypeName.apify_facebook_comments,
     )
@@ -155,7 +154,6 @@ def test_serialize_facebook_comment_gather_response_with_required_fields_only():
         created_at=datetime.datetime.now(),
         updated_at=datetime.datetime.now(),
         project_id=123,
-        deleted_at=None,
         latest_job_run=None,
         child_type=gathers.schemas.ChildTypeName.apify_facebook_comments,
     )

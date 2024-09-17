@@ -38,7 +38,7 @@ const CreateEditProjectForm: React.FC<Props> = ({ getInputProps }) => {
 			/>
 			<NumberInput
 				mt="sm"
-				min={183}
+				min={30}
 				max={365}
 				label={
 					<div className="flex items-center">
@@ -56,7 +56,7 @@ const CreateEditProjectForm: React.FC<Props> = ({ getInputProps }) => {
 			/>
 			<NumberInput
 				mt="sm"
-				min={183}
+				min={30}
 				max={365}
 				label={
 					<div className="flex items-center">

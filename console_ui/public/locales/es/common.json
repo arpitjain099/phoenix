@@ -89,6 +89,7 @@
 		"save": "Guardar",
 		"logout": "Cerrar sesión",
 		"delete": "Eliminar",
+		"duplicate": "Dupliquer",
 		"edit": "Editar",
 		"cancel": "Cancelar",
 		"confirm": "¿Está seguro?",
@@ -227,7 +228,8 @@
 			"create": "Crear reunión",
 			"edit": "Editar reunión",
 			"list": "Reuniones",
-			"show": "Mostrar reunión"
+			"show": "Mostrar reunión",
+			"select_type": "Seleccione el tipo de recopilación que le gustaría hacer"
 		},
 		"sub_titles": {
 			"list": "Define la plataforma, la fuente y los parámetros de búsqueda para la recopilación de datos. Crea tu nueva reunión y luego ejecútala. Una vez que se haya completado, puedes ejecutar una tabulación para actualizar el conjunto de datos del tablero."
@@ -321,8 +323,41 @@
 				}
 			},
 			"apify_tiktok_accounts_posts": {
-				"title": "Publicaciones de cuentas de TikTok",
-				"description": "Recopilar publicaciones (videos) de cuentas de TikTok (nombres de usuario) utilizando el scraper web Apify"
+				"title": "Publicaciones de Cuentas TikTok",
+				"description": "Recopilar publicaciones (videos) de cuentas TikTok (nombres de usuario) usando el scraper web Apify",
+				"create": "Configurar una nueva recopilación de publicaciones de cuentas TikTok:",
+				"create_description": "Cree una recopilación de publicaciones (videos) de cuentas TikTok (nombres de usuario) usando el scraper web Apify. Una vez que haya creado su recopilación, podrá ejecutarla para recopilar los datos.",
+				"edit": "Editar una nueva recopilación de publicaciones de cuentas TikTok",
+				"edit_description": "Edite una recopilación de publicaciones (videos) de cuentas TikTok (nombres de usuario) usando el scraper web Apify. Una vez que haya creado su recopilación, podrá ejecutarla para recopilar los datos.",
+				"fields": {
+					"posts_created_after": "Publicaciones creadas después - solo editable si 'Publicaciones creadas desde (Número de días)' está vacío",
+					"limit_posts_per_account": "Limitar publicaciones por cuenta",
+					"posts_created_since_num_days": "Publicaciones creadas desde (Número de días) - solo editable si 'Publicaciones creadas después' está vacío",
+					"proxy_country_to_gather_from": "País del cual recopilar",
+					"input": {
+						"url_list": "Agregue las cuentas TikTok (nombres de usuario) desde las que desea recopilar"
+					},
+					"info": {
+						"posts_created_after": "Recopile publicaciones creadas después de las 00:00 del día configurado. Use `x` a la derecha para vaciar el campo.",
+						"limit_posts_per_account": "Limite la cantidad de publicaciones que se recopilan por cuenta.",
+						"posts_created_since_num_days": "Especifique cuántos días atrás deben ser los videos recopilados. Poner 1 obtendrá solo las publicaciones de hoy, 2 - las de ayer y hoy, y así sucesivamente. Si se ha configurado el campo 'Publicaciones creadas después', se recopilarán los videos más recientes.",
+						"proxy_country_to_gather_from": "País del cual recopilar"
+					},
+					"validation": {
+						"required": "Requerido",
+						"created_since_num_days_and_created_after": "No se pueden configurar ambos campos, 'Publicaciones creadas después' y 'Publicaciones creadas desde (Número de días)'",
+						"created_since_num_days_or_created_after": "Configure ya sea 'Publicaciones creadas después' o 'Publicaciones creadas desde (Número de días)'"
+					}
+				},
+				"view": {
+					"text": "Esta es una recopilación de publicaciones de cuentas TikTok. Recopila publicaciones de cuentas de TikTok usando el scraper web Apify.",
+					"accordion": {
+						"status": "Estado",
+						"general": "General",
+						"source": "Las publicaciones de TikTok provienen de estas cuentas",
+						"source_title": "URLs de las cuentas de TikTok"
+					}
+				}
 			}
 		},
 		"fields": {
@@ -364,8 +399,21 @@
 			"estimated_duration_minutes": "Tiempo estimado",
 			"cost": "Costo estimado"
 		},
+		"delete": {
+			"message": "¿Está seguro de que desea eliminar esta recopilación?",
+			"note": "Tenga en cuenta que al eliminar esta recopilación:",
+			"list": {
+				"a": "Los datos recopilados para esta recopilación se eliminarán del panel de control.",
+				"b": "Esta acción no se puede deshacer.",
+				"c": "Esta recopilación seguirá estando disponible para duplicar."
+			}
+		},
+		"success": {
+			"delete": "Eliminando la recopilación."
+		},
 		"errors": {
-			"create": "Algo salió mal durante la creación"
+			"create": "Algo salió mal al crear",
+			"delete": "Ocurrió un error al eliminar la recopilación."
 		}
 	},
 	"tabulate": {
@@ -405,6 +453,13 @@
 		"awaiting_start": "En espera de inicio",
 		"processing": "Procesando",
 		"failed": "Fallido",
-		"completed_successfully": "Completado con éxito"
+		"completed_successfully": "Completado con éxito",
+		"delete_status": {
+			"in_queue": "Eliminación en cola",
+			"awaiting_start": "Eliminación en espera de inicio",
+			"processing": "Eliminación en proceso",
+			"failed": "Eliminación fallida",
+			"completed_successfully": "Eliminado"
+		}
 	}
 }

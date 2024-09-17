@@ -18,6 +18,8 @@ class ChildTypeName(str, Enum):
     apify_facebook_comments = "apify_facebook_comments"
     apify_tiktok_hashtags_posts = "apify_tiktok_hashtags_posts"
     apify_tiktok_accounts_posts = "apify_tiktok_accounts_posts"
+    apify_tiktok_searches_posts = "apify_tiktok_searches_posts"
+    apify_tiktok_comments = "apify_tiktok_comments"
 
 
 class Platform(str, Enum):
@@ -54,7 +56,6 @@ class GatherResponse(GatherBase):
     created_at: datetime.datetime
     updated_at: datetime.datetime
     project_id: int
-    deleted_at: datetime.datetime | None = None
     latest_job_run: job_runs_schemas.JobRunResponse | None = None
     delete_job_run: job_runs_schemas.JobRunResponse | None = None
     child_type: Annotated[

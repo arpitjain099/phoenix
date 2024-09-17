@@ -5,18 +5,17 @@ import { useShow, useTranslate } from "@refinedev/core";
 import {
 	Show,
 	TextField,
-	DateField,
 	EditButtonProps,
 	EditButton,
 	NumberField,
 } from "@refinedev/mantine";
 import { Accordion, Button, Container, Group, Title } from "@mantine/core";
 import { useParams } from "next/navigation";
-import { statusTextStyle } from "src/utils";
 import { IconCopy } from "@tabler/icons";
 import Link from "next/link";
 import URLInputList from "@components/gather/url-list";
 import BreadcrumbsComponent from "@components/breadcrumbs";
+import GatherViewStatus from "@components/gather/view_status";
 
 export default function ApifyFacebookPostShow(): JSX.Element {
 	const { projectid, id } = useParams();
@@ -33,11 +32,7 @@ export default function ApifyFacebookPostShow(): JSX.Element {
 	const editButtonProps: EditButtonProps = {
 		resource: `apify_facebook_comments`,
 		recordItemId: id as string,
-		...(isLoading ||
-		(record?.latest_job_run &&
-			record?.latest_job_run?.status !== "awaiting_start")
-			? { disabled: true }
-			: {}),
+		...(isLoading || record?.latest_job_run ? { disabled: true } : {}),
 	};
 
 	const breadcrumbs = [
@@ -69,7 +64,9 @@ export default function ApifyFacebookPostShow(): JSX.Element {
 					<Link
 						href={`/projects/${projectid}/gathers/apify_facebook_comments/duplicate/${id}`}
 					>
-						<Button leftIcon={<IconCopy size={18} />}>Duplicate</Button>
+						<Button leftIcon={<IconCopy size={18} />}>
+							{translate("buttons.duplicate")}
+						</Button>
 					</Link>
 					<EditButton {...editButtonProps} />
 				</>
@@ -101,46 +98,7 @@ export default function ApifyFacebookPostShow(): JSX.Element {
 							</Title>
 						</Accordion.Control>
 						<Accordion.Panel>
-							<Container className="mx-0 flex flex-col my-4">
-								<Group>
-									<Title my="xs" order={5}>
-										{translate("gathers.fields.status")}:
-									</Title>
-									<span
-										className={`${statusTextStyle(record?.latest_job_run?.status)}`}
-									>
-										{record?.latest_job_run?.status
-											? translate(`status.${record.latest_job_run.status}`)
-											: "-"}
-									</span>
-								</Group>
-								<Group>
-									<Title my="xs" order={5}>
-										{translate("gathers.fields.started_processing_at")}:
-									</Title>
-									{record?.latest_job_run?.started_processing_at ? (
-										<DateField
-											format="LLL"
-											value={record?.latest_job_run.started_processing_at}
-										/>
-									) : (
-										"-"
-									)}
-								</Group>
-								<Group>
-									<Title my="xs" order={5}>
-										{translate("gathers.fields.completed_at")}:
-									</Title>
-									{record?.latest_job_run?.completed_at ? (
-										<DateField
-											format="LLL"
-											value={record?.latest_job_run.completed_at}
-										/>
-									) : (
-										"-"
-									)}
-								</Group>
-							</Container>
+							<GatherViewStatus record={record} />
 						</Accordion.Panel>
 					</Accordion.Item>
 					<Accordion.Item value="general" mb="md">

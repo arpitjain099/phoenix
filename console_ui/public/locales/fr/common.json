@@ -89,6 +89,7 @@
 		"save": "Enregistrer",
 		"logout": "Déconnexion",
 		"delete": "Supprimer",
+		"duplicate": "Dupliquer",
 		"edit": "Modifier",
 		"cancel": "Annuler",
 		"confirm": "Êtes-vous sûr ?",
@@ -227,7 +228,8 @@
 			"create": "Créer un rassemblement",
 			"edit": "Modifier un rassemblement",
 			"list": "Rassemblements",
-			"show": "Afficher le rassemblement"
+			"show": "Afficher le rassemblement",
+			"select_type": "Sélectionnez le type de collecte que vous souhaitez effectuer"
 		},
 		"sub_titles": {
 			"list": "Définit la plateforme, la source et les paramètres de recherche pour la collecte de données. Créez votre nouveau rassemblement, puis exécutez-le. Une fois terminé, vous pouvez exécuter un tableau pour mettre à jour l'ensemble de données du tableau de bord."
@@ -321,8 +323,41 @@
 				}
 			},
 			"apify_tiktok_accounts_posts": {
-				"title": "Publications des comptes TikTok",
-				"description": "Rassembler les publications (vidéos) des comptes TikTok (noms d'utilisateur) en utilisant le web scraper Apify"
+				"title": "Publications de Comptes TikTok",
+				"description": "Récupérer les publications (vidéos) des comptes TikTok (noms d'utilisateur) en utilisant le scraper web Apify",
+				"create": "Configurer une nouvelle collecte de publications de comptes TikTok :",
+				"create_description": "Créez une collecte de publications (vidéos) de comptes TikTok (noms d'utilisateur) en utilisant le scraper web Apify. Une fois que vous aurez créé votre collecte, vous pourrez l'exécuter pour collecter les données.",
+				"edit": "Modifier une nouvelle collecte de publications de comptes TikTok",
+				"edit_description": "Modifiez une collecte de publications (vidéos) de comptes TikTok (noms d'utilisateur) en utilisant le scraper web Apify. Une fois que vous aurez créé votre collecte, vous pourrez l'exécuter pour collecter les données.",
+				"fields": {
+					"posts_created_after": "Publications créées après - modifiable uniquement si 'Publications créées depuis (Nombre de jours)' est vide",
+					"limit_posts_per_account": "Limiter les publications par compte",
+					"posts_created_since_num_days": "Publications créées depuis (Nombre de jours) - modifiable uniquement si 'Publications créées après' est vide",
+					"proxy_country_to_gather_from": "Pays à collecter",
+					"input": {
+						"url_list": "Ajoutez les comptes TikTok (noms d'utilisateur) à partir desquels vous souhaitez collecter"
+					},
+					"info": {
+						"posts_created_after": "Récupérez les publications créées après 00h00 du jour configuré. Utilisez `x` à l'extrême droite pour vider le champ.",
+						"limit_posts_per_account": "Limitez le nombre de publications collectées pour chaque compte.",
+						"posts_created_since_num_days": "Spécifiez l'ancienneté des vidéos extraites (en jours). En mettant 1, vous obtiendrez uniquement les publications d'aujourd'hui, 2 - celles d'hier et d'aujourd'hui, etc. Si le champ 'Publications créées après' est défini, les vidéos les plus récentes seront extraites.",
+						"proxy_country_to_gather_from": "Pays à collecter"
+					},
+					"validation": {
+						"required": "Requis",
+						"created_since_num_days_and_created_after": "'Publications créées après' et 'Publications créées depuis (Nombre de jours)' ne peuvent pas être définis simultanément",
+						"created_since_num_days_or_created_after": "Définissez soit 'Publications créées après', soit 'Publications créées depuis (Nombre de jours)'"
+					}
+				},
+				"view": {
+					"text": "Ceci est une collecte de publications de comptes TikTok. Elle récupère les publications des comptes TikTok à l'aide du scraper web Apify.",
+					"accordion": {
+						"status": "Statut",
+						"general": "Général",
+						"source": "Les publications TikTok proviennent de ces comptes",
+						"source_title": "URLs des comptes TikTok"
+					}
+				}
 			}
 		},
 		"fields": {
@@ -364,11 +399,23 @@
 			"estimated_duration_minutes": "Temps estimé",
 			"cost": "Coût estimé"
 		},
+		"delete": {
+			"message": "Êtes-vous sûr de vouloir supprimer cette collecte ?",
+			"note": "Veuillez noter qu'en supprimant cette collecte :",
+			"list": {
+				"a": "Les données recueillies pour cette collecte seront supprimées du tableau de bord.",
+				"b": "Cette action ne peut pas être annulée.",
+				"c": "Cette collecte restera disponible pour être dupliquée."
+			}
+		},
+		"success": {
+			"delete": "Suppression de la collecte."
+		},
 		"errors": {
-			"create": "Quelque chose s'est mal passé lors de la création"
+			"create": "Une erreur s'est produite lors de la création",
+			"delete": "Une erreur s'est produite lors de la suppression de la collecte."
 		}
 	},
-
 	"tabulate": {
 		"title": "Tabuler",
 		"sub_titles": {
@@ -406,6 +453,13 @@
 		"awaiting_start": "En attente de début",
 		"processing": "Traitement",
 		"failed": "Échoué",
-		"completed_successfully": "Terminé avec succès"
+		"completed_successfully": "Terminé avec succès",
+		"delete_status": {
+			"in_queue": "Suppression en attente",
+			"awaiting_start": "Suppression en attente de démarrage",
+			"processing": "Suppression en cours",
+			"failed": "Échec de la suppression",
+			"completed_successfully": "Supprimé"
+		}
 	}
 }

@@ -4,12 +4,12 @@ from typing import Coroutine
 import prefect
 
 from phiphi import constants
-from phiphi.api.projects import job_runs
-from phiphi.pipeline_jobs import utils as pipeline_jobs_utils
+from phiphi.pipeline_jobs.classify import flow as classify_flow
+from phiphi.pipeline_jobs.tabulate import flow as tabulate_flow
 
 
 @prefect.flow(name="classify_tabulate_flow")
-async def classify_tabulate_flow(
+def classify_tabulate_flow(
     project_id: int,
     job_source_id: int,
     job_run_id: int,
@@ -18,30 +18,16 @@ async def classify_tabulate_flow(
     class_id_name_map: dict[int, str],
 ) -> None:
     """Flow which runs a classify, and tabulates all data."""
-    await pipeline_jobs_utils.run_flow_deployment_as_subflow(
-        deployment_name="classify_flow/classify_flow",
-        flow_params={
-            "classifier_dict": classifier_dict,
-            "job_run_id": job_run_id,
-            "project_namespace": project_namespace,
-        },
-        project_id=project_id,
-        job_type=job_runs.schemas.ForeignJobType.classify,
-        job_source_id=job_source_id,
+    classify_flow.classify_flow(
+        classifier_dict=classifier_dict,
         job_run_id=job_run_id,
+        project_namespace=project_namespace,
     )
 
-    await pipeline_jobs_utils.run_flow_deployment_as_subflow(
-        deployment_name="tabulate_flow/tabulate_flow",
-        flow_params={
-            "class_id_name_map": class_id_name_map,
-            "job_run_id": job_run_id,
-            "project_namespace": project_namespace,
-        },
-        project_id=project_id,
-        job_type=job_runs.schemas.ForeignJobType.tabulate,
-        job_source_id=job_source_id,
+    tabulate_flow.tabulate_flow(
+        class_id_name_map=class_id_name_map,
         job_run_id=job_run_id,
+        project_namespace=project_namespace,
     )
 
 

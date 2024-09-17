@@ -1,4 +1,4 @@
-"""Seed the apify facebook post gathers."""
+"""Seed the apify tiktok accounts post gathers."""
 from sqlalchemy.orm import Session
 
 from phiphi.api.projects.gathers import child_crud as gather_child_crud
@@ -10,7 +10,6 @@ TEST_APIFY_TIKTOK_ACCOUNTS_POSTS_GATHER_CREATE = schemas.ApifyTikTokAccountsPost
     account_username_list=["username1", "username2"],
     limit_posts_per_account=1000,
     posts_created_after="2024-04-25",
-    posts_created_since_num_days=7,
     proxy_country_to_gather_from="US",
 )
 

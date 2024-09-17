@@ -38,6 +38,18 @@ from phiphi.api.projects.gathers.apify_tiktok_accounts_posts import (
 from phiphi.api.projects.gathers.apify_tiktok_accounts_posts import (
     schemas as tiktok_accounts_posts_schema,
 )
+from phiphi.api.projects.gathers.apify_tiktok_comments import (
+    models as tiktok_comments_models,
+)
+from phiphi.api.projects.gathers.apify_tiktok_comments import (
+    schemas as tiktok_comments_schema,
+)
+from phiphi.api.projects.gathers.apify_tiktok_hashtags_posts import (
+    models as tiktok_hashtags_posts_models,
+)
+from phiphi.api.projects.gathers.apify_tiktok_hashtags_posts import (
+    schemas as tiktok_hashtags_posts_schema,
+)
 
 router = fastapi.APIRouter()
 
@@ -74,6 +86,18 @@ list_of_child_gather_routes: dict[
         tiktok_accounts_posts_schema.ApifyTikTokAccountsPostsGatherUpdate,
         tiktok_accounts_posts_schema.ApifyTikTokAccountsPostsGatherResponse,
         tiktok_accounts_posts_models.ApifyTikTokAccountsPostsGather,
+    ),
+    gather_schema.ChildTypeName.apify_tiktok_hashtags_posts: (
+        tiktok_hashtags_posts_schema.ApifyTikTokHashtagsPostsGatherCreate,
+        tiktok_hashtags_posts_schema.ApifyTikTokHashtagsPostsGatherUpdate,
+        tiktok_hashtags_posts_schema.ApifyTikTokHashtagsPostsGatherResponse,
+        tiktok_hashtags_posts_models.ApifyTikTokHashtagsPostsGather,
+    ),
+    gather_schema.ChildTypeName.apify_tiktok_comments: (
+        tiktok_comments_schema.ApifyTikTokCommentsGatherCreate,
+        tiktok_comments_schema.ApifyTikTokCommentsGatherUpdate,
+        tiktok_comments_schema.ApifyTikTokCommentsGatherResponse,
+        tiktok_comments_models.ApifyTikTokCommentsGather,
     ),
     # Add more routes as needed
 }

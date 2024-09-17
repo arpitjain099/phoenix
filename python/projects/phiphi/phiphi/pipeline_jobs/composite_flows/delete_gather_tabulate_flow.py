@@ -5,12 +5,12 @@ from typing import Coroutine
 import prefect
 
 from phiphi import constants
-from phiphi.api.projects import job_runs
-from phiphi.pipeline_jobs import utils as pipeline_jobs_utils
+from phiphi.pipeline_jobs.gathers import flow as gather_flow
+from phiphi.pipeline_jobs.tabulate import flow as tabulate_flow
 
 
 @prefect.flow(name="delete_gather_tabulate_flow")
-async def delete_gather_tabulate_flow(
+def delete_gather_tabulate_flow(
     project_id: int,
     job_source_id: int,
     job_run_id: int,
@@ -18,30 +18,16 @@ async def delete_gather_tabulate_flow(
     class_id_name_map: dict[int, str],
 ) -> None:
     """Flow which deletes a gather's data, and tabulates all data."""
-    await pipeline_jobs_utils.run_flow_deployment_as_subflow(
-        deployment_name="delete_gather_flow/delete_gather_flow",
-        flow_params={
-            "gather_id": job_source_id,
-            "job_run_id": job_run_id,
-            "project_namespace": project_namespace,
-        },
-        project_id=project_id,
-        job_type=job_runs.schemas.ForeignJobType.delete_gather,
-        job_source_id=job_source_id,
+    gather_flow.delete_flow(
+        gather_id=job_source_id,
         job_run_id=job_run_id,
+        project_namespace=project_namespace,
     )
 
-    await pipeline_jobs_utils.run_flow_deployment_as_subflow(
-        deployment_name="tabulate_flow/tabulate_flow",
-        flow_params={
-            "class_id_name_map": class_id_name_map,
-            "job_run_id": job_run_id,
-            "project_namespace": project_namespace,
-        },
-        project_id=project_id,
-        job_type=job_runs.schemas.ForeignJobType.tabulate,
-        job_source_id=job_source_id,
+    tabulate_flow.tabulate_flow(
+        class_id_name_map=class_id_name_map,
         job_run_id=job_run_id,
+        project_namespace=project_namespace,
     )
 
 

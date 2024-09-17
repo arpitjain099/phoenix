@@ -21,6 +21,8 @@ def gather_flow(
     Warning: there is a race condition in this flow for the deduplicate step if multiple gathers
     flow are being run at the same time. Very unlikely though.
     """
+    # Create the gather object from the gather_dict as prefect can't parse it automatically from
+    # the parameters
     gather = gathers.child_types.get_response_type(gather_child_type)(**gather_dict)
 
     scrape_response = apify_scrape.apify_scrape_and_batch_download_results(
@@ -49,6 +51,8 @@ def gather_flow(
 @prefect.flow(name="delete_gather_flow")
 def delete_flow(
     gather_id: int,
+    # To be consistent with other flows we keep the job_run_id even though it is not used.
+    job_run_id: int,
     project_namespace: str,
 ) -> None:
     """Flow which deletes gathered data."""

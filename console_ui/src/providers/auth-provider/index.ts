@@ -83,7 +83,10 @@ export const setUserInfoFromAPI = async (): Promise<UserInfo | null> => {
 };
 
 export const getUserRole = async (): Promise<string | null> => {
-	const userInfo = await getCurrentUserInfo();
+	let userInfo = await getCurrentUserInfo();
+	if (!userInfo) {
+		userInfo = await setUserInfoFromAPI();
+	}
 	if (userInfo && Object.hasOwn(userInfo, "app_role")) {
 		return userInfo.app_role;
 	}

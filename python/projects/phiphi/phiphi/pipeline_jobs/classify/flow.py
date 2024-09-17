@@ -5,6 +5,7 @@ import prefect
 
 from phiphi import constants
 from phiphi.api.projects.classifiers import schemas
+from phiphi.pipeline_jobs.classify import keyword_match_classifier
 
 
 @prefect.flow(name="classify_flow")
@@ -18,7 +19,10 @@ def classify_flow(
 
     if classifier.type == schemas.ClassifierType.keyword_match:
         # Run keyword_match classifier
-        pass
+        classifier = schemas.ClassifierKeywordMatchResponse(**classifier_dict)
+        keyword_match_classifier.classify(
+            classifier=classifier, bigquery_dataset=project_namespace, job_run_id=job_run_id
+        )
     else:
         raise ValueError(f"{classifier.type=} not implemented.")
 

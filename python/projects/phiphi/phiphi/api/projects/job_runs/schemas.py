@@ -12,7 +12,7 @@ class Status(str, Enum):
     awaiting_start = "awaiting_start"
     in_queue = "in_queue"
     processing = "processing"
-    completed_sucessfully = "completed_sucessfully"
+    completed_successfully = "completed_successfully"
     failed = "failed"
 
 

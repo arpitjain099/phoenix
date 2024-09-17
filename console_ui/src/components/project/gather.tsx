@@ -17,12 +17,17 @@ import {
 } from "@mantine/core";
 import { DateField } from "@refinedev/mantine";
 import TableComponent from "@components/table";
-import { PHEONIX_MANUAL_URL, statusTextStyle } from "src/utils";
-import { IconPlayerPlay, IconSquarePlus } from "@tabler/icons";
+import {
+	isJobRunRunning,
+	PHEONIX_MANUAL_URL,
+	statusTextStyle,
+} from "src/utils";
+import { IconPlayerPlay, IconSquarePlus, IconTrash } from "@tabler/icons";
 import GatherRunModal from "@components/modals/gather-run";
 import { jobRunService } from "src/services";
 import { GatherResponse } from "src/interfaces/gather";
 import Link from "next/link";
+import GatherDeleteModal from "@components/modals/delete-gather";
 
 interface IGatherProps {
 	projectid: any;
@@ -32,6 +37,7 @@ interface IGatherProps {
 const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 	const translate = useTranslate();
 	const [opened, setOpened] = useState(false);
+	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 	const [selected, setSelected] = useState(null);
 	const [gatherList, setGatherList] = useState<any>([]);
 	const [loadingStates, setLoadingStates] = useState<{
@@ -49,16 +55,45 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 		async (gatherDetail: GatherResponse) => {
 			setLoadingStates((prev) => ({ ...prev, [gatherDetail.id]: true }));
 			try {
-				const { data } = await jobRunService.fetchJobRun({
+				const latest_job_run_fetch = await jobRunService.fetchJobRun({
 					project_id: gatherDetail.project_id,
 					id: gatherDetail?.latest_job_run?.id,
-					type: "gather",
 				});
+				let delete_job_run_fetch = { data: null };
+				if (gatherDetail?.delete_job_run) {
+					delete_job_run_fetch = await jobRunService.fetchJobRun({
+						project_id: gatherDetail.project_id,
+						id: gatherDetail?.delete_job_run?.id,
+					});
+				}
 				setGatherList((prevList: GatherResponse[]) =>
 					prevList.map((gather) =>
 						gather.id === gatherDetail.id
-							? { ...gather, latest_job_run: data }
+							? {
+									...gather,
+									latest_job_run: latest_job_run_fetch.data,
+									delete_job_run: delete_job_run_fetch.data,
+								}
 							: gather
+					)
+				);
+			} catch (error) {
+				console.error("Error fetching gather details:", error);
+			} finally {
+				refetch();
+				setLoadingStates((prev) => ({ ...prev, [gatherDetail.id]: false }));
+			}
+		},
+		[refetch]
+	);
+
+	const handleGatherUpdate = useCallback(
+		async (gatherDetail: GatherResponse) => {
+			setLoadingStates((prev) => ({ ...prev, [gatherDetail.id]: true }));
+			try {
+				setGatherList((prevList: GatherResponse[]) =>
+					prevList.map((gather) =>
+						gather.id === gatherDetail.id ? gatherDetail : gather
 					)
 				);
 			} catch (error) {
@@ -94,12 +129,16 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 				accessorKey: "latest_job_run.started_processing_at",
 				header: translate("gathers.fields.started_run_at"),
 				cell: function render({ row }) {
-					const { latest_job_run } = row.original;
+					const { latest_job_run, delete_job_run } = row.original;
 					const started_processing_at = latest_job_run
 						? latest_job_run.started_processing_at
 						: null;
 					return started_processing_at ? (
-						<DateField format="LLL" value={started_processing_at} />
+						<span
+							className={`${delete_job_run?.status === "completed_successfully" ? statusTextStyle("deleted") : ""}`}
+						>
+							<DateField format="LLL" value={started_processing_at} />
+						</span>
 					) : (
 						""
 					);
@@ -110,12 +149,16 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 				accessorKey: "latest_job_run.completed_at",
 				header: translate("gathers.fields.completed_at"),
 				cell: function render({ row }) {
-					const { latest_job_run } = row.original;
+					const { latest_job_run, delete_job_run } = row.original;
 					const completed_at = latest_job_run
 						? latest_job_run.completed_at
 						: null;
 					return completed_at ? (
-						<DateField format="LLL" value={completed_at} />
+						<span
+							className={`${delete_job_run?.status === "completed_successfully" ? statusTextStyle("deleted") : ""}`}
+						>
+							<DateField format="LLL" value={completed_at} />
+						</span>
 					) : (
 						""
 					);
@@ -126,11 +169,17 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 				accessorKey: "latest_job_run.status",
 				header: translate("projects.fields.status"),
 				cell: function render({ row }) {
-					const { latest_job_run } = row.original;
+					const { latest_job_run, delete_job_run } = row.original;
 					const status = latest_job_run ? latest_job_run.status : null;
 					return (
-						<span className={`${statusTextStyle(status)}`}>
-							{status ? translate(`status.${status}`) : ""}
+						<span
+							className={`${statusTextStyle(delete_job_run?.status === "completed_successfully" ? "deleted" : delete_job_run?.status ? delete_job_run?.status : status)}`}
+						>
+							{delete_job_run
+								? translate(`status.delete_status.${delete_job_run.status}`)
+								: status
+									? translate(`status.${status}`)
+									: ""}
 						</span>
 					);
 				},
@@ -141,7 +190,7 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 				header: translate("table.actions"),
 				cell: function render({ row }) {
 					const gatherId = row.original.id;
-					const { latest_job_run } = row.original;
+					const { latest_job_run, delete_job_run } = row.original;
 					const status = latest_job_run ? latest_job_run.status : null;
 					const isLoading = loadingStates[gatherId];
 					return (
@@ -165,9 +214,25 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 											</Button>
 										</Tooltip>
 									)}
-									{["in_queue", "processing", "awaiting_start"].includes(
-										status
-									) && <Loader size="sm" />}
+									{(isJobRunRunning(latest_job_run) ||
+										isJobRunRunning(delete_job_run)) && <Loader size="sm" />}
+									{latest_job_run?.completed_at &&
+										!isJobRunRunning(delete_job_run) &&
+										delete_job_run?.status !== "completed_successfully" && (
+											<Tooltip label="Delete">
+												<Button
+													p={0}
+													variant="subtle"
+													color="red"
+													onClick={() => {
+														setSelected(row.original);
+														setDeleteModalOpen(true);
+													}}
+												>
+													<IconTrash size={20} color="red" />
+												</Button>
+											</Tooltip>
+										)}
 								</>
 							)}
 						</Group>
@@ -201,12 +266,17 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 	useEffect(() => {
 		let interval: NodeJS.Timeout | undefined;
 		if (
-			gatherList.some((gather: any) => !gather.latest_job_run?.completed_at)
+			gatherList.some(
+				(gather: any) =>
+					!gather.latest_job_run?.completed_at ||
+					(gather.delete_job_run && !gather.delete_job_run?.completed_at)
+			)
 		) {
 			interval = setInterval(() => {
 				const pendingGathers = gatherList.filter(
 					(gather: any) =>
-						gather.latest_job_run && !gather.latest_job_run?.completed_at
+						(gather.latest_job_run && !gather.latest_job_run?.completed_at) ||
+						(gather.delete_job_run && !gather.delete_job_run?.completed_at)
 				);
 				Promise.all(
 					pendingGathers.map((gather: any) => handleGatherRefresh(gather))
@@ -218,7 +288,7 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 				clearInterval(interval);
 			}
 		};
-	}, [gatherList, handleGatherRefresh]);
+	}, [gatherList, handleGatherRefresh, handleGatherUpdate]);
 
 	return (
 		<>
@@ -275,6 +345,12 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 				setOpened={setOpened}
 				gatherDetail={selected}
 				handleRefresh={handleGatherRefresh}
+			/>
+			<GatherDeleteModal
+				opened={deleteModalOpen}
+				setOpened={setDeleteModalOpen}
+				gatherDetail={selected}
+				handleUpdate={handleGatherUpdate}
 			/>
 		</>
 	);
