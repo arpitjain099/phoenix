@@ -72,10 +72,25 @@ def normalise_batches(
     job_run_id: int,
     bigquery_dataset: str,
 ) -> None:
-    """Normalize batches and write to a BigQuery table."""
+    """Normalize batches and write to a BigQuery table.
+
+    This function reads one batch at a time from the gather_batches table, normalizes it, and
+    writes the normalized data to the generalised_messages table.
+
+    It does this one batch at a time to fix the memory footprint of the function and allow for a
+    predictable runtime memory usage.
+
+    Args:
+        gather_id: The gather ID.
+        job_run_id: The job run ID.
+        bigquery_dataset: The BigQuery dataset.
+    """
     prefect_logger = prefect.get_run_logger()
 
     batch_id = 0
+    # Using a while loop to read one batch at a time
+    # This is to keep the memory footprint of the function low/predictable based on batch size of
+    # the gathered data.
     while True:
         query = f"""
             SELECT * FROM {bigquery_dataset}.{constants.GATHER_BATCHES_TABLE_NAME}
