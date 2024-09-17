@@ -12,9 +12,12 @@ https://googleapis.dev/python/sqlalchemy-bigquery/latest/alembic.html
 See docs: https://googleapis.dev/python/sqlalchemy-bigquery/latest/README.html
 """
 import contextlib
+import os
 from typing import Generator
 
 import sqlalchemy as sa
+from alembic import command as alembic_command
+from alembic import config as alembic_config
 
 from phiphi import utils
 
@@ -56,3 +59,32 @@ def init_connection(sqlalchemy_uri: str) -> Generator[sa.Connection, None, None]
     engine = sa.create_engine(sqlalchemy_uri)
     with engine.connect() as connection:
         yield connection
+
+
+def get_default_alembic_ini_path() -> str:
+    """Get the default alembic ini path.
+
+    Returns:
+        str: The default alembic ini path.
+    """
+    return os.path.join(os.path.dirname(__file__), "../project_db.alembic.ini")
+
+
+def alembic_upgrade(
+    connection: sa.Connection, revision: str = "head", alembic_ini_path: str | None = None
+) -> None:
+    """Upgrade the database to the latest revision.
+
+    Args:
+        connection (sa.Connection): The connection.
+        revision (str, optional): The revision to upgrade to. Defaults to "head".
+        alembic_ini_path (str | None, optional): The alembic ini path. If None then the default
+            alembic ini path will be used. Defaults to project_db.alembic.ini in phiphi.
+    """
+    if alembic_ini_path is None:
+        alembic_ini_path = get_default_alembic_ini_path()
+    alembic_cfg = alembic_config.Config(alembic_ini_path)
+    # Passing the connection overrides sqlalchemy.url in the alembic.ini file and allows to create
+    # the connection in the most optimal way possible.
+    alembic_cfg.attributes["connection"] = connection
+    alembic_command.upgrade(alembic_cfg, revision)
