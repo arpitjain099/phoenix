@@ -25,7 +25,7 @@ def upgrade() -> None:
         sa.Column("post_author_class", sa.String(), nullable=True),
         sa.Column("post_author_description", sa.Text(), nullable=True),
         sa.Column("post_author_followers", sa.Integer(), nullable=True),
-        sa.Column("post_author_id", sa.Integer(), nullable=False),
+        sa.Column("post_author_id", sa.String(), nullable=False),
         sa.Column("post_author_location", sa.String(), nullable=True),
         sa.Column("post_author_name_pi", sa.String(), nullable=True),
         sa.Column("post_author_link_pi", sa.String(), nullable=True),
