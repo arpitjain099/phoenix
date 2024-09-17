@@ -2,11 +2,9 @@
 from unittest.mock import patch
 
 import pandas as pd
-import pytest
-from google.cloud import bigquery
 
 from phiphi import config
-from phiphi.pipeline_jobs import constants, projects
+from phiphi.pipeline_jobs import constants
 from phiphi.pipeline_jobs import utils as pipeline_jobs_utils
 from phiphi.pipeline_jobs.composite_flows import (
     delete_gather_tabulate_flow,
@@ -70,14 +68,6 @@ def test_bq_pipeline_integration(tmp_bq_project):
         )
 
     test_project_namespace = tmp_bq_project
-    client = bigquery.Client()
-    assert client.get_dataset(test_project_namespace)
-    # Check that the dummy tabulated messages has been created
-    assert client.get_table(f"{test_project_namespace}.{constants.TABULATED_MESSAGES_TABLE_NAME}")
-
-    # Check that will not fail if the dataset already exists.
-    dataset = projects.init_project_db.fn(test_project_namespace)
-    assert client.get_dataset(dataset)
 
     batch_size = 20
 
@@ -356,8 +346,3 @@ def test_bq_pipeline_integration(tmp_bq_project):
 
     # Use this to break before deleting the dataset to manually inspect the data
     # assert False
-
-    projects.delete_project_db.fn(test_project_namespace)
-
-    with pytest.raises(Exception):
-        client.get_dataset(dataset)
