@@ -18,6 +18,8 @@ from typing import Generator
 import sqlalchemy as sa
 from alembic import command as alembic_command
 from alembic import config as alembic_config
+from alembic import migration as alembic_migration
+from alembic import script as alembic_script
 
 from phiphi import utils
 
@@ -80,7 +82,7 @@ def alembic_upgrade(
     connection: sa.Connection,
     revision: str = "head",
     alembic_ini_path: str | pathlib.Path | None = None,
-) -> None:
+) -> bool:
     """Upgrade the database to the latest revision.
 
     The alembic upgrade will use the db that the connection is configured for and not
@@ -91,11 +93,39 @@ def alembic_upgrade(
         revision (str, optional): The revision to upgrade to. Defaults to "head".
         alembic_ini_path (str | None, optional): The alembic ini path. If None then the default
             alembic ini path will be used. Defaults to project_db.alembic.ini in phiphi.
+
+    Returns:
+        bool: True if new revision applied, False if already up to date.
     """
     if alembic_ini_path is None:
         alembic_ini_path = get_default_alembic_ini_path()
     alembic_cfg = alembic_config.Config(alembic_ini_path)
+
+    if check_current_head(alembic_cfg, connection):
+        return False
     # Passing the connection overrides sqlalchemy.url in the alembic.ini file and allows to create
     # the connection in the most optimal way possible.
     alembic_cfg.attributes["connection"] = connection
+
+    # Perform the upgrade
     alembic_command.upgrade(alembic_cfg, revision)
+
+    return True
+
+
+def check_current_head(alembic_cfg: alembic_config.Config, connection: sa.Connection) -> bool:
+    """Check if the current head is the latest revision.
+
+    From cookbook:
+    https://alembic.sqlalchemy.org/en/latest/cookbook.html#test-current-database-revision-is-at-head-s
+
+    Args:
+        alembic_cfg (alembic_config.Config): The alembic config.
+        connection (sa.Connection): The connection.
+
+    Returns:
+        bool: True if the current head is the latest revision, False otherwise.
+    """
+    directory = alembic_script.ScriptDirectory.from_config(alembic_cfg)
+    context = alembic_migration.MigrationContext.configure(connection)
+    return set(context.get_current_heads()) == set(directory.get_heads())
