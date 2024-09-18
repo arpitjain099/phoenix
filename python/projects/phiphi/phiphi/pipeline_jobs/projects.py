@@ -70,3 +70,23 @@ def delete_project_db(
     """
     client = bigquery.Client()
     client.delete_dataset(dataset=project_namespace, delete_contents=True, not_found_ok=True)
+
+
+@prefect.task
+def drop_downstream_tables(
+    project_namespace: str,
+) -> None:
+    """Drop downstream tables.
+
+    Currently this only drops the generalised_messages table as the rest of the tables are
+    recreated with each pipeline.
+
+    Args:
+        project_namespace (str): The project namespace.
+    """
+    client = bigquery.Client()
+    query = f"""
+        DROP TABLE {project_namespace}.{constants.GENERALISED_MESSAGES_TABLE_NAME}
+    """
+    client.query(query)
+    return None

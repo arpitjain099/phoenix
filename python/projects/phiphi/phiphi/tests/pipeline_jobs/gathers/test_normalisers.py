@@ -22,7 +22,8 @@ def test_normaliser_facebook_posts(normalised_facebook_posts_df, facebook_posts_
     processed_df = normalise.normalise_batch(
         normaliser=normalisers.normalise_single_facebook_posts_json,
         batch_json=batch_json,
-        gather=facebook_posts_gather_fixture,
+        gather_id=facebook_posts_gather_fixture.id,
+        gather_child_type=facebook_posts_gather_fixture.child_type,
         gather_batch_id=3,
         gathered_at=datetime.fromisoformat("2024-04-01T12:00:00.000Z"),
     )
@@ -46,7 +47,8 @@ def test_normaliser_facebook_comments(
     processed_df = normalise.normalise_batch(
         normaliser=normalisers.normalise_single_facebook_comments_json,
         batch_json=batch_json,
-        gather=facebook_comments_gather_fixture,
+        gather_id=facebook_comments_gather_fixture.id,
+        gather_child_type=facebook_comments_gather_fixture.child_type,
         gather_batch_id=3,
         gathered_at=datetime.fromisoformat("2024-04-01T12:00:00.000Z"),
     )
@@ -71,7 +73,8 @@ def test_normaliser_tiktok_accounts_posts(
         # all tiktok posts gathers are normalised the same way
         normaliser=normalisers.normalise_single_tiktok_posts_json,
         batch_json=batch_json,
-        gather=tiktok_accounts_posts_gather_fixture,
+        gather_id=tiktok_accounts_posts_gather_fixture.id,
+        gather_child_type=tiktok_accounts_posts_gather_fixture.child_type,
         gather_batch_id=3,
         gathered_at=datetime.fromisoformat("2024-04-01T12:00:00.000Z"),
     )
@@ -96,7 +99,8 @@ def test_normaliser_tiktok_hashtags_posts(
         # all tiktok posts gathers are normalised the same way
         normaliser=normalisers.normalise_single_tiktok_posts_json,
         batch_json=batch_json,
-        gather=tiktok_hashtags_posts_gather_fixture,
+        gather_id=tiktok_hashtags_posts_gather_fixture.id,
+        gather_child_type=tiktok_hashtags_posts_gather_fixture.child_type,
         gather_batch_id=3,
         gathered_at=datetime.fromisoformat("2024-04-01T12:00:00.000Z"),
     )
@@ -118,7 +122,8 @@ def test_normaliser_tiktok_comments(normalised_tiktok_comments_df, tiktok_commen
     processed_df = normalise.normalise_batch(
         normaliser=normalisers.normalise_single_tiktok_comments_json,
         batch_json=batch_json,
-        gather=tiktok_comments_gather_fixture,
+        gather_id=tiktok_comments_gather_fixture.id,
+        gather_child_type=tiktok_comments_gather_fixture.child_type,
         gather_batch_id=3,
         gathered_at=datetime.fromisoformat("2024-04-01T12:00:00.000Z"),
     )
