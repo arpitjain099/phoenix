@@ -22,6 +22,10 @@ def recompute_all_batches_tabulate_flow(
     Importantly this will not replace any metadata about the normalised batches. Ie `job_run_id`
     will be the original job_run_id from the gather not the new job_run_id.
 
+    This will not run if there are no gather batches to recompute. This is important behaviour
+    in that with the deletion of a PI data this will include the gather batches. If a recompute is
+    run after a PI delete it will leave all tables and data as is.
+
     Args:
         job_run_id: The job run ID.
         project_id: The project ID.
@@ -38,6 +42,8 @@ def recompute_all_batches_tabulate_flow(
     gather_batches_metadata = normalise.get_all_gather_and_job_run_ids(
         bigquery_dataset=project_namespace
     )
+    if len(gather_batches_metadata) == 0:
+        return None
     for _, gather_batch_metadata in gather_batches_metadata.iterrows():
         normalise.normalise_batches(
             gather_id=gather_batch_metadata.gather_id,
