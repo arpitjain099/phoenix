@@ -2,23 +2,7 @@
 import pandera as pa
 
 from phiphi.api.projects.gathers import schemas
-
-
-def utc_datetime_column(nullable: bool) -> pa.Column:
-    """Return a Pandera column for a UTC datetime which coerces.
-
-    Should be used for columns that are expected to be UTC datetimes, and dfs should be passed
-    through validation to ensure columns are coerced.
-    """
-    return pa.Column(
-        pa.engines.pandas_engine.DateTime(  # type: ignore[call-arg]
-            unit="ms",
-            tz="UTC",
-        ),
-        coerce=True,
-        nullable=nullable,
-    )
-
+from phiphi.pipeline_jobs import utils as pipeline_jobs_utils
 
 # TODO: should add BQ cluster specification on columns: gather_id, job_run_id, gather_batch_id
 # Schema for gather batches
@@ -40,9 +24,9 @@ gather_batches_schema = pa.DataFrameSchema(
             pa.String, checks=pa.Check.isin([e.value for e in schemas.DataType]), nullable=False
         ),
         "batch_id": pa.Column(pa.Int, nullable=False),
-        "gathered_at": utc_datetime_column(nullable=False),
+        "gathered_at": pipeline_jobs_utils.utc_datetime_column(nullable=False),
         "json_data": pa.Column(pa.String, nullable=False),
-        "last_processed_at": utc_datetime_column(nullable=True),
+        "last_processed_at": pipeline_jobs_utils.utc_datetime_column(nullable=True),
     }
 )
 
@@ -56,8 +40,8 @@ generalised_messages_schema = pa.DataFrameSchema(
     {
         "gather_id": pa.Column(pa.Int, nullable=False),
         "gather_batch_id": pa.Column(pa.Int, nullable=False),
-        "gathered_at": utc_datetime_column(nullable=False),
-        "phoenix_processed_at": utc_datetime_column(nullable=False),
+        "gathered_at": pipeline_jobs_utils.utc_datetime_column(nullable=False),
+        "phoenix_processed_at": pipeline_jobs_utils.utc_datetime_column(nullable=False),
         "gather_type": pa.Column(
             pa.String,
             checks=pa.Check.isin([e.value for e in schemas.ChildTypeName]),
@@ -85,7 +69,9 @@ generalised_messages_schema = pa.DataFrameSchema(
         "pi_platform_root_message_id": pa.Column(pa.String, nullable=True),
         "pi_text": pa.Column(pa.String, nullable=True),
         "pi_platform_message_url": pa.Column(pa.String, nullable=True),
-        "platform_message_last_updated_at": utc_datetime_column(nullable=False),
+        "platform_message_last_updated_at": pipeline_jobs_utils.utc_datetime_column(
+            nullable=False
+        ),
         # Hash of `pi_platform_message_id`.
         "phoenix_platform_message_id": pa.Column(pa.String, nullable=False),
         # Hash of `pi_platform_message_author_id`.

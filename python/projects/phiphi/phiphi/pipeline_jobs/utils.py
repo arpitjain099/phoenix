@@ -3,6 +3,7 @@ import os
 import re
 
 import pandas as pd
+import pandera as pa
 from prefect import task
 from prefect.deployments import deployments
 
@@ -100,3 +101,19 @@ def translate_bq_to_pandas_query(bq_query: str) -> str:
     # Remove backticks if present
     pandas_query = pandas_query.replace("`", "")
     return pandas_query
+
+
+def utc_datetime_column(nullable: bool) -> pa.Column:
+    """Return a Pandera column for a UTC datetime which coerces.
+
+    Should be used for columns that are expected to be UTC datetimes, and dfs should be passed
+    through validation to ensure columns are coerced.
+    """
+    return pa.Column(
+        pa.engines.pandas_engine.DateTime(  # type: ignore[call-arg]
+            unit="ms",
+            tz="UTC",
+        ),
+        coerce=True,
+        nullable=nullable,
+    )
