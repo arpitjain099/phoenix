@@ -129,3 +129,26 @@ def check_current_head(alembic_cfg: alembic_config.Config, connection: sa.Connec
     directory = alembic_script.ScriptDirectory.from_config(alembic_cfg)
     context = alembic_migration.MigrationContext.configure(connection)
     return set(context.get_current_heads()) == set(directory.get_heads())
+
+
+def alembic_downgrade(
+    connection: sa.Connection, revision: str, alembic_ini_path: str | pathlib.Path | None = None
+) -> None:
+    """Downgrade the database to the specified revision.
+
+    The alembic downgrade will use the db that the connection is configured for and not
+    `project_db.alembic.ini`.
+
+    Args:
+        connection (sa.Connection): The connection.
+        revision (str): The revision to downgrade to.
+        alembic_ini_path (str | None, optional): The alembic ini path. If None then the default
+            alembic ini path will be used. Defaults to project_db.alembic.ini in phiphi.
+    """
+    if alembic_ini_path is None:
+        alembic_ini_path = get_default_alembic_ini_path()
+    alembic_cfg = alembic_config.Config(alembic_ini_path)
+    # Passing the connection overrides sqlalchemy.url in the alembic.ini file and allows to create
+    # the connection in the most optimal way possible.
+    alembic_cfg.attributes["connection"] = connection
+    alembic_command.downgrade(alembic_cfg, revision)
