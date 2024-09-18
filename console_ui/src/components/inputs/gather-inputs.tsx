@@ -1,4 +1,3 @@
-/* eslint-disable react/require-default-props */
 /* eslint-disable react/no-array-index-key */
 
 "use client";
@@ -28,6 +27,7 @@ import {
 	IconX,
 } from "@tabler/icons";
 import { useTranslate } from "@refinedev/core";
+import { templateString } from "src/utils/constants";
 
 interface Props {
 	error?: string;
@@ -35,7 +35,7 @@ interface Props {
 	placeholder: string;
 	data: string[];
 	setData: React.Dispatch<React.SetStateAction<string[]>>;
-	template_url?: string;
+	template_url_for_input?: string;
 }
 
 const GatherInputs: React.FC<Props> = ({
@@ -44,7 +44,7 @@ const GatherInputs: React.FC<Props> = ({
 	placeholder,
 	data,
 	setData,
-	template_url,
+	template_url_for_input,
 }) => {
 	const translate = useTranslate();
 	const [inputValue, setInputValue] = useState<string>("");
@@ -161,7 +161,13 @@ const GatherInputs: React.FC<Props> = ({
 										</Button>
 										<Button
 											component="a"
-											href={template_url ? `${template_url}${item}` : item}
+											href={
+												template_url_for_input
+													? templateString(template_url_for_input, {
+															input: item,
+														})
+													: item
+											}
 											target="_blank"
 											rel="noopener noreferrer"
 											p={0}

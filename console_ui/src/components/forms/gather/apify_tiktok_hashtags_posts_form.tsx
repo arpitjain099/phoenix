@@ -154,7 +154,7 @@ const ApifyTiktokHashtagsPostsForm: React.FC<Props> = ({
 				placeholder={translate("gathers.fields.input.data_placeholder")}
 				data={inputList}
 				setData={setInputList}
-				template_url={hashTagPostBaseLink}
+				template_url_for_input={hashTagPostBaseLink}
 				{...getInputProps("hashtag_list")}
 			/>
 		</>

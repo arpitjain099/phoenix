@@ -5,7 +5,6 @@ import { useShow, useTranslate } from "@refinedev/core";
 import {
 	Show,
 	TextField,
-	DateField,
 	EditButtonProps,
 	EditButton,
 	NumberField,
@@ -17,6 +16,7 @@ import Link from "next/link";
 import URLInputList from "@components/gather/url-list";
 import BreadcrumbsComponent from "@components/breadcrumbs";
 import GatherViewStatus from "@components/gather/view_status";
+import { hashTagPostBaseLink } from "src/utils/constants";
 
 export default function ApifyTiktokHashtagPostShow(): JSX.Element {
 	const { projectid, id } = useParams();
@@ -188,7 +188,10 @@ export default function ApifyTiktokHashtagPostShow(): JSX.Element {
 									{translate(`gathers.fields.source.input_values`)}
 								</Group>
 								{record?.hashtag_list?.length > 0 && (
-									<URLInputList list={record?.hashtag_list} />
+									<URLInputList
+										list={record?.hashtag_list}
+										template_url_for_input={hashTagPostBaseLink}
+									/>
 								)}
 							</Container>
 						</Accordion.Panel>
