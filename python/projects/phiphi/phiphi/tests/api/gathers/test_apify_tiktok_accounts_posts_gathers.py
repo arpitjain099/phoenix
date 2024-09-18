@@ -106,6 +106,7 @@ def test_serialize_tiktok_accounts_posts_gather_response_with_all_fields_1():
         limit_posts_per_account=10,
         account_username_list=["example", "test"],
         posts_created_after="2024-04-04",
+        posts_created_since_num_days=None,
         proxy_country_to_gather_from="US",
         id=1,
         created_at=datetime.datetime.now(),
