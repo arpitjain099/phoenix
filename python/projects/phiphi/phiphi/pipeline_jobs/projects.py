@@ -4,6 +4,7 @@ from google.cloud import bigquery
 
 from phiphi import config, project_db, utils
 from phiphi.pipeline_jobs import constants, tabulated_messages
+from phiphi.pipeline_jobs.composite_flows import recompute_all_batches_tabulate_flow
 
 
 @prefect.task
@@ -77,3 +78,41 @@ def drop_downstream_tables(
     """
     client.query(query)
     return None
+
+
+@prefect.flow(name="project_apply_migrations")
+def project_apply_migrations(
+    job_run_id: int,
+    project_id: int,
+    class_id_name_map: dict[int, str],
+    project_namespace: str,
+) -> bool:
+    """Apply the migrations to the project database.
+
+    If the migrations are applied successfully then the recompute_all_batches_tabulate_flow will be
+    run.
+
+    Args:
+        job_run_id (int): The job run ID.
+        project_id (int): The project ID.
+        class_id_name_map (dict[int, str]): A dictionary mapping class IDs to class names.
+        project_namespace (str): The project namespace.
+
+    Returns:
+        bool: True if the migrations were applied successfully.
+    """
+    with project_db.init_connection(
+        project_db.form_bigquery_sqlalchmey_uri(project_namespace)
+    ) as connection:
+        revisions_applyed = project_db.alembic_upgrade(connection)
+    if revisions_applyed:
+        recompute_all_batches_tabulate_flow.recompute_all_batches_tabulate_flow(
+            job_run_id=job_run_id,
+            project_id=project_id,
+            project_namespace=project_namespace,
+            class_id_name_map=class_id_name_map,
+            # It is important that we drop the downstream tables as the schemas of downstream
+            # tables may have changed.
+            drop_downstream_tables=True,
+        )
+    return revisions_applyed
