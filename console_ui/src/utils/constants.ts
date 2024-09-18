@@ -313,7 +313,8 @@ export const countryList = [
 ];
 
 // Hashtag BaseURL
-export const hashTagPostBaseLink = "https://www.tiktok.com/search/video?q=%23{{ input }}";
+export const hashTagPostBaseLink =
+	"https://www.tiktok.com/search/video?q=%23{{ input }}";
 
 /**
  * Replaces placeholders in a template string with corresponding values from an object.
@@ -328,4 +329,5 @@ export const hashTagPostBaseLink = "https://www.tiktok.com/search/video?q=%23{{ 
  * const result = templateString(template, values);
  * console.log(result);  // Output: "Hello, John! Welcome to Tokyo."
  */
-export const templateString = (template: string, values: any) => template.replace(/\{\{(.*?)\}\}/g, (match, key) => values[key.trim()] || "")
+export const templateString = (template: string, values: any) =>
+	template.replace(/\{\{(.*?)\}\}/g, (match, key) => values[key.trim()] || "");
