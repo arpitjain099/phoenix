@@ -27,7 +27,7 @@ def test_normaliser_facebook_posts(normalised_facebook_posts_df, facebook_posts_
         gather_batch_id=3,
         gathered_at=datetime.fromisoformat("2024-04-01T12:00:00.000Z"),
     )
-
+    assert processed_df is not None
     pd.testing.assert_frame_equal(processed_df, normalised_facebook_posts_df)
 
 
@@ -52,7 +52,7 @@ def test_normaliser_facebook_comments(
         gather_batch_id=3,
         gathered_at=datetime.fromisoformat("2024-04-01T12:00:00.000Z"),
     )
-
+    assert processed_df is not None
     pd.testing.assert_frame_equal(processed_df, normalised_facebook_comments_df)
 
 
@@ -78,7 +78,7 @@ def test_normaliser_tiktok_accounts_posts(
         gather_batch_id=3,
         gathered_at=datetime.fromisoformat("2024-04-01T12:00:00.000Z"),
     )
-
+    assert processed_df is not None
     pd.testing.assert_frame_equal(processed_df, normalised_tiktok_accounts_posts_df)
 
 
@@ -104,7 +104,7 @@ def test_normaliser_tiktok_hashtags_posts(
         gather_batch_id=3,
         gathered_at=datetime.fromisoformat("2024-04-01T12:00:00.000Z"),
     )
-
+    assert processed_df is not None
     pd.testing.assert_frame_equal(processed_df, normalised_tiktok_hashtags_posts_df)
 
 
@@ -127,5 +127,5 @@ def test_normaliser_tiktok_comments(normalised_tiktok_comments_df, tiktok_commen
         gather_batch_id=3,
         gathered_at=datetime.fromisoformat("2024-04-01T12:00:00.000Z"),
     )
-
+    assert processed_df is not None
     pd.testing.assert_frame_equal(processed_df, normalised_tiktok_comments_df)
