@@ -50,6 +50,12 @@ def init_connection(sqlalchemy_uri: str) -> Generator[sa.Connection, None, None]
     In general Sessions are used for ORM and Connections are used for raw SQL. Since it is not
     recommended to use ORM for bigquery tables, this function is provided to get a connection.
 
+    Usage:
+    ```python
+    with project_db.init_connection(sqlalchemy_uri) as connection:
+        # Do something with the connection.
+    ```
+
     Args:
         sqlalchemy_uri (str): The sqlalchemy uri.
 
