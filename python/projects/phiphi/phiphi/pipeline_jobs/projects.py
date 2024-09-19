@@ -41,7 +41,7 @@ def init_project_db(
     ) as connection:
         project_db.alembic_upgrade(connection)
         if with_dummy_data:
-            tabulated_messages.seed_dummy_data(connection)
+            tabulated_messages.seed_dummy_data(project_namespace)
 
     return project_namespace
 

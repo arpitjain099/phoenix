@@ -6,12 +6,14 @@ having a different syntax sqlalchemy-bigquery not supporting primary keys, index
 constraints.
 
 """
+import pandas as pd
 import sqlalchemy as sa
 
 from phiphi import project_db
+from phiphi.pipeline_jobs import constants, utils
 
 tabulated_messages_table = sa.Table(
-    "tabulated_messages",
+    constants.TABULATED_MESSAGES_TABLE_NAME,
     project_db.metadata,
     # General
     sa.Column("platform", sa.String, nullable=False),
@@ -54,14 +56,13 @@ tabulated_messages_table = sa.Table(
 )
 
 
-def seed_dummy_data(connection: sa.Connection) -> None:
+def seed_dummy_data(project_namespace: str) -> None:
     """Seed the tabulated messages table with dummy data.
 
     Args:
-        connection (sa.Connection): The connection to the database.
+        project_namespace (str): The project namespace.
     """
-    connection.execute(
-        tabulated_messages_table.insert(),
+    seed_tabulated_dummy_df = pd.DataFrame(
         [
             {
                 "platform": "dummy_platform",
@@ -132,4 +133,7 @@ def seed_dummy_data(connection: sa.Connection) -> None:
                 "tiktok_post_plays": 100,
             },
         ],
+    )
+    utils.write_data(
+        seed_tabulated_dummy_df, project_namespace, constants.TABULATED_MESSAGES_TABLE_NAME
     )
