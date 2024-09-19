@@ -12,7 +12,7 @@ from phiphi.pipeline_jobs.gathers import deduplicate, normalise
 from phiphi.pipeline_jobs.tabulate import flow as tabulate_flow
 
 
-@prefect.task(name="recompute_all_batches_tabulate_flow")
+@prefect.flow(name="recompute_all_batches_tabulate_flow")
 def recompute_all_batches_tabulate_flow(
     job_run_id: int,
     project_id: int,
