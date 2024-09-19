@@ -14,7 +14,7 @@ def test_bq_project_init(tmp_project_namespace):
 
     If the test fails you may need to manually clean up (delete) the dataset within Bigquery.
     """
-    projects.init_project_db.fn(tmp_project_namespace, with_dummy_data=True)
+    projects.init_project_db.fn(tmp_project_namespace, "test", with_dummy_data=True)
 
     client = bigquery.Client()
     assert client.get_dataset(tmp_project_namespace)
@@ -22,7 +22,7 @@ def test_bq_project_init(tmp_project_namespace):
     assert client.get_table(f"{tmp_project_namespace}.{constants.TABULATED_MESSAGES_TABLE_NAME}")
 
     # Check that will not fail if the dataset already exists.
-    dataset = projects.init_project_db.fn(tmp_project_namespace)
+    dataset = projects.init_project_db.fn(tmp_project_namespace, "test")
     assert client.get_dataset(dataset)
 
     projects.delete_project_db.fn(tmp_project_namespace)
@@ -41,7 +41,7 @@ def test_bq_project_apply_migrations(patch_settings, tmp_project_namespace, pref
 
     If the test fails you may need to manually clean up (delete) the dataset within Bigquery.
     """
-    projects.init_project_db.fn(tmp_project_namespace, with_dummy_data=True)
+    projects.init_project_db.fn(tmp_project_namespace, "test", with_dummy_data=True)
 
     client = bigquery.Client()
     assert client.get_dataset(tmp_project_namespace)

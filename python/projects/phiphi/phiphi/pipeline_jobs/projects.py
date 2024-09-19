@@ -13,6 +13,7 @@ from phiphi.pipeline_jobs.composite_flows import recompute_all_batches_tabulate_
 @prefect.task
 def init_project_db(
     project_namespace: str,
+    workspace_slug: str,
     with_dummy_data: bool = False,
 ) -> str:
     """Initialize the project database.
@@ -22,6 +23,7 @@ def init_project_db(
 
     Args:
         project_namespace (str): The project namespace.
+        workspace_slug (str): The workspace_slug.
         with_dummy_data (bool, optional): If True then dummy data will be seeded.
             Defaults to False.
 
@@ -38,6 +40,7 @@ def init_project_db(
     dataset = bigquery.Dataset(dataset_reference)
 
     dataset.location = config.settings.BQ_DEFAULT_LOCATION
+    dataset.labels = {"workspace_slug": workspace_slug}
     client.create_dataset(dataset=dataset, exists_ok=True)
 
     with project_db.init_connection(
