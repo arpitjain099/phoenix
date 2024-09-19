@@ -15,6 +15,7 @@ from typing import Coroutine, Protocol
 
 from phiphi import constants, health_check_flows
 from phiphi.api.projects.job_runs import flow_runner_flow
+from phiphi.pipeline_jobs import projects
 from phiphi.pipeline_jobs.classify import flow as classify_flow
 from phiphi.pipeline_jobs.composite_flows import (
     classify_tabulate_flow,
@@ -50,6 +51,7 @@ list_of_create_deployment_fn: list[CreateDeploymentsInterface] = [
     gather_classify_tabulate_flow.create_deployments,
     delete_gather_tabulate_flow.create_deployments,
     classify_tabulate_flow.create_deployments,
+    projects.create_deployments,
     # Add new create deployment functions here.
 ]
 
