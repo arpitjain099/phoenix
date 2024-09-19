@@ -12,7 +12,7 @@ https://googleapis.dev/python/sqlalchemy-bigquery/latest/alembic.html
 See docs: https://googleapis.dev/python/sqlalchemy-bigquery/latest/README.html
 """
 import contextlib
-import os
+import pathlib
 from typing import Generator
 
 import sqlalchemy as sa
@@ -61,17 +61,19 @@ def init_connection(sqlalchemy_uri: str) -> Generator[sa.Connection, None, None]
         yield connection
 
 
-def get_default_alembic_ini_path() -> str:
+def get_default_alembic_ini_path() -> pathlib.Path:
     """Get the default alembic ini path.
 
     Returns:
         str: The default alembic ini path.
     """
-    return os.path.join(os.path.dirname(__file__), "../project_db.alembic.ini")
+    return pathlib.Path(__file__).parent / "../project_db.alembic.ini"
 
 
 def alembic_upgrade(
-    connection: sa.Connection, revision: str = "head", alembic_ini_path: str | None = None
+    connection: sa.Connection,
+    revision: str = "head",
+    alembic_ini_path: str | pathlib.Path | None = None,
 ) -> None:
     """Upgrade the database to the latest revision.
 
