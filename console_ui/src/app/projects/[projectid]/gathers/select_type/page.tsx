@@ -49,6 +49,14 @@ export default function SelectGatherType(): JSX.Element {
 					)}
 					link={`/projects/${projectid}/gathers/apify_tiktok_accounts_posts/create`}
 				/>
+				<TypeCard
+					icon={<IconBrandTiktok className="text-blue-600" size={27} />}
+					title={translate("gathers.types.apify_tiktok_hashtags_posts.title")}
+					description={translate(
+						"gathers.types.apify_tiktok_hashtags_posts.description"
+					)}
+					link={`/projects/${projectid}/gathers/apify_tiktok_hashtags_posts/create`}
+				/>
 			</div>
 		</div>
 	);

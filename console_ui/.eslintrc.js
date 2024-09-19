@@ -59,6 +59,7 @@ module.exports = {
 		],
 		"react/prop-types": "off",
 		"react/react-in-jsx-scope": "off",
+		"react/require-default-props": "off",
 		"no-nested-ternary": "off",
 		"no-unused-vars": "off",
 		"arrow-body-style": ["error", "as-needed"],

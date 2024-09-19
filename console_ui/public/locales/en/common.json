@@ -358,6 +358,37 @@
 						"source_title": "Tiktok account URLs"
 					}
 				}
+			},
+			"apify_tiktok_hashtags_posts": {
+				"title": "TikTok Hashtags Posts",
+				"description": "Gather posts (videos) from TikTok hashtags using the web scraper Apify",
+				"create": "Configure a new TikTok Hashtags posts gather:",
+				"create_description": "Create a gather of posts (videos) from TikTok hashtags using the web scraper Apify. Once you have created your gather your will be able to run it to collect the data.",
+				"edit": "Edit new TikTok Hashtags posts gather",
+				"edit_description": "Edit a gather of posts (videos) from TikTok accounts (usernames) using the web scraper Apify. Once you have created your gather your will be able to run it to collect the data.",
+				"fields": {
+					"limit_posts_per_hashtag": "Limit Posts Per Hashtag",
+					"proxy_country_to_gather_from": "Country to Gather From",
+					"input": {
+						"url_list": "Add TikTok hashtags you would like to gather from (without '#')"
+					},
+					"info": {
+						"limit_posts_per_account": "Limit the number of posts that are collected for each hashtag.",
+						"proxy_country_to_gather_from": "Country to Gather From"
+					},
+					"validation": {
+						"required": "Required"
+					}
+				},
+				"view": {
+					"text": "This is a Tiktok Hashtags posts gather. It gathers posts from tiktok hashtags using the Apify web scraper.",
+					"accordion": {
+						"status": "Status",
+						"general": "General",
+						"source": "Tiktok posts come from these hashtags",
+						"source_title": "Tiktok hashtag (without '#')"
+					}
+				}
 			}
 		},
 		"fields": {
@@ -379,6 +410,8 @@
 				"input_values": "input values",
 				"facebook": "Facebook",
 				"posts": "Post",
+				"account_posts": "Account Posts",
+				"hashtag_posts": "Hashtag Posts",
 				"comments": "Comment",
 				"tiktok": "Tiktok"
 			},
