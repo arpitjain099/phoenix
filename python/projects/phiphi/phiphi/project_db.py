@@ -75,6 +75,9 @@ def alembic_upgrade(
 ) -> None:
     """Upgrade the database to the latest revision.
 
+    The alembic upgrade will use the db that the connection is configured for and not
+    `project_db.alembic.ini`.
+
     Args:
         connection (sa.Connection): The connection.
         revision (str, optional): The revision to upgrade to. Defaults to "head".
