@@ -304,6 +304,9 @@ def normalised_facebook_comments_df() -> pd.DataFrame:
             normalisers.anonymize("823003113189049"),
             normalisers.anonymize("7637165919660332"),
         ],
+        "like_count": [4, 2, 2, 1, 1, 1, 0, 2, 1],
+        "share_count": [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        "comment_count": [1, 3, 2, 0, 0, 2, 0, 5, 0],
     }
 
     df = pd.DataFrame(data)  # noqa: PD901

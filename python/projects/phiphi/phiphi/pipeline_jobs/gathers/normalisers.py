@@ -80,6 +80,11 @@ def normalise_single_facebook_comments_json(json_blob: Dict) -> Dict | None:
         "phoenix_platform_message_author_id": anonymize(json_blob["profileId"]),
         "phoenix_platform_parent_message_id": anonymize(parent_message_id),
         "phoenix_platform_root_message_id": anonymize(json_blob["facebookId"]),
+        # stats
+        "like_count": json_blob.get("likesCount", 0),
+        # There are no shares of comments for facebook
+        "share_count": 0,
+        "comment_count": json_blob.get("commentsCount", 0),
     }
 
 
