@@ -389,6 +389,36 @@
 						"source_title": "Tiktok hashtag (without '#')"
 					}
 				}
+			},
+			"apify_tiktok_comments": {
+				"title": "Tiktok Comments from public Tiktok posts",
+				"description": "Gather comments from Tiktok posts using the web scraper Apify",
+				"create": "Configure a new Tiktok comments gather",
+				"create_description": "Create a gather of comments from Tiktok posts using the web scraper Apify. Once you have created your gather you will be able to run it to collect the data.",
+				"edit": "Edit new Tiktok comments gather",
+				"edit_description": "Edit a gather of comments from tiktok posts using the web scraper Apify. Once you have created your gather your will be able to run it to collect the data.",
+				"fields": {
+					"limit_comments_per_post": "Limit Comments Per Post",
+					"include_comment_replies": "Comment Replies",
+					"input": {
+						"url_list": "Add tiktok posts would you like to gather from"
+					},
+					"info": {
+						"limit_comments_per_post": "Limit the number of comments that are collected for each post."
+					},
+					"validation": {
+						"required": "Required"
+					}
+				},
+				"view": {
+					"text": "This is a Tiktok comments gather. It gathers comments from tiktok posts using the Apify web scraper.",
+					"accordion": {
+						"status": "Status",
+						"general": "General",
+						"source": "Tiktok comments come from these posts",
+						"source_title": "Tiktok post URLs"
+					}
+				}
 			}
 		},
 		"fields": {

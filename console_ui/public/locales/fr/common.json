@@ -389,6 +389,36 @@
 						"source_title": "Hashtag TikTok (sans '#')"
 					}
 				}
+			},
+			"apify_tiktok_comments": {
+				"title": "Commentaires Tiktok des publications publiques Tiktok",
+				"description": "Rassembler les commentaires des publications Tiktok en utilisant le scraper web Apify",
+				"create": "Configurer une nouvelle collecte de commentaires Tiktok",
+				"create_description": "Créer une collecte de commentaires à partir de publications Tiktok en utilisant le scraper web Apify. Une fois votre collecte créée, vous pourrez l'exécuter pour collecter les données.",
+				"edit": "Modifier la collecte de commentaires Tiktok",
+				"edit_description": "Modifier une collecte de commentaires à partir de publications Tiktok en utilisant le scraper web Apify. Une fois votre collecte créée, vous pourrez l'exécuter pour collecter les données.",
+				"fields": {
+					"limit_comments_per_post": "Limiter les commentaires par publication",
+					"include_comment_replies": "Réponses aux commentaires",
+					"input": {
+						"url_list": "Ajouter les publications Tiktok dont vous souhaitez recueillir les commentaires"
+					},
+					"info": {
+						"limit_comments_per_post": "Limiter le nombre de commentaires collectés pour chaque publication."
+					},
+					"validation": {
+						"required": "Requis"
+					}
+				},
+				"view": {
+					"text": "Ceci est une collecte de commentaires Tiktok. Elle recueille les commentaires des publications Tiktok en utilisant le scraper web Apify.",
+					"accordion": {
+						"status": "Statut",
+						"general": "Général",
+						"source": "Les commentaires Tiktok proviennent de ces publications",
+						"source_title": "URLs des publications Tiktok"
+					}
+				}
 			}
 		},
 		"fields": {
