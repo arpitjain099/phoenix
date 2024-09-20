@@ -21,6 +21,17 @@ def is_apify_scraping_error(json_blob: Dict) -> bool:
     return False
 
 
+def is_empty_result(json_blob: Dict) -> bool:
+    """When apify's scraping returns an empty result, it can return a json blob without an id key.
+
+    This is undocumented, but we've seen that tiktok results return "authorMeta" data without
+    any messages if the user hasn't posted in the timeframe of the scrape .
+    """
+    if "id" not in json_blob:
+        return True
+    return False
+
+
 def normalise_single_facebook_posts_json(json_blob: Dict) -> Dict | None:
     """Extract fields from a single Facebook post JSON blob to normalized form."""
     if is_apify_scraping_error(json_blob):
@@ -76,6 +87,8 @@ def normalise_single_tiktok_posts_json(json_blob: Dict) -> Dict | None:
     https://apify.com/clockworks/tiktok-scraper/input-schema
     """
     if is_apify_scraping_error(json_blob):
+        return None
+    if is_empty_result(json_blob):
         return None
 
     return {
