@@ -21,14 +21,12 @@ def assert_tabulated_messages_are_equal(
 ):
     """Assert that the tabulated messages are equal."""
     assert len(tabulated_messages_after_recompute_df) == len(tabulated_messages_df)
-    columns_to_compare = ["phoenix_platform_message_id", "pi_platform_message_id"]
-    df_1 = tabulated_messages_df.sort_values(by=["phoenix_platform_message_id"]).reset_index(
+    columns_to_compare = ["post_id", "comment_id"]
+    df_1 = tabulated_messages_df.sort_values(by=columns_to_compare).reset_index(drop=True)
+    df_1 = df_1[columns_to_compare]
+    df_2 = tabulated_messages_after_recompute_df.sort_values(by=columns_to_compare).reset_index(
         drop=True
     )
-    df_1 = df_1[columns_to_compare]
-    df_2 = tabulated_messages_after_recompute_df.sort_values(
-        by=["phoenix_platform_message_id"]
-    ).reset_index(drop=True)
     df_2 = df_2[columns_to_compare]
 
     pd.testing.assert_frame_equal(df_1, df_2)
@@ -164,7 +162,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
     )
     assert len(tabulated_messages_df) == 14
     # Test that "class"/"comment_class" columns exists in the tabulated messages and has NaN values
-    assert tabulated_messages_df["class"].isna().all()
+    assert tabulated_messages_df["post_class"].isna().all()
     assert tabulated_messages_df["comment_class"].isna().all()
 
     ## Recompute all batches and tabulate flow
@@ -292,10 +290,10 @@ def test_bq_pipeline_integration(tmp_bq_project):
     # in total count
     # - Added two classes to a comment -> +1 to the total count
     assert len(tabulated_messages_df) == 19  # Previous count was 14
-    assert tabulated_messages_df["class"].isna().sum() == 5
+    assert tabulated_messages_df["post_class"].isna().sum() == 5
     for class_name in class_id_name_map.values():
-        assert class_name in tabulated_messages_df["class"].unique()
-    assert "missing_class_name" in tabulated_messages_df["class"].unique()
+        assert class_name in tabulated_messages_df["post_class"].unique()
+    assert "missing_class_name" in tabulated_messages_df["post_class"].unique()
     assert tabulated_messages_df["comment_class"].isna().sum() == 15
     for class_name in class_id_name_map.values():
         assert class_name in tabulated_messages_df["comment_class"].unique()
