@@ -19,6 +19,8 @@ classified_messages_table = sa.Table(
     constants.CLASSIFIED_MESSAGES_TABLE_NAME,
     project_db.metadata,
     sa.Column("classifier_id", sa.Integer, nullable=False),
+    # In the new version of the classification system we are going to remove class_id and start to
+    # use class_name.
     sa.Column("class_id", sa.Integer, nullable=False),
     sa.Column("phoenix_platform_message_id", sa.String, nullable=False),
     sa.Column("job_run_id", sa.Integer, nullable=False),
