@@ -151,9 +151,9 @@
 			"created_at": "Created At",
 			"updated_at": "Updated At",
 			"validation": {
-				"required": "",
-				"days_until_pi_expiration": "Value needs to fall between 90 - 365 days",
-				"days_until_all_data_expiration": "Value needs to fall between 90 - 365 days"
+				"required": "Required",
+				"days_until_pi_expiration": "Value needs to fall between 30 - 365 days",
+				"days_until_all_data_expiration": "Value needs to fall between 30 - 365 days"
 			}
 		},
 		"titles": {

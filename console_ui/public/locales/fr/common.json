@@ -152,8 +152,8 @@
 			"updated_at": "Mis à jour le",
 			"validation": {
 				"required": "requis",
-				"days_until_pi_expiration": "La valeur doit être comprise entre 90 et 365 jours",
-				"days_until_all_data_expiration": "La valeur doit être comprise entre 90 et 365 jours"
+				"days_until_pi_expiration": "La valeur doit être comprise entre 30 et 365 jours",
+				"days_until_all_data_expiration": "La valeur doit être comprise entre 30 et 365 jours"
 			}
 		},
 		"titles": {
