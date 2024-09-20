@@ -3,6 +3,7 @@ import pandera as pa
 import sqlalchemy as sa
 
 from phiphi import project_db
+from phiphi.pipeline_jobs import constants
 
 classified_messages_schema = pa.DataFrameSchema(
     {
@@ -15,7 +16,7 @@ classified_messages_schema = pa.DataFrameSchema(
 
 
 classified_messages_table = sa.Table(
-    "classified_messages",
+    constants.CLASSIFIED_MESSAGES_TABLE_NAME,
     project_db.metadata,
     sa.Column("classifier_id", sa.Integer, nullable=False),
     sa.Column("class_id", sa.Integer, nullable=False),
