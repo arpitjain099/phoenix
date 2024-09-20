@@ -52,6 +52,10 @@ def upgrade() -> None:
         sa.Column("comment_text_pi", sa.Text(), nullable=True),
         sa.Column("facebook_video_views", sa.Integer(), nullable=True),
         sa.Column("tiktok_post_plays", sa.Integer(), nullable=True),
+        # Add columns here
+        # Developer columns should always go last
+        sa.Column("phoenix_processed_at", sa.DateTime(), nullable=False),
+        sa.Column("phoenix_job_run_id", sa.Integer(), nullable=False),
     )
 
 
