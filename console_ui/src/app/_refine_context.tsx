@@ -22,15 +22,21 @@ import {
 import { useLocalStorage } from "@mantine/hooks";
 import { NotificationsProvider } from "@mantine/notifications";
 import dataProvider from "@providers/data-provider";
-import { useTranslation } from "next-i18next";
-
-// initialize i18n
-import "../providers/i18n";
 import { IconUser } from "@tabler/icons";
 import authProvider from "@providers/auth-provider";
 import accessControlProvider from "@providers/access-provider";
 import Header from "@components/header";
+import { useTranslation } from "next-i18next";
 import Image from "next/image";
+
+// initialize i18n
+import "../providers/i18n";
+
+// Import Date Locales
+import "dayjs/locale/en";
+import "dayjs/locale/fr";
+import "dayjs/locale/es";
+import "dayjs/locale/ar";
 
 const RefineContext = ({ children }: PropsWithChildren) => {
 	const { t, i18n } = useTranslation();
