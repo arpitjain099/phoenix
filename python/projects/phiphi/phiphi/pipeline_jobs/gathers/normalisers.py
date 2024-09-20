@@ -142,4 +142,8 @@ def normalise_single_tiktok_comments_json(json_blob: Dict) -> Dict:
         "phoenix_platform_message_author_id": anonymize(json_blob["user"]["id"]),
         "phoenix_platform_parent_message_id": anonymize(parent_message_id),
         "phoenix_platform_root_message_id": anonymize(json_blob["awemeId"]),
+        "like_count": json_blob.get("likeCount", 0),
+        # No shares for TikTok comments
+        "share_count": 0,
+        "comment_count": json_blob.get("replyCount", 0),
     }

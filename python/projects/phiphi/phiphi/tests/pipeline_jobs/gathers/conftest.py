@@ -553,6 +553,9 @@ def normalised_tiktok_comments_df() -> pd.DataFrame:
             normalisers.anonymize("anonymizedAwemeID3"),
             normalisers.anonymize("anonymizedAwemeID4"),
         ],
+        "like_count": [0, 0, 0, 3],
+        "share_count": [0, 0, 0, 0],
+        "comment_count": [1, 0, 0, 0],
     }
     normalised_tiktok_df = pd.DataFrame(data)
     normalised_tiktok_df["gather_id"] = 5
