@@ -113,6 +113,10 @@ def normalise_single_tiktok_posts_json(json_blob: Dict) -> Dict | None:
         "phoenix_platform_message_author_id": anonymize(json_blob["authorMeta"]["id"]),
         "phoenix_platform_parent_message_id": None,
         "phoenix_platform_root_message_id": None,
+        # stats
+        "like_count": json_blob.get("diggCount", 0),
+        "share_count": json_blob.get("shareCount", 0),
+        "comment_count": json_blob.get("commentCount", 0),
     }
 
 

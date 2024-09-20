@@ -363,6 +363,9 @@ def normalised_tiktok_accounts_posts_df() -> pd.DataFrame:
         ],
         "phoenix_platform_parent_message_id": [None, None, None],
         "phoenix_platform_root_message_id": [None, None, None],
+        "like_count": [2268, 6804, 1314],
+        "share_count": [636, 244, 11],
+        "comment_count": [174, 232, 65],
     }
     normalised_tiktok_df = pd.DataFrame(data)
     normalised_tiktok_df["gather_id"] = 3
