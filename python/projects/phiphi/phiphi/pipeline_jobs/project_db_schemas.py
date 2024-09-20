@@ -53,5 +53,10 @@ generalised_messages_schema = pa.DataFrameSchema(
         # Hash of `pi_platform_parent_message_id`.
         "phoenix_platform_parent_message_id": pa.Column(pa.String, nullable=True),
         "phoenix_platform_root_message_id": pa.Column(pa.String, nullable=True),
+        # Stats
+        # These are not nullable as should be set to 0 if not present.
+        "like_count": pa.Column(pa.Int, nullable=False),
+        "share_count": pa.Column(pa.Int, nullable=False),
+        "comment_count": pa.Column(pa.Int, nullable=False),
     }
 )
