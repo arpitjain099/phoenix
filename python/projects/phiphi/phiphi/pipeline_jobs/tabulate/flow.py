@@ -70,25 +70,51 @@ def tabulate(
             data_type = 'comments'
     )
     SELECT
-        p.*,
-        c.pi_platform_message_id AS comment_pi_platform_message_id,
-        c.pi_platform_message_author_id AS comment_pi_platform_message_author_id,
-        c.pi_platform_message_author_name AS comment_pi_platform_message_author_name,
-        c.pi_text AS comment_pi_text,
-        c.pi_platform_message_url AS comment_pi_platform_message_url,
-        c.platform_message_last_updated_at AS comment_platform_message_last_updated_at,
-        c.phoenix_platform_message_id AS comment_phoenix_platform_message_id,
-        c.phoenix_platform_message_author_id AS comment_phoenix_platform_message_author_id,
-        c.phoenix_platform_parent_message_id AS comment_phoenix_platform_parent_message_id,
-        c.phoenix_platform_root_message_id AS comment_phoenix_platform_root_message_id,
+        p.platform AS platform,
+
+        -- Post Author
+        -- Currently no implemented
+        NULL AS post_author_category,
+        NULL AS post_author_class,
+        NULL AS post_author_description,
+        NULL AS post_author_followers,
+        p.phoenix_platform_message_author_id AS post_author_id,
+        NULL AS post_author_location,
+        p.pi_platform_message_author_name AS post_author_name_pi,
+        NULL AS post_author_link_pi,
+
+        -- Post
+        p.class AS post_class,
+        p.comment_count AS post_comment_count,
+        p.platform_message_last_updated_at AS post_date,
+        p.gather_id AS post_gather_id,
+        p.phoenix_platform_message_id AS post_id,
+        p.like_count AS post_like_count,
+        p.pi_platform_message_url AS post_link_pi,
+        p.share_count AS post_share_count,
+        p.pi_text AS post_text_pi,
+
+        -- Comment Author
+        NULL AS comment_author_class,
+        c.phoenix_platform_message_author_id AS comment_author_id,
+        c.pi_platform_message_author_name AS comment_author_name_pi,
+
+        -- Comment
+        c.class AS comment_class,
+        c.platform_message_last_updated_at AS comment_date,
         c.gather_id AS comment_gather_id,
-        c.gather_batch_id AS comment_gather_batch_id,
-        c.gathered_at AS comment_gathered_at,
-        c.gather_type AS comment_gather_type,
-        c.platform AS comment_platform,
-        c.data_type AS comment_data_type,
-        c.phoenix_processed_at AS comment_phoenix_processed_at,
-        c.class AS comment_class
+        c.phoenix_platform_message_id AS comment_id,
+        c.like_count AS comment_like_count,
+        c.pi_platform_message_url AS comment_link_pi,
+        c.phoenix_platform_root_message_id AS comment_parent_post_id,
+        c.phoenix_platform_parent_message_id AS comment_replied_to_id,
+        c.pi_text AS comment_text_pi,
+
+        -- Platform specific stats
+        -- Facebook
+        NULL AS facebook_video_views,
+        -- TikTok
+        NULL AS tiktok_post_plays
     FROM
         posts p
     LEFT JOIN
