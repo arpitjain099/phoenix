@@ -14,7 +14,12 @@ def tabulate(
     bigquery_dataset: str,
     class_id_name_map: dict[int, str],
 ) -> None:
-    """Task which tabulates data."""
+    """Task which tabulates data.
+
+    The tabulate flow must produce a table that matches the schema the file `tabulated_messages.py`
+    and in the notion manual.
+    TODO: add link to notion once if become stable/deployed so it is one URL rather then versioned.
+    """
     client = bigquery.Client()
 
     source_table_name = f"{bigquery_dataset}.{pipeline_jobs_constants.DEDUPLICATED_GENERALISED_MESSAGES_TABLE_NAME}"  # noqa: E501
