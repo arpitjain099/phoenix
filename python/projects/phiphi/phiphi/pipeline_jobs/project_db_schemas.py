@@ -55,13 +55,3 @@ generalised_messages_schema = pa.DataFrameSchema(
         "phoenix_platform_root_message_id": pa.Column(pa.String, nullable=True),
     }
 )
-
-
-classified_messages_schema = pa.DataFrameSchema(
-    {
-        "classifier_id": pa.Column(pa.Int, nullable=False),
-        "class_id": pa.Column(pa.Int, nullable=False),
-        "phoenix_platform_message_id": pa.Column(pa.String, nullable=False),
-        "job_run_id": pa.Column(pa.Int, nullable=False),
-    }
-)

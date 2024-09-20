@@ -1,7 +1,18 @@
 """Classified Messages table definition."""
+import pandera as pa
 import sqlalchemy as sa
 
 from phiphi import project_db
+
+classified_messages_schema = pa.DataFrameSchema(
+    {
+        "classifier_id": pa.Column(pa.Int, nullable=False),
+        "class_id": pa.Column(pa.Int, nullable=False),
+        "phoenix_platform_message_id": pa.Column(pa.String, nullable=False),
+        "job_run_id": pa.Column(pa.Int, nullable=False),
+    }
+)
+
 
 classified_messages_table = sa.Table(
     "classified_messages",
