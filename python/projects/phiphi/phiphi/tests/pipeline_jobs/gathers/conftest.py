@@ -457,6 +457,9 @@ def normalised_tiktok_hashtags_posts_df() -> pd.DataFrame:
         ],
         "phoenix_platform_parent_message_id": [None] * 6,
         "phoenix_platform_root_message_id": [None] * 6,
+        "like_count": [137800, 4955, 211900, 6845, 729, 674900],
+        "share_count": [16200, 152, 24000, 542, 46, 12600],
+        "comment_count": [1167, 181, 7705, 0, 485, 18100],
     }
     normalised_tiktok_df = pd.DataFrame(data)
     normalised_tiktok_df["gather_id"] = 4
