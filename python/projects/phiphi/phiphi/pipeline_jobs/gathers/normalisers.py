@@ -50,6 +50,10 @@ def normalise_single_facebook_posts_json(json_blob: Dict) -> Dict | None:
         "phoenix_platform_message_author_id": anonymize(json_blob["user"]["id"]),
         "phoenix_platform_parent_message_id": None,  # Posts don't have parent messages
         "phoenix_platform_root_message_id": None,  # Posts don't have root messages
+        # stats
+        "like_count": json_blob.get("likes", 0),
+        "share_count": json_blob.get("shares", 0),
+        "comment_count": json_blob.get("comments", 0),
     }
 
 

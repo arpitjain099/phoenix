@@ -137,6 +137,9 @@ def normalised_facebook_posts_df() -> pd.DataFrame:
         ],
         "phoenix_platform_parent_message_id": [None, None, None, None, None, None, None, None],
         "phoenix_platform_root_message_id": [None, None, None, None, None, None, None, None],
+        "like_count": [4, 3, 2, 477, 1259, 956, 3, 2327],
+        "share_count": [1, 3, 0, 171, 261, 347, 1, 1054],
+        "comment_count": [0, 0, 0, 203, 229, 388, 0, 214],
     }
 
     df = pd.DataFrame(data)  # noqa: PD901
