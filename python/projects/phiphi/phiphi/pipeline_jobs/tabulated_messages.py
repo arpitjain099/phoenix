@@ -6,6 +6,8 @@ having a different syntax sqlalchemy-bigquery not supporting primary keys, index
 constraints.
 
 """
+import datetime
+
 import pandas as pd
 import sqlalchemy as sa
 
@@ -53,6 +55,12 @@ tabulated_messages_table = sa.Table(
     # Platform specific
     sa.Column("facebook_video_views", sa.Integer, nullable=True),
     sa.Column("tiktok_post_plays", sa.Integer, nullable=True),
+    # Add columns here
+    # Developer columns should always go last
+    # DateTime was chosen because parings a timestamp seems to take a lot longer and makes the
+    # integration tests unnecessarily slow.
+    sa.Column("phoenix_processed_at", sa.DateTime, nullable=False),
+    sa.Column("phoenix_job_run_id", sa.Integer, nullable=False),
 )
 
 
@@ -97,6 +105,8 @@ def seed_dummy_data(project_namespace: str) -> None:
                 "comment_text_pi": "dummy_text",
                 "facebook_video_views": 100,
                 "tiktok_post_plays": 0,
+                "phoenix_processed_at": datetime.datetime.now(),
+                "phoenix_job_run_id": 0,
             },
             {
                 "platform": "dummy_platform",
@@ -131,6 +141,8 @@ def seed_dummy_data(project_namespace: str) -> None:
                 "comment_text_pi": "dummy_text",
                 "facebook_video_views": 0,
                 "tiktok_post_plays": 100,
+                "phoenix_processed_at": datetime.datetime.now(),
+                "phoenix_job_run_id": 0,
             },
         ],
     )

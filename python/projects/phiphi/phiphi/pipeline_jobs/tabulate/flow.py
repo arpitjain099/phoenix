@@ -114,7 +114,13 @@ def tabulate(
         -- Facebook
         NULL AS facebook_video_views,
         -- TikTok
-        NULL AS tiktok_post_plays
+        NULL AS tiktok_post_plays,
+
+        -- Developer fields should always be last
+        -- Using CURRENT_DATETIME rather then PARSE_DATETIME as it seems to make the integration
+        -- tests faster.
+        CURRENT_DATETIME() AS phoenix_processed_at,
+        {job_run_id} AS phoenix_job_run_id
     FROM
         posts p
     LEFT JOIN
