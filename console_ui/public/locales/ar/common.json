@@ -152,8 +152,8 @@
 			"updated_at": "تم التحديث في",
 			"validation": {
 				"required": "مطلوب",
-				"days_until_pi_expiration": "يجب أن تكون القيمة بين 90 و 365 يومًا",
-				"days_until_all_data_expiration": "يجب أن تكون القيمة بين 90 و 365 يومًا"
+				"days_until_pi_expiration": "يجب أن تكون القيمة بين 30 و 365 يومًا",
+				"days_until_all_data_expiration": "يجب أن تكون القيمة بين 30 و 365 يومًا"
 			}
 		},
 		"titles": {

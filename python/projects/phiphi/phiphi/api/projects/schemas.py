@@ -17,10 +17,10 @@ class ExpectedUsage(str, Enum):
 
 
 pi_delete_pydantic_field = pydantic.Field(
-    default=183, description="PI deletion time in days, min 1, max 365", gt=1, lt=365
+    default=183, description="PI deletion time in days, min 1, max 365", ge=1, le=365
 )
 delete_after_days_field = pydantic.Field(
-    default=183, description="Deletion time in days, min 1, max 365", gt=1, lt=365
+    default=183, description="Deletion time in days, min 1, max 365", ge=1, le=365
 )
 workspace_slug_field = pydantic.Field(
     default="main", description="The workspace slug of the project"
