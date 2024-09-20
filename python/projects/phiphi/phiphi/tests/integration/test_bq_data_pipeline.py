@@ -164,11 +164,12 @@ def test_bq_pipeline_integration(tmp_bq_project):
     # Test that "class"/"comment_class" columns exists in the tabulated messages and has NaN values
     assert tabulated_messages_df["post_class"].isna().all()
     assert tabulated_messages_df["comment_class"].isna().all()
+    assert tabulated_messages_df["phoenix_job_run_id"].unique() == [4]
 
     ## Recompute all batches and tabulate flow
 
     recompute_all_batches_tabulate_flow.recompute_all_batches_tabulate_flow(
-        job_run_id=4,
+        job_run_id=10,
         project_id=1,
         project_namespace=test_project_namespace,
         class_id_name_map={},
@@ -204,10 +205,11 @@ def test_bq_pipeline_integration(tmp_bq_project):
     assert recompute_processed_at.shape[0] == 1
     # Make sure that the recompute processed_at is greater than the previous processed_at
     assert recompute_processed_at[0] > previous_processed_at
+    assert tabulated_messages_after_recompute_df["phoenix_job_run_id"].unique() == [10]
 
     # Recompute with a drop
     recompute_all_batches_tabulate_flow.recompute_all_batches_tabulate_flow(
-        job_run_id=4,
+        job_run_id=11,
         project_id=1,
         project_namespace=test_project_namespace,
         class_id_name_map={},
@@ -241,6 +243,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
     assert recompute_2_processed_at.shape[0] == 1
     # Make sure that the recompute processed_at is greater than the previous recompute processed_at
     assert recompute_2_processed_at[0] > recompute_processed_at[0]
+    assert tabulated_messages_after_recompute_2_df["phoenix_job_run_id"].unique() == [11]
 
     # Manually create and add some classified_messages
     # Grab rows just to make a dataframe
