@@ -353,5 +353,31 @@
       "url":"https://www.tiktok.com/channel/@12312",
       "input":"https://www.tiktok.com/channel/@12312",
       "error":"The provided profile URL is not a valid TikTok profile URL: https://www.tiktok.com/channel/@12312"
+   },
+   {
+     "authorMeta":{
+       "id":"8379213798217329813",
+       "name":"a_user",
+       "profileUrl":"https://www.tiktok.com/@a_user",
+       "nickName":"a_user",
+       "verified":false,
+       "signature":"Le fils du faso 226����������",
+       "bioLink":null,
+       "avatar":"https://avatar.jpg",
+       "commerceUserInfo":{
+         "commerceUser":false
+       },
+       "privateAccount":false,
+       "region":"USA",
+       "roomId":"",
+       "ttSeller":false,
+       "following":393,
+       "friends":59,
+       "fans":39400,
+       "heart":147200,
+       "video":154,
+       "digg":0
+     },
+     "input":"@a_user"
    }
 ]
