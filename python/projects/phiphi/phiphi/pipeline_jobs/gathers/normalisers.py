@@ -25,7 +25,7 @@ def is_empty_result(json_blob: Dict) -> bool:
     """When apify's scraping returns an empty result, it can return a json blob without an id key.
 
     This is undocumented, but we've seen that tiktok results return "authorMeta" data without
-    any messages if the user hasn't posted in the timeframe of the scrape .
+    any messages if the user hasn't posted in the timeframe of the scrape.
     """
     if "id" not in json_blob:
         return True
