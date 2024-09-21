@@ -57,9 +57,9 @@ tabulated_messages_table = sa.Table(
     sa.Column("tiktok_post_plays", sa.Integer, nullable=True),
     # Add columns here
     # Developer columns should always go last
-    # DateTime was chosen because parings a timestamp seems to take a lot longer and makes the
+    # TIMESTAMP was chosen because this is the default type for pandas datetime columns.
     # integration tests unnecessarily slow.
-    sa.Column("phoenix_processed_at", sa.DateTime, nullable=False),
+    sa.Column("phoenix_processed_at", sa.TIMESTAMP, nullable=False),
     sa.Column("phoenix_job_run_id", sa.Integer, nullable=False),
 )
 

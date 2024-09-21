@@ -122,9 +122,9 @@ def tabulate(
         NULL AS tiktok_post_plays,
 
         -- Developer fields should always be last
-        -- Using CURRENT_DATETIME rather then PARSE_DATETIME as it seems to make the integration
+        -- Using CURRENT_TIMESTAMP rather then PARSE_TIMESTAMPE as it seems to make the integration
         -- tests faster.
-        CURRENT_DATETIME() AS phoenix_processed_at,
+        CURRENT_TIMESTAMP() AS phoenix_processed_at,
         {job_run_id} AS phoenix_job_run_id
     FROM
         posts p
