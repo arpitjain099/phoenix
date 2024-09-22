@@ -20,11 +20,15 @@ def normalise_batch(
     gather_child_type: gathers.schemas.ChildTypeName,
     gather_batch_id: int,
     gathered_at: datetime,
-) -> pd.DataFrame:
+) -> pd.DataFrame | None:
     """Process a list of JSON blobs and normalize them into a DataFrame."""
     normalized_records = [
         result for blob in batch_json if (result := normaliser(blob)) is not None
     ]
+
+    if not normalized_records:
+        return None
+
     messages_df = pd.DataFrame(normalized_records)
 
     gather_creation_defaults = gathers.child_types.get_gather_project_db_defaults(
@@ -119,6 +123,8 @@ def normalise_batches(
                 gather_batch_id=batch.batch_id,
                 gathered_at=batch.gathered_at,
             )
+            if normalized_df is None:
+                continue
 
             utils.write_data(
                 df=normalized_df,

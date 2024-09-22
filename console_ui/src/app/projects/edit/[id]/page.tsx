@@ -1,49 +1,55 @@
 "use client";
 
 import React from "react";
-import { useUpdate } from "@refinedev/core";
+import { useTranslate, useUpdate } from "@refinedev/core";
 import { Edit, useForm } from "@refinedev/mantine";
-import CreateEditProjectForm from "@components/forms/create-edit-project";
+import CreateEditProjectForm, {
+	getProjectValidationRules,
+	initialFormValues,
+} from "@components/forms/create-edit-project";
 import { useRouter } from "next/navigation";
 
 export default function ProjectEdit(): JSX.Element {
+	const translate = useTranslate();
 	const { mutate } = useUpdate();
 	const router = useRouter();
 	const {
 		getInputProps,
 		saveButtonProps,
-		values,
+		values: formValues,
+		isValid,
+		validate,
+		errors,
 		refineCore: { queryResult },
 	} = useForm({
-		initialValues: {
-			name: "",
-			workspace_slug: "",
-			description: "",
-			pi_deleted_after_days: "",
-			delete_after_days: "",
-			expected_usage: "",
-		},
+		initialValues: initialFormValues,
+		validate: (values) => getProjectValidationRules(values, translate),
 	});
 
 	const projectsData = queryResult?.data?.data;
 
 	const handleSave = async () => {
-		if (projectsData?.id)
-			mutate(
-				{
-					resource: "projects",
-					id: projectsData.id,
-					values,
-					meta: {
-						method: "put",
+		if (isValid()) {
+			if (projectsData?.id) {
+				mutate(
+					{
+						resource: "projects",
+						id: projectsData.id,
+						values: formValues,
+						meta: {
+							method: "put",
+						},
 					},
-				},
-				{
-					onSuccess: async () => {
-						router.push(`/projects/show/${projectsData.id}`);
-					},
-				}
-			);
+					{
+						onSuccess: async () => {
+							router.push(`/projects/show/${projectsData.id}`);
+						},
+					}
+				);
+			}
+		} else {
+			validate();
+		}
 	};
 
 	return (

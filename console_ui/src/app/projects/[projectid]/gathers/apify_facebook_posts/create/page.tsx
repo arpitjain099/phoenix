@@ -42,40 +42,42 @@ export default function ApifyFacebookPostCreate(): JSX.Element {
 	}, [inputList, setFieldValue]);
 
 	return (
-		<Create
-			breadcrumb={null}
-			title={
-				<Title order={3}>
-					{translate("gathers.types.apify_facebook_posts.create")}
-				</Title>
-			}
-			isLoading={
-				formLoading || createResourceLoading || formResetAfterCreateloading
-			}
-			saveButtonProps={{
-				...saveButtonProps,
-				onClick: () =>
-					handleGatherSave(
-						`projects/${projectid}/gathers/apify_facebook_posts`,
-						`/projects/show/${projectid}?activeItem=gather`,
-						isValid,
-						projectid as string,
-						setLoading,
-						mutate,
-						translate,
-						formValues,
-						setInputList,
-						reset,
-						router,
-						validate
-					),
-			}}
-		>
-			<ApifyFacebookPostsForm
-				getInputProps={getInputProps}
-				inputList={inputList}
-				setInputList={setInputList}
-			/>
-		</Create>
+		<div className="form-wrapper">
+			<Create
+				breadcrumb={null}
+				title={
+					<Title order={3}>
+						{translate("gathers.types.apify_facebook_posts.create")}
+					</Title>
+				}
+				isLoading={
+					formLoading || createResourceLoading || formResetAfterCreateloading
+				}
+				saveButtonProps={{
+					...saveButtonProps,
+					onClick: () =>
+						handleGatherSave(
+							`projects/${projectid}/gathers/apify_facebook_posts`,
+							`/projects/show/${projectid}?activeItem=gather`,
+							isValid,
+							projectid as string,
+							setLoading,
+							mutate,
+							translate,
+							formValues,
+							setInputList,
+							reset,
+							router,
+							validate
+						),
+				}}
+			>
+				<ApifyFacebookPostsForm
+					getInputProps={getInputProps}
+					inputList={inputList}
+					setInputList={setInputList}
+				/>
+			</Create>
+		</div>
 	);
 }

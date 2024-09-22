@@ -152,8 +152,8 @@
 			"updated_at": "Mis à jour le",
 			"validation": {
 				"required": "requis",
-				"days_until_pi_expiration": "La valeur doit être comprise entre 90 et 365 jours",
-				"days_until_all_data_expiration": "La valeur doit être comprise entre 90 et 365 jours"
+				"days_until_pi_expiration": "La valeur doit être comprise entre 30 et 365 jours",
+				"days_until_all_data_expiration": "La valeur doit être comprise entre 30 et 365 jours"
 			}
 		},
 		"titles": {
@@ -356,6 +356,67 @@
 						"general": "Général",
 						"source": "Les publications TikTok proviennent de ces comptes",
 						"source_title": "URLs des comptes TikTok"
+					}
+				}
+			},
+			"apify_tiktok_hashtags_posts": {
+				"title": "Publications TikTok Hashtags",
+				"description": "Récupérez des publications (vidéos) à partir des hashtags TikTok en utilisant le web scraper Apify",
+				"create": "Configurer une nouvelle récupération de publications TikTok Hashtags:",
+				"create_description": "Créez une récupération de publications (vidéos) à partir des hashtags TikTok en utilisant le web scraper Apify. Une fois que vous avez créé votre récupération, vous pourrez l'exécuter pour collecter les données.",
+				"edit": "Modifier la nouvelle récupération de publications TikTok Hashtags",
+				"edit_description": "Modifiez une récupération de publications (vidéos) à partir des comptes TikTok (noms d'utilisateur) en utilisant le web scraper Apify. Une fois que vous avez créé votre récupération, vous pourrez l'exécuter pour collecter les données.",
+				"fields": {
+					"limit_posts_per_hashtag": "Limiter les publications par hashtag",
+					"proxy_country_to_gather_from": "Pays à partir duquel recueillir",
+					"input": {
+						"url_list": "Ajoutez les hashtags TikTok que vous souhaitez collecter (sans '#')"
+					},
+					"info": {
+						"limit_posts_per_account": "Limitez le nombre de publications collectées pour chaque hashtag.",
+						"proxy_country_to_gather_from": "Pays à partir duquel recueillir"
+					},
+					"validation": {
+						"required": "Requis"
+					}
+				},
+				"view": {
+					"text": "Ceci est une récupération de publications TikTok Hashtags. Il récupère des publications à partir des hashtags TikTok en utilisant le web scraper Apify.",
+					"accordion": {
+						"status": "Statut",
+						"general": "Général",
+						"source": "Les publications TikTok proviennent de ces hashtags",
+						"source_title": "Hashtag TikTok (sans '#')"
+					}
+				}
+			},
+			"apify_tiktok_comments": {
+				"title": "Commentaires Tiktok des publications publiques Tiktok",
+				"description": "Rassembler les commentaires des publications Tiktok en utilisant le scraper web Apify",
+				"create": "Configurer une nouvelle collecte de commentaires Tiktok",
+				"create_description": "Créer une collecte de commentaires à partir de publications Tiktok en utilisant le scraper web Apify. Une fois votre collecte créée, vous pourrez l'exécuter pour collecter les données.",
+				"edit": "Modifier la collecte de commentaires Tiktok",
+				"edit_description": "Modifier une collecte de commentaires à partir de publications Tiktok en utilisant le scraper web Apify. Une fois votre collecte créée, vous pourrez l'exécuter pour collecter les données.",
+				"fields": {
+					"limit_comments_per_post": "Limiter les commentaires par publication",
+					"include_comment_replies": "Réponses aux commentaires",
+					"input": {
+						"url_list": "Ajouter les publications Tiktok dont vous souhaitez recueillir les commentaires"
+					},
+					"info": {
+						"limit_comments_per_post": "Limiter le nombre de commentaires collectés pour chaque publication."
+					},
+					"validation": {
+						"required": "Requis"
+					}
+				},
+				"view": {
+					"text": "Ceci est une collecte de commentaires Tiktok. Elle recueille les commentaires des publications Tiktok en utilisant le scraper web Apify.",
+					"accordion": {
+						"status": "Statut",
+						"general": "Général",
+						"source": "Les commentaires Tiktok proviennent de ces publications",
+						"source_title": "URLs des publications Tiktok"
 					}
 				}
 			}

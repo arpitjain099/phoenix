@@ -1,12 +1,14 @@
 import { Box, Button, Divider, Group, Text } from "@mantine/core";
 import { IconExternalLink } from "@tabler/icons";
 import React, { FC } from "react";
+import { templateString } from "src/utils/constants";
 
 interface Props {
 	list: [];
+	template_url_for_input?: string;
 }
 
-const URLInputList: FC<Props> = ({ list }) => (
+const URLInputList: FC<Props> = ({ list, template_url_for_input }) => (
 	<Box
 		py={16}
 		sx={{
@@ -21,7 +23,13 @@ const URLInputList: FC<Props> = ({ list }) => (
 					<Group>
 						<Button
 							component="a"
-							href={item}
+							href={
+								template_url_for_input
+									? templateString(template_url_for_input, {
+											input: item,
+										})
+									: item
+							}
 							target="_blank"
 							rel="noopener noreferrer"
 							p={0}

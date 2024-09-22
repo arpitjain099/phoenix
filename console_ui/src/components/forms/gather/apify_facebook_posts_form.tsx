@@ -2,7 +2,7 @@
 
 import React from "react";
 import { NumberInput, TextInput, Tooltip } from "@mantine/core";
-import { useTranslate } from "@refinedev/core";
+import { useGetLocale, useTranslate } from "@refinedev/core";
 import { IconInfoCircle } from "@tabler/icons";
 import { GetInputProps } from "@mantine/form/lib/types";
 import { ProjectSchema } from "src/interfaces/project";
@@ -85,6 +85,8 @@ const ApifyFacebookPostsForm: React.FC<Props> = ({
 	setInputList,
 }) => {
 	const translate = useTranslate();
+	const locale = useGetLocale();
+	const currentLocale = locale();
 	return (
 		<>
 			<TextField
@@ -108,6 +110,7 @@ const ApifyFacebookPostsForm: React.FC<Props> = ({
 			/>
 			<DatePicker
 				mt="lg"
+				locale={currentLocale}
 				label={
 					<div className="flex items-center">
 						<Tooltip
@@ -128,6 +131,7 @@ const ApifyFacebookPostsForm: React.FC<Props> = ({
 			/>
 			<DatePicker
 				mt="lg"
+				locale={currentLocale}
 				label={
 					<div className="flex items-center">
 						<Tooltip

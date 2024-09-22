@@ -74,14 +74,32 @@ the next release.
 
 To make a release, the maintainers will follow these steps:
 - Merge all approved changes in to `dev`
+- Pull `dev` locally: `git checkout dev`, `git pull`
 - Update the version number in:
   - [./charts/main/Chart.yaml](./charts/main/Chart.yaml), `version` and `appVersion`
-- Commit these changes and tag the commit with the version number
-- Create a MR from `dev` to `main` with the changes and commit with the version change. This will
-  publish the release ready for deployment.
-- Create a MR in `phoenix-infra` to update the version of the chart for dev and prod
-- Apply the tofu environment `dev` and manually test if needed
-- Merge the MRs both in `phoenix` and `phoenix-infra` and apply the tofu environment `prod`
+- Commit these changes to `dev` with a commit message like "Bump version 2.6.0"
+- Add a tag to the commit with the version number, `git tag -a 2.6.0`, with a message that follows
+  the convention of the other tags, e.g. `Release 2.6.0` then a description of what has changed.
+  Currently we don't automatically generate this but it is good to give an indication of what is
+  being released.
+- Push to `dev` `git push --follow-tags`
+- This will start the CI/CD pipeline for the tag and create a release, [releases
+  page](https://gitlab.com/howtobuildup/phoenix/-/releases)
+- Create a MR from `dev` to `main` with the changes and commit with the version change. Be aware
+  there will be a pipeline for the MR and for the tag.
+- Once the release has been created the artefacts and images will be available and you can deploy
+  the new version to the dev and prod infrastructure.
+- Create a MR in `phoenix-infra` to update the variables for the chart version
+  (`helm_phoenix_main.chart_version`) in the files `dev.tfvars` and `prod.tfvars` to the new
+  version.
+- Once the pipeline for the MR in `phoenix-infra` has passed, check the plans and apply the changes
+  to `dev` (manual step of pipeline).
+- It is also possible to apply tofu environments to the `dev` environment from your local machine
+  to future test if needed.
+- Once everything looks good merge both the MRs in `phoenix` and `phoenix-infra` and apply the tofu
+  environment `prod` (from the Pipelines page in GitLab).
+- The front-end is automatically deployed with `Aws Amplify` (from `main` and the backend is
+  deployed with `Helm` to the `prod` environment.
 
 ### Helpful
 

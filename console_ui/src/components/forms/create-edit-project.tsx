@@ -18,6 +18,53 @@ interface Props {
 	getInputProps: GetInputProps<ProjectSchema>;
 }
 
+export const initialFormValues = {
+	name: "",
+	description: "",
+	workspace_slug: "",
+	pi_deleted_after_days: 90,
+	delete_after_days: 90,
+	expected_usage: "",
+};
+
+export function getProjectValidationRules(data: any, translate: any) {
+	const validationRules: any = {};
+
+	validationRules.name =
+		data.name.length <= 0
+			? translate("projects.fields.validation.required")
+			: null;
+	validationRules.workspace_slug =
+		data.workspace_slug.length <= 0
+			? translate("projects.fields.validation.required")
+			: null;
+	validationRules.expected_usage =
+		data.expected_usage.length <= 0
+			? translate("projects.fields.validation.required")
+			: null;
+	validationRules.pi_deleted_after_days =
+		data.pi_deleted_after_days === undefined
+			? translate("projects.fields.validation.required")
+			: null;
+	validationRules.delete_after_days =
+		data.delete_after_days === undefined
+			? translate("projects.fields.validation.required")
+			: null;
+
+	if (data.pi_deleted_after_days < 30 || data.pi_deleted_after_days > 365) {
+		validationRules.pi_deleted_after_days = translate(
+			"projects.fields.validation.days_until_pi_expiration"
+		);
+	}
+	if (data.delete_after_days < 30 || data.delete_after_days > 365) {
+		validationRules.delete_after_days = translate(
+			"projects.fields.validation.days_until_all_data_expiration"
+		);
+	}
+
+	return validationRules;
+}
+
 const CreateEditProjectForm: React.FC<Props> = ({ getInputProps }) => {
 	const translate = useTranslate();
 	return (

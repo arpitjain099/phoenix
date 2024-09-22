@@ -152,8 +152,8 @@
 			"updated_at": "Actualizado en",
 			"validation": {
 				"required": "requerido",
-				"days_until_pi_expiration": "El valor debe estar entre 90 y 365 días",
-				"days_until_all_data_expiration": "El valor debe estar entre 90 y 365 días"
+				"days_until_pi_expiration": "El valor debe estar entre 30 y 365 días",
+				"days_until_all_data_expiration": "El valor debe estar entre 30 y 365 días"
 			}
 		},
 		"titles": {
@@ -356,6 +356,67 @@
 						"general": "General",
 						"source": "Las publicaciones de TikTok provienen de estas cuentas",
 						"source_title": "URLs de las cuentas de TikTok"
+					}
+				}
+			},
+			"apify_tiktok_hashtags_posts": {
+				"title": "Publicaciones de Hashtags de TikTok",
+				"description": "Recoge publicaciones (videos) de hashtags de TikTok usando el web scraper Apify",
+				"create": "Configurar una nueva recopilación de publicaciones de Hashtags de TikTok:",
+				"create_description": "Crea una recopilación de publicaciones (videos) de hashtags de TikTok usando el web scraper Apify. Una vez que hayas creado tu recopilación, podrás ejecutarla para recolectar los datos.",
+				"edit": "Editar nueva recopilación de publicaciones de Hashtags de TikTok",
+				"edit_description": "Edita una recopilación de publicaciones (videos) de cuentas de TikTok (nombres de usuario) usando el web scraper Apify. Una vez que hayas creado tu recopilación, podrás ejecutarla para recolectar los datos.",
+				"fields": {
+					"limit_posts_per_hashtag": "Limitar publicaciones por hashtag",
+					"proxy_country_to_gather_from": "País desde el que recopilar",
+					"input": {
+						"url_list": "Añadir hashtags de TikTok que deseas recopilar (sin '#')"
+					},
+					"info": {
+						"limit_posts_per_account": "Limita la cantidad de publicaciones que se recogen por cada hashtag.",
+						"proxy_country_to_gather_from": "País desde el que recopilar"
+					},
+					"validation": {
+						"required": "Requerido"
+					}
+				},
+				"view": {
+					"text": "Esta es una recopilación de publicaciones de hashtags de TikTok. Recoge publicaciones de hashtags de TikTok usando el web scraper Apify.",
+					"accordion": {
+						"status": "Estado",
+						"general": "General",
+						"source": "Las publicaciones de TikTok provienen de estos hashtags",
+						"source_title": "Hashtag de TikTok (sin '#')"
+					}
+				}
+			},
+			"apify_tiktok_comments": {
+				"title": "Comentarios de Tiktok de publicaciones públicas de Tiktok",
+				"description": "Recopilar comentarios de publicaciones de Tiktok utilizando el raspador web Apify",
+				"create": "Configurar una nueva recopilación de comentarios de Tiktok",
+				"create_description": "Crear una recopilación de comentarios de publicaciones de Tiktok utilizando el raspador web Apify. Una vez que hayas creado tu recopilación, podrás ejecutarla para recoger los datos.",
+				"edit": "Editar la recopilación de comentarios de Tiktok",
+				"edit_description": "Editar una recopilación de comentarios de publicaciones de Tiktok utilizando el raspador web Apify. Una vez que hayas creado tu recopilación, podrás ejecutarla para recoger los datos.",
+				"fields": {
+					"limit_comments_per_post": "Limitar comentarios por publicación",
+					"include_comment_replies": "Respuestas a comentarios",
+					"input": {
+						"url_list": "Añadir publicaciones de Tiktok de las que te gustaría recopilar comentarios"
+					},
+					"info": {
+						"limit_comments_per_post": "Limitar el número de comentarios que se recopilan para cada publicación."
+					},
+					"validation": {
+						"required": "Requerido"
+					}
+				},
+				"view": {
+					"text": "Esta es una recopilación de comentarios de Tiktok. Recopila comentarios de publicaciones de Tiktok utilizando el raspador web Apify.",
+					"accordion": {
+						"status": "Estado",
+						"general": "General",
+						"source": "Los comentarios de Tiktok provienen de estas publicaciones",
+						"source_title": "URLs de publicaciones de Tiktok"
 					}
 				}
 			}

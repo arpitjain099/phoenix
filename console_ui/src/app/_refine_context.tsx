@@ -22,15 +22,21 @@ import {
 import { useLocalStorage } from "@mantine/hooks";
 import { NotificationsProvider } from "@mantine/notifications";
 import dataProvider from "@providers/data-provider";
-import { useTranslation } from "next-i18next";
-
-// initialize i18n
-import "../providers/i18n";
 import { IconUser } from "@tabler/icons";
 import authProvider from "@providers/auth-provider";
 import accessControlProvider from "@providers/access-provider";
 import Header from "@components/header";
+import { useTranslation } from "next-i18next";
 import Image from "next/image";
+
+// initialize i18n
+import "../providers/i18n";
+
+// Import Date Locales
+import "dayjs/locale/en";
+import "dayjs/locale/fr";
+import "dayjs/locale/es";
+import "dayjs/locale/ar";
 
 const RefineContext = ({ children }: PropsWithChildren) => {
 	const { t, i18n } = useTranslation();
@@ -114,6 +120,30 @@ const RefineContext = ({ children }: PropsWithChildren) => {
 										show: "/projects/:projectid/gathers/apify_tiktok_accounts_posts/:id",
 										meta: {
 											label: "Apify Tiktok Accounts Posts",
+											parent: "projects",
+											hide: true,
+										},
+									},
+									{
+										name: "apify_tiktok_hashtags_posts",
+										create:
+											"/projects/:projectid/gathers/apify_tiktok_hashtags_posts/create",
+										edit: "/projects/:projectid/gathers/apify_tiktok_hashtags_posts/edit/:id",
+										show: "/projects/:projectid/gathers/apify_tiktok_hashtags_posts/:id",
+										meta: {
+											label: "Apify Tiktok Accounts Posts",
+											parent: "projects",
+											hide: true,
+										},
+									},
+									{
+										name: "apify_tiktok_comments",
+										create:
+											"/projects/:projectid/gathers/apify_tiktok_comments/create",
+										edit: "/projects/:projectid/gathers/apify_tiktok_comments/edit/:id",
+										show: "/projects/:projectid/gathers/apify_tiktok_comments/:id",
+										meta: {
+											label: "Apify Tiktok Comments",
 											parent: "projects",
 											hide: true,
 										},
