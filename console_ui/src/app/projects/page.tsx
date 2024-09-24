@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { useGetIdentity, useTranslate } from "@refinedev/core";
+import { useGetIdentity, useList, useTranslate } from "@refinedev/core";
 import { ColumnDef } from "@tanstack/react-table";
 import { Pagination, ScrollArea } from "@mantine/core";
 import { DateField, List } from "@refinedev/mantine";
@@ -55,38 +55,16 @@ export default function ProjectList(): JSX.Element {
 		[translate]
 	);
 
-	const {
-		getHeaderGroups,
-		getRowModel,
-		setOptions,
-		refineCore: { setCurrent, pageCount, current, tableQueryResult },
-	} = useTable({
-		columns,
-	});
-
-	setOptions((prev) => ({
-		...prev,
-		meta: {
-			...prev.meta,
+	const apiResponse = useList({
+		resource: "projects",
+		pagination: {
+			mode: "off",
 		},
-	}));
+	});
 
 	return (
 		<List canCreate={user?.app_role === "admin"}>
-			<ScrollArea>
-				<TableComponent
-					headerGroups={getHeaderGroups}
-					rowModel={getRowModel}
-					data={tableQueryResult}
-				/>
-			</ScrollArea>
-			<br />
-			<Pagination
-				position="right"
-				total={pageCount}
-				page={current}
-				onChange={setCurrent}
-			/>
+			<TableComponent columns={columns} data={apiResponse?.data?.data || []} />
 		</List>
 	);
 }
