@@ -45,7 +45,7 @@ gather_batches_table = sa.Table(
     sa.Column("platform", sa.String, nullable=False),
     sa.Column("data_type", sa.String, nullable=False),
     sa.Column("batch_id", sa.Integer, nullable=False),
-    # By pandas datetime is inserted as TIMESTAMP by default
+    # Pandas datetime is parsed into Bigquery as TIMESTAMP by default
     sa.Column("gathered_at", sa.TIMESTAMP, nullable=False),
     # This has to be a string because sqlalchemy has not yet implemented
     # a JSON type for BigQuery.

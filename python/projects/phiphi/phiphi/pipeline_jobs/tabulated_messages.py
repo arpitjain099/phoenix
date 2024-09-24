@@ -57,8 +57,7 @@ tabulated_messages_table = sa.Table(
     sa.Column("tiktok_post_plays", sa.Integer, nullable=True),
     # Add columns here
     # Developer columns should always go last
-    # TIMESTAMP was chosen because this is the default type for pandas datetime columns.
-    # integration tests unnecessarily slow.
+    # Pandas datetime is parsed into Bigquery as TIMESTAMP by default
     sa.Column("phoenix_processed_at", sa.TIMESTAMP, nullable=False),
     sa.Column("phoenix_job_run_id", sa.Integer, nullable=False),
 )
