@@ -139,7 +139,7 @@ def normalise_batches(
 def get_gather_and_job_run_ids(
     bigquery_dataset: str, gather_ids: Optional[list[int]] = None
 ) -> pd.DataFrame:
-    """Get the gather ID and job run ID for all gather batches.
+    """Get the unique gather ID and job run ID for all gather batches.
 
     Args:
         bigquery_dataset: The BigQuery dataset.
@@ -149,12 +149,15 @@ def get_gather_and_job_run_ids(
     Returns:
         DataFrame: The gather ID and job run ID for all gather batches.
     """
-    query = f"""
-        SELECT gather_id, job_run_id FROM {bigquery_dataset}.{constants.GATHER_BATCHES_TABLE_NAME}
-    """
+    where_query = ""
     if gather_ids:
         gather_ids_str = ",".join([str(gather_id) for gather_id in gather_ids])
-        query += f" WHERE gather_id IN ({gather_ids_str})"
+        where_query += f" WHERE gather_id IN ({gather_ids_str}) "
+    query = f"""
+        SELECT gather_id, job_run_id FROM {bigquery_dataset}.{constants.GATHER_BATCHES_TABLE_NAME}
+        {where_query}
+        GROUP BY 1, 2
+    """
     return utils.read_data(
         query, dataset=bigquery_dataset, table=constants.GATHER_BATCHES_TABLE_NAME
     )
