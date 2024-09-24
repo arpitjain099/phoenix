@@ -136,14 +136,15 @@ def normalise_batches(
         batch_id += 1
 
 
-def get_all_gather_and_job_run_ids(
+def get_gather_and_job_run_ids(
     bigquery_dataset: str, gather_ids: Optional[list[int]] = None
 ) -> pd.DataFrame:
     """Get the gather ID and job run ID for all gather batches.
 
     Args:
         bigquery_dataset: The BigQuery dataset.
-        gather_ids: The gather IDs.
+        gather_ids (Optional): The gather IDs to filter for. If none then all gathers will be
+            gotten.
 
     Returns:
         DataFrame: The gather ID and job run ID for all gather batches.
