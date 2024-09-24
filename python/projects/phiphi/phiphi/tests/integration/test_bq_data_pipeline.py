@@ -207,6 +207,21 @@ def test_bq_pipeline_integration(tmp_bq_project):
     assert recompute_processed_at[0] > previous_processed_at
     assert tabulated_messages_after_recompute_df["phoenix_job_run_id"].unique() == [10]
 
+    # Recompute just 1 gathers
+    recompute_all_batches_tabulate_flow.recompute_all_batches_tabulate_flow(
+        job_run_id=10,
+        project_id=1,
+        project_namespace=test_project_namespace,
+        class_id_name_map={},
+        gather_ids=[example_gathers.facebook_posts_gather_example().id],
+    )
+
+    messages_after_recompute_df = pd.read_gbq(
+        f"SELECT * FROM {test_project_namespace}.{constants.GENERALISED_MESSAGES_TABLE_NAME}"
+    )
+    # 16 is the number of messages in facebook_posts_gather_example
+    assert len(messages_after_recompute_df) == len(duplicated_messages) + 16
+
     # Recompute with a drop
     recompute_all_batches_tabulate_flow.recompute_all_batches_tabulate_flow(
         job_run_id=11,
