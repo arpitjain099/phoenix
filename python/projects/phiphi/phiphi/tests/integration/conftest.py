@@ -7,14 +7,19 @@ from phiphi.pipeline_jobs import projects
 
 
 @pytest.fixture
-def tmp_bq_project():
+def tmp_project_namespace():
+    """Generate a temporary project namespace for testing."""
+    tmp_project_namespace_hash = str(uuid.uuid4())[:10]
+    tmp_project_namespace_hash = tmp_project_namespace_hash.replace("-", "")
+    return f"test_{tmp_project_namespace_hash}"
+
+
+@pytest.fixture
+def tmp_bq_project(tmp_project_namespace):
     """Setup and breakdown of a test project namespace wrapper for integration tests."""
-    temp_project_namespace = str(uuid.uuid4())[:10]
-    temp_project_namespace = temp_project_namespace.replace("-", "")
-    test_project_namespace = f"test_{temp_project_namespace}"
-    print(f"Test project namespace: {test_project_namespace}")
-    projects.init_project_db.fn(test_project_namespace, with_dummy_rows=2)
+    print(f"Test project namespace: {tmp_project_namespace}")
+    projects.init_project_db.fn(tmp_project_namespace, "test", with_dummy_data=True)
 
-    yield test_project_namespace
+    yield tmp_project_namespace
 
-    projects.delete_project_db.fn(test_project_namespace)
+    projects.delete_project_db.fn(tmp_project_namespace)

@@ -7,7 +7,7 @@ import pandas as pd
 import prefect
 
 from phiphi.api.projects import gathers
-from phiphi.pipeline_jobs import constants, project_db_schemas, utils
+from phiphi.pipeline_jobs import constants, gather_batches, project_db_schemas, utils
 from phiphi.pipeline_jobs.gathers import normalisers
 
 NormaliserFuncType = Callable[[Dict], Dict | None]
@@ -107,7 +107,7 @@ def normalise_batches(
         if batches_df.empty:
             break
 
-        validated_batches_df = project_db_schemas.gather_batches_schema.validate(batches_df)
+        validated_batches_df = gather_batches.gather_batches_schema.validate(batches_df)
 
         for _, batch in validated_batches_df.iterrows():
             prefect_logger.info(f"Normalizing batch {batch.batch_id}")

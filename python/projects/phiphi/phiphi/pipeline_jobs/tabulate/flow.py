@@ -14,7 +14,12 @@ def tabulate(
     bigquery_dataset: str,
     class_id_name_map: dict[int, str],
 ) -> None:
-    """Task which tabulates data."""
+    """Task which tabulates data.
+
+    The tabulate flow must produce a table that matches the schema the file `tabulated_messages.py`
+    and in the notion manual.
+    TODO: add link to notion once if become stable/deployed so it is one URL rather then versioned.
+    """
     client = bigquery.Client()
 
     source_table_name = f"{bigquery_dataset}.{pipeline_jobs_constants.DEDUPLICATED_GENERALISED_MESSAGES_TABLE_NAME}"  # noqa: E501
@@ -70,25 +75,57 @@ def tabulate(
             data_type = 'comments'
     )
     SELECT
-        p.*,
-        c.pi_platform_message_id AS comment_pi_platform_message_id,
-        c.pi_platform_message_author_id AS comment_pi_platform_message_author_id,
-        c.pi_platform_message_author_name AS comment_pi_platform_message_author_name,
-        c.pi_text AS comment_pi_text,
-        c.pi_platform_message_url AS comment_pi_platform_message_url,
-        c.platform_message_last_updated_at AS comment_platform_message_last_updated_at,
-        c.phoenix_platform_message_id AS comment_phoenix_platform_message_id,
-        c.phoenix_platform_message_author_id AS comment_phoenix_platform_message_author_id,
-        c.phoenix_platform_parent_message_id AS comment_phoenix_platform_parent_message_id,
-        c.phoenix_platform_root_message_id AS comment_phoenix_platform_root_message_id,
+        p.platform AS platform,
+
+        -- Post Author
+        -- Currently no implemented
+        NULL AS post_author_category,
+        NULL AS post_author_class,
+        NULL AS post_author_description,
+        NULL AS post_author_followers,
+        p.phoenix_platform_message_author_id AS post_author_id,
+        NULL AS post_author_location,
+        p.pi_platform_message_author_name AS post_author_name_pi,
+        NULL AS post_author_link_pi,
+
+        -- Post
+        p.class AS post_class,
+        p.comment_count AS post_comment_count,
+        p.platform_message_last_updated_at AS post_date,
+        p.gather_id AS post_gather_id,
+        p.phoenix_platform_message_id AS post_id,
+        p.like_count AS post_like_count,
+        p.pi_platform_message_url AS post_link_pi,
+        p.share_count AS post_share_count,
+        p.pi_text AS post_text_pi,
+
+        -- Comment Author
+        NULL AS comment_author_class,
+        c.phoenix_platform_message_author_id AS comment_author_id,
+        c.pi_platform_message_author_name AS comment_author_name_pi,
+
+        -- Comment
+        c.class AS comment_class,
+        c.platform_message_last_updated_at AS comment_date,
         c.gather_id AS comment_gather_id,
-        c.gather_batch_id AS comment_gather_batch_id,
-        c.gathered_at AS comment_gathered_at,
-        c.gather_type AS comment_gather_type,
-        c.platform AS comment_platform,
-        c.data_type AS comment_data_type,
-        c.phoenix_processed_at AS comment_phoenix_processed_at,
-        c.class AS comment_class
+        c.phoenix_platform_message_id AS comment_id,
+        c.like_count AS comment_like_count,
+        c.pi_platform_message_url AS comment_link_pi,
+        c.phoenix_platform_root_message_id AS comment_parent_post_id,
+        c.phoenix_platform_parent_message_id AS comment_replied_to_id,
+        c.pi_text AS comment_text_pi,
+
+        -- Platform specific stats
+        -- Facebook
+        NULL AS facebook_video_views,
+        -- TikTok
+        NULL AS tiktok_post_plays,
+
+        -- Developer fields should always be last
+        -- Using CURRENT_TIMESTAMP rather then PARSE_TIMESTAMP as it seems to make the integration
+        -- tests faster.
+        CURRENT_TIMESTAMP() AS phoenix_processed_at,
+        {job_run_id} AS phoenix_job_run_id
     FROM
         posts p
     LEFT JOIN

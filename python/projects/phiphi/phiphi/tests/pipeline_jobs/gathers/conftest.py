@@ -137,6 +137,9 @@ def normalised_facebook_posts_df() -> pd.DataFrame:
         ],
         "phoenix_platform_parent_message_id": [None, None, None, None, None, None, None, None],
         "phoenix_platform_root_message_id": [None, None, None, None, None, None, None, None],
+        "like_count": [4, 3, 2, 477, 1259, 956, 3, 2327],
+        "share_count": [1, 3, 0, 171, 261, 347, 1, 1054],
+        "comment_count": [0, 0, 0, 203, 229, 388, 0, 214],
     }
 
     df = pd.DataFrame(data)  # noqa: PD901
@@ -301,6 +304,9 @@ def normalised_facebook_comments_df() -> pd.DataFrame:
             normalisers.anonymize("823003113189049"),
             normalisers.anonymize("7637165919660332"),
         ],
+        "like_count": [4, 2, 2, 1, 1, 1, 0, 2, 1],
+        "share_count": [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        "comment_count": [1, 3, 2, 0, 0, 2, 0, 5, 0],
     }
 
     df = pd.DataFrame(data)  # noqa: PD901
@@ -357,6 +363,9 @@ def normalised_tiktok_accounts_posts_df() -> pd.DataFrame:
         ],
         "phoenix_platform_parent_message_id": [None, None, None],
         "phoenix_platform_root_message_id": [None, None, None],
+        "like_count": [2268, 6804, 1314],
+        "share_count": [636, 244, 11],
+        "comment_count": [174, 232, 65],
     }
     normalised_tiktok_df = pd.DataFrame(data)
     normalised_tiktok_df["gather_id"] = 3
@@ -448,6 +457,9 @@ def normalised_tiktok_hashtags_posts_df() -> pd.DataFrame:
         ],
         "phoenix_platform_parent_message_id": [None] * 6,
         "phoenix_platform_root_message_id": [None] * 6,
+        "like_count": [137800, 4955, 211900, 6845, 729, 674900],
+        "share_count": [16200, 152, 24000, 542, 46, 12600],
+        "comment_count": [1167, 181, 7705, 0, 485, 18100],
     }
     normalised_tiktok_df = pd.DataFrame(data)
     normalised_tiktok_df["gather_id"] = 4
@@ -541,6 +553,9 @@ def normalised_tiktok_comments_df() -> pd.DataFrame:
             normalisers.anonymize("anonymizedAwemeID3"),
             normalisers.anonymize("anonymizedAwemeID4"),
         ],
+        "like_count": [0, 0, 0, 3],
+        "share_count": [0, 0, 0, 0],
+        "comment_count": [1, 0, 0, 0],
     }
     normalised_tiktok_df = pd.DataFrame(data)
     normalised_tiktok_df["gather_id"] = 5

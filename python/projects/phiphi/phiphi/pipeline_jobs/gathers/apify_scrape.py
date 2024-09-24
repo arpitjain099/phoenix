@@ -15,7 +15,7 @@ import prefect
 
 from phiphi import config, utils
 from phiphi.api.projects import gathers
-from phiphi.pipeline_jobs import constants, project_db_schemas
+from phiphi.pipeline_jobs import constants, gather_batches
 from phiphi.pipeline_jobs import utils as pipeline_jobs_utils
 from phiphi.pipeline_jobs.gathers import types as gather_types
 from phiphi.pipeline_jobs.gathers import utils as gather_utils
@@ -85,7 +85,7 @@ def update_and_write_batch(
     gather_batch_df.loc[0, "json_data"] = json.dumps(batch_items)
 
     # Validate the DataFrame against the Pandera schema
-    validated_df = project_db_schemas.gather_batches_schema.validate(gather_batch_df)
+    validated_df = gather_batches.gather_batches_schema.validate(gather_batch_df)
 
     pipeline_jobs_utils.write_data(df=validated_df, dataset=bigquery_dataset, table=bigquery_table)
 
@@ -138,7 +138,7 @@ def apify_scrape_and_batch_download_results(
     gather_batch_df["last_processed_at"] = gather_batch_df["last_processed_at"].dt.tz_localize(
         "UTC"
     )
-    validated_gather_batch_df = project_db_schemas.gather_batches_schema.validate(gather_batch_df)
+    validated_gather_batch_df = gather_batches.gather_batches_schema.validate(gather_batch_df)
 
     # Iterate over dataset items and insert into BigQuery or Parquet in batches
     for item in dataset_iterator:

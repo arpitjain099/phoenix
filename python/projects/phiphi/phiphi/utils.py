@@ -3,9 +3,11 @@ import json
 import logging
 import os
 import re
+from typing import Optional, cast
 
 import sentry_sdk
 import yaml
+from google import auth
 
 from phiphi import config
 
@@ -103,3 +105,16 @@ def init_sentry(
             environment=environment,
             release=release,
         )
+
+
+def get_default_bigquery_project() -> str:
+    """Get the default BigQuery project based on the current environment."""
+    _, returned_project_id = auth.default()
+    # For some reason the type of project is not being inferred correctly
+    # Documented type: https://google-auth.readthedocs.io/en/master/reference/google.auth.html#google.auth.default
+    project_id = cast(Optional[str], returned_project_id)
+    if not project_id:
+        raise ValueError(
+            "No default project found. Please set GOOGLE_CLOUD_PROJECT environment variable."
+        )
+    return project_id
