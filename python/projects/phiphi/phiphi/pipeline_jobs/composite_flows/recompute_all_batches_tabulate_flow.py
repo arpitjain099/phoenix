@@ -2,7 +2,7 @@
 
 This flow is used to recompute all batches and tabulate the data.
 """
-from typing import Coroutine
+from typing import Coroutine, Optional
 
 import prefect
 
@@ -19,6 +19,7 @@ def recompute_all_batches_tabulate_flow(
     project_namespace: str,
     class_id_name_map: dict[int, str],
     drop_downstream_tables: bool = False,
+    gather_ids: Optional[list[int]] = None,
 ) -> None:
     """Flow that recomputes all batches and tabulates the data.
 
@@ -36,14 +37,16 @@ def recompute_all_batches_tabulate_flow(
         class_id_name_map: A dictionary mapping class IDs to class names.
         drop_downstream_tables: If True, delete downstream tables. Defaults to False.
             This will also recompute the schemas for theses downstream tables.
+        gather_ids: The gather IDs to recompute. If None, all gather IDs will be recomputed.
     """
     if drop_downstream_tables:
         projects.drop_downstream_tables(
             project_namespace=project_namespace,
         )
 
-    gather_batches_metadata = normalise.get_all_gather_and_job_run_ids(
-        bigquery_dataset=project_namespace
+    gather_batches_metadata = normalise.get_gather_and_job_run_ids(
+        bigquery_dataset=project_namespace,
+        gather_ids=gather_ids,
     )
     if len(gather_batches_metadata) == 0:
         return None

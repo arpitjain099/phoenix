@@ -5,6 +5,7 @@ import prefect
 
 from phiphi import constants
 from phiphi.api.projects import gathers
+from phiphi.pipeline_jobs import constants as pipeline_jobs_constants
 from phiphi.pipeline_jobs.gathers import apify_scrape, deduplicate, delete, normalise
 
 
@@ -14,7 +15,7 @@ def gather_flow(
     gather_child_type: gathers.schemas.ChildTypeName,
     job_run_id: int,
     project_namespace: str,
-    batch_size: int = 100,
+    batch_size: int = pipeline_jobs_constants.DEFAULT_BATCH_SIZE,
 ) -> None:
     """Flow which gathers data.
 

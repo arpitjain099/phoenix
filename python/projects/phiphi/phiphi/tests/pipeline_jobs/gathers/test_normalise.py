@@ -8,6 +8,7 @@ from prefect.logging import disable_run_logger as disable_prefect_run_logger
 
 from phiphi import config
 from phiphi.api.projects.gathers import schemas
+from phiphi.pipeline_jobs import constants as pipeline_jobs_constants
 from phiphi.pipeline_jobs.gathers import apify_scrape, normalise, normalisers, utils
 
 
@@ -74,7 +75,9 @@ def test_normalise_batches(
         )
 
     # Check that the normalized data was written to the correct Parquet file
-    parquet_file_path = tmpdir.join("test_dataset", "generalised_messages.parquet")
+    parquet_file_path = tmpdir.join(
+        "test_dataset", f"{pipeline_jobs_constants.GENERALISED_MESSAGES_TABLE_NAME}.parquet"
+    )
     assert parquet_file_path.check()
 
     # Alter expected DataFrame to match that now using multiple batches
@@ -138,5 +141,7 @@ def test_normalise_error_batch(
 
     # Check that no error was thrown, and no normalized data was written as the raw data was not
     # valid
-    parquet_file_path = tmpdir.join("test_dataset", "generalised_messages.parquet")
+    parquet_file_path = tmpdir.join(
+        "test_dataset", f"{pipeline_jobs_constants.GENERALISED_MESSAGES_TABLE_NAME}.parquet"
+    )
     assert not parquet_file_path.check()
