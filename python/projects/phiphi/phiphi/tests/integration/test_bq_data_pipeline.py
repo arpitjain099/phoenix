@@ -1,4 +1,17 @@
-"""Integration tests for the data pipeline with big query."""
+"""Integration tests for the data pipeline with big query.
+
+Instructions on running these tests without having to setup the local platform database:
+- In `phiphi/config.py`:
+   - Set `USE_MOCK_APIFY: bool = True`
+   - Add `None` default to `SQLALCHEMY_DATABASE_URI: ... | None = None`
+- In `python/projects/phiphi/docker_env.dev` set `USE_MOCK_BQ` to False.
+- Login to Prefect cloud via CLI using API key from `Phoenix Dev` (buildup+dev@datavaluepeople.com)
+  workspace
+- Delete everything in `tests/confest.py`
+- Set env var `export GOOGLE_CLOUD_PROJECT="bu-phoenix-dev"`
+- Run `make test_integration` to run the tests
+"""
+import datetime
 from unittest.mock import patch
 
 import pandas as pd
@@ -37,16 +50,6 @@ def test_bq_pipeline_integration(tmp_bq_project):
 
     WARNING: !!!!!!!!!!!!!!
     The patch settings fixture/monkey patching env vars does not work with Prefect flows.
-
-    Instructions on running this test using venv (not using docker):
-     - In `phiphi/config.py`:
-        - Set `USE_MOCK_APIFY: bool = True`
-        - Add `None` default to `SQLALCHEMY_DATABASE_URI: ... | None = None`
-        - `USE_MOCK_BQ` must be false this requires a change in
-          python/projects/phiphi/docker_env.dev if using `make test_integration`.
-     - Login to Prefect cloud via CLI using API key from `Phoenix Dev` workspace
-     - Delete everything in `tests/confest.py` and the line `engine = create_engine(...`
-        in `phiphi/platform_db.py`
 
     This test creates a Bigquery dataset with name `test_<random_prefix>`.
 
@@ -319,12 +322,67 @@ def test_bq_pipeline_integration(tmp_bq_project):
     for class_name in class_id_name_map.values():
         assert class_name in tabulated_messages_df["comment_class"].unique()
 
+    # Testing author manual classifications
+
+    # Manually create and add some manually_classified_authors
+    # Grab rows just to make a dataframe
+    manually_classified_authors_df = deduped_messages_df.iloc[:5][
+        ["phoenix_platform_message_author_id"]
+    ].copy()
+    # Explicitly set the author IDs - this is brittle, but better than doing anything smart.
+    manually_classified_authors_df["phoenix_platform_author_id"] = [
+        normalisers.anonymize("100064878993116"),
+        normalisers.anonymize("100064381045972"),
+        normalisers.anonymize("100064381045972"),
+        normalisers.anonymize(
+            "pfbid02CWk7wdftZWU4ChNjeqbvkd6ePFh8YrDTv5mMuqV7hzRNy7cq6TzDyDnSe4SaK87Xl"
+        ),
+        normalisers.anonymize(
+            "pfbid02CWk7wdftZWU4ChNjeqbvkd6ePFh8YrDTv5mMuqV7hzRNy7cq6TzDyDnSe4SaK87Xl"
+        ),
+    ]
+    manually_classified_authors_df = manually_classified_authors_df.drop(
+        "phoenix_platform_message_author_id", axis=1
+    )
+    manually_classified_authors_df["class_name"] = [
+        "news_outlet",  # post author 1
+        "news_outlet",  # post author 2
+        "journalist",  # post author 2
+        "individual",  # comment author 1
+        "blogger",  # comment author 1
+    ]
+    manually_classified_authors_df["last_updated_at"] = datetime.datetime.now()
+    pipeline_jobs_utils.write_data(
+        df=manually_classified_authors_df,
+        dataset=test_project_namespace,
+        table=constants.MANUALLY_CLASSIFIED_AUTHORS_TABLE_NAME,
+    )
+    # Re-tabulate, now with the classified authors
+    tabulate_flow.tabulate_flow(
+        job_run_id=5, project_namespace=test_project_namespace, class_id_name_map=class_id_name_map
+    )
+    tabulated_messages_df = pd.read_gbq(
+        f"""
+        SELECT *
+        FROM {test_project_namespace}.{constants.TABULATED_MESSAGES_TABLE_NAME}
+        """
+    )
+    assert len(tabulated_messages_df) == 36
+    post_author_class_value_counts = tabulated_messages_df["post_author_class"].value_counts()
+    assert post_author_class_value_counts["news_outlet"] == 20
+    assert post_author_class_value_counts["journalist"] == 16
+    comment_author_class_value_counts = tabulated_messages_df[
+        "comment_author_class"
+    ].value_counts()
+    assert comment_author_class_value_counts["individual"] == 2
+    assert comment_author_class_value_counts["blogger"] == 2
+
     # Delete just the comments
     gather_id_of_comments = example_gathers.facebook_comments_gather_example().id
     delete_gather_tabulate_flow.delete_gather_tabulate_flow(
         project_id=1,
         job_source_id=gather_id_of_comments,
-        job_run_id=5,
+        job_run_id=6,
         project_namespace=test_project_namespace,
         class_id_name_map=class_id_name_map,
     )
@@ -345,7 +403,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
     assert len(messages_df) == 16
     assert gather_id_of_comments not in messages_df["gather_id"].unique()
 
-    # and the deduplication should be the same as without the comments.
+    # and the deduplication should be the same as without the comments, but now with author classes
     deduped_messages_df = pd.read_gbq(
         f"""
         SELECT *
@@ -361,4 +419,4 @@ def test_bq_pipeline_integration(tmp_bq_project):
         FROM {test_project_namespace}.{constants.TABULATED_MESSAGES_TABLE_NAME}
         """
     )
-    assert len(tabulated_messages_df) == 9
+    assert len(tabulated_messages_df) == 14
