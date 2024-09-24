@@ -207,3 +207,24 @@ c. Translation:
 5. **Repeat Same Actions For Edit Page**
 
 6. **Repeat Same Actions For Duplicate Page**
+
+7. **Update Refine Configuration**
+
+- Navigate to the `console_ui/src/app/_refine_context.tsx` file.
+
+- Add the newly created gather type as a resource in Refine. For example:
+
+```javascript
+{
+  name: "apify_facebook_posts",
+  create: "/projects/:projectid/gathers/apify_facebook_posts/create",
+  edit: "/projects/:projectid/gathers/apify_facebook_posts/edit/:id",
+  show: "/projects/:projectid/gathers/apify_facebook_posts/:id",
+  meta: {
+    label: "Apify Facebook Posts",
+    parent: "projects",
+    hide: true,
+  },
+}
+
+```
