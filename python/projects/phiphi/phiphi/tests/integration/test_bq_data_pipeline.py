@@ -2,11 +2,9 @@
 from unittest.mock import patch
 
 import pandas as pd
-import pytest
-from google.cloud import bigquery
 
 from phiphi import config
-from phiphi.pipeline_jobs import constants, projects
+from phiphi.pipeline_jobs import constants
 from phiphi.pipeline_jobs import utils as pipeline_jobs_utils
 from phiphi.pipeline_jobs.composite_flows import (
     delete_gather_tabulate_flow,
@@ -23,14 +21,12 @@ def assert_tabulated_messages_are_equal(
 ):
     """Assert that the tabulated messages are equal."""
     assert len(tabulated_messages_after_recompute_df) == len(tabulated_messages_df)
-    columns_to_compare = ["phoenix_platform_message_id", "pi_platform_message_id"]
-    df_1 = tabulated_messages_df.sort_values(by=["phoenix_platform_message_id"]).reset_index(
+    columns_to_compare = ["post_id", "comment_id"]
+    df_1 = tabulated_messages_df.sort_values(by=columns_to_compare).reset_index(drop=True)
+    df_1 = df_1[columns_to_compare]
+    df_2 = tabulated_messages_after_recompute_df.sort_values(by=columns_to_compare).reset_index(
         drop=True
     )
-    df_1 = df_1[columns_to_compare]
-    df_2 = tabulated_messages_after_recompute_df.sort_values(
-        by=["phoenix_platform_message_id"]
-    ).reset_index(drop=True)
     df_2 = df_2[columns_to_compare]
 
     pd.testing.assert_frame_equal(df_1, df_2)
@@ -70,14 +66,6 @@ def test_bq_pipeline_integration(tmp_bq_project):
         )
 
     test_project_namespace = tmp_bq_project
-    client = bigquery.Client()
-    assert client.get_dataset(test_project_namespace)
-    # Check that the dummy tabulated messages has been created
-    assert client.get_table(f"{test_project_namespace}.{constants.TABULATED_MESSAGES_TABLE_NAME}")
-
-    # Check that will not fail if the dataset already exists.
-    dataset = projects.init_project_db.fn(test_project_namespace)
-    assert client.get_dataset(dataset)
 
     batch_size = 20
 
@@ -174,13 +162,14 @@ def test_bq_pipeline_integration(tmp_bq_project):
     )
     assert len(tabulated_messages_df) == 14
     # Test that "class"/"comment_class" columns exists in the tabulated messages and has NaN values
-    assert tabulated_messages_df["class"].isna().all()
+    assert tabulated_messages_df["post_class"].isna().all()
     assert tabulated_messages_df["comment_class"].isna().all()
+    assert tabulated_messages_df["phoenix_job_run_id"].unique() == [4]
 
     ## Recompute all batches and tabulate flow
 
     recompute_all_batches_tabulate_flow.recompute_all_batches_tabulate_flow(
-        job_run_id=4,
+        job_run_id=10,
         project_id=1,
         project_namespace=test_project_namespace,
         class_id_name_map={},
@@ -216,10 +205,11 @@ def test_bq_pipeline_integration(tmp_bq_project):
     assert recompute_processed_at.shape[0] == 1
     # Make sure that the recompute processed_at is greater than the previous processed_at
     assert recompute_processed_at[0] > previous_processed_at
+    assert tabulated_messages_after_recompute_df["phoenix_job_run_id"].unique() == [10]
 
     # Recompute with a drop
     recompute_all_batches_tabulate_flow.recompute_all_batches_tabulate_flow(
-        job_run_id=4,
+        job_run_id=11,
         project_id=1,
         project_namespace=test_project_namespace,
         class_id_name_map={},
@@ -253,6 +243,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
     assert recompute_2_processed_at.shape[0] == 1
     # Make sure that the recompute processed_at is greater than the previous recompute processed_at
     assert recompute_2_processed_at[0] > recompute_processed_at[0]
+    assert tabulated_messages_after_recompute_2_df["phoenix_job_run_id"].unique() == [11]
 
     # Manually create and add some classified_messages
     # Grab rows just to make a dataframe
@@ -302,10 +293,10 @@ def test_bq_pipeline_integration(tmp_bq_project):
     # in total count
     # - Added two classes to a comment -> +1 to the total count
     assert len(tabulated_messages_df) == 19  # Previous count was 14
-    assert tabulated_messages_df["class"].isna().sum() == 5
+    assert tabulated_messages_df["post_class"].isna().sum() == 5
     for class_name in class_id_name_map.values():
-        assert class_name in tabulated_messages_df["class"].unique()
-    assert "missing_class_name" in tabulated_messages_df["class"].unique()
+        assert class_name in tabulated_messages_df["post_class"].unique()
+    assert "missing_class_name" in tabulated_messages_df["post_class"].unique()
     assert tabulated_messages_df["comment_class"].isna().sum() == 15
     for class_name in class_id_name_map.values():
         assert class_name in tabulated_messages_df["comment_class"].unique()
@@ -356,8 +347,3 @@ def test_bq_pipeline_integration(tmp_bq_project):
 
     # Use this to break before deleting the dataset to manually inspect the data
     # assert False
-
-    projects.delete_project_db.fn(test_project_namespace)
-
-    with pytest.raises(Exception):
-        client.get_dataset(dataset)

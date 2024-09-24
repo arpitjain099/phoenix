@@ -50,6 +50,10 @@ def normalise_single_facebook_posts_json(json_blob: Dict) -> Dict | None:
         "phoenix_platform_message_author_id": anonymize(json_blob["user"]["id"]),
         "phoenix_platform_parent_message_id": None,  # Posts don't have parent messages
         "phoenix_platform_root_message_id": None,  # Posts don't have root messages
+        # stats
+        "like_count": json_blob.get("likes", 0),
+        "share_count": json_blob.get("shares", 0),
+        "comment_count": json_blob.get("comments", 0),
     }
 
 
@@ -76,6 +80,11 @@ def normalise_single_facebook_comments_json(json_blob: Dict) -> Dict | None:
         "phoenix_platform_message_author_id": anonymize(json_blob["profileId"]),
         "phoenix_platform_parent_message_id": anonymize(parent_message_id),
         "phoenix_platform_root_message_id": anonymize(json_blob["facebookId"]),
+        # stats
+        "like_count": json_blob.get("likesCount", 0),
+        # There are no shares of comments for facebook
+        "share_count": 0,
+        "comment_count": json_blob.get("commentsCount", 0),
     }
 
 
@@ -104,6 +113,10 @@ def normalise_single_tiktok_posts_json(json_blob: Dict) -> Dict | None:
         "phoenix_platform_message_author_id": anonymize(json_blob["authorMeta"]["id"]),
         "phoenix_platform_parent_message_id": None,
         "phoenix_platform_root_message_id": None,
+        # stats
+        "like_count": json_blob.get("diggCount", 0),
+        "share_count": json_blob.get("shareCount", 0),
+        "comment_count": json_blob.get("commentCount", 0),
     }
 
 
@@ -129,4 +142,8 @@ def normalise_single_tiktok_comments_json(json_blob: Dict) -> Dict:
         "phoenix_platform_message_author_id": anonymize(json_blob["user"]["id"]),
         "phoenix_platform_parent_message_id": anonymize(parent_message_id),
         "phoenix_platform_root_message_id": anonymize(json_blob["awemeId"]),
+        "like_count": json_blob.get("likeCount", 0),
+        # No shares for TikTok comments
+        "share_count": 0,
+        "comment_count": json_blob.get("replyCount", 0),
     }

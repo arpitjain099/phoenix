@@ -58,7 +58,9 @@ def test_create_get_delete_project(
     assert project["checked_visualise"] is False
     assert project["checked_explore"] is False
 
-    mock_project_init_db.assert_called_once_with(f"project_id{project['id']}", with_dummy_rows=2)
+    mock_project_init_db.assert_called_once_with(
+        f"project_id{project['id']}", "main", with_dummy_data=True
+    )
 
     response = client.get(f"/projects/{project['id']}")
     assert response.status_code == 200

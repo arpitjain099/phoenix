@@ -6,12 +6,16 @@ having a different syntax sqlalchemy-bigquery not supporting primary keys, index
 constraints.
 
 """
+import datetime
+
+import pandas as pd
 import sqlalchemy as sa
 
 from phiphi import project_db
+from phiphi.pipeline_jobs import constants, utils
 
 tabulated_messages_table = sa.Table(
-    "tabulated_messages",
+    constants.TABULATED_MESSAGES_TABLE_NAME,
     project_db.metadata,
     # General
     sa.Column("platform", sa.String, nullable=False),
@@ -20,7 +24,7 @@ tabulated_messages_table = sa.Table(
     sa.Column("post_author_class", sa.String, nullable=True),
     sa.Column("post_author_description", sa.Text, nullable=True),
     sa.Column("post_author_followers", sa.Integer, nullable=True),
-    sa.Column("post_author_id", sa.Integer, nullable=False),
+    sa.Column("post_author_id", sa.String, nullable=False),
     sa.Column("post_author_location", sa.String, nullable=True),
     sa.Column("post_author_name_pi", sa.String, nullable=True),
     sa.Column("post_author_link_pi", sa.String, nullable=True),
@@ -51,4 +55,96 @@ tabulated_messages_table = sa.Table(
     # Platform specific
     sa.Column("facebook_video_views", sa.Integer, nullable=True),
     sa.Column("tiktok_post_plays", sa.Integer, nullable=True),
+    # Add columns here
+    # Developer columns should always go last
+    # Pandas datetime is parsed into Bigquery as TIMESTAMP by default
+    sa.Column("phoenix_processed_at", sa.TIMESTAMP, nullable=False),
+    sa.Column("phoenix_job_run_id", sa.Integer, nullable=False),
 )
+
+
+def seed_dummy_data(project_namespace: str) -> None:
+    """Seed the tabulated messages table with dummy data.
+
+    Args:
+        project_namespace (str): The project namespace.
+    """
+    seed_tabulated_dummy_df = pd.DataFrame(
+        [
+            {
+                "platform": "dummy_platform",
+                "post_author_category": "dummy_category",
+                "post_author_class": "dummy_class",
+                "post_author_description": "dummy_description",
+                "post_author_followers": 100,
+                "post_author_id": "dummy_author_id",
+                "post_author_location": "dummy_location",
+                "post_author_name_pi": "dummy_name",
+                "post_author_link_pi": "dummy_link",
+                "post_class": "dummy_class",
+                "post_comment_count": 100,
+                "post_date": "2021-01-01",
+                "post_gather_id": 1,
+                "post_id": "dummy_post_id",
+                "post_like_count": 100,
+                "post_link_pi": "dummy_link",
+                "post_share_count": 100,
+                "post_text_pi": "dummy_text",
+                "comment_author_class": "class",
+                "comment_author_id": "dummy_comment_id",
+                "comment_author_name_pi": "name",
+                "comment_class": "dummy_class",
+                "comment_date": "2021-01-01",
+                "comment_gather_id": 1,
+                "comment_id": "1",
+                "comment_like_count": 100,
+                "comment_link_pi": "dummy_link",
+                "comment_parent_post_id": "dummy_post_id",
+                "comment_replied_to_id": "dummy_comment_id",
+                "comment_text_pi": "dummy_text",
+                "facebook_video_views": 100,
+                "tiktok_post_plays": 0,
+                "phoenix_processed_at": datetime.datetime.now(),
+                "phoenix_job_run_id": 0,
+            },
+            {
+                "platform": "dummy_platform",
+                "post_author_category": "dummy_category",
+                "post_author_class": "dummy_class",
+                "post_author_description": "dummy_description",
+                "post_author_followers": 100,
+                "post_author_id": "dummy_author_id",
+                "post_author_location": "dummy_location",
+                "post_author_name_pi": "dummy_name",
+                "post_author_link_pi": "dummy_link",
+                "post_class": "dummy_class",
+                "post_comment_count": 100,
+                "post_date": "2021-01-01",
+                "post_gather_id": 1,
+                "post_id": "dummy_post_id",
+                "post_like_count": 100,
+                "post_link_pi": "dummy_link",
+                "post_share_count": 100,
+                "post_text_pi": "dummy_text",
+                "comment_author_class": "class",
+                "comment_author_id": "dummy_comment_id",
+                "comment_author_name_pi": "name",
+                "comment_class": "dummy_class",
+                "comment_date": "2021-01-01",
+                "comment_gather_id": 1,
+                "comment_id": "1",
+                "comment_like_count": 100,
+                "comment_link_pi": "dummy_link",
+                "comment_parent_post_id": "dummy_post_id",
+                "comment_replied_to_id": "dummy_comment_id",
+                "comment_text_pi": "dummy_text",
+                "facebook_video_views": 0,
+                "tiktok_post_plays": 100,
+                "phoenix_processed_at": datetime.datetime.now(),
+                "phoenix_job_run_id": 0,
+            },
+        ],
+    )
+    utils.write_data(
+        seed_tabulated_dummy_df, project_namespace, constants.TABULATED_MESSAGES_TABLE_NAME
+    )

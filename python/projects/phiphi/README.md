@@ -147,6 +147,17 @@ Check and edit the migration file as needed and fixing any linting issues.
 
 Apply the migration to the test database: `make project_alembic_upgrade` to see if it works.
 
+If you want to manually test this in a real cloud dataset:
+* Set up you gcloud credentials: `gcloud auth application-default login`
+* Create a dataset in BigQuery
+* In the file project_db.alembic.ini set sqlalchemy.url to the dataset:
+  `bigquery://<project_id>/<dataset_id>`
+* Run `make project_alembic_upgrade`. The google credentials should be automagically set up in the
+  container.
+* Check the dataset in BigQuery to see if the tables were created
+* Delete the dataset in BigQuery
+* Change the sqlalchemy.url back to the test sqlite database
+
 ## Running deployments locally for testing full flow runs
 
 If you are developing flows and want to test the full flow run, you can run the flow locally.
