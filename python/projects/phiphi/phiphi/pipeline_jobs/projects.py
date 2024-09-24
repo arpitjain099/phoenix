@@ -103,9 +103,9 @@ def project_apply_migrations(
         project_db.form_bigquery_sqlalchmey_uri(project_namespace)
     ) as connection:
         logger.info("Applying migrations.")
-        revisions_applyed = project_db.alembic_upgrade(connection)
-        logger.info(f"Revisions applyed: {revisions_applyed}")
-    if revisions_applyed:
+        revisions_applied = project_db.alembic_upgrade(connection)
+        logger.info(f"Revisions applied: {revisions_applied}")
+    if revisions_applied:
         recompute_all_batches_tabulate_flow.recompute_all_batches_tabulate_flow(
             job_run_id=job_run_id,
             project_id=project_id,
@@ -117,7 +117,7 @@ def project_apply_migrations(
         )
         logger.info("Recompute all batches tabulate flow completed.")
     logger.info("Migrations applied.")
-    return revisions_applyed
+    return revisions_applied
 
 
 def create_deployments(
