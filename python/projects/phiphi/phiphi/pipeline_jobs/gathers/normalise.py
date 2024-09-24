@@ -1,7 +1,7 @@
 """Normalise functionality for the gather pipeline job."""
 import json
 from datetime import datetime
-from typing import Callable, Dict, List
+from typing import Callable, Dict, List, Optional
 
 import pandas as pd
 import prefect
@@ -136,11 +136,14 @@ def normalise_batches(
         batch_id += 1
 
 
-def get_all_gather_and_job_run_ids(bigquery_dataset: str) -> pd.DataFrame:
+def get_all_gather_and_job_run_ids(
+    bigquery_dataset: str, gather_ids: Optional[list[int]] = None
+) -> pd.DataFrame:
     """Get the gather ID and job run ID for all gather batches.
 
     Args:
         bigquery_dataset: The BigQuery dataset.
+        gather_ids: The gather IDs.
 
     Returns:
         DataFrame: The gather ID and job run ID for all gather batches.
@@ -148,6 +151,9 @@ def get_all_gather_and_job_run_ids(bigquery_dataset: str) -> pd.DataFrame:
     query = f"""
         SELECT gather_id, job_run_id FROM {bigquery_dataset}.{constants.GATHER_BATCHES_TABLE_NAME}
     """
+    if gather_ids:
+        gather_ids_str = ",".join([str(gather_id) for gather_id in gather_ids])
+        query += f" WHERE gather_id IN ({gather_ids_str})"
     return utils.read_data(
         query, dataset=bigquery_dataset, table=constants.GATHER_BATCHES_TABLE_NAME
     )
