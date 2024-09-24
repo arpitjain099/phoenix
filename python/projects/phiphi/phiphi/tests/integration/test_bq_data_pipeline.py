@@ -260,6 +260,8 @@ def test_bq_pipeline_integration(tmp_bq_project):
     assert recompute_2_processed_at[0] > recompute_processed_at[0]
     assert tabulated_messages_after_recompute_2_df["phoenix_job_run_id"].unique() == [11]
 
+    # Testing classified messages
+
     # Manually create and add some classified_messages
     # Grab rows just to make a dataframe
     classified_messages_df = deduped_messages_df.iloc[:7][["phoenix_platform_message_id"]].copy()
