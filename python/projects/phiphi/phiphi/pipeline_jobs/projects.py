@@ -97,21 +97,15 @@ def project_apply_migrations(
 
     If the migrations are applied successfully then the recompute_all_batches_tabulate_flow will be
     run.
-
-    Args:
-        job_run_id (int): The job run ID.
-        project_id (int): The project ID.
-        class_id_name_map (dict[int, str]): A dictionary mapping class IDs to class names.
-        project_namespace (str): The project namespace.
-
-    Returns:
-        bool: True if the migrations were applied successfully.
     """
+    logger = prefect.get_run_logger()
     with project_db.init_connection(
         project_db.form_bigquery_sqlalchmey_uri(project_namespace)
     ) as connection:
-        revisions_applyed = project_db.alembic_upgrade(connection)
-    if revisions_applyed:
+        logger.info("Applying migrations.")
+        revisions_applied = project_db.alembic_upgrade(connection)
+        logger.info(f"Revisions applied: {revisions_applied}")
+    if revisions_applied:
         recompute_all_batches_tabulate_flow.recompute_all_batches_tabulate_flow(
             job_run_id=job_run_id,
             project_id=project_id,
@@ -121,7 +115,9 @@ def project_apply_migrations(
             # tables may have changed.
             drop_downstream_tables=True,
         )
-    return revisions_applyed
+        logger.info("Recompute all batches tabulate flow completed.")
+    logger.info("Migrations applied.")
+    return revisions_applied
 
 
 def create_deployments(

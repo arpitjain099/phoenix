@@ -27,14 +27,14 @@ def upgrade() -> None:
         sa.Column("platform", sa.String(), nullable=False),
         sa.Column("data_type", sa.String(), nullable=False),
         sa.Column("batch_id", sa.Integer(), nullable=False),
-        sa.Column("gathered_at", sa.DateTime(), nullable=False),
+        sa.Column("gathered_at", sa.TIMESTAMP(), nullable=False),
         # This has to be a string because sqlalchemy has not yet implemented
         # a JSON type for BigQuery.
         # https://github.com/googleapis/python-bigquery-sqlalchemy/issues/546
         # And not in pandas gbq:
         # https://github.com/googleapis/python-bigquery/issues/1966
         sa.Column("json_data", sa.String(), nullable=False),
-        sa.Column("last_processed_at", sa.DateTime(), nullable=True),
+        sa.Column("last_processed_at", sa.TIMESTAMP(), nullable=True),
     )
 
 
