@@ -11,8 +11,8 @@ type: application
 # If you change this you have to update superset.image.tag in values.yaml
 # This can not be done via the parent chart
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-version: 2.7.4
-appVersion: "2.7.4"
+version: 2.7.5
+appVersion: "2.7.5"
 
 dependencies:
 - name: superset
