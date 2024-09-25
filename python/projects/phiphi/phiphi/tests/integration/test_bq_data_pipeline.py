@@ -362,6 +362,3 @@ def test_bq_pipeline_integration(tmp_bq_project):
         """
     )
     assert len(tabulated_messages_df) == 9
-
-    # Use this to break before deleting the dataset to manually inspect the data
-    # assert False
