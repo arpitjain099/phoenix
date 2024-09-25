@@ -109,6 +109,28 @@ def test_bq_project_apply_migrations(patch_settings, tmp_project_namespace, pref
     ) as connection:
         project_db.alembic_downgrade(connection, revision="-1")
 
+    # Apply the migrations should not do the recompute as the recompute strategy is never
+    projects.project_apply_migrations(
+        job_run_id=1,
+        project_id=1,
+        class_id_name_map={},
+        project_namespace=tmp_project_namespace,
+        with_recompute_all_batches=projects.RecomputeStrategy.never,
+    )
+
+    tabulated_messages_4_df = pd.read_gbq(
+        f"SELECT * FROM {tmp_project_namespace}.{constants.TABULATED_MESSAGES_TABLE_NAME}"
+    )
+
+    assert len(tabulated_messages_4_df) == len(tabulated_messages_df)
+    pd.testing.assert_frame_equal(tabulated_messages_df, tabulated_messages_4_df)
+
+    with project_db.init_connection(
+        project_db.form_bigquery_sqlalchmey_uri(tmp_project_namespace)
+    ) as connection:
+        project_db.alembic_downgrade(connection, revision="-1")
+
+    # Apply migrations and recompute
     projects.project_apply_migrations(
         job_run_id=1,
         project_id=1,
@@ -116,12 +138,12 @@ def test_bq_project_apply_migrations(patch_settings, tmp_project_namespace, pref
         project_namespace=tmp_project_namespace,
     )
 
-    tabulated_messages_4_df = pd.read_gbq(
+    tabulated_messages_5_df = pd.read_gbq(
         f"SELECT * FROM {tmp_project_namespace}.{constants.TABULATED_MESSAGES_TABLE_NAME}"
     )
 
     # The recompute should have been run and the table should contain the messages
-    assert len(tabulated_messages_4_df) > len(tabulated_messages_df)
-    assert len(tabulated_messages_4_df) == 8
+    assert len(tabulated_messages_5_df) > len(tabulated_messages_df)
+    assert len(tabulated_messages_5_df) == 8
     # Should not be equal because the data was updated
-    assert not tabulated_messages_df.equals(tabulated_messages_4_df)
+    assert not tabulated_messages_df.equals(tabulated_messages_5_df)

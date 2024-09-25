@@ -1,4 +1,5 @@
 """Pipeline jobs for projects."""
+from enum import Enum
 from typing import Coroutine
 
 import prefect
@@ -86,17 +87,34 @@ def drop_downstream_tables(
     return None
 
 
+class RecomputeStrategy(str, Enum):
+    """Recompute strategy enum."""
+
+    always = "always"
+    never = "never"
+    on_upgrade = "on_upgrade"
+
+
 @prefect.flow(name="project_apply_migrations")
 def project_apply_migrations(
     job_run_id: int,
     project_id: int,
     class_id_name_map: dict[int, str],
     project_namespace: str,
+    with_recompute_all_batches: RecomputeStrategy = RecomputeStrategy.on_upgrade,
 ) -> bool:
     """Apply the migrations to the project database.
 
     If the migrations are applied successfully then the recompute_all_batches_tabulate_flow will be
     run.
+
+    Args:
+        job_run_id (int): The job run id.
+        project_id (int): The project id.
+        class_id_name_map (dict[int, str]): The class id name map.
+        project_namespace (str): The project namespace.
+        with_recompute_all_batches (RecomputeStrategy, optional): The recompute strategy.
+            Defaults to RecomputeStrategy.on_upgrade.
     """
     logger = prefect.get_run_logger()
     with project_db.init_connection(
@@ -105,7 +123,9 @@ def project_apply_migrations(
         logger.info("Applying migrations.")
         revisions_applied = project_db.alembic_upgrade(connection)
         logger.info(f"Revisions applied: {revisions_applied}")
-    if revisions_applied:
+    if with_recompute_all_batches == RecomputeStrategy.always or (
+        with_recompute_all_batches == RecomputeStrategy.on_upgrade and revisions_applied
+    ):
         recompute_all_batches_tabulate_flow.recompute_all_batches_tabulate_flow(
             job_run_id=job_run_id,
             project_id=project_id,
