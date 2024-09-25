@@ -224,7 +224,9 @@ def normalised_facebook_comments_df() -> pd.DataFrame:
             "Thanks a lot to all of you do for huminity👍❤️",
             "Awesome 👏 \nHappy autism day",
             "and thank you lord and thank you God Amen",
-            "Le PMU c'est pour qui ?😄😄😄",
+            # No "text" key in blob is for comment that are images. We include them but with empty
+            # text
+            "",
         ],
         "pi_platform_message_url": [
             "https://www.facebook.com/unitednations/posts/pfbid045as8QKV2uLVYe2NumDPs7a68Hr4P5cjmoyMRo2e4dj4p3rp2gWNNj948Uu7BVcxl?comment_id=961647078809735",

@@ -73,7 +73,7 @@ def normalise_single_facebook_comments_json(json_blob: Dict) -> Dict | None:
         "pi_platform_message_author_name": json_blob["profileName"],
         "pi_platform_parent_message_id": parent_message_id,
         "pi_platform_root_message_id": json_blob["facebookId"],
-        "pi_text": json_blob["text"],
+        "pi_text": json_blob.get("text", ""),
         "pi_platform_message_url": json_blob["commentUrl"],
         "platform_message_last_updated_at": datetime.fromisoformat(json_blob["date"]),
         "phoenix_platform_message_id": anonymize(json_blob["id"]),
