@@ -74,6 +74,8 @@ def test_get_gathers(client: TestClient, reseed_tables) -> None:
     gathers = response.json()
     # Currently this includes even the deleted gathers
     assert len(gathers) == 6
+    # Descending order
+    assert gathers[0]["id"] > gathers[1]["id"]
 
     response = client.get("/projects/2/gathers/")
     assert response.status_code == 200

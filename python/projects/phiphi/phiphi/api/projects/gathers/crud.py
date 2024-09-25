@@ -34,7 +34,6 @@ def get_orm_gather(
     return orm_gather
 
 
-## Issues with this implementation
 def get_gathers(
     session: sqlalchemy.orm.Session, project_id: int, start: int = 0, end: int = 100
 ) -> list[schemas.GatherResponse]:
@@ -48,10 +47,7 @@ def get_gathers(
     gathers = (
         session.query(models.Gather)
         .filter(models.Gather.project_id == project_id)
-        .options(
-            # Add additional relationships to be eagerly loaded here
-            # Example: joinedload(Gather.other_related_model),
-        )
+        .order_by(models.Gather.id.desc())
         .slice(start, end)
         .all()
     )
