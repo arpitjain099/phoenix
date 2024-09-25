@@ -2,11 +2,8 @@
 
 import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { useTranslate, useList } from "@refinedev/core";
-import { useTable } from "@refinedev/react-table";
 import { ColumnDef } from "@tanstack/react-table";
 import {
-	ScrollArea,
-	Pagination,
 	Group,
 	Button,
 	Tooltip,
@@ -47,7 +44,7 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 	const apiResponse = useList({
 		resource: projectid ? `projects/${projectid}/gathers` : "",
 		pagination: {
-			mode: "client",
+			mode: "off",
 		},
 	});
 
@@ -243,20 +240,6 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 		[translate, loadingStates]
 	);
 
-	const {
-		getHeaderGroups,
-		getRowModel,
-		refineCore: { setCurrent, pageCount, current },
-	} = useTable({
-		columns,
-		data: gatherList,
-		refineCoreProps: {
-			pagination: {
-				mode: "off",
-			},
-		},
-	});
-
 	useEffect(() => {
 		if (apiResponse?.data?.data) {
 			setGatherList(apiResponse.data.data);
@@ -325,19 +308,9 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 						</Button>
 					</Link>
 				</Group>
-				<ScrollArea>
-					<TableComponent
-						headerGroups={getHeaderGroups}
-						rowModel={getRowModel}
-						data={apiResponse}
-					/>
-				</ScrollArea>
-				<br />
-				<Pagination
-					position="right"
-					total={pageCount}
-					page={current}
-					onChange={setCurrent}
+				<TableComponent
+					columns={columns}
+					data={apiResponse?.data?.data || []}
 				/>
 			</div>
 			<GatherRunModal

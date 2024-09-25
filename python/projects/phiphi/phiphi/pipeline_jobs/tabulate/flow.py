@@ -8,6 +8,11 @@ from phiphi import constants
 from phiphi.pipeline_jobs import constants as pipeline_jobs_constants
 
 
+def escape_sql_value(value: str) -> str:
+    """Escapes single quotes in a string for safe SQL queries."""
+    return value.replace("'", "\\'")
+
+
 @prefect.task
 def tabulate(
     job_run_id: int,
@@ -29,11 +34,14 @@ def tabulate(
     classified_messages_table_name = (
         f"{bigquery_dataset}.{pipeline_jobs_constants.CLASSIFIED_MESSAGES_TABLE_NAME}"
     )
+    manually_classified_authors_table_name = (
+        f"{bigquery_dataset}.{pipeline_jobs_constants.MANUALLY_CLASSIFIED_AUTHORS_TABLE_NAME}"
+    )
 
     if class_id_name_map:
         # Generate the CASE statement for class names mapping from their IDs
         class_name_case_statements = [
-            f"WHEN cm.class_id = {class_id} THEN '{class_name}'"
+            f"WHEN cm.class_id = {class_id} THEN '{escape_sql_value(class_name)}'"
             for class_id, class_name in class_id_name_map.items()
         ]
         class_name_case_statement_sql = (
@@ -50,6 +58,7 @@ def tabulate(
     WITH messages_classes AS (
         SELECT
             m.*,
+            mca.class_name AS author_class_name,
             {class_name_case_statement_sql}
         FROM
             `{source_table_name}` m
@@ -57,6 +66,10 @@ def tabulate(
             `{classified_messages_table_name}` cm
         ON
             m.phoenix_platform_message_id = cm.phoenix_platform_message_id
+        LEFT JOIN
+            `{manually_classified_authors_table_name}` mca
+        ON
+            m.phoenix_platform_message_author_id = mca.phoenix_platform_author_id
     ),
     posts AS (
         SELECT
@@ -78,9 +91,9 @@ def tabulate(
         p.platform AS platform,
 
         -- Post Author
-        -- Currently no implemented
+        -- Currently many columns not implemented (i.e. NULL)
         NULL AS post_author_category,
-        NULL AS post_author_class,
+        p.author_class_name AS post_author_class,
         NULL AS post_author_description,
         NULL AS post_author_followers,
         p.phoenix_platform_message_author_id AS post_author_id,
@@ -100,7 +113,7 @@ def tabulate(
         p.pi_text AS post_text_pi,
 
         -- Comment Author
-        NULL AS comment_author_class,
+        c.author_class_name AS comment_author_class,
         c.phoenix_platform_message_author_id AS comment_author_id,
         c.pi_platform_message_author_name AS comment_author_name_pi,
 

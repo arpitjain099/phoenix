@@ -61,6 +61,10 @@ def normalise_single_facebook_comments_json(json_blob: Dict) -> Dict | None:
     """Extract fields from a single Facebook comment JSON blob to normalized form."""
     if is_apify_scraping_error(json_blob):
         return None
+    # Sometimes the Apify actor's GraphQL API returns what seems to be an empty node, with
+    # only the post url, and `"video_home_www_trending_hashtag":[]` as the only key-value pairs.
+    if "id" not in json_blob:
+        return None
 
     if "replyToCommentId" in json_blob:
         parent_message_id = json_blob["replyToCommentId"]
@@ -120,12 +124,16 @@ def normalise_single_tiktok_posts_json(json_blob: Dict) -> Dict | None:
     }
 
 
-def normalise_single_tiktok_comments_json(json_blob: Dict) -> Dict:
+def normalise_single_tiktok_comments_json(json_blob: Dict) -> Dict | None:
     """Extract fields from a single TikTok comment JSON blob to normalized form.
 
     This normaliser can be used for all gathers that use the apidojo/tiktok-comments-scraper actor.
     https://apify.com/apidojo/tiktok-comments-scraper/input-schema
     """
+    # Tiktok comments have a "noResults" key if there are no comments for a post
+    if "noResults" in json_blob and json_blob["noResults"] is True:
+        return None
+
     # ParentId is the comment of a reply and is not set if it is a top-level comment
     parent_message_id = json_blob.get("parentId", json_blob["awemeId"])
     return {
