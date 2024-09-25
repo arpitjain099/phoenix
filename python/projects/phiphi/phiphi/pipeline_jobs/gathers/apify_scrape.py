@@ -96,7 +96,7 @@ def apify_scrape_and_batch_download_results(
     job_run_id: int,
     bigquery_dataset: str,
     bigquery_table: str = constants.GATHER_BATCHES_TABLE_NAME,
-    batch_size: int = 100,
+    batch_size: int = constants.DEFAULT_BATCH_SIZE,
 ) -> gather_types.ScrapeResponse:
     """Scrape data using the Apify API and save them to a GCP BigQuery table or Parquet."""
     prefect_logger = prefect.get_run_logger()
