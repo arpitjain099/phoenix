@@ -10,6 +10,9 @@ Instructions on running these tests without having to setup the local platform d
 - Delete everything in `tests/confest.py`
 - Set env var `export GOOGLE_CLOUD_PROJECT="bu-phoenix-dev"`
 - Run `make test_integration` to run the tests
+
+To not delete the resultant tables in BQ for inspection you need to alter the pytest fixture
+`tmp_bq_project`.
 """
 import datetime
 from unittest.mock import patch
