@@ -124,12 +124,16 @@ def normalise_single_tiktok_posts_json(json_blob: Dict) -> Dict | None:
     }
 
 
-def normalise_single_tiktok_comments_json(json_blob: Dict) -> Dict:
+def normalise_single_tiktok_comments_json(json_blob: Dict) -> Dict | None:
     """Extract fields from a single TikTok comment JSON blob to normalized form.
 
     This normaliser can be used for all gathers that use the apidojo/tiktok-comments-scraper actor.
     https://apify.com/apidojo/tiktok-comments-scraper/input-schema
     """
+    # Tiktok comments have a "noResults" key if there are no comments for a post
+    if "noResults" in json_blob and json_blob["noResults"] is True:
+        return None
+
     # ParentId is the comment of a reply and is not set if it is a top-level comment
     parent_message_id = json_blob.get("parentId", json_blob["awemeId"])
     return {
