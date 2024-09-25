@@ -8,6 +8,11 @@ from phiphi import constants
 from phiphi.pipeline_jobs import constants as pipeline_jobs_constants
 
 
+def escape_sql_value(value: str) -> str:
+    """Escapes single quotes in a string for safe SQL queries."""
+    return value.replace("'", "\\'")
+
+
 @prefect.task
 def tabulate(
     job_run_id: int,
@@ -33,7 +38,7 @@ def tabulate(
     if class_id_name_map:
         # Generate the CASE statement for class names mapping from their IDs
         class_name_case_statements = [
-            f"WHEN cm.class_id = {class_id} THEN '{class_name}'"
+            f"WHEN cm.class_id = {class_id} THEN '{escape_sql_value(class_name)}'"
             for class_id, class_name in class_id_name_map.items()
         ]
         class_name_case_statement_sql = (

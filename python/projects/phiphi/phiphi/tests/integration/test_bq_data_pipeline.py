@@ -285,7 +285,8 @@ def test_bq_pipeline_integration(tmp_bq_project):
         table=constants.CLASSIFIED_MESSAGES_TABLE_NAME,
     )
 
-    class_id_name_map = {0: "economy", 1: "politics"}
+    # Add an apostrophe to the class_name to test that we don't get sql errors
+    class_id_name_map = {0: "d'economy", 1: "politics"}
 
     # Re-tabulate, now with the classified messages, and class_id_name_map
     tabulate_flow.tabulate_flow(
