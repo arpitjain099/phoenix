@@ -6,6 +6,7 @@ import prefect
 
 from phiphi import constants
 from phiphi.api.projects import gathers
+from phiphi.pipeline_jobs import constants as pipeline_jobs_constants
 from phiphi.pipeline_jobs.classify import flow as classify_flow
 from phiphi.pipeline_jobs.gathers import flow as gather_flow
 from phiphi.pipeline_jobs.tabulate import flow as tabulate_flow
@@ -21,7 +22,7 @@ async def gather_classify_tabulate_flow(
     gather_child_type: gathers.schemas.ChildTypeName,
     classifiers_dict_list: list[dict],
     class_id_name_map: dict[int, str],
-    batch_size: int = 100,
+    batch_size: int = pipeline_jobs_constants.DEFAULT_BATCH_SIZE,
 ) -> None:
     """Flow which gathers, classifies, and tabulates data.
 
