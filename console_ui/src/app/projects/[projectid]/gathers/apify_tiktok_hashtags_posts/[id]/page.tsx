@@ -2,21 +2,14 @@
 
 import React from "react";
 import { useShow, useTranslate } from "@refinedev/core";
-import {
-	Show,
-	TextField,
-	EditButtonProps,
-	EditButton,
-	NumberField,
-} from "@refinedev/mantine";
-import { Accordion, Button, Container, Group, Title } from "@mantine/core";
+import { Show, TextField, NumberField } from "@refinedev/mantine";
+import { Accordion, Container, Group, Title } from "@mantine/core";
 import { useParams } from "next/navigation";
-import { IconCopy } from "@tabler/icons";
-import Link from "next/link";
 import URLInputList from "@components/gather/url-list";
-import BreadcrumbsComponent from "@components/breadcrumbs";
 import GatherViewStatus from "@components/gather/view_status";
 import { hashTagPostBaseLink } from "src/utils/constants";
+import GatherViewBreadcrumb from "@components/breadcrumbs/gatherView";
+import GatherViewHeaderButton from "@components/gather/header-button";
 
 export default function ApifyTiktokHashtagPostShow(): JSX.Element {
 	const { projectid, id } = useParams();
@@ -30,51 +23,21 @@ export default function ApifyTiktokHashtagPostShow(): JSX.Element {
 
 	const record = data?.data;
 
-	const editButtonProps: EditButtonProps = {
-		resource: `apify_tiktok_hashtags_posts`,
-		recordItemId: id as string,
-		...(isLoading ||
-		(record?.latest_job_run &&
-			record?.latest_job_run?.status !== "awaiting_start")
-			? { disabled: true }
-			: {}),
-	};
-
-	const breadcrumbs = [
-		{ title: translate("projects.projects"), href: "/projects" },
-		{
-			title: projectid as string,
-			href: `/projects/show/${projectid}`,
-			replaceWithProjectName: true,
-		},
-		{
-			title: translate("gathers.gathers"),
-			href: `/projects/show/${projectid}?activeItem=gather`,
-		},
-		{ title: record?.name, href: "" },
-	];
-
 	return (
 		<Show
 			title={<Title order={3}>{record?.name}</Title>}
 			breadcrumb={
-				<BreadcrumbsComponent
-					breadcrumbs={breadcrumbs}
-					projectid={projectid as string}
-				/>
+				<GatherViewBreadcrumb record={record} projectid={projectid as string} />
 			}
 			isLoading={isLoading}
 			headerButtons={() => (
-				<>
-					<Link
-						href={`/projects/${projectid}/gathers/apify_tiktok_hashtags_posts/duplicate/${id}`}
-					>
-						<Button leftIcon={<IconCopy size={18} />}>
-							{translate("buttons.duplicate")}
-						</Button>
-					</Link>
-					<EditButton {...editButtonProps} />
-				</>
+				<GatherViewHeaderButton
+					resource="apify_tiktok_hashtags_posts"
+					id={id as string}
+					projectid={projectid as string}
+					record={record}
+					isLoading={isLoading}
+				/>
 			)}
 		>
 			<TextField
