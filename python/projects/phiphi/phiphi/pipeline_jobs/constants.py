@@ -5,7 +5,7 @@ GATHER_BATCHES_TABLE_NAME = "gather_batches"
 # We had a problem with the limit and had to change the name of the table so we could still process
 # the recompute on the same day.
 # Once the migrations is complete this should be change back to `generalised_messages`.
-GENERALISED_MESSAGES_TABLE_NAME = "generalised_messages_tmp2"
+GENERALISED_MESSAGES_TABLE_NAME = "generalised_messages"
 DEDUPLICATED_GENERALISED_MESSAGES_TABLE_NAME = "deduped_generalised_messages"
 CLASSIFIED_MESSAGES_TABLE_NAME = "classified_messages"
 TABULATED_MESSAGES_TABLE_NAME = "tabulated_messages"
