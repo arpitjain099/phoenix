@@ -22,8 +22,8 @@ tabulated_messages_table = sa.Table(
     # Post Author
     sa.Column("post_author_category", sa.String, nullable=True),
     sa.Column("post_author_class", sa.String, nullable=True),
-    sa.Column("post_author_description", sa.Text, nullable=True),
-    sa.Column("post_author_followers", sa.Integer, nullable=True),
+    sa.Column("post_author_description_pi", sa.Text, nullable=True),
+    sa.Column("post_author_followers_count", sa.Integer, nullable=True),
     sa.Column("post_author_id", sa.String, nullable=False),
     sa.Column("post_author_location", sa.String, nullable=True),
     sa.Column("post_author_name_pi", sa.String, nullable=True),
@@ -55,6 +55,7 @@ tabulated_messages_table = sa.Table(
     # Platform specific
     sa.Column("facebook_video_views", sa.Integer, nullable=True),
     sa.Column("tiktok_post_plays", sa.Integer, nullable=True),
+    sa.Column("x_tweet_quotes", sa.Integer, nullable=True),
     # Add columns here
     # Developer columns should always go last
     # Pandas datetime is parsed into Bigquery as TIMESTAMP by default
@@ -75,8 +76,8 @@ def seed_dummy_data(project_namespace: str) -> None:
                 "platform": "dummy_platform",
                 "post_author_category": "dummy_category",
                 "post_author_class": "dummy_class",
-                "post_author_description": "dummy_description",
-                "post_author_followers": 100,
+                "post_author_description_pi": "dummy_description",
+                "post_author_followers_count": 100,
                 "post_author_id": "dummy_author_id",
                 "post_author_location": "dummy_location",
                 "post_author_name_pi": "dummy_name",
@@ -104,6 +105,7 @@ def seed_dummy_data(project_namespace: str) -> None:
                 "comment_text_pi": "dummy_text",
                 "facebook_video_views": 100,
                 "tiktok_post_plays": 0,
+                "x_tweet_quotes": 0,
                 "phoenix_processed_at": datetime.datetime.now(),
                 "phoenix_job_run_id": 0,
             },
@@ -111,8 +113,8 @@ def seed_dummy_data(project_namespace: str) -> None:
                 "platform": "dummy_platform",
                 "post_author_category": "dummy_category",
                 "post_author_class": "dummy_class",
-                "post_author_description": "dummy_description",
-                "post_author_followers": 100,
+                "post_author_description_pi": "dummy_description",
+                "post_author_followers_count": 100,
                 "post_author_id": "dummy_author_id",
                 "post_author_location": "dummy_location",
                 "post_author_name_pi": "dummy_name",
@@ -140,6 +142,7 @@ def seed_dummy_data(project_namespace: str) -> None:
                 "comment_text_pi": "dummy_text",
                 "facebook_video_views": 0,
                 "tiktok_post_plays": 100,
+                "x_tweet_quotes": 0,
                 "phoenix_processed_at": datetime.datetime.now(),
                 "phoenix_job_run_id": 0,
             },

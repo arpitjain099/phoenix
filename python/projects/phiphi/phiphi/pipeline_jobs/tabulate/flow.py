@@ -92,14 +92,14 @@ def tabulate(
 
         -- Post Author
         -- Currently many columns not implemented (i.e. NULL)
-        NULL AS post_author_category,
+        CAST(NULL AS STRING) AS post_author_category,
         p.author_class_name AS post_author_class,
-        NULL AS post_author_description,
-        NULL AS post_author_followers,
+        CAST(NULL AS STRING) AS post_author_description_pi,
+        CAST(NULL AS INT64) AS post_author_followers_count,
         p.phoenix_platform_message_author_id AS post_author_id,
-        NULL AS post_author_location,
+        CAST(NULL AS STRING) AS post_author_location,
         p.pi_platform_message_author_name AS post_author_name_pi,
-        NULL AS post_author_link_pi,
+        CAST(NULL AS STRING) AS post_author_link_pi,
 
         -- Post
         p.class AS post_class,
@@ -130,9 +130,11 @@ def tabulate(
 
         -- Platform specific stats
         -- Facebook
-        NULL AS facebook_video_views,
+        CAST(NULL AS INT64) AS facebook_video_views,
         -- TikTok
-        NULL AS tiktok_post_plays,
+        CAST(NULL AS INT64) AS tiktok_post_plays,
+        -- X
+        CAST(NULL AS INT64) AS x_tweet_quotes,
 
         -- Developer fields should always be last
         -- Using CURRENT_TIMESTAMP rather then PARSE_TIMESTAMP as it seems to make the integration
