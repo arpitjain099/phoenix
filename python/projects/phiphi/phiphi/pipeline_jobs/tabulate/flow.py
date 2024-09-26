@@ -133,6 +133,8 @@ def tabulate(
         CAST(NULL AS INT64) AS facebook_video_views,
         -- TikTok
         CAST(NULL AS INT64) AS tiktok_post_plays,
+        -- X
+        CAST(NULL AS INT64) AS x_tweet_quotes,
 
         -- Developer fields should always be last
         -- Using CURRENT_TIMESTAMP rather then PARSE_TIMESTAMP as it seems to make the integration
