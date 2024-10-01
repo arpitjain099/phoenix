@@ -156,9 +156,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
     )
     assert len(deduped_messages_df) == 17
 
-    tabulate_flow.tabulate_flow(
-        job_run_id=4, project_namespace=test_project_namespace, class_id_name_map={}
-    )
+    tabulate_flow.tabulate_flow(job_run_id=4, project_namespace=test_project_namespace)
 
     tabulated_messages_df = pd.read_gbq(
         f"""
@@ -178,7 +176,6 @@ def test_bq_pipeline_integration(tmp_bq_project):
         job_run_id=10,
         project_id=1,
         project_namespace=test_project_namespace,
-        class_id_name_map={},
     )
 
     messages_after_recompute_df = pd.read_gbq(
@@ -218,7 +215,6 @@ def test_bq_pipeline_integration(tmp_bq_project):
         job_run_id=10,
         project_id=1,
         project_namespace=test_project_namespace,
-        class_id_name_map={},
         gather_ids=[example_gathers.facebook_posts_gather_example().id],
     )
 
@@ -233,7 +229,6 @@ def test_bq_pipeline_integration(tmp_bq_project):
         job_run_id=11,
         project_id=1,
         project_namespace=test_project_namespace,
-        class_id_name_map={},
         drop_downstream_tables=True,
     )
 
@@ -270,11 +265,10 @@ def test_bq_pipeline_integration(tmp_bq_project):
 
     # Manually create and add some classified_messages
     # Grab rows just to make a dataframe
-    classified_messages_df = deduped_messages_df.iloc[:7][["phoenix_platform_message_id"]].copy()
+    classified_messages_df = deduped_messages_df.iloc[:6][["phoenix_platform_message_id"]].copy()
     # Explicitly set the message IDs - this is brittle, but better than doing anything smart.
     classified_messages_df["phoenix_platform_message_id"] = [
         normalisers.anonymize("818337297005563"),  # post with no comments one class
-        normalisers.anonymize("823689576453736"),  # post with 3 comments one class
         # post with 4 comments two classes
         normalisers.anonymize("823003113189049"),
         normalisers.anonymize("823003113189049"),
@@ -285,7 +279,16 @@ def test_bq_pipeline_integration(tmp_bq_project):
         normalisers.anonymize("Y29tbWVudDo4MjM2ODk1NzY0NTM3MzZfMTUyMDM5OTc0ODU5MzY2NA=="),
     ]
     classified_messages_df["classifier_id"] = 1
-    classified_messages_df["class_id"] = [0, -1, 0, 1, 1, 0, 1]
+    classified_messages_df["classifier_version_id"] = 1
+    # Add an apostrophe to the class_name to test that we don't get sql errors
+    classified_messages_df["class_name"] = [
+        "d'economy",
+        "d'economy",
+        "politics",
+        "politics",
+        "d'economy",
+        "politics",
+    ]
     classified_messages_df["job_run_id"] = 5
     pipeline_jobs_utils.write_data(
         df=classified_messages_df,
@@ -293,13 +296,8 @@ def test_bq_pipeline_integration(tmp_bq_project):
         table=constants.CLASSIFIED_MESSAGES_TABLE_NAME,
     )
 
-    # Add an apostrophe to the class_name to test that we don't get sql errors
-    class_id_name_map = {0: "d'economy", 1: "politics"}
-
-    # Re-tabulate, now with the classified messages, and class_id_name_map
-    tabulate_flow.tabulate_flow(
-        job_run_id=4, project_namespace=test_project_namespace, class_id_name_map=class_id_name_map
-    )
+    # Re-tabulate, now with the classified messages
+    tabulate_flow.tabulate_flow(job_run_id=4, project_namespace=test_project_namespace)
 
     tabulated_messages_df = pd.read_gbq(
         f"""
@@ -313,16 +311,13 @@ def test_bq_pipeline_integration(tmp_bq_project):
     # - Add two classes to a post, BUT, that post has 4 comments, so it creates 2 * num_comments,
     # i.e. 4 _new_ rows in tabulated_messages table due to cross-product posts x comments.
     # - Add a single class to a comment -> no change in count
-    # - Added a single class (without a matching class name) to a post with comments -> no change
-    # in total count
     # - Added two classes to a comment -> +1 to the total count
     assert len(tabulated_messages_df) == 19  # Previous count was 14
-    assert tabulated_messages_df["post_class"].isna().sum() == 5
-    for class_name in class_id_name_map.values():
+    assert tabulated_messages_df["post_class"].isna().sum() == 10
+    for class_name in ["d'economy", "politics"]:
         assert class_name in tabulated_messages_df["post_class"].unique()
-    assert "missing_class_name" in tabulated_messages_df["post_class"].unique()
     assert tabulated_messages_df["comment_class"].isna().sum() == 15
-    for class_name in class_id_name_map.values():
+    for class_name in ["d'economy", "politics"]:
         assert class_name in tabulated_messages_df["comment_class"].unique()
 
     # Testing author manual classifications
@@ -361,9 +356,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
         table=constants.MANUALLY_CLASSIFIED_AUTHORS_TABLE_NAME,
     )
     # Re-tabulate, now with the classified authors
-    tabulate_flow.tabulate_flow(
-        job_run_id=5, project_namespace=test_project_namespace, class_id_name_map=class_id_name_map
-    )
+    tabulate_flow.tabulate_flow(job_run_id=5, project_namespace=test_project_namespace)
     tabulated_messages_df = pd.read_gbq(
         f"""
         SELECT *
@@ -387,7 +380,6 @@ def test_bq_pipeline_integration(tmp_bq_project):
         job_source_id=gather_id_of_comments,
         job_run_id=6,
         project_namespace=test_project_namespace,
-        class_id_name_map=class_id_name_map,
     )
 
     # Checking that the comments are deleted from the batches
