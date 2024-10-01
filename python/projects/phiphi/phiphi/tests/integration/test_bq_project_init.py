@@ -58,7 +58,6 @@ def test_bq_project_apply_migrations(patch_settings, tmp_project_namespace, pref
     projects.project_apply_migrations(
         job_run_id=1,
         project_id=1,
-        class_id_name_map={},
         project_namespace=tmp_project_namespace,
     )
 
@@ -80,7 +79,6 @@ def test_bq_project_apply_migrations(patch_settings, tmp_project_namespace, pref
     projects.project_apply_migrations(
         job_run_id=1,
         project_id=1,
-        class_id_name_map={},
         project_namespace=tmp_project_namespace,
     )
 
@@ -113,7 +111,6 @@ def test_bq_project_apply_migrations(patch_settings, tmp_project_namespace, pref
     projects.project_apply_migrations(
         job_run_id=1,
         project_id=1,
-        class_id_name_map={},
         project_namespace=tmp_project_namespace,
         with_recompute_all_batches=projects.RecomputeStrategy.never,
     )
@@ -134,7 +131,6 @@ def test_bq_project_apply_migrations(patch_settings, tmp_project_namespace, pref
     projects.project_apply_migrations(
         job_run_id=1,
         project_id=1,
-        class_id_name_map={},
         project_namespace=tmp_project_namespace,
     )
 
