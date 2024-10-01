@@ -39,21 +39,29 @@ def test_keyword_match_classifier(tmp_bq_project):
     )
 
     # Instantiate the ClassifierKeywordMatchResponse to match the test data. Everything but id "e"
-    # should match a class_id
+    # should match a class
     classifier = {
         "id": 1,
+        "version_id": 1,
         "project_id": 10,
         "created_at": datetime.datetime.now(),
         "updated_at": datetime.datetime.now(),
+        "version_created_at": datetime.datetime.now(),
+        "version_updated_at": datetime.datetime.now(),
         "archived_at": None,
         "classifier_id": 1,
         "type": "keyword_match",
         "name": "test_classifier",
+        "classes_dict": {
+            "apple_banana": "Things that are apples and bananas",
+            "apple_orange": "Things that are apples and oranges",
+            "orange_banana": "Things that are oranges and bananas",
+        },
         "params": {
             "class_to_keyword_configs": [
-                {"class_id": 1, "musts": "apples bananas"},
-                {"class_id": 2, "musts": "apples oranges"},
-                {"class_id": 3, "musts": "oranges bananas"},
+                {"class_name": "apple_banana", "musts": "apples bananas"},
+                {"class_name": "apple_orange", "musts": "apples oranges"},
+                {"class_name": "orange_banana", "musts": "oranges bananas"},
             ]
         },
     }
@@ -61,7 +69,14 @@ def test_keyword_match_classifier(tmp_bq_project):
     expected_classified_messages_df = pd.DataFrame(
         {
             "classifier_id": [1, 1, 1, 1, 1],
-            "class_id": [1, 2, 3, 2, 1],
+            "classifier_version_id": [1, 1, 1, 1, 1],
+            "class_name": [
+                "apple_banana",
+                "apple_orange",
+                "orange_banana",
+                "apple_orange",
+                "apple_banana",
+            ],
             "phoenix_platform_message_id": ["a", "b", "c", "d", "f"],
             "job_run_id": [9, 9, 9, 9, 9],
         }
