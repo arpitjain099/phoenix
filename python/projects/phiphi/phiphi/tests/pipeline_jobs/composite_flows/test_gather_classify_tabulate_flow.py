@@ -40,7 +40,6 @@ async def test_gather_classify_tabulate_flow(
         gather_dict=gather.model_dump(),
         gather_child_type=gather.child_type,
         classifiers_dict_list=[],
-        class_id_name_map={},
         batch_size=1,
     )
     mock_apify_scrape_and_batch_download_results.assert_called_once()
@@ -75,7 +74,6 @@ async def test_gather_classify_tabulate_flow_exception_propagate(
             gather_dict=gather.model_dump(),
             gather_child_type=gather.child_type,
             classifiers_dict_list=[],
-            class_id_name_map={},
             batch_size=1,
         )
         mock_apify_scrape_and_batch_download_results.assert_called_once()
@@ -110,7 +108,6 @@ async def test_gather_classify_tabulate_flow_with_classify(
         gather_dict=gather.model_dump(),
         gather_child_type=gather.child_type,
         classifiers_dict_list=[classify_dict, classify_dict],
-        class_id_name_map={},
         batch_size=1,
     )
     mock_apify_scrape_and_batch_download_results.assert_called_once()
@@ -150,7 +147,6 @@ async def test_gather_classify_tabulate_flow_with_classify_exception(
         gather_dict=gather.model_dump(),
         gather_child_type=gather.child_type,
         classifiers_dict_list=[classify_dict, classify_dict],
-        class_id_name_map={},
         batch_size=1,
     )
     mock_apify_scrape_and_batch_download_results.assert_called_once()
