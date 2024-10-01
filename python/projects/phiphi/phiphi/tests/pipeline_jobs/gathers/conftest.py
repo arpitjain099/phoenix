@@ -42,6 +42,14 @@ def tiktok_hashtags_posts_gather_fixture() -> (
 
 
 @pytest.fixture
+def tiktok_searches_posts_gather_fixture() -> (
+    gathers.apify_tiktok_searches_posts.schemas.ApifyTikTokSearchesPostsGatherResponse
+):
+    """Fixture for the TikTok searches posts gather example."""
+    return example_gathers.tiktok_searches_posts_gather_example()
+
+
+@pytest.fixture
 def tiktok_comments_gather_fixture() -> (
     gathers.apify_tiktok_comments.schemas.ApifyTikTokCommentsGatherResponse
 ):
@@ -376,6 +384,100 @@ def normalised_tiktok_accounts_posts_df() -> pd.DataFrame:
     normalised_tiktok_df[
         "gather_type"
     ] = gathers.schemas.ChildTypeName.apify_tiktok_accounts_posts.value
+    normalised_tiktok_df["platform"] = gathers.schemas.Platform.tiktok
+    normalised_tiktok_df["data_type"] = gathers.schemas.DataType.posts
+    normalised_tiktok_df["phoenix_processed_at"] = datetime.fromisoformat(
+        "2024-04-02T12:10:59.000Z"
+    )
+    for column in ["platform_message_last_updated_at", "gathered_at", "phoenix_processed_at"]:
+        normalised_tiktok_df[column] = normalised_tiktok_df[column].astype("datetime64[ms, UTC]")  # type: ignore[call-overload]
+
+    return normalised_tiktok_df
+
+
+@pytest.fixture
+def normalised_tiktok_searches_posts_df() -> pd.DataFrame:
+    """Return the expected DataFrame based on the processed JSON data."""
+    data = {
+        "pi_platform_message_id": [
+            "tiktok-searches-id1",
+            "tiktok-searches-id2",
+            "tiktok-searches-id3",
+            "tiktok-searches-id4",
+            "tiktok-searches-id5",
+            "tiktok-searches-id6",
+        ],
+        "pi_platform_message_author_id": [
+            "tiktok-searches-authorMetaId1",
+            "tiktok-searches-authorMetaId2",
+            "tiktok-searches-authorMetaId3",
+            "tiktok-searches-authorMetaId4",
+            "tiktok-searches-authorMetaId5",
+            "tiktok-searches-authorMetaId6",
+        ],
+        "pi_platform_message_author_name": [
+            "tiktok-searches-authorMetaName1",
+            "tiktok-searches-authorMetaName2",
+            "tiktok-searches-authorMetaName3",
+            "tiktok-searches-authorMetaName4",
+            "tiktok-searches-authorMetaName5",
+            "tiktok-searches-authorMetaName6",
+        ],
+        "pi_platform_parent_message_id": [None] * 6,
+        "pi_platform_root_message_id": [None] * 6,
+        "pi_text": [
+            "Finding peace often requires letting go of people",
+            "You find peace in the countryside #countrysidelife",
+            "for my birthday I want PEACE and NO human interaction",
+            "Hello World #programming #coding #python #codingmemes ",
+            "#helloworld #painisanillusion #fyp I am a trained martial arts practitioner",
+            "text6",
+        ],
+        "pi_platform_message_url": [
+            "https://www.tiktok.com/@tiktok-searches-authorMetaProfileUrl1/video/id1",
+            "https://www.tiktok.com/@tiktok-searches-authorMetaProfileUrl2/video/id2",
+            "https://www.tiktok.com/@tiktok-searches-authorMetaProfileUrl3/video/id3",
+            "https://www.tiktok.com/@tiktok-searches-authorMetaProfileUrl4/video/id4",
+            "https://www.tiktok.com/@tiktok-searches-authorMetaProfileUrl5/video/id5",
+            "https://www.tiktok.com/@tiktok-searches-authorMetaProfileUrl6/video/id6",
+        ],
+        "platform_message_last_updated_at": [
+            1676503649000,
+            1715610890000,
+            1721064158000,
+            1725019495000,
+            1723029970000,
+            1725793230000,
+        ],
+        "phoenix_platform_message_id": [
+            normalisers.anonymize("tiktok-searches-id1"),
+            normalisers.anonymize("tiktok-searches-id2"),
+            normalisers.anonymize("tiktok-searches-id3"),
+            normalisers.anonymize("tiktok-searches-id4"),
+            normalisers.anonymize("tiktok-searches-id5"),
+            normalisers.anonymize("tiktok-searches-id6"),
+        ],
+        "phoenix_platform_message_author_id": [
+            normalisers.anonymize("tiktok-searches-authorMetaId1"),
+            normalisers.anonymize("tiktok-searches-authorMetaId2"),
+            normalisers.anonymize("tiktok-searches-authorMetaId3"),
+            normalisers.anonymize("tiktok-searches-authorMetaId4"),
+            normalisers.anonymize("tiktok-searches-authorMetaId5"),
+            normalisers.anonymize("tiktok-searches-authorMetaId6"),
+        ],
+        "phoenix_platform_parent_message_id": [None] * 6,
+        "phoenix_platform_root_message_id": [None] * 6,
+        "like_count": [54100, 469900, 105500, 491200, 0, 0],
+        "share_count": [11800, 15200, 3500, 77300, 0, 0],
+        "comment_count": [304, 2197, 900, 4112, 2496, 0],
+    }
+    normalised_tiktok_df = pd.DataFrame(data)
+    normalised_tiktok_df["gather_id"] = 6
+    normalised_tiktok_df["gather_batch_id"] = 3
+    normalised_tiktok_df["gathered_at"] = pd.to_datetime("2024-04-01T12:00:00.000Z")
+    normalised_tiktok_df[
+        "gather_type"
+    ] = gathers.schemas.ChildTypeName.apify_tiktok_searches_posts.value
     normalised_tiktok_df["platform"] = gathers.schemas.Platform.tiktok
     normalised_tiktok_df["data_type"] = gathers.schemas.DataType.posts
     normalised_tiktok_df["phoenix_processed_at"] = datetime.fromisoformat(
