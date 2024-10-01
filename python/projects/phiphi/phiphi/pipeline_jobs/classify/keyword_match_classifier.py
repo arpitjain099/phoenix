@@ -12,14 +12,13 @@ def classify(
 ) -> None:
     """Classify messages using keyword match classifier through BigQuery query."""
     client = bigquery.Client()
-    classifier_id: int = classifier.id
     source_table_name = f"{bigquery_dataset}.{pipeline_jobs_constants.DEDUPLICATED_GENERALISED_MESSAGES_TABLE_NAME}"  # noqa: E501
     destination_table_name = (
         f"{bigquery_dataset}.{pipeline_jobs_constants.CLASSIFIED_MESSAGES_TABLE_NAME}"  # noqa: E501
     )
 
     for config in classifier.params.class_to_keyword_configs:
-        class_id = config.class_id
+        class_name = config.class_name
         must_keywords = config.musts.split()
 
         # Construct the query conditions for each keyword.
@@ -30,10 +29,17 @@ def classify(
         # BigQuery SQL query to classify messages and insert into the classified messages table
         query = f"""
             INSERT INTO `{destination_table_name}`
-            (classifier_id, class_id, phoenix_platform_message_id, job_run_id)
+            (
+                classifier_id,
+                classifier_version_id,
+                class_name,
+                phoenix_platform_message_id,
+                job_run_id
+            )
             SELECT
-                {classifier_id} AS classifier_id,
-                {class_id} AS class_id,
+                {classifier.id} AS classifier_id,
+                {classifier.version_id} AS classifier_version_id,
+                '{class_name}' AS class_name,
                 phoenix_platform_message_id,
                 {job_run_id} AS job_run_id
             FROM

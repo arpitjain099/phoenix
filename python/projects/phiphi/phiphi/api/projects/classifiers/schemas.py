@@ -15,7 +15,7 @@ class ClassifierType(str, Enum):
 class ClassToKeywordConfig(pydantic.BaseModel):
     """Class to keyword config containing keyword matches."""
 
-    class_id: int
+    class_name: str
     musts: Annotated[
         str,
         pydantic.Field(
