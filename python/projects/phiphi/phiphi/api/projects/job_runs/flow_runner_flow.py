@@ -56,13 +56,11 @@ def get_all_classifiers_params(project_id: int) -> dict[str, Any]:
 
 
 def get_tabulate_flow_params(project_id: int) -> dict[str, Any]:
-    """Get the parameters for the tabulate flow."""
-    with platform_db.get_session_context() as session:
-        classes = classifiers.crud.get_classes(session=session, project_id=project_id)
-    params = {
-        "class_id_name_map": {class_.id: class_.name for class_ in classes},
-    }
-    return params
+    """Get the parameters for the tabulate flow.
+
+    Note: Currently there are no extra parameters needed for the tabulate flow.
+    """
+    return {}
 
 
 @task
