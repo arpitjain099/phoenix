@@ -82,6 +82,23 @@ def tiktok_hashtags_posts_gather_example() -> (
     )
 
 
+def tiktok_searches_posts_gather_example() -> (
+    gathers.apify_tiktok_searches_posts.schemas.ApifyTikTokSearchesPostsGatherResponse
+):
+    """Example for ApifyTiktokSearchesGatherPostsResponse schema."""
+    return gathers.apify_tiktok_searches_posts.schemas.ApifyTikTokSearchesPostsGatherResponse(
+        name="Example",
+        search_list=["hello world", "peace"],
+        limit_posts_per_search=3,
+        id=6,
+        created_at=datetime.datetime.now(),
+        updated_at=datetime.datetime.now(),
+        project_id=1,
+        latest_job_run=None,
+        child_type=gathers.schemas.ChildTypeName.apify_tiktok_searches_posts,
+    )
+
+
 def tiktok_comments_gather_example() -> (
     gathers.apify_tiktok_comments.schemas.ApifyTikTokCommentsGatherResponse
 ):
