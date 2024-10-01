@@ -99,7 +99,6 @@ class RecomputeStrategy(str, Enum):
 def project_apply_migrations(
     job_run_id: int,
     project_id: int,
-    class_id_name_map: dict[int, str],
     project_namespace: str,
     with_recompute_all_batches: RecomputeStrategy = RecomputeStrategy.on_upgrade,
 ) -> bool:
@@ -111,7 +110,6 @@ def project_apply_migrations(
     Args:
         job_run_id (int): The job run id.
         project_id (int): The project id.
-        class_id_name_map (dict[int, str]): The class id name map.
         project_namespace (str): The project namespace.
         with_recompute_all_batches (RecomputeStrategy, optional): The recompute strategy.
             Defaults to RecomputeStrategy.on_upgrade.
@@ -130,7 +128,6 @@ def project_apply_migrations(
             job_run_id=job_run_id,
             project_id=project_id,
             project_namespace=project_namespace,
-            class_id_name_map=class_id_name_map,
             # It is important that we drop the downstream tables as the schemas of downstream
             # tables may have changed.
             drop_downstream_tables=True,

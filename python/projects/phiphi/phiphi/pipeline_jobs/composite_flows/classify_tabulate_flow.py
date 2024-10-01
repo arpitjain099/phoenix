@@ -15,7 +15,6 @@ def classify_tabulate_flow(
     job_run_id: int,
     project_namespace: str,
     classifier_dict: dict,
-    class_id_name_map: dict[int, str],
 ) -> None:
     """Flow which runs a classify, and tabulates all data."""
     classify_flow.classify_flow(
@@ -25,7 +24,6 @@ def classify_tabulate_flow(
     )
 
     tabulate_flow.tabulate_flow(
-        class_id_name_map=class_id_name_map,
         job_run_id=job_run_id,
         project_namespace=project_namespace,
     )

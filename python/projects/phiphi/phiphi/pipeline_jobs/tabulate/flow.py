@@ -17,7 +17,6 @@ def escape_sql_value(value: str) -> str:
 def tabulate(
     job_run_id: int,
     bigquery_dataset: str,
-    class_id_name_map: dict[int, str],
 ) -> None:
     """Task which tabulates data.
 
@@ -38,28 +37,13 @@ def tabulate(
         f"{bigquery_dataset}.{pipeline_jobs_constants.MANUALLY_CLASSIFIED_AUTHORS_TABLE_NAME}"
     )
 
-    if class_id_name_map:
-        # Generate the CASE statement for class names mapping from their IDs
-        class_name_case_statements = [
-            f"WHEN cm.class_id = {class_id} THEN '{escape_sql_value(class_name)}'"
-            for class_id, class_name in class_id_name_map.items()
-        ]
-        class_name_case_statement_sql = (
-            "CASE "
-            + " ".join(class_name_case_statements)
-            + " WHEN cm.class_id IS NULL THEN NULL"
-            + " ELSE 'missing_class_name' END AS class"
-        )
-    else:
-        class_name_case_statement_sql = "NULL AS class"
-
     tabulate_query = f"""
     CREATE OR REPLACE TABLE `{tabulate_table_name}` AS
     WITH messages_classes AS (
         SELECT
             m.*,
+            cm.class_name AS class,
             mca.class_name AS author_class_name,
-            {class_name_case_statement_sql}
         FROM
             `{source_table_name}` m
         LEFT JOIN
@@ -157,13 +141,11 @@ def tabulate(
 def tabulate_flow(
     job_run_id: int,
     project_namespace: str,
-    class_id_name_map: dict[int, str],
 ) -> None:
     """Flow which tabulates data - producing the dataset for the dashboard to use."""
     tabulate(
         job_run_id=job_run_id,
         bigquery_dataset=project_namespace,
-        class_id_name_map=class_id_name_map,
     )
 
 
