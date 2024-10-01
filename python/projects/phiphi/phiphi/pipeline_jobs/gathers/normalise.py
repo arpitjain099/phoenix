@@ -63,6 +63,9 @@ gather_normalisation_map: Dict[gathers.schemas.ChildTypeName, NormaliserFuncType
     gathers.schemas.ChildTypeName.apify_tiktok_hashtags_posts: (
         normalisers.normalise_single_tiktok_posts_json
     ),
+    gathers.schemas.ChildTypeName.apify_tiktok_searches_posts: (
+        normalisers.normalise_single_tiktok_posts_json
+    ),
     gathers.schemas.ChildTypeName.apify_tiktok_comments: (
         normalisers.normalise_single_tiktok_comments_json
     ),
