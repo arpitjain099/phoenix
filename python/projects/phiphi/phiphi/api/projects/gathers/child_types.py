@@ -18,6 +18,9 @@ from phiphi.api.projects.gathers.apify_tiktok_comments import (
 from phiphi.api.projects.gathers.apify_tiktok_hashtags_posts import (
     schemas as tiktok_hashtags_posts_schema,
 )
+from phiphi.api.projects.gathers.apify_tiktok_searches_posts import (
+    schemas as tiktok_searches_posts_schema,
+)
 
 ##############################
 # Child Types
@@ -30,6 +33,7 @@ AllChildTypesUnion = Union[
     facebook_post_schema.ApifyFacebookPostsGatherResponse,
     tiktok_hashtags_posts_schema.ApifyTikTokHashtagsPostsGatherResponse,
     tiktok_accounts_posts_schema.ApifyTikTokAccountsPostsGatherResponse,
+    tiktok_searches_posts_schema.ApifyTikTokSearchesPostsGatherResponse,
     tiktok_comments_schema.ApifyTikTokCommentsGatherResponse,
 ]
 
@@ -45,6 +49,9 @@ CHILD_TYPES_MAP: dict[gather_schemas.ChildTypeName, Type[AllChildTypesUnion]] = 
     ),
     gather_schemas.ChildTypeName.apify_tiktok_accounts_posts: (
         tiktok_accounts_posts_schema.ApifyTikTokAccountsPostsGatherResponse
+    ),
+    gather_schemas.ChildTypeName.apify_tiktok_searches_posts: (
+        tiktok_searches_posts_schema.ApifyTikTokSearchesPostsGatherResponse
     ),
     gather_schemas.ChildTypeName.apify_tiktok_comments: (
         tiktok_comments_schema.ApifyTikTokCommentsGatherResponse
@@ -76,6 +83,10 @@ CHILD_TYPES_MAP_PROJECT_DB_DEFAULTS: dict[
         data_type=gather_schemas.DataType.posts,
     ),
     gather_schemas.ChildTypeName.apify_tiktok_accounts_posts: GatherProjectDBDefaults(
+        platform=gather_schemas.Platform.tiktok,
+        data_type=gather_schemas.DataType.posts,
+    ),
+    gather_schemas.ChildTypeName.apify_tiktok_searches_posts: GatherProjectDBDefaults(
         platform=gather_schemas.Platform.tiktok,
         data_type=gather_schemas.DataType.posts,
     ),
