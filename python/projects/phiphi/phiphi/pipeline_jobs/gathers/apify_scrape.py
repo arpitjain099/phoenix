@@ -33,6 +33,9 @@ gather_apify_actor_map: dict[type[gathers.schemas.GatherResponse], str] = {
     gathers.apify_tiktok_hashtags_posts.schemas.ApifyTikTokHashtagsPostsGatherResponse: (
         "clockworks/tiktok-scraper"
     ),
+    gathers.apify_tiktok_searches_posts.schemas.ApifyTikTokSearchesPostsGatherResponse: (
+        "clockworks/tiktok-scraper"
+    ),
     gathers.apify_tiktok_comments.schemas.ApifyTikTokCommentsGatherResponse: (
         "apidojo/tiktok-comments-scraper"
     ),
