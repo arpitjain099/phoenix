@@ -75,6 +75,39 @@ def get_classifier(
     )
 
 
+def get_classifiers(
+    session: sqlalchemy.orm.Session,
+    project_id: int,
+    included_deleted: bool = False,
+) -> list[schemas.ClassifierResponse]:
+    """Get classifiers."""
+    query = session.query(models.Classifiers).filter(models.Classifiers.project_id == project_id)
+    if not included_deleted:
+        query = query.filter(models.Classifiers.archived_at.is_(None))
+    orm_classifiers = query.order_by(models.Classifiers.id.desc()).all()
+
+    classifiers = []
+    for orm_classifier in orm_classifiers:
+        latest_version = orm_classifier.latest_version
+        classifiers.append(
+            schemas.ClassifierResponse(
+                id=orm_classifier.id,
+                project_id=orm_classifier.project_id,
+                name=orm_classifier.name,
+                type=orm_classifier.type,
+                archived_at=orm_classifier.archived_at,
+                version_id=latest_version.version_id,
+                classes_dict=latest_version.classes_dict,
+                params=latest_version.params,
+                created_at=orm_classifier.created_at,
+                updated_at=orm_classifier.updated_at,
+                version_created_at=latest_version.created_at,
+                version_updated_at=latest_version.updated_at,
+            )
+        )
+    return classifiers
+
+
 def update_classifier_version(
     session: sqlalchemy.orm.Session,
     classifier_id: int,
