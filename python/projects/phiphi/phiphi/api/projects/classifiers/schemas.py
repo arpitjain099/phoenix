@@ -46,7 +46,10 @@ class ClassifierBase(pydantic.BaseModel):
         int, pydantic.Field(description="The ID of the project which the Classifier is within")
     ]
     name: Annotated[str, pydantic.Field(description="The name of the Classifier")]
-    type: Annotated[ClassifierType, pydantic.Field(description="The type of the classifier")]
+    type: Annotated[ClassifierType, pydantic.Field(description="The type of the Classifier")]
+    classes_dict: Annotated[
+        dict, pydantic.Field(description="The classes dictionary of the Classifier")
+    ]
     params: Annotated[
         Union[dict, KeywordMatchParams], pydantic.Field(description="The params of the Classifier")
     ]
@@ -68,13 +71,35 @@ class ClassifierResponse(ClassifierBase):
     model_config = pydantic.ConfigDict(from_attributes=True)
 
     id: int
+    version_id: Annotated[
+        int,
+        pydantic.Field(description="The version ID of the Classifier."),
+    ]
     created_at: datetime
     updated_at: datetime
+    version_created_at: datetime
+    version_updated_at: datetime
     archived_at: datetime | None
 
 
 class ClassifierArchive(pydantic.BaseModel):
     """Classifier archive schema."""
+
+
+class ClassifierUpdateVersion(pydantic.BaseModel):
+    """Classifier update version schema.
+
+    Properties to receive via API on creation.
+    """
+
+    classes_dict: Annotated[
+        dict | None,
+        pydantic.Field(default=None, description="The classes dictionary of the Classifier"),
+    ]
+    params: Annotated[
+        Union[dict, KeywordMatchParams] | None,
+        pydantic.Field(default=None, description="The params of the Classifier"),
+    ]
 
 
 class ClassifierKeywordMatchResponse(ClassifierResponse):
@@ -84,45 +109,3 @@ class ClassifierKeywordMatchResponse(ClassifierResponse):
     """
 
     params: KeywordMatchParams
-
-
-class ClassBase(pydantic.BaseModel):
-    """Class base schema.
-
-    Shared properties of all class schemas.
-    """
-
-    project_id: Annotated[
-        int, pydantic.Field(description="The ID of the project the Class is within")
-    ]
-    name: Annotated[str, pydantic.Field(description="The name of the Class")]
-    description: Annotated[str, pydantic.Field(description="The description of the Class")]
-
-
-class ClassCreate(ClassBase):
-    """Class create schema.
-
-    Properties to receive via API on creation.
-    """
-
-
-class ClassResponse(ClassBase):
-    """Class schema.
-
-    Properties to return to client.
-    """
-
-    id: int
-    created_at: datetime
-    updated_at: datetime
-
-
-class ClassUpdate(pydantic.BaseModel):
-    """Class update schema."""
-
-    name: str | None = None
-    description: str | None = None
-
-
-class ClassDelete(pydantic.BaseModel):
-    """Class delete schema."""
