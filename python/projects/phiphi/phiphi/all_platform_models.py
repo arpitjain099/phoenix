@@ -22,6 +22,9 @@ from phiphi.api.projects.gathers.apify_tiktok_comments import (
 from phiphi.api.projects.gathers.apify_tiktok_hashtags_posts import (
     models as apify_tiktok_hashtags_posts_models,  # noqa: F401,
 )
+from phiphi.api.projects.gathers.apify_tiktok_searches_posts import (
+    models as apify_tiktok_searches_posts_models,  # noqa: F401,
+)
 from phiphi.api.projects.job_runs import models as job_runs_models  # noqa: F401
 from phiphi.api.users import models as user_models  # noqa: F401
 from phiphi.api.workspaces import models as workspace_models  # noqa: F401
