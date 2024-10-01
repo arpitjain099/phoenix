@@ -80,7 +80,7 @@ def test_get_gathers(client: TestClient, reseed_tables) -> None:
     response = client.get("/projects/2/gathers/")
     assert response.status_code == 200
     gathers = response.json()
-    assert len(gathers) == 6
+    assert len(gathers) == 7
 
 
 def test_get_gathers_estimate(client: TestClient, reseed_tables) -> None:

@@ -17,6 +17,7 @@ from phiphi.seed import (
     apify_tiktok_accounts_posts_gather,
     apify_tiktok_comments_gather,
     apify_tiktok_hashtags_posts_gather,
+    apify_tiktok_searches_posts_gather,
     job_runs,
     projects,
     users,
@@ -50,6 +51,7 @@ def main(session: Session, testing: bool = False) -> None:
         apify_facebook_comments_gather.seed_test_apify_facebook_comments_gathers(session)
         apify_tiktok_accounts_posts_gather.seed_test_apify_tiktok_accounts_posts_gathers(session)
         apify_tiktok_hashtags_posts_gather.seed_test_apify_tiktok_hashtags_posts_gathers(session)
+        apify_tiktok_searches_posts_gather.seed_test_apify_tiktok_searches_posts_gathers(session)
         apify_tiktok_comments_gather.seed_test_apify_tiktok_comments_gathers(session)
         job_runs.seed_test_job_runs(session)
 
