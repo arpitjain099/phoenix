@@ -156,7 +156,9 @@ def test_bq_pipeline_integration(tmp_bq_project):
     )
     assert len(deduped_messages_df) == 17
 
-    tabulate_flow.tabulate_flow(job_run_id=4, project_namespace=test_project_namespace)
+    tabulate_flow.tabulate_flow(
+        job_run_id=4, project_namespace=test_project_namespace, classifiers_dict_list=[]
+    )
 
     tabulated_messages_df = pd.read_gbq(
         f"""
@@ -176,6 +178,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
         job_run_id=10,
         project_id=1,
         project_namespace=test_project_namespace,
+        classifiers_dict_list=[],
     )
 
     messages_after_recompute_df = pd.read_gbq(
@@ -215,6 +218,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
         job_run_id=10,
         project_id=1,
         project_namespace=test_project_namespace,
+        classifiers_dict_list=[],
         gather_ids=[example_gathers.facebook_posts_gather_example().id],
     )
 
@@ -229,6 +233,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
         job_run_id=11,
         project_id=1,
         project_namespace=test_project_namespace,
+        classifiers_dict_list=[],
         drop_downstream_tables=True,
     )
 
@@ -265,7 +270,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
 
     # Manually create and add some classified_messages
     # Grab rows just to make a dataframe
-    classified_messages_df = deduped_messages_df.iloc[:6][["phoenix_platform_message_id"]].copy()
+    classified_messages_df = deduped_messages_df.iloc[:7][["phoenix_platform_message_id"]].copy()
     # Explicitly set the message IDs - this is brittle, but better than doing anything smart.
     classified_messages_df["phoenix_platform_message_id"] = [
         normalisers.anonymize("818337297005563"),  # post with no comments one class
@@ -277,9 +282,10 @@ def test_bq_pipeline_integration(tmp_bq_project):
         # comment two classes
         normalisers.anonymize("Y29tbWVudDo4MjM2ODk1NzY0NTM3MzZfMTUyMDM5OTc0ODU5MzY2NA=="),
         normalisers.anonymize("Y29tbWVudDo4MjM2ODk1NzY0NTM3MzZfMTUyMDM5OTc0ODU5MzY2NA=="),
+        normalisers.anonymize("Y29tbWVudDo4MjM2ODk1NzY0NTM3MzZfMTUyMDM5OTc0ODU5MzY2NA=="),
     ]
     classified_messages_df["classifier_id"] = 1
-    classified_messages_df["classifier_version_id"] = 1
+    classified_messages_df["classifier_version_id"] = [2, 2, 2, 2, 2, 2, 1]
     # Add an apostrophe to the class_name to test that we don't get sql errors
     classified_messages_df["class_name"] = [
         "d'economy",
@@ -288,6 +294,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
         "politics",
         "d'economy",
         "politics",
+        "old_version_example",
     ]
     classified_messages_df["job_run_id"] = 5
     pipeline_jobs_utils.write_data(
@@ -297,7 +304,11 @@ def test_bq_pipeline_integration(tmp_bq_project):
     )
 
     # Re-tabulate, now with the classified messages
-    tabulate_flow.tabulate_flow(job_run_id=4, project_namespace=test_project_namespace)
+    tabulate_flow.tabulate_flow(
+        job_run_id=4,
+        project_namespace=test_project_namespace,
+        classifiers_dict_list=[{"id": 1, "version_id": 2}],
+    )
 
     tabulated_messages_df = pd.read_gbq(
         f"""
@@ -356,7 +367,11 @@ def test_bq_pipeline_integration(tmp_bq_project):
         table=constants.MANUALLY_CLASSIFIED_AUTHORS_TABLE_NAME,
     )
     # Re-tabulate, now with the classified authors
-    tabulate_flow.tabulate_flow(job_run_id=5, project_namespace=test_project_namespace)
+    tabulate_flow.tabulate_flow(
+        job_run_id=5,
+        project_namespace=test_project_namespace,
+        classifiers_dict_list=[{"id": 1, "version_id": 2}],
+    )
     tabulated_messages_df = pd.read_gbq(
         f"""
         SELECT *
@@ -380,6 +395,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
         job_source_id=gather_id_of_comments,
         job_run_id=6,
         project_namespace=test_project_namespace,
+        classifiers_dict_list=[{"id": 1, "version_id": 2}],
     )
 
     # Checking that the comments are deleted from the batches
