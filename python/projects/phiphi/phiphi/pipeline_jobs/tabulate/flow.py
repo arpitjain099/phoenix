@@ -38,9 +38,22 @@ def tabulate(
         f"{bigquery_dataset}.{pipeline_jobs_constants.MANUALLY_CLASSIFIED_AUTHORS_TABLE_NAME}"
     )
 
+    # Note, we could convert the classifier dicts into their pydantic models, and then get type
+    # checking on `id` and `version_id`, but this makes testing harder as we need to create entire
+    # classifier objects instead of just minimal dicts.
+    # Note we always add `(NULL, NULL)` to handle the case where there are no classifiers.
+    classifier_ids = ", ".join(
+        ["(NULL, NULL)"] + [f"({d['id']}, {d['version_id']})" for d in classifiers_dict_list]
+    )
+
     tabulate_query = f"""
     CREATE OR REPLACE TABLE `{tabulate_table_name}` AS
-    WITH messages_classes AS (
+    WITH active_only_classified_messages AS (
+        SELECT *
+        FROM `{classified_messages_table_name}`
+        WHERE (classifier_id, classifier_version_id) IN ({classifier_ids})
+    ),
+    messages_classes AS (
         SELECT
             m.*,
             cm.class_name AS class,
@@ -48,7 +61,7 @@ def tabulate(
         FROM
             `{source_table_name}` m
         LEFT JOIN
-            `{classified_messages_table_name}` cm
+            active_only_classified_messages cm
         ON
             m.phoenix_platform_message_id = cm.phoenix_platform_message_id
         LEFT JOIN
