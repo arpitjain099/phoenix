@@ -49,12 +49,14 @@ def get_classifier(
 
 
 def get_classifiers(
-    session: sqlalchemy.orm.Session, project_id: int, included_deleted: bool = False
+    session: sqlalchemy.orm.Session,
+    project_id: int,
+    include_archived: bool = False,
 ) -> list[schemas.ClassifierResponse]:
     """Get a list of classifiers for a project."""
     query = session.query(models.Classifiers).filter(models.Classifiers.project_id == project_id)
 
-    if not included_deleted:
+    if not include_archived:
         query = query.filter(models.Classifiers.archived_at.is_(None))
 
     orm_classifiers = query.order_by(models.Classifiers.id.desc()).all()
