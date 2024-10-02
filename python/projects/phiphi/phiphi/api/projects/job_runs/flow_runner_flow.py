@@ -58,9 +58,10 @@ def get_all_classifiers_params(project_id: int) -> dict[str, Any]:
 def get_tabulate_flow_params(project_id: int) -> dict[str, Any]:
     """Get the parameters for the tabulate flow.
 
-    Note: Currently there are no extra parameters needed for the tabulate flow.
+    Tabulate needs to know which classifiers are still active in the project, and what their latest
+    version is, so that it can pull the correct classification data.
     """
-    return {}
+    return get_all_classifiers_params(project_id=project_id)
 
 
 @task

@@ -100,6 +100,7 @@ def project_apply_migrations(
     job_run_id: int,
     project_id: int,
     project_namespace: str,
+    classifiers_dict_list: list[dict],
     with_recompute_all_batches: RecomputeStrategy = RecomputeStrategy.on_upgrade,
 ) -> bool:
     """Apply the migrations to the project database.
@@ -111,6 +112,7 @@ def project_apply_migrations(
         job_run_id (int): The job run id.
         project_id (int): The project id.
         project_namespace (str): The project namespace.
+        classifiers_dict_list: The active classifiers (including their version). For tabulate.
         with_recompute_all_batches (RecomputeStrategy, optional): The recompute strategy.
             Defaults to RecomputeStrategy.on_upgrade.
     """
@@ -128,6 +130,7 @@ def project_apply_migrations(
             job_run_id=job_run_id,
             project_id=project_id,
             project_namespace=project_namespace,
+            classifiers_dict_list=classifiers_dict_list,
             # It is important that we drop the downstream tables as the schemas of downstream
             # tables may have changed.
             drop_downstream_tables=True,
