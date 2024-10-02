@@ -17,6 +17,7 @@ def escape_sql_value(value: str) -> str:
 def tabulate(
     job_run_id: int,
     bigquery_dataset: str,
+    classifiers_dict_list: list[dict],
 ) -> None:
     """Task which tabulates data.
 
@@ -141,11 +142,13 @@ def tabulate(
 def tabulate_flow(
     job_run_id: int,
     project_namespace: str,
+    classifiers_dict_list: list[dict],
 ) -> None:
     """Flow which tabulates data - producing the dataset for the dashboard to use."""
     tabulate(
         job_run_id=job_run_id,
         bigquery_dataset=project_namespace,
+        classifiers_dict_list=classifiers_dict_list,
     )
 
 

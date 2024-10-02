@@ -56,6 +56,7 @@ async def gather_classify_tabulate_flow(
     tabulate_flow.tabulate_flow(
         job_run_id=job_run_id,
         project_namespace=project_namespace,
+        classifiers_dict_list=classifiers_dict_list,
     )
 
 

@@ -17,6 +17,7 @@ def recompute_all_batches_tabulate_flow(
     job_run_id: int,
     project_id: int,
     project_namespace: str,
+    classifiers_dict_list: list[dict],
     drop_downstream_tables: bool = False,
     gather_ids: Optional[list[int]] = None,
 ) -> None:
@@ -33,6 +34,7 @@ def recompute_all_batches_tabulate_flow(
         job_run_id: The job run ID.
         project_id: The project ID.
         project_namespace: The project namespace.
+        classifiers_dict_list: The active classifiers (including their version). For tabulate.
         drop_downstream_tables: If True, delete downstream tables. Defaults to False.
             This will also recompute the schemas for theses downstream tables.
         gather_ids: The gather IDs to recompute. If None, all gather IDs will be recomputed.
@@ -80,6 +82,7 @@ def recompute_all_batches_tabulate_flow(
     tabulate_flow.tabulate_flow(
         job_run_id=job_run_id,
         project_namespace=project_namespace,
+        classifiers_dict_list=classifiers_dict_list,
     )
     prefect_logger.info("Recompute batches and tabulate flow completed.")
 
