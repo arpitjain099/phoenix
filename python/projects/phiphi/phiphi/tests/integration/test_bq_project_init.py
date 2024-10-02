@@ -59,6 +59,7 @@ def test_bq_project_apply_migrations(patch_settings, tmp_project_namespace, pref
         job_run_id=1,
         project_id=1,
         project_namespace=tmp_project_namespace,
+        classifiers_dict_list=[],
     )
 
     tabulated_messages_2_df = pd.read_gbq(
@@ -80,6 +81,7 @@ def test_bq_project_apply_migrations(patch_settings, tmp_project_namespace, pref
         job_run_id=1,
         project_id=1,
         project_namespace=tmp_project_namespace,
+        classifiers_dict_list=[],
     )
 
     tabulated_messages_3_df = pd.read_gbq(
@@ -112,6 +114,7 @@ def test_bq_project_apply_migrations(patch_settings, tmp_project_namespace, pref
         job_run_id=1,
         project_id=1,
         project_namespace=tmp_project_namespace,
+        classifiers_dict_list=[],
         with_recompute_all_batches=projects.RecomputeStrategy.never,
     )
 
@@ -132,6 +135,7 @@ def test_bq_project_apply_migrations(patch_settings, tmp_project_namespace, pref
         job_run_id=1,
         project_id=1,
         project_namespace=tmp_project_namespace,
+        classifiers_dict_list=[],
     )
 
     tabulated_messages_5_df = pd.read_gbq(
