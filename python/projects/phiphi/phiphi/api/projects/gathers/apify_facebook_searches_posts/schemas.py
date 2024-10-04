@@ -6,6 +6,7 @@ Documentation on actor:
 from typing import Any, Dict, Optional
 
 import pydantic
+from pydantic_extra_types.country import CountryAlpha2
 
 from phiphi.api.projects.gathers import constants
 from phiphi.api.projects.gathers import schemas as gather_schemas
@@ -26,16 +27,20 @@ class ApifyProxyConfig(pydantic.BaseModel):
     apify_proxy_groups: Optional[list[str]] = pydantic.Field(
         default=None,
         serialization_alias="apifyProxyGroups",
-        description="List of Apify Proxy groups to use.",
+        description=(
+            "List of Apify Proxy groups to use. "
+            "These are found in the Apify Proxy UI. "
+            "https://console.apify.com/organization/<org_id>/proxy/groups"
+        ),
     )
-    apify_proxy_country: Optional[str] = pydantic.Field(
+    apify_proxy_country: Optional[CountryAlpha2] = pydantic.Field(
         default=None,
         serialization_alias="apifyProxyCountry",
         description="Country of Apify Proxy to use.",
     )
 
     @pydantic.model_validator(mode="after")
-    def validate_proxy_settings(self):
+    def validate_proxy_settings(self) -> "ApifyProxyConfig":
         """Validate proxy settings."""
         use_proxy = self.use_apify_proxy
         groups = self.apify_proxy_groups
