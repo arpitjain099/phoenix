@@ -3,9 +3,12 @@
 Documentation on actor:
     https://apify.com/danek/facebook-search-rental/input-schema
 """
-from typing import Optional
+from typing import Any, Dict, Optional
 
 import pydantic
+
+from phiphi.api.projects.gathers import constants
+from phiphi.api.projects.gathers import schemas as gather_schemas
 
 
 class ApifyProxyConfig(pydantic.BaseModel):
@@ -48,3 +51,45 @@ class ApifyProxyConfig(pydantic.BaseModel):
                     'When "use_apify_proxy" is False, "apify_proxy_groups" must not be provided.'
                 )
         return self
+
+
+class ApifyFacebookSearchesPostsGatherBase(gather_schemas.GatherBase):
+    """Input schema for the Apify Facebook searches posts scraper."""
+
+    search_list: list[str] = pydantic.Field(
+        serialization_alias="query",
+        description="List of search queries for Facebook posts.",
+    )
+    limit_posts_per_search: int = pydantic.Field(
+        serialization_alias="max_posts", description="Limit results per search query."
+    )
+    limit_retries_per_search: int = pydantic.Field(
+        serialization_alias="max_retries", description="Limit retries per search query."
+    )
+    recent_posts: Optional[bool] = pydantic.Field(
+        default=True,
+        serialization_alias="recent_posts",
+        description=(
+            "Whether to check the recent posts element for posts search, "
+            "see https://www.facebook.com/search/posts?q=hello "
+            "for the UI input and an example. "
+            "Defaults to True."
+        ),
+    )
+    proxy: Optional[ApifyProxyConfig] = pydantic.Field(
+        default=None,
+        description="Apify proxy to use for the gather.",
+    )
+
+
+class ApifyFacebookSearchesPostsGatherResponse(
+    gather_schemas.GatherResponse, ApifyFacebookSearchesPostsGatherBase
+):
+    """Apify Facebook searches posts gather schema."""
+
+    def serialize_to_apify_input(self) -> Dict[str, Any]:
+        """Serialize the instance to a dictionary suitable for Apify API."""
+        apify_dict = super().serialize_to_apify_input()
+        # Add the search type to the apify_dict as this must always be posts.
+        apify_dict["search_type"] = constants.FACEBOOK_POST_SEARCH_TYPE
+        return apify_dict
