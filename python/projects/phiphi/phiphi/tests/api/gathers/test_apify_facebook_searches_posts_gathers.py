@@ -3,6 +3,7 @@ import datetime
 
 import pydantic
 import pytest
+from pydantic_extra_types.country import CountryAlpha2
 
 from phiphi.api.projects import gathers
 
@@ -12,6 +13,16 @@ def test_validation_apify_proxy_config():
     with pytest.raises(pydantic.ValidationError):
         gathers.apify_facebook_searches_posts.schemas.ApifyProxyConfig(
             use_apify_proxy=False, apify_proxy_groups=["GROUP1", "GROUP2"]
+        )
+
+
+def test_validation_apify_proxy_config_country():
+    """Test that ApifyProxyConfig throws validation error with in correct country code."""
+    with pytest.raises(pydantic.ValidationError):
+        gathers.apify_facebook_searches_posts.schemas.ApifyProxyConfig(
+            use_apify_proxy=True,
+            apify_proxy_groups=["GROUP1", "GROUP2"],
+            apify_proxy_country="NOT_A_COUNTRY",  # type: ignore[arg-type]
         )
 
 
@@ -33,7 +44,7 @@ def test_serialize_facebook_searches_post_gather_response_with_all_fields():
             proxy=gathers.apify_facebook_searches_posts.schemas.ApifyProxyConfig(
                 use_apify_proxy=True,
                 apify_proxy_groups=["GROUP1", "GROUP2"],
-                apify_proxy_country="US",
+                apify_proxy_country=CountryAlpha2("US"),
             ),
         )
     )
