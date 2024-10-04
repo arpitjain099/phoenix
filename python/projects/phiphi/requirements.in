@@ -19,6 +19,10 @@ psycopg
 prefect
 python-slugify
 PyYAML
+# Pydantic extra types for country codes
+pydantic-extra-types
+pycountry
+
 # Stubs :(
 types-PyYAML
 sentry-sdk[fastapi]

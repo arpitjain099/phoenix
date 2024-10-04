@@ -331,6 +331,8 @@ pyasn1==0.6.0
     #   rsa
 pyasn1-modules==0.4.0
     # via google-auth
+pycountry==24.6.1
+    # via -r projects/phiphi/requirements.in
 pycparser==2.22
     # via cffi
 pydantic[email]==2.8.2
@@ -345,7 +347,9 @@ pydantic-core==2.20.1
     #   prefect
     #   pydantic
 pydantic-extra-types==2.9.0
-    # via fastapi
+    # via
+    #   -r projects/phiphi/requirements.in
+    #   fastapi
 pydantic-settings==2.4.0
     # via fastapi
 pydata-google-auth==1.8.2
