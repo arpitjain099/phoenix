@@ -36,6 +36,44 @@ class KeywordMatchParams(pydantic.BaseModel):
     class_to_keyword_configs: list[ClassToKeywordConfig]
 
 
+class ClassifierVersion(pydantic.BaseModel):
+    """Classifier version base schema.
+
+    Shared properties of all classifier version schemas.
+    """
+
+    classes_dict: Annotated[
+        dict, pydantic.Field(description="The classes dictionary of the Classifier")
+    ]
+    params: Annotated[
+        Union[dict, KeywordMatchParams], pydantic.Field(description="The params of the Classifier")
+    ]
+
+
+class ClassifierVersionCreate(ClassifierVersion):
+    """Classifier version create schema.
+
+    Properties to receive via API on creation.
+    """
+
+
+class ClassifierVersionResponse(ClassifierVersion):
+    """Classifier version schema.
+
+    Properties to return to client.
+    """
+
+    version_id: Annotated[
+        int,
+        pydantic.Field(description="The ID of this version (of the corresponding Classifier)"),
+    ]
+    classifier_id: Annotated[
+        int, pydantic.Field(description="The ID of the Classifier this is a version of")
+    ]
+    created_at: datetime
+    updated_at: datetime
+
+
 class ClassifierBase(pydantic.BaseModel):
     """Classifier base schema.
 
@@ -47,12 +85,6 @@ class ClassifierBase(pydantic.BaseModel):
     ]
     name: Annotated[str, pydantic.Field(description="The name of the Classifier")]
     type: Annotated[ClassifierType, pydantic.Field(description="The type of the Classifier")]
-    classes_dict: Annotated[
-        dict, pydantic.Field(description="The classes dictionary of the Classifier")
-    ]
-    params: Annotated[
-        Union[dict, KeywordMatchParams], pydantic.Field(description="The params of the Classifier")
-    ]
 
 
 class ClassifierCreate(ClassifierBase):
@@ -71,35 +103,17 @@ class ClassifierResponse(ClassifierBase):
     model_config = pydantic.ConfigDict(from_attributes=True)
 
     id: int
-    version_id: Annotated[
-        int,
-        pydantic.Field(description="The version ID of the Classifier."),
-    ]
     created_at: datetime
     updated_at: datetime
-    version_created_at: datetime
-    version_updated_at: datetime
     archived_at: datetime | None
+    latest_version: Annotated[
+        ClassifierVersionResponse,
+        pydantic.Field(description="The latest version of the Classifier"),
+    ]
 
 
 class ClassifierArchive(pydantic.BaseModel):
     """Classifier archive schema."""
-
-
-class ClassifierUpdateVersion(pydantic.BaseModel):
-    """Classifier update version schema.
-
-    Properties to receive via API on creation.
-    """
-
-    classes_dict: Annotated[
-        dict | None,
-        pydantic.Field(default=None, description="The classes dictionary of the Classifier"),
-    ]
-    params: Annotated[
-        Union[dict, KeywordMatchParams] | None,
-        pydantic.Field(default=None, description="The params of the Classifier"),
-    ]
 
 
 class ClassifierKeywordMatchResponse(ClassifierResponse):
