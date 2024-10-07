@@ -116,10 +116,19 @@ class ClassifierArchive(pydantic.BaseModel):
     """Classifier archive schema."""
 
 
-class ClassifierKeywordMatchResponse(ClassifierResponse):
+class ClassifierKeywordMatchVersionResponse(ClassifierVersionResponse):
     """Keyword match classifier schema.
 
     Properties to return to client.
     """
 
     params: KeywordMatchParams
+
+
+class ClassifierKeywordMatchResponse(ClassifierResponse):
+    """Keyword match classifier schema.
+
+    Properties to return to client.
+    """
+
+    latest_version: ClassifierKeywordMatchVersionResponse

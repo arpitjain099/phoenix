@@ -17,7 +17,7 @@ def classify(
         f"{bigquery_dataset}.{pipeline_jobs_constants.CLASSIFIED_MESSAGES_TABLE_NAME}"  # noqa: E501
     )
 
-    for config in classifier.params.class_to_keyword_configs:
+    for config in classifier.latest_version.params.class_to_keyword_configs:
         class_name = config.class_name
         must_keywords = config.musts.split()
 
@@ -38,7 +38,7 @@ def classify(
             )
             SELECT
                 {classifier.id} AS classifier_id,
-                {classifier.version_id} AS classifier_version_id,
+                {classifier.latest_version.version_id} AS classifier_version_id,
                 '{class_name}' AS class_name,
                 phoenix_platform_message_id,
                 {job_run_id} AS job_run_id
