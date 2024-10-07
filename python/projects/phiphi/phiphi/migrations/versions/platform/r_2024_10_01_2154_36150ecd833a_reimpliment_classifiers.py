@@ -1,7 +1,7 @@
 """Reimplement classifiers.
 
 Revision ID: 36150ecd833a
-Revises: ec85edb9a339
+Revises: 7f9234efb602
 Create Date: 2024-10-01 21:54:36.808142
 
 """
@@ -15,7 +15,7 @@ from phiphi.api import base_models
 
 # revision identifiers, used by Alembic.
 revision: str = "36150ecd833a"
-down_revision: Union[str, None] = "ec85edb9a339"
+down_revision: Union[str, None] = "7f9234efb602"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
