@@ -48,7 +48,6 @@ class Classifiers(ClassifiersBase, base_models.TimestampModel):
     # Relationship to ClassifierVersions
     classifier_versions = orm.relationship(
         "ClassifierVersions",
-        back_populates="classifier",
         cascade="all, delete-orphan",
         order_by="ClassifierVersions.version_id.desc()",  # Ensures ordered by desc version_id
         lazy="dynamic",
