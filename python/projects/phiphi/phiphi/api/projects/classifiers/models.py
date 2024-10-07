@@ -61,8 +61,3 @@ class ClassifierVersions(ClassifierVersionsBase, base_models.TimestampModel):
     """Classifier versions table."""
 
     __tablename__ = "classifier_versions"
-
-    # Relationship back to Classifiers
-    classifier: orm.Mapped[Classifiers] = orm.relationship(
-        "Classifiers", back_populates="classifier_versions"
-    )
