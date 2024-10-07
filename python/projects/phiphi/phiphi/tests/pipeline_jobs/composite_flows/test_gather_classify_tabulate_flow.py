@@ -97,7 +97,7 @@ async def test_gather_classify_tabulate_flow_with_classify(
 ):
     """Test gather_classify_tabulate_flow."""
     gather = example_gathers.facebook_comments_gather_example()
-    classify_dict = {"check": "check", "id": 1, "version_id": 1}
+    classify_dict = {"check": "check", "id": 1, "latest_version": {"version_id": 1}}
     # Due to prefect doing some magic with flows that return None we are not testing the return
     # value.
     await gather_classify_tabulate_flow.gather_classify_tabulate_flow(
@@ -135,7 +135,7 @@ async def test_gather_classify_tabulate_flow_with_classify_exception(
     Currently we do not raise the exception from classify_flow.
     """
     gather = example_gathers.facebook_comments_gather_example()
-    classify_dict = {"check": "check", "id": 1, "version_id": 1}
+    classify_dict = {"check": "check", "id": 1, "latest_version": {"version_id": 1}}
     mock_classify_flow.side_effect = Exception("Test")
     # Due to prefect doing some magic with flows that return None we are not testing the return
     # value.
