@@ -303,11 +303,12 @@ def test_bq_pipeline_integration(tmp_bq_project):
         table=constants.CLASSIFIED_MESSAGES_TABLE_NAME,
     )
 
+    classifiers_dict_list = [{"id": 1, "latest_version": {"version_id": 2}}]
     # Re-tabulate, now with the classified messages
     tabulate_flow.tabulate_flow(
         job_run_id=4,
         project_namespace=test_project_namespace,
-        classifiers_dict_list=[{"id": 1, "version_id": 2}],
+        classifiers_dict_list=classifiers_dict_list,
     )
 
     tabulated_messages_df = pd.read_gbq(
@@ -370,7 +371,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
     tabulate_flow.tabulate_flow(
         job_run_id=5,
         project_namespace=test_project_namespace,
-        classifiers_dict_list=[{"id": 1, "version_id": 2}],
+        classifiers_dict_list=classifiers_dict_list,
     )
     tabulated_messages_df = pd.read_gbq(
         f"""
@@ -395,7 +396,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
         job_source_id=gather_id_of_comments,
         job_run_id=6,
         project_namespace=test_project_namespace,
-        classifiers_dict_list=[{"id": 1, "version_id": 2}],
+        classifiers_dict_list=classifiers_dict_list,
     )
 
     # Checking that the comments are deleted from the batches

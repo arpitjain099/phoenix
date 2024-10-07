@@ -43,7 +43,8 @@ def tabulate(
     # classifier objects instead of just minimal dicts.
     # Note we always add `(NULL, NULL)` to handle the case where there are no classifiers.
     classifier_ids = ", ".join(
-        ["(NULL, NULL)"] + [f"({d['id']}, {d['version_id']})" for d in classifiers_dict_list]
+        ["(NULL, NULL)"]
+        + [f"({d['id']}, {d['latest_version']['version_id']})" for d in classifiers_dict_list]
     )
 
     tabulate_query = f"""

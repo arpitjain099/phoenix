@@ -42,27 +42,29 @@ def test_keyword_match_classifier(tmp_bq_project):
     # should match a class
     classifier = {
         "id": 1,
-        "version_id": 1,
         "project_id": 10,
+        "name": "test_classifier",
+        "type": "keyword_match",
         "created_at": datetime.datetime.now(),
         "updated_at": datetime.datetime.now(),
-        "version_created_at": datetime.datetime.now(),
-        "version_updated_at": datetime.datetime.now(),
         "archived_at": None,
-        "classifier_id": 1,
-        "type": "keyword_match",
-        "name": "test_classifier",
-        "classes_dict": {
-            "apple_banana": "Things that are apples and bananas",
-            "apple_orange": "Things that are apples and oranges",
-            "orange_banana": "Things that are oranges and bananas",
-        },
-        "params": {
-            "class_to_keyword_configs": [
-                {"class_name": "apple_banana", "musts": "apples bananas"},
-                {"class_name": "apple_orange", "musts": "apples oranges"},
-                {"class_name": "orange_banana", "musts": "oranges bananas"},
-            ]
+        "latest_version": {
+            "version_id": 1,
+            "classifier_id": 1,
+            "created_at": datetime.datetime.now(),
+            "updated_at": datetime.datetime.now(),
+            "classes_dict": {
+                "apple_banana": "Things that are apples and bananas",
+                "apple_orange": "Things that are apples and oranges",
+                "orange_banana": "Things that are oranges and bananas",
+            },
+            "params": {
+                "class_to_keyword_configs": [
+                    {"class_name": "apple_banana", "musts": "apples bananas"},
+                    {"class_name": "apple_orange", "musts": "apples oranges"},
+                    {"class_name": "orange_banana", "musts": "oranges bananas"},
+                ]
+            },
         },
     }
 
