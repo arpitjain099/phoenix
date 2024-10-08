@@ -65,10 +65,10 @@ class GatherResponse(GatherBase):
 
     def serialize_to_apify_input(self) -> Dict[str, Any]:
         """Serialize the instance to a dictionary suitable for Apify API."""
-        # We only want to include the fields from the child response not that of the base response.
+        # Get base class fields so that we can filter them out later.
         base_fields = set(GatherResponse.model_fields.keys())
-        # We exclude Nones because we believe Apify's Optional fields mean that they can be
-        # omitted, not that they can be None.
+        # We exclude Nones because Apify's Optional fields often have to be omitted, rather then
+        # set to None.
         instance_dict = self.model_dump(by_alias=True, exclude_unset=True, exclude_none=True)
         apify_dict = {key: value for key, value in instance_dict.items() if key not in base_fields}
         return apify_dict
