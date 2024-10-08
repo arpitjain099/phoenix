@@ -54,6 +54,9 @@ gather_normalisation_map: Dict[gathers.schemas.ChildTypeName, NormaliserFuncType
     gathers.schemas.ChildTypeName.apify_facebook_posts: (
         normalisers.normalise_single_facebook_posts_json
     ),
+    gathers.schemas.ChildTypeName.apify_facebook_search_posts: (
+        normalisers.normalise_single_facebook_search_posts_json
+    ),
     gathers.schemas.ChildTypeName.apify_facebook_comments: (
         normalisers.normalise_single_facebook_comments_json
     ),
