@@ -26,6 +26,24 @@ def facebook_posts_gather_example() -> (
     )
 
 
+def facebook_search_posts_gather_example() -> (
+    gathers.apify_facebook_search_posts.schemas.ApifyFacebookSearchPostsGatherResponse
+):
+    """Example for ApifyFacebookSearchPostsGatherResponse schema."""
+    return gathers.apify_facebook_search_posts.schemas.ApifyFacebookSearchPostsGatherResponse(
+        name="Example",
+        search_query="hello world",
+        limit_posts=3,
+        limit_retries=2,
+        id=7,
+        created_at=datetime.datetime.now(),
+        updated_at=datetime.datetime.now(),
+        project_id=1,
+        latest_job_run=None,
+        child_type=gathers.schemas.ChildTypeName.apify_facebook_search_posts,
+    )
+
+
 def facebook_comments_gather_example() -> (
     gathers.apify_facebook_comments.schemas.ApifyFacebookCommentsGatherResponse
 ):
