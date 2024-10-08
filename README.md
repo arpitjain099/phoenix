@@ -2,47 +2,54 @@
 
 An open-source social media analysis platform for peacebuilders.
 
+Phoenix is a powerful, multi-tier platform that enables peacebuilders and analysts to monitor,
+analyze, and visualize social media data for conflict prevention and peacebuilding efforts.
+
 ## Where to start
 
-Phoenix has a number of different levels of interface and components to fit the different needs of
-its users.
+Phoenix offers several components tailored to different users' needs, from peacebuilders to
+experienced software engineers. You can choose from three primary levels of interaction:
 
-### Platform
+### 1. Platform
 
-The platform is a full stack web application that provides a user-friendly interface for managing
-configuration, collecting and processing data, and analyzing and visualizing the results. It is
-designed to be used by non technical peacebuilders and analysts who want to monitor and analyze
-social media data.
+The **Phoenix Platform** is a full-stack web application providing a user-friendly interface to manage
+configurations, collect and process social media data, and visualize results. It is designed for
+peacebuilders and analysts (not deep in the code) who need a comprehensive toolset to monitor and
+analyze social media activity.
 
-It has the most complex set up process of the levels of interface and components, but is the most
-the most feature rich and complete. See the [Platform Quick start](#platform-quick-start) section
-below to get started.
+* **Best for**: A team of engineers that want to offer phoenix to multi users who need a
+  full-featured, out-of-the-box solution.
+* **Setup complexity**: Highest, but includes the richest features.
+* **Getting started**: See the [Platform Quick start](#platform-quick-start) section below.
 
-Build Up provides a hosted version of the platform find out more at
-[https://howtobuildup.org/programs/digital-conflict/phoenix/](https://howtobuildup.org/programs/digital-conflict/phoenix/).
+Build Up also provides a **hosted version** of the platform. Learn more at [Build Up
+Phoenix](https://howtobuildup.org/programs/digital-conflict/phoenix/).
 
-### PhiPhi API
+### 2. PhiPhi API
 
-The PhiPhi API is a RESTful API that provides an interface for managing configuration, collecting
-and processing data. It is has an auto-generated Swagger web interface (documentation) and is
-designed to be used by developers who may want to integrate Phoenix with other (visualisation)
-systems or want to manage a large number of projects and users but don't need a fancy web
-interface.
+The **PhiPhi API** is a RESTful API designed for developers who want to manage configurations,
+collect data, and integrate Phoenix with other systems (such as visualization platforms). The API
+includes auto-generated documentation via a Swagger web interface that allows developers to explore
+and use the API endpoints.
 
-This has a simpler set up process than the platform, but would probably need to be deployed in to a
-cloud environment to be useful. See the [PhiPhi Readme](python/projects/phiphi/README.md) for more
-information.
+* **Best for**: Developers wanting to manage multiple projects or integrate Phoenix with other
+  systems.
+* **Setup complexity**: Medium. Requires cloud deployment for practical use.
+* **Documentation**: See the [PhiPhi Readme](python/projects/phiphi/README.md) for more
+  information.
 
-### PhiPhi Pipeline Jobs
+### 3. PhiPhi Pipeline Jobs
 
-The PhiPhi Pipeline Jobs are a set of prefect flows (python functions) that can be used to collect
-and process social media data. They are designed to be used by developers who want to do their own
-social media data collection and processing. This is best for developers that are working on just
-a couple of projects and they want to process these data locally.
+The **PhiPhi Pipeline Jobs** are a set of Python-based Prefect flows for developers who prefer to
+collect and process social media data locally. This component is ideal for developers working on a
+limited number of projects and is the easiest to set up.
 
-This has the simplest set up process of the levels of interface and components, but is requires the
-developer to manage the configuration themselves. See the [PhiPhi Pipeline Jobs
-Readme](python/projects/phiphi/docs/getting_started_with_pipeline_jobs.md) for more information.
+* **Best for**: Developers who want get going quick, can manage their own data collection and
+  processing locally.
+* **Setup complexity**: Lowest, but requires developers organise configuration.
+* **Documentation**: See the [PhiPhi Pipeline Jobs
+  Readme](python/projects/phiphi/docs/getting_started_with_pipeline_jobs.md) for setup
+  instructions.
 
 ## Platform Quick start
 
