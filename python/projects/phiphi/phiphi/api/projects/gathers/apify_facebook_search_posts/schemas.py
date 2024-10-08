@@ -98,3 +98,42 @@ class ApifyFacebookSearchPostsGatherResponse(
         # Add the search type to the apify_dict as this must always be posts.
         apify_dict["search_type"] = constants.FACEBOOK_POST_SEARCH_TYPE
         return apify_dict
+
+
+class ApifyFacebookSearchPostsGatherCreate(
+    gather_schemas.GatherCreate, ApifyFacebookSearchPostsGatherBase
+):
+    """Apify Gather create schema.
+
+    Properties to receive via API on creation.
+    """
+
+
+class ApifyFacebookSearchPostsGatherUpdate(gather_schemas.GatherUpdate):
+    """Apify Gather update schema."""
+
+    search_query: Optional[str] = pydantic.Field(
+        default=None,
+        serialization_alias="query",
+        description="Search query to get posts.",
+    )
+    limit_posts: Optional[int] = pydantic.Field(
+        default=None, serialization_alias="max_posts", description="Limit number of posts."
+    )
+    limit_retries: Optional[int] = pydantic.Field(
+        default=None, serialization_alias="max_retries", description="Limit retries."
+    )
+    recent_posts: Optional[bool] = pydantic.Field(
+        default=None,
+        serialization_alias="recent_posts",
+        description=(
+            "Whether to check the recent posts element for posts search, "
+            "see https://www.facebook.com/search/posts?q=hello "
+            "for the UI input and an example. "
+            "Defaults to True."
+        ),
+    )
+    proxy: Optional[ApifyProxyConfig] = pydantic.Field(
+        default=None,
+        description="Apify proxy to use for the gather.",
+    )
