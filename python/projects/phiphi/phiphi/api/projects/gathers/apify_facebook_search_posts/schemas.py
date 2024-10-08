@@ -1,4 +1,4 @@
-"""Apify Facebook searches posts gather schemas.
+"""Apify Facebook search posts gather schemas.
 
 Documentation on actor:
     https://apify.com/danek/facebook-search-rental/input-schema
@@ -58,18 +58,18 @@ class ApifyProxyConfig(pydantic.BaseModel):
         return self
 
 
-class ApifyFacebookSearchesPostsGatherBase(gather_schemas.GatherBase):
-    """Input schema for the Apify Facebook searches posts scraper."""
+class ApifyFacebookSearchPostsGatherBase(gather_schemas.GatherBase):
+    """Input schema for the Apify Facebook search posts scraper."""
 
-    search_list: list[str] = pydantic.Field(
+    search_query: str = pydantic.Field(
         serialization_alias="query",
-        description="List of search queries for Facebook posts.",
+        description="Search query to get posts.",
     )
-    limit_posts_per_search: int = pydantic.Field(
-        serialization_alias="max_posts", description="Limit results per search query."
+    limit_posts: int = pydantic.Field(
+        serialization_alias="max_posts", description="Limit number of posts."
     )
-    limit_retries_per_search: int = pydantic.Field(
-        serialization_alias="max_retries", description="Limit retries per search query."
+    limit_retries: int = pydantic.Field(
+        serialization_alias="max_retries", description="Limit retries."
     )
     recent_posts: Optional[bool] = pydantic.Field(
         default=True,
@@ -87,10 +87,10 @@ class ApifyFacebookSearchesPostsGatherBase(gather_schemas.GatherBase):
     )
 
 
-class ApifyFacebookSearchesPostsGatherResponse(
-    gather_schemas.GatherResponse, ApifyFacebookSearchesPostsGatherBase
+class ApifyFacebookSearchPostsGatherResponse(
+    gather_schemas.GatherResponse, ApifyFacebookSearchPostsGatherBase
 ):
-    """Apify Facebook searches posts gather schema."""
+    """Apify Facebook search posts gather schema."""
 
     def serialize_to_apify_input(self) -> Dict[str, Any]:
         """Serialize the instance to a dictionary suitable for Apify API."""
