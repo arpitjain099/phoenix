@@ -1,9 +1,41 @@
 # Getting Started with Pipeline Jobs
 
-The PhiPhi Pipeline Jobs are a set of prefect flows (python functions) that can be used to collect
-and process social media data. They are designed to be used by developers who want to do their own
-social media data collection and processing. This is best for developers that are working on just a
-couple of projects and they want to process these data locally.
+**PhiPhi Pipeline Jobs** are a set of Python-based Prefect flows designed for developers who need to
+collect and process social media data independently. These flows allow for flexible, customizable
+data pipelines that can be executed locally, giving developers full control over how they collect
+and process data.
 
-Unfortunately we didn't yet get the time to make this documentation. Please reach out to us or give
-it a go your self. We would love to see someone else make/use this.
+## Who Should Use PhiPhi Pipeline Jobs?
+
+* **Target Audience**: Developers looking to manage their own social media data collection and
+  processing pipelines.
+* **Use Cases**: Ideal for working on a limited number of projects, where local data processing and
+  custom pipelines are preferred over larger, cloud-hosted systems.
+
+If you are comfortable with Python and want more control over your data collection and processing
+workflows, PhiPhi Pipeline Jobs are a great choice.
+
+## Features
+
+* **Customizable**: Write your own data processing logic using Python and Prefect.
+* **Local Execution**: Run and manage flows on your local machine for smaller projects. With data
+  persisted in to google cloud's big query.
+* **Extensible**: Integrate with other tools and systems as needed.
+
+## Documentation Status
+
+We are still working on comprehensive documentation for PhiPhi Pipeline Jobs. In the meantime,
+here’s how you can get started:
+
+* **Clone the repository** and explore the existing Prefect flows in the pipeline_jobs directory.
+* **Experiment** with modifying and running the flows locally to suit your project's needs.
+* **Reach out** to us if you have any questions or need assistance. We’re here to help!
+
+## Contribute
+
+If you're interested in contributing to the project by improving the documentation or adding new
+features, we would love to collaborate with you. Whether you're a seasoned developer or just
+getting started, any contribution is welcome!
+
+Feel free to open issues or pull requests with any improvements you make, and let's build something
+impactful together.
