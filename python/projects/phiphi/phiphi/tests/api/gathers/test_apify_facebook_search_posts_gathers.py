@@ -3,9 +3,65 @@ import datetime
 
 import pydantic
 import pytest
+from fastapi.testclient import TestClient
 from pydantic_extra_types.country import CountryAlpha2
 
 from phiphi.api.projects import gathers
+from phiphi.seed import apify_facebook_search_posts_gather
+
+CREATED_TIME = "2024-04-01T12:00:01"
+UPDATE_TIME = "2024-04-01T12:00:02"
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
+def test_create_apify_facebook_search_posts_gather(reseed_tables, client: TestClient) -> None:
+    """Test create apify facebook search posts gather."""
+    post_data = {
+        "name": "First apify gather",
+        "search_query": "example",
+        "limit_posts": 1000,
+        "limit_retries": 5,
+    }
+    project_id = 1
+    response = client.post(
+        f"/projects/{project_id}/gathers/apify_facebook_search_posts", json=post_data
+    )
+    assert response.status_code == 200
+    gather = response.json()
+
+    for key, value in post_data.items():
+        assert gather[key] == value
+
+    # These are automatically set
+
+    assert gather["created_at"] == CREATED_TIME
+
+
+def test_patch_apify_facebook_search_posts(reseed_tables, client: TestClient) -> None:
+    """Test patch apify facebook search posts gather."""
+    data = {
+        "name": "Updated apify gather",
+        "search_query": "example",
+        "limit_posts": 1,
+        "limit_retries": 5,
+    }
+    # Check that it is not the same as the seed values
+    # just in case there are changes in the seed
+    test_gather = apify_facebook_search_posts_gather.TEST_APIFY_FACEBOOK_SEARCH_POSTS_GATHERS[0]
+    project_id = test_gather.project_id
+    gather_id = test_gather.id
+    dict_test_gather = test_gather.dict()
+    for key, value in data.items():
+        assert dict_test_gather[key] != value
+    response = client.patch(
+        f"/projects/{project_id}/gathers/apify_facebook_search_posts/{gather_id}", json=data
+    )
+    json_response = response.json()
+    assert response.status_code == 200
+    for key, value in data.items():
+        assert json_response[key] == value
+
+    assert json_response["child_type"] == "apify_facebook_search_posts"
 
 
 def test_validation_apify_proxy_config():
