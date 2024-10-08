@@ -61,7 +61,15 @@ def get_tabulate_flow_params(project_id: int) -> dict[str, Any]:
     Tabulate needs to know which classifiers are still active in the project, and what their latest
     version is, so that it can pull the correct classification data.
     """
-    return get_all_classifiers_params(project_id=project_id)
+    with platform_db.get_session_context() as session:
+        classifiers_list = classifiers.crud.get_classifiers(session=session, project_id=project_id)
+    params = {
+        "active_classifiers_versions": [
+            (_classifier.id, _classifier.latest_version.version_id)
+            for _classifier in classifiers_list
+        ],
+    }
+    return params
 
 
 @task

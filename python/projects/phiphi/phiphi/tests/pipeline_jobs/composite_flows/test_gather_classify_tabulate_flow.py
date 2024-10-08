@@ -40,6 +40,7 @@ async def test_gather_classify_tabulate_flow(
         gather_dict=gather.model_dump(),
         gather_child_type=gather.child_type,
         classifiers_dict_list=[],
+        active_classifiers_versions=[],
         batch_size=1,
     )
     mock_apify_scrape_and_batch_download_results.assert_called_once()
@@ -74,6 +75,7 @@ async def test_gather_classify_tabulate_flow_exception_propagate(
             gather_dict=gather.model_dump(),
             gather_child_type=gather.child_type,
             classifiers_dict_list=[],
+            active_classifiers_versions=[],
             batch_size=1,
         )
         mock_apify_scrape_and_batch_download_results.assert_called_once()
@@ -97,7 +99,8 @@ async def test_gather_classify_tabulate_flow_with_classify(
 ):
     """Test gather_classify_tabulate_flow."""
     gather = example_gathers.facebook_comments_gather_example()
-    classify_dict = {"check": "check", "id": 1, "latest_version": {"version_id": 1}}
+    classify_dict = {"check": "check"}
+    active_classifiers_versions = [(1, 1)]
     # Due to prefect doing some magic with flows that return None we are not testing the return
     # value.
     await gather_classify_tabulate_flow.gather_classify_tabulate_flow(
@@ -108,6 +111,7 @@ async def test_gather_classify_tabulate_flow_with_classify(
         gather_dict=gather.model_dump(),
         gather_child_type=gather.child_type,
         classifiers_dict_list=[classify_dict, classify_dict],
+        active_classifiers_versions=active_classifiers_versions,
         batch_size=1,
     )
     mock_apify_scrape_and_batch_download_results.assert_called_once()
@@ -135,7 +139,8 @@ async def test_gather_classify_tabulate_flow_with_classify_exception(
     Currently we do not raise the exception from classify_flow.
     """
     gather = example_gathers.facebook_comments_gather_example()
-    classify_dict = {"check": "check", "id": 1, "latest_version": {"version_id": 1}}
+    classify_dict = {"check": "check"}
+    active_classifiers_versions = [(1, 1)]
     mock_classify_flow.side_effect = Exception("Test")
     # Due to prefect doing some magic with flows that return None we are not testing the return
     # value.
@@ -147,6 +152,7 @@ async def test_gather_classify_tabulate_flow_with_classify_exception(
         gather_dict=gather.model_dump(),
         gather_child_type=gather.child_type,
         classifiers_dict_list=[classify_dict, classify_dict],
+        active_classifiers_versions=active_classifiers_versions,
         batch_size=1,
     )
     mock_apify_scrape_and_batch_download_results.assert_called_once()

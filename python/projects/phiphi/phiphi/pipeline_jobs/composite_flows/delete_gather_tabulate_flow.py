@@ -15,7 +15,7 @@ def delete_gather_tabulate_flow(
     job_source_id: int,
     job_run_id: int,
     project_namespace: str,
-    classifiers_dict_list: list[dict],
+    active_classifiers_versions: list[tuple[int, int]],
 ) -> None:
     """Flow which deletes a gather's data, and tabulates all data."""
     gather_flow.delete_flow(
@@ -25,9 +25,9 @@ def delete_gather_tabulate_flow(
     )
 
     tabulate_flow.tabulate_flow(
-        classifiers_dict_list=classifiers_dict_list,
         job_run_id=job_run_id,
         project_namespace=project_namespace,
+        active_classifiers_versions=active_classifiers_versions,
     )
 
 
