@@ -21,6 +21,7 @@ async def gather_classify_tabulate_flow(
     gather_dict: dict,
     gather_child_type: gathers.schemas.ChildTypeName,
     classifiers_dict_list: list[dict],
+    active_classifiers_versions: list[tuple[int, int]],
     batch_size: int = pipeline_jobs_constants.DEFAULT_BATCH_SIZE,
 ) -> None:
     """Flow which gathers, classifies, and tabulates data.
@@ -56,7 +57,7 @@ async def gather_classify_tabulate_flow(
     tabulate_flow.tabulate_flow(
         job_run_id=job_run_id,
         project_namespace=project_namespace,
-        classifiers_dict_list=classifiers_dict_list,
+        active_classifiers_versions=active_classifiers_versions,
     )
 
 

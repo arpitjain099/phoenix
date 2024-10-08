@@ -157,7 +157,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
     assert len(deduped_messages_df) == 17
 
     tabulate_flow.tabulate_flow(
-        job_run_id=4, project_namespace=test_project_namespace, classifiers_dict_list=[]
+        job_run_id=4, project_namespace=test_project_namespace, active_classifiers_versions=[]
     )
 
     tabulated_messages_df = pd.read_gbq(
@@ -178,7 +178,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
         job_run_id=10,
         project_id=1,
         project_namespace=test_project_namespace,
-        classifiers_dict_list=[],
+        active_classifiers_versions=[],
     )
 
     messages_after_recompute_df = pd.read_gbq(
@@ -218,7 +218,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
         job_run_id=10,
         project_id=1,
         project_namespace=test_project_namespace,
-        classifiers_dict_list=[],
+        active_classifiers_versions=[],
         gather_ids=[example_gathers.facebook_posts_gather_example().id],
     )
 
@@ -233,7 +233,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
         job_run_id=11,
         project_id=1,
         project_namespace=test_project_namespace,
-        classifiers_dict_list=[],
+        active_classifiers_versions=[],
         drop_downstream_tables=True,
     )
 
@@ -303,12 +303,12 @@ def test_bq_pipeline_integration(tmp_bq_project):
         table=constants.CLASSIFIED_MESSAGES_TABLE_NAME,
     )
 
-    classifiers_dict_list = [{"id": 1, "latest_version": {"version_id": 2}}]
+    active_classifiers_versions = [(1, 2)]
     # Re-tabulate, now with the classified messages
     tabulate_flow.tabulate_flow(
         job_run_id=4,
         project_namespace=test_project_namespace,
-        classifiers_dict_list=classifiers_dict_list,
+        active_classifiers_versions=active_classifiers_versions,
     )
 
     tabulated_messages_df = pd.read_gbq(
@@ -371,7 +371,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
     tabulate_flow.tabulate_flow(
         job_run_id=5,
         project_namespace=test_project_namespace,
-        classifiers_dict_list=classifiers_dict_list,
+        active_classifiers_versions=active_classifiers_versions,
     )
     tabulated_messages_df = pd.read_gbq(
         f"""
@@ -396,7 +396,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
         job_source_id=gather_id_of_comments,
         job_run_id=6,
         project_namespace=test_project_namespace,
-        classifiers_dict_list=classifiers_dict_list,
+        active_classifiers_versions=active_classifiers_versions,
     )
 
     # Checking that the comments are deleted from the batches

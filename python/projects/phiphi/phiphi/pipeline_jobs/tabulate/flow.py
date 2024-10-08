@@ -17,13 +17,19 @@ def escape_sql_value(value: str) -> str:
 def tabulate(
     job_run_id: int,
     bigquery_dataset: str,
-    classifiers_dict_list: list[dict],
+    active_classifiers_versions: list[tuple[int, int]],
 ) -> None:
     """Task which tabulates data.
 
     The tabulate flow must produce a table that matches the schema the file `tabulated_messages.py`
     and in the notion manual.
     TODO: add link to notion once if become stable/deployed so it is one URL rather then versioned.
+
+    Args:
+        job_run_id (int): The job run id.
+        bigquery_dataset (str): The bigquery dataset to use.
+        active_classifiers_versions (list[tuple[int, int]]): The active classifiers versions to
+            use. Each tuple should be (classifier_id, version_id).
     """
     client = bigquery.Client()
 
@@ -43,8 +49,7 @@ def tabulate(
     # classifier objects instead of just minimal dicts.
     # Note we always add `(NULL, NULL)` to handle the case where there are no classifiers.
     classifier_ids = ", ".join(
-        ["(NULL, NULL)"]
-        + [f"({d['id']}, {d['latest_version']['version_id']})" for d in classifiers_dict_list]
+        ["(NULL, NULL)"] + [f"({t[0]}, {t[1]})" for t in active_classifiers_versions]
     )
 
     tabulate_query = f"""
@@ -156,13 +161,13 @@ def tabulate(
 def tabulate_flow(
     job_run_id: int,
     project_namespace: str,
-    classifiers_dict_list: list[dict],
+    active_classifiers_versions: list[tuple[int, int]],
 ) -> None:
     """Flow which tabulates data - producing the dataset for the dashboard to use."""
     tabulate(
         job_run_id=job_run_id,
         bigquery_dataset=project_namespace,
-        classifiers_dict_list=classifiers_dict_list,
+        active_classifiers_versions=active_classifiers_versions,
     )
 
 
