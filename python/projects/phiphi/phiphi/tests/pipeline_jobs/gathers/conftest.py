@@ -26,6 +26,14 @@ def facebook_comments_gather_fixture() -> (
 
 
 @pytest.fixture
+def facebook_search_posts_gather_fixture() -> (
+    gathers.apify_facebook_search_posts.schemas.ApifyFacebookSearchPostsGatherResponse
+):
+    """Fixture for the Facebook search posts gather example."""
+    return example_gathers.facebook_search_posts_gather_example()
+
+
+@pytest.fixture
 def tiktok_accounts_posts_gather_fixture() -> (
     gathers.apify_tiktok_accounts_posts.schemas.ApifyTikTokAccountsPostsGatherResponse
 ):
@@ -158,6 +166,85 @@ def normalised_facebook_posts_df() -> pd.DataFrame:
     df["platform"] = gathers.schemas.Platform.facebook
     df["data_type"] = gathers.schemas.DataType.posts
     df["phoenix_processed_at"] = datetime.fromisoformat("2024-04-02T12:10:59.000Z")
+    for column in ["platform_message_last_updated_at", "gathered_at", "phoenix_processed_at"]:
+        df[column] = df[column].astype("datetime64[ms, UTC]")  # type: ignore[call-overload]
+
+    return df
+
+
+@pytest.fixture
+def normalised_facebook_search_posts_df() -> pd.DataFrame:
+    """Return the expected DataFrame based on the processed JSON data."""
+    data = {
+        "pi_platform_message_id": [
+            "facebook_search_posts-postId1",
+            "facebook_search_posts-postId2",
+            "facebook_search_posts-postId3",
+            "facebook_search_posts-postId4",
+        ],
+        "pi_platform_message_author_id": [
+            "facebook_search_posts-authorID1",
+            "facebook_search_posts-authorID2",
+            "facebook_search_posts-authorID3",
+            "facebook_search_posts-authorID4",
+        ],
+        "pi_platform_message_author_name": [
+            "facebook_search_posts-authorName1",
+            "facebook_search_posts-authorName2",
+            "facebook_search_posts-authorName3",
+            "facebook_search_posts-authorName4",
+        ],
+        "pi_platform_parent_message_id": [None] * 4,
+        "pi_platform_root_message_id": [None] * 4,
+        "pi_text": [
+            "ONE MORE HELLO OR ONE LAST GOODBYE! \\ud83d",
+            "One more hello or one last goodbye? \\n\\nWitness their new world.",
+            "test",
+            "One more hello or one last goodbye? \\u2708\\ufe0f",
+        ],
+        "pi_platform_message_url": [
+            "https://www.facebook.com/authorId1/posts/urlId1",
+            "https://www.facebook.com/authorId2/videos/urlId2",
+            "https://www.facebook.com/authorId3/videos/urlId3",
+            "https://www.facebook.com/authorId4/videos/urlId4",
+        ],
+        "platform_message_last_updated_at": [
+            datetime.utcfromtimestamp(1728388135),
+            datetime.utcfromtimestamp(1728387357),
+            datetime.utcfromtimestamp(1728385343),
+            datetime.utcfromtimestamp(1728387354),
+        ],
+        "phoenix_platform_message_id": [
+            normalisers.anonymize("facebook_search_posts-postId1"),
+            normalisers.anonymize("facebook_search_posts-postId2"),
+            normalisers.anonymize("facebook_search_posts-postId3"),
+            normalisers.anonymize("facebook_search_posts-postId4"),
+        ],
+        "phoenix_platform_message_author_id": [
+            normalisers.anonymize("facebook_search_posts-authorID1"),
+            normalisers.anonymize("facebook_search_posts-authorID2"),
+            normalisers.anonymize("facebook_search_posts-authorID3"),
+            normalisers.anonymize("facebook_search_posts-authorID4"),
+        ],
+        "phoenix_platform_parent_message_id": [None] * 4,
+        "phoenix_platform_root_message_id": [None] * 4,
+        "like_count": [91, 125, 3, 36],
+        "share_count": [0] * 4,
+        "comment_count": [15, 43, 0, 3],
+    }
+
+    df = pd.DataFrame(data)  # noqa: PD901
+    df["gather_id"] = 7
+    df["gather_batch_id"] = 3
+    df["gathered_at"] = pd.to_datetime("2024-04-01T12:00:00.000Z")
+    df["gather_type"] = gathers.schemas.ChildTypeName.apify_facebook_search_posts.value
+    df["platform"] = gathers.schemas.Platform.facebook
+    df["data_type"] = gathers.schemas.DataType.posts
+    df["phoenix_processed_at"] = datetime.fromisoformat("2024-04-02T12:10:59.000Z")
+    # For some reason UTC is not typed correctly in pandas but is in the normalisation.
+    df["platform_message_last_updated_at"] = df["platform_message_last_updated_at"].dt.tz_localize(
+        "UTC"
+    )
     for column in ["platform_message_last_updated_at", "gathered_at", "phoenix_processed_at"]:
         df[column] = df[column].astype("datetime64[ms, UTC]")  # type: ignore[call-overload]
 

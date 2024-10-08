@@ -57,6 +57,35 @@ def normalise_single_facebook_posts_json(json_blob: Dict) -> Dict | None:
     }
 
 
+def normalise_single_facebook_search_posts_json(json_blob: Dict) -> Dict | None:
+    """Extract fields from a single Facebook search post JSON blob to normalized form."""
+    if is_apify_scraping_error(json_blob):
+        return None
+
+    if "post_id" not in json_blob and "message" in json_blob:
+        # This means there was some error
+        return None
+
+    return {
+        "pi_platform_message_id": json_blob["post_id"],
+        "pi_platform_message_author_id": json_blob["author"]["id"],
+        "pi_platform_message_author_name": json_blob["author"]["name"],
+        "pi_platform_parent_message_id": None,  # Posts don't have parent messages
+        "pi_platform_root_message_id": None,  # Posts don't have root messages
+        "pi_text": json_blob["message"],
+        "pi_platform_message_url": json_blob["url"],
+        "platform_message_last_updated_at": datetime.utcfromtimestamp(json_blob["timestamp"]),
+        "phoenix_platform_message_id": anonymize(json_blob["post_id"]),
+        "phoenix_platform_message_author_id": anonymize(json_blob["author"]["id"]),
+        "phoenix_platform_parent_message_id": None,  # Posts don't have parent messages
+        "phoenix_platform_root_message_id": None,  # Posts don't have root messages
+        # stats
+        "like_count": json_blob["reactions"].get("like", 0),
+        "share_count": 0,  # Facebook search posts don't have shares
+        "comment_count": json_blob.get("comments_count", 0),
+    }
+
+
 def normalise_single_facebook_comments_json(json_blob: Dict) -> Dict | None:
     """Extract fields from a single Facebook comment JSON blob to normalized form."""
     if is_apify_scraping_error(json_blob):
