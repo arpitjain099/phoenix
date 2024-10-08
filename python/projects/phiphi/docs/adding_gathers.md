@@ -78,7 +78,8 @@ you are adding.
 ### Create sample data
 
 Add the real output data that you received from the request as the json sample data:
-`phiphi/pipeline_jobs/gathers/<child_type_name>.json`.
+`phiphi/pipeline_jobs/gathers/<child_type_name>.json`. Also add the new sample raw data to switch
+in `phiphi/pipeline_jobs/gathers/utils.py`.
 
 It is important to remove PI data. List of things that should be removed:
 - Ids
