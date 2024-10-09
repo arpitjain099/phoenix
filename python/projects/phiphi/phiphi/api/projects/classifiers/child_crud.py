@@ -4,7 +4,7 @@ At some point it might be best to integrate this into the main classifier CRUD o
 """
 import sqlalchemy.orm
 
-from phiphi.api.projects.classifiers import base_schemas, models
+from phiphi.api.projects.classifiers import base_schemas, models, response_schemas
 
 
 def create_classifier(
@@ -12,7 +12,7 @@ def create_classifier(
     project_id: int,
     classifier_type: base_schemas.ClassifierType,
     classifier_create: base_schemas.ClassifierCreate,
-) -> None:
+) -> response_schemas.AnyClassifierResponse:
     """Create a new classifier with an initial version."""
     orm_classifier = models.Classifiers(
         project_id=project_id,
@@ -32,4 +32,4 @@ def create_classifier(
     session.add(orm_initial_version)
     session.commit()
     session.refresh(orm_initial_version)
-    return None
+    return response_schemas.classifier_response_adaptor.validate_python(orm_classifier)
