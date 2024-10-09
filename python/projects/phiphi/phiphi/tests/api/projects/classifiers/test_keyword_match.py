@@ -1,5 +1,6 @@
 """Test Keyword match."""
 import pytest
+from fastapi.testclient import TestClient
 
 from phiphi.api.projects.classifiers import base_schemas, child_crud, response_schemas
 from phiphi.api.projects.classifiers.keyword_match import schemas as keyword_match_schemas
@@ -32,3 +33,43 @@ def test_create_keyword_match_classifier_crud(reseed_tables) -> None:
     )
     assert isinstance(classifer_response, keyword_match_schemas.KeywordMatchClassifierResponse)
     assert classifer_response.name == "First apify gather"
+    assert classifer_response
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
+def test_create_keyword_match_classifier(reseed_tables, client: TestClient) -> None:
+    """Test create keyword match classifier."""
+    data = {
+        "name": "First apify gather",
+        "version": {
+            "classes_dict": {"class1": "des", "class2": "desc"},
+            "params": {
+                "class_to_keyword_configs": [
+                    {
+                        "class_name": "class1",
+                        "musts": "keyword1",
+                    }
+                ]
+            },
+        },
+    }
+    project_id = 1
+    response = client.post(f"/projects/{project_id}/classifiers/keyword_match", json=data)
+    assert response.status_code == 200
+    classifier = response.json()
+
+    assert classifier["name"] == data["name"]
+    assert classifier["project_id"] == project_id
+    assert classifier["type"] == "keyword_match"
+    assert classifier["archived_at"] is None
+    assert classifier["created_at"] == CREATED_TIME
+    assert classifier["latest_version"]["classes_dict"] == data["version"]["classes_dict"]  # type: ignore[index]
+    assert (
+        classifier["latest_version"]["params"]["class_to_keyword_configs"][0]["class_name"]
+        == "class1"
+    )
+    assert (
+        classifier["latest_version"]["params"]["class_to_keyword_configs"][0]["musts"]
+        == "keyword1"
+    )
+    assert classifier["latest_version"]["created_at"] == CREATED_TIME
