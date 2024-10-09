@@ -1,5 +1,5 @@
 """Keyword Match Schemas."""
-from typing import Annotated
+from typing import Annotated, Literal
 
 import pydantic
 from typing_extensions import TypedDict
@@ -46,3 +46,16 @@ class KeywordMatchClassifierCreate(base_schemas.ClassifierCreate):
     """Keyword match classifier create."""
 
     version: KeywordMatchVersionCreate
+
+
+class KeywordMatchVersionResponse(KeywordMatchVersionBase, base_schemas.ClassifierVersionResponse):
+    """Keyword match version schema."""
+
+
+class KeywordMatchClassifierResponse(base_schemas.ClassifierResponse):
+    """Keyword match classifier response."""
+
+    # This seems to be the correct way to do this:
+    # https://github.com/pydantic/pydantic/issues/8708
+    type: Literal[base_schemas.ClassifierType.keyword_match]
+    latest_version: KeywordMatchVersionResponse
