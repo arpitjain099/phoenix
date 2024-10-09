@@ -1,4 +1,6 @@
 """Test Keyword match."""
+from typing import get_args
+
 import pytest
 from fastapi.testclient import TestClient
 
@@ -31,6 +33,8 @@ def test_create_keyword_match_classifier_crud(reseed_tables) -> None:
             version=keyword_match_create,
         ),
     )
+    expected_types = get_args(response_schemas.AnyClassifierResponse)
+    assert isinstance(classifer_response, expected_types)
     assert isinstance(classifer_response, keyword_match_schemas.KeywordMatchClassifierResponse)
     assert classifer_response.name == "First apify gather"
     assert classifer_response
