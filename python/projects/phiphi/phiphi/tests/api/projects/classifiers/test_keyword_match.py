@@ -65,3 +65,7 @@ def test_create_keyword_match_classifier(reseed_tables, client: TestClient) -> N
     assert classifier["created_at"] == CREATED_TIME.isoformat()
     # There is no version yet so this should be None
     assert classifier["latest_version"] is None
+    assert len(classifier["intermediatory_classes"]) == 2
+    assert classifier["intermediatory_classes"][0]["name"] == "class1"
+    assert classifier["intermediatory_classes"][0]["description"] == "des"
+    assert classifier["intermediatory_classes"][1]["name"] == "class2"
