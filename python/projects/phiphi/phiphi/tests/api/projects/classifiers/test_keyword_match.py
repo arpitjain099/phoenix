@@ -29,14 +29,14 @@ def test_create_keyword_match_classifier_crud(reseed_tables) -> None:
         project_id=1,
         classifier_type=base_schemas.ClassifierType.keyword_match,
         classifier_create=keyword_match_schemas.KeywordMatchClassifierCreate(
-            name="First apify gather",
+            name="First keyword match classifier",
             version=keyword_match_create,
         ),
     )
     expected_types = get_args(response_schemas.AnyClassifierResponse)
     assert isinstance(classifer_response, expected_types)
     assert isinstance(classifer_response, keyword_match_schemas.KeywordMatchClassifierResponse)
-    assert classifer_response.name == "First apify gather"
+    assert classifer_response.name == "First keyword match classifier"
     assert classifer_response
 
 
@@ -44,7 +44,7 @@ def test_create_keyword_match_classifier_crud(reseed_tables) -> None:
 def test_create_keyword_match_classifier(reseed_tables, client: TestClient) -> None:
     """Test create keyword match classifier."""
     data = {
-        "name": "First apify gather",
+        "name": "First keyword match classifier",
         "version": {
             "classes_dict": {"class1": "des", "class2": "desc"},
             "params": {
