@@ -52,7 +52,7 @@ class ClassifierVersionResponse(pydantic.BaseModel):
     params: Annotated[Any, pydantic.Field(description="The params of the Classifier")]
 
 
-class ClassifierResponse(pydantic.BaseModel):
+class ClassifierResponseBase(pydantic.BaseModel):
     """Classifier schema.
 
     Properties to return to client.
