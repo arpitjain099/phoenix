@@ -419,6 +419,37 @@
 						"source_title": "URLs des publications Tiktok"
 					}
 				}
+			},
+			"apify_tiktok_searches_posts": {
+				"title": "Publications de recherches TikTok",
+				"description": "Rassemblez des publications (vidéos) à partir des recherches TikTok en utilisant le scraper web Apify",
+				"create": "Configurez un nouveau rassemblement de publications de recherches TikTok :",
+				"create_description": "Créez un rassemblement de publications (vidéos) à partir des recherches TikTok en utilisant le scraper web Apify. Une fois que vous avez créé votre rassemblement, vous pourrez l'exécuter pour collecter les données.",
+				"edit": "Modifier le nouveau rassemblement de publications de recherches TikTok",
+				"edit_description": "Modifiez un rassemblement de publications (vidéos) à partir des recherches TikTok en utilisant le scraper web Apify. Une fois que vous avez créé votre rassemblement, vous pourrez l'exécuter pour collecter les données.",
+				"fields": {
+					"limit_posts_per_search": "Limiter les publications par recherche",
+					"proxy_country_to_gather_from": "Pays à partir duquel rassembler",
+					"input": {
+						"url_list": "Ajoutez les recherches TikTok que vous souhaitez rassembler (sans '#')"
+					},
+					"info": {
+						"limit_posts_per_search": "Limitez le nombre de publications collectées pour chaque recherche.",
+						"proxy_country_to_gather_from": "Pays à partir duquel rassembler"
+					},
+					"validation": {
+						"required": "Obligatoire"
+					}
+				},
+				"view": {
+					"text": "Ceci est un rassemblement de publications de recherches TikTok. Il rassemble des publications à partir des recherches TikTok en utilisant le scraper web Apify.",
+					"accordion": {
+						"status": "Statut",
+						"general": "Général",
+						"source": "Les publications TikTok proviennent de ces recherches",
+						"source_title": "Recherche TikTok"
+					}
+				}
 			}
 		},
 		"fields": {

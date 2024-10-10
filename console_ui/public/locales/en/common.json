@@ -419,6 +419,37 @@
 						"source_title": "Tiktok post URLs"
 					}
 				}
+			},
+			"apify_tiktok_searches_posts": {
+				"title": "TikTok Searches Posts",
+				"description": "Gather posts (videos) from TikTok searches using the web scraper Apify",
+				"create": "Configure a new TikTok Searches posts gather:",
+				"create_description": "Create a gather of posts (videos) from TikTok searches using the web scraper Apify. Once you have created your gather your will be able to run it to collect the data.",
+				"edit": "Edit new TikTok Searches posts gather",
+				"edit_description": "Edit a gather of posts (videos) from TikTok searches using the web scraper Apify. Once you have created your gather your will be able to run it to collect the data.",
+				"fields": {
+					"limit_posts_per_search": "Limit Posts Per Search",
+					"proxy_country_to_gather_from": "Country to Gather From",
+					"input": {
+						"url_list": "Add TikTok searches you would like to gather from (without '#')"
+					},
+					"info": {
+						"limit_posts_per_search": "Limit the number of posts that are collected for each search.",
+						"proxy_country_to_gather_from": "Country to Gather From"
+					},
+					"validation": {
+						"required": "Required"
+					}
+				},
+				"view": {
+					"text": "This is a Tiktok Searches posts gather. It gathers posts from tiktok searches using the Apify web scraper.",
+					"accordion": {
+						"status": "Status",
+						"general": "General",
+						"source": "Tiktok posts come from these searches",
+						"source_title": "Tiktok search"
+					}
+				}
 			}
 		},
 		"fields": {
