@@ -1,4 +1,5 @@
 """Test Keyword match."""
+import datetime
 from typing import get_args
 
 import pytest
@@ -7,7 +8,7 @@ from fastapi.testclient import TestClient
 from phiphi.api.projects.classifiers import base_schemas, child_crud, models, response_schemas
 from phiphi.api.projects.classifiers.keyword_match import schemas as keyword_match_schemas
 
-CREATED_TIME = "2024-04-01T12:00:01"
+CREATED_TIME = datetime.datetime(2021, 1, 1, 0, 0, 0)
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
@@ -36,6 +37,7 @@ def test_create_keyword_match_classifier_crud(reseed_tables) -> None:
     assert orm_classifier.name == "First keyword match classifier"
     assert orm_classifier.type == "keyword_match"
     assert orm_classifier.archived_at is None
+    assert orm_classifier.created_at == CREATED_TIME
     assert orm_classifier.latest_version is None
 
     assert orm_classifier.intermediatory_classes.count() == 2
@@ -60,6 +62,6 @@ def test_create_keyword_match_classifier(reseed_tables, client: TestClient) -> N
     assert classifier["project_id"] == project_id
     assert classifier["type"] == "keyword_match"
     assert classifier["archived_at"] is None
-    assert classifier["created_at"] == CREATED_TIME
+    assert classifier["created_at"] == CREATED_TIME.isoformat()
     # There is no version yet so this should be None
     assert classifier["latest_version"] is None
