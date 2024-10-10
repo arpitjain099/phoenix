@@ -40,6 +40,8 @@ class ClassifierVersionResponse(pydantic.BaseModel):
     Properties to return to client.
     """
 
+    model_config = pydantic.ConfigDict(from_attributes=True)
+
     version_id: Annotated[
         int, pydantic.Field(description="The ID of this version (of the corresponding Classifier)")
     ]
@@ -48,7 +50,6 @@ class ClassifierVersionResponse(pydantic.BaseModel):
     classes_dict: ClassesDictType
     # Typed as Any as the subclasses will define the params
     params: Annotated[Any, pydantic.Field(description="The params of the Classifier")]
-    model_config = pydantic.ConfigDict(from_attributes=True)
 
 
 class ClassifierResponse(pydantic.BaseModel):
@@ -57,6 +58,8 @@ class ClassifierResponse(pydantic.BaseModel):
     Properties to return to client.
     """
 
+    model_config = pydantic.ConfigDict(from_attributes=True)
+
     id: int
     project_id: int
     name: str
@@ -64,7 +67,6 @@ class ClassifierResponse(pydantic.BaseModel):
     archived_at: Optional[datetime.datetime]
     created_at: datetime.datetime
     updated_at: datetime.datetime
-    model_config = pydantic.ConfigDict(from_attributes=True)
     # It is possible to have a classifier without any versions
     # This then uses the intermediatory tables to store data about the version
     latest_version: Annotated[
