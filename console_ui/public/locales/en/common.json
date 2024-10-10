@@ -431,7 +431,7 @@
 					"limit_posts_per_search": "Limit Posts Per Search",
 					"proxy_country_to_gather_from": "Country to Gather From",
 					"input": {
-						"url_list": "Add TikTok searches you would like to gather from (without '#')"
+						"url_list": "Add TikTok searches you would like to gather from"
 					},
 					"info": {
 						"limit_posts_per_search": "Limit the number of posts that are collected for each search.",

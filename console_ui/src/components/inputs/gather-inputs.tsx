@@ -36,6 +36,7 @@ interface Props {
 	data: string[];
 	setData: React.Dispatch<React.SetStateAction<string[]>>;
 	template_url_for_input?: string;
+	split_regex: RegExp;
 }
 
 const GatherInputs: React.FC<Props> = ({
@@ -45,6 +46,7 @@ const GatherInputs: React.FC<Props> = ({
 	data,
 	setData,
 	template_url_for_input,
+	split_regex,
 }) => {
 	const translate = useTranslate();
 	const [inputValue, setInputValue] = useState<string>("");
@@ -59,7 +61,7 @@ const GatherInputs: React.FC<Props> = ({
 	const handleAddInput = () => {
 		if (inputValue.trim() !== "") {
 			const inputs = inputValue
-				.split(/[,\s]+/) // Split by commas and spaces
+				.split(split_regex) // Split by commas and spaces
 				.map((input) => input.trim())
 				.filter((input) => input !== "");
 
