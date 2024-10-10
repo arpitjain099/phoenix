@@ -53,6 +53,13 @@ class Classifiers(ClassifiersBase, base_models.TimestampModel):
         lazy="dynamic",
     )
 
+    intermediatory_classes = orm.relationship(
+        "IntermediatoryClasses",
+        cascade="all, delete-orphan",
+        order_by="IntermediatoryClasses.id",
+        lazy="dynamic",
+    )
+
     @property
     def latest_version(self) -> ClassifierVersions:
         """Get the latest version of the classifier."""
