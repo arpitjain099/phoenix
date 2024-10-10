@@ -63,3 +63,25 @@ class Classifiers(ClassifiersBase, base_models.TimestampModel):
         """Get all versions of the classifier."""
         latest_versions: list[ClassifierVersions] = self.classifier_versions.all()
         return latest_versions
+
+
+class IntermediatoryClassesBase(platform_db.Base):
+    """Intermediatory classes table base."""
+
+    __abstract__ = True
+
+    id: orm.Mapped[int] = orm.mapped_column(primary_key=True)
+    classifier_id: orm.Mapped[int] = orm.mapped_column(sa.ForeignKey("classifiers.id"))
+    name: orm.Mapped[str]
+    description: orm.Mapped[str]
+
+
+class IntermediatoryClasses(IntermediatoryClassesBase, base_models.TimestampModel):
+    """Intermediatory classes table."""
+
+    __tablename__ = "intermediatory_classes"
+
+    __table_args__ = (
+        sa.UniqueConstraint("classifier_id", "name", name="uq_classifier_classname"),
+        sa.Index("ix_classifier_classname", "classifier_id", "name"),
+    )
