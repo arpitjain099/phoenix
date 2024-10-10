@@ -24,5 +24,14 @@ def create_classifier(
     session.commit()
     session.refresh(orm_classifier)
 
-    # Implement of the intermediatory_classes_dict at some poin
+    for class_create in classifier_create.intermediatory_classes:
+        orm_intermediate_class = models.IntermediatoryClasses(
+            classifier_id=orm_classifier.id,
+            name=class_create.name,
+            description=class_create.description,
+        )
+        session.add(orm_intermediate_class)
+
+    session.commit()
+    session.refresh(orm_classifier)
     return response_schemas.classifier_adapter.validate_python(orm_classifier)

@@ -12,6 +12,27 @@ class ClassifierType(str, Enum):
     keyword_match = "keyword_match"
 
 
+class IntermediatoryClassBase(pydantic.BaseModel):
+    """Class schema."""
+
+    name: str
+    description: str
+
+
+class IntermediatoryClassCreate(IntermediatoryClassBase):
+    """Class create schema."""
+
+
+class IntermediatoryClassResponse(IntermediatoryClassBase):
+    """Class response schema."""
+
+    model_config = pydantic.ConfigDict(from_attributes=True)
+
+    id: int
+    created_at: datetime.datetime
+    updated_at: datetime.datetime
+
+
 ClassName = str
 ClassDescription = str
 
@@ -31,7 +52,7 @@ class ClassifierCreate(pydantic.BaseModel):
     """
 
     name: Annotated[str, pydantic.Field(description="The name of the Classifier")]
-    intermediatory_classes_dict: ClassesDictType
+    intermediatory_classes: list[IntermediatoryClassCreate]
 
 
 class ClassifierVersionResponse(pydantic.BaseModel):
