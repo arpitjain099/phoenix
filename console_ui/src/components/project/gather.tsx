@@ -14,17 +14,18 @@ import {
 } from "@mantine/core";
 import { DateField } from "@refinedev/mantine";
 import TableComponent from "@components/table";
-import {
-	isJobRunRunning,
-	PHEONIX_MANUAL_URL,
-	statusTextStyle,
-} from "src/utils";
+import { isJobRunRunning, statusTextStyle } from "src/utils";
 import { IconPlayerPlay, IconSquarePlus, IconTrash } from "@tabler/icons";
 import GatherRunModal from "@components/modals/gather-run";
 import { jobRunService } from "src/services";
 import { GatherResponse } from "src/interfaces/gather";
 import Link from "next/link";
 import GatherDeleteModal from "@components/modals/delete-gather";
+
+const PHEONIX_MANUAL_GATHER =
+	"https://howtobuildup.notion.site/Decide-where-you-will-get-data-from-167f039d54874316be086734be194654";
+const PHEONIX_MANUAL_GATHER_MORE =
+	"https://howtobuildup.notion.site/Understanding-platform-credits-3f749bc6ebdf4ca68ba44447bc0dd4cc";
 
 interface IGatherProps {
 	projectid: any;
@@ -283,7 +284,7 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 							{translate("projects.tabs.gather.description.part1.a")}
 							<Anchor
 								className="font-normal text-inherit hover:text-blue-500 text-sm underline"
-								href={PHEONIX_MANUAL_URL}
+								href={PHEONIX_MANUAL_GATHER}
 								target="_blank"
 							>
 								{translate("projects.tabs.gather.description.part1.b")}
@@ -294,7 +295,7 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 							{translate("projects.tabs.gather.description.part2.a")}
 							<Anchor
 								className="font-normal text-inherit hover:text-blue-500 text-sm underline"
-								href={PHEONIX_MANUAL_URL}
+								href={PHEONIX_MANUAL_GATHER_MORE}
 								target="_blank"
 							>
 								{translate("projects.tabs.gather.description.part2.b")}
