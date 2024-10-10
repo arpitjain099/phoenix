@@ -3,7 +3,15 @@
 import { Anchor, Checkbox, Group, Text, Title } from "@mantine/core";
 import { useTranslate, useUpdate } from "@refinedev/core";
 import React from "react";
-import { PHEONIX_MANUAL_URL } from "src/utils";
+
+const PHEONIX_MANUAL =
+	"https://howtobuildup.notion.site/4ee4530d67574fb5a81ff55c7be348f9";
+const PHEONIX_MANUAL_PROBLEM_STATEMENT =
+	"https://howtobuildup.notion.site/Define-a-problem-statement-79e84c1c039b49eebc9f6ee14940da0e";
+const PHEONIX_MANUAL_SOURCE =
+	"https://howtobuildup.notion.site/Decide-where-you-will-get-data-from-167f039d54874316be086734be194654";
+const PHEONIX_MANUAL_INSIGHTS =
+	"https://howtobuildup.notion.site/Case-studies-cd8ace41995a479a820c3f722532440c";
 
 interface IOverviewProps {
 	info: any;
@@ -48,7 +56,7 @@ const OverviewComponent: React.FC<IOverviewProps> = ({
 					{translate("projects.tabs.overview.description.part2.a")}
 					<Anchor
 						className="font-normal text-inherit hover:text-blue-500 text-sm underline"
-						href={PHEONIX_MANUAL_URL}
+						href={PHEONIX_MANUAL}
 						target="_blank"
 					>
 						{translate("projects.tabs.overview.description.part2.b")}
@@ -77,7 +85,7 @@ const OverviewComponent: React.FC<IOverviewProps> = ({
 						</Text>
 						<Anchor
 							className="font-normal text-inherit hover:text-blue-500 text-sm underline"
-							href={PHEONIX_MANUAL_URL}
+							href={PHEONIX_MANUAL_PROBLEM_STATEMENT}
 							target="_blank"
 						>
 							({translate("projects.tabs.overview.tips.manual")})
@@ -97,7 +105,7 @@ const OverviewComponent: React.FC<IOverviewProps> = ({
 						<Text fz="sm">{translate("projects.tabs.overview.source")}</Text>
 						<Anchor
 							className="font-normal text-inherit hover:text-blue-500 text-sm underline"
-							href={PHEONIX_MANUAL_URL}
+							href={PHEONIX_MANUAL_SOURCE}
 							target="_blank"
 						>
 							({translate("projects.tabs.overview.tips.manual")})
@@ -183,7 +191,7 @@ const OverviewComponent: React.FC<IOverviewProps> = ({
 						<Text fz="sm">{translate("projects.tabs.overview.insights")}</Text>
 						<Anchor
 							className="font-normal text-inherit hover:text-blue-500 text-sm underline"
-							href={PHEONIX_MANUAL_URL}
+							href={PHEONIX_MANUAL_INSIGHTS}
 							target="_blank"
 						>
 							({translate("projects.tabs.overview.tips.manual")})
