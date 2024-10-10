@@ -191,6 +191,7 @@ const ApifyFacebookPostsForm: React.FC<Props> = ({
 				placeholder={translate("gathers.fields.input.data_placeholder")}
 				data={inputList}
 				setData={setInputList}
+				split_regex={/[,\s]+/}
 				{...getInputProps("account_url_list")}
 			/>
 		</>

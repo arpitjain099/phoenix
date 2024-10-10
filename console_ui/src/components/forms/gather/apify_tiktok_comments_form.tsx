@@ -127,6 +127,7 @@ const ApifyTiktokommentsForm: React.FC<Props> = ({
 				placeholder={translate("gathers.fields.input.data_placeholder")}
 				data={inputList}
 				setData={setInputList}
+				split_regex={/[,\s]+/}
 				{...getInputProps("post_url_list")}
 			/>
 		</>

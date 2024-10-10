@@ -8,7 +8,7 @@ import { GetInputProps } from "@mantine/form/lib/types";
 import { ProjectSchema } from "src/interfaces/project";
 import GatherInputs from "@components/inputs/gather-inputs";
 import { TextField } from "@refinedev/mantine";
-import { countryList, hashTagPostBaseLink } from "src/utils/constants";
+import { countryList, searchPostBaseLink } from "src/utils/constants";
 
 interface FormValues {
 	name: string;
@@ -154,7 +154,8 @@ const ApifyTiktokSearchesPostsForm: React.FC<Props> = ({
 				placeholder={translate("gathers.fields.input.data_placeholder")}
 				data={inputList}
 				setData={setInputList}
-				template_url_for_input={hashTagPostBaseLink}
+				template_url_for_input={searchPostBaseLink}
+				split_regex={/[,]+/}
 				{...getInputProps("search_list")}
 			/>
 		</>

@@ -11,7 +11,7 @@ import { searchPostBaseLink } from "src/utils/constants";
 import GatherViewBreadcrumb from "@components/breadcrumbs/gatherView";
 import GatherViewHeaderButton from "@components/gather/header-button";
 
-export default function ApifyTiktokSearchPostShow(): JSX.Element {
+export default function ApifyTiktokSearchesPostShow(): JSX.Element {
 	const { projectid, id } = useParams();
 	const translate = useTranslate();
 	const { queryResult } = useShow({
