@@ -419,6 +419,37 @@
 						"source_title": "URLs de publicaciones de Tiktok"
 					}
 				}
+			},
+			"apify_tiktok_searches_posts": {
+				"title": "Publicaciones de búsquedas de TikTok",
+				"description": "Recopila publicaciones (videos) de búsquedas de TikTok utilizando el scraper web Apify",
+				"create": "Configura una nueva recopilación de publicaciones de búsquedas de TikTok:",
+				"create_description": "Crea una recopilación de publicaciones (videos) de búsquedas de TikTok utilizando el scraper web Apify. Una vez que hayas creado tu recopilación, podrás ejecutarla para recoger los datos.",
+				"edit": "Editar nueva recopilación de publicaciones de búsquedas de TikTok",
+				"edit_description": "Edita una recopilación de publicaciones (videos) de búsquedas de TikTok utilizando el scraper web Apify. Una vez que hayas creado tu recopilación, podrás ejecutarla para recoger los datos.",
+				"fields": {
+					"limit_posts_per_search": "Limitar publicaciones por búsqueda",
+					"proxy_country_to_gather_from": "País del cual recopilar",
+					"input": {
+						"url_list": "Agrega las búsquedas de TikTok de las que te gustaría recopilar (sin '#')"
+					},
+					"info": {
+						"limit_posts_per_search": "Limita el número de publicaciones que se recopilan para cada búsqueda.",
+						"proxy_country_to_gather_from": "País del cual recopilar"
+					},
+					"validation": {
+						"required": "Requerido"
+					}
+				},
+				"view": {
+					"text": "Esta es una recopilación de publicaciones de búsquedas de TikTok. Recopila publicaciones de búsquedas de TikTok utilizando el scraper web Apify.",
+					"accordion": {
+						"status": "Estado",
+						"general": "General",
+						"source": "Las publicaciones de TikTok provienen de estas búsquedas",
+						"source_title": "Búsqueda de TikTok"
+					}
+				}
 			}
 		},
 		"fields": {

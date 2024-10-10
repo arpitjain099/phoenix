@@ -316,6 +316,10 @@ export const countryList = [
 export const hashTagPostBaseLink =
 	"https://www.tiktok.com/search/video?q=%23{{ input }}";
 
+// Searches BaseURL
+export const searchPostBaseLink =
+	"https://www.tiktok.com/search/video?q={{ input }}";
+
 /**
  * Replaces placeholders in a template string with corresponding values from an object.
  *
