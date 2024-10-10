@@ -12,9 +12,15 @@ class ClassifierType(str, Enum):
     keyword_match = "keyword_match"
 
 
-# Currently these produces unhelpful example in the swagger docs but this is not a big deal
+ClassName = str
+ClassDescription = str
+
 ClassesDictType = Annotated[
-    dict[str, str], pydantic.Field(description="The classes dictionary of the Classifier")
+    dict[ClassName, ClassDescription],
+    pydantic.Field(
+        description="The classes dictionary of the Classifier",
+        examples=[{"class1": "class1 description", "class2": "class2 description"}],
+    ),
 ]
 
 
