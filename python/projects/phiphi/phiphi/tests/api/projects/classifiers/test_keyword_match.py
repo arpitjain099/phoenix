@@ -13,24 +13,13 @@ CREATED_TIME = "2024-04-01T12:00:01"
 @pytest.mark.freeze_time(CREATED_TIME)
 def test_create_keyword_match_classifier_crud(reseed_tables) -> None:
     """Test create keyword match classifier."""
-    keyword_match_create = keyword_match_schemas.KeywordMatchVersionCreate(
-        classes_dict={"class1": "class1 description", "class2": "class2"},
-        params=keyword_match_schemas.KeywordMatchParams(
-            class_to_keyword_configs=[
-                keyword_match_schemas.ClassToKeywordConfig(
-                    class_name="class1",
-                    musts="keyword1",
-                )
-            ]
-        ),
-    )
     classifer_response = child_crud.create_classifier(
         session=reseed_tables,
         project_id=1,
         classifier_type=base_schemas.ClassifierType.keyword_match,
-        classifier_create=keyword_match_schemas.KeywordMatchClassifierCreate(
+        classifier_create=base_schemas.ClassifierCreate(
             name="First keyword match classifier",
-            version=keyword_match_create,
+            intermediatory_classes_dict={"class1": "class1 description", "class2": "class2"},
         ),
     )
     expected_types = get_args(response_schemas.AnyClassifierResponse)
@@ -45,17 +34,7 @@ def test_create_keyword_match_classifier(reseed_tables, client: TestClient) -> N
     """Test create keyword match classifier."""
     data = {
         "name": "First keyword match classifier",
-        "version": {
-            "classes_dict": {"class1": "des", "class2": "desc"},
-            "params": {
-                "class_to_keyword_configs": [
-                    {
-                        "class_name": "class1",
-                        "musts": "keyword1",
-                    }
-                ]
-            },
-        },
+        "intermediatory_classes_dict": {"class1": "des", "class2": "desc"},
     }
     project_id = 1
     response = client.post(f"/projects/{project_id}/classifiers/keyword_match", json=data)
@@ -67,13 +46,6 @@ def test_create_keyword_match_classifier(reseed_tables, client: TestClient) -> N
     assert classifier["type"] == "keyword_match"
     assert classifier["archived_at"] is None
     assert classifier["created_at"] == CREATED_TIME
-    assert classifier["latest_version"]["classes_dict"] == data["version"]["classes_dict"]  # type: ignore[index]
-    assert (
-        classifier["latest_version"]["params"]["class_to_keyword_configs"][0]["class_name"]
-        == "class1"
-    )
-    assert (
-        classifier["latest_version"]["params"]["class_to_keyword_configs"][0]["musts"]
-        == "keyword1"
-    )
-    assert classifier["latest_version"]["created_at"] == CREATED_TIME
+    # There is no version yet so this should be None
+    # At somepoint we should return the intermediatory_classes_dict here
+    assert classifier["latest_version"] is None

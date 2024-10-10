@@ -24,12 +24,5 @@ def create_classifier(
     session.commit()
     session.refresh(orm_classifier)
 
-    orm_initial_version = models.ClassifierVersions(
-        classifier_id=orm_classifier.id,
-        classes_dict=classifier_create.version.classes_dict,
-        params=classifier_create.version.params,
-    )
-    session.add(orm_initial_version)
-    session.commit()
-    session.refresh(orm_initial_version)
+    # Implement of the intermediatory_classes_dict at some poin
     return response_schemas.classifier_response_adaptor.validate_python(orm_classifier)

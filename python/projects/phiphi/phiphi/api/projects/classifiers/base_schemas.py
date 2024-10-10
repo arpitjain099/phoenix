@@ -24,17 +24,6 @@ ClassesDictType = Annotated[
 ]
 
 
-class ClassifierVersionCreate(pydantic.BaseModel):
-    """Classifier version create schema.
-
-    Properties to receive via API on creation.
-    """
-
-    classes_dict: ClassesDictType
-    # Any as these will be defined by subclasses
-    params: Any
-
-
 class ClassifierCreate(pydantic.BaseModel):
     """Classifier create schema.
 
@@ -42,9 +31,7 @@ class ClassifierCreate(pydantic.BaseModel):
     """
 
     name: Annotated[str, pydantic.Field(description="The name of the Classifier")]
-    # For the create `version` is used over `latest_version` as on the create the version submitted
-    # is the latest version
-    version: ClassifierVersionCreate
+    intermediatory_classes_dict: ClassesDictType
 
 
 class ClassifierVersionResponse(pydantic.BaseModel):
@@ -78,4 +65,9 @@ class ClassifierResponse(pydantic.BaseModel):
     created_at: datetime.datetime
     updated_at: datetime.datetime
     model_config = pydantic.ConfigDict(from_attributes=True)
-    latest_version: ClassifierVersionResponse
+    # It is possible to have a classifier without any versions
+    # This then uses the intermediatory tables to store data about the version
+    latest_version: Annotated[
+        Optional[ClassifierVersionResponse],
+        pydantic.Field(description="The latest version of the Classifier", default=None),
+    ]
