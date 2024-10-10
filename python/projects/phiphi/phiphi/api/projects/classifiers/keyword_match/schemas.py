@@ -42,7 +42,7 @@ class KeywordMatchVersionResponse(KeywordMatchVersionBase, base_schemas.Classifi
     """Keyword match version schema."""
 
 
-class KeywordMatchClassifierResponse(base_schemas.ClassifierResponse):
+class KeywordMatchClassifierResponse(base_schemas.ClassifierResponseBase):
     """Keyword match classifier response."""
 
     # This seems to be the correct way to do this:

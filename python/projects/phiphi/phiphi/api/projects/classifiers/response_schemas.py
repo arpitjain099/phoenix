@@ -9,11 +9,11 @@ import pydantic
 
 from phiphi.api.projects.classifiers.keyword_match import schemas as keyword_match_schemas
 
-AnyClassifierResponse = Annotated[
+Classifier = Annotated[
     Union[keyword_match_schemas.KeywordMatchClassifierResponse],
     # This tells pydantic to use the `type` field to determine the type of the response
     # and optimises the Union
     pydantic.Field(description="Any classifier response", discriminator="type"),
 ]
 
-classifier_response_adaptor = pydantic.TypeAdapter(AnyClassifierResponse)
+classifier_adaptor = pydantic.TypeAdapter(Classifier)

@@ -14,7 +14,7 @@ def create_keyword_match_classifier(
     session: deps.SessionDep,
     project_id: int,
     classifier_create: base_schemas.ClassifierCreate,
-) -> response_schemas.AnyClassifierResponse:
+) -> response_schemas.Classifier:
     """Create a new keyword match classifier."""
     return child_crud.create_classifier(
         session=session,

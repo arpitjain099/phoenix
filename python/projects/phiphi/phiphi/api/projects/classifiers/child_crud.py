@@ -12,7 +12,7 @@ def create_classifier(
     project_id: int,
     classifier_type: base_schemas.ClassifierType,
     classifier_create: base_schemas.ClassifierCreate,
-) -> response_schemas.AnyClassifierResponse:
+) -> response_schemas.Classifier:
     """Create a new classifier with an initial version."""
     orm_classifier = models.Classifiers(
         project_id=project_id,
@@ -25,4 +25,4 @@ def create_classifier(
     session.refresh(orm_classifier)
 
     # Implement of the intermediatory_classes_dict at some poin
-    return response_schemas.classifier_response_adaptor.validate_python(orm_classifier)
+    return response_schemas.classifier_adaptor.validate_python(orm_classifier)
