@@ -120,17 +120,29 @@ def archive_classifier(
     session: sqlalchemy.orm.Session,
     project_id: int,
     classifier_id: int,
-) -> response_schemas.Classifier | None:
-    """Archive a classifier."""
-    orm_classifier = (
-        session.query(models.Classifiers)
-        .filter(models.Classifiers.project_id == project_id)
-        .filter(models.Classifiers.id == classifier_id)
-        .first()
-    )
+) -> response_schemas.Classifier:
+    """Archive a classifier.
+
+    This will set the `archived_at` field to the current time and run the `archive_classifier` job.
+
+    The job will be responsible for archiving the classifier and applying this to the downstream
+    tables.
+
+    Args:
+        session: SQLAlchemy session.
+        project_id: Project ID.
+        classifier_id: Classifier ID.
+
+    Returns:
+        The archived classifier.
+
+    Raises:
+        ClassifierNotFound: If the classifier does not exist.
+    """
+    orm_classifier = get_orm_classifier(session, project_id, classifier_id)
 
     if orm_classifier is None:
-        return None
+        raise exceptions.ClassifierNotFound()
 
     orm_classifier.archived_at = datetime.datetime.utcnow()
     session.commit()

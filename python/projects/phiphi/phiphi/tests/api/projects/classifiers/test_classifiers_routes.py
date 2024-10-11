@@ -1,7 +1,12 @@
 """Test classifier routes."""
+import datetime
+
+import pytest
 from fastapi.testclient import TestClient
 
 from phiphi.seed.classifiers import keyword_match_seed
+
+TIMESTAMP = datetime.datetime(2021, 1, 1, 0, 0, 0)
 
 
 def test_get_classifier(reseed_tables, client: TestClient) -> None:
@@ -62,3 +67,18 @@ def test_patch_classifier_not_found(reseed_tables, client: TestClient) -> None:
     response = client.patch("/projects/2/classifiers/1", json={"name": "New Name"})
     assert response.status_code == 404
     assert response.json() == {"detail": "Classifier not found"}
+
+
+@pytest.mark.freeze_time(TIMESTAMP)
+def test_archive_classifier(reseed_tables, client: TestClient) -> None:
+    """Test archive classifier."""
+    classifier = keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[0]
+    response = client.post(
+        f"/projects/{classifier.project_id}/classifiers/{classifier.id}/archive"
+    )
+    assert response.status_code == 200
+    assert response.json()["archived_at"] == TIMESTAMP.isoformat()
+
+    response = client.get(f"/projects/{classifier.project_id}/classifiers/{classifier.id}")
+    assert response.status_code == 200
+    assert response.json()["archived_at"] == TIMESTAMP.isoformat()
