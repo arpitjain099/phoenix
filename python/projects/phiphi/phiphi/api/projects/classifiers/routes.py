@@ -2,8 +2,8 @@
 import fastapi
 
 from phiphi.api import deps, exceptions
+from phiphi.api.projects.classifiers import base_schemas, response_schemas
 from phiphi.api.projects.classifiers import crud_v2 as crud
-from phiphi.api.projects.classifiers import response_schemas
 from phiphi.api.projects.classifiers.keyword_match import routes as keyword_match_routes
 
 router = fastapi.APIRouter()
@@ -39,3 +39,23 @@ def get_classifiers(
 ) -> list[response_schemas.ClassifierList]:
     """Get classifiers."""
     return crud.get_classifiers(session=session, project_id=project_id, start=start, end=end)
+
+
+@router.patch(
+    "/projects/{project_id}/classifiers/{classifier_id}",
+    response_model=response_schemas.Classifier,
+)
+def patch_classifier(
+    session: deps.SessionDep,
+    project_id: int,
+    classifier_id: int,
+    classifier_patch: base_schemas.ClassifierPatch,
+) -> response_schemas.Classifier:
+    """Patch a classifier."""
+    classifier = crud.patch_classifier(
+        session=session,
+        project_id=project_id,
+        classifier_id=classifier_id,
+        classifier_patch=classifier_patch,
+    )
+    return classifier

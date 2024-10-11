@@ -4,6 +4,7 @@ At somepoint this will replace the current CRUD operations in `crud.py`.
 """
 import sqlalchemy.orm
 
+from phiphi.api import exceptions
 from phiphi.api.projects.classifiers import base_schemas, models, response_schemas
 
 
@@ -41,18 +42,27 @@ def create_classifier(
     return response_schemas.classifier_adapter.validate_python(orm_classifier)
 
 
+def get_orm_classifier(
+    session: sqlalchemy.orm.Session,
+    project_id: int,
+    classifier_id: int,
+) -> models.Classifiers | None:
+    """Get a classifier ORM."""
+    return (
+        session.query(models.Classifiers)
+        .filter(models.Classifiers.project_id == project_id)
+        .filter(models.Classifiers.id == classifier_id)
+        .one_or_none()
+    )
+
+
 def get_classifier(
     session: sqlalchemy.orm.Session,
     project_id: int,
     classifier_id: int,
 ) -> response_schemas.Classifier | None:
     """Get a classifier with its latest version."""
-    orm_classifier = (
-        session.query(models.Classifiers)
-        .filter(models.Classifiers.project_id == project_id)
-        .filter(models.Classifiers.id == classifier_id)
-        .first()
-    )
+    orm_classifier = get_orm_classifier(session, project_id, classifier_id)
 
     if orm_classifier is None:
         return None
@@ -81,3 +91,24 @@ def get_classifiers(
         response_schemas.ClassifierList.model_validate(orm_classifier)
         for orm_classifier in query.all()
     ]
+
+
+def patch_classifier(
+    session: sqlalchemy.orm.Session,
+    project_id: int,
+    classifier_id: int,
+    classifier_patch: base_schemas.ClassifierPatch,
+) -> response_schemas.Classifier:
+    """Patch a classifier."""
+    orm_classifier = get_orm_classifier(session, project_id, classifier_id)
+
+    if orm_classifier is None:
+        raise exceptions.ClassifierNotFound()
+
+    # TODO handle archived should not be updated
+    for key, value in classifier_patch.dict(exclude_unset=True).items():
+        setattr(orm_classifier, key, value)
+
+    session.commit()
+    session.refresh(orm_classifier)
+    return response_schemas.classifier_adapter.validate_python(orm_classifier)
