@@ -275,6 +275,42 @@
 					}
 				}
 			},
+			"apify_facebook_search_posts": {
+				"title": "Facebook Search Posts from public pages and groups",
+				"description": "Gather posts from facebook search using the web scraper Apify",
+				"create": "Configure a new Facebook search posts gather",
+				"create_description": "Create a gather of posts from facebook searches using the web scraper Apify. Once you have created your gather your will be able to run it to collect the data.",
+				"edit": "Edit new Facebook search posts gather",
+				"edit_description": "Edit a gather of posts from facebook searches using the web scraper Apify. Once you have created your gather your will be able to run it to collect the data.",
+				"fields": {
+					"search_query": "Search Query",
+					"limit_posts": "Limit Posts Per Search",
+					"limit_retries": "Limit Retries",
+					"recent_posts": "Recent Posts",
+					"proxy_groups": "Proxy groups",
+					"residential_proxies": "Residential proxies",
+					"no_proxy": "No proxy",
+					"proxy_country": "Proxy country",
+					"anywhere": "Anywhere (recommended)",
+					"info": {
+						"search_query": "Search Query",
+						"limit_posts": "Limit the number of posts that are collected for each search.",
+						"limit_retries": "Limit the number of retries allowed for each search.",
+						"proxy_groups": "IP addresses located in people's homes and offices. This type of proxy has the lowest chance of getting blocked and the best geographical coverage."
+					},
+					"validation": {
+						"required": "Required"
+					}
+				},
+				"view": {
+					"text": "This is a Facebook search posts gather. It gathers posts from facebook accounts using the Apify web scraper.",
+					"accordion": {
+						"status": "Status",
+						"general": "General",
+						"proxy_setting": "Proxy Setting"
+					}
+				}
+			},
 			"apify_facebook_comments": {
 				"title": "Facebook Comments from public Facebook posts",
 				"description": "Gather comments from Facebook posts using the web scraper Apify",

@@ -35,6 +35,14 @@ export default function SelectGatherType(): JSX.Element {
 				/>
 				<TypeCard
 					icon={<IconBrandFacebook className="text-blue-600" size={27} />}
+					title={translate("gathers.types.apify_facebook_search_posts.title")}
+					description={translate(
+						"gathers.types.apify_facebook_search_posts.description"
+					)}
+					link={`/projects/${projectid}/gathers/apify_facebook_search_posts/create`}
+				/>
+				<TypeCard
+					icon={<IconBrandFacebook className="text-blue-600" size={27} />}
 					title={translate("gathers.types.apify_facebook_comments.title")}
 					description={translate(
 						"gathers.types.apify_facebook_comments.description"

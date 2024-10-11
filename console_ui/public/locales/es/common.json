@@ -275,6 +275,42 @@
 					}
 				}
 			},
+			"apify_facebook_search_posts": {
+				"title": "Buscar publicaciones en Facebook de páginas y grupos públicos",
+				"description": "Recopile publicaciones de la búsqueda de Facebook utilizando el web scraper Apify",
+				"create": "Configurar una nueva recopilación de publicaciones de búsqueda de Facebook",
+				"create_description": "Cree una recopilación de publicaciones de búsquedas en Facebook utilizando el web scraper Apify. Una vez que haya creado su recopilación, podrá ejecutarla para recopilar los datos.",
+				"edit": "Editar nueva recopilación de publicaciones de Facebook",
+				"edit_description": "Edite una recopilación de publicaciones de búsquedas en Facebook utilizando el web scraper Apify. Una vez que haya creado su recopilación, podrá ejecutarla para recopilar los datos.",
+				"fields": {
+					"search_query": "Consulta de búsqueda",
+					"limit_posts": "Limitar publicaciones por búsqueda",
+					"limit_retries": "Limitar reintentos",
+					"recent_posts": "Publicaciones recientes",
+					"proxy_groups": "Grupos de proxies",
+					"residential_proxies": "Proxies residenciales",
+					"no_proxy": "Sin proxy",
+					"proxy_country": "País del proxy",
+					"anywhere": "Cualquier lugar (recomendado)",
+					"info": {
+						"search_query": "Consulta de búsqueda",
+						"limit_posts": "Limite el número de publicaciones que se recopilan para cada búsqueda.",
+						"limit_retries": "Limite el número de reintentos permitidos para cada búsqueda.",
+						"proxy_groups": "Direcciones IP ubicadas en las casas y oficinas de las personas. Este tipo de proxy tiene menos probabilidades de ser bloqueado y ofrece la mejor cobertura geográfica."
+					},
+					"validation": {
+						"required": "Requerido"
+					}
+				},
+				"view": {
+					"text": "Esta es una recopilación de publicaciones de búsqueda de Facebook. Recopila publicaciones de cuentas de Facebook utilizando el web scraper Apify.",
+					"accordion": {
+						"status": "Estado",
+						"general": "General",
+						"proxy_setting": "Configuración del proxy"
+					}
+				}
+			},
 			"apify_facebook_comments": {
 				"title": "Comentarios de Facebook",
 				"description": "Recopilar comentarios de publicaciones de Facebook utilizando el scraper web Apify",
