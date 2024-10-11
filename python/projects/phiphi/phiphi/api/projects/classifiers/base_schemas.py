@@ -49,6 +49,11 @@ class ClassifierCreate(pydantic.BaseModel):
     """Classifier create schema.
 
     Properties to receive via API on creation.
+
+    This includes the intermediatory classes. That will be stored in `intermediatory_classes`
+    table.
+
+    No version of the classifier is created at this point, only the classifier itself.
     """
 
     name: Annotated[str, pydantic.Field(description="The name of the Classifier")]
