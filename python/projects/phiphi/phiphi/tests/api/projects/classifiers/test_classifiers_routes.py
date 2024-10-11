@@ -86,3 +86,19 @@ def test_archive_classifier(reseed_tables, client: TestClient) -> None:
     response = client.get(f"/projects/{classifier.project_id}/classifiers/{classifier.id}")
     assert response.status_code == 200
     assert response.json()["archived_at"] == TIMESTAMP.isoformat()
+
+
+def test_restore_classifier(reseed_tables, client: TestClient) -> None:
+    """Test restore classifier."""
+    # Classifier 1 is archived
+    classifier = keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[1]
+    assert classifier.archived_at is not None
+    response = client.post(
+        f"/projects/{classifier.project_id}/classifiers/{classifier.id}/restore"
+    )
+    assert response.status_code == 200
+    assert response.json()["archived_at"] is None
+
+    response = client.get(f"/projects/{classifier.project_id}/classifiers/{classifier.id}")
+    assert response.status_code == 200
+    assert response.json()["archived_at"] is None
