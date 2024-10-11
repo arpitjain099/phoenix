@@ -13,7 +13,11 @@ def create_classifier(
     classifier_type: base_schemas.ClassifierType,
     classifier_create: base_schemas.ClassifierCreate,
 ) -> response_schemas.Classifier:
-    """Create a new classifier with an initial version."""
+    """Create a new classifier with an initial version.
+
+    To make the versioning more transparent we only create versions for a classifier when
+    `create_version` is called.
+    """
     orm_classifier = models.Classifiers(
         project_id=project_id,
         name=classifier_create.name,
