@@ -55,3 +55,11 @@ class ClassifierNotFound(fastapi.HTTPException):
     def __init__(self) -> None:
         """Constructor for custom exception."""
         super().__init__(status_code=404, detail="Classifier not found")
+
+
+class ClassifierArchived(fastapi.HTTPException):
+    """Custom exception for archived classifiers."""
+
+    def __init__(self) -> None:
+        """Constructor for custom exception."""
+        super().__init__(status_code=400, detail="Classifier is archived.")
