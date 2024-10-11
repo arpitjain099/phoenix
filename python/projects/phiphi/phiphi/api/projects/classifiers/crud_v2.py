@@ -39,3 +39,22 @@ def create_classifier(
     session.commit()
     session.refresh(orm_classifier)
     return response_schemas.classifier_adapter.validate_python(orm_classifier)
+
+
+def get_classifier(
+    session: sqlalchemy.orm.Session,
+    project_id: int,
+    classifier_id: int,
+) -> response_schemas.Classifier | None:
+    """Get a classifier with its latest version."""
+    orm_classifier = (
+        session.query(models.Classifiers)
+        .filter(models.Classifiers.project_id == project_id)
+        .filter(models.Classifiers.id == classifier_id)
+        .first()
+    )
+
+    if orm_classifier is None:
+        return None
+
+    return response_schemas.classifier_adapter.validate_python(orm_classifier)
