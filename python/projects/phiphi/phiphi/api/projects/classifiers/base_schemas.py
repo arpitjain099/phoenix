@@ -60,6 +60,15 @@ class ClassifierCreate(pydantic.BaseModel):
     intermediatory_classes: list[IntermediatoryClassCreate]
 
 
+class ClassifierPatch(pydantic.BaseModel):
+    """Classifier patch schema.
+
+    Properties to receive via API on update.
+    """
+
+    name: Annotated[Optional[str], pydantic.Field(description="The name of the Classifier")]
+
+
 class ClassifierVersionResponse(pydantic.BaseModel):
     """Classifier version schema.
 
