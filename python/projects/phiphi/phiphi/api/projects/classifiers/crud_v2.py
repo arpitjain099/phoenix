@@ -2,6 +2,8 @@
 
 At somepoint this will replace the current CRUD operations in `crud.py`.
 """
+import datetime
+
 import sqlalchemy.orm
 
 from phiphi.api import exceptions
@@ -111,4 +113,28 @@ def patch_classifier(
 
     session.commit()
     session.refresh(orm_classifier)
+    return response_schemas.classifier_adapter.validate_python(orm_classifier)
+
+
+def archive_classifier(
+    session: sqlalchemy.orm.Session,
+    project_id: int,
+    classifier_id: int,
+) -> response_schemas.Classifier | None:
+    """Archive a classifier."""
+    orm_classifier = (
+        session.query(models.Classifiers)
+        .filter(models.Classifiers.project_id == project_id)
+        .filter(models.Classifiers.id == classifier_id)
+        .first()
+    )
+
+    if orm_classifier is None:
+        return None
+
+    orm_classifier.archived_at = datetime.datetime.utcnow()
+    session.commit()
+    session.refresh(orm_classifier)
+
+    # TODO: add the archive_classifier job run that should be kicked off but not waited for.
     return response_schemas.classifier_adapter.validate_python(orm_classifier)
