@@ -52,6 +52,7 @@ def get_classifiers(
     session: sqlalchemy.orm.Session,
     project_id: int,
     include_archived: bool = False,
+    active_classifiers_only: bool = True,
 ) -> list[schemas.ClassifierResponse]:
     """Get a list of classifiers for a project."""
     query = session.query(models.Classifiers).filter(models.Classifiers.project_id == project_id)
@@ -60,6 +61,13 @@ def get_classifiers(
         query = query.filter(models.Classifiers.archived_at.is_(None))
 
     orm_classifiers = query.order_by(models.Classifiers.id.desc()).all()
+
+    # Filter out classifiers without a latest version
+    # Pipelines classifiers should always have a latest version
+    if active_classifiers_only:
+        orm_classifiers = [
+            classifier for classifier in orm_classifiers if classifier.latest_version is not None
+        ]
 
     return [
         schemas.ClassifierResponse.model_validate(orm_classifier)
