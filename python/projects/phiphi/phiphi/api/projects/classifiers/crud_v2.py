@@ -58,3 +58,26 @@ def get_classifier(
         return None
 
     return response_schemas.classifier_adapter.validate_python(orm_classifier)
+
+
+def get_classifiers(
+    session: sqlalchemy.orm.Session,
+    project_id: int,
+    start: int = 0,
+    end: int = 10,
+    include_archived: bool = True,
+) -> list[response_schemas.ClassifierList]:
+    """Get a list of classifiers for a project."""
+    query = (
+        session.query(models.Classifiers)
+        .filter(models.Classifiers.project_id == project_id)
+        .order_by(models.Classifiers.id.desc())
+        .slice(start, end)
+    )
+    if not include_archived:
+        query = query.filter(models.Classifiers.archived_at.is_(None))
+
+    return [
+        response_schemas.ClassifierList.model_validate(orm_classifier)
+        for orm_classifier in query.all()
+    ]

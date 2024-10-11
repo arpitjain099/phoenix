@@ -22,3 +22,13 @@ def test_get_classifier_not_found(reseed_tables, client: TestClient) -> None:
     response = client.get("/projects/1/classifiers/0")
     assert response.status_code == 404
     assert response.json() == {"detail": "Classifier not found"}
+
+
+def test_get_classifiers(reseed_tables, client: TestClient) -> None:
+    """Test get classifiers."""
+    response = client.get("/projects/1/classifiers")
+    assert response.status_code == 200
+    json = response.json()
+    assert len(json) == 1
+    assert json[0]["id"] == keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[0].id
+    assert "intermediatory_classes" not in json[0]

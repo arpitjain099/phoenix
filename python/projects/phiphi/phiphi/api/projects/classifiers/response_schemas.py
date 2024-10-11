@@ -3,10 +3,12 @@
 This copies ideas from Pydantic discriminator:
 https://docs.pydantic.dev/latest/concepts/unions/#nested-discriminated-unions
 """
-from typing import Annotated, Union
+import datetime
+from typing import Annotated, Optional, Union
 
 import pydantic
 
+from phiphi.api.projects.classifiers import base_schemas
 from phiphi.api.projects.classifiers.keyword_match import schemas as keyword_match_schemas
 
 Classifier = Annotated[
@@ -17,3 +19,27 @@ Classifier = Annotated[
 ]
 
 classifier_adapter = pydantic.TypeAdapter(Classifier)
+
+
+class ClassifierList(pydantic.BaseModel):
+    """Classifier list schema.
+
+    Properties to return to client.
+
+    This is a simplified version of the ClassifierResponseBase schema. That allows for optimisation
+    of the GET for all classifiers.
+    """
+
+    model_config = pydantic.ConfigDict(from_attributes=True)
+
+    id: int
+    project_id: int
+    name: str
+    type: base_schemas.ClassifierType
+    archived_at: Optional[datetime.datetime]
+    created_at: datetime.datetime
+    updated_at: datetime.datetime
+    latest_version: Annotated[
+        Optional[base_schemas.ClassifierVersionResponse],
+        pydantic.Field(description="The latest version of the Classifier", default=None),
+    ]
