@@ -25,4 +25,4 @@ def create_classifier(
     session.refresh(orm_classifier)
 
     # Implement of the intermediatory_classes_dict at some poin
-    return response_schemas.classifier_adaptor.validate_python(orm_classifier)
+    return response_schemas.classifier_adapter.validate_python(orm_classifier)

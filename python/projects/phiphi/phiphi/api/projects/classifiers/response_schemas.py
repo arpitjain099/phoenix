@@ -16,4 +16,4 @@ Classifier = Annotated[
     pydantic.Field(description="Any classifier response", discriminator="type"),
 ]
 
-classifier_adaptor = pydantic.TypeAdapter(Classifier)
+classifier_adapter = pydantic.TypeAdapter(Classifier)
