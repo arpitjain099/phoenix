@@ -68,6 +68,10 @@ def test_patch_classifier_not_found(reseed_tables, client: TestClient) -> None:
     assert response.status_code == 404
     assert response.json() == {"detail": "Classifier not found"}
 
+    response = client.patch("/projects/1/classifiers/2", json={"name": "New Name"})
+    assert response.status_code == 400
+    assert response.json() == {"detail": "Classifier is archived."}
+
 
 @pytest.mark.freeze_time(TIMESTAMP)
 def test_archive_classifier(reseed_tables, client: TestClient) -> None:

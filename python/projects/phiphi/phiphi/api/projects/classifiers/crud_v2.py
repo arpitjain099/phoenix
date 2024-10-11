@@ -107,7 +107,9 @@ def patch_classifier(
     if orm_classifier is None:
         raise exceptions.ClassifierNotFound()
 
-    # TODO handle archived should not be updated
+    if orm_classifier.archived_at is not None:
+        raise exceptions.ClassifierArchived()
+
     for key, value in classifier_patch.dict(exclude_unset=True).items():
         setattr(orm_classifier, key, value)
 
