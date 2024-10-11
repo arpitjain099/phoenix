@@ -75,8 +75,8 @@ class Classifiers(ClassifiersBase, base_models.TimestampModel):
 class IntermediatoryClassesBase(platform_db.Base):
     """Intermediatory classes table base.
 
-    The intermediatory classes table stores the most current version of the classes that the user
-    has defined.
+    The intermediatory classes table stores the "live" table, on which all edits and additions to
+    the classes are applied to.
 
     When a new version of the classifier is created, the classes are copied from this table to the
     classifier_versions table.
