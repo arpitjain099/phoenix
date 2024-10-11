@@ -1,6 +1,6 @@
-"""Child CRUD operations for the classifiers API.
+"""CRUD operations for classifiers version 2.
 
-At some point it might be best to integrate this into the main classifier CRUD operations.
+At somepoint this will replace the current CRUD operations in `crud.py`.
 """
 import sqlalchemy.orm
 

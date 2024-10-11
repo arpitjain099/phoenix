@@ -5,7 +5,8 @@ from typing import get_args
 import pytest
 from fastapi.testclient import TestClient
 
-from phiphi.api.projects.classifiers import base_schemas, child_crud, models, response_schemas
+from phiphi.api.projects.classifiers import base_schemas, models, response_schemas
+from phiphi.api.projects.classifiers import crud_v2 as crud
 from phiphi.api.projects.classifiers.keyword_match import schemas as keyword_match_schemas
 
 CREATED_TIME = datetime.datetime(2021, 1, 1, 0, 0, 0)
@@ -14,7 +15,7 @@ CREATED_TIME = datetime.datetime(2021, 1, 1, 0, 0, 0)
 @pytest.mark.freeze_time(CREATED_TIME)
 def test_create_keyword_match_classifier_crud(reseed_tables) -> None:
     """Test create keyword match classifier."""
-    classifer_response = child_crud.create_classifier(
+    classifer_response = crud.create_classifier(
         session=reseed_tables,
         project_id=1,
         classifier_type=base_schemas.ClassifierType.keyword_match,

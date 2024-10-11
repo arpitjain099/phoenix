@@ -2,7 +2,8 @@
 import fastapi
 
 from phiphi.api import deps
-from phiphi.api.projects.classifiers import base_schemas, child_crud, response_schemas
+from phiphi.api.projects.classifiers import base_schemas, response_schemas
+from phiphi.api.projects.classifiers import crud_v2 as crud
 
 router = fastapi.APIRouter()
 
@@ -16,7 +17,7 @@ def create_keyword_match_classifier(
     classifier_create: base_schemas.ClassifierCreate,
 ) -> response_schemas.Classifier:
     """Create a new keyword match classifier."""
-    return child_crud.create_classifier(
+    return crud.create_classifier(
         session=session,
         project_id=project_id,
         classifier_type=base_schemas.ClassifierType.keyword_match,
