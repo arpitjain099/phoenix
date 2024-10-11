@@ -59,3 +59,19 @@ def patch_classifier(
         classifier_patch=classifier_patch,
     )
     return classifier
+
+
+@router.post(
+    "/projects/{project_id}/classifiers/{classifier_id}/archive",
+    response_model=response_schemas.Classifier,
+)
+def archive_classifier(
+    session: deps.SessionDep,
+    project_id: int,
+    classifier_id: int,
+) -> response_schemas.Classifier:
+    """Archive a classifier."""
+    classifier = crud.archive_classifier(
+        session=session, project_id=project_id, classifier_id=classifier_id
+    )
+    return classifier
