@@ -25,3 +25,17 @@ def get_classifier(
     if classifier is None:
         raise exceptions.ClassifierNotFound()
     return classifier
+
+
+@router.get(
+    "/projects/{project_id}/classifiers",
+    response_model=list[response_schemas.ClassifierList],
+)
+def get_classifiers(
+    session: deps.SessionDep,
+    project_id: int,
+    start: int = 0,
+    end: int = 100,
+) -> list[response_schemas.ClassifierList]:
+    """Get classifiers."""
+    return crud.get_classifiers(session=session, project_id=project_id, start=start, end=end)
