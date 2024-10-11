@@ -29,8 +29,10 @@ def test_get_classifiers(reseed_tables, client: TestClient) -> None:
     response = client.get("/projects/1/classifiers")
     assert response.status_code == 200
     json = response.json()
-    assert len(json) == 1
-    assert json[0]["id"] == keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[0].id
+    length = 2
+    assert len(json) == length
+    # First classifier should be last as it is id desc
+    assert json[length - 1]["id"] == keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[0].id
     assert "intermediatory_classes" not in json[0]
 
 

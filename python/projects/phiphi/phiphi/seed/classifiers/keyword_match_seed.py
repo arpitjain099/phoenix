@@ -18,6 +18,20 @@ TEST_KEYWORD_CLASSIFIER_CREATE_1 = base_schemas.ClassifierCreate(
     ],
 )
 
+TEST_KEYWORD_CLASSIFIER_CREATE_2 = base_schemas.ClassifierCreate(
+    name="Test keyword match Classifier 2 Archieved",
+    intermediatory_classes=[
+        base_schemas.IntermediatoryClassCreate(
+            name="Test Class 1",
+            description="Test Class 1 Description",
+        ),
+        base_schemas.IntermediatoryClassCreate(
+            name="Test Class 2",
+            description="Test Class 2 Description",
+        ),
+    ],
+)
+
 TEST_KEYWORD_CLASSIFIERS: list[response_schemas.Classifier] = []
 
 
@@ -37,3 +51,18 @@ def seed_test_classifier_keyword_match(session: Session) -> None:
             classifier_create=classifier_create,
         )
         TEST_KEYWORD_CLASSIFIERS.append(classifier)
+
+    classifier = crud.create_classifier(
+        session=session,
+        project_id=1,
+        classifier_type=base_schemas.ClassifierType.keyword_match,
+        classifier_create=TEST_KEYWORD_CLASSIFIER_CREATE_2,
+    )
+    archived_classifier = crud.archive_classifier(
+        session=session,
+        project_id=1,
+        classifier_id=classifier.id,
+    )
+    # Need to check for typing errors
+    assert archived_classifier
+    TEST_KEYWORD_CLASSIFIERS.append(archived_classifier)
