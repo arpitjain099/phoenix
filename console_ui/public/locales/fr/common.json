@@ -280,20 +280,20 @@
 				"description": "Récupérez des publications depuis la recherche Facebook en utilisant le web scraper Apify",
 				"create": "Configurer une nouvelle collecte de publications de recherche Facebook",
 				"create_description": "Créez une collecte de publications à partir de recherches Facebook en utilisant le web scraper Apify. Une fois la collecte créée, vous pourrez l'exécuter pour recueillir les données.",
-				"edit": "Modifier la collecte de publications Facebook",
+				"edit": "Modifier la collecte de publications de recherche Facebook",
 				"edit_description": "Modifiez une collecte de publications à partir de recherches Facebook en utilisant le web scraper Apify. Une fois la collecte créée, vous pourrez l'exécuter pour recueillir les données.",
 				"fields": {
 					"search_query": "Requête de recherche",
-					"limit_posts": "Limiter le nombre de publications par recherche",
+					"limit_posts": "Limiter les publications par recherche",
 					"limit_retries": "Limiter les tentatives",
 					"recent_posts": "Publications récentes",
 					"proxy_groups": "Groupes de proxy",
 					"residential_proxies": "Proxies résidentiels",
 					"no_proxy": "Pas de proxy",
 					"proxy_country": "Pays du proxy",
-					"anywhere": "Partout (recommandé)",
+					"anywhere": "Partout",
 					"info": {
-						"search_query": "Requête de recherche",
+						"search_query": "Les termes et mots que vous souhaitez rechercher. Ils doivent être aussi spécifiques que possible. Sachez que les résultats que vous voyez sur votre compte peuvent différer de ceux recueillis par un compte anonyme.",
 						"limit_posts": "Limitez le nombre de publications collectées pour chaque recherche.",
 						"limit_retries": "Limitez le nombre de tentatives autorisées pour chaque recherche.",
 						"proxy_groups": "Adresses IP situées dans les maisons et bureaux des gens. Ce type de proxy a le moins de chances d'être bloqué et offre la meilleure couverture géographique."
@@ -303,7 +303,7 @@
 					}
 				},
 				"view": {
-					"text": "Ceci est une collecte de publications de recherche Facebook. Elle récupère des publications à partir de comptes Facebook en utilisant le web scraper Apify.",
+					"text": "Ceci est une collecte de publications de recherche Facebook. Elle récupère des publications depuis une recherche Facebook en utilisant le web scraper Apify.",
 					"accordion": {
 						"status": "Statut",
 						"general": "Général",
