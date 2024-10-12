@@ -280,7 +280,7 @@
 				"description": "Recopile publicaciones de la búsqueda de Facebook utilizando el web scraper Apify",
 				"create": "Configurar una nueva recopilación de publicaciones de búsqueda de Facebook",
 				"create_description": "Cree una recopilación de publicaciones de búsquedas en Facebook utilizando el web scraper Apify. Una vez que haya creado su recopilación, podrá ejecutarla para recopilar los datos.",
-				"edit": "Editar nueva recopilación de publicaciones de Facebook",
+				"edit": "Editar nueva recopilación de publicaciones de búsqueda de Facebook",
 				"edit_description": "Edite una recopilación de publicaciones de búsquedas en Facebook utilizando el web scraper Apify. Una vez que haya creado su recopilación, podrá ejecutarla para recopilar los datos.",
 				"fields": {
 					"search_query": "Consulta de búsqueda",
@@ -291,9 +291,9 @@
 					"residential_proxies": "Proxies residenciales",
 					"no_proxy": "Sin proxy",
 					"proxy_country": "País del proxy",
-					"anywhere": "Cualquier lugar (recomendado)",
+					"anywhere": "Cualquier lugar",
 					"info": {
-						"search_query": "Consulta de búsqueda",
+						"search_query": "Los términos y palabras que desea buscar. Deben ser lo más específicos posible. Tenga en cuenta que los resultados que ve en su cuenta pueden diferir de los recopilados por una cuenta anónima.",
 						"limit_posts": "Limite el número de publicaciones que se recopilan para cada búsqueda.",
 						"limit_retries": "Limite el número de reintentos permitidos para cada búsqueda.",
 						"proxy_groups": "Direcciones IP ubicadas en las casas y oficinas de las personas. Este tipo de proxy tiene menos probabilidades de ser bloqueado y ofrece la mejor cobertura geográfica."
@@ -303,7 +303,7 @@
 					}
 				},
 				"view": {
-					"text": "Esta es una recopilación de publicaciones de búsqueda de Facebook. Recopila publicaciones de cuentas de Facebook utilizando el web scraper Apify.",
+					"text": "Esta es una recopilación de publicaciones de búsqueda de Facebook. Recopila publicaciones desde una búsqueda de Facebook utilizando el web scraper Apify.",
 					"accordion": {
 						"status": "Estado",
 						"general": "General",
