@@ -77,6 +77,9 @@ class ClassifierVersionResponse(pydantic.BaseModel):
 
     model_config = pydantic.ConfigDict(from_attributes=True)
 
+    # Although this is duplicated in the ClassifierResponseBase, it is good to have here for
+    # testing versions and the response from the create of a version
+    classifier_id: int
     version_id: Annotated[
         int, pydantic.Field(description="The ID of this version (of the corresponding Classifier)")
     ]
