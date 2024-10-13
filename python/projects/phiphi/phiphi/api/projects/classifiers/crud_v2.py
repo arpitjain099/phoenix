@@ -44,6 +44,37 @@ def create_classifier(
     return response_schemas.classifier_adapter.validate_python(orm_classifier)
 
 
+def get_class_dict(
+    session: sqlalchemy.orm.Session,
+    orm_classifier: models.Classifiers,
+) -> base_schemas.ClassesDictType:
+    """Get the classes dict for a classifier.
+
+    This will return a dictionary of the classes for a classifier.
+
+    Args:
+        session: SQLAlchemy session.
+        orm_classifier: Classifier ORM. Using a classifier ORM rather then just the id to show that
+            the classifier has to exist.
+
+    Returns:
+        ClassesDictType
+    """
+    list_intermediatory_classes = (
+        session.query(models.IntermediatoryClasses)
+        .filter(models.IntermediatoryClasses.classifier_id == orm_classifier.id)
+        .all()
+    )
+
+    classes_dict: base_schemas.ClassesDictType = {}
+
+    # Due to the unique index on intermediatory_classes table we know there is one name per class
+    for intermediate_class in list_intermediatory_classes:
+        classes_dict[intermediate_class.name] = intermediate_class.description
+
+    return classes_dict
+
+
 def get_orm_classifier(
     session: sqlalchemy.orm.Session,
     project_id: int,
