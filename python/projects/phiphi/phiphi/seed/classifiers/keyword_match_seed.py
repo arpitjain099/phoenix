@@ -4,8 +4,8 @@ from sqlalchemy.orm import Session
 from phiphi.api.projects.classifiers import base_schemas, response_schemas
 from phiphi.api.projects.classifiers import crud_v2 as crud
 
-TEST_KEYWORD_CLASSIFIER_CREATE_1 = base_schemas.ClassifierCreate(
-    name="Test keyword match Classifier 1",
+TEST_KEYWORD_CLASSIFIER_CREATE_NO_VERSION = base_schemas.ClassifierCreate(
+    name="Test keyword match Classifier 1 no version",
     intermediatory_classes=[
         base_schemas.IntermediatoryClassCreate(
             name="Test Class 1",
@@ -39,14 +39,13 @@ def seed_test_classifier_keyword_match(session: Session) -> None:
     """Seed test keyword match classifier."""
     # Need to clear the list before seeding other wise every seed will add to the list
     TEST_KEYWORD_CLASSIFIERS.clear()
-    classifiers = [
-        TEST_KEYWORD_CLASSIFIER_CREATE_1,
-    ]
+    classifiers = [TEST_KEYWORD_CLASSIFIER_CREATE_NO_VERSION]
+    project_id = 1
 
     for classifier_create in classifiers:
         classifier = crud.create_classifier(
             session=session,
-            project_id=1,
+            project_id=project_id,
             classifier_type=base_schemas.ClassifierType.keyword_match,
             classifier_create=classifier_create,
         )
