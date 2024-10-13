@@ -2,6 +2,7 @@
 
 import React, { Dispatch, SetStateAction } from "react";
 import {
+	Button,
 	Checkbox,
 	Group,
 	NumberInput,
@@ -11,7 +12,7 @@ import {
 	Tooltip,
 } from "@mantine/core";
 import { useTranslate } from "@refinedev/core";
-import { IconInfoCircle } from "@tabler/icons";
+import { IconExternalLink, IconInfoCircle } from "@tabler/icons";
 import { GetInputProps } from "@mantine/form/lib/types";
 import { ProjectSchema } from "src/interfaces/project";
 import { TextField } from "@refinedev/mantine";
@@ -46,13 +47,13 @@ export function getPostValidationRules(data: any, translate: any) {
 				)
 			: null;
 	validationRules.limit_posts =
-		data.limit_posts === undefined
+		data.limit_posts === undefined || data.limit_posts <= 0
 			? translate(
 					"gathers.types.apify_facebook_search_posts.fields.validation.required"
 				)
 			: null;
 	validationRules.limit_retries =
-		data.limit_retries === undefined
+		data.limit_retries === undefined || data.limit_retries <= 0
 			? translate(
 					"gathers.types.apify_facebook_search_posts.fields.validation.required"
 				)
@@ -60,6 +61,23 @@ export function getPostValidationRules(data: any, translate: any) {
 
 	return validationRules;
 }
+
+export const getUpdatedFormValues = (
+	formValues: any,
+	proxyGroup: string,
+	proxyCountry: string | null
+) => ({
+	...formValues,
+	proxy: {
+		use_apify_proxy: proxyGroup === "RESIDENTIAL",
+		apify_proxy_groups:
+			proxyGroup === "RESIDENTIAL" ? ["RESIDENTIAL"] : undefined,
+		apify_proxy_country:
+			proxyGroup === "RESIDENTIAL" && proxyCountry !== "anywhere"
+				? proxyCountry
+				: undefined,
+	},
+});
 
 interface Props {
 	proxyGroup: string;
@@ -98,26 +116,39 @@ const ApifyFacebookSearchPostsForm: React.FC<Props> = ({
 				}
 				{...getInputProps("name")}
 			/>
-			<TextInput
-				mt="sm"
-				label={
-					<div className="flex items-center">
-						<Tooltip
-							label={translate(
-								"gathers.types.apify_facebook_search_posts.fields.info.search_query"
+			<div className="flex items-end w-full">
+				<TextInput
+					className="flex-1"
+					mt="sm"
+					label={
+						<div className="flex items-center">
+							<Tooltip
+								label={translate(
+									"gathers.types.apify_facebook_search_posts.fields.info.search_query"
+								)}
+							>
+								<span className="flex">
+									<IconInfoCircle size={12} />
+								</span>
+							</Tooltip>
+							{translate(
+								"gathers.types.apify_facebook_search_posts.fields.search_query"
 							)}
-						>
-							<span className="flex">
-								<IconInfoCircle size={12} />
-							</span>
-						</Tooltip>
-						{translate(
-							"gathers.types.apify_facebook_search_posts.fields.search_query"
-						)}
-					</div>
-				}
-				{...getInputProps("search_query")}
-			/>
+						</div>
+					}
+					{...getInputProps("search_query")}
+				/>
+				<Button
+					component="a"
+					href={`https://www.facebook.com/search/posts?q=${getInputProps("search_query").value}`}
+					target="_blank"
+					rel="noopener noreferrer"
+					p={0}
+					variant="subtle"
+				>
+					<IconExternalLink size={20} />
+				</Button>
+			</div>
 			<NumberInput
 				mt="lg"
 				label={

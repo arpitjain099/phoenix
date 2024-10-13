@@ -8,6 +8,7 @@ import { useParams } from "next/navigation";
 import GatherViewStatus from "@components/gather/view_status";
 import GatherViewBreadcrumb from "@components/breadcrumbs/gatherView";
 import GatherViewHeaderButton from "@components/gather/header-button";
+import { countryList } from "src/utils/constants";
 
 export default function ApifyFacebookSearchPostShow(): JSX.Element {
 	const { projectid, id } = useParams();
@@ -189,7 +190,11 @@ export default function ApifyFacebookSearchPostShow(): JSX.Element {
 											className="capitalize"
 											value={
 												record?.proxy?.apify_proxy_country
-													? record?.proxy?.apify_proxy_country
+													? countryList.find(
+															(country) =>
+																country.value ===
+																record?.proxy?.apify_proxy_country
+														)?.label
 													: translate(
 															"gathers.types.apify_facebook_search_posts.fields.anywhere"
 														)
