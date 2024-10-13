@@ -21,10 +21,10 @@ Classifier = Annotated[
 classifier_adapter = pydantic.TypeAdapter(Classifier)
 
 
-class ClassifierList(pydantic.BaseModel):
-    """Classifier list schema.
+class OptimisedClassifier(pydantic.BaseModel):
+    """Optimised Classifier schema.
 
-    Properties to return to client.
+    Properties to return to client for a request like list the classifiers
 
     This is a simplified version of the ClassifierResponseBase schema. That allows for optimisation
     of the GET for all classifiers.
