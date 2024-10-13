@@ -9,14 +9,12 @@ import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ApifyFacebookSearchPostsForm, {
 	getPostValidationRules,
+	getUpdatedFormValues,
 	initialFormValues,
 } from "@components/forms/gather/apify_facebook_search_posts_form";
 import { handleGatherSave } from "src/utils/constants";
 
 export default function ApifyFacebookSearchPostEdit(): JSX.Element {
-	const today = new Date();
-	const tomorrow = new Date(today);
-	tomorrow.setDate(tomorrow.getDate() + 1);
 	const { mutate, isLoading: editResourceLoading } = useUpdate();
 	const translate = useTranslate();
 	const router = useRouter();
@@ -60,17 +58,11 @@ export default function ApifyFacebookSearchPostEdit(): JSX.Element {
 	}, [gatherData, setProxyCountry, setProxyGroup]);
 
 	const handleSubmit = () => {
-		const updatedFormValues = {
-			...formValues,
-			proxy: {
-				use_apify_proxy: proxyGroup === "RESIDENTIAL",
-				apify_proxy_groups: proxyGroup === "RESIDENTIAL" ? ["RESIDENTIAL"] : [],
-				apify_proxy_country:
-					proxyGroup === "RESIDENTIAL" && proxyCountry !== "anywhere"
-						? proxyCountry
-						: undefined,
-			},
-		};
+		const updatedFormValues = getUpdatedFormValues(
+			formValues,
+			proxyGroup,
+			proxyCountry
+		);
 		handleGatherSave(
 			`projects/${projectid}/gathers/apify_facebook_search_posts`,
 			`/projects/${projectid}/gathers/${gatherData?.child_type}/${gatherData?.id}`,

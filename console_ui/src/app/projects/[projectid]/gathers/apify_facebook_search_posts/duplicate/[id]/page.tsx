@@ -9,6 +9,7 @@ import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ApifyFacebookSearchPostsForm, {
 	getPostValidationRules,
+	getUpdatedFormValues,
 	initialFormValues,
 } from "@components/forms/gather/apify_facebook_search_posts_form";
 import { handleGatherSave } from "src/utils/constants";
@@ -60,17 +61,11 @@ export default function ApifyFacebookSearchPostDuplicate(): JSX.Element {
 	}, [gatherData, setProxyCountry, setProxyGroup, setFieldValue]);
 
 	const handleSubmit = () => {
-		const updatedFormValues = {
-			...formValues,
-			proxy: {
-				use_apify_proxy: proxyGroup === "RESIDENTIAL",
-				apify_proxy_groups: proxyGroup === "RESIDENTIAL" ? ["RESIDENTIAL"] : [],
-				apify_proxy_country:
-					proxyGroup === "RESIDENTIAL" && proxyCountry !== "anywhere"
-						? proxyCountry
-						: undefined,
-			},
-		};
+		const updatedFormValues = getUpdatedFormValues(
+			formValues,
+			proxyGroup,
+			proxyCountry
+		);
 		handleGatherSave(
 			`projects/${projectid}/gathers/apify_facebook_search_posts`,
 			`/projects/show/${projectid}?activeItem=gather`,
