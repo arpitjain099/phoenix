@@ -77,6 +77,21 @@ TEST_KEYWORD_CLASSIFIER_CREATE_VERSION_FAILED = base_schemas.ClassifierCreate(
     ],
 )
 
+# Needed for the console development
+TEST_KEYWORD_CLASSIFIER_COMPLETED_ARCHIVED = base_schemas.ClassifierCreate(
+    name="Test keyword match Classifier 2 Archived Completed",
+    intermediatory_classes=[
+        base_schemas.IntermediatoryClassCreate(
+            name="Test Class 1",
+            description="Test Class 1 Description",
+        ),
+        base_schemas.IntermediatoryClassCreate(
+            name="Test Class 2",
+            description="Test Class 2 Description",
+        ),
+    ],
+)
+
 TEST_KEYWORD_CLASSIFIERS: list[response_schemas.Classifier] = []
 
 
@@ -154,3 +169,10 @@ def seed_test_classifier_keyword_match(session: Session) -> None:
         # Needed for the typing
         assert classifier_with_version
         TEST_KEYWORD_CLASSIFIERS.append(classifier_with_version)
+
+    archived_completed_classifier = create_archived_classifier(
+        session=session,
+        project_id=project_id,
+        classifier_create=TEST_KEYWORD_CLASSIFIER_COMPLETED_ARCHIVED,
+    )
+    TEST_KEYWORD_CLASSIFIERS.append(archived_completed_classifier)
