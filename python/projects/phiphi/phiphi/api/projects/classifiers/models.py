@@ -7,6 +7,8 @@ from sqlalchemy import orm
 
 from phiphi import platform_db
 from phiphi.api import base_models
+from phiphi.api.projects.job_runs import models as job_run_models
+from phiphi.api.projects.job_runs import schemas as job_run_schemas
 
 
 class ClassifierVersionsBase(platform_db.Base):
@@ -40,6 +42,14 @@ class ClassifiersBase(platform_db.Base):
     archived_at: orm.Mapped[datetime.datetime | None] = orm.mapped_column(nullable=True)
 
 
+job_run_foreign_type_query = (
+    "or_("
+    f"JobRuns.foreign_job_type=='{job_run_schemas.ForeignJobType.classify.value}',"
+    f"JobRuns.foreign_job_type=='{job_run_schemas.ForeignJobType.classify_tabulate.value}'"
+    ")"
+)
+
+
 class Classifiers(ClassifiersBase, base_models.TimestampModel):
     """Classifiers table."""
 
@@ -60,6 +70,16 @@ class Classifiers(ClassifiersBase, base_models.TimestampModel):
         lazy="dynamic",
     )
 
+    # Relationship to get all related JobRuns, ordered by id descending
+    job_runs = orm.relationship(
+        "JobRuns",
+        order_by="desc(JobRuns.id)",
+        primaryjoin=(
+            f"and_({job_run_foreign_type_query}, foreign(JobRuns.foreign_id)==Classifiers.id)"
+        ),
+        lazy="dynamic",
+    )
+
     @property
     def latest_version(self) -> ClassifierVersions:
         """Get the latest version of the classifier."""
@@ -70,6 +90,16 @@ class Classifiers(ClassifiersBase, base_models.TimestampModel):
         """Get all versions of the classifier."""
         latest_versions: list[ClassifierVersions] = self.classifier_versions.all()
         return latest_versions
+
+    @property
+    def latest_job_run(self) -> job_run_models.JobRuns | None:
+        """Property to get the most recent JobRun."""
+        latest_run: job_run_models.JobRuns | None = self.job_runs.first()
+
+        if latest_run is None:
+            return None
+
+        return latest_run
 
 
 class IntermediatoryClassesBase(platform_db.Base):
