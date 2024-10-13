@@ -294,6 +294,8 @@
 					"anywhere": "Cualquier lugar",
 					"info": {
 						"search_query": "Los términos y palabras que desea buscar. Deben ser lo más específicos posible. Tenga en cuenta que los resultados que ve en su cuenta pueden diferir de los recopilados por una cuenta anónima.",
+						"search_query_results": "Ver los resultados posibles para la consulta de búsqueda",
+						"results_tooltip": "Los resultados varían según el proxy y el usuario conectado. El Gather utilizará usuarios anónimos y un proxy definido a continuación.",
 						"limit_posts": "Limite el número de publicaciones que se recopilan para cada búsqueda.",
 						"limit_retries": "Limite el número de reintentos permitidos para cada búsqueda.",
 						"proxy_groups": "Direcciones IP ubicadas en las casas y oficinas de las personas. Este tipo de proxy tiene menos probabilidades de ser bloqueado y ofrece la mejor cobertura geográfica."

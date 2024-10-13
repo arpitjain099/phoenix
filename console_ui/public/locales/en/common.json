@@ -294,6 +294,8 @@
 					"anywhere": "Anywhere",
 					"info": {
 						"search_query": "The terms and words that you want to search for. These should be as specific as possible. Be aware that what the results you see on your account may be different than gathered by an anonymous account.",
+						"search_query_results": "View possible results for the search query",
+						"results_tooltip": "Results vary depending on proxy and the user logged in. The Gather will use anonymous users and a proxy defined in below.",
 						"limit_posts": "Limit the number of posts that are collected for each search.",
 						"limit_retries": "Limit the number of retries allowed for each search.",
 						"proxy_groups": "IP addresses located in people's homes and offices. This type of proxy has the lowest chance of getting blocked and the best geographical coverage."
