@@ -29,6 +29,22 @@ def test_get_classifier_not_found(reseed_tables, client: TestClient) -> None:
     assert response.json() == {"detail": "Classifier not found"}
 
 
+def test_get_classifier_with_version_and_job(reseed_tables, client: TestClient) -> None:
+    """Test get classifier."""
+    # Classifier with a version
+    classifier = keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[2]
+    assert classifier.latest_version
+    assert classifier.latest_job_run
+    response = client.get(f"/projects/{classifier.project_id}/classifiers/{classifier.id}")
+    assert response.status_code == 200
+    json = response.json()
+    assert json == classifier.model_dump(mode="json")
+    assert "latest_version" in json
+    assert json["latest_version"]["version_id"] == classifier.latest_version.version_id
+    assert "latest_job_run" in json
+    assert json["latest_job_run"]["id"] == classifier.latest_job_run.id
+
+
 def test_get_classifiers(reseed_tables, client: TestClient) -> None:
     """Test get classifiers."""
     response = client.get("/projects/1/classifiers")

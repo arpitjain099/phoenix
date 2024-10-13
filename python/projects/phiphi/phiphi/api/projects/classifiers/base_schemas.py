@@ -5,6 +5,8 @@ from typing import Annotated, Any, Optional
 
 import pydantic
 
+from phiphi.api.projects.job_runs import schemas as job_runs_schemas
+
 
 class ClassifierType(str, Enum):
     """Classifier type enum."""
@@ -112,3 +114,4 @@ class ClassifierResponseBase(pydantic.BaseModel):
         Optional[ClassifierVersionResponse],
         pydantic.Field(description="The latest version of the Classifier", default=None),
     ]
+    latest_job_run: job_runs_schemas.JobRunResponse | None = None

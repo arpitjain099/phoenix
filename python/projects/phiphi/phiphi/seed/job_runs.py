@@ -55,6 +55,11 @@ TEST_GATHER_RUNNING_DELETED_JOB_RUN = schemas.JobRunCreate(
 )
 
 
+TEST_CLASSIFY_RUNNING_JOB_RUN = schemas.JobRunCreate(
+    foreign_id=3, foreign_job_type=schemas.ForeignJobType.classify_tabulate
+)
+
+
 def create_deleted_job_run(
     session: Session,
     project_id: int,
@@ -137,3 +142,5 @@ def seed_test_job_runs(session: Session) -> None:
     # Make gather id 9 completed gather and have a running deleted gather run
     create_job_run_and_complete(session, 1, TEST_GATHER_RUNNING_DELETED_GATHER_RUN)
     create_deleted_job_run(session, 1, TEST_GATHER_RUNNING_DELETED_JOB_RUN, None)
+    # Classify
+    crud.create_job_run(session, 1, TEST_CLASSIFY_RUNNING_JOB_RUN)
