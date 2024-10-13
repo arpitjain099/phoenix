@@ -10,6 +10,7 @@ import pydantic
 
 from phiphi.api.projects.classifiers import base_schemas
 from phiphi.api.projects.classifiers.keyword_match import schemas as keyword_match_schemas
+from phiphi.api.projects.job_runs import schemas as job_runs_schemas
 
 Classifier = Annotated[
     Union[keyword_match_schemas.KeywordMatchClassifierResponse],
@@ -43,3 +44,4 @@ class OptimisedClassifier(pydantic.BaseModel):
         Optional[base_schemas.ClassifierVersionResponse],
         pydantic.Field(description="The latest version of the Classifier", default=None),
     ]
+    latest_job_run: job_runs_schemas.JobRunResponse | None = None
