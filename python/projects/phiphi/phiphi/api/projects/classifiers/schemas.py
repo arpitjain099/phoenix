@@ -63,6 +63,8 @@ class ClassifierVersionResponse(ClassifierVersion):
     Properties to return to client.
     """
 
+    model_config = pydantic.ConfigDict(from_attributes=True)
+
     version_id: Annotated[
         int,
         pydantic.Field(description="The ID of this version (of the corresponding Classifier)"),
