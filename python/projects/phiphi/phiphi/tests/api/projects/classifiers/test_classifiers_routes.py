@@ -47,13 +47,15 @@ def test_get_classifier_with_version_and_job(reseed_tables, client: TestClient) 
 
 def test_get_classifiers(reseed_tables, client: TestClient) -> None:
     """Test get classifiers."""
-    response = client.get("/projects/1/classifiers")
+    # Doing start and end so we don't have to worry about the number of classifiers
+    # in the seeds
+    response = client.get("/projects/1/classifiers?start=0&end=4")
     assert response.status_code == 200
     json = response.json()
     length = 4
     assert len(json) == length
-    # First classifier should be last as it is id desc
-    assert json[length - 1]["id"] == keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[0].id
+    # Desc order
+    assert json[length - 1]["id"] < json[0]["id"]
     assert "intermediatory_classes" not in json[0]
     assert "latest_job_run" in json[0]
     # First classifier should have a job run
