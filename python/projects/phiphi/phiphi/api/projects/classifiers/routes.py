@@ -64,13 +64,13 @@ def patch_classifier(
     "/projects/{project_id}/classifiers/{classifier_id}/archive",
     response_model=response_schemas.Classifier,
 )
-def archive_classifier(
+async def archive_classifier(
     session: deps.SessionDep,
     project_id: int,
     classifier_id: int,
 ) -> response_schemas.Classifier:
     """Archive a classifier."""
-    classifier = crud.archive_classifier(
+    classifier = await crud.archive_classifier_run_archive_job(
         session=session, project_id=project_id, classifier_id=classifier_id
     )
     return classifier

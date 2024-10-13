@@ -1,9 +1,12 @@
 """Test classifier routes."""
 import datetime
+from unittest import mock
 
 import pytest
 from fastapi.testclient import TestClient
+from prefect.client.schemas import objects
 
+from phiphi.api.projects.job_runs import schemas as job_run_schemas
 from phiphi.seed.classifiers import keyword_match_seed
 
 TIMESTAMP = datetime.datetime(2021, 1, 1, 0, 0, 0)
@@ -97,11 +100,25 @@ def test_patch_classifier_not_found(reseed_tables, client: TestClient) -> None:
 
 
 @pytest.mark.freeze_time(TIMESTAMP)
-def test_archive_classifier(reseed_tables, client: TestClient) -> None:
+@mock.patch("phiphi.api.projects.job_runs.prefect_deployment.wrapped_run_deployment")
+def test_archive_classifier(m_run_deployment, reseed_tables, client: TestClient) -> None:
     """Test archive classifier."""
+    mock_flow_run = mock.MagicMock(spec=objects.FlowRun)
+    mock_flow_run.id = "mock_uuid"
+    mock_flow_run.name = "mock_flow_run"
+    m_run_deployment.return_value = mock_flow_run
     classifier = keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[0]
     response = client.post(
         f"/projects/{classifier.project_id}/classifiers/{classifier.id}/archive"
+    )
+    m_run_deployment.assert_called_once_with(
+        name="flow_runner_flow/flow_runner_flow",
+        parameters={
+            "project_id": classifier.project_id,
+            "job_type": job_run_schemas.ForeignJobType.classifier_archive,
+            "job_source_id": classifier.id,
+            "job_run_id": mock.ANY,
+        },
     )
     assert response.status_code == 200
     assert response.json()["archived_at"] == TIMESTAMP.isoformat()
