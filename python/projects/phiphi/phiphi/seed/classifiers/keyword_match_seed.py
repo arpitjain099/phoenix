@@ -18,8 +18,8 @@ TEST_KEYWORD_CLASSIFIER_CREATE_NO_VERSION = base_schemas.ClassifierCreate(
     ],
 )
 
-TEST_KEYWORD_CLASSIFIER_CREATE_2 = base_schemas.ClassifierCreate(
-    name="Test keyword match Classifier 2 Archieved",
+TEST_KEYWORD_CLASSIFIER_CREATE_ARCHIVED = base_schemas.ClassifierCreate(
+    name="Test keyword match Classifier 2 Archived",
     intermediatory_classes=[
         base_schemas.IntermediatoryClassCreate(
             name="Test Class 1",
@@ -53,13 +53,13 @@ def seed_test_classifier_keyword_match(session: Session) -> None:
 
     classifier = crud.create_classifier(
         session=session,
-        project_id=1,
+        project_id=project_id,
         classifier_type=base_schemas.ClassifierType.keyword_match,
-        classifier_create=TEST_KEYWORD_CLASSIFIER_CREATE_2,
+        classifier_create=TEST_KEYWORD_CLASSIFIER_CREATE_ARCHIVED,
     )
     archived_classifier = crud.archive_classifier(
         session=session,
-        project_id=1,
+        project_id=project_id,
         classifier_id=classifier.id,
     )
     # Need to check for typing errors
