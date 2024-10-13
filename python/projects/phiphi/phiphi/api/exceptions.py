@@ -47,3 +47,11 @@ class ForeignObjectHasActiveJobRun(fastapi.HTTPException):
                 f" Type: {foreign_job_type}, Id: {foreign_id}"
             ),
         )
+
+
+class ClassifierNotFound(fastapi.HTTPException):
+    """Custom exception for null classifier."""
+
+    def __init__(self) -> None:
+        """Constructor for custom exception."""
+        super().__init__(status_code=404, detail="Classifier not found")

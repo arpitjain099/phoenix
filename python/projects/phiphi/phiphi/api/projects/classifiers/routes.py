@@ -1,7 +1,7 @@
 """Classifier routes."""
 import fastapi
 
-from phiphi.api import deps
+from phiphi.api import deps, exceptions
 from phiphi.api.projects.classifiers import crud_v2 as crud
 from phiphi.api.projects.classifiers import response_schemas
 from phiphi.api.projects.classifiers.keyword_match import routes as keyword_match_routes
@@ -23,5 +23,5 @@ def get_classifier(
         session=session, project_id=project_id, classifier_id=classifier_id
     )
     if classifier is None:
-        raise fastapi.HTTPException(status_code=404, detail="Classifier not found")
+        raise exceptions.ClassifierNotFound()
     return classifier
