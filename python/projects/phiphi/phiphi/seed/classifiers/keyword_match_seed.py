@@ -80,6 +80,30 @@ TEST_KEYWORD_CLASSIFIER_CREATE_VERSION_FAILED = base_schemas.ClassifierCreate(
 TEST_KEYWORD_CLASSIFIERS: list[response_schemas.Classifier] = []
 
 
+def create_archived_classifier(
+    session: Session, project_id: int, classifier_create: base_schemas.ClassifierCreate
+) -> response_schemas.Classifier:
+    """Create an archived classifier."""
+    classifier = classifier_crud.create_classifier(
+        session=session,
+        project_id=project_id,
+        classifier_type=base_schemas.ClassifierType.keyword_match,
+        classifier_create=classifier_create,
+    )
+    classifier_crud.archive_classifier(
+        session=session,
+        project_id=project_id,
+        classifier_id=classifier.id,
+    )
+    classifier_archived = classifier_crud.get_classifier(
+        session=session,
+        project_id=project_id,
+        classifier_id=classifier.id,
+    )
+    assert classifier_archived  # Needed for the typing
+    return classifier_archived
+
+
 def seed_test_classifier_keyword_match(session: Session) -> None:
     """Seed test keyword match classifier."""
     # Need to clear the list before seeding other wise every seed will add to the list
@@ -96,19 +120,11 @@ def seed_test_classifier_keyword_match(session: Session) -> None:
         )
         TEST_KEYWORD_CLASSIFIERS.append(classifier)
 
-    classifier = classifier_crud.create_classifier(
+    archived_classifier = create_archived_classifier(
         session=session,
         project_id=project_id,
-        classifier_type=base_schemas.ClassifierType.keyword_match,
         classifier_create=TEST_KEYWORD_CLASSIFIER_CREATE_ARCHIVED,
     )
-    archived_classifier = classifier_crud.archive_classifier(
-        session=session,
-        project_id=project_id,
-        classifier_id=classifier.id,
-    )
-    # Need to check for typing errors
-    assert archived_classifier
     TEST_KEYWORD_CLASSIFIERS.append(archived_classifier)
 
     versioned_classifiers = [
