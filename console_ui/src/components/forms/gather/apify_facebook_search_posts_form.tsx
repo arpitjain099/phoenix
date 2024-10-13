@@ -25,8 +25,8 @@ tomorrow.setDate(tomorrow.getDate() + 1);
 export const initialFormValues = {
 	name: "",
 	search_query: "",
-	limit_posts: 0,
-	limit_retries: 0,
+	limit_posts: 10,
+	limit_retries: 1,
 	recent_posts: true,
 };
 
@@ -116,39 +116,50 @@ const ApifyFacebookSearchPostsForm: React.FC<Props> = ({
 				}
 				{...getInputProps("name")}
 			/>
-			<div className="flex items-end w-full">
-				<TextInput
-					className="flex-1"
-					mt="sm"
-					label={
-						<div className="flex items-center">
-							<Tooltip
-								label={translate(
-									"gathers.types.apify_facebook_search_posts.fields.info.search_query"
-								)}
-							>
-								<span className="flex">
-									<IconInfoCircle size={12} />
-								</span>
-							</Tooltip>
-							{translate(
-								"gathers.types.apify_facebook_search_posts.fields.search_query"
+			<TextInput
+				className="flex-1"
+				mt="sm"
+				label={
+					<div className="flex items-center">
+						<Tooltip
+							label={translate(
+								"gathers.types.apify_facebook_search_posts.fields.info.search_query"
 							)}
-						</div>
-					}
-					{...getInputProps("search_query")}
-				/>
-				<Button
-					component="a"
-					href={`https://www.facebook.com/search/posts?q=${getInputProps("search_query").value}`}
-					target="_blank"
-					rel="noopener noreferrer"
-					p={0}
-					variant="subtle"
+						>
+							<span className="flex">
+								<IconInfoCircle size={12} />
+							</span>
+						</Tooltip>
+						{translate(
+							"gathers.types.apify_facebook_search_posts.fields.search_query"
+						)}
+					</div>
+				}
+				{...getInputProps("search_query")}
+			/>
+			<Button
+				component="a"
+				className="!bg-transparent"
+				href={`https://www.facebook.com/search/posts?q=${getInputProps("search_query").value}`}
+				target="_blank"
+				rel="noopener noreferrer"
+				p={0}
+				disabled={!getInputProps("search_query").value}
+				variant="subtle"
+			>
+				{translate(
+					"gathers.types.apify_facebook_search_posts.fields.info.search_query_results"
+				)}
+				<Tooltip
+					label={translate(
+						"gathers.types.apify_facebook_search_posts.fields.info.results_tooltip"
+					)}
 				>
-					<IconExternalLink size={20} />
-				</Button>
-			</div>
+					<span className="flex">
+						<IconInfoCircle size={12} />
+					</span>
+				</Tooltip>
+			</Button>
 			<NumberInput
 				mt="lg"
 				label={
