@@ -59,6 +59,10 @@ TEST_CLASSIFY_RUNNING_JOB_RUN = schemas.JobRunCreate(
     foreign_id=3, foreign_job_type=schemas.ForeignJobType.classify_tabulate
 )
 
+TEST_CLASSIFY_COMPLETED_JOB_RUN = schemas.JobRunCreate(
+    foreign_id=4, foreign_job_type=schemas.ForeignJobType.classify_tabulate
+)
+
 
 def create_deleted_job_run(
     session: Session,
@@ -143,4 +147,6 @@ def seed_test_job_runs(session: Session) -> None:
     create_job_run_and_complete(session, 1, TEST_GATHER_RUNNING_DELETED_GATHER_RUN)
     create_deleted_job_run(session, 1, TEST_GATHER_RUNNING_DELETED_JOB_RUN, None)
     # Classify
+    create_job_run_and_complete(session, 1, TEST_CLASSIFY_COMPLETED_JOB_RUN)
     crud.create_job_run(session, 1, TEST_CLASSIFY_RUNNING_JOB_RUN)
+    # The last job run in project 1 needs to not be complete
