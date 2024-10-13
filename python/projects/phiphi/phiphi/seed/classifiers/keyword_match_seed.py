@@ -20,7 +20,7 @@ TEST_KEYWORD_CLASSIFIER_CREATE_NO_VERSION = base_schemas.ClassifierCreate(
 )
 
 TEST_KEYWORD_CLASSIFIER_CREATE_ARCHIVED = base_schemas.ClassifierCreate(
-    name="Test keyword match Classifier 2 Archived",
+    name="Test keyword match Classifier 2 Running Archived",
     intermediatory_classes=[
         base_schemas.IntermediatoryClassCreate(
             name="Test Class 1",
