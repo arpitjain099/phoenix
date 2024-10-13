@@ -26,6 +26,8 @@ class ForeignJobType(str, Enum):
     gather_classify_tabulate = "gather_classify_tabulate"
     classify_tabulate = "classify_tabulate"
     delete_gather_tabulate = "delete_gather_tabulate"
+    # This job type has not corresponding flow and currently uses tabulate
+    classifier_archive = "classifier_archive"
 
 
 class JobRunCreate(pydantic.BaseModel):
