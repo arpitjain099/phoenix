@@ -8,6 +8,8 @@ import sqlalchemy.orm
 
 from phiphi.api import exceptions
 from phiphi.api.projects.classifiers import base_schemas, models, response_schemas
+from phiphi.api.projects.job_runs import crud as job_run_crud
+from phiphi.api.projects.job_runs import schemas as job_run_schemas
 
 
 def create_classifier(
@@ -153,25 +155,8 @@ def archive_classifier(
     session: sqlalchemy.orm.Session,
     project_id: int,
     classifier_id: int,
-) -> response_schemas.Classifier:
-    """Archive a classifier.
-
-    This will set the `archived_at` field to the current time and run the `archive_classifier` job.
-
-    The job will be responsible for archiving the classifier and applying this to the downstream
-    tables.
-
-    Args:
-        session: SQLAlchemy session.
-        project_id: Project ID.
-        classifier_id: Classifier ID.
-
-    Returns:
-        The archived classifier.
-
-    Raises:
-        ClassifierNotFound: If the classifier does not exist.
-    """
+) -> models.Classifiers:
+    """Archive a classifier."""
     orm_classifier = get_orm_classifier(session, project_id, classifier_id)
 
     if orm_classifier is None:
@@ -181,7 +166,25 @@ def archive_classifier(
     session.commit()
     session.refresh(orm_classifier)
 
-    # TODO: add the archive_classifier job run that should be kicked off but not waited for.
+    return orm_classifier
+
+
+async def archive_classifier_run_archive_job(
+    session: sqlalchemy.orm.Session,
+    project_id: int,
+    classifier_id: int,
+) -> response_schemas.Classifier:
+    """Archive a classifier and run the classifier archive job."""
+    orm_classifier = archive_classifier(session, project_id, classifier_id)
+
+    _ = await job_run_crud.create_and_run_job_run(
+        session,
+        project_id,
+        job_run_schemas.JobRunCreate(
+            foreign_id=orm_classifier.id,
+            foreign_job_type=job_run_schemas.ForeignJobType.classifier_archive,
+        ),
+    )
     return response_schemas.classifier_adapter.validate_python(orm_classifier)
 
 
