@@ -165,10 +165,10 @@ def test_create_guard_tabulate(reseed_tables, client: TestClient) -> None:
 
 def test_get_job_runs(client: TestClient, reseed_tables) -> None:
     """Test getting job runs."""
-    response = client.get("/projects/1/job_runs/")
+    response = client.get("/projects/1/job_runs/?start=0&end=10")
     assert response.status_code == 200
     job_runs = response.json()
-    length = 13
+    length = 10
     assert len(job_runs) == length
     # Assert desc id
     assert job_runs[length - 1]["id"] < job_runs[0]["id"]
