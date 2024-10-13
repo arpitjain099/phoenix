@@ -55,6 +55,11 @@ def test_get_classifiers(reseed_tables, client: TestClient) -> None:
     # First classifier should be last as it is id desc
     assert json[length - 1]["id"] == keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[0].id
     assert "intermediatory_classes" not in json[0]
+    assert "latest_job_run" in json[0]
+    # First classifier should have a job run
+    assert json[length - 1]["latest_job_run"] is None
+    # Third classifier should have a job run
+    assert json[length - 3]["latest_job_run"]["id"] is not None
 
 
 def test_patch_classifier(reseed_tables, client: TestClient) -> None:
