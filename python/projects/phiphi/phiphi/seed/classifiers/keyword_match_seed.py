@@ -47,6 +47,21 @@ TEST_KEYWORD_CLASSIFIER_CREATE_VERSIONED = base_schemas.ClassifierCreate(
     ],
 )
 
+# Needed for the console development
+TEST_KEYWORD_CLASSIFIER_CREATE_VERSION_COMPLETED = base_schemas.ClassifierCreate(
+    name="Test keyword match Classifier 4 Versioned Completed",
+    intermediatory_classes=[
+        base_schemas.IntermediatoryClassCreate(
+            name="Test Class 1",
+            description="Test Class 1 Description",
+        ),
+        base_schemas.IntermediatoryClassCreate(
+            name="Test Class 2",
+            description="Test Class 2 Description",
+        ),
+    ],
+)
+
 TEST_KEYWORD_CLASSIFIERS: list[response_schemas.Classifier] = []
 
 
@@ -81,23 +96,29 @@ def seed_test_classifier_keyword_match(session: Session) -> None:
     assert archived_classifier
     TEST_KEYWORD_CLASSIFIERS.append(archived_classifier)
 
-    classifier = classifier_crud.create_classifier(
-        session=session,
-        project_id=project_id,
-        classifier_type=base_schemas.ClassifierType.keyword_match,
-        classifier_create=TEST_KEYWORD_CLASSIFIER_CREATE_VERSIONED,
-    )
-    _ = crud.create_version(
-        session=session,
-        project_id=project_id,
-        classifier_id=classifier.id,
-    )
-    # Need to refresh the classifier so the response includes latest version
-    classifier_with_version = classifier_crud.get_classifier(
-        session=session,
-        project_id=project_id,
-        classifier_id=classifier.id,
-    )
-    # Needed for the typing
-    assert classifier_with_version
-    TEST_KEYWORD_CLASSIFIERS.append(classifier_with_version)
+    versioned_classifiers = [
+        TEST_KEYWORD_CLASSIFIER_CREATE_VERSIONED,
+        TEST_KEYWORD_CLASSIFIER_CREATE_VERSION_COMPLETED,
+    ]
+
+    for classifier_create in versioned_classifiers:
+        classifier = classifier_crud.create_classifier(
+            session=session,
+            project_id=project_id,
+            classifier_type=base_schemas.ClassifierType.keyword_match,
+            classifier_create=classifier_create,
+        )
+        _ = crud.create_version(
+            session=session,
+            project_id=project_id,
+            classifier_id=classifier.id,
+        )
+        # Need to refresh the classifier so the response includes latest version
+        classifier_with_version = classifier_crud.get_classifier(
+            session=session,
+            project_id=project_id,
+            classifier_id=classifier.id,
+        )
+        # Needed for the typing
+        assert classifier_with_version
+        TEST_KEYWORD_CLASSIFIERS.append(classifier_with_version)

@@ -168,7 +168,7 @@ def test_get_job_runs(client: TestClient, reseed_tables) -> None:
     response = client.get("/projects/1/job_runs/")
     assert response.status_code == 200
     job_runs = response.json()
-    length = 12
+    length = 13
     assert len(job_runs) == length
     # Assert desc id
     assert job_runs[length - 1]["id"] < job_runs[0]["id"]
