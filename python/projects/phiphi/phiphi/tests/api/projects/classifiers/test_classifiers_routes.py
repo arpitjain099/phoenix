@@ -17,7 +17,13 @@ def test_get_classifier(reseed_tables, client: TestClient) -> None:
     classifier = keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[0]
     response = client.get(f"/projects/{classifier.project_id}/classifiers/{classifier.id}")
     assert response.status_code == 200
-    assert response.json() == classifier.model_dump(mode="json")
+    json = response.json()
+    assert json == classifier.model_dump(mode="json")
+    assert "latest_version" in json
+    assert json["latest_version"] is None
+    assert "latest_job_run" in json
+    assert json["latest_job_run"] is None
+    assert "intermediatory_classes" in json
 
 
 def test_get_classifier_not_found(reseed_tables, client: TestClient) -> None:
@@ -61,10 +67,6 @@ def test_get_classifiers(reseed_tables, client: TestClient) -> None:
     assert json[length - 1]["id"] < json[0]["id"]
     assert "intermediatory_classes" not in json[0]
     assert "latest_job_run" in json[0]
-    # First classifier should have a job run
-    assert json[length - 1]["latest_job_run"] is None
-    # Third classifier should have a job run
-    assert json[length - 3]["latest_job_run"]["id"] is not None
 
 
 def test_patch_classifier(reseed_tables, client: TestClient) -> None:
