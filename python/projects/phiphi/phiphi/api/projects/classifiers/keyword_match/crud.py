@@ -17,11 +17,11 @@ def create_version(
     if orm_classifier is None:
         raise exceptions.ClassifierNotFound()
 
-    classes_dict = crud.get_class_dict(session, orm_classifier)
+    classes = crud.get_classes(session, orm_classifier)
 
     orm_version = models.ClassifierVersions(
         classifier_id=orm_classifier.id,
-        classes_dict=classes_dict,
+        classes=[class_versionsed.model_dump() for class_versionsed in classes],
         # This needs to be implemented in the future
         params={"class_to_keyword_configs": []},
     )
