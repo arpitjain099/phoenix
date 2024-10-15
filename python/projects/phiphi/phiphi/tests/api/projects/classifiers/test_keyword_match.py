@@ -127,3 +127,10 @@ def test_patch_keyword_match_classes(reseed_tables, client: TestClient) -> None:
     assert intermediate_class["id"] == class_id
     assert intermediate_class["updated_at"] == UPDATED_TIME.isoformat()
     assert intermediate_class["created_at"] == CREATED_TIME.isoformat()
+
+    # Get the classifier again to check the change and last_edited_at is correct
+    response = client.get(f"/projects/{classifier.project_id}/classifiers/{classifier.id}")
+    assert response.status_code == 200
+    json = response.json()
+    assert json["last_edited_at"] == UPDATED_TIME.isoformat()
+    assert json["intermediatory_classes"][0]["name"] == patch_data["name"]
