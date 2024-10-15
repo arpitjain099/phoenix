@@ -130,13 +130,28 @@ def test_archive_classifier(m_run_deployment, reseed_tables, client: TestClient)
     assert response.json()["archived_at"] == TIMESTAMP.isoformat()
 
 
-def test_restore_classifier(reseed_tables, client: TestClient) -> None:
+@pytest.mark.freeze_time(TIMESTAMP)
+@mock.patch("phiphi.api.projects.job_runs.prefect_deployment.wrapped_run_deployment")
+def test_restore_classifier(m_run_deployment, reseed_tables, client: TestClient) -> None:
     """Test restore classifier."""
+    mock_flow_run = mock.MagicMock(spec=objects.FlowRun)
+    mock_flow_run.id = "mock_uuid"
+    mock_flow_run.name = "mock_flow_run"
+    m_run_deployment.return_value = mock_flow_run
     # Classifier 1 is archived
     classifier = keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[1]
     assert classifier.archived_at is not None
     response = client.post(
         f"/projects/{classifier.project_id}/classifiers/{classifier.id}/restore"
+    )
+    m_run_deployment.assert_called_once_with(
+        name="flow_runner_flow/flow_runner_flow",
+        parameters={
+            "project_id": classifier.project_id,
+            "job_type": job_run_schemas.ForeignJobType.classifier_restore,
+            "job_source_id": classifier.id,
+            "job_run_id": mock.ANY,
+        },
     )
     assert response.status_code == 200
     assert response.json()["archived_at"] is None
