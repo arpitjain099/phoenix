@@ -25,6 +25,18 @@ class IntermediatoryClassCreate(IntermediatoryClassBase):
     """Class create schema."""
 
 
+class IntermediatoryClassPatch(pydantic.BaseModel):
+    """Class Patch schema."""
+
+    name: Annotated[
+        Optional[str], pydantic.Field(description="The name of the Classifier", default=None)
+    ]
+    description: Annotated[
+        Optional[str],
+        pydantic.Field(description="The description of the Classifier", default=None),
+    ]
+
+
 class IntermediatoryClassResponse(IntermediatoryClassBase):
     """Class response schema."""
 

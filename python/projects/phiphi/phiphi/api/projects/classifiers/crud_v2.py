@@ -254,3 +254,33 @@ async def restore_classifier_run_restore_job(
         ),
     )
     return response_schemas.classifier_adapter.validate_python(orm_classifier)
+
+
+def patch_intermediatory_class(
+    session: sqlalchemy.orm.Session,
+    project_id: int,
+    classifier_id: int,
+    class_id: int,
+    class_patch: base_schemas.IntermediatoryClassPatch,
+) -> base_schemas.IntermediatoryClassResponse:
+    """Patch a class."""
+    with get_orm_classifier_with_edited_context(
+        session, project_id, classifier_id
+    ) as orm_classifier:
+        orm_class = (
+            session.query(models.IntermediatoryClasses)
+            .filter(models.IntermediatoryClasses.classifier_id == orm_classifier.id)
+            .filter(models.IntermediatoryClasses.id == class_id)
+            .one_or_none()
+        )
+
+        if orm_class is None:
+            raise exceptions.IntermediatoryClassNotFound()
+
+        for key, value in class_patch.dict(exclude_unset=True).items():
+            setattr(orm_class, key, value)
+
+        session.commit()
+
+    session.refresh(orm_class)
+    return base_schemas.IntermediatoryClassResponse.model_validate(orm_class)
