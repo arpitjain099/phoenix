@@ -35,16 +35,13 @@ class IntermediatoryClassResponse(IntermediatoryClassBase):
     updated_at: datetime.datetime
 
 
-ClassName = str
-ClassDescription = str
+class ClassVersioned(pydantic.BaseModel):
+    """Class versioned schema."""
 
-ClassesDictType = Annotated[
-    dict[ClassName, ClassDescription],
-    pydantic.Field(
-        description="The classes dictionary of the Classifier",
-        examples=[{"class1": "class1 description", "class2": "class2 description"}],
-    ),
-]
+    model_config = pydantic.ConfigDict(from_attributes=True)
+
+    name: str
+    description: str
 
 
 class ClassifierCreate(pydantic.BaseModel):
@@ -87,7 +84,7 @@ class ClassifierVersionResponse(pydantic.BaseModel):
     ]
     created_at: datetime.datetime
     updated_at: datetime.datetime
-    classes_dict: ClassesDictType
+    classes: list[ClassVersioned]
     # Typed as Any as the subclasses will define the params
     params: Annotated[Any, pydantic.Field(description="The params of the Classifier")]
 
