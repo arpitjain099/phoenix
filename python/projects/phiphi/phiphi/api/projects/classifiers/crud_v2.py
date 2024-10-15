@@ -193,23 +193,7 @@ def restore_classifier(
     project_id: int,
     classifier_id: int,
 ) -> response_schemas.Classifier:
-    """Restore a classifier.
-
-    This will set the `archived_at` field to `None` and run the `restore_classifier` job.
-
-    The job will be responsible for restoring the classifier and applying the latest_version.
-
-    Args:
-        session: SQLAlchemy session.
-        project_id: Project ID.
-        classifier_id: Classifier ID.
-
-    Returns:
-        The restored classifier.
-
-    Raises:
-        ClassifierNotFound: If the classifier does not exist.
-    """
+    """Restore a classifier."""
     orm_classifier = get_orm_classifier(session, project_id, classifier_id)
 
     if orm_classifier is None:
@@ -218,5 +202,23 @@ def restore_classifier(
     orm_classifier.archived_at = None
     session.commit()
     session.refresh(orm_classifier)
-    # TODO: add the restore_classifier job run that should be kicked off but not waited for.
+    return response_schemas.classifier_adapter.validate_python(orm_classifier)
+
+
+async def restore_classifier_run_restore_job(
+    session: sqlalchemy.orm.Session,
+    project_id: int,
+    classifier_id: int,
+) -> response_schemas.Classifier:
+    """Restore a classifier and run the classifier restore job."""
+    orm_classifier = restore_classifier(session, project_id, classifier_id)
+
+    _ = await job_run_crud.create_and_run_job_run(
+        session,
+        project_id,
+        job_run_schemas.JobRunCreate(
+            foreign_id=orm_classifier.id,
+            foreign_job_type=job_run_schemas.ForeignJobType.classifier_restore,
+        ),
+    )
     return response_schemas.classifier_adapter.validate_python(orm_classifier)
