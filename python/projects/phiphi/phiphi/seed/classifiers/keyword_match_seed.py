@@ -135,6 +135,31 @@ def create_archived_classifier(
     return classifier_archived
 
 
+def create_versioned_classifier(
+    session: Session, project_id: int, classifier_create: base_schemas.ClassifierCreate
+) -> response_schemas.Classifier:
+    """Create a versioned classifier."""
+    classifier = classifier_crud.create_classifier(
+        session=session,
+        project_id=project_id,
+        classifier_type=base_schemas.ClassifierType.keyword_match,
+        classifier_create=classifier_create,
+    )
+    crud.create_version(
+        session=session,
+        project_id=project_id,
+        classifier_id=classifier.id,
+    )
+    # Need to refresh the classifier to get the latest version
+    classifier_versioned = classifier_crud.get_classifier(
+        session=session,
+        project_id=project_id,
+        classifier_id=classifier.id,
+    )
+    assert classifier_versioned  # Needed for the typing
+    return classifier_versioned
+
+
 def seed_test_classifier_keyword_match(session: Session) -> None:
     """Seed test keyword match classifier."""
     # Need to clear the list before seeding other wise every seed will add to the list
@@ -165,25 +190,11 @@ def seed_test_classifier_keyword_match(session: Session) -> None:
     ]
 
     for classifier_create in versioned_classifiers:
-        classifier = classifier_crud.create_classifier(
+        classifier_with_version = create_versioned_classifier(
             session=session,
             project_id=project_id,
-            classifier_type=base_schemas.ClassifierType.keyword_match,
             classifier_create=classifier_create,
         )
-        _ = crud.create_version(
-            session=session,
-            project_id=project_id,
-            classifier_id=classifier.id,
-        )
-        # Need to refresh the classifier so the response includes latest version
-        classifier_with_version = classifier_crud.get_classifier(
-            session=session,
-            project_id=project_id,
-            classifier_id=classifier.id,
-        )
-        # Needed for the typing
-        assert classifier_with_version
         TEST_KEYWORD_CLASSIFIERS.append(classifier_with_version)
 
     archived_classifiers = [
