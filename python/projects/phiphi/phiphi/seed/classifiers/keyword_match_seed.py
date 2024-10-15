@@ -107,6 +107,20 @@ TEST_KEYWORD_CLASSIFIER_FAILED_ARCHIVED = base_schemas.ClassifierCreate(
     ],
 )
 
+# Needed for the console development
+TEST_KEYWORD_CLASSIFIER_CREATE_VERSION_RESTORE_RUNNING = base_schemas.ClassifierCreate(
+    name="Test keyword match Classifier 4 Versioned Restore Running",
+    intermediatory_classes=[
+        base_schemas.IntermediatoryClassCreate(
+            name="Test Class 1",
+            description="Test Class 1 Description",
+        ),
+        base_schemas.IntermediatoryClassCreate(
+            name="Test Class 2",
+            description="Test Class 2 Description",
+        ),
+    ],
+)
 
 TEST_KEYWORD_CLASSIFIERS: list[response_schemas.Classifier] = []
 
@@ -208,3 +222,14 @@ def seed_test_classifier_keyword_match(session: Session) -> None:
             classifier_create=classifier_create,
         )
         TEST_KEYWORD_CLASSIFIERS.append(archived_classifier)
+
+    # Job runs will be added in seed/job_runs.py
+    versioned_classifiers_restored = [TEST_KEYWORD_CLASSIFIER_CREATE_VERSION_RESTORE_RUNNING]
+
+    for classifier_create in versioned_classifiers_restored:
+        classifier_with_version = create_versioned_classifier(
+            session=session,
+            project_id=project_id,
+            classifier_create=classifier_create,
+        )
+        TEST_KEYWORD_CLASSIFIERS.append(classifier_with_version)
