@@ -40,6 +40,7 @@ class OptimisedClassifier(pydantic.BaseModel):
     archived_at: Optional[datetime.datetime]
     created_at: datetime.datetime
     updated_at: datetime.datetime
+    last_edited_at: Optional[datetime.datetime]
     latest_version: Annotated[
         Optional[base_schemas.ClassifierVersionResponse],
         pydantic.Field(description="The latest version of the Classifier", default=None),
