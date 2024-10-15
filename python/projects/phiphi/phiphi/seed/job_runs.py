@@ -68,15 +68,15 @@ TEST_CLASSIFY_FAILED_JOB_RUN = schemas.JobRunCreate(
 )
 
 TEST_CLASSIFY_ARCHIVE_RUNNING_JOB_RUN = schemas.JobRunCreate(
-    foreign_id=2, foreign_job_type=schemas.ForeignJobType.classify_tabulate
+    foreign_id=2, foreign_job_type=schemas.ForeignJobType.classifier_archive
 )
 
 TEST_CLASSIFY_ARCHIVE_COMPLETED_JOB_RUN = schemas.JobRunCreate(
-    foreign_id=6, foreign_job_type=schemas.ForeignJobType.classify_tabulate
+    foreign_id=6, foreign_job_type=schemas.ForeignJobType.classifier_archive
 )
 
 TEST_CLASSIFY_ARCHIVE_FAILED_JOB_RUN = schemas.JobRunCreate(
-    foreign_id=7, foreign_job_type=schemas.ForeignJobType.classify_tabulate
+    foreign_id=7, foreign_job_type=schemas.ForeignJobType.classifier_archive
 )
 
 
