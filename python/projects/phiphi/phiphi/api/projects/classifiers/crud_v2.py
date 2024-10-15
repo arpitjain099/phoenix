@@ -320,13 +320,20 @@ def create_intermediatory_class(
     with get_orm_classifier_with_edited_context(
         session, project_id, classifier_id
     ) as orm_classifier:
-        orm_class = models.IntermediatoryClasses(
-            classifier_id=orm_classifier.id,
-            name=class_create.name,
-            description=class_create.description,
-        )
-        session.add(orm_class)
-        session.commit()
+        try:
+            # Attempt to add an object that may violate the unique constraint
+            orm_class = models.IntermediatoryClasses(
+                classifier_id=orm_classifier.id,
+                name=class_create.name,
+                description=class_create.description,
+            )
+            session.add(orm_class)
+            session.commit()
+        except sqlalchemy.exc.IntegrityError as e:
+            session.rollback()
+            if "unique constraint" in str(e).lower():
+                raise exceptions.IntermediatoryClassNameConflict()
+            raise exceptions.UnknownIntegrityError()
 
     session.refresh(orm_class)
     return base_schemas.IntermediatoryClassResponse.model_validate(orm_class)

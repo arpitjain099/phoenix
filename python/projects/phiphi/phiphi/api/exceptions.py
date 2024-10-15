@@ -11,6 +11,15 @@ class HttpException400(fastapi.HTTPException):
         super().__init__(status_code=400, detail=detail)
 
 
+class UnknownIntegrityError(fastapi.HTTPException):
+    """Custom exception for unknown integrity error."""
+
+    def __init__(self) -> None:
+        """Constructor for custom exception."""
+        # Important that no SQL are in the detail string as this could lead to a security risk
+        super().__init__(status_code=500, detail="Internal server error")
+
+
 class ProjectNotFound(fastapi.HTTPException):
     """Custom exception for null projects."""
 
@@ -71,3 +80,11 @@ class IntermediatoryClassNotFound(fastapi.HTTPException):
     def __init__(self) -> None:
         """Constructor for custom exception."""
         super().__init__(status_code=404, detail="Intermediatory Class not found")
+
+
+class IntermediatoryClassNameConflict(fastapi.HTTPException):
+    """Custom exception for null Class."""
+
+    def __init__(self) -> None:
+        """Constructor for custom exception."""
+        super().__init__(status_code=400, detail="Intermediatory Class with name already exists")
