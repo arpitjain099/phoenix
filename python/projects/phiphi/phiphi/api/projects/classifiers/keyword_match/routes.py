@@ -23,3 +23,23 @@ def create_keyword_match_classifier(
         classifier_type=base_schemas.ClassifierType.keyword_match,
         classifier_create=classifier_create,
     )
+
+
+@router.patch(
+    "/projects/{project_id}/classifiers/keyword_match/{classifier_id}/intermediatory_classes/{class_id}",
+)
+def patch_keyword_match_intemediatory_classes(
+    session: deps.SessionDep,
+    project_id: int,
+    classifier_id: int,
+    class_id: int,
+    class_patch: base_schemas.IntermediatoryClassPatch,
+) -> base_schemas.IntermediatoryClassResponse:
+    """Patch the classes of a keyword match classifier."""
+    return crud.patch_intermediatory_class(
+        session=session,
+        project_id=project_id,
+        classifier_id=classifier_id,
+        class_id=class_id,
+        class_patch=class_patch,
+    )
