@@ -24,7 +24,7 @@ def create_classifier(
 
     orm_initial_version = models.ClassifierVersions(
         classifier_id=orm_classifier.id,
-        classes_dict=version.classes_dict,
+        classes=version.classes,
         params=version.params,
     )
     session.add(orm_initial_version)
@@ -89,7 +89,7 @@ def classifier_version_create(
 
     new_version = models.ClassifierVersions(
         classifier_id=classifier_id,
-        classes_dict=version.classes_dict,
+        classes=version.classes,
         params=version.params,
     )
     session.add(new_version)

@@ -1,7 +1,7 @@
 """Schemas for classifiers."""
 from datetime import datetime
 from enum import Enum
-from typing import Annotated, Union
+from typing import Annotated, Any, Union
 
 import pydantic
 
@@ -42,9 +42,7 @@ class ClassifierVersion(pydantic.BaseModel):
     Shared properties of all classifier version schemas.
     """
 
-    classes_dict: Annotated[
-        dict, pydantic.Field(description="The classes dictionary of the Classifier")
-    ]
+    classes: Annotated[Any, pydantic.Field(description="The classes dictionary of the Classifier")]
     params: Annotated[
         Union[dict, KeywordMatchParams], pydantic.Field(description="The params of the Classifier")
     ]
