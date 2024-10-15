@@ -32,8 +32,8 @@ def test_create_keyword_match_classifier_crud(reseed_tables) -> None:
         )
         for class_obj in classes
     ]
-    classes_versionsed = [
-        base_schemas.ClassVersioned(name=class_obj["name"], description=class_obj["description"])
+    class_labels = [
+        base_schemas.ClassLabel(name=class_obj["name"], description=class_obj["description"])
         for class_obj in classes
     ]
     classifer_response = classifier_crud.create_classifier(
@@ -71,7 +71,7 @@ def test_create_keyword_match_classifier_crud(reseed_tables) -> None:
         classifer_version_response, keyword_match_schemas.KeywordMatchVersionResponse
     )
     assert classifer_version_response.classifier_id == classifer_response.id
-    assert classifer_version_response.classes == classes_versionsed
+    assert classifer_version_response.classes == class_labels
 
     orm_classifier = classifier_crud.get_orm_classifier(reseed_tables, 1, classifer_response.id)
     assert orm_classifier.latest_version.version_id == classifer_version_response.version_id

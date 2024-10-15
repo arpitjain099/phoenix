@@ -21,7 +21,7 @@ def create_version(
 
     orm_version = models.ClassifierVersions(
         classifier_id=orm_classifier.id,
-        classes=[class_versionsed.model_dump() for class_versionsed in classes],
+        classes=[class_label.model_dump() for class_label in classes],
         # This needs to be implemented in the future
         params={"class_to_keyword_configs": []},
     )

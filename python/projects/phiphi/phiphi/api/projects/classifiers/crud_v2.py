@@ -49,7 +49,7 @@ def create_classifier(
 def get_classes(
     session: sqlalchemy.orm.Session,
     orm_classifier: models.Classifiers,
-) -> list[base_schemas.ClassVersioned]:
+) -> list[base_schemas.ClassLabel]:
     """Get the classes for a classifier.
 
     This will return a dictionary of the classes for a classifier.
@@ -69,7 +69,7 @@ def get_classes(
     )
 
     classes = [
-        base_schemas.ClassVersioned.model_validate(intermediatory_class)
+        base_schemas.ClassLabel.model_validate(intermediatory_class)
         for intermediatory_class in list_intermediatory_classes
     ]
 

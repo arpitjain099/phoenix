@@ -34,7 +34,7 @@ class KeywordMatchParams(TypedDict):
 class KeywordMatchVersionBase(pydantic.BaseModel):
     """Keyword match version base schema."""
 
-    classes: list[base_schemas.ClassVersioned]
+    classes: list[base_schemas.ClassLabel]
     params: KeywordMatchParams
 
 
