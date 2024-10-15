@@ -134,3 +134,23 @@ def test_patch_keyword_match_classes(reseed_tables, client: TestClient) -> None:
     json = response.json()
     assert json["last_edited_at"] == UPDATED_TIME.isoformat()
     assert json["intermediatory_classes"][0]["name"] == patch_data["name"]
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
+def test_delete_keyword_match_classes(reseed_tables, client: TestClient) -> None:
+    """Test delete keyword match classes."""
+    classifier = keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[0]
+    class_id = classifier.intermediatory_classes[0].id
+    with freezegun.freeze_time(UPDATED_TIME):
+        response = client.delete(
+            f"/projects/{classifier.project_id}/classifiers/keyword_match/{classifier.id}/intermediatory_classes/{class_id}"
+        )
+    assert response.status_code == 200
+    assert response.json() is None
+    # Get the classifier again to check the change
+    response = client.get(f"/projects/{classifier.project_id}/classifiers/{classifier.id}")
+    assert response.status_code == 200
+    json = response.json()
+    assert len(json["intermediatory_classes"]) == 1
+    assert json["intermediatory_classes"][0]["id"] != class_id
+    assert json["last_edited_at"] == UPDATED_TIME.isoformat()
