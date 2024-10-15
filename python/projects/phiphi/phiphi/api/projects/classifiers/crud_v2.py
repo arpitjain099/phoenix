@@ -284,3 +284,27 @@ def patch_intermediatory_class(
 
     session.refresh(orm_class)
     return base_schemas.IntermediatoryClassResponse.model_validate(orm_class)
+
+
+def delete_intermediatory_class(
+    session: sqlalchemy.orm.Session,
+    project_id: int,
+    classifier_id: int,
+    class_id: int,
+) -> None:
+    """Delete an intermediatory class."""
+    with get_orm_classifier_with_edited_context(
+        session, project_id, classifier_id
+    ) as orm_classifier:
+        orm_class = (
+            session.query(models.IntermediatoryClasses)
+            .filter(models.IntermediatoryClasses.classifier_id == orm_classifier.id)
+            .filter(models.IntermediatoryClasses.id == class_id)
+            .one_or_none()
+        )
+
+        if orm_class is None:
+            raise exceptions.IntermediatoryClassNotFound()
+
+        session.delete(orm_class)
+        session.commit()
