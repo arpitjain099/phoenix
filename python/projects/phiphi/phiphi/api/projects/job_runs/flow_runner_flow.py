@@ -135,6 +135,12 @@ async def start_flow_run(
             # classifiers.
             deployment_name = "tabulate_flow/tabulate_flow"
             params = params | get_tabulate_flow_params(project_id=project_id)
+        case schemas.ForeignJobType.classifier_restore:
+            # Currently the classifier_restore is just a tabulate flow
+            # As active_classifiers_versions will be computed based on the non archived
+            # classifiers.
+            deployment_name = "tabulate_flow/tabulate_flow"
+            params = params | get_tabulate_flow_params(project_id=project_id)
         case _:
             raise NotImplementedError(f"Job type {job_type=} not implemented yet.")
 
