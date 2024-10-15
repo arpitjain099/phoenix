@@ -1,6 +1,6 @@
 """Models for classifiers and classifier versions tables."""
 import datetime
-from typing import Dict, Optional
+from typing import Optional
 
 import sqlalchemy as sa
 from sqlalchemy import orm
@@ -20,7 +20,7 @@ class ClassifierVersionsBase(platform_db.Base):
 
     version_id: orm.Mapped[int] = orm.mapped_column(primary_key=True)
     classifier_id: orm.Mapped[int] = orm.mapped_column(sa.ForeignKey("classifiers.id"))
-    classes_dict: orm.Mapped[Dict[str, str]] = orm.mapped_column(base_models.JSONEncodedValue)
+    classes: orm.Mapped[str] = orm.mapped_column(base_models.JSONEncodedValue)
     params: orm.Mapped[Optional[str]] = orm.mapped_column(base_models.JSONEncodedValue)
 
 
