@@ -17,7 +17,13 @@ class Status(str, Enum):
 
 
 class ForeignJobType(str, Enum):
-    """The type of job run."""
+    """The type of job run.
+
+    These job types correspond to the different types of pipeline jobs/prefect flows that can be
+    run.
+
+    See flow_runner_flow.py for the corresponding flows.
+    """
 
     gather = "gather"
     delete_gather = "delete_gather"
@@ -26,7 +32,6 @@ class ForeignJobType(str, Enum):
     gather_classify_tabulate = "gather_classify_tabulate"
     classify_tabulate = "classify_tabulate"
     delete_gather_tabulate = "delete_gather_tabulate"
-    # This job type has not corresponding flow and currently uses tabulate
     classifier_archive = "classifier_archive"
 
 
