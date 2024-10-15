@@ -97,8 +97,10 @@ def get_orm_classifier_with_edited_context(
     session: sqlalchemy.orm.Session,
     project_id: int,
     classifier_id: int,
-) -> Generator[models.Classifiers | None, None, None]:
+) -> Generator[models.Classifiers, None, None]:
     """Get a classifier ORM last_edited_at updated at the end of context.
+
+    The classifier has to exist and not be archived or this will raise an exception.
 
     This is useful when you want to update the last_edited_at field after a set of operations are
     done.
@@ -113,6 +115,12 @@ def get_orm_classifier_with_edited_context(
         .filter(models.Classifiers.id == classifier_id)
         .one_or_none()
     )
+    if orm is None:
+        raise exceptions.ClassifierNotFound()
+
+    if orm.archived_at is not None:
+        raise exceptions.ClassifierArchived()
+
     yield orm
     if orm:
         orm.last_edited_at = datetime.datetime.utcnow()
@@ -166,12 +174,6 @@ def patch_classifier(
     with get_orm_classifier_with_edited_context(
         session, project_id, classifier_id
     ) as orm_classifier:
-        if orm_classifier is None:
-            raise exceptions.ClassifierNotFound()
-
-        if orm_classifier.archived_at is not None:
-            raise exceptions.ClassifierArchived()
-
         for key, value in classifier_patch.dict(exclude_unset=True).items():
             setattr(orm_classifier, key, value)
 
