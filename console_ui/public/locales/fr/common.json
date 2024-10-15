@@ -295,7 +295,7 @@
 					"info": {
 						"search_query": "Les termes et mots que vous souhaitez rechercher. Ils doivent être aussi spécifiques que possible. Sachez que les résultats que vous voyez sur votre compte peuvent différer de ceux recueillis par un compte anonyme.",
 						"search_query_results": "Voir les résultats possibles pour la requête de recherche",
-						"results_tooltip": "Les résultats varient en fonction du proxy et de l'utilisateur connecté. Le Gather utilisera des utilisateurs anonymes et un proxy défini ci-dessous.",
+						"results_tooltip": "Les résultats varient en fonction du proxy et de l'utilisateur connecté. Le Gather utilisera des utilisateurs anonymes et le proxy défini ci-dessous.",
 						"limit_posts": "Limitez le nombre de publications collectées pour chaque recherche.",
 						"limit_retries": "Limitez le nombre de tentatives autorisées pour chaque recherche.",
 						"proxy_groups": "Adresses IP situées dans les maisons et bureaux des gens. Ce type de proxy a le moins de chances d'être bloqué et offre la meilleure couverture géographique."
