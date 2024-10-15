@@ -16,13 +16,25 @@ CREATED_TIME = datetime.datetime(2021, 1, 1, 0, 0, 0)
 @pytest.mark.freeze_time(CREATED_TIME)
 def test_create_keyword_match_classifier_crud(reseed_tables) -> None:
     """Test create keyword match classifier."""
-    class_dict = {
-        "class1": "des",
-        "class2": "des",
-    }
+    classes = [
+        {
+            "name": "class1",
+            "description": "des",
+        },
+        {
+            "name": "class2",
+            "description": "des",
+        },
+    ]
     intermediatory_classes = [
-        base_schemas.IntermediatoryClassCreate(name=key, description=value)
-        for key, value in class_dict.items()
+        base_schemas.IntermediatoryClassCreate(
+            name=class_obj["name"], description=class_obj["description"]
+        )
+        for class_obj in classes
+    ]
+    classes_versionsed = [
+        base_schemas.ClassVersioned(name=class_obj["name"], description=class_obj["description"])
+        for class_obj in classes
     ]
     classifer_response = classifier_crud.create_classifier(
         session=reseed_tables,
@@ -59,7 +71,7 @@ def test_create_keyword_match_classifier_crud(reseed_tables) -> None:
         classifer_version_response, keyword_match_schemas.KeywordMatchVersionResponse
     )
     assert classifer_version_response.classifier_id == classifer_response.id
-    assert classifer_version_response.classes_dict == class_dict
+    assert classifer_version_response.classes == classes_versionsed
 
     orm_classifier = classifier_crud.get_orm_classifier(reseed_tables, 1, classifer_response.id)
     assert orm_classifier.latest_version.version_id == classifer_version_response.version_id
