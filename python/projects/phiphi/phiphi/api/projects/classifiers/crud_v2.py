@@ -308,3 +308,25 @@ def delete_intermediatory_class(
 
         session.delete(orm_class)
         session.commit()
+
+
+def create_intermediatory_class(
+    session: sqlalchemy.orm.Session,
+    project_id: int,
+    classifier_id: int,
+    class_create: base_schemas.IntermediatoryClassCreate,
+) -> base_schemas.IntermediatoryClassResponse:
+    """Create an intermediatory class."""
+    with get_orm_classifier_with_edited_context(
+        session, project_id, classifier_id
+    ) as orm_classifier:
+        orm_class = models.IntermediatoryClasses(
+            classifier_id=orm_classifier.id,
+            name=class_create.name,
+            description=class_create.description,
+        )
+        session.add(orm_class)
+        session.commit()
+
+    session.refresh(orm_class)
+    return base_schemas.IntermediatoryClassResponse.model_validate(orm_class)
