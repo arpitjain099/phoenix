@@ -63,3 +63,11 @@ class ClassifierArchived(fastapi.HTTPException):
     def __init__(self) -> None:
         """Constructor for custom exception."""
         super().__init__(status_code=400, detail="Classifier is archived.")
+
+
+class IntermediatoryClassNotFound(fastapi.HTTPException):
+    """Custom exception for null Class."""
+
+    def __init__(self) -> None:
+        """Constructor for custom exception."""
+        super().__init__(status_code=404, detail="Intermediatory Class not found")

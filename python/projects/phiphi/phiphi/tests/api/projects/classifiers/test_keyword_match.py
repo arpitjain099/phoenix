@@ -2,6 +2,7 @@
 import datetime
 from typing import get_args
 
+import freezegun
 import pytest
 from fastapi.testclient import TestClient
 
@@ -9,8 +10,10 @@ from phiphi.api.projects.classifiers import base_schemas, models, response_schem
 from phiphi.api.projects.classifiers import crud_v2 as classifier_crud
 from phiphi.api.projects.classifiers.keyword_match import crud
 from phiphi.api.projects.classifiers.keyword_match import schemas as keyword_match_schemas
+from phiphi.seed.classifiers import keyword_match_seed
 
 CREATED_TIME = datetime.datetime(2021, 1, 1, 0, 0, 0)
+UPDATED_TIME = datetime.datetime(2021, 1, 2, 0, 0, 0)
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
@@ -103,3 +106,24 @@ def test_create_keyword_match_classifier(reseed_tables, client: TestClient) -> N
     assert classifier["intermediatory_classes"][0]["name"] == "class1"
     assert classifier["intermediatory_classes"][0]["description"] == "des"
     assert classifier["intermediatory_classes"][1]["name"] == "class2"
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
+def test_patch_keyword_match_classes(reseed_tables, client: TestClient) -> None:
+    """Test patch keyword match classes."""
+    classifier = keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[0]
+    patch_data = {"name": "New Name"}
+    class_id = classifier.intermediatory_classes[0].id
+    assert classifier.intermediatory_classes[0].name != patch_data["name"]
+    with freezegun.freeze_time(UPDATED_TIME):
+        response = client.patch(
+            f"/projects/{classifier.project_id}/classifiers/keyword_match/{classifier.id}/intermediatory_classes/{class_id}",
+            json=patch_data,
+        )
+    assert response.status_code == 200
+    intermediate_class = response.json()
+    assert intermediate_class["name"] == patch_data["name"]
+    assert intermediate_class["description"] == classifier.intermediatory_classes[0].description
+    assert intermediate_class["id"] == class_id
+    assert intermediate_class["updated_at"] == UPDATED_TIME.isoformat()
+    assert intermediate_class["created_at"] == CREATED_TIME.isoformat()
