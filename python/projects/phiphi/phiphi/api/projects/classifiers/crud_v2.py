@@ -2,7 +2,9 @@
 
 At somepoint this will replace the current CRUD operations in `crud.py`.
 """
+import contextlib
 import datetime
+from typing import Generator
 
 import sqlalchemy.orm
 
@@ -90,6 +92,33 @@ def get_orm_classifier(
     )
 
 
+@contextlib.contextmanager
+def get_orm_classifier_with_edited_context(
+    session: sqlalchemy.orm.Session,
+    project_id: int,
+    classifier_id: int,
+) -> Generator[models.Classifiers | None, None, None]:
+    """Get a classifier ORM last_edited_at updated at the end of context.
+
+    This is useful when you want to update the last_edited_at field after a set of operations are
+    done.
+
+    !! Important !!
+    To get the correct last_edited_at value, the ORM object should not be modified directly
+    and orm.refresh() should be called after the context manager is done.
+    """
+    orm = (
+        session.query(models.Classifiers)
+        .filter(models.Classifiers.project_id == project_id)
+        .filter(models.Classifiers.id == classifier_id)
+        .one_or_none()
+    )
+    yield orm
+    if orm:
+        orm.last_edited_at = datetime.datetime.utcnow()
+        session.commit()
+
+
 def get_classifier(
     session: sqlalchemy.orm.Session,
     project_id: int,
@@ -134,18 +163,20 @@ def patch_classifier(
     classifier_patch: base_schemas.ClassifierPatch,
 ) -> response_schemas.Classifier:
     """Patch a classifier."""
-    orm_classifier = get_orm_classifier(session, project_id, classifier_id)
+    with get_orm_classifier_with_edited_context(
+        session, project_id, classifier_id
+    ) as orm_classifier:
+        if orm_classifier is None:
+            raise exceptions.ClassifierNotFound()
 
-    if orm_classifier is None:
-        raise exceptions.ClassifierNotFound()
+        if orm_classifier.archived_at is not None:
+            raise exceptions.ClassifierArchived()
 
-    if orm_classifier.archived_at is not None:
-        raise exceptions.ClassifierArchived()
+        for key, value in classifier_patch.dict(exclude_unset=True).items():
+            setattr(orm_classifier, key, value)
 
-    for key, value in classifier_patch.dict(exclude_unset=True).items():
-        setattr(orm_classifier, key, value)
+        session.commit()
 
-    session.commit()
     session.refresh(orm_classifier)
     return response_schemas.classifier_adapter.validate_python(orm_classifier)
 

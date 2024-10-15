@@ -69,21 +69,25 @@ def test_get_classifiers(reseed_tables, client: TestClient) -> None:
     assert "latest_job_run" in json[0]
 
 
+@pytest.mark.freeze_time(TIMESTAMP)
 def test_patch_classifier(reseed_tables, client: TestClient) -> None:
     """Test patch classifier."""
     classifier = keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[0]
     patch_data = {"name": "New Name"}
     assert classifier.name != patch_data["name"]
+    assert classifier.last_edited_at is None
     response = client.patch(
         f"/projects/{classifier.project_id}/classifiers/{classifier.id}",
         json=patch_data,
     )
     assert response.status_code == 200
     assert response.json()["name"] == patch_data["name"]
+    assert response.json()["last_edited_at"] == TIMESTAMP.isoformat()
 
     response = client.get(f"/projects/{classifier.project_id}/classifiers/{classifier.id}")
     assert response.status_code == 200
     assert response.json()["name"] == "New Name"
+    assert response.json()["last_edited_at"] == TIMESTAMP.isoformat()
 
 
 def test_patch_classifier_not_found(reseed_tables, client: TestClient) -> None:
