@@ -61,3 +61,21 @@ def delete_keyword_match_intemediatory_classes(
         classifier_id=classifier_id,
         class_id=class_id,
     )
+
+
+@router.post(
+    "/projects/{project_id}/classifiers/keyword_match/{classifier_id}/intermediatory_classes"
+)
+def create_keyword_match_intemediatory_classes(
+    session: deps.SessionDep,
+    project_id: int,
+    classifier_id: int,
+    class_create: base_schemas.IntermediatoryClassCreate,
+) -> base_schemas.IntermediatoryClassResponse:
+    """Create the classes of a keyword match classifier."""
+    return crud.create_intermediatory_class(
+        session=session,
+        project_id=project_id,
+        classifier_id=classifier_id,
+        class_create=class_create,
+    )

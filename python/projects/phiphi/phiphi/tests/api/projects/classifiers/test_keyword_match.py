@@ -154,3 +154,33 @@ def test_delete_keyword_match_classes(reseed_tables, client: TestClient) -> None
     assert len(json["intermediatory_classes"]) == 1
     assert json["intermediatory_classes"][0]["id"] != class_id
     assert json["last_edited_at"] == UPDATED_TIME.isoformat()
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
+def test_create_keyword_match_intermediatory_class(reseed_tables, client: TestClient) -> None:
+    """Test create keyword match intermediatory class."""
+    classifier = keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[0]
+    intermediatory_class = {
+        "name": "class3",
+        "description": "des3",
+    }
+    with freezegun.freeze_time(UPDATED_TIME):
+        response = client.post(
+            f"/projects/{classifier.project_id}/classifiers/keyword_match/{classifier.id}/intermediatory_classes",
+            json=intermediatory_class,
+        )
+    assert response.status_code == 200
+    version = response.json()
+    assert version["created_at"] == UPDATED_TIME.isoformat()
+    assert version["updated_at"] == UPDATED_TIME.isoformat()
+    assert version["name"] == intermediatory_class["name"]
+    assert version["description"] == intermediatory_class["description"]
+
+    # Get the classifier again to check the change
+    response = client.get(f"/projects/{classifier.project_id}/classifiers/{classifier.id}")
+    assert response.status_code == 200
+    json = response.json()
+    assert len(json["intermediatory_classes"]) == 3
+    assert json["intermediatory_classes"][2]["name"] == intermediatory_class["name"]
+    assert json["intermediatory_classes"][2]["description"] == intermediatory_class["description"]
+    assert json["last_edited_at"] == UPDATED_TIME.isoformat()
