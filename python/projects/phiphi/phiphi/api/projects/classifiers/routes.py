@@ -80,13 +80,13 @@ async def archive_classifier(
     "/projects/{project_id}/classifiers/{classifier_id}/restore",
     response_model=response_schemas.Classifier,
 )
-def restore_classifier(
+async def restore_classifier(
     session: deps.SessionDep,
     project_id: int,
     classifier_id: int,
 ) -> response_schemas.Classifier:
     """Restore a classifier."""
-    classifier = crud.restore_classifier(
+    classifier = await crud.restore_classifier_run_restore_job(
         session=session, project_id=project_id, classifier_id=classifier_id
     )
     return classifier
