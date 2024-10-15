@@ -53,11 +53,11 @@ def test_keyword_match_classifier(tmp_bq_project):
             "classifier_id": 1,
             "created_at": datetime.datetime.now(),
             "updated_at": datetime.datetime.now(),
-            "classes_dict": {
-                "apple_banana": "Things that are apples and bananas",
-                "apple_orange": "Things that are apples and oranges",
-                "orange_banana": "Things that are oranges and bananas",
-            },
+            "classes": [
+                {"name": "apple_banana", "description": "Things that are apples and bananas"},
+                {"name": "apple_orange", "description": "Things that are apples and oranges"},
+                {"name": "orange_banana", "description": "Things that are oranges and bananas"},
+            ],
             "params": {
                 "class_to_keyword_configs": [
                     {"class_name": "apple_banana", "musts": "apples bananas"},
