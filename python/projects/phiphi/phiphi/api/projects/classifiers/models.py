@@ -40,6 +40,7 @@ class ClassifiersBase(platform_db.Base):
     name: orm.Mapped[str]
     type: orm.Mapped[str]
     archived_at: orm.Mapped[datetime.datetime | None] = orm.mapped_column(nullable=True)
+    last_edited_at: orm.Mapped[datetime.datetime | None] = orm.mapped_column(nullable=True)
 
 
 job_run_foreign_type_query = (
