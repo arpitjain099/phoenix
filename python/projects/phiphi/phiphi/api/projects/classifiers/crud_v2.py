@@ -276,11 +276,16 @@ def patch_intermediatory_class(
 
         if orm_class is None:
             raise exceptions.IntermediatoryClassNotFound()
+        try:
+            for key, value in class_patch.dict(exclude_unset=True).items():
+                setattr(orm_class, key, value)
 
-        for key, value in class_patch.dict(exclude_unset=True).items():
-            setattr(orm_class, key, value)
-
-        session.commit()
+            session.commit()
+        except sqlalchemy.exc.IntegrityError as e:
+            session.rollback()
+            if "unique constraint" in str(e).lower():
+                raise exceptions.IntermediatoryClassNameConflict()
+            raise exceptions.UnknownIntegrityError()
 
     session.refresh(orm_class)
     return base_schemas.IntermediatoryClassResponse.model_validate(orm_class)

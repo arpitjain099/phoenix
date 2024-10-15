@@ -209,3 +209,27 @@ def test_create_keyword_match_intermediatory_class_non_unique_error(
     json = response.json()
     assert len(json["intermediatory_classes"]) == 2
     assert json["last_edited_at"] is None
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
+def test_patch_keyword_match_intermediatory_class_non_unique_error(
+    reseed_tables, client: TestClient
+) -> None:
+    """Test patch keyword_match intermediatory_class that is not unique, should throw error."""
+    classifier = keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[0]
+    intermediatory_class = {
+        "name": classifier.intermediatory_classes[1].name,
+    }
+    response = client.patch(
+        f"/projects/{classifier.project_id}/classifiers/keyword_match/{classifier.id}/intermediatory_classes/{classifier.intermediatory_classes[0].id}",
+        json=intermediatory_class,
+    )
+    assert response.status_code == 400
+    assert response.json() == {"detail": "Intermediatory Class with name already exists"}
+
+    # Get the classifier again to check the change
+    response = client.get(f"/projects/{classifier.project_id}/classifiers/{classifier.id}")
+    assert response.status_code == 200
+    json = response.json()
+    assert len(json["intermediatory_classes"]) == 2
+    assert json["last_edited_at"] is None
