@@ -48,6 +48,8 @@ class IntermediatoryClassToKeywordConfig(
             name="uq_intermediatory_class_to_keyword_configs",
         ),
         sa.Index("ix_intermediatory_class_to_keyword_configs", "classifier_id", "class_id"),
+        # We are adding an index on class_id to speed the requests for deletes.
+        sa.Index("ix_intermediatory_class_to_keyword_configs_class_id", "class_id"),
     )
 
     # Define the relationship between IntermediatoryClassToKeywordConfig and IntermediatoryClasses
