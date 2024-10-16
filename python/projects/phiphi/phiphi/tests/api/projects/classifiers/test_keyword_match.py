@@ -233,3 +233,27 @@ def test_patch_keyword_match_intermediatory_class_non_unique_error(
     json = response.json()
     assert len(json["intermediatory_classes"]) == 2
     assert json["last_edited_at"] is None
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
+def test_create_keyword_match_intermediatory_config(reseed_tables, client: TestClient) -> None:
+    """Test create keyword match intermediatory config."""
+    classifier = keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[0]
+    intermediatory_config = {
+        "class_id": classifier.intermediatory_classes[0].id,
+        "musts": "must1 must2",
+    }
+    with freezegun.freeze_time(UPDATED_TIME):
+        response = client.post(
+            f"/projects/{classifier.project_id}/classifiers/keyword_match/{classifier.id}/intermediatory_class_to_keyword_configs",
+            json=intermediatory_config,
+        )
+    assert response.status_code == 200
+    json = response.json()
+    assert json is None
+
+    # Get the classifier again to check the change
+    response = client.get(f"/projects/{classifier.project_id}/classifiers/{classifier.id}")
+    assert response.status_code == 200
+    json = response.json()
+    assert json["last_edited_at"] == UPDATED_TIME.isoformat()
