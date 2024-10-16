@@ -98,3 +98,23 @@ def create_keyword_match_intermediatory_class_to_keyword_config(
         classifier_id=classifier_id,
         intermediatory_class_to_keyword_config=intermediatory_class_to_keyword_config,
     )
+
+
+@router.patch(
+    "/projects/{project_id}/classifiers/keyword_match/{classifier_id}/intermediatory_class_to_keyword_configs/{config_id}",
+)
+def patch_keyword_match_intermediatory_class_to_keyword_config(
+    session: deps.SessionDep,
+    project_id: int,
+    classifier_id: int,
+    config_id: int,
+    intermediatory_class_to_keyword_config: schemas.IntermediatoryClassToKeywordConfigPatch,
+) -> schemas.IntermediatoryClassToKeywordConfigResponse:
+    """Patch an intermediatory class to keyword config."""
+    return crud.patch_intermediatory_class_to_keyword_config(
+        session=session,
+        project_id=project_id,
+        classifier_id=classifier_id,
+        intermediatory_class_to_keyword_config_id=config_id,
+        intermediatory_class_to_keyword_config=intermediatory_class_to_keyword_config,
+    )

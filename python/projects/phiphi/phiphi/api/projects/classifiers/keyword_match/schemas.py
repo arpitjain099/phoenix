@@ -27,6 +27,16 @@ class IntermediatoryClassToKeywordConfigCreate(pydantic.BaseModel):
     ]
 
 
+class IntermediatoryClassToKeywordConfigPatch(pydantic.BaseModel):
+    """Intermediatory class to keyword config patch schema."""
+
+    musts: Annotated[Optional[str], pydantic.Field(description=MUSTS_DESCRIPTION, default=None)]
+    nots: Annotated[
+        Optional[str],
+        pydantic.Field(description=NOTS_DESCRIPTION, default=None),
+    ]
+
+
 class IntermediatoryClassToKeywordConfigResponse(IntermediatoryClassToKeywordConfigCreate):
     """Intermediatory class to keyword config response schema."""
 
