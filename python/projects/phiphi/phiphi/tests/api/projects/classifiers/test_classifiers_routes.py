@@ -72,7 +72,9 @@ def test_get_classifiers(reseed_tables, client: TestClient) -> None:
 @pytest.mark.freeze_time(TIMESTAMP)
 def test_patch_classifier(reseed_tables, client: TestClient) -> None:
     """Test patch classifier."""
-    classifier = keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[0]
+    # Using a classifier that has not been edited to check that `last_edited_at` is not changed on
+    # error
+    classifier = keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[3]
     patch_data = {"name": "New Name"}
     assert classifier.name != patch_data["name"]
     assert classifier.last_edited_at is None
