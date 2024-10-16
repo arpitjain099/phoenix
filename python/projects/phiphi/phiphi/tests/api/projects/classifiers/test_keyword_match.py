@@ -250,7 +250,11 @@ def test_create_keyword_match_intermediatory_config(reseed_tables, client: TestC
         )
     assert response.status_code == 200
     json = response.json()
-    assert json is None
+    assert json["created_at"] == UPDATED_TIME.isoformat()
+    assert json["updated_at"] == UPDATED_TIME.isoformat()
+    assert json["class_id"] == intermediatory_config["class_id"]
+    assert json["musts"] == intermediatory_config["musts"]
+    assert json["nots"] is None
 
     # Get the classifier again to check the change
     response = client.get(f"/projects/{classifier.project_id}/classifiers/{classifier.id}")

@@ -90,7 +90,7 @@ def create_keyword_match_intermediatory_class_to_keyword_config(
     project_id: int,
     classifier_id: int,
     intermediatory_class_to_keyword_config: schemas.IntermediatoryClassToKeywordConfigCreate,
-) -> None:
+) -> schemas.IntermediatoryClassToKeywordConfigResponse:
     """Create an intermediatory class to keyword config."""
     return crud.create_intermediatory_class_to_keyword_config(
         session=session,
