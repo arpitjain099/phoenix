@@ -139,3 +139,10 @@ class IntermediatoryClasses(IntermediatoryClassesBase, base_models.TimestampMode
         sa.UniqueConstraint("classifier_id", "name", name="uq_classifier_classname"),
         sa.Index("ix_classifier_classname", "classifier_id", "name"),
     )
+
+    intermediatory_class_to_keyword_configs = orm.relationship(
+        "IntermediatoryClassToKeywordConfig",
+        cascade="all, delete-orphan",
+        order_by="asc(IntermediatoryClassToKeywordConfig.id)",
+        lazy="select",
+    )
