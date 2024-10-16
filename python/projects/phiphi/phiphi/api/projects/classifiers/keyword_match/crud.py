@@ -88,12 +88,18 @@ def patch_intermediatory_class_to_keyword_config(
         if orm_intermediatory_class_to_keyword_config is None:
             raise exceptions.HttpException404()
 
-        for key, value in intermediatory_class_to_keyword_config.model_dump(
-            exclude_unset=True
-        ).items():
-            setattr(orm_intermediatory_class_to_keyword_config, key, value)
+        try:
+            for key, value in intermediatory_class_to_keyword_config.model_dump(
+                exclude_unset=True
+            ).items():
+                setattr(orm_intermediatory_class_to_keyword_config, key, value)
 
-        session.commit()
+            session.commit()
+        except sa.exc.IntegrityError as e:
+            session.rollback()
+            if "unique constraint" in str(e):
+                raise exceptions.HttpException400(UNIQUE_ERROR_MESSAGE)
+            raise exceptions.UnknownIntegrityError()
 
     session.refresh(orm_intermediatory_class_to_keyword_config)
     return schemas.IntermediatoryClassToKeywordConfigResponse.model_validate(

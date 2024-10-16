@@ -332,3 +332,37 @@ def test_patch_keyword_match_intermediatory_config(reseed_tables, client: TestCl
     assert len(json["intermediatory_class_to_keyword_configs"]) == 2
     assert json["intermediatory_class_to_keyword_configs"][0]["class_id"] == config["class_id"]
     assert json["intermediatory_class_to_keyword_configs"][0]["musts"] == config["musts"]
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
+def test_patch_keyword_match_intermediatory_config_not_unique_error(
+    reseed_tables, client: TestClient
+) -> None:
+    """Test patch keyword match intermediatory config not unique.
+
+    This creates a config and then tries to patch it to be the same as another config.
+    """
+    classifier = keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[0]
+    class_id = classifier.intermediatory_class_to_keyword_configs[0].class_id
+    config_id = classifier.intermediatory_class_to_keyword_configs[0].id
+    musts = "some musts"
+    assert classifier.intermediatory_class_to_keyword_configs[0].musts != musts
+    post_intermediatory_config = {
+        "class_id": class_id,
+        "musts": musts,
+    }
+    patch_intermediatory_config = {
+        "musts": musts,
+    }
+    with freezegun.freeze_time(UPDATED_TIME):
+        response_1 = client.post(
+            f"/projects/{classifier.project_id}/classifiers/keyword_match/{classifier.id}/intermediatory_class_to_keyword_configs",
+            json=post_intermediatory_config,
+        )
+        response_2 = client.patch(
+            f"/projects/{classifier.project_id}/classifiers/keyword_match/{classifier.id}/intermediatory_class_to_keyword_configs/{config_id}",
+            json=patch_intermediatory_config,
+        )
+    assert response_1.status_code == 200
+    assert response_2.status_code == 400
+    assert response_2.json() == {"detail": crud.UNIQUE_ERROR_MESSAGE}
