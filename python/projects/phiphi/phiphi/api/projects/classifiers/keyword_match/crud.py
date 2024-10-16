@@ -47,6 +47,7 @@ def get_keyword_match_params(
         class_to_keyword_config = schemas.ClassToKeywordConfig(
             class_name=orm_intermediatory_class_to_keyword_config.class_name,
             musts=orm_intermediatory_class_to_keyword_config.musts,
+            nots=orm_intermediatory_class_to_keyword_config.nots,
         )
         class_to_keyword_configs.append(class_to_keyword_config)
     return schemas.KeywordMatchParams(class_to_keyword_configs=class_to_keyword_configs)
