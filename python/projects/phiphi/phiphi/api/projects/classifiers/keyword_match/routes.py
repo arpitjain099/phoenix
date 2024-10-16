@@ -26,6 +26,22 @@ def create_keyword_match_classifier(
     )
 
 
+@router.post(
+    "/projects/{project_id}/classifiers/keyword_match/{classifier_id}/version_and_run",
+)
+async def create_keyword_match_version_and_run(
+    session: deps.SessionDep,
+    project_id: int,
+    classifier_id: int,
+) -> response_schemas.Classifier:
+    """Create a new keyword match version and run."""
+    return await crud.create_version_and_run(
+        session=session,
+        project_id=project_id,
+        classifier_id=classifier_id,
+    )
+
+
 @router.patch(
     "/projects/{project_id}/classifiers/keyword_match/{classifier_id}/intermediatory_classes/{class_id}",
 )

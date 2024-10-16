@@ -5,6 +5,8 @@ from phiphi.api import exceptions
 from phiphi.api.projects.classifiers import crud_v2 as crud
 from phiphi.api.projects.classifiers import models as classifiers_models
 from phiphi.api.projects.classifiers.keyword_match import models, schemas
+from phiphi.api.projects.job_runs import crud as job_run_crud
+from phiphi.api.projects.job_runs import schemas as job_run_schemas
 
 UNIQUE_ERROR_MESSAGE = "The class to keyword match configuration already exists."
 NOT_FOUND_ERROR_MESSAGE = "The class to keyword match configuration does not exist."
@@ -32,6 +34,28 @@ def create_version(
     session.commit()
     session.refresh(orm_version)
     return schemas.KeywordMatchVersionResponse.model_validate(orm_version)
+
+
+async def create_version_and_run(
+    session: sa.orm.Session,
+    project_id: int,
+    classifier_id: int,
+) -> schemas.KeywordMatchClassifierResponse:
+    """Create a keyword match version and run."""
+    orm_classifier = crud.get_orm_classifier(session, project_id, classifier_id)
+    if orm_classifier is None:
+        raise exceptions.ClassifierNotFound()
+    _ = create_version(session, project_id, classifier_id)
+    _ = await job_run_crud.create_and_run_job_run(
+        session,
+        project_id,
+        job_run_schemas.JobRunCreate(
+            foreign_id=orm_classifier.id,
+            foreign_job_type=job_run_schemas.ForeignJobType.classify_tabulate,
+        ),
+    )
+    session.refresh(orm_classifier)
+    return schemas.KeywordMatchClassifierResponse.model_validate(obj=orm_classifier)
 
 
 def create_intermediatory_class_to_keyword_config(
