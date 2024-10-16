@@ -154,6 +154,9 @@ def test_delete_keyword_match_classes(reseed_tables, client: TestClient) -> None
     assert len(json["intermediatory_classes"]) == 1
     assert json["intermediatory_classes"][0]["id"] != class_id
     assert json["last_edited_at"] == UPDATED_TIME.isoformat()
+    # Check that the intermediatory_class_to_keyword_configs are also deleted
+    assert len(json["intermediatory_class_to_keyword_configs"]) == 1
+    assert json["intermediatory_class_to_keyword_configs"][0]["class_id"] != class_id
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
