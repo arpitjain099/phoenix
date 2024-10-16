@@ -36,7 +36,7 @@ def create_intermediatory_class_to_keyword_config(
     project_id: int,
     classifier_id: int,
     intermediatory_class_to_keyword_config: schemas.IntermediatoryClassToKeywordConfigCreate,
-) -> None:
+) -> schemas.IntermediatoryClassToKeywordConfigResponse:
     """Create an intermediatory class to keyword config."""
     with crud.get_orm_classifier_with_edited_context(
         session, project_id, classifier_id
@@ -51,5 +51,6 @@ def create_intermediatory_class_to_keyword_config(
         session.commit()
 
     session.refresh(orm_intermediatory_class_to_keyword_config)
-    # TODO add response schema
-    return None
+    return schemas.IntermediatoryClassToKeywordConfigResponse.model_validate(
+        orm_intermediatory_class_to_keyword_config
+    )
