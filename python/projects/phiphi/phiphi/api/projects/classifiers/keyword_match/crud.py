@@ -6,6 +6,8 @@ from phiphi.api.projects.classifiers import crud_v2 as crud
 from phiphi.api.projects.classifiers import models as classifiers_models
 from phiphi.api.projects.classifiers.keyword_match import models, schemas
 
+UNIQUE_ERROR_MESSAGE = "The class to keyword match configuration already exists."
+
 
 def create_version(
     session: sa.orm.Session,
@@ -41,14 +43,21 @@ def create_intermediatory_class_to_keyword_config(
     with crud.get_orm_classifier_with_edited_context(
         session, project_id, classifier_id
     ) as orm_classifier:
-        orm_intermediatory_class_to_keyword_config = models.IntermediatoryClassToKeywordConfig(
-            classifier_id=orm_classifier.id,
-            class_id=intermediatory_class_to_keyword_config.class_id,
-            musts=intermediatory_class_to_keyword_config.musts,
-            nots=intermediatory_class_to_keyword_config.nots,
-        )
-        session.add(orm_intermediatory_class_to_keyword_config)
-        session.commit()
+        try:
+            # Attempt to add an object that may violate the unique constraint
+            orm_intermediatory_class_to_keyword_config = models.IntermediatoryClassToKeywordConfig(
+                classifier_id=orm_classifier.id,
+                class_id=intermediatory_class_to_keyword_config.class_id,
+                musts=intermediatory_class_to_keyword_config.musts,
+                nots=intermediatory_class_to_keyword_config.nots,
+            )
+            session.add(orm_intermediatory_class_to_keyword_config)
+            session.commit()
+        except sa.exc.IntegrityError as e:
+            session.rollback()
+            if "unique constraint" in str(e):
+                raise exceptions.HttpException400(UNIQUE_ERROR_MESSAGE)
+            raise exceptions.UnknownIntegrityError()
 
     session.refresh(orm_intermediatory_class_to_keyword_config)
     return schemas.IntermediatoryClassToKeywordConfigResponse.model_validate(

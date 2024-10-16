@@ -261,3 +261,27 @@ def test_create_keyword_match_intermediatory_config(reseed_tables, client: TestC
     assert response.status_code == 200
     json = response.json()
     assert json["last_edited_at"] == UPDATED_TIME.isoformat()
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
+def test_create_keyword_match_intermediatory_config_not_unique_error(
+    reseed_tables, client: TestClient
+) -> None:
+    """Test create keyword match intermediatory config not unique."""
+    classifier = keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[0]
+    intermediatory_config = {
+        "class_id": classifier.intermediatory_classes[0].id,
+        "musts": "must1 must2",
+    }
+    with freezegun.freeze_time(UPDATED_TIME):
+        response_1 = client.post(
+            f"/projects/{classifier.project_id}/classifiers/keyword_match/{classifier.id}/intermediatory_class_to_keyword_configs",
+            json=intermediatory_config,
+        )
+        response_2 = client.post(
+            f"/projects/{classifier.project_id}/classifiers/keyword_match/{classifier.id}/intermediatory_class_to_keyword_configs",
+            json=intermediatory_config,
+        )
+    assert response_1.status_code == 200
+    assert response_2.status_code == 400
+    assert response_2.json() == {"detail": crud.UNIQUE_ERROR_MESSAGE}
