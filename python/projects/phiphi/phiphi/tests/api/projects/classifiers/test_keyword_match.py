@@ -140,6 +140,19 @@ def test_keyword_match_version_and_run(
     json = response.json()
     assert json["latest_version"] is not None
     assert json["latest_version"]["created_at"] == UPDATED_TIME.isoformat()
+    expected_params = {
+        "class_to_keyword_configs": [
+            {
+                "class_name": classifier.intermediatory_class_to_keyword_configs[0].class_name,
+                "musts": classifier.intermediatory_class_to_keyword_configs[0].musts,
+            },
+            {
+                "class_name": classifier.intermediatory_class_to_keyword_configs[1].class_name,
+                "musts": classifier.intermediatory_class_to_keyword_configs[1].musts,
+            },
+        ]
+    }
+    assert json["latest_version"]["params"] == expected_params
 
     response = client.get(f"/projects/{classifier.project_id}/classifiers/{classifier.id}")
     assert response.status_code == 200

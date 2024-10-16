@@ -23,17 +23,33 @@ def create_version(
         raise exceptions.ClassifierNotFound()
 
     classes = crud.get_classes(session, orm_classifier)
+    params = get_keyword_match_params(session, orm_classifier)
 
     orm_version = classifiers_models.ClassifierVersions(
         classifier_id=orm_classifier.id,
         classes=[class_label.model_dump() for class_label in classes],
-        # This needs to be implemented in the future
-        params={"class_to_keyword_configs": []},
+        params=params,
     )
     session.add(orm_version)
     session.commit()
     session.refresh(orm_version)
     return schemas.KeywordMatchVersionResponse.model_validate(orm_version)
+
+
+def get_keyword_match_params(
+    session: sa.orm.Session,
+    orm_classifier: classifiers_models.Classifiers,
+) -> schemas.KeywordMatchParams:
+    """Get keyword match params."""
+    all_configs = orm_classifier.intermediatory_class_to_keyword_configs
+    class_to_keyword_configs = []
+    for orm_intermediatory_class_to_keyword_config in all_configs:
+        class_to_keyword_config = schemas.ClassToKeywordConfig(
+            class_name=orm_intermediatory_class_to_keyword_config.class_name,
+            musts=orm_intermediatory_class_to_keyword_config.musts,
+        )
+        class_to_keyword_configs.append(class_to_keyword_config)
+    return schemas.KeywordMatchParams(class_to_keyword_configs=class_to_keyword_configs)
 
 
 async def create_version_and_run(
