@@ -4,6 +4,7 @@ from sqlalchemy import orm
 
 from phiphi import platform_db
 from phiphi.api import base_models
+from phiphi.api.projects.classifiers import models as classifiers_models
 
 
 class IntermediatoryClassToKeywordConfigBase(platform_db.Base):
@@ -48,3 +49,14 @@ class IntermediatoryClassToKeywordConfig(
         ),
         sa.Index("ix_intermediatory_class_to_keyword_configs", "classifier_id", "class_id"),
     )
+
+    # Define the relationship between IntermediatoryClassToKeywordConfig and IntermediatoryClasses
+    intermediatory_class: orm.Mapped[classifiers_models.IntermediatoryClasses] = orm.relationship(
+        "IntermediatoryClasses",
+        lazy="joined",  # Eager load the relationship as the class name is always needed
+    )
+
+    @property
+    def class_name(self) -> str:
+        """Retrieve the class name from the intermediatory_classes table."""
+        return self.intermediatory_class.name

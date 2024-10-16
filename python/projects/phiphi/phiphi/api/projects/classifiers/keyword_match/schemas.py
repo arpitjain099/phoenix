@@ -44,6 +44,7 @@ class IntermediatoryClassToKeywordConfigResponse(IntermediatoryClassToKeywordCon
     id: int
     created_at: datetime.datetime
     updated_at: datetime.datetime
+    class_name: str
 
 
 class ClassToKeywordConfig(TypedDict):
