@@ -7,6 +7,7 @@ from phiphi.api.projects.classifiers import models as classifiers_models
 from phiphi.api.projects.classifiers.keyword_match import models, schemas
 
 UNIQUE_ERROR_MESSAGE = "The class to keyword match configuration already exists."
+NOT_FOUND_ERROR_MESSAGE = "The class to keyword match configuration does not exist."
 
 
 def create_version(
@@ -86,7 +87,7 @@ def patch_intermediatory_class_to_keyword_config(
             .one_or_none()
         )
         if orm_intermediatory_class_to_keyword_config is None:
-            raise exceptions.HttpException404()
+            raise exceptions.HttpException404(NOT_FOUND_ERROR_MESSAGE)
 
         try:
             for key, value in intermediatory_class_to_keyword_config.model_dump(

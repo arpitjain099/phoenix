@@ -366,3 +366,19 @@ def test_patch_keyword_match_intermediatory_config_not_unique_error(
     assert response_1.status_code == 200
     assert response_2.status_code == 400
     assert response_2.json() == {"detail": crud.UNIQUE_ERROR_MESSAGE}
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
+def test_patch_keyword_match_intermediatory_config_not_found_error(
+    reseed_tables, client: TestClient
+) -> None:
+    """Test patch keyword match intermediatory config not found."""
+    classifier = keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[0]
+    patch_data = {"musts": "must3 must4"}
+    with freezegun.freeze_time(UPDATED_TIME):
+        response = client.patch(
+            f"/projects/{classifier.project_id}/classifiers/keyword_match/{classifier.id}/intermediatory_class_to_keyword_configs/0",
+            json=patch_data,
+        )
+    assert response.status_code == 404
+    assert response.json() == {"detail": crud.NOT_FOUND_ERROR_MESSAGE}
