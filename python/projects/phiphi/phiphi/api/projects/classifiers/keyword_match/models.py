@@ -38,8 +38,6 @@ class IntermediatoryClassToKeywordConfig(
     __tablename__ = "intermediatory_class_to_keyword_configs"
 
     __table_args__ = (
-        # For clarification, the unique constraint will treat NULLs as the different values so that
-        # two rows with the same musts and NULL nots are not considered duplicates.
         sa.UniqueConstraint(
             "classifier_id",
             "class_id",
