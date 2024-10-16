@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from phiphi.api.projects.classifiers import base_schemas, response_schemas
 from phiphi.api.projects.classifiers import crud_v2 as classifier_crud
-from phiphi.api.projects.classifiers.keyword_match import crud
+from phiphi.api.projects.classifiers.keyword_match import crud, schemas
 
 TEST_KEYWORD_CLASSIFIER_CREATE_NO_VERSION = base_schemas.ClassifierCreate(
     name="Test keyword match Classifier 1 no version",
@@ -204,6 +204,30 @@ def create_versioned_classifier(
     return classifier_versioned
 
 
+def create_test_intermediatory_class_to_keyword_config(
+    session: Session,
+    classifier: response_schemas.Classifier,
+    class_id: int,
+    musts: str,
+    nots: str | None = None,
+) -> None:
+    """Create test intermediatory class to keyword config.
+
+    This will update `last_edited_at` of the classifier.
+    """
+    intermediatory_class_to_keyword_config = schemas.IntermediatoryClassToKeywordConfigCreate(
+        class_id=class_id,
+        musts=musts,
+        nots=nots,
+    )
+    crud.create_intermediatory_class_to_keyword_config(
+        session=session,
+        project_id=classifier.project_id,
+        classifier_id=classifier.id,
+        intermediatory_class_to_keyword_config=intermediatory_class_to_keyword_config,
+    )
+
+
 def seed_test_classifier_keyword_match(session: Session) -> None:
     """Seed test keyword match classifier."""
     # Need to clear the list before seeding other wise every seed will add to the list
@@ -217,6 +241,19 @@ def seed_test_classifier_keyword_match(session: Session) -> None:
             project_id=project_id,
             classifier_type=base_schemas.ClassifierType.keyword_match,
             classifier_create=classifier_create,
+        )
+        # Create intermediatory class to keyword config
+        create_test_intermediatory_class_to_keyword_config(
+            session=session,
+            classifier=classifier,
+            class_id=classifier.intermediatory_classes[0].id,
+            musts="test1",
+        )
+        create_test_intermediatory_class_to_keyword_config(
+            session=session,
+            classifier=classifier,
+            class_id=classifier.intermediatory_classes[1].id,
+            musts="test2",
         )
         TEST_KEYWORD_CLASSIFIERS.append(classifier)
 

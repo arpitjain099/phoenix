@@ -191,7 +191,9 @@ def test_create_keyword_match_intermediatory_class_non_unique_error(
     reseed_tables, client: TestClient
 ) -> None:
     """Test create keyword_match intermediatory_class that is not unique, should throw error."""
-    classifier = keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[0]
+    # Using a classifier that has not been edited to check that `last_edited_at` is not changed on
+    # error
+    classifier = keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[3]
     intermediatory_class = {
         "name": classifier.intermediatory_classes[0].name,
         "description": "des3",
@@ -216,7 +218,9 @@ def test_patch_keyword_match_intermediatory_class_non_unique_error(
     reseed_tables, client: TestClient
 ) -> None:
     """Test patch keyword_match intermediatory_class that is not unique, should throw error."""
-    classifier = keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[0]
+    # Using a classifier that has not been edited to check that `last_edited_at` is not changed on
+    # error
+    classifier = keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[3]
     intermediatory_class = {
         "name": classifier.intermediatory_classes[1].name,
     }
@@ -262,13 +266,14 @@ def test_create_keyword_match_intermediatory_config(reseed_tables, client: TestC
     assert response.status_code == 200
     json = response.json()
     assert json["last_edited_at"] == UPDATED_TIME.isoformat()
-    assert len(json["intermediatory_class_to_keyword_configs"]) == 1
+    assert len(json["intermediatory_class_to_keyword_configs"]) == 3
+    # Due to the ordering the new config should be the second as it is order by class_id first
     assert (
-        json["intermediatory_class_to_keyword_configs"][0]["class_id"]
+        json["intermediatory_class_to_keyword_configs"][1]["class_id"]
         == intermediatory_config["class_id"]
     )
     assert (
-        json["intermediatory_class_to_keyword_configs"][0]["musts"]
+        json["intermediatory_class_to_keyword_configs"][1]["musts"]
         == intermediatory_config["musts"]
     )
 
