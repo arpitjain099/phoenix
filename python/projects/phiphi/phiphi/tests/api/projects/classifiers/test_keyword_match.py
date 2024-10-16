@@ -261,7 +261,7 @@ def test_create_keyword_match_intermediatory_config(reseed_tables, client: TestC
     assert json["updated_at"] == UPDATED_TIME.isoformat()
     assert json["class_id"] == intermediatory_config["class_id"]
     assert json["musts"] == intermediatory_config["musts"]
-    assert json["nots"] is None
+    assert json["nots"] == ""
     assert json["class_name"] == classifier.intermediatory_classes[0].name
 
     # Get the classifier again to check the change
