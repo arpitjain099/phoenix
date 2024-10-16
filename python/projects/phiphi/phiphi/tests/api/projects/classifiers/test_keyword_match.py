@@ -145,10 +145,12 @@ def test_keyword_match_version_and_run(
             {
                 "class_name": classifier.intermediatory_class_to_keyword_configs[0].class_name,
                 "musts": classifier.intermediatory_class_to_keyword_configs[0].musts,
+                "nots": "",
             },
             {
                 "class_name": classifier.intermediatory_class_to_keyword_configs[1].class_name,
                 "musts": classifier.intermediatory_class_to_keyword_configs[1].musts,
+                "nots": "",
             },
         ]
     }

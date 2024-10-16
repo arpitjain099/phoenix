@@ -55,15 +55,10 @@ class ClassToKeywordConfig(TypedDict):
     musts: Annotated[
         str,
         pydantic.Field(
-            description="Whitespace separated list of keywords that must all match to classify "
-            "as this class"
+            description=MUSTS_DESCRIPTION,
         ),
     ]
-    # These are optional upgrades which are not going to be implemented in the first version
-    # shoulds: Annotated[str, pydantic.Field(description="Whitespace separated list of keywords
-    # of which one must match to classify as this class")]
-    # nots: Annotated[str, pydantic.Field(description="Whitespace separated list of keywords
-    #     of which none can match to classify as this class")]
+    nots: Annotated[Optional[str], pydantic.Field(description=NOTS_DESCRIPTION, default="")]
 
 
 class KeywordMatchParams(TypedDict):
