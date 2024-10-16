@@ -6,6 +6,21 @@ from typing_extensions import TypedDict
 
 from phiphi.api.projects.classifiers import base_schemas
 
+MUSTS_DESCRIPTION = (
+    "Whitespace separated list of keywords that must all match to classify as this class"
+)
+NOTS_DESCRIPTION = (
+    "Whitespace separated list of keywords of which none can match to classify as this class"
+)
+
+
+class IntermediatoryClassToKeywordConfigCreate(pydantic.BaseModel):
+    """Intermediatory class to keyword config create schema."""
+
+    class_id: int
+    musts: Annotated[str, pydantic.Field(description=MUSTS_DESCRIPTION)]
+    nots: Annotated[Optional[str], pydantic.Field(description=NOTS_DESCRIPTION, default=None)]
+
 
 class ClassToKeywordConfig(TypedDict):
     """Class to keyword config containing keyword matches."""
