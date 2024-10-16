@@ -71,6 +71,15 @@ class Classifiers(ClassifiersBase, base_models.TimestampModel):
         lazy="dynamic",
     )
 
+    intermediatory_class_to_keyword_configs = orm.relationship(
+        "IntermediatoryClassToKeywordConfig",
+        cascade="all, delete-orphan",
+        # Order by class_id and id to ensure that the order is consistent
+        # And so that for the user it matches the ordering of intermediatory_classes
+        order_by="asc(IntermediatoryClassToKeywordConfig.class_id),asc(IntermediatoryClassToKeywordConfig.id)",
+        lazy="select",
+    )
+
     # Relationship to get all related JobRuns, ordered by id descending
     job_runs = orm.relationship(
         "JobRuns",

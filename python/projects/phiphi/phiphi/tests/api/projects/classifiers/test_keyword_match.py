@@ -262,6 +262,15 @@ def test_create_keyword_match_intermediatory_config(reseed_tables, client: TestC
     assert response.status_code == 200
     json = response.json()
     assert json["last_edited_at"] == UPDATED_TIME.isoformat()
+    assert len(json["intermediatory_class_to_keyword_configs"]) == 1
+    assert (
+        json["intermediatory_class_to_keyword_configs"][0]["class_id"]
+        == intermediatory_config["class_id"]
+    )
+    assert (
+        json["intermediatory_class_to_keyword_configs"][0]["musts"]
+        == intermediatory_config["musts"]
+    )
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
