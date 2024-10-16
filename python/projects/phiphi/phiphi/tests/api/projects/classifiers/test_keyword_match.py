@@ -320,7 +320,7 @@ def test_patch_keyword_match_intermediatory_config(reseed_tables, client: TestCl
     config = response.json()
     assert config["class_id"] == classifier.intermediatory_classes[0].id
     assert config["musts"] == patch_data["musts"]
-    assert config["nots"] is None
+    assert config["nots"] == ""
     assert config["updated_at"] == UPDATED_TIME.isoformat()
     assert config["created_at"] == CREATED_TIME.isoformat()
 
