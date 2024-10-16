@@ -255,7 +255,14 @@ def seed_test_classifier_keyword_match(session: Session) -> None:
             class_id=classifier.intermediatory_classes[1].id,
             musts="test2",
         )
-        TEST_KEYWORD_CLASSIFIERS.append(classifier)
+        # Need to refresh the classifier to get the most updated orm
+        classifier_with_intermediatory = classifier_crud.get_classifier(
+            session=session,
+            project_id=project_id,
+            classifier_id=classifier.id,
+        )
+        assert classifier_with_intermediatory
+        TEST_KEYWORD_CLASSIFIERS.append(classifier_with_intermediatory)
 
     archived_classifier = create_archived_classifier(
         session=session,

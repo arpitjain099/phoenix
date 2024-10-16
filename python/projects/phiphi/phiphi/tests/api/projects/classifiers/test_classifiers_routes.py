@@ -24,6 +24,7 @@ def test_get_classifier(reseed_tables, client: TestClient) -> None:
     assert "latest_job_run" in json
     assert json["latest_job_run"] is None
     assert "intermediatory_classes" in json
+    assert "intermediatory_class_to_keyword_configs" in json
 
 
 def test_get_classifier_not_found(reseed_tables, client: TestClient) -> None:
