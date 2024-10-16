@@ -382,3 +382,37 @@ def test_patch_keyword_match_intermediatory_config_not_found_error(
         )
     assert response.status_code == 404
     assert response.json() == {"detail": crud.NOT_FOUND_ERROR_MESSAGE}
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
+def test_delete_keyword_match_intermediatory_config(reseed_tables, client: TestClient) -> None:
+    """Test delete keyword match intermediatory config."""
+    classifier = keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[0]
+    config_id = classifier.intermediatory_class_to_keyword_configs[0].id
+    with freezegun.freeze_time(UPDATED_TIME):
+        response = client.delete(
+            f"/projects/{classifier.project_id}/classifiers/keyword_match/{classifier.id}/intermediatory_class_to_keyword_configs/{config_id}"
+        )
+    assert response.status_code == 200
+    assert response.json() is None
+    # Get the classifier again to check the change
+    response = client.get(f"/projects/{classifier.project_id}/classifiers/{classifier.id}")
+    assert response.status_code == 200
+    json = response.json()
+    assert len(json["intermediatory_class_to_keyword_configs"]) == 1
+    assert json["intermediatory_class_to_keyword_configs"][0]["id"] != config_id
+    assert json["last_edited_at"] == UPDATED_TIME.isoformat()
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
+def test_delete_keyword_match_intermediatory_config_not_found_error(
+    reseed_tables, client: TestClient
+) -> None:
+    """Test delete keyword match intermediatory config not found."""
+    classifier = keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[0]
+    with freezegun.freeze_time(UPDATED_TIME):
+        response = client.delete(
+            f"/projects/{classifier.project_id}/classifiers/keyword_match/{classifier.id}/intermediatory_class_to_keyword_configs/0",
+        )
+    assert response.status_code == 404
+    assert response.json() == {"detail": crud.NOT_FOUND_ERROR_MESSAGE}
