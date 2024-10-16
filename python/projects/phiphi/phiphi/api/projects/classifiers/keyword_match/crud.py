@@ -106,3 +106,29 @@ def patch_intermediatory_class_to_keyword_config(
     return schemas.IntermediatoryClassToKeywordConfigResponse.model_validate(
         orm_intermediatory_class_to_keyword_config
     )
+
+
+def delete_intermediatory_class_to_keyword_config(
+    session: sa.orm.Session,
+    project_id: int,
+    classifier_id: int,
+    intermediatory_class_to_keyword_config_id: int,
+) -> None:
+    """Delete an intermediatory class to keyword config."""
+    with crud.get_orm_classifier_with_edited_context(
+        session, project_id, classifier_id
+    ) as orm_classifier:
+        orm_intermediatory_class_to_keyword_config = (
+            session.query(models.IntermediatoryClassToKeywordConfig)
+            .filter(
+                models.IntermediatoryClassToKeywordConfig.id
+                == intermediatory_class_to_keyword_config_id,
+                models.IntermediatoryClassToKeywordConfig.classifier_id == orm_classifier.id,
+            )
+            .one_or_none()
+        )
+        if orm_intermediatory_class_to_keyword_config is None:
+            raise exceptions.HttpException404(NOT_FOUND_ERROR_MESSAGE)
+
+        session.delete(orm_intermediatory_class_to_keyword_config)
+        session.commit()
