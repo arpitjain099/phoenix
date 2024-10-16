@@ -303,3 +303,32 @@ def test_create_keyword_match_intermediatory_config_not_unique_error(
     assert response_1.status_code == 200
     assert response_2.status_code == 400
     assert response_2.json() == {"detail": crud.UNIQUE_ERROR_MESSAGE}
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
+def test_patch_keyword_match_intermediatory_config(reseed_tables, client: TestClient) -> None:
+    """Test patch keyword match intermediatory config."""
+    classifier = keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[0]
+    config_id = classifier.intermediatory_class_to_keyword_configs[0].id
+    patch_data = {"musts": "must3 must4"}
+    with freezegun.freeze_time(UPDATED_TIME):
+        response = client.patch(
+            f"/projects/{classifier.project_id}/classifiers/keyword_match/{classifier.id}/intermediatory_class_to_keyword_configs/{config_id}",
+            json=patch_data,
+        )
+    assert response.status_code == 200
+    config = response.json()
+    assert config["class_id"] == classifier.intermediatory_classes[0].id
+    assert config["musts"] == patch_data["musts"]
+    assert config["nots"] is None
+    assert config["updated_at"] == UPDATED_TIME.isoformat()
+    assert config["created_at"] == CREATED_TIME.isoformat()
+
+    # Get the classifier again to check the change
+    response = client.get(f"/projects/{classifier.project_id}/classifiers/{classifier.id}")
+    assert response.status_code == 200
+    json = response.json()
+    assert json["last_edited_at"] == UPDATED_TIME.isoformat()
+    assert len(json["intermediatory_class_to_keyword_configs"]) == 2
+    assert json["intermediatory_class_to_keyword_configs"][0]["class_id"] == config["class_id"]
+    assert json["intermediatory_class_to_keyword_configs"][0]["musts"] == config["musts"]
