@@ -12,7 +12,8 @@ MUSTS_DESCRIPTION = (
     "Whitespace separated list of keywords that must all match to classify as this class"
 )
 NOTS_DESCRIPTION = (
-    "Whitespace separated list of keywords of which none can match to classify as this class"
+    "Whitespace separated list of keywords; "
+    "to be classified into this class, it must not contain any of the words"
 )
 
 
