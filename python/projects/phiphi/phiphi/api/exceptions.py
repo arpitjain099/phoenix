@@ -11,6 +11,14 @@ class HttpException400(fastapi.HTTPException):
         super().__init__(status_code=400, detail=detail)
 
 
+class HttpException404(fastapi.HTTPException):
+    """Custom exception for 404 status code."""
+
+    def __init__(self, detail: str) -> None:
+        """Constructor for custom exception."""
+        super().__init__(status_code=404, detail=detail)
+
+
 class UnknownIntegrityError(fastapi.HTTPException):
     """Custom exception for unknown integrity error."""
 
