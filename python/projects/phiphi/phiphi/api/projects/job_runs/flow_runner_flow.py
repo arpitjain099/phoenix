@@ -36,9 +36,14 @@ def get_gather_flow_params(project_id: int, gather_id: int) -> dict[str, Any]:
 def get_classify_flow_params(project_id: int, classifier_id: int) -> dict[str, Any]:
     """Get the parameters for the classify flow."""
     with platform_db.get_session_context() as session:
-        classifier = classifiers.crud.get_classifier(session=session, classifier_id=classifier_id)
+        classifier = classifiers.crud_v2.get_pipeline_classifier(
+            session=session, project_id=project_id, classifier_id=classifier_id
+        )
     if classifier is None:
-        raise ValueError(f"Classifier with {project_id=}, {classifier_id=} not found.")
+        raise ValueError(
+            f"Classifier with {project_id=}, {classifier_id=} not found, "
+            " or is not a valid pipeline classifier."
+        )
     params = {
         "classifier_dict": classifier.model_dump(),
     }
@@ -48,7 +53,9 @@ def get_classify_flow_params(project_id: int, classifier_id: int) -> dict[str, A
 def get_all_classifiers_params(project_id: int) -> dict[str, Any]:
     """Get list of specs for all classifiers."""
     with platform_db.get_session_context() as session:
-        classifiers_list = classifiers.crud.get_classifiers(session=session, project_id=project_id)
+        classifiers_list = classifiers.crud_v2.get_pipeline_classifiers(
+            session=session, project_id=project_id
+        )
     params = {
         "classifiers_dict_list": [_classifier.model_dump() for _classifier in classifiers_list],
     }
@@ -62,7 +69,9 @@ def get_tabulate_flow_params(project_id: int) -> dict[str, Any]:
     version is, so that it can pull the correct classification data.
     """
     with platform_db.get_session_context() as session:
-        classifiers_list = classifiers.crud.get_classifiers(session=session, project_id=project_id)
+        classifiers_list = classifiers.crud_v2.get_pipeline_classifiers(
+            session=session, project_id=project_id
+        )
     params = {
         "active_classifiers_versions": [
             (_classifier.id, _classifier.latest_version.version_id)
