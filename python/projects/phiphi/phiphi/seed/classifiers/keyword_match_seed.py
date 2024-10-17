@@ -34,7 +34,7 @@ TEST_KEYWORD_CLASSIFIER_CREATE_ARCHIVED = base_schemas.ClassifierCreate(
 )
 
 TEST_KEYWORD_CLASSIFIER_CREATE_VERSIONED = base_schemas.ClassifierCreate(
-    name="Test keyword match Classifier 2 Versioned",
+    name="Test keyword match Classifier 3 Versioned",
     intermediatory_classes=[
         base_schemas.IntermediatoryClassCreate(
             name="Test Class 1",
@@ -64,7 +64,7 @@ TEST_KEYWORD_CLASSIFIER_CREATE_VERSION_COMPLETED = base_schemas.ClassifierCreate
 
 # Needed for the console development
 TEST_KEYWORD_CLASSIFIER_CREATE_VERSION_FAILED = base_schemas.ClassifierCreate(
-    name="Test keyword match Classifier 4 Versioned Failed",
+    name="Test keyword match Classifier 5 Versioned Failed",
     intermediatory_classes=[
         base_schemas.IntermediatoryClassCreate(
             name="Test Class 1",
@@ -79,7 +79,7 @@ TEST_KEYWORD_CLASSIFIER_CREATE_VERSION_FAILED = base_schemas.ClassifierCreate(
 
 # Needed for the console development
 TEST_KEYWORD_CLASSIFIER_COMPLETED_ARCHIVED = base_schemas.ClassifierCreate(
-    name="Test keyword match Classifier 2 Archived Completed",
+    name="Test keyword match Classifier 6 Archived Completed",
     intermediatory_classes=[
         base_schemas.IntermediatoryClassCreate(
             name="Test Class 1",
@@ -94,7 +94,7 @@ TEST_KEYWORD_CLASSIFIER_COMPLETED_ARCHIVED = base_schemas.ClassifierCreate(
 
 # Needed for the console development
 TEST_KEYWORD_CLASSIFIER_FAILED_ARCHIVED = base_schemas.ClassifierCreate(
-    name="Test keyword match Classifier 2 Archived Failed",
+    name="Test keyword match Classifier 7 Archived Failed",
     intermediatory_classes=[
         base_schemas.IntermediatoryClassCreate(
             name="Test Class 1",
@@ -109,7 +109,7 @@ TEST_KEYWORD_CLASSIFIER_FAILED_ARCHIVED = base_schemas.ClassifierCreate(
 
 # Needed for the console development
 TEST_KEYWORD_CLASSIFIER_CREATE_VERSION_RESTORE_RUNNING = base_schemas.ClassifierCreate(
-    name="Test keyword match Classifier 4 Versioned Restore Running",
+    name="Test keyword match Classifier 8 Versioned Restore Running",
     intermediatory_classes=[
         base_schemas.IntermediatoryClassCreate(
             name="Test Class 1",
@@ -124,7 +124,7 @@ TEST_KEYWORD_CLASSIFIER_CREATE_VERSION_RESTORE_RUNNING = base_schemas.Classifier
 
 # Needed for the console development
 TEST_KEYWORD_CLASSIFIER_CREATE_VERSION_RESTORE_COMPLETED = base_schemas.ClassifierCreate(
-    name="Test keyword match Classifier 4 Versioned Restore Completed",
+    name="Test keyword match Classifier 9 Versioned Restore Completed",
     intermediatory_classes=[
         base_schemas.IntermediatoryClassCreate(
             name="Test Class 1",
@@ -139,7 +139,7 @@ TEST_KEYWORD_CLASSIFIER_CREATE_VERSION_RESTORE_COMPLETED = base_schemas.Classifi
 
 # Needed for the console development
 TEST_KEYWORD_CLASSIFIER_CREATE_VERSION_RESTORE_FAILED = base_schemas.ClassifierCreate(
-    name="Test keyword match Classifier 4 Versioned Restore Failed",
+    name="Test keyword match Classifier 10 Versioned Restore Failed",
     intermediatory_classes=[
         base_schemas.IntermediatoryClassCreate(
             name="Test Class 1",
