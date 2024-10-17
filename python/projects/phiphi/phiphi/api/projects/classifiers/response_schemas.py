@@ -3,8 +3,7 @@
 This copies ideas from Pydantic discriminator:
 https://docs.pydantic.dev/latest/concepts/unions/#nested-discriminated-unions
 """
-import datetime
-from typing import Annotated, Optional, Union
+from typing import Annotated, Union
 
 import pydantic
 
@@ -22,27 +21,15 @@ ClassifierDetail = Annotated[
 classifier_detail_adapter = pydantic.TypeAdapter(ClassifierDetail)
 
 
-class OptimisedClassifier(pydantic.BaseModel):
-    """Optimised Classifier schema.
+class ClassifierSummary(base_schemas.ClassifierResponseBase):
+    """Classifier Summary.
 
-    Properties to return to client for a request like list the classifiers
+    Properties to return to client for a request like list the classifiers.
 
-    This is a simplified version of the ClassifierResponseBase schema. That allows for optimisation
-    of the GET for all classifiers.
+    Can be used to get a summary of the classifier.
+
+    We are not using a union of sub classifiers because it improves speed and the strong typing of
+    the latest_version is not needed.
     """
 
-    model_config = pydantic.ConfigDict(from_attributes=True)
-
-    id: int
-    project_id: int
-    name: str
-    type: base_schemas.ClassifierType
-    archived_at: Optional[datetime.datetime]
-    created_at: datetime.datetime
-    updated_at: datetime.datetime
-    last_edited_at: Optional[datetime.datetime]
-    latest_version: Annotated[
-        Optional[base_schemas.ClassifierVersionResponse],
-        pydantic.Field(description="The latest version of the Classifier", default=None),
-    ]
     latest_job_run: job_runs_schemas.JobRunResponse | None = None

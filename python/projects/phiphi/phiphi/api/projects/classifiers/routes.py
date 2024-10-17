@@ -29,14 +29,14 @@ def get_classifier(
 
 
 @router.get(
-    "/projects/{project_id}/classifiers", response_model=list[response_schemas.OptimisedClassifier]
+    "/projects/{project_id}/classifiers", response_model=list[response_schemas.ClassifierSummary]
 )
 def get_classifiers(
     session: deps.SessionDep,
     project_id: int,
     start: int = 0,
     end: int = 100,
-) -> list[response_schemas.OptimisedClassifier]:
+) -> list[response_schemas.ClassifierSummary]:
     """Get classifiers."""
     return crud.get_classifiers(session=session, project_id=project_id, start=start, end=end)
 
