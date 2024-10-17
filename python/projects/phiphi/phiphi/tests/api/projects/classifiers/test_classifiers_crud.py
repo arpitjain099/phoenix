@@ -15,3 +15,14 @@ def test_get_pipeline_classifiers(reseed_tables):
     assert classifiers[3].id == 8
     assert classifiers[4].id == 9
     assert classifiers[5].id == 10
+
+
+def test_get_pipeline_classifier(reseed_tables):
+    """Test get pipeline classifier."""
+    classifier = crud.get_pipeline_classifier(reseed_tables, 1, 3)
+    assert classifier
+    assert classifier.id == 3
+
+    # classifier 1 has no version
+    classifier = crud.get_pipeline_classifier(reseed_tables, 1, 1)
+    assert classifier is None
