@@ -218,6 +218,16 @@
 						"c": " para más información sobre los créditos de proyecto)."
 					}
 				}
+			},
+			"classifier": {
+				"title": "Clasificadores",
+				"description": {
+					"part1": {
+						"a": "En esta página, puedes agregar clasificaciones a tus datos – esencialmente, otra columna que contiene información útil para ti. Antes de agregar tu primer clasificador, te recomendamos que leas ",
+						"b": "esta sección",
+						"c": " del manual de Phoenix."
+					}
+				}
 			}
 		}
 	},
@@ -544,6 +554,53 @@
 		"errors": {
 			"create": "Algo salió mal al crear",
 			"delete": "Ocurrió un error al eliminar la recopilación."
+		}
+	},
+	"classifiers": {
+		"classifiers": "Clasificadores",
+		"details": "Detalles de los clasificadores",
+		"titles": {
+			"create": "Crear clasificador",
+			"edit": "Editar clasificador",
+			"list": "Clasificadores",
+			"show": "Mostrar clasificador",
+			"select_type": "Seleccione el tipo de clasificador que desea crear"
+		},
+		"types": {
+			"post_author_classifier": {
+				"create": "Crear un clasificador de autor de publicaciones",
+				"create_description": "A partir de los datos recopilados, puede agregar una o más clases a cada autor que tenga publicaciones. Los autores se ordenarán por el número de publicaciones recopiladas (de mayor a menor) y podrá agregar clases a cada autor.",
+				"proceed_text": "Comenzar a crear"
+			},
+			"keyword_match": {
+				"create": "Crear un clasificador de texto por palabras clave",
+				"create_description": "Defina un clasificador que agregue automáticamente clases a una publicación y/o comentario cuando su texto contenga ciertas palabras clave. Esto se aplicará a publicaciones y/o comentarios que se hayan recopilado, así como a datos recopilados en el futuro.",
+				"proceed_text": "Comenzar a crear"
+			},
+			"perspective_classifier_text": {
+				"create": "Aplicar la API de Perspective para clasificar texto",
+				"create_description": "La API de Perspective es un clasificador gratuito que utiliza aprendizaje automático para identificar comentarios `tóxicos`. Puede usar la API de Perspective para clasificar según el texto de una publicación y/o comentario. Esto se aplicará a todas las publicaciones y/o comentarios que se hayan recopilado, así como a los datos recopilados en el futuro. Para más información sobre el modelo, consulte ",
+				"proceed_text": "Comenzar a aplicar"
+			}
+		},
+		"actions": {
+			"button": "Sí, continuar",
+			"titles": {
+				"archive": "Archivar",
+				"restore": "Restaurar"
+			},
+			"text": {
+				"archive": "¿Te gustaría ARCHIVAR este clasificador?",
+				"restore": "¿Te gustaría RESTAURAR este clasificador?"
+			}
+		},
+		"caution": "Su clasificador tiene modificaciones que no se han aplicado. Haga clic en el ícono para ir a la página de edición y luego haga clic en `Ejecutar y aplicar a futuras recopilaciones` para actualizar el conjunto de datos del tablero.",
+		"success": {
+			"archive": "Archivando clasificador.",
+			"restore": "Restaurando clasificador."
+		},
+		"errors": {
+			"create": "Algo salió mal al crear"
 		}
 	},
 	"tabulate": {

@@ -8,15 +8,17 @@ const TypeCard = ({
 	icon,
 	title,
 	description,
+	link_text = "Proceed",
 	link,
 }: {
-	icon: React.ReactNode;
+	icon?: React.ReactNode;
 	title: string;
-	description: string;
+	description: any;
+	link_text?: string;
 	link: string;
 }) => (
 	<div className="p-6 md:w-[300px] mx-auto bg-white border border-gray-100 shadow-md flex flex-col items-start">
-		<div className="mb-7 mt-4">{icon}</div>
+		{icon && <div className="mb-7 mt-4">{icon}</div>}
 		<div className="flex flex-col justify-between h-full">
 			<div>
 				<div className="text-xl font-medium mb-3 text-black">{title}</div>
@@ -28,7 +30,7 @@ const TypeCard = ({
 					variant="subtle"
 					className="mt-6 flex items-center hover:bg-transparent"
 				>
-					Proceed <span className="ml-2">→</span>
+					{link_text} <span className="ml-2">→</span>
 				</Button>
 			</Link>
 		</div>

@@ -88,7 +88,7 @@ export default function ProjectShow(): JSX.Element {
 				</Tabs.Panel>
 
 				<Tabs.Panel value="classify" pt="xs">
-					<ClassifyComponent />
+					<ClassifyComponent projectid={idFromParams} refetch={refetch} />
 				</Tabs.Panel>
 
 				<Tabs.Panel value="visualise" pt="xs">

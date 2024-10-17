@@ -30,7 +30,7 @@ export const statusTextStyle = (type: any): string => {
 };
 
 export const isJobRunRunning = (jobRun: JobRunResponse | null): boolean =>
-	jobRun !== null && !jobRun.completed_at;
+	jobRun !== null && !jobRun?.completed_at;
 
 export const formatToCurrency = (value: number | string): string => {
 	let numberValue: number;
