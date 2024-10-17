@@ -8,8 +8,8 @@ import pytest
 from fastapi.testclient import TestClient
 from prefect.client.schemas import objects
 
+from phiphi.api.projects import classifiers
 from phiphi.api.projects.classifiers import base_schemas, models, response_schemas
-from phiphi.api.projects.classifiers import crud_v2 as classifier_crud
 from phiphi.api.projects.classifiers.keyword_match import crud
 from phiphi.api.projects.classifiers.keyword_match import schemas as keyword_match_schemas
 from phiphi.api.projects.job_runs import schemas as job_run_schemas
@@ -42,7 +42,7 @@ def test_create_keyword_match_classifier_crud(reseed_tables) -> None:
         base_schemas.ClassLabel(name=class_obj["name"], description=class_obj["description"])
         for class_obj in classes
     ]
-    classifer_response = classifier_crud.create_classifier(
+    classifer_response = classifiers.crud.create_classifier(
         session=reseed_tables,
         project_id=1,
         classifier_type=base_schemas.ClassifierType.keyword_match,
@@ -79,7 +79,7 @@ def test_create_keyword_match_classifier_crud(reseed_tables) -> None:
     assert classifer_version_response.classifier_id == classifer_response.id
     assert classifer_version_response.classes == class_labels
 
-    orm_classifier = classifier_crud.get_orm_classifier(reseed_tables, 1, classifer_response.id)
+    orm_classifier = classifiers.crud.get_orm_classifier(reseed_tables, 1, classifer_response.id)
     assert orm_classifier.latest_version.version_id == classifer_version_response.version_id
 
 

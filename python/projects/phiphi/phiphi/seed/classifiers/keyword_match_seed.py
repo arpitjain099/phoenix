@@ -1,8 +1,8 @@
 """Classifier Keyword match seed."""
 from sqlalchemy.orm import Session
 
+from phiphi.api.projects import classifiers
 from phiphi.api.projects.classifiers import base_schemas, response_schemas
-from phiphi.api.projects.classifiers import crud_v2 as classifier_crud
 from phiphi.api.projects.classifiers.keyword_match import crud, schemas
 
 TEST_KEYWORD_CLASSIFIER_CREATE_NO_VERSION = base_schemas.ClassifierCreate(
@@ -159,18 +159,18 @@ def create_archived_classifier(
     session: Session, project_id: int, classifier_create: base_schemas.ClassifierCreate
 ) -> response_schemas.ClassifierDetail:
     """Create an archived classifier."""
-    classifier = classifier_crud.create_classifier(
+    classifier = classifiers.crud.create_classifier(
         session=session,
         project_id=project_id,
         classifier_type=base_schemas.ClassifierType.keyword_match,
         classifier_create=classifier_create,
     )
-    classifier_crud.archive_classifier(
+    classifiers.crud.archive_classifier(
         session=session,
         project_id=project_id,
         classifier_id=classifier.id,
     )
-    classifier_archived = classifier_crud.get_classifier(
+    classifier_archived = classifiers.crud.get_classifier(
         session=session,
         project_id=project_id,
         classifier_id=classifier.id,
@@ -183,7 +183,7 @@ def create_versioned_classifier(
     session: Session, project_id: int, classifier_create: base_schemas.ClassifierCreate
 ) -> response_schemas.ClassifierDetail:
     """Create a versioned classifier."""
-    classifier = classifier_crud.create_classifier(
+    classifier = classifiers.crud.create_classifier(
         session=session,
         project_id=project_id,
         classifier_type=base_schemas.ClassifierType.keyword_match,
@@ -195,7 +195,7 @@ def create_versioned_classifier(
         classifier_id=classifier.id,
     )
     # Need to refresh the classifier to get the latest version
-    classifier_versioned = classifier_crud.get_classifier(
+    classifier_versioned = classifiers.crud.get_classifier(
         session=session,
         project_id=project_id,
         classifier_id=classifier.id,
@@ -232,11 +232,11 @@ def seed_test_classifier_keyword_match(session: Session) -> None:
     """Seed test keyword match classifier."""
     # Need to clear the list before seeding other wise every seed will add to the list
     TEST_KEYWORD_CLASSIFIERS.clear()
-    classifiers = [TEST_KEYWORD_CLASSIFIER_CREATE_NO_VERSION]
+    classifiers_to_create = [TEST_KEYWORD_CLASSIFIER_CREATE_NO_VERSION]
     project_id = 1
 
-    for classifier_create in classifiers:
-        classifier = classifier_crud.create_classifier(
+    for classifier_create in classifiers_to_create:
+        classifier = classifiers.crud.create_classifier(
             session=session,
             project_id=project_id,
             classifier_type=base_schemas.ClassifierType.keyword_match,
@@ -256,7 +256,7 @@ def seed_test_classifier_keyword_match(session: Session) -> None:
             musts="test2",
         )
         # Need to refresh the classifier to get the most updated orm
-        classifier_with_intermediatory = classifier_crud.get_classifier(
+        classifier_with_intermediatory = classifiers.crud.get_classifier(
             session=session,
             project_id=project_id,
             classifier_id=classifier.id,

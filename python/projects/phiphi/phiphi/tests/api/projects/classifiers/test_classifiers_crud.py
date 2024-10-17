@@ -1,6 +1,6 @@
 """Test classifiers crud."""
 
-from phiphi.api.projects.classifiers import crud_v2 as crud
+from phiphi.api.projects.classifiers import crud
 
 
 def test_get_pipeline_classifiers(reseed_tables):

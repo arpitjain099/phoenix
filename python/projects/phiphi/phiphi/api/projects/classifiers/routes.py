@@ -2,8 +2,7 @@
 import fastapi
 
 from phiphi.api import deps, exceptions
-from phiphi.api.projects.classifiers import base_schemas, response_schemas
-from phiphi.api.projects.classifiers import crud_v2 as crud
+from phiphi.api.projects.classifiers import base_schemas, crud, response_schemas
 from phiphi.api.projects.classifiers.keyword_match import routes as keyword_match_routes
 
 router = fastapi.APIRouter()

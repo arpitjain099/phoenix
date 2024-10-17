@@ -2,7 +2,7 @@
 import sqlalchemy as sa
 
 from phiphi.api import exceptions
-from phiphi.api.projects.classifiers import crud_v2 as crud
+from phiphi.api.projects.classifiers import crud
 from phiphi.api.projects.classifiers import models as classifiers_models
 from phiphi.api.projects.classifiers.keyword_match import models, schemas
 from phiphi.api.projects.job_runs import crud as job_run_crud
