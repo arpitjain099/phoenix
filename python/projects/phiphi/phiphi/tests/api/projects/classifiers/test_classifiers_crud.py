@@ -26,3 +26,7 @@ def test_get_pipeline_classifier(reseed_tables):
     # classifier 1 has no version
     classifier = crud.get_pipeline_classifier(reseed_tables, 1, 1)
     assert classifier is None
+
+    # classifier 2 is archived
+    classifier = crud.get_pipeline_classifier(reseed_tables, 1, 2)
+    assert classifier is None
