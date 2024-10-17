@@ -33,3 +33,11 @@ class ClassifierSummary(base_schemas.ClassifierResponseBase):
     """
 
     latest_job_run: job_runs_schemas.JobRunResponse | None = None
+
+
+ClassifierPipeline = Annotated[
+    Union[keyword_match_schemas.KeywordMatchClassifierPipeline],
+    pydantic.Field(description="Any classifier response", discriminator="type"),
+]
+
+classifier_pipeline_adapter = pydantic.TypeAdapter(ClassifierPipeline)
