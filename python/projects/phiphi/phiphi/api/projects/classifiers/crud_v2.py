@@ -141,6 +141,31 @@ def get_classifier(
     return response_schemas.classifier_detail_adapter.validate_python(orm_classifier)
 
 
+def get_pipeline_classifiers(
+    session: sqlalchemy.orm.Session,
+    project_id: int,
+) -> list[response_schemas.ClassifierPipeline]:
+    """Get a list of pipeline classifiers for a project.
+
+    Pipeline classifiers are classifiers that have at least one version and are not archived.
+    """
+    orm_classifiers = (
+        session.query(models.Classifiers)
+        .filter(models.Classifiers.project_id == project_id)
+        .filter(models.Classifiers.archived_at.is_(None))
+        # The order will be the order that they where added
+        .order_by(models.Classifiers.id.asc())
+        .all()
+    )
+
+    return [
+        response_schemas.classifier_pipeline_adapter.validate_python(orm_classifier)
+        for orm_classifier in orm_classifiers
+        # Pipeline classifiers have to have at least one version
+        if orm_classifier.latest_version is not None
+    ]
+
+
 def get_classifiers(
     session: sqlalchemy.orm.Session,
     project_id: int,
