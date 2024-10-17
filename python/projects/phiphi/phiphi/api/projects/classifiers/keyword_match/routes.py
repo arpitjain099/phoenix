@@ -16,7 +16,7 @@ def create_keyword_match_classifier(
     session: deps.SessionDep,
     project_id: int,
     classifier_create: base_schemas.ClassifierCreate,
-) -> response_schemas.Classifier:
+) -> response_schemas.ClassifierDetail:
     """Create a new keyword match classifier."""
     return classifiers_crud.create_classifier(
         session=session,
@@ -33,7 +33,7 @@ async def create_keyword_match_version_and_run(
     session: deps.SessionDep,
     project_id: int,
     classifier_id: int,
-) -> response_schemas.Classifier:
+) -> response_schemas.ClassifierDetail:
     """Create a new keyword match version and run."""
     return await crud.create_version_and_run(
         session=session,

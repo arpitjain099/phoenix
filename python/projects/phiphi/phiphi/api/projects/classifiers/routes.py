@@ -12,12 +12,13 @@ router.include_router(keyword_match_routes.router)
 
 @router.get(
     "/projects/{project_id}/classifiers/{classifier_id}",
+    response_model=response_schemas.ClassifierDetail,
 )
 def get_classifier(
     session: deps.SessionDep,
     project_id: int,
     classifier_id: int,
-) -> response_schemas.Classifier:
+) -> response_schemas.ClassifierDetail:
     """Get a classifier."""
     classifier = crud.get_classifier(
         session=session, project_id=project_id, classifier_id=classifier_id
@@ -42,14 +43,14 @@ def get_classifiers(
 
 @router.patch(
     "/projects/{project_id}/classifiers/{classifier_id}",
-    response_model=response_schemas.Classifier,
+    response_model=response_schemas.ClassifierDetail,
 )
 def patch_classifier(
     session: deps.SessionDep,
     project_id: int,
     classifier_id: int,
     classifier_patch: base_schemas.ClassifierPatch,
-) -> response_schemas.Classifier:
+) -> response_schemas.ClassifierDetail:
     """Patch a classifier."""
     classifier = crud.patch_classifier(
         session=session,
@@ -62,13 +63,13 @@ def patch_classifier(
 
 @router.post(
     "/projects/{project_id}/classifiers/{classifier_id}/archive",
-    response_model=response_schemas.Classifier,
+    response_model=response_schemas.ClassifierDetail,
 )
 async def archive_classifier(
     session: deps.SessionDep,
     project_id: int,
     classifier_id: int,
-) -> response_schemas.Classifier:
+) -> response_schemas.ClassifierDetail:
     """Archive a classifier."""
     classifier = await crud.archive_classifier_run_archive_job(
         session=session, project_id=project_id, classifier_id=classifier_id
@@ -78,13 +79,13 @@ async def archive_classifier(
 
 @router.post(
     "/projects/{project_id}/classifiers/{classifier_id}/restore",
-    response_model=response_schemas.Classifier,
+    response_model=response_schemas.ClassifierDetail,
 )
 async def restore_classifier(
     session: deps.SessionDep,
     project_id: int,
     classifier_id: int,
-) -> response_schemas.Classifier:
+) -> response_schemas.ClassifierDetail:
     """Restore a classifier."""
     classifier = await crud.restore_classifier_run_restore_job(
         session=session, project_id=project_id, classifier_id=classifier_id

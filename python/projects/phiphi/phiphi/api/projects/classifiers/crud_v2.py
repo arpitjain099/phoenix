@@ -19,7 +19,7 @@ def create_classifier(
     project_id: int,
     classifier_type: base_schemas.ClassifierType,
     classifier_create: base_schemas.ClassifierCreate,
-) -> response_schemas.Classifier:
+) -> response_schemas.ClassifierDetail:
     """Create a new classifier with an initial version.
 
     To make the versioning more transparent we only create versions for a classifier when
@@ -45,7 +45,7 @@ def create_classifier(
 
     session.commit()
     session.refresh(orm_classifier)
-    return response_schemas.classifier_adapter.validate_python(orm_classifier)
+    return response_schemas.classifier_detail_adapter.validate_python(orm_classifier)
 
 
 def get_classes(
@@ -131,14 +131,14 @@ def get_classifier(
     session: sqlalchemy.orm.Session,
     project_id: int,
     classifier_id: int,
-) -> response_schemas.Classifier | None:
+) -> response_schemas.ClassifierDetail | None:
     """Get a classifier with its latest version."""
     orm_classifier = get_orm_classifier(session, project_id, classifier_id)
 
     if orm_classifier is None:
         return None
 
-    return response_schemas.classifier_adapter.validate_python(orm_classifier)
+    return response_schemas.classifier_detail_adapter.validate_python(orm_classifier)
 
 
 def get_classifiers(
@@ -169,7 +169,7 @@ def patch_classifier(
     project_id: int,
     classifier_id: int,
     classifier_patch: base_schemas.ClassifierPatch,
-) -> response_schemas.Classifier:
+) -> response_schemas.ClassifierDetail:
     """Patch a classifier."""
     with get_orm_classifier_with_edited_context(
         session, project_id, classifier_id
@@ -180,7 +180,7 @@ def patch_classifier(
         session.commit()
 
     session.refresh(orm_classifier)
-    return response_schemas.classifier_adapter.validate_python(orm_classifier)
+    return response_schemas.classifier_detail_adapter.validate_python(orm_classifier)
 
 
 def archive_classifier(
@@ -205,7 +205,7 @@ async def archive_classifier_run_archive_job(
     session: sqlalchemy.orm.Session,
     project_id: int,
     classifier_id: int,
-) -> response_schemas.Classifier:
+) -> response_schemas.ClassifierDetail:
     """Archive a classifier and run the classifier archive job."""
     orm_classifier = archive_classifier(session, project_id, classifier_id)
 
@@ -217,14 +217,14 @@ async def archive_classifier_run_archive_job(
             foreign_job_type=job_run_schemas.ForeignJobType.classifier_archive,
         ),
     )
-    return response_schemas.classifier_adapter.validate_python(orm_classifier)
+    return response_schemas.classifier_detail_adapter.validate_python(orm_classifier)
 
 
 def restore_classifier(
     session: sqlalchemy.orm.Session,
     project_id: int,
     classifier_id: int,
-) -> response_schemas.Classifier:
+) -> response_schemas.ClassifierDetail:
     """Restore a classifier."""
     orm_classifier = get_orm_classifier(session, project_id, classifier_id)
 
@@ -234,14 +234,14 @@ def restore_classifier(
     orm_classifier.archived_at = None
     session.commit()
     session.refresh(orm_classifier)
-    return response_schemas.classifier_adapter.validate_python(orm_classifier)
+    return response_schemas.classifier_detail_adapter.validate_python(orm_classifier)
 
 
 async def restore_classifier_run_restore_job(
     session: sqlalchemy.orm.Session,
     project_id: int,
     classifier_id: int,
-) -> response_schemas.Classifier:
+) -> response_schemas.ClassifierDetail:
     """Restore a classifier and run the classifier restore job."""
     orm_classifier = restore_classifier(session, project_id, classifier_id)
 
@@ -253,7 +253,7 @@ async def restore_classifier_run_restore_job(
             foreign_job_type=job_run_schemas.ForeignJobType.classifier_restore,
         ),
     )
-    return response_schemas.classifier_adapter.validate_python(orm_classifier)
+    return response_schemas.classifier_detail_adapter.validate_python(orm_classifier)
 
 
 def patch_intermediatory_class(

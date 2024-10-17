@@ -12,14 +12,14 @@ from phiphi.api.projects.classifiers import base_schemas
 from phiphi.api.projects.classifiers.keyword_match import schemas as keyword_match_schemas
 from phiphi.api.projects.job_runs import schemas as job_runs_schemas
 
-Classifier = Annotated[
-    Union[keyword_match_schemas.KeywordMatchClassifierResponse],
+ClassifierDetail = Annotated[
+    Union[keyword_match_schemas.KeywordMatchClassifierDetail],
     # This tells pydantic to use the `type` field to determine the type of the response
     # and optimises the Union
     pydantic.Field(description="Any classifier response", discriminator="type"),
 ]
 
-classifier_adapter = pydantic.TypeAdapter(Classifier)
+classifier_detail_adapter = pydantic.TypeAdapter(ClassifierDetail)
 
 
 class OptimisedClassifier(pydantic.BaseModel):

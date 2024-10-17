@@ -51,7 +51,7 @@ def test_create_keyword_match_classifier_crud(reseed_tables) -> None:
             intermediatory_classes=intermediatory_classes,
         ),
     )
-    expected_types = get_args(response_schemas.Classifier)
+    expected_types = get_args(response_schemas.ClassifierDetail)
     assert isinstance(classifer_response, expected_types)
     assert isinstance(classifer_response, keyword_match_schemas.KeywordMatchClassifierResponse)
     assert classifer_response.name == "First keyword match classifier"
