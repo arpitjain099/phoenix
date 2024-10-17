@@ -218,6 +218,16 @@
 						"c": " pour plus d'informations sur les crédits de projet)."
 					}
 				}
+			},
+			"classifier": {
+				"title": "Classificateurs",
+				"description": {
+					"part1": {
+						"a": "Sur cette page, vous pouvez ajouter des classifications à vos données – essentiellement, une autre colonne contenant des informations qui vous sont utiles. Avant d'ajouter votre premier classificateur, nous vous recommandons de lire ",
+						"b": "cette section",
+						"c": " du manuel Phoenix."
+					}
+				}
 			}
 		}
 	},
@@ -544,6 +554,53 @@
 		"errors": {
 			"create": "Une erreur s'est produite lors de la création",
 			"delete": "Une erreur s'est produite lors de la suppression de la collecte."
+		}
+	},
+	"classifiers": {
+		"classifiers": "Classificateurs",
+		"details": "Détails des classificateurs",
+		"titles": {
+			"create": "Créer un classificateur",
+			"edit": "Modifier le classificateur",
+			"list": "Classificateurs",
+			"show": "Afficher le classificateur",
+			"select_type": "Sélectionnez le type de classificateur que vous souhaitez créer"
+		},
+		"types": {
+			"post_author_classifier": {
+				"create": "Créer un classificateur d'auteur de post",
+				"create_description": "À partir des données recueillies, vous pouvez ajouter une ou plusieurs classes à chaque auteur ayant des publications. Les auteurs seront classés par le nombre de publications recueillies (le plus élevé en premier) et vous pourrez ajouter des classes à chaque auteur.",
+				"proceed_text": "Commencer à créer"
+			},
+			"keyword_match": {
+				"create": "Créer un classificateur de texte par mots-clés",
+				"create_description": "Définissez un classificateur qui ajoutera automatiquement des classes à un post et/ou un commentaire lorsque son texte contient certains mots-clés. Cela s'appliquera aux publications et/ou commentaires recueillis, ainsi qu'aux données collectées à l'avenir.",
+				"proceed_text": "Commencer à créer"
+			},
+			"perspective_classifier_text": {
+				"create": "Appliquer l'API Perspective pour classifier le texte",
+				"create_description": "L'API Perspective est un classificateur gratuit qui utilise l'apprentissage automatique pour identifier les commentaires `toxiques`. Vous pouvez utiliser l'API Perspective pour classifier en fonction du texte d'un post et/ou commentaire. Cela s'appliquera à tous les posts et/ou commentaires qui ont été recueillis, ainsi qu'aux données collectées à l'avenir. Pour plus d'informations sur le modèle, consultez ",
+				"proceed_text": "Commencer à appliquer"
+			}
+		},
+		"actions": {
+			"button": "Oui, continuer",
+			"titles": {
+				"archive": "Archiver",
+				"restore": "Restaurer"
+			},
+			"text": {
+				"archive": "Voulez-vous ARCHIVER ce classificateur ?",
+				"restore": "Voulez-vous RESTAURER ce classificateur ?"
+			}
+		},
+		"caution": "Votre classificateur a des modifications qui n'ont pas été appliquées. Cliquez sur l'icône pour aller à la page de modification puis cliquez sur `Exécuter et appliquer aux futures collectes` pour mettre à jour le jeu de données du tableau de bord.",
+		"success": {
+			"archive": "Archivage du classificateur.",
+			"restore": "Restauration du classificateur."
+		},
+		"errors": {
+			"create": "Une erreur s'est produite lors de la création"
 		}
 	},
 	"tabulate": {

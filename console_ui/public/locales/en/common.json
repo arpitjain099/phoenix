@@ -218,6 +218,16 @@
 						"c": " for more information on project credits)."
 					}
 				}
+			},
+			"classifier": {
+				"title": "Classifiers",
+				"description": {
+					"part1": {
+						"a": "On this page, you can add classifications to your data – essentially, another column containing information that is useful to you. Before you add your first classfier, we recommend that you read ",
+						"b": "this section",
+						"c": " of the Phoenix manual."
+					}
+				}
 			}
 		}
 	},
@@ -550,6 +560,53 @@
 		"errors": {
 			"create": "Something went wrong while creating",
 			"delete": "An error occurred while deleting gather."
+		}
+	},
+	"classifiers": {
+		"classifiers": "Classifiers",
+		"details": "Classifiers details",
+		"titles": {
+			"create": "Create Classifier",
+			"edit": "Edit Classifier",
+			"list": "Classifiers",
+			"show": "Show Classifier",
+			"select_type": "Select the type of classifier you would like to do"
+		},
+		"types": {
+			"post_author_classifier": {
+				"create": "Create a post author classifier",
+				"create_description": "From the data that has been gathered you can add one or more classes to each author that has posts. The authors will be ordered by the number of posts gathered (highest first) and you will be able to add classes to each author.",
+				"proceed_text": "Start creating"
+			},
+			"keyword_match": {
+				"create": "Create a keyword text classifier",
+				"create_description": "Define a classifier that will automatically add classes to a post and/or comment when its text contains certain keywords. This will be applied to posts and/or comments that have been gathered, and data gathered in the future.",
+				"proceed_text": "Start creating"
+			},
+			"perspective_classifier_text": {
+				"create": "Apply Perspective API to classify text",
+				"create_description": "Perspective API is a free classifier that uses machine learning to identify `toxic` comments. You can use Perspective API to classify based on the text of a post and/or comment. This will be applied to all posts and/or comments that have been gathered, and data gathered in the future. For more information on the model check out ",
+				"proceed_text": "Start applying"
+			}
+		},
+		"actions": {
+			"button": "Yes, Proceed",
+			"titles": {
+				"archive": "Archive",
+				"restore": "Restore"
+			},
+			"text": {
+				"archive": "Would you like to ARCHIVE this classifier?",
+				"restore": "Would you like to RESTORE this classifier?"
+			}
+		},
+		"caution": "Your classifier has edit's that have not been applied. Click icon to go to edit page and then click `Run and apply to future Gathers` to update dashboard dataset.",
+		"success": {
+			"archive": "Archiving Classifier.",
+			"restore": "Restoring Classifier."
+		},
+		"errors": {
+			"create": "Something went wrong while creating"
 		}
 	},
 	"tabulate": {
