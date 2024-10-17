@@ -57,7 +57,7 @@ async def create_version_and_run(
     session: sa.orm.Session,
     project_id: int,
     classifier_id: int,
-) -> schemas.KeywordMatchClassifierResponse:
+) -> schemas.KeywordMatchClassifierDetail:
     """Create a keyword match version and run."""
     orm_classifier = crud.get_orm_classifier(session, project_id, classifier_id)
     if orm_classifier is None:
@@ -72,7 +72,7 @@ async def create_version_and_run(
         ),
     )
     session.refresh(orm_classifier)
-    return schemas.KeywordMatchClassifierResponse.model_validate(obj=orm_classifier)
+    return schemas.KeywordMatchClassifierDetail.model_validate(obj=orm_classifier)
 
 
 def create_intermediatory_class_to_keyword_config(

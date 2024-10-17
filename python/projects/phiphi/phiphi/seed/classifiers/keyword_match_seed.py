@@ -152,12 +152,12 @@ TEST_KEYWORD_CLASSIFIER_CREATE_VERSION_RESTORE_FAILED = base_schemas.ClassifierC
     ],
 )
 
-TEST_KEYWORD_CLASSIFIERS: list[response_schemas.Classifier] = []
+TEST_KEYWORD_CLASSIFIERS: list[response_schemas.ClassifierDetail] = []
 
 
 def create_archived_classifier(
     session: Session, project_id: int, classifier_create: base_schemas.ClassifierCreate
-) -> response_schemas.Classifier:
+) -> response_schemas.ClassifierDetail:
     """Create an archived classifier."""
     classifier = classifier_crud.create_classifier(
         session=session,
@@ -181,7 +181,7 @@ def create_archived_classifier(
 
 def create_versioned_classifier(
     session: Session, project_id: int, classifier_create: base_schemas.ClassifierCreate
-) -> response_schemas.Classifier:
+) -> response_schemas.ClassifierDetail:
     """Create a versioned classifier."""
     classifier = classifier_crud.create_classifier(
         session=session,
@@ -206,7 +206,7 @@ def create_versioned_classifier(
 
 def create_test_intermediatory_class_to_keyword_config(
     session: Session,
-    classifier: response_schemas.Classifier,
+    classifier: response_schemas.ClassifierDetail,
     class_id: int,
     musts: str,
     nots: str | None = None,

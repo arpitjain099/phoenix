@@ -107,7 +107,7 @@ class ClassifierVersionResponse(pydantic.BaseModel):
 class ClassifierResponseBase(pydantic.BaseModel):
     """Classifier schema.
 
-    Properties to return to client.
+    Base properties for the Classifier.
     """
 
     model_config = pydantic.ConfigDict(from_attributes=True)
@@ -120,11 +120,19 @@ class ClassifierResponseBase(pydantic.BaseModel):
     created_at: datetime.datetime
     updated_at: datetime.datetime
     last_edited_at: Optional[datetime.datetime]
-    intermediatory_classes: list[IntermediatoryClassResponse]
     # It is possible to have a classifier without any versions
     # This then uses the intermediatory tables to store data about the version
     latest_version: Annotated[
         Optional[ClassifierVersionResponse],
         pydantic.Field(description="The latest version of the Classifier", default=None),
     ]
+
+
+class ClassifierDetailBase(ClassifierResponseBase):
+    """Classifier detail schema.
+
+    Detailed version of the classifier used for viewing and editing.
+    """
+
+    intermediatory_classes: list[IntermediatoryClassResponse]
     latest_job_run: job_runs_schemas.JobRunResponse | None = None

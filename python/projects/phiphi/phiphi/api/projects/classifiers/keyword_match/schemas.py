@@ -85,4 +85,11 @@ class KeywordMatchClassifierResponse(base_schemas.ClassifierResponseBase):
     # https://github.com/pydantic/pydantic/issues/8708
     type: Literal[base_schemas.ClassifierType.keyword_match]
     latest_version: Optional[KeywordMatchVersionResponse] = None
+
+
+class KeywordMatchClassifierDetail(
+    KeywordMatchClassifierResponse, base_schemas.ClassifierDetailBase
+):
+    """Keyword match classifier response."""
+
     intermediatory_class_to_keyword_configs: list[IntermediatoryClassToKeywordConfigResponse] = []
