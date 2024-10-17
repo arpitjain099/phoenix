@@ -147,7 +147,7 @@ def get_classifiers(
     start: int = 0,
     end: int = 10,
     include_archived: bool = True,
-) -> list[response_schemas.OptimisedClassifier]:
+) -> list[response_schemas.ClassifierSummary]:
     """Get a list of classifiers for a project."""
     query = (
         session.query(models.Classifiers)
@@ -159,7 +159,7 @@ def get_classifiers(
         query = query.filter(models.Classifiers.archived_at.is_(None))
 
     return [
-        response_schemas.OptimisedClassifier.model_validate(orm_classifier)
+        response_schemas.ClassifierSummary.model_validate(orm_classifier)
         for orm_classifier in query.all()
     ]
 
