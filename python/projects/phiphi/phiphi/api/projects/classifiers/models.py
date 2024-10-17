@@ -57,11 +57,12 @@ class Classifiers(ClassifiersBase, base_models.TimestampModel):
     __tablename__ = "classifiers"
 
     # Relationship to ClassifierVersions
-    classifier_versions = orm.relationship(
+    classifier_versions: orm.Mapped[list[ClassifierVersions]] = orm.relationship(
         "ClassifierVersions",
         cascade="all, delete-orphan",
         order_by="ClassifierVersions.version_id.desc()",  # Ensures ordered by desc version_id
-        lazy="dynamic",
+        # For all response types we need the latest version so this will be eager loaded
+        lazy="selectin",
     )
 
     intermediatory_classes = orm.relationship(
@@ -91,15 +92,15 @@ class Classifiers(ClassifiersBase, base_models.TimestampModel):
     )
 
     @property
-    def latest_version(self) -> ClassifierVersions:
+    def latest_version(self) -> ClassifierVersions | None:
         """Get the latest version of the classifier."""
-        latest_version: ClassifierVersions = self.classifier_versions.first()
-        return latest_version
+        if len(self.classifier_versions) == 0:
+            return None
+        return self.classifier_versions[0]
 
     def all_versions(self) -> list[ClassifierVersions]:
         """Get all versions of the classifier."""
-        latest_versions: list[ClassifierVersions] = self.classifier_versions.all()
-        return latest_versions
+        return self.classifier_versions
 
     @property
     def latest_job_run(self) -> job_run_models.JobRuns | None:
