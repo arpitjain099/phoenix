@@ -136,3 +136,15 @@ class ClassifierDetailBase(ClassifierResponseBase):
 
     intermediatory_classes: list[IntermediatoryClassResponse]
     latest_job_run: job_runs_schemas.JobRunResponse | None = None
+
+
+class ClassifierPipelineBase(ClassifierResponseBase):
+    """Classifier Pipeline.
+
+    Pipeline classifiers always have a version.
+    """
+
+    latest_version: Annotated[
+        ClassifierVersionResponse,
+        pydantic.Field(description="The latest version of the Classifier"),
+    ]

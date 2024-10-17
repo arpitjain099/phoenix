@@ -93,3 +93,11 @@ class KeywordMatchClassifierDetail(
     """Keyword match classifier response."""
 
     intermediatory_class_to_keyword_configs: list[IntermediatoryClassToKeywordConfigResponse] = []
+
+
+class KeywordMatchClassifierPipeline(
+    KeywordMatchClassifierResponse, base_schemas.ClassifierPipelineBase
+):
+    """Keyword match classifier response."""
+
+    latest_version: KeywordMatchVersionResponse
