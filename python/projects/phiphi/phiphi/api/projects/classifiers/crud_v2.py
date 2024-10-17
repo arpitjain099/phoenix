@@ -146,7 +146,10 @@ def get_pipeline_classifier(
     project_id: int,
     classifier_id: int,
 ) -> response_schemas.ClassifierPipeline | None:
-    """Get a pipeline classifiers for a project."""
+    """Get a pipeline classifiers for a project.
+
+    Pipeline classifiers are classifiers that have at least one version and are not archived.
+    """
     orm_classifier = (
         session.query(models.Classifiers)
         .filter(models.Classifiers.project_id == project_id)
