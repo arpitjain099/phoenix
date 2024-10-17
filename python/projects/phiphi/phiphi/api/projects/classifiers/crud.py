@@ -1,7 +1,4 @@
-"""CRUD operations for classifiers version 2.
-
-At somepoint this will replace the current CRUD operations in `crud.py`.
-"""
+"""CRUD operations for classifiers."""
 import contextlib
 import datetime
 from typing import Generator

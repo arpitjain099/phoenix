@@ -2,8 +2,8 @@
 import fastapi
 
 from phiphi.api import deps
+from phiphi.api.projects import classifiers
 from phiphi.api.projects.classifiers import base_schemas, response_schemas
-from phiphi.api.projects.classifiers import crud_v2 as classifiers_crud
 from phiphi.api.projects.classifiers.keyword_match import crud, schemas
 
 router = fastapi.APIRouter()
@@ -18,7 +18,7 @@ def create_keyword_match_classifier(
     classifier_create: base_schemas.ClassifierCreate,
 ) -> response_schemas.ClassifierDetail:
     """Create a new keyword match classifier."""
-    return classifiers_crud.create_classifier(
+    return classifiers.crud.create_classifier(
         session=session,
         project_id=project_id,
         classifier_type=base_schemas.ClassifierType.keyword_match,
@@ -53,7 +53,7 @@ def patch_keyword_match_intemediatory_classes(
     class_patch: base_schemas.IntermediatoryClassPatch,
 ) -> base_schemas.IntermediatoryClassResponse:
     """Patch the classes of a keyword match classifier."""
-    return classifiers_crud.patch_intermediatory_class(
+    return classifiers.crud.patch_intermediatory_class(
         session=session,
         project_id=project_id,
         classifier_id=classifier_id,
@@ -72,7 +72,7 @@ def delete_keyword_match_intemediatory_classes(
     class_id: int,
 ) -> None:
     """Delete the classes of a keyword match classifier."""
-    return classifiers_crud.delete_intermediatory_class(
+    return classifiers.crud.delete_intermediatory_class(
         session=session,
         project_id=project_id,
         classifier_id=classifier_id,
@@ -90,7 +90,7 @@ def create_keyword_match_intemediatory_classes(
     class_create: base_schemas.IntermediatoryClassCreate,
 ) -> base_schemas.IntermediatoryClassResponse:
     """Create the classes of a keyword match classifier."""
-    return classifiers_crud.create_intermediatory_class(
+    return classifiers.crud.create_intermediatory_class(
         session=session,
         project_id=project_id,
         classifier_id=classifier_id,
