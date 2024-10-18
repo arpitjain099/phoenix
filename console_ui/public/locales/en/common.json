@@ -654,6 +654,27 @@
 			"processing": "Delete Processing",
 			"failed": "Delete Failed",
 			"completed_successfully": "Deleted"
+		},
+		"classify_tabulate": {
+			"in_queue": "In Queue",
+			"awaiting_start": "Awaiting Start",
+			"processing": "Processing",
+			"failed": "Failed",
+			"completed_successfully": "Completed Successfully"
+		},
+		"classifier_archive": {
+			"in_queue": "Archive in Queue",
+			"awaiting_start": "Awaiting Archive",
+			"processing": "Archive Processing",
+			"failed": "Archive Failed",
+			"completed_successfully": "Archived"
+		},
+		"classifier_restore": {
+			"in_queue": "Restore in Queue",
+			"awaiting_start": "Awaiting Restore",
+			"processing": "Restore Processing",
+			"failed": "Restore Failed",
+			"completed_successfully": "Restored"
 		}
 	}
 }

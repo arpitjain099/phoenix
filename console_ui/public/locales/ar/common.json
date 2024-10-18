@@ -647,6 +647,27 @@
 			"processing": "جاري الحذف",
 			"failed": "فشل الحذف",
 			"completed_successfully": "تم الحذف"
+		},
+		"classify_tabulate": {
+			"in_queue": "في الانتظار",
+			"awaiting_start": "في انتظار البدء",
+			"processing": "قيد المعالجة",
+			"failed": "فشل",
+			"completed_successfully": "اكتمل بنجاح"
+		},
+		"classifier_archive": {
+			"in_queue": "الأرشفة في الانتظار",
+			"awaiting_start": "في انتظار الأرشفة",
+			"processing": "قيد معالجة الأرشفة",
+			"failed": "فشل الأرشفة",
+			"completed_successfully": "تمت الأرشفة"
+		},
+		"classifier_restore": {
+			"in_queue": "استعادة في الانتظار",
+			"awaiting_start": "في انتظار الاستعادة",
+			"processing": "قيد معالجة الاستعادة",
+			"failed": "فشل الاستعادة",
+			"completed_successfully": "تم الاستعادة"
 		}
 	}
 }

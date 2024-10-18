@@ -647,6 +647,27 @@
 			"processing": "Suppression en cours",
 			"failed": "Échec de la suppression",
 			"completed_successfully": "Supprimé"
+		},
+		"classify_tabulate": {
+			"in_queue": "En Attente",
+			"awaiting_start": "En Attente de Début",
+			"processing": "Traitement",
+			"failed": "Échoué",
+			"completed_successfully": "Terminé Avec Succès"
+		},
+		"classifier_archive": {
+			"in_queue": "Archivage en Attente",
+			"awaiting_start": "En Attente d'Archivage",
+			"processing": "Traitement d'Archivage",
+			"failed": "Échec de l'Archivage",
+			"completed_successfully": "Archivé"
+		},
+		"classifier_restore": {
+			"in_queue": "Restauration en Attente",
+			"awaiting_start": "En Attente de Restauration",
+			"processing": "Traitement de Restauration",
+			"failed": "Échec de la Restauration",
+			"completed_successfully": "Restauré"
 		}
 	}
 }
