@@ -165,6 +165,11 @@ def create_archived_classifier(
         classifier_type=base_schemas.ClassifierType.keyword_match,
         classifier_create=classifier_create,
     )
+    crud.create_version(
+        session=session,
+        project_id=project_id,
+        classifier_id=classifier.id,
+    )
     classifiers.crud.archive_classifier(
         session=session,
         project_id=project_id,
