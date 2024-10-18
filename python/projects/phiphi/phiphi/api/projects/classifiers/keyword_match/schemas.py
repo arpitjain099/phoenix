@@ -49,7 +49,12 @@ class IntermediatoryClassToKeywordConfigResponse(IntermediatoryClassToKeywordCon
 
 
 class ClassToKeywordConfig(TypedDict):
-    """Class to keyword config containing keyword matches."""
+    """Class to keyword config containing keyword matches.
+
+    This is a TypedDict rather then a pydantic models as fast api recommends using TypedDict for
+    nested objects to improve performance.
+    https://docs.pydantic.dev/latest/concepts/performance/#use-typeddict-over-nested-models
+    """
 
     class_name: str
     musts: Annotated[
@@ -62,7 +67,12 @@ class ClassToKeywordConfig(TypedDict):
 
 
 class KeywordMatchParams(TypedDict):
-    """Params subschema for keyword match classifier."""
+    """Params subschema for keyword match classifier.
+
+    This is a TypedDict rather then a pydantic models as fast api recommends using TypedDict for
+    nested objects to improve performance.
+    https://docs.pydantic.dev/latest/concepts/performance/#use-typeddict-over-nested-models
+    """
 
     class_to_keyword_configs: list[ClassToKeywordConfig]
 
