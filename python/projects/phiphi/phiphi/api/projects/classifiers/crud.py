@@ -243,6 +243,9 @@ def archive_classifier(
     if orm_classifier is None:
         raise exceptions.ClassifierNotFound()
 
+    if orm_classifier.latest_version is None:
+        raise exceptions.HttpException400("Classifier has no versions and cannot be archived.")
+
     orm_classifier.archived_at = datetime.datetime.utcnow()
     session.commit()
     session.refresh(orm_classifier)
