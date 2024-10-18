@@ -198,7 +198,7 @@ def test_delete_keyword_match_classes(reseed_tables, client: TestClient) -> None
     class_id = classifier.intermediatory_classes[0].id
     with freezegun.freeze_time(UPDATED_TIME):
         response = client.delete(
-            f"/projects/{classifier.project_id}/classifiers/keyword_match/{classifier.id}/intermediatory_classes/{class_id}"
+            f"/projects/{classifier.project_id}/classifiers/{classifier.id}/intermediatory_classes/{class_id}"
         )
     assert response.status_code == 200
     assert response.json() is None
