@@ -170,12 +170,12 @@ TEST_KEYWORD_CLASSIFIER_CREATE_VERSION_COMPLETED_EDITED = base_schemas.Classifie
 )
 
 
-TEST_KEYWORD_CLASSIFIERS: list[response_schemas.ClassifierDetail] = []
+TEST_KEYWORD_CLASSIFIERS: list[schemas.KeywordMatchClassifierDetail] = []
 
 
 def create_archived_classifier(
     session: Session, project_id: int, classifier_create: base_schemas.ClassifierCreate
-) -> response_schemas.ClassifierDetail:
+) -> schemas.KeywordMatchClassifierDetail:
     """Create an archived classifier."""
     classifier = classifiers.crud.create_classifier(
         session=session,
@@ -198,13 +198,14 @@ def create_archived_classifier(
         project_id=project_id,
         classifier_id=classifier.id,
     )
-    assert classifier_archived  # Needed for the typing
+    # Need for mypy
+    assert isinstance(classifier_archived, schemas.KeywordMatchClassifierDetail)
     return classifier_archived
 
 
 def create_versioned_classifier(
     session: Session, project_id: int, classifier_create: base_schemas.ClassifierCreate
-) -> response_schemas.ClassifierDetail:
+) -> schemas.KeywordMatchClassifierDetail:
     """Create a versioned classifier."""
     classifier = classifiers.crud.create_classifier(
         session=session,
@@ -223,7 +224,8 @@ def create_versioned_classifier(
         project_id=project_id,
         classifier_id=classifier.id,
     )
-    assert classifier_versioned  # Needed for the typing
+    # Need for mypy
+    assert isinstance(classifier_versioned, schemas.KeywordMatchClassifierDetail)
     return classifier_versioned
 
 
@@ -255,7 +257,7 @@ def update_last_edit_at_classifier(
     session: Session,
     classifier: response_schemas.ClassifierDetail,
     add_timedelta: datetime.timedelta,
-) -> response_schemas.ClassifierDetail:
+) -> schemas.KeywordMatchClassifierDetail:
     """Update the last edited at of the classifier."""
     orm_classifier = classifiers.crud.get_orm_classifier(
         session=session,
@@ -273,7 +275,8 @@ def update_last_edit_at_classifier(
         project_id=classifier.project_id,
         classifier_id=classifier.id,
     )
-    assert classifier_versioned  # Needed for the typing
+    # Need for mypy
+    assert isinstance(classifier_versioned, schemas.KeywordMatchClassifierDetail)
     return classifier_versioned
 
 
@@ -310,7 +313,8 @@ def seed_test_classifier_keyword_match(session: Session) -> None:
             project_id=project_id,
             classifier_id=classifier.id,
         )
-        assert classifier_with_intermediatory
+        # Need for mypy
+        assert isinstance(classifier_with_intermediatory, schemas.KeywordMatchClassifierDetail)
         TEST_KEYWORD_CLASSIFIERS.append(classifier_with_intermediatory)
 
     archived_classifier = create_archived_classifier(
