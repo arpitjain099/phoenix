@@ -42,24 +42,6 @@ async def create_keyword_match_version_and_run(
     )
 
 
-@router.delete(
-    "/projects/{project_id}/classifiers/keyword_match/{classifier_id}/intermediatory_classes/{class_id}",
-)
-def delete_keyword_match_intemediatory_classes(
-    session: deps.SessionDep,
-    project_id: int,
-    classifier_id: int,
-    class_id: int,
-) -> None:
-    """Delete the classes of a keyword match classifier."""
-    return classifiers.crud.delete_intermediatory_class(
-        session=session,
-        project_id=project_id,
-        classifier_id=classifier_id,
-        class_id=class_id,
-    )
-
-
 @router.post(
     "/projects/{project_id}/classifiers/keyword_match/{classifier_id}/intermediatory_classes"
 )
