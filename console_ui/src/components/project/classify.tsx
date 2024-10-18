@@ -244,11 +244,12 @@ const ClassifyComponent: React.FC<IClassifierProps> = ({
 				accessorKey: "latest_job_run.status",
 				header: translate("projects.fields.status"),
 				cell: function render({ row }) {
-					const { latest_job_run, latest_version } = row.original;
+					const { latest_job_run } = row.original;
 					const status = latest_job_run ? latest_job_run.status : null;
+					const type = latest_job_run ? latest_job_run.foreign_job_type : null;
 					return (
 						<span className={statusTextStyle(status)}>
-							{status && latest_version ? translate(`status.${status}`) : "-"}
+							{status ? translate(`status.${type}.${status}`) : "-"}
 						</span>
 					);
 				},
@@ -345,6 +346,7 @@ const ClassifyComponent: React.FC<IClassifierProps> = ({
 											</Popover>
 										)}
 									{type === "classifier_archive" &&
+										!isJobRunRunning(latest_job_run) &&
 										status !== "completed_successfully" && (
 											<Popover position="bottom" withArrow shadow="md">
 												<Popover.Target>
@@ -378,7 +380,7 @@ const ClassifyComponent: React.FC<IClassifierProps> = ({
 											</Popover>
 										)}
 									{type === "classifier_restore" &&
-										isJobRunRunning(latest_job_run) && (
+										!isJobRunRunning(latest_job_run) && (
 											<Popover position="bottom" withArrow shadow="md">
 												<Popover.Target>
 													<Tooltip

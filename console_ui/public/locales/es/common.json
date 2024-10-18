@@ -647,6 +647,27 @@
 			"processing": "Eliminación en proceso",
 			"failed": "Eliminación fallida",
 			"completed_successfully": "Eliminado"
+		},
+		"classify_tabulate": {
+			"in_queue": "En Cola",
+			"awaiting_start": "Esperando Inicio",
+			"processing": "Procesando",
+			"failed": "Fallido",
+			"completed_successfully": "Completado Exitosamente"
+		},
+		"classifier_archive": {
+			"in_queue": "Archivo en Cola",
+			"awaiting_start": "Esperando Archivo",
+			"processing": "Procesando Archivo",
+			"failed": "Archivo Fallido",
+			"completed_successfully": "Archivado"
+		},
+		"classifier_restore": {
+			"in_queue": "Restaurar en Cola",
+			"awaiting_start": "Esperando Restaurar",
+			"processing": "Procesando Restauración",
+			"failed": "Restauración Fallida",
+			"completed_successfully": "Restaurado"
 		}
 	}
 }
