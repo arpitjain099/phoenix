@@ -58,6 +58,7 @@ def main(session: Session, testing: bool = False) -> None:
         apify_facebook_search_posts_gather.seed_test_apify_facebook_search_posts_gathers(session)
         job_runs.seed_test_job_runs(session)
         classifiers.keyword_match_seed.seed_test_classifier_keyword_match(session)
+        classifiers.manual_post_authors_seed.seed_test_classifiers_manual_post_authors(session)
 
 
 if __name__ == "__main__":
