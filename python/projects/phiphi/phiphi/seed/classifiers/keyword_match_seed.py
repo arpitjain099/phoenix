@@ -1,4 +1,6 @@
 """Classifier Keyword match seed."""
+import datetime
+
 from sqlalchemy.orm import Session
 
 from phiphi.api.projects import classifiers
@@ -152,6 +154,22 @@ TEST_KEYWORD_CLASSIFIER_CREATE_VERSION_RESTORE_FAILED = base_schemas.ClassifierC
     ],
 )
 
+# Needed for the console development
+TEST_KEYWORD_CLASSIFIER_CREATE_VERSION_COMPLETED_EDITED = base_schemas.ClassifierCreate(
+    name="Test keyword match Classifier 11 Versioned Completed Edited",
+    intermediatory_classes=[
+        base_schemas.IntermediatoryClassCreate(
+            name="Test Class 1",
+            description="Test Class 1 Description",
+        ),
+        base_schemas.IntermediatoryClassCreate(
+            name="Test Class 2",
+            description="Test Class 2 Description",
+        ),
+    ],
+)
+
+
 TEST_KEYWORD_CLASSIFIERS: list[response_schemas.ClassifierDetail] = []
 
 
@@ -233,6 +251,32 @@ def create_test_intermediatory_class_to_keyword_config(
     )
 
 
+def update_last_edit_at_classifier(
+    session: Session,
+    classifier: response_schemas.ClassifierDetail,
+    add_timedelta: datetime.timedelta,
+) -> response_schemas.ClassifierDetail:
+    """Update the last edited at of the classifier."""
+    orm_classifier = classifiers.crud.get_orm_classifier(
+        session=session,
+        project_id=classifier.project_id,
+        classifier_id=classifier.id,
+    )
+    assert orm_classifier
+    base_date = datetime.datetime.now()
+    if orm_classifier.last_edited_at is not None:
+        base_date = orm_classifier.last_edited_at
+    orm_classifier.last_edited_at = base_date + add_timedelta
+    session.commit()
+    classifier_versioned = classifiers.crud.get_classifier(
+        session=session,
+        project_id=classifier.project_id,
+        classifier_id=classifier.id,
+    )
+    assert classifier_versioned  # Needed for the typing
+    return classifier_versioned
+
+
 def seed_test_classifier_keyword_match(session: Session) -> None:
     """Seed test keyword match classifier."""
     # Need to clear the list before seeding other wise every seed will add to the list
@@ -307,6 +351,7 @@ def seed_test_classifier_keyword_match(session: Session) -> None:
         TEST_KEYWORD_CLASSIFIER_CREATE_VERSION_RESTORE_RUNNING,
         TEST_KEYWORD_CLASSIFIER_CREATE_VERSION_RESTORE_COMPLETED,
         TEST_KEYWORD_CLASSIFIER_CREATE_VERSION_RESTORE_FAILED,
+        TEST_KEYWORD_CLASSIFIER_CREATE_VERSION_COMPLETED_EDITED,
     ]
 
     for classifier_create in versioned_classifiers_restored:
@@ -316,3 +361,9 @@ def seed_test_classifier_keyword_match(session: Session) -> None:
             classifier_create=classifier_create,
         )
         TEST_KEYWORD_CLASSIFIERS.append(classifier_with_version)
+
+    TEST_KEYWORD_CLASSIFIERS[10] = update_last_edit_at_classifier(
+        session=session,
+        classifier=TEST_KEYWORD_CLASSIFIERS[10],
+        add_timedelta=datetime.timedelta(seconds=1),
+    )
