@@ -224,7 +224,7 @@ def test_create_keyword_match_intermediatory_class(reseed_tables, client: TestCl
     }
     with freezegun.freeze_time(UPDATED_TIME):
         response = client.post(
-            f"/projects/{classifier.project_id}/classifiers/keyword_match/{classifier.id}/intermediatory_classes",
+            f"/projects/{classifier.project_id}/classifiers/{classifier.id}/intermediatory_classes",
             json=intermediatory_class,
         )
     assert response.status_code == 200
@@ -257,7 +257,7 @@ def test_create_keyword_match_intermediatory_class_non_unique_error(
         "description": "des3",
     }
     response = client.post(
-        f"/projects/{classifier.project_id}/classifiers/keyword_match/{classifier.id}/intermediatory_classes",
+        f"/projects/{classifier.project_id}/classifiers/{classifier.id}/intermediatory_classes",
         json=intermediatory_class,
     )
     assert response.status_code == 400
