@@ -15,17 +15,23 @@ from phiphi.api.projects.classifiers.manual_post_authors import (
 )
 from phiphi.api.projects.job_runs import schemas as job_runs_schemas
 
+classifier_detail_union = Union[
+    keyword_match_schemas.KeywordMatchClassifierDetail,
+    manual_post_authors_schemas.ManualPostAuthorsClassifierDetail,
+]
+
 ClassifierDetail = Annotated[
-    Union[
-        keyword_match_schemas.KeywordMatchClassifierDetail,
-        manual_post_authors_schemas.ManualPostAuthorsClassifierDetail,
-    ],
+    classifier_detail_union,
     # This tells pydantic to use the `type` field to determine the type of the response
     # and optimises the Union
     pydantic.Field(description="Any classifier response", discriminator="type"),
 ]
 
-classifier_detail_adapter = pydantic.TypeAdapter(ClassifierDetail)
+# This is the work around for the typing as documented here:
+# https://docs.pydantic.dev/latest/api/type_adapter/#pydantic.type_adapter.TypeAdapter
+classifier_detail_adapter: pydantic.TypeAdapter[classifier_detail_union] = pydantic.TypeAdapter(
+    ClassifierDetail
+)
 
 
 class ClassifierSummary(base_schemas.ClassifierResponseBase):
