@@ -116,7 +116,10 @@ def test_archive_classifier(m_run_deployment, reseed_tables, client: TestClient)
     mock_flow_run.id = "mock_uuid"
     mock_flow_run.name = "mock_flow_run"
     m_run_deployment.return_value = mock_flow_run
-    classifier = keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[0]
+    # Classifier 4
+    # Is complete and has a version
+    classifier = keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[3]
+    assert classifier.latest_version is not None
     response = client.post(
         f"/projects/{classifier.project_id}/classifiers/{classifier.id}/archive"
     )
@@ -135,6 +138,31 @@ def test_archive_classifier(m_run_deployment, reseed_tables, client: TestClient)
     response = client.get(f"/projects/{classifier.project_id}/classifiers/{classifier.id}")
     assert response.status_code == 200
     assert response.json()["archived_at"] == TIMESTAMP.isoformat()
+
+
+@pytest.mark.freeze_time(TIMESTAMP)
+@mock.patch("phiphi.api.projects.job_runs.prefect_deployment.wrapped_run_deployment")
+def test_archive_classifier_no_version_error(
+    m_run_deployment, reseed_tables, client: TestClient
+) -> None:
+    """Test archive classifier."""
+    mock_flow_run = mock.MagicMock(spec=objects.FlowRun)
+    mock_flow_run.id = "mock_uuid"
+    mock_flow_run.name = "mock_flow_run"
+    m_run_deployment.return_value = mock_flow_run
+    # Classifier 1 has no version
+    classifier = keyword_match_seed.TEST_KEYWORD_CLASSIFIERS[0]
+    assert classifier.latest_version is None
+    response = client.post(
+        f"/projects/{classifier.project_id}/classifiers/{classifier.id}/archive"
+    )
+    m_run_deployment.assert_not_called()
+    assert response.status_code == 400
+    assert response.json() == {"detail": "Classifier has no versions and cannot be archived."}
+
+    response = client.get(f"/projects/{classifier.project_id}/classifiers/{classifier.id}")
+    assert response.status_code == 200
+    assert response.json()["archived_at"] is None
 
 
 @pytest.mark.freeze_time(TIMESTAMP)
