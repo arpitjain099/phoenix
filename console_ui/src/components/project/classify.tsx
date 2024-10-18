@@ -183,20 +183,20 @@ const ClassifyComponent: React.FC<IClassifierProps> = ({
 						row.original;
 					return (
 						<div className="flex items-center">
-							{!latest_version ||
+							{(!latest_version ||
 								(latest_version &&
 									new Date(latest_version?.created_at) <
-										new Date(last_edited_at) && (
-										<Tooltip
-											multiline
-											width={350}
-											label={translate("classifiers.caution")}
-										>
-											<Button p={0} variant="subtle" color="black">
-												<IconAlertTriangle size={20} color="black" />
-											</Button>
-										</Tooltip>
-									))}
+										new Date(last_edited_at))) && (
+								<Tooltip
+									multiline
+									width={350}
+									label={translate("classifiers.caution")}
+								>
+									<Button p={0} variant="subtle" color="black">
+										<IconAlertTriangle size={20} color="black" />
+									</Button>
+								</Tooltip>
+							)}
 							<Link
 								href={`/projects/${project_id}/classifier/${type}/${id}`}
 								className="no-underline text-blue-500"
