@@ -4,9 +4,13 @@ import fastapi
 from phiphi.api import deps, exceptions
 from phiphi.api.projects.classifiers import base_schemas, crud, response_schemas
 from phiphi.api.projects.classifiers.keyword_match import routes as keyword_match_routes
+from phiphi.api.projects.classifiers.manual_post_authors import (
+    routes as manual_post_authors_routes,
+)
 
 router = fastapi.APIRouter()
 router.include_router(keyword_match_routes.router)
+router.include_router(manual_post_authors_routes.router)
 
 
 @router.get(
