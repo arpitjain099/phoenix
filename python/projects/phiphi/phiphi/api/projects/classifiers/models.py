@@ -46,7 +46,9 @@ class ClassifiersBase(platform_db.Base):
 job_run_foreign_type_query = (
     "or_("
     f"JobRuns.foreign_job_type=='{job_run_schemas.ForeignJobType.classify.value}',"
-    f"JobRuns.foreign_job_type=='{job_run_schemas.ForeignJobType.classify_tabulate.value}'"
+    f"JobRuns.foreign_job_type=='{job_run_schemas.ForeignJobType.classify_tabulate.value}',"
+    f"JobRuns.foreign_job_type=='{job_run_schemas.ForeignJobType.classifier_archive.value}',"
+    f"JobRuns.foreign_job_type=='{job_run_schemas.ForeignJobType.classifier_restore.value}'"
     ")"
 )
 
