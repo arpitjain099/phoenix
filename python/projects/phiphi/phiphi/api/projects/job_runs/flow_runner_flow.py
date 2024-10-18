@@ -43,6 +43,7 @@ def get_classify_flow_params(project_id: int, classifier_id: int) -> dict[str, A
         raise ValueError(
             f"Classifier with {project_id=}, {classifier_id=} not found, "
             " or is not a valid pipeline classifier."
+            "Check `classifiers.crud.get_pipeline_classifier` for more information."
         )
     params = {
         "classifier_dict": classifier.model_dump(),
