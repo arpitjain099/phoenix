@@ -4,22 +4,20 @@ from typing import Coroutine
 import prefect
 
 from phiphi import constants
-from phiphi.api.projects.classifiers import schemas
+from phiphi.api.projects.classifiers import base_schemas, response_schemas
 from phiphi.pipeline_jobs.classify import keyword_match_classifier
 
 
 @prefect.flow(name="classify_flow")
 def classify_flow(
-    classifier_dict: dict,  # dict of schemas.ClassifierResponse
+    classifier_dict: dict,  # dict of response_schemas.ClassifierPipeline
     job_run_id: int,
     project_namespace: str,
 ) -> None:
     """Flow which runs classifier on all (as yet unclassified by this classifier) messages."""
-    classifier = schemas.ClassifierResponse(**classifier_dict)
+    classifier = response_schemas.classifier_pipeline_adapter.validate_python(classifier_dict)
 
-    if classifier.type == schemas.ClassifierType.keyword_match:
-        # Run keyword_match classifier
-        classifier = schemas.ClassifierKeywordMatchResponse(**classifier_dict)
+    if classifier.type == base_schemas.ClassifierType.keyword_match:
         keyword_match_classifier.classify(
             classifier=classifier, bigquery_dataset=project_namespace, job_run_id=job_run_id
         )
