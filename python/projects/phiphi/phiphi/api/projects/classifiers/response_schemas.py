@@ -3,7 +3,8 @@
 This copies ideas from Pydantic discriminator:
 https://docs.pydantic.dev/latest/concepts/unions/#nested-discriminated-unions
 """
-from typing import Annotated, Union
+import datetime
+from typing import Annotated, Optional, Union
 
 import pydantic
 
@@ -32,6 +33,10 @@ class ClassifierSummary(base_schemas.ClassifierResponseBase):
     the latest_version is not needed.
     """
 
+    archived_at: Optional[datetime.datetime]
+    created_at: datetime.datetime
+    updated_at: datetime.datetime
+    last_edited_at: Optional[datetime.datetime]
     latest_job_run: job_runs_schemas.JobRunResponse | None = None
 
 

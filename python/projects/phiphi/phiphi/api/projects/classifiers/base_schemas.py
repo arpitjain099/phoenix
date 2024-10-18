@@ -116,10 +116,6 @@ class ClassifierResponseBase(pydantic.BaseModel):
     project_id: int
     name: str
     type: ClassifierType
-    archived_at: Optional[datetime.datetime]
-    created_at: datetime.datetime
-    updated_at: datetime.datetime
-    last_edited_at: Optional[datetime.datetime]
     # It is possible to have a classifier without any versions
     # This then uses the intermediatory tables to store data about the version
     latest_version: Annotated[
@@ -134,6 +130,10 @@ class ClassifierDetailBase(ClassifierResponseBase):
     Detailed version of the classifier used for viewing and editing.
     """
 
+    archived_at: Optional[datetime.datetime]
+    created_at: datetime.datetime
+    updated_at: datetime.datetime
+    last_edited_at: Optional[datetime.datetime]
     intermediatory_classes: list[IntermediatoryClassResponse]
     latest_job_run: job_runs_schemas.JobRunResponse | None = None
 
