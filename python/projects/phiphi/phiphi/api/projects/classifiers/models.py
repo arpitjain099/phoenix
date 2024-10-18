@@ -145,6 +145,7 @@ class IntermediatoryClasses(IntermediatoryClassesBase, base_models.TimestampMode
 
     intermediatory_class_to_keyword_configs = orm.relationship(
         "IntermediatoryClassToKeywordConfig",
+        back_populates="intermediatory_class",
         cascade="all, delete-orphan",
         order_by="asc(IntermediatoryClassToKeywordConfig.id)",
         lazy="select",

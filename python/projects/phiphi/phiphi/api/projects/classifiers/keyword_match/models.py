@@ -53,6 +53,7 @@ class IntermediatoryClassToKeywordConfig(
     # Define the relationship between IntermediatoryClassToKeywordConfig and IntermediatoryClasses
     intermediatory_class: orm.Mapped[classifiers_models.IntermediatoryClasses] = orm.relationship(
         "IntermediatoryClasses",
+        back_populates="intermediatory_class_to_keyword_configs",
         lazy="joined",  # Eager load the relationship as the class name is always needed
     )
 
