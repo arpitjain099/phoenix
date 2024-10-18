@@ -91,6 +91,10 @@ TEST_CLASSIFY_RESTORE_FAILED_JOB_RUN = schemas.JobRunCreate(
     foreign_id=10, foreign_job_type=schemas.ForeignJobType.classifier_restore
 )
 
+TEST_CLASSIFY_COMPLETED_JOB_RUN_2 = schemas.JobRunCreate(
+    foreign_id=11, foreign_job_type=schemas.ForeignJobType.classify_tabulate
+)
+
 
 def create_deleted_job_run(
     session: Session,
@@ -192,5 +196,6 @@ def seed_test_job_runs(session: Session) -> None:
     create_job_run_and_complete(
         session, 1, TEST_CLASSIFY_RESTORE_FAILED_JOB_RUN, schemas.Status.failed
     )
+    create_job_run_and_complete(session, 1, TEST_CLASSIFY_COMPLETED_JOB_RUN_2)
     crud.create_job_run(session, 1, TEST_CLASSIFY_RESTORE_RUNNING_JOB_RUN)
     # The last job run in project 1 needs to not be complete

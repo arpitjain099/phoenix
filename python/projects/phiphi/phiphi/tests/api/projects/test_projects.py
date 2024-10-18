@@ -264,9 +264,9 @@ def test_project_with_latest_job_run(client: TestClient, reseed_tables) -> None:
     response = client.get("/projects/1")
     assert response.status_code == 200
     project = response.json()
-    assert project["last_job_run_completed_at"] == "2024-04-01T12:00:21"
+    assert project["last_job_run_completed_at"] == "2024-04-01T12:00:22"
     # The job_run that is completed is not the same as the latest_job_run
-    assert project["latest_job_run"]["id"] == 21
+    assert project["latest_job_run"]["id"] == 22
     assert project["latest_job_run"]["completed_at"] != project["last_job_run_completed_at"]
 
 
