@@ -38,16 +38,13 @@ def test_keyword_match_classifier(tmp_bq_project):
         table=pipeline_jobs_constants.DEDUPLICATED_GENERALISED_MESSAGES_TABLE_NAME,
     )
 
-    # Instantiate the ClassifierKeywordMatchResponse to match the test data. Everything but id "e"
+    # Instantiate the KeywordMatchClassifierPipeline to match the test data. Everything but id "e"
     # should match a class
     classifier = {
         "id": 1,
         "project_id": 10,
         "name": "test_classifier",
         "type": "keyword_match",
-        "created_at": datetime.datetime.now(),
-        "updated_at": datetime.datetime.now(),
-        "archived_at": None,
         "latest_version": {
             "version_id": 1,
             "classifier_id": 1,
