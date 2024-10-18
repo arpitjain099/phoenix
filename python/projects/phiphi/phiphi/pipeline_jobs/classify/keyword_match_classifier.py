@@ -2,13 +2,13 @@
 import prefect
 from google.cloud import bigquery
 
-from phiphi.api.projects.classifiers import schemas
+from phiphi.api.projects.classifiers.keyword_match import schemas
 from phiphi.pipeline_jobs import constants as pipeline_jobs_constants
 
 
 @prefect.task
 def classify(
-    classifier: schemas.ClassifierKeywordMatchResponse, bigquery_dataset: str, job_run_id: int
+    classifier: schemas.KeywordMatchClassifierPipeline, bigquery_dataset: str, job_run_id: int
 ) -> None:
     """Classify messages using keyword match classifier through BigQuery query."""
     client = bigquery.Client()
@@ -17,9 +17,9 @@ def classify(
         f"{bigquery_dataset}.{pipeline_jobs_constants.CLASSIFIED_MESSAGES_TABLE_NAME}"  # noqa: E501
     )
 
-    for config in classifier.latest_version.params.class_to_keyword_configs:
-        class_name = config.class_name
-        must_keywords = config.musts.split()
+    for config in classifier.latest_version.params["class_to_keyword_configs"]:
+        class_name = config["class_name"]
+        must_keywords = config["musts"].split()
 
         # Construct the query conditions for each keyword.
         # BigQuery doesn't support lookarounds, so we're doing a simple LIKE.
