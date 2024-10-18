@@ -172,7 +172,7 @@ def test_patch_keyword_match_classes(reseed_tables, client: TestClient) -> None:
     assert classifier.intermediatory_classes[0].name != patch_data["name"]
     with freezegun.freeze_time(UPDATED_TIME):
         response = client.patch(
-            f"/projects/{classifier.project_id}/classifiers/keyword_match/{classifier.id}/intermediatory_classes/{class_id}",
+            f"/projects/{classifier.project_id}/classifiers/{classifier.id}/intermediatory_classes/{class_id}",
             json=patch_data,
         )
     assert response.status_code == 200
@@ -283,7 +283,7 @@ def test_patch_keyword_match_intermediatory_class_non_unique_error(
         "name": classifier.intermediatory_classes[1].name,
     }
     response = client.patch(
-        f"/projects/{classifier.project_id}/classifiers/keyword_match/{classifier.id}/intermediatory_classes/{classifier.intermediatory_classes[0].id}",
+        f"/projects/{classifier.project_id}/classifiers/{classifier.id}/intermediatory_classes/{classifier.intermediatory_classes[0].id}",
         json=intermediatory_class,
     )
     assert response.status_code == 400
