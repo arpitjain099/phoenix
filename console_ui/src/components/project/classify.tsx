@@ -277,7 +277,6 @@ const ClassifyComponent: React.FC<IClassifierProps> = ({
 										isJobRunRunning(latest_job_run) && <Loader size="sm" />}
 
 									{type === "classify_tabulate" &&
-										latest_job_run?.last_edited_at &&
 										status === "completed_successfully" && (
 											<Popover position="bottom" withArrow shadow="md">
 												<Popover.Target>
