@@ -12,6 +12,7 @@ class ClassifierType(str, Enum):
     """Classifier type enum."""
 
     keyword_match = "keyword_match"
+    manual_post_authors = "manual_post_authors"
 
 
 class IntermediatoryClassBase(pydantic.BaseModel):
