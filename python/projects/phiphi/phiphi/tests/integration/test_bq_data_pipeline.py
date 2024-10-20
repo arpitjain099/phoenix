@@ -452,6 +452,16 @@ def test_bq_pipeline_integration(tmp_bq_project):
     assert len(deduped_messages_df) == 8
     assert gather_id_of_comments not in deduped_messages_df["gather_id"].unique()
 
+    deduped_authors_after_delete_df = pd.read_gbq(
+        f"""
+        SELECT *
+        FROM {test_project_namespace}.{constants.DEDUPLICATED_GENERALISED_AUTHORS_TABLE_NAME}
+        ORDER BY post_count DESC
+        """
+    )
+    assert len(deduped_authors_after_delete_df) == 2
+    assert deduped_authors_after_delete_df.iloc[0]["post_count"] == 4
+
     tabulated_messages_df = pd.read_gbq(
         f"""
         SELECT *
