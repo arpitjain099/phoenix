@@ -205,6 +205,14 @@ def test_bq_pipeline_integration(tmp_bq_project):
     )
     duplicated_messages = pd.concat([messages_df, messages_df], ignore_index=True)
     assert len(messages_after_recompute_df) == len(duplicated_messages)
+    deduped_authors_after_recompute_df = pd.read_gbq(
+        f"""
+        SELECT *
+        FROM {test_project_namespace}.{constants.DEDUPLICATED_GENERALISED_AUTHORS_TABLE_NAME}
+        ORDER BY post_count DESC
+        """
+    )
+    assert len(deduped_authors_after_recompute_df) == len(deduped_authors_df)
 
     # Due to the ordering of the data not being consistent we do group by the message ID
     # and check that the counts are the same.
