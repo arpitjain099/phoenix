@@ -45,6 +45,15 @@ test_integration:
 	@echo "Currently dev environment is the only environment with gcloud credentials setup."
 	$(DEV_COMPOSE_COMMAND) run -e PYTEST_ARGS_OVERRIDE="tests/integration/" api make test path=$(default_path)
 
+clean_bq_test_datasets:
+	@if [ -z "$(GCP_PROJECT_ID)" ]; then \
+	  echo "Error: GCP_PROJECT_ID is required."; \
+	  echo "Usage: make clean_bq_test_datasets GCP_PROJECT_ID=your-gcp-project-id"; \
+	  exit 1; \
+	fi
+	@echo "Cleaning up BigQuery test datasets in project $(GCP_PROJECT_ID)"
+	@./clean_bq_test_datasets.sh $(GCP_PROJECT_ID)
+
 format:
 	@echo "Running `format` in ci environment"
 	docker compose run api make format path=$(default_path)
