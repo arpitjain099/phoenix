@@ -132,6 +132,14 @@ def test_bq_pipeline_integration(tmp_bq_project):
     )
     assert len(deduped_messages_df) == 8
 
+    deduped_authors_df = pd.read_gbq(
+        f"""
+       SELECT *
+       FROM {test_project_namespace}.{constants.DEDUPLICATED_GENERALISED_AUTHORS_TABLE_NAME}
+       """
+    )
+    assert len(deduped_authors_df) == 2
+
     gather_flow.gather_flow(
         gather_dict=example_gathers.facebook_comments_gather_example().dict(),
         gather_child_type=example_gathers.facebook_comments_gather_example().child_type,
@@ -155,6 +163,17 @@ def test_bq_pipeline_integration(tmp_bq_project):
         """
     )
     assert len(deduped_messages_df) == 17
+    deduped_authors_df = pd.read_gbq(
+        f"""
+       SELECT *
+       FROM {test_project_namespace}.{constants.DEDUPLICATED_GENERALISED_AUTHORS_TABLE_NAME}
+       ORDER BY post_count DESC
+       """
+    )
+    assert len(deduped_authors_df) == 11
+    assert deduped_authors_df.iloc[0]["post_count"] == 4
+    assert deduped_authors_df.iloc[0]["comment_count"] == 0
+    assert deduped_authors_df.iloc[2]["post_count"] == 0
 
     tabulate_flow.tabulate_flow(
         job_run_id=4, project_namespace=test_project_namespace, active_classifiers_versions=[]
