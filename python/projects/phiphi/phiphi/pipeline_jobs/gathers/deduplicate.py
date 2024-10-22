@@ -76,6 +76,10 @@ def refresh_deduplicated_authors_tables(
                 phoenix_platform_message_author_id,
                 pi_platform_message_author_id,
                 pi_platform_message_author_name,
+                -- Currently we don't have any metadata about the created at or updated at of the
+                -- author. `phoenix_processed_at` is the best option for understanding when the
+                -- author was added to the system.
+                phoenix_processed_at,
                 platform,
             FROM
                 time_ordered_authors
