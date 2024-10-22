@@ -345,6 +345,8 @@ def test_bq_pipeline_integration(tmp_bq_project):
         "old_version_example",
     ]
     classified_messages_df["job_run_id"] = 5
+    # Include a duplicated row to test this doesn't affect results
+    classified_messages_df = pd.concat([classified_messages_df, classified_messages_df.iloc[0:1]])
     pipeline_jobs_utils.write_data(
         df=classified_messages_df,
         dataset=test_project_namespace,
