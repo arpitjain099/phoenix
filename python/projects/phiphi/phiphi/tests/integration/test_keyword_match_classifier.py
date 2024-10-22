@@ -97,3 +97,14 @@ def test_keyword_match_classifier(tmp_bq_project):
     set2 = set(expected_classified_messages_df.itertuples(index=False, name=None))
     # Compare sets
     assert set1 == set2, "DataFrames contain different rows"
+
+    # Check classifier is incremental - i.e. running the same classifier again should not duplicate
+    # the classified messages
+    classify_flow.classify_flow(
+        classifier_dict=classifier, project_namespace=test_project_namespace, job_run_id=10
+    )
+    post_rerun_classified_messages_df = pd.read_gbq(
+        f"SELECT * "
+        f"FROM {test_project_namespace}.{pipeline_jobs_constants.CLASSIFIED_MESSAGES_TABLE_NAME}"
+    )
+    assert classified_messages_df.equals(post_rerun_classified_messages_df)
