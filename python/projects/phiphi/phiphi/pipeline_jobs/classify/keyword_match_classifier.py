@@ -17,8 +17,25 @@ def classify(
         f"{bigquery_dataset}.{pipeline_jobs_constants.CLASSIFIED_MESSAGES_TABLE_NAME}"  # noqa: E501
     )
 
+    unclassified_messages_query = f"""
+        WITH unclassified_messages AS (
+            SELECT
+                src.phoenix_platform_message_id,
+                src.pi_text  -- Include pi_text so it can be used in WHERE conditions
+            FROM
+                `{source_table_name}` AS src
+            LEFT JOIN
+                `{destination_table_name}` AS dst
+            ON
+                src.phoenix_platform_message_id = dst.phoenix_platform_message_id
+                AND dst.classifier_id = {classifier.id}
+                AND dst.classifier_version_id = {classifier.latest_version.version_id}
+            WHERE
+                dst.phoenix_platform_message_id IS NULL
+        )
+    """
+
     select_statements = []
-    # Loop through each config and construct a separate SELECT statement for each class
     for config in classifier.latest_version.params["class_to_keyword_configs"]:
         conditions = [f"pi_text LIKE '%{keyword}%'" for keyword in config["musts"].split()]
         combined_conditions = " AND ".join(conditions)
@@ -32,7 +49,7 @@ def classify(
                 phoenix_platform_message_id,
                 {job_run_id} AS job_run_id
             FROM
-                `{source_table_name}`
+                unclassified_messages
             WHERE
                 {combined_conditions}
             """
@@ -49,6 +66,7 @@ def classify(
             phoenix_platform_message_id,
             job_run_id
         )
+        {unclassified_messages_query}
         {union_query}
     """
 
