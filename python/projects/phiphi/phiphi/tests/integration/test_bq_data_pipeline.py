@@ -167,12 +167,12 @@ def test_bq_pipeline_integration(tmp_bq_project):
         f"""
        SELECT *
        FROM {test_project_namespace}.{constants.DEDUPLICATED_GENERALISED_AUTHORS_TABLE_NAME}
-       ORDER BY post_count DESC
+       ORDER BY post_count DESC, comment_count DESC
        """
     )
-    assert len(deduped_authors_df) == 11
+    assert len(deduped_authors_df) == 10
     assert deduped_authors_df.iloc[0]["post_count"] == 4
-    assert deduped_authors_df.iloc[0]["comment_count"] == 0
+    assert deduped_authors_df.iloc[0]["comment_count"] == 1
     assert deduped_authors_df.iloc[2]["post_count"] == 0
 
     tabulate_flow.tabulate_flow(
@@ -371,22 +371,18 @@ def test_bq_pipeline_integration(tmp_bq_project):
         normalisers.anonymize("100064878993116"),
         normalisers.anonymize("100064381045972"),
         normalisers.anonymize("100064381045972"),
-        normalisers.anonymize(
-            "pfbid02CWk7wdftZWU4ChNjeqbvkd6ePFh8YrDTv5mMuqV7hzRNy7cq6TzDyDnSe4SaK87Xl"
-        ),
-        normalisers.anonymize(
-            "pfbid02CWk7wdftZWU4ChNjeqbvkd6ePFh8YrDTv5mMuqV7hzRNy7cq6TzDyDnSe4SaK87Xl"
-        ),
+        normalisers.anonymize("100024915288912"),
+        normalisers.anonymize("100024915288912"),
     ]
     manually_classified_authors_df = manually_classified_authors_df.drop(
         "phoenix_platform_message_author_id", axis=1
     )
     manually_classified_authors_df["class_name"] = [
-        "news_outlet",  # post author 1
+        "news_outlet",  # post author 1 and comment author 1
         "news_outlet",  # post author 2
         "journalist",  # post author 2
-        "individual",  # comment author 1
-        "blogger",  # comment author 1
+        "individual",  # comment author 2
+        "blogger",  # comment author 2
     ]
     manually_classified_authors_df["last_updated_at"] = datetime.datetime.now()
     pipeline_jobs_utils.write_data(
@@ -456,11 +452,12 @@ def test_bq_pipeline_integration(tmp_bq_project):
         f"""
         SELECT *
         FROM {test_project_namespace}.{constants.DEDUPLICATED_GENERALISED_AUTHORS_TABLE_NAME}
-        ORDER BY post_count DESC
+        ORDER BY post_count DESC, comment_count DESC
         """
     )
     assert len(deduped_authors_after_delete_df) == 2
     assert deduped_authors_after_delete_df.iloc[0]["post_count"] == 4
+    assert deduped_authors_after_delete_df.iloc[0]["comment_count"] == 0
 
     tabulated_messages_df = pd.read_gbq(
         f"""
