@@ -17,29 +17,18 @@ def classify(
         f"{bigquery_dataset}.{pipeline_jobs_constants.CLASSIFIED_MESSAGES_TABLE_NAME}"  # noqa: E501
     )
 
+    select_statements = []
+    # Loop through each config and construct a separate SELECT statement for each class
     for config in classifier.latest_version.params["class_to_keyword_configs"]:
-        class_name = config["class_name"]
-        must_keywords = config["musts"].split()
-
-        # Construct the query conditions for each keyword.
-        # BigQuery doesn't support lookarounds, so we're doing a simple LIKE.
-        conditions = [f"pi_text LIKE '%{keyword}%'" for keyword in must_keywords]
+        conditions = [f"pi_text LIKE '%{keyword}%'" for keyword in config["musts"].split()]
         combined_conditions = " AND ".join(conditions)
 
-        # BigQuery SQL query to classify messages and insert into the classified messages table
-        query = f"""
-            INSERT INTO `{destination_table_name}`
-            (
-                classifier_id,
-                classifier_version_id,
-                class_name,
-                phoenix_platform_message_id,
-                job_run_id
-            )
+        select_statements.append(
+            f"""
             SELECT
                 {classifier.id} AS classifier_id,
                 {classifier.latest_version.version_id} AS classifier_version_id,
-                '{class_name}' AS class_name,
+                '{config["class_name"]}' AS class_name,
                 phoenix_platform_message_id,
                 {job_run_id} AS job_run_id
             FROM
@@ -47,6 +36,21 @@ def classify(
             WHERE
                 {combined_conditions}
             """
+        )
 
-        query_job = client.query(query)
-        query_job.result()
+    union_query = " UNION ALL ".join(select_statements)
+
+    query = f"""
+        INSERT INTO `{destination_table_name}`
+        (
+            classifier_id,
+            classifier_version_id,
+            class_name,
+            phoenix_platform_message_id,
+            job_run_id
+        )
+        {union_query}
+    """
+
+    query_job = client.query(query)
+    query_job.result()
