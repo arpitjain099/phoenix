@@ -267,7 +267,7 @@ def normalised_facebook_comments_df() -> pd.DataFrame:
             "Y29tbWVudDo3NjM3MTY1OTE5NjYwMzMyXzQyNjU5NzcyOTk5MDI2OA==",
         ],
         "pi_platform_message_author_id": [
-            "pfbid02CWk7wdftZWU4ChNjeqbvkd6ePFh8YrDTv5mMuqV7hzRNy7cq6TzDyDnSe4SaK87Xl",
+            "100064878993116",
             "100024915288912",
             "pfbid0M9N6BtGwe2g76dEPzMAsmRa4xUowvx8ohdMHbqHgCfssWyap6Gyr6RueezmvZeXml",
             "pfbid02n7VKGoXEYpLj5vMDb8QCk2ZY7wbqqudAz25ftbqGwTm7D5vKPWw8qNtHwy5mqBiql",
@@ -278,7 +278,7 @@ def normalised_facebook_comments_df() -> pd.DataFrame:
             "pfbid02wia9a2GDCRqQH2aSty35ZBwNMHZpys2UajNSYaW1sKLxNxw22Ebc1Vk64KusqWnxl",
         ],
         "pi_platform_message_author_name": [
-            "Binu Pg",
+            "Build Up",
             "Sally Yuan",
             "Jamil Mohammad",
             "Judy Haila",
@@ -357,9 +357,7 @@ def normalised_facebook_comments_df() -> pd.DataFrame:
             normalisers.anonymize("Y29tbWVudDo3NjM3MTY1OTE5NjYwMzMyXzQyNjU5NzcyOTk5MDI2OA=="),
         ],
         "phoenix_platform_message_author_id": [
-            normalisers.anonymize(
-                "pfbid02CWk7wdftZWU4ChNjeqbvkd6ePFh8YrDTv5mMuqV7hzRNy7cq6TzDyDnSe4SaK87Xl"
-            ),
+            normalisers.anonymize("100064878993116"),
             normalisers.anonymize("100024915288912"),
             normalisers.anonymize(
                 "pfbid0M9N6BtGwe2g76dEPzMAsmRa4xUowvx8ohdMHbqHgCfssWyap6Gyr6RueezmvZeXml"

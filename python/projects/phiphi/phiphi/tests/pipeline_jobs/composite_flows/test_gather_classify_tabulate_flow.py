@@ -44,7 +44,7 @@ async def test_gather_classify_tabulate_flow(
         batch_size=1,
     )
     mock_apify_scrape_and_batch_download_results.assert_called_once()
-    assert mock_bigquery_client.call_count == 2
+    assert mock_bigquery_client.call_count == 3
     mock_read_gbq.assert_called_once()
     mock_classify_flow.assert_not_called()
 
@@ -116,7 +116,7 @@ async def test_gather_classify_tabulate_flow_with_classify(
     )
     mock_apify_scrape_and_batch_download_results.assert_called_once()
     assert mock_classify_flow.call_count == 2
-    assert mock_bigquery_client.call_count == 2
+    assert mock_bigquery_client.call_count == 3
     mock_read_gbq.assert_called_once()
 
 
@@ -157,5 +157,5 @@ async def test_gather_classify_tabulate_flow_with_classify_exception(
     )
     mock_apify_scrape_and_batch_download_results.assert_called_once()
     assert mock_classify_flow.call_count == 2
-    assert mock_bigquery_client.call_count == 2
+    assert mock_bigquery_client.call_count == 3
     mock_read_gbq.assert_called_once()

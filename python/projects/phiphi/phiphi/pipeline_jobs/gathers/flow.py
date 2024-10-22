@@ -47,6 +47,9 @@ def gather_flow(
     deduplicate.refresh_deduplicated_messages_tables(
         bigquery_dataset=project_namespace,
     )
+    deduplicate.refresh_deduplicated_authors_tables(
+        bigquery_dataset=project_namespace,
+    )
 
 
 @prefect.flow(name="delete_gather_flow")
@@ -62,6 +65,9 @@ def delete_flow(
         bigquery_dataset=project_namespace,
     )
     deduplicate.refresh_deduplicated_messages_tables(
+        bigquery_dataset=project_namespace,
+    )
+    deduplicate.refresh_deduplicated_authors_tables(
         bigquery_dataset=project_namespace,
     )
 

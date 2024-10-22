@@ -132,6 +132,14 @@ def test_bq_pipeline_integration(tmp_bq_project):
     )
     assert len(deduped_messages_df) == 8
 
+    deduped_authors_df = pd.read_gbq(
+        f"""
+       SELECT *
+       FROM {test_project_namespace}.{constants.DEDUPLICATED_GENERALISED_AUTHORS_TABLE_NAME}
+       """
+    )
+    assert len(deduped_authors_df) == 2
+
     gather_flow.gather_flow(
         gather_dict=example_gathers.facebook_comments_gather_example().dict(),
         gather_child_type=example_gathers.facebook_comments_gather_example().child_type,
@@ -155,6 +163,17 @@ def test_bq_pipeline_integration(tmp_bq_project):
         """
     )
     assert len(deduped_messages_df) == 17
+    deduped_authors_df = pd.read_gbq(
+        f"""
+       SELECT *
+       FROM {test_project_namespace}.{constants.DEDUPLICATED_GENERALISED_AUTHORS_TABLE_NAME}
+       ORDER BY post_count DESC, comment_count DESC
+       """
+    )
+    assert len(deduped_authors_df) == 10
+    assert deduped_authors_df.iloc[0]["post_count"] == 4
+    assert deduped_authors_df.iloc[0]["comment_count"] == 1
+    assert deduped_authors_df.iloc[2]["post_count"] == 0
 
     tabulate_flow.tabulate_flow(
         job_run_id=4, project_namespace=test_project_namespace, active_classifiers_versions=[]
@@ -186,6 +205,14 @@ def test_bq_pipeline_integration(tmp_bq_project):
     )
     duplicated_messages = pd.concat([messages_df, messages_df], ignore_index=True)
     assert len(messages_after_recompute_df) == len(duplicated_messages)
+    deduped_authors_after_recompute_df = pd.read_gbq(
+        f"""
+        SELECT *
+        FROM {test_project_namespace}.{constants.DEDUPLICATED_GENERALISED_AUTHORS_TABLE_NAME}
+        ORDER BY post_count DESC
+        """
+    )
+    assert len(deduped_authors_after_recompute_df) == len(deduped_authors_df)
 
     # Due to the ordering of the data not being consistent we do group by the message ID
     # and check that the counts are the same.
@@ -344,22 +371,18 @@ def test_bq_pipeline_integration(tmp_bq_project):
         normalisers.anonymize("100064878993116"),
         normalisers.anonymize("100064381045972"),
         normalisers.anonymize("100064381045972"),
-        normalisers.anonymize(
-            "pfbid02CWk7wdftZWU4ChNjeqbvkd6ePFh8YrDTv5mMuqV7hzRNy7cq6TzDyDnSe4SaK87Xl"
-        ),
-        normalisers.anonymize(
-            "pfbid02CWk7wdftZWU4ChNjeqbvkd6ePFh8YrDTv5mMuqV7hzRNy7cq6TzDyDnSe4SaK87Xl"
-        ),
+        normalisers.anonymize("100024915288912"),
+        normalisers.anonymize("100024915288912"),
     ]
     manually_classified_authors_df = manually_classified_authors_df.drop(
         "phoenix_platform_message_author_id", axis=1
     )
     manually_classified_authors_df["class_name"] = [
-        "news_outlet",  # post author 1
+        "news_outlet",  # post author 1 and comment author 1
         "news_outlet",  # post author 2
         "journalist",  # post author 2
-        "individual",  # comment author 1
-        "blogger",  # comment author 1
+        "individual",  # comment author 2
+        "blogger",  # comment author 2
     ]
     manually_classified_authors_df["last_updated_at"] = datetime.datetime.now()
     pipeline_jobs_utils.write_data(
@@ -424,6 +447,17 @@ def test_bq_pipeline_integration(tmp_bq_project):
     )
     assert len(deduped_messages_df) == 8
     assert gather_id_of_comments not in deduped_messages_df["gather_id"].unique()
+
+    deduped_authors_after_delete_df = pd.read_gbq(
+        f"""
+        SELECT *
+        FROM {test_project_namespace}.{constants.DEDUPLICATED_GENERALISED_AUTHORS_TABLE_NAME}
+        ORDER BY post_count DESC, comment_count DESC
+        """
+    )
+    assert len(deduped_authors_after_delete_df) == 2
+    assert deduped_authors_after_delete_df.iloc[0]["post_count"] == 4
+    assert deduped_authors_after_delete_df.iloc[0]["comment_count"] == 0
 
     tabulated_messages_df = pd.read_gbq(
         f"""

@@ -79,6 +79,9 @@ def recompute_all_batches_tabulate_flow(
     deduplicate.refresh_deduplicated_messages_tables(
         bigquery_dataset=project_namespace,
     )
+    deduplicate.refresh_deduplicated_authors_tables(
+        bigquery_dataset=project_namespace,
+    )
     prefect_logger.info("Tabulating data.")
     tabulate_flow.tabulate_flow(
         job_run_id=job_run_id,
