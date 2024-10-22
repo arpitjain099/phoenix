@@ -20,7 +20,7 @@ from unittest.mock import patch
 import pandas as pd
 
 from phiphi import config
-from phiphi.pipeline_jobs import constants
+from phiphi.pipeline_jobs import constants, generalised_authors
 from phiphi.pipeline_jobs import utils as pipeline_jobs_utils
 from phiphi.pipeline_jobs.composite_flows import (
     delete_gather_tabulate_flow,
@@ -140,6 +140,21 @@ def test_bq_pipeline_integration(tmp_bq_project):
     )
     assert len(deduped_authors_df) == 2
 
+    post_authors_df = generalised_authors.get_post_authors(
+        project_namespace=test_project_namespace
+    )
+    assert len(post_authors_df) == 2
+
+    post_authors_df = generalised_authors.get_post_authors(
+        project_namespace=test_project_namespace,
+        offset=1,
+        limit=1,
+    )
+    assert len(post_authors_df) == 1
+    # Should be the second author that was gotten
+    assert post_authors_df.iloc[0]["post_count"] == 4
+    assert post_authors_df.iloc[0]["comment_count"] == 0
+
     gather_flow.gather_flow(
         gather_dict=example_gathers.facebook_comments_gather_example().dict(),
         gather_child_type=example_gathers.facebook_comments_gather_example().child_type,
@@ -174,6 +189,12 @@ def test_bq_pipeline_integration(tmp_bq_project):
     assert deduped_authors_df.iloc[0]["post_count"] == 4
     assert deduped_authors_df.iloc[0]["comment_count"] == 1
     assert deduped_authors_df.iloc[2]["post_count"] == 0
+
+    # Still only authors with posts
+    post_authors_df = generalised_authors.get_post_authors(
+        project_namespace=test_project_namespace
+    )
+    assert len(post_authors_df) == 2
 
     tabulate_flow.tabulate_flow(
         job_run_id=4, project_namespace=test_project_namespace, active_classifiers_versions=[]
