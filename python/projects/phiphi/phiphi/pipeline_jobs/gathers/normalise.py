@@ -78,30 +78,35 @@ gather_normalisation_map: Dict[gathers.schemas.ChildTypeName, NormaliserFuncType
 
 @prefect.task
 def normalise_batches(
-    gather_id: int, job_run_id: int, bigquery_dataset: str, batch_of_batches_size: int = 200
+    gather_job_run_pairs: list[tuple[int, int]],
+    bigquery_dataset: str,
+    batch_of_batches_size: int = 200,
 ) -> None:
     """Normalize batches and write to a BigQuery table.
 
-    This function reads multiple batches at once from the gather_batches table, normalizes them,
-    and writes the normalized data to the generalised_messages table in one go.
+    This function reads multiple batches at once from the gather_batches table for multiple
+    gather-job_run pairs, normalizes them, and writes the normalized data to the
+    generalised_messages table.
 
     Args:
-        gather_id (int): The gather ID.
-        job_run_id (int): The job run ID.
+        gather_job_run_pairs (list[tuple[int, int]]): List of (gather_id, job_run_id) pairs.
         bigquery_dataset (str): The BigQuery dataset.
         batch_of_batches_size (int, optional): The number of batches to read at once. Defaults to
             200. Note that BQ has a row size limit of 10MB, so 200 gives a max 2GB in memory.
     """
     prefect_logger = prefect.get_run_logger()
 
-    batch_id = 0
+    gather_job_run_filter = ", ".join(
+        [f"({gather_id}, {job_run_id})" for gather_id, job_run_id in gather_job_run_pairs]
+    )
 
+    total_processed = 0
     while True:
         query = f"""
             SELECT * FROM {bigquery_dataset}.{constants.GATHER_BATCHES_TABLE_NAME}
-            WHERE gather_id = {gather_id} AND job_run_id = {job_run_id} AND batch_id >= {batch_id}
-            ORDER BY batch_id ASC
-            LIMIT {batch_of_batches_size}
+            WHERE (gather_id, job_run_id) IN ({gather_job_run_filter})
+            ORDER BY gather_id ASC, job_run_id ASC, batch_id ASC
+            LIMIT {batch_of_batches_size} OFFSET {total_processed}
         """
         batches_df = utils.read_data(
             query, dataset=bigquery_dataset, table=constants.GATHER_BATCHES_TABLE_NAME
@@ -115,7 +120,10 @@ def normalise_batches(
         normalized_data = []
 
         for _, batch in validated_batches_df.iterrows():
-            prefect_logger.info(f"Normalizing batch {batch.batch_id}")
+            prefect_logger.info(
+                f"Normalizing batch {batch.batch_id} for gather_id "
+                f"{batch.gather_id}, job_run_id {batch.job_run_id}"
+            )
             child_type_name = gathers.schemas.ChildTypeName(batch.gather_type)
             norm_func = gather_normalisation_map[child_type_name]
 
@@ -123,7 +131,7 @@ def normalise_batches(
             normalized_df = normalise_batch(
                 normaliser=norm_func,
                 batch_json=batch_json,
-                gather_id=gather_id,
+                gather_id=batch.gather_id,
                 gather_child_type=child_type_name,
                 gather_batch_id=batch.batch_id,
                 gathered_at=batch.gathered_at,
@@ -138,12 +146,17 @@ def normalise_batches(
                 dataset=bigquery_dataset,
                 table=constants.GENERALISED_MESSAGES_TABLE_NAME,
             )
+
+            start_batch = validated_batches_df.iloc[0]
+            end_batch = validated_batches_df.iloc[-1]
             prefect_logger.info(
-                f"Batches {batch_id=} to {batch_id + batch_of_batches_size - 1} "
-                "normalized and written."
+                f"Processed batches from (gather_id: {start_batch.gather_id}, job_run_id: "
+                f"{start_batch.job_run_id}, batch_id: {start_batch.batch_id}) "
+                f"to (gather_id: {end_batch.gather_id}, job_run_id: {end_batch.job_run_id}, "
+                f"batch_id: {end_batch.batch_id})"
             )
 
-        batch_id += batch_of_batches_size
+        total_processed += batch_of_batches_size
 
 
 def get_gather_and_job_run_ids(
