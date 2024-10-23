@@ -133,3 +133,64 @@ def test_delete_intermediatory_classified_post_author(reseed_tables, client: Tes
     json = response.json()
     assert json["last_edited_at"] == UPDATED_TIME.isoformat()
     assert len(json["intermediatory_classified_post_authors"]) == 0
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
+def test_patch_manual_post_authors_classes(reseed_tables, client: TestClient) -> None:
+    """Test patch manual post authors classes."""
+    classifier = manual_post_authors_seed.TEST_MANUAL_POST_AUTHORS_CLASSIFIERS[1]
+    project_id = classifier.project_id
+    class_id = classifier.intermediatory_classes[0].id
+    data = {"name": "new_name", "description": "new_desc"}
+
+    with freezegun.freeze_time(UPDATED_TIME):
+        response = client.patch(
+            (
+                f"/projects/{project_id}"
+                f"/classifiers/{classifier.id}"
+                f"/intermediatory_classes/{class_id}"
+            ),
+            json=data,
+        )
+    assert response.status_code == 200
+    updated_class = response.json()
+
+    assert updated_class["id"] == class_id
+    assert updated_class["name"] == data["name"]
+    assert updated_class["description"] == data["description"]
+
+    response = client.get(f"/projects/{classifier.project_id}/classifiers/{classifier.id}")
+    assert response.status_code == 200
+    json = response.json()
+    assert json["last_edited_at"] == UPDATED_TIME.isoformat()
+    assert len(json["intermediatory_classes"]) == 2
+    assert json["intermediatory_classes"][0] == updated_class
+    # Important to check that the intermediatory_classified_post_authors class name is now updated
+    assert json["intermediatory_classified_post_authors"][0]["class_name"] == data["name"]
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
+def test_deleted_manual_post_authors_classes(reseed_tables, client: TestClient) -> None:
+    """Test delete manual post authors classes."""
+    classifier = manual_post_authors_seed.TEST_MANUAL_POST_AUTHORS_CLASSIFIERS[1]
+    project_id = classifier.project_id
+    class_id = classifier.intermediatory_classes[0].id
+
+    with freezegun.freeze_time(UPDATED_TIME):
+        response = client.delete(
+            (
+                f"/projects/{project_id}"
+                f"/classifiers/{classifier.id}"
+                f"/intermediatory_classes/{class_id}"
+            )
+        )
+    assert response.status_code == 200
+    assert response.json() is None
+
+    response = client.get(f"/projects/{classifier.project_id}/classifiers/{classifier.id}")
+    assert response.status_code == 200
+    json = response.json()
+    assert json["last_edited_at"] == UPDATED_TIME.isoformat()
+    assert len(json["intermediatory_classes"]) == 1
+    assert json["intermediatory_classes"][0]["id"] == classifier.intermediatory_classes[1].id
+    assert len(json["intermediatory_classified_post_authors"]) == 0
