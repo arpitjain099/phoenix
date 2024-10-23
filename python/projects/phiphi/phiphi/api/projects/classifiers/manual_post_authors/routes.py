@@ -42,3 +42,21 @@ def create_intermediatory_classified_post_author(
         classifier_id=classifier_id,
         create_obj=create_obj,
     )
+
+
+@router.delete(
+    "/projects/{project_id}/classifiers/manual_post_authors/{classifier_id}/intermediatory_classified_post_authors/{classified_post_author_id}",
+)
+def delete_intermediatory_classified_post_author(
+    session: deps.SessionDep,
+    project_id: int,
+    classifier_id: int,
+    classified_post_author_id: int,
+) -> None:
+    """Delete an intermediatory classified post author."""
+    return crud.delete_intermediatory_classified_post_author(
+        session=session,
+        project_id=project_id,
+        classifier_id=classifier_id,
+        classified_post_author_id=classified_post_author_id,
+    )
