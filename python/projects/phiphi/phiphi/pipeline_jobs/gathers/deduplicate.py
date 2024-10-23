@@ -50,7 +50,7 @@ def refresh_deduplicated_authors_tables(
     This must be run after the deduplicated messages table has been created.
 
     !! IMPORTANT !!
-    The `deduplicated_generalised_messages` table must be in sync with the schema:
+    The `deduplicated_generalised_authors` table must be in sync with the schema:
     `deduplicated_generalised_authors` in `pipeline_jobs/generalised_authors.py`
     """
     client = bigquery.Client()
