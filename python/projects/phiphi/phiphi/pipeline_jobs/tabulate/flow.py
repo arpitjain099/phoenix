@@ -55,7 +55,11 @@ def tabulate(
     tabulate_query = f"""
     CREATE OR REPLACE TABLE `{tabulate_table_name}` AS
     WITH active_only_classified_messages AS (
-        SELECT *
+        SELECT DISTINCT
+            classifier_id,
+            classifier_version_id,
+            phoenix_platform_message_id,
+            class_name
         FROM `{classified_messages_table_name}`
         WHERE (classifier_id, classifier_version_id) IN ({classifier_ids})
     ),
