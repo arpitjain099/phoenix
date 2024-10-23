@@ -111,6 +111,34 @@ def test_create_intermediatory_classified_post_author_non_unique_error(
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
+def test_create_intermediatory_classified_post_author_class_not_found(
+    reseed_tables, client: TestClient
+) -> None:
+    """Test create intermediatory classified post author class not found."""
+    classifier = manual_post_authors_seed.TEST_MANUAL_POST_AUTHORS_CLASSIFIERS[1]
+    project_id = classifier.project_id
+    author_id = classifier.intermediatory_classified_post_authors[
+        0
+    ].phoenix_platform_message_author_id
+    data = {
+        "class_id": 0,
+        "phoenix_platform_message_author_id": author_id,
+    }
+    with freezegun.freeze_time(UPDATED_TIME):
+        response = client.post(
+            (
+                f"/projects/{project_id}"
+                f"/classifiers/manual_post_authors/{classifier.id}"
+                "/intermediatory_classified_post_authors/"
+            ),
+            json=data,
+        )
+
+    assert response.status_code == 404
+    assert response.json() == {"detail": "Intermediatory Class not found"}
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
 def test_delete_intermediatory_classified_post_author(reseed_tables, client: TestClient) -> None:
     """Test delete intermediatory classified post author."""
     classifier = manual_post_authors_seed.TEST_MANUAL_POST_AUTHORS_CLASSIFIERS[1]
