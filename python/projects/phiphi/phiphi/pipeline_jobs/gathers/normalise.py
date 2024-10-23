@@ -80,7 +80,7 @@ gather_normalisation_map: Dict[gathers.schemas.ChildTypeName, NormaliserFuncType
 def normalise_batches(
     gather_job_run_pairs: list[tuple[int, int]],
     bigquery_dataset: str,
-    batch_of_batches_size: int = 200,
+    batch_of_batches_size: int = constants.DEFAULT_BATCH_OF_BATCHES_SIZE,
 ) -> None:
     """Normalize batches and write to a BigQuery table.
 
