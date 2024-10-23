@@ -28,18 +28,21 @@ def test_keyword_match_classifier(tmp_bq_project):
         "I love bananas and furthermore \n I love apples.",
     ]
 
-    validated_general_mes_df = project_db_schemas.generalised_messages_schema.validate(
-        deduped_general_messages_df
+    # Step 1: Add the first five messages (all except the last one) to the database
+    partial_messages_df = deduped_general_messages_df.iloc[:5]
+
+    validated_partial_messages_df = project_db_schemas.generalised_messages_schema.validate(
+        partial_messages_df
     )
 
     pipeline_jobs_utils.write_data(
-        df=validated_general_mes_df,
+        df=validated_partial_messages_df,
         dataset=test_project_namespace,
         table=pipeline_jobs_constants.DEDUPLICATED_GENERALISED_MESSAGES_TABLE_NAME,
     )
 
-    # Instantiate the KeywordMatchClassifierPipeline to match the test data. Everything but id "e"
-    # should match a class
+    # Step 2: Instantiate the KeywordMatchClassifierPipeline to match the test data. Everything but
+    # id "e" should match a class
     classifier = {
         "id": 1,
         "project_id": 10,
@@ -67,26 +70,25 @@ def test_keyword_match_classifier(tmp_bq_project):
 
     expected_classified_messages_df = pd.DataFrame(
         {
-            "classifier_id": [1, 1, 1, 1, 1],
-            "classifier_version_id": [1, 1, 1, 1, 1],
+            "classifier_id": [1, 1, 1, 1],
+            "classifier_version_id": [1, 1, 1, 1],
             "class_name": [
                 "apple_banana",
                 "apple_orange",
                 "orange_banana",
                 "apple_orange",
-                "apple_banana",
             ],
-            "phoenix_platform_message_id": ["a", "b", "c", "d", "f"],
-            "job_run_id": [9, 9, 9, 9, 9],
+            "phoenix_platform_message_id": ["a", "b", "c", "d"],
+            "job_run_id": [9, 9, 9, 9],
         }
     )
 
-    # Run the classifier
+    # Step 3: Run the classifier for the first time
     classify_flow.classify_flow(
         classifier_dict=classifier, project_namespace=test_project_namespace, job_run_id=9
     )
 
-    # Check the classified messages table
+    # Step 4: Check the classified messages table
     classified_messages_df = pd.read_gbq(
         f"SELECT * "
         f"FROM {test_project_namespace}.{pipeline_jobs_constants.CLASSIFIED_MESSAGES_TABLE_NAME}"
@@ -95,16 +97,46 @@ def test_keyword_match_classifier(tmp_bq_project):
     # pd.testing using check_like=True doesn't work due to dtypes, so we'll use set comparison
     set1 = set(classified_messages_df.itertuples(index=False, name=None))
     set2 = set(expected_classified_messages_df.itertuples(index=False, name=None))
-    # Compare sets
-    assert set1 == set2, "DataFrames contain different rows"
+    assert set1 == set2, "DataFrames contain different rows after first classification"
 
-    # Check classifier is incremental - i.e. running the same classifier again should not duplicate
-    # the classified messages
+    # Step 5: Add the remaining message to the database (the last row)
+    remaining_message_df = deduped_general_messages_df.iloc[5:]
+    validated_remaining_message_df = project_db_schemas.generalised_messages_schema.validate(
+        remaining_message_df
+    )
+
+    pipeline_jobs_utils.write_data(
+        df=validated_remaining_message_df,
+        dataset=test_project_namespace,
+        table=pipeline_jobs_constants.DEDUPLICATED_GENERALISED_MESSAGES_TABLE_NAME,
+    )
+
+    # Step 6: Check classifier is incremental - i.e. running the same classifier again should not
+    # duplicate the classified messages, and should classify all new messages (the last one)
     classify_flow.classify_flow(
         classifier_dict=classifier, project_namespace=test_project_namespace, job_run_id=10
     )
+
+    # Step 7: Check the classified messages table after rerun
     post_rerun_classified_messages_df = pd.read_gbq(
         f"SELECT * "
         f"FROM {test_project_namespace}.{pipeline_jobs_constants.CLASSIFIED_MESSAGES_TABLE_NAME}"
     )
-    assert classified_messages_df.equals(post_rerun_classified_messages_df)
+
+    # Update the expected DataFrame to include the last message
+    new_message_df = pd.DataFrame(
+        {
+            "classifier_id": [1],
+            "classifier_version_id": [1],
+            "class_name": ["apple_banana"],
+            "phoenix_platform_message_id": ["f"],
+            "job_run_id": [10],
+        }
+    )
+    expected_classified_messages_df = pd.concat(
+        [expected_classified_messages_df, new_message_df], ignore_index=True
+    )
+
+    set3 = set(post_rerun_classified_messages_df.itertuples(index=False, name=None))
+    set4 = set(expected_classified_messages_df.itertuples(index=False, name=None))
+    assert set3 == set4, "DataFrames contain different rows after adding the last message"
