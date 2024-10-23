@@ -12,3 +12,6 @@ MANUALLY_CLASSIFIED_AUTHORS_TABLE_NAME = "manually_classified_authors"
 # This will mean that most gathers will have a max a handful of load jobs.
 # Furthermore there is a limit of 10MB per row. The hope is that 2000 batch size will keep the
 DEFAULT_BATCH_SIZE = 2000
+# The number of batches to read at once when normalising. Note that BQ has a row size limit of
+# 10MB, so 200 gives a max 2GB in memory.
+DEFAULT_BATCH_OF_BATCHES_SIZE = 200

@@ -74,6 +74,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
     test_project_namespace = tmp_bq_project
 
     batch_size = 20
+    batch_of_batches_size = 2
 
     # Check that if the first gather is run with no data, the table is not created This is
     # important as if we try to produce generalised_messages without any data, it will fail. We
@@ -86,6 +87,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
             job_run_id=1,
             project_namespace=test_project_namespace,
             batch_size=batch_size,
+            batch_of_batches_size=batch_of_batches_size,
         )
 
     messages_exists = pd.read_gbq(
@@ -105,6 +107,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
         job_run_id=1,
         project_namespace=test_project_namespace,
         batch_size=batch_size,
+        batch_of_batches_size=batch_of_batches_size,
     )
 
     messages_df = pd.read_gbq(
@@ -118,6 +121,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
         job_run_id=2,
         project_namespace=test_project_namespace,
         batch_size=batch_size,
+        batch_of_batches_size=batch_of_batches_size,
     )
 
     messages_df = pd.read_gbq(
@@ -161,6 +165,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
         job_run_id=3,
         project_namespace=test_project_namespace,
         batch_size=batch_size,
+        batch_of_batches_size=batch_of_batches_size,
     )
 
     batches_df = pd.read_gbq(

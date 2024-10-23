@@ -7,6 +7,7 @@ from typing import Coroutine, Optional
 import prefect
 
 from phiphi import constants
+from phiphi.pipeline_jobs import constants as pipeline_jobs_constants
 from phiphi.pipeline_jobs import projects
 from phiphi.pipeline_jobs.gathers import deduplicate, normalise
 from phiphi.pipeline_jobs.tabulate import flow as tabulate_flow
@@ -20,6 +21,7 @@ def recompute_all_batches_tabulate_flow(
     active_classifiers_versions: list[tuple[int, int]],
     drop_downstream_tables: bool = False,
     gather_ids: Optional[list[int]] = None,
+    batch_of_batches_size: int = pipeline_jobs_constants.DEFAULT_BATCH_OF_BATCHES_SIZE,
 ) -> None:
     """Flow that recomputes all batches and tabulates the data.
 
@@ -39,6 +41,8 @@ def recompute_all_batches_tabulate_flow(
         drop_downstream_tables: If True, delete downstream tables. Defaults to False.
             This will also recompute the schemas for theses downstream tables.
         gather_ids: The gather IDs to recompute. If None, all gather IDs will be recomputed.
+        batch_of_batches_size: The size of the batch of batches when normalising. Defaults to
+            pipeline_jobs_constants.DEFAULT_BATCH_OF_BATCHES_SIZE.
     """
     prefect_logger = prefect.get_run_logger()
     if drop_downstream_tables:
@@ -54,26 +58,11 @@ def recompute_all_batches_tabulate_flow(
     prefect_logger.info(f"Found {len(gather_batches_metadata)} gather batches to recompute.")
     if len(gather_batches_metadata) == 0:
         return None
-    for _, gather_batch_metadata in gather_batches_metadata.iterrows():
-        prefect_logger.info(
-            f"""
-            Recomputing
-                gather_id: {gather_batch_metadata.gather_id}
-                job_run_id: {gather_batch_metadata.job_run_id}
-            """
-        )
-        normalise.normalise_batches(
-            gather_id=gather_batch_metadata.gather_id,
-            job_run_id=gather_batch_metadata.job_run_id,
-            bigquery_dataset=project_namespace,
-        )
-        prefect_logger.info(
-            f"""
-            Completed recompute for
-                gather_id: {gather_batch_metadata.gather_id}
-                job_run_id: {gather_batch_metadata.job_run_id}
-            """
-        )
+    normalise.normalise_batches(
+        gather_job_run_pairs=list(gather_batches_metadata.itertuples(index=False)),
+        bigquery_dataset=project_namespace,
+        batch_of_batches_size=batch_of_batches_size,
+    )
 
     prefect_logger.info("Refreshing deduplicated messages tables.")
     deduplicate.refresh_deduplicated_messages_tables(
