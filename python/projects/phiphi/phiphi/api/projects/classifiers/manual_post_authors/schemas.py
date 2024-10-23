@@ -21,6 +21,7 @@ class IntermediatoryClassifiedPostAuthorsResponse(IntermediatoryClassifiedPostAu
 
     id: int
     classifier_id: int
+    class_name: str
     created_at: datetime.datetime
     # We don't return the updated at as classified_post_authors should not be updated.
 

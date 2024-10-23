@@ -69,6 +69,10 @@ def test_create_intermediatory_classified_post_author(reseed_tables, client: Tes
         == data["phoenix_platform_message_author_id"]
     )
     assert intermediatory_classified_post_author["created_at"] == UPDATED_TIME.isoformat()
+    assert (
+        intermediatory_classified_post_author["class_name"]
+        == classifier.intermediatory_classes[0].name
+    )
 
     response = client.get(f"/projects/{classifier.project_id}/classifiers/{classifier.id}")
     assert response.status_code == 200
