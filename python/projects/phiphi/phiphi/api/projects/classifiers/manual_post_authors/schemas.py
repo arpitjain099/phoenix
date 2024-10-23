@@ -52,3 +52,5 @@ class ManualPostAuthorsClassifierDetail(
     ManualPostAuthorsClassifierResponse, base_schemas.ClassifierDetailBase
 ):
     """Manual post authors classifier response."""
+
+    intermediatory_classified_post_authors: list[IntermediatoryClassifiedPostAuthorsResponse] = []
