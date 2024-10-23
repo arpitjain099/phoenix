@@ -3,6 +3,7 @@ import sqlalchemy as sa
 
 from phiphi.api import exceptions
 from phiphi.api.projects.classifiers import base_schemas, crud
+from phiphi.api.projects.classifiers import models as classifiers_models
 from phiphi.api.projects.classifiers.manual_post_authors import models, schemas
 
 UNIQUE_ERROR_MESSAGE = "The author id and class id pair already exists."
@@ -20,6 +21,13 @@ def create_intermediatory_classified_post_authors(
     ) as orm_classifier:
         if orm_classifier.type != base_schemas.ClassifierType.manual_post_authors:
             raise exceptions.HttpException400("Invalid classifier type")
+
+        orm_intermediate_class = session.query(classifiers_models.IntermediatoryClasses).get(
+            create_obj.class_id
+        )
+
+        if orm_intermediate_class is None:
+            raise exceptions.IntermediatoryClassNotFound()
 
         try:
             orm = models.IntermediatoryClassifiedPostAuthors(
