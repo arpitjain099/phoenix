@@ -5,6 +5,7 @@ import freezegun
 import pytest
 from fastapi.testclient import TestClient
 
+from phiphi.api.projects.classifiers.manual_post_authors import crud
 from phiphi.seed.classifiers import manual_post_authors_seed
 
 CREATED_TIME = datetime.datetime(2021, 1, 1, 0, 0, 0)
@@ -77,3 +78,29 @@ def test_create_intermediatory_classified_post_author(reseed_tables, client: Tes
     assert (
         json["intermediatory_classified_post_authors"][0] == intermediatory_classified_post_author
     )
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
+def test_create_intermediatory_classified_post_author_non_unique_error(
+    reseed_tables, client: TestClient
+) -> None:
+    """Test create intermediatory classified post author not unique."""
+    classifier = manual_post_authors_seed.TEST_MANUAL_POST_AUTHORS_CLASSIFIERS[1]
+    project_id = classifier.project_id
+    duplicated_obj = classifier.intermediatory_classified_post_authors[0]
+    data = {
+        "class_id": duplicated_obj.class_id,
+        "phoenix_platform_message_author_id": duplicated_obj.phoenix_platform_message_author_id,
+    }
+    with freezegun.freeze_time(UPDATED_TIME):
+        response = client.post(
+            (
+                f"/projects/{project_id}"
+                f"/classifiers/manual_post_authors/{classifier.id}"
+                "/intermediatory_classified_post_authors/"
+            ),
+            json=data,
+        )
+
+    assert response.status_code == 400
+    assert response.json() == {"detail": crud.UNIQUE_ERROR_MESSAGE}
