@@ -157,3 +157,10 @@ class IntermediatoryClasses(IntermediatoryClassesBase, base_models.TimestampMode
         order_by="asc(IntermediatoryClassToKeywordConfig.id)",
         lazy="select",
     )
+    intermediatory_classified_post_authors = orm.relationship(
+        "IntermediatoryClassifiedPostAuthors",
+        back_populates="intermediatory_class",
+        cascade="all, delete-orphan",
+        order_by="asc(IntermediatoryClassifiedPostAuthors.id)",
+        lazy="select",
+    )

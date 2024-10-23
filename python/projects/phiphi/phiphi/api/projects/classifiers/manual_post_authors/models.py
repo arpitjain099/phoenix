@@ -56,6 +56,7 @@ class IntermediatoryClassifiedPostAuthors(
     # Define the relationship between IntermediatoryClassToKeywordConfig and IntermediatoryClasses
     intermediatory_class: orm.Mapped[classifiers_models.IntermediatoryClasses] = orm.relationship(
         "IntermediatoryClasses",
+        back_populates="intermediatory_classified_post_authors",
         lazy="selectin",  # Eager load the relationship as the class name is always needed
     )
 
