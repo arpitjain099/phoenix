@@ -104,3 +104,28 @@ def test_create_intermediatory_classified_post_author_non_unique_error(
 
     assert response.status_code == 400
     assert response.json() == {"detail": crud.UNIQUE_ERROR_MESSAGE}
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
+def test_delete_intermediatory_classified_post_author(reseed_tables, client: TestClient) -> None:
+    """Test delete intermediatory classified post author."""
+    classifier = manual_post_authors_seed.TEST_MANUAL_POST_AUTHORS_CLASSIFIERS[1]
+    project_id = classifier.project_id
+    obj_id = classifier.intermediatory_classified_post_authors[0].id
+
+    with freezegun.freeze_time(UPDATED_TIME):
+        response = client.delete(
+            (
+                f"/projects/{project_id}"
+                f"/classifiers/manual_post_authors/{classifier.id}"
+                f"/intermediatory_classified_post_authors/{obj_id}"
+            )
+        )
+    assert response.status_code == 200
+    assert response.json() is None
+
+    response = client.get(f"/projects/{classifier.project_id}/classifiers/{classifier.id}")
+    assert response.status_code == 200
+    json = response.json()
+    assert json["last_edited_at"] == UPDATED_TIME.isoformat()
+    assert len(json["intermediatory_classified_post_authors"]) == 0

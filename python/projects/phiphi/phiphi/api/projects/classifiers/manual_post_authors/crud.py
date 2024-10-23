@@ -36,3 +36,29 @@ def create_intermediatory_classified_post_authors(
             raise exceptions.UnknownIntegrityError()
     session.refresh(orm_classifier)
     return schemas.IntermediatoryClassifiedPostAuthorsResponse.model_validate(orm)
+
+
+def delete_intermediatory_classified_post_author(
+    session: sa.orm.Session,
+    project_id: int,
+    classifier_id: int,
+    classified_post_author_id: int,
+) -> None:
+    """Delete an intermediatory classified post author."""
+    with crud.get_orm_classifier_with_edited_context(
+        session=session, project_id=project_id, classifier_id=classifier_id
+    ) as orm_classifier:
+        if orm_classifier.type != base_schemas.ClassifierType.manual_post_authors:
+            raise exceptions.HttpException400("Invalid classifier type")
+
+        orm = (
+            session.query(models.IntermediatoryClassifiedPostAuthors)
+            .filter(models.IntermediatoryClassifiedPostAuthors.id == classified_post_author_id)
+            .first()
+        )
+        if orm is None:
+            raise exceptions.HttpException404("Intermediatory classified post author not found")
+        session.delete(orm)
+        session.commit()
+    session.refresh(orm_classifier)
+    return None
