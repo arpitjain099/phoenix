@@ -19,6 +19,15 @@ def gather_flow(
 ) -> None:
     """Flow which gathers data.
 
+    Args:
+        gather_dict (dict): Dictionary containing the gather parameters.
+        gather_child_type (gathers.schemas.ChildTypeName): The type of gather.
+        job_run_id (int): The job run id.
+        project_namespace (str): The project namespace.
+        batch_size (int, optional): The batch size. Defaults to
+            pipeline_jobs_constants.DEFAULT_BATCH_SIZE. Note that one batch is written to one row
+            in BigQuery, and BQ has a row size limit of 10MB.
+
     Warning: there is a race condition in this flow for the deduplicate step if multiple gathers
     flow are being run at the same time. Very unlikely though.
     """
