@@ -17,36 +17,58 @@ def classify(
         f"{bigquery_dataset}.{pipeline_jobs_constants.CLASSIFIED_MESSAGES_TABLE_NAME}"  # noqa: E501
     )
 
-    for config in classifier.latest_version.params["class_to_keyword_configs"]:
-        class_name = config["class_name"]
-        must_keywords = config["musts"].split()
+    unclassified_messages_query = f"""
+        WITH unclassified_messages AS (
+            SELECT
+                src.phoenix_platform_message_id,
+                src.pi_text  -- Include pi_text so it can be used in WHERE conditions
+            FROM
+                `{source_table_name}` AS src
+            LEFT JOIN
+                `{destination_table_name}` AS dst
+            ON
+                src.phoenix_platform_message_id = dst.phoenix_platform_message_id
+                AND dst.classifier_id = {classifier.id}
+                AND dst.classifier_version_id = {classifier.latest_version.version_id}
+            WHERE
+                dst.phoenix_platform_message_id IS NULL
+        )
+    """
 
-        # Construct the query conditions for each keyword.
-        # BigQuery doesn't support lookarounds, so we're doing a simple LIKE.
-        conditions = [f"pi_text LIKE '%{keyword}%'" for keyword in must_keywords]
+    select_statements = []
+    for config in classifier.latest_version.params["class_to_keyword_configs"]:
+        conditions = [f"pi_text LIKE '%{keyword}%'" for keyword in config["musts"].split()]
         combined_conditions = " AND ".join(conditions)
 
-        # BigQuery SQL query to classify messages and insert into the classified messages table
-        query = f"""
-            INSERT INTO `{destination_table_name}`
-            (
-                classifier_id,
-                classifier_version_id,
-                class_name,
-                phoenix_platform_message_id,
-                job_run_id
-            )
+        select_statements.append(
+            f"""
             SELECT
                 {classifier.id} AS classifier_id,
                 {classifier.latest_version.version_id} AS classifier_version_id,
-                '{class_name}' AS class_name,
+                '{config["class_name"]}' AS class_name,
                 phoenix_platform_message_id,
                 {job_run_id} AS job_run_id
             FROM
-                `{source_table_name}`
+                unclassified_messages
             WHERE
                 {combined_conditions}
             """
+        )
 
-        query_job = client.query(query)
-        query_job.result()
+    union_query = " UNION ALL ".join(select_statements)
+
+    query = f"""
+        INSERT INTO `{destination_table_name}`
+        (
+            classifier_id,
+            classifier_version_id,
+            class_name,
+            phoenix_platform_message_id,
+            job_run_id
+        )
+        {unclassified_messages_query}
+        {union_query}
+    """
+
+    query_job = client.query(query)
+    query_job.result()
