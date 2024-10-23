@@ -68,3 +68,12 @@ def test_create_intermediatory_classified_post_author(reseed_tables, client: Tes
         == data["phoenix_platform_message_author_id"]
     )
     assert intermediatory_classified_post_author["created_at"] == UPDATED_TIME.isoformat()
+
+    response = client.get(f"/projects/{classifier.project_id}/classifiers/{classifier.id}")
+    assert response.status_code == 200
+    json = response.json()
+    assert json["last_edited_at"] == UPDATED_TIME.isoformat()
+    assert len(json["intermediatory_classified_post_authors"]) == 1
+    assert (
+        json["intermediatory_classified_post_authors"][0] == intermediatory_classified_post_author
+    )
