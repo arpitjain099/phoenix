@@ -1,6 +1,8 @@
 """Conftest."""
+import json
 from typing import Generator, Iterator
 
+import pandas as pd
 import pydantic_core
 import pytest
 from fastapi.testclient import TestClient
@@ -9,7 +11,7 @@ from prefect.testing.utilities import prefect_test_harness
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
-from phiphi import config, platform_db
+from phiphi import config, platform_db, utils
 from phiphi.api import main
 from phiphi.seed import main as seed_main
 
@@ -170,3 +172,14 @@ def prefect_test_fixture():
     with prefect_test_harness():
         with disable_run_logger():
             yield
+
+
+@pytest.fixture
+def pipeline_jobs_sample_generalised_post_authors() -> pd.DataFrame:
+    """Sample generalised post authors."""
+    base_path = utils.get_pipeline_sample_data_path()
+    path = base_path.joinpath("generalised_post_authors.json").resolve()
+    with open(path, "r") as f:
+        sample_authors = json.load(f)
+
+    return pd.DataFrame(sample_authors)
