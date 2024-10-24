@@ -7,14 +7,14 @@ from phiphi.api import base_models
 from phiphi.api.projects.classifiers import models as classifiers_models
 
 
-class IntermediatoryClassifiedPostAuthorsBase(platform_db.Base):
-    """Intermediatory classified post authors table.
+class IntermediatoryAuthorClassesBase(platform_db.Base):
+    """Intermediatory author classes.
 
     The intermediatory table stores the "live" table, on which all edits and additions to
-    the list of classified authors are made.
+    the list of author classes are made.
 
     When a new version of the classifier is created, the table is copied to the
-    "classified_authors" attribute in the `params` of the classifier_versions table. Pipeline
+    "author_classes" attribute in the `params` of the classifier_versions table. Pipeline
     classifiers then use the versioned params to classify data.
     """
 
@@ -29,27 +29,25 @@ class IntermediatoryClassifiedPostAuthorsBase(platform_db.Base):
     )
 
 
-class IntermediatoryClassifiedPostAuthors(
-    IntermediatoryClassifiedPostAuthorsBase, base_models.TimestampModel
-):
+class IntermediatoryAuthorClasses(IntermediatoryAuthorClassesBase, base_models.TimestampModel):
     """Intermediatory classified authors table."""
 
-    __tablename__ = "intermediatory_classified_post_authors"
+    __tablename__ = "intermediatory_author_classes"
 
     __table_args__ = (
         sa.UniqueConstraint(
             "classifier_id",
             "class_id",
             "phoenix_platform_message_author_id",
-            name="uq_intermediatory_classified_authors",
+            name="uq_intermediatory_author_classes",
         ),
-        sa.Index("ix_intermediatory_classified_authors", "classifier_id", "class_id"),
+        sa.Index("ix_intermediatory_author_classes", "classifier_id", "class_id"),
         # We are adding an index on class_id to speed
-        sa.Index("ix_intermediatory_classified_authors_class", "class_id"),
+        sa.Index("ix_intermediatory_author_classes_class_id", "class_id"),
         # We are adding an index on phoenix_platform_message_author_id as we are going to do a join
         # on this id from the project data
         sa.Index(
-            "ix_intermediatory_classified_authors_phoenix_id", "phoenix_platform_message_author_id"
+            "ix_intermediatory_author_classes_phoenix_id", "phoenix_platform_message_author_id"
         ),
     )
 
