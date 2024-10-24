@@ -30,7 +30,7 @@ def create_intermediatory_classified_post_authors(
             raise exceptions.IntermediatoryClassNotFound()
 
         try:
-            orm = models.IntermediatoryClassifiedPostAuthors(
+            orm = models.IntermediatoryAuthorClasses(
                 classifier_id=orm_classifier.id,
                 class_id=create_obj.class_id,
                 phoenix_platform_message_author_id=create_obj.phoenix_platform_message_author_id,
@@ -60,8 +60,8 @@ def delete_intermediatory_classified_post_author(
             raise exceptions.HttpException400("Invalid classifier type")
 
         orm = (
-            session.query(models.IntermediatoryClassifiedPostAuthors)
-            .filter(models.IntermediatoryClassifiedPostAuthors.id == classified_post_author_id)
+            session.query(models.IntermediatoryAuthorClasses)
+            .filter(models.IntermediatoryAuthorClasses.id == classified_post_author_id)
             .first()
         )
         if orm is None:
