@@ -60,3 +60,23 @@ def delete_intermediatory_author_class(
         classifier_id=classifier_id,
         classified_post_author_id=classified_post_author_id,
     )
+
+
+@router.get(
+    "/projects/{project_id}/classifiers/manual_post_authors/{classifier_id}/authors/",
+)
+def get_authors(
+    session: deps.SessionDep,
+    project_id: int,
+    classifier_id: int,
+    start: int = 0,
+    end: int = 10,
+) -> list[schemas.AuthorsResponse]:
+    """Get authors to classified and configure."""
+    return crud.get_authors(
+        session=session,
+        project_id=project_id,
+        classifier_id=classifier_id,
+        offset=start,
+        limit=end,
+    )
