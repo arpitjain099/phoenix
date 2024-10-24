@@ -6,7 +6,8 @@ from phiphi.api.projects.classifiers import base_schemas
 from phiphi.api.projects.classifiers.manual_post_authors import crud, schemas
 
 TEST_MANUAL_POST_AUTHORS_CREATE_NO_VERSION = base_schemas.ClassifierCreate(
-    name="Test keyword match Classifier 1 no version",
+    name="Test manual_post_authors Classifier 1 no version",
+    description="Test Classifier 1 Description",
     intermediatory_classes=[
         base_schemas.IntermediatoryClassCreate(
             name="Test Class 1",
@@ -20,7 +21,8 @@ TEST_MANUAL_POST_AUTHORS_CREATE_NO_VERSION = base_schemas.ClassifierCreate(
 )
 
 TEST_MANUAL_POST_AUTHORS_CREATE_NO_VERSION_CLASSIFIED = base_schemas.ClassifierCreate(
-    name="Test keyword match Classifier 1 no version with intermediatory classified post authors",
+    name="Test manual_post_authors Classifier 2 no version with intermediatory author classes",
+    description="Test Classifier 2 Description",
     intermediatory_classes=[
         base_schemas.IntermediatoryClassCreate(
             name="Test Class 1",
