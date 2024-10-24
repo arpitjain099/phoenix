@@ -1,6 +1,7 @@
 """Utility functions for data processing and uploading."""
 import os
 import re
+import warnings
 
 import pandas as pd
 import pandera as pa
@@ -39,7 +40,14 @@ def write_data(
     dataset: str,
     table: str,
 ) -> None:
-    """Upload DataFrame to BigQuery or save as Parquet file locally based on configuration.
+    """Upload DataFrame to BigQuery, or attempt to use BQ emulation.
+
+    Warning: Not all BQ queries used in the pipelines are supported in the mock/emulated BQ
+    environment. Use with caution.
+
+    Future intention is to implement https://github.com/goccy/bigquery-emulator as a local emulator
+    for testing, as well as a platform version that doesn't rely on GCP. Not currently implemented.
+
 
     Args:
         df (pd.DataFrame): DataFrame to be uploaded or saved.
@@ -47,6 +55,10 @@ def write_data(
         table (str): BigQuery table name.
     """
     if config.settings.USE_MOCK_BQ:
+        warnings.warn(
+            "Not all BQ queries used in the pipelines are supported in the mock/emulated BQ "
+            " environment. Use with caution."
+        )
         parquet_file_path = os.path.join(
             config.settings.MOCK_BQ_ROOT_DIR, dataset, table + ".parquet"
         )
