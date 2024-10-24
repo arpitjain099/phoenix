@@ -86,7 +86,9 @@ def seed_test_classifiers_manual_post_authors(session: Session) -> None:
         intermediatory_author_class_creates=[
             schemas.IntermediatoryAuthorClassCreate(
                 class_id=classifier_to_create_intermediatory.intermediatory_classes[0].id,
-                phoenix_platform_message_author_id="author1",
+                # Using `id_1` as this is in the
+                # pipeline_jobs/sample_data/generalised_post_authors.json
+                phoenix_platform_message_author_id="id_1",
             )
         ],
     )
