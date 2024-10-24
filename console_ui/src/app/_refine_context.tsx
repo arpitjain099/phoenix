@@ -173,6 +173,18 @@ const RefineContext = ({ children }: PropsWithChildren) => {
 										},
 									},
 									{
+										name: "keyword_match",
+										create:
+											"/projects/:projectid/classifiers/keyword_match/create",
+										edit: "/projects/:projectid/classifiers/keyword_match/edit/:id",
+										show: "/projects/:projectid/classifiers/keyword_match/:id",
+										meta: {
+											label: "Classify Keyword Match",
+											parent: "projects",
+											hide: true,
+										},
+									},
+									{
 										name: "profile",
 										list: "/profile",
 										meta: {

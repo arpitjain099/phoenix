@@ -198,7 +198,7 @@ const ClassifyComponent: React.FC<IClassifierProps> = ({
 								</Tooltip>
 							)}
 							<Link
-								href={`/projects/${project_id}/classifier/${type}/${id}`}
+								href={`/projects/${project_id}/classifiers/${type}/${id}`}
 								className="no-underline text-blue-500"
 							>
 								{name}

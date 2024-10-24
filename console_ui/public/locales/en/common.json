@@ -572,6 +572,14 @@
 			"show": "Show Classifier",
 			"select_type": "Select the type of classifier you would like to do"
 		},
+		"fields": {
+			"class_name": "Class Name",
+			"keywords": "Keywords"
+		},
+		"info": {
+			"create_keywords": "Keywords added in one sequence have an `and` operator between them. To create `or` releationships for this class add more then one keyword sequence.",
+			"edit_keywords": "To create `or` releationships for this class add more then one keyword sequence."
+		},
 		"types": {
 			"post_author_classifier": {
 				"create": "Create a post author classifier",
@@ -579,9 +587,17 @@
 				"proceed_text": "Start creating"
 			},
 			"keyword_match": {
+				"run": "Run and apply to future Gathers",
 				"create": "Create a keyword text classifier",
 				"create_description": "Define a classifier that will automatically add classes to a post and/or comment when its text contains certain keywords. This will be applied to posts and/or comments that have been gathered, and data gathered in the future.",
-				"proceed_text": "Start creating"
+				"create_description_2": "You will need to create the classifier with the classes before you edit the keywords.",
+				"proceed_text": "Start creating",
+				"edit": "Edit a keyword text classifier",
+				"edit_description": "Define a classifier that will automatically add classes to a post and/or comment when its text contains certain keywords. This will be applied to posts and/or comments that have been gathered, and data gathered in the future.",
+				"edit_description_2": "Edits will be automatically saved but you must `Run and apply to future Gathers` to have the classifier update the dashboard dataset.",
+				"view": {
+					"text": "View your keyword text classifier."
+				}
 			},
 			"perspective_classifier_text": {
 				"create": "Apply Perspective API to classify text",
@@ -598,10 +614,17 @@
 			"text": {
 				"archive": "Would you like to ARCHIVE this classifier?",
 				"restore": "Would you like to RESTORE this classifier?"
+			},
+			"tooltips": {
+				"save_class": "Save Class and Keywords data",
+				"add_keyword": "Add Keyword group",
+				"delete_class": "Delete this class",
+				"delete_keyword": "Delete this keyword group"
 			}
 		},
 		"caution": "Your classifier has edit's that have not been applied. Click icon to go to edit page and then click `Run and apply to future Gathers` to update dashboard dataset.",
 		"success": {
+			"success": "Success",
 			"archive": "Archiving Classifier.",
 			"restore": "Restoring Classifier."
 		},
