@@ -41,7 +41,7 @@ def test_create_manual_post_authors_classifier(reseed_tables, client: TestClient
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
-def test_create_intermediatory_classified_post_author(reseed_tables, client: TestClient) -> None:
+def test_create_intermediatory_author_class(reseed_tables, client: TestClient) -> None:
     """Test create intermediatory classified post author."""
     classifier = manual_post_authors_seed.TEST_MANUAL_POST_AUTHORS_CLASSIFIERS[0]
     project_id = classifier.project_id
@@ -55,35 +55,32 @@ def test_create_intermediatory_classified_post_author(reseed_tables, client: Tes
             (
                 f"/projects/{project_id}"
                 f"/classifiers/manual_post_authors/{classifier.id}"
-                "/intermediatory_classified_post_authors/"
+                "/intermediatory_author_classes/"
             ),
             json=data,
         )
     assert response.status_code == 200
-    intermediatory_classified_post_author = response.json()
+    intermediatory_author_class = response.json()
 
-    assert intermediatory_classified_post_author["classifier_id"] == classifier.id
-    assert intermediatory_classified_post_author["class_id"] == data["class_id"]
+    assert intermediatory_author_class["classifier_id"] == classifier.id
+    assert intermediatory_author_class["class_id"] == data["class_id"]
     assert (
-        intermediatory_classified_post_author["phoenix_platform_message_author_id"]
+        intermediatory_author_class["phoenix_platform_message_author_id"]
         == data["phoenix_platform_message_author_id"]
     )
-    assert intermediatory_classified_post_author["created_at"] == UPDATED_TIME.isoformat()
-    assert (
-        intermediatory_classified_post_author["class_name"]
-        == classifier.intermediatory_classes[0].name
-    )
+    assert intermediatory_author_class["created_at"] == UPDATED_TIME.isoformat()
+    assert intermediatory_author_class["class_name"] == classifier.intermediatory_classes[0].name
 
     response = client.get(f"/projects/{classifier.project_id}/classifiers/{classifier.id}")
     assert response.status_code == 200
     json = response.json()
     assert json["last_edited_at"] == UPDATED_TIME.isoformat()
     assert len(json["intermediatory_author_classes"]) == 1
-    assert json["intermediatory_author_classes"][0] == intermediatory_classified_post_author
+    assert json["intermediatory_author_classes"][0] == intermediatory_author_class
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
-def test_create_intermediatory_classified_post_author_non_unique_error(
+def test_create_intermediatory_author_class_non_unique_error(
     reseed_tables, client: TestClient
 ) -> None:
     """Test create intermediatory classified post author not unique."""
@@ -99,7 +96,7 @@ def test_create_intermediatory_classified_post_author_non_unique_error(
             (
                 f"/projects/{project_id}"
                 f"/classifiers/manual_post_authors/{classifier.id}"
-                "/intermediatory_classified_post_authors/"
+                "/intermediatory_author_classes/"
             ),
             json=data,
         )
@@ -109,7 +106,7 @@ def test_create_intermediatory_classified_post_author_non_unique_error(
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
-def test_create_intermediatory_classified_post_author_class_not_found(
+def test_create_intermediatory_author_class_class_not_found(
     reseed_tables, client: TestClient
 ) -> None:
     """Test create intermediatory classified post author class not found."""
@@ -125,7 +122,7 @@ def test_create_intermediatory_classified_post_author_class_not_found(
             (
                 f"/projects/{project_id}"
                 f"/classifiers/manual_post_authors/{classifier.id}"
-                "/intermediatory_classified_post_authors/"
+                "/intermediatory_author_classes/"
             ),
             json=data,
         )
@@ -135,7 +132,7 @@ def test_create_intermediatory_classified_post_author_class_not_found(
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
-def test_delete_intermediatory_classified_post_author(reseed_tables, client: TestClient) -> None:
+def test_delete_intermediatory_author_class(reseed_tables, client: TestClient) -> None:
     """Test delete intermediatory classified post author."""
     classifier = manual_post_authors_seed.TEST_MANUAL_POST_AUTHORS_CLASSIFIERS[1]
     project_id = classifier.project_id
@@ -146,7 +143,7 @@ def test_delete_intermediatory_classified_post_author(reseed_tables, client: Tes
             (
                 f"/projects/{project_id}"
                 f"/classifiers/manual_post_authors/{classifier.id}"
-                f"/intermediatory_classified_post_authors/{obj_id}"
+                f"/intermediatory_author_classes/{obj_id}"
             )
         )
     assert response.status_code == 200

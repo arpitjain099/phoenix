@@ -27,16 +27,16 @@ def create_manual_post_authors_classifier(
 
 
 @router.post(
-    "/projects/{project_id}/classifiers/manual_post_authors/{classifier_id}/intermediatory_classified_post_authors",
+    "/projects/{project_id}/classifiers/manual_post_authors/{classifier_id}/intermediatory_author_classes",
 )
-def create_intermediatory_classified_post_author(
+def create_intermediatory_author_class(
     session: deps.SessionDep,
     project_id: int,
     classifier_id: int,
     create_obj: schemas.IntermediatoryAuthorClassCreate,
 ) -> schemas.IntermediatoryAuthorClassResponse:
-    """Create an intermediatory classified post author."""
-    return crud.create_intermediatory_classified_post_authors(
+    """Create an intermediatory author class."""
+    return crud.create_intermediatory_author_class(
         session=session,
         project_id=project_id,
         classifier_id=classifier_id,
@@ -45,16 +45,16 @@ def create_intermediatory_classified_post_author(
 
 
 @router.delete(
-    "/projects/{project_id}/classifiers/manual_post_authors/{classifier_id}/intermediatory_classified_post_authors/{classified_post_author_id}",
+    "/projects/{project_id}/classifiers/manual_post_authors/{classifier_id}/intermediatory_author_classes/{classified_post_author_id}",
 )
-def delete_intermediatory_classified_post_author(
+def delete_intermediatory_author_class(
     session: deps.SessionDep,
     project_id: int,
     classifier_id: int,
     classified_post_author_id: int,
 ) -> None:
-    """Delete an intermediatory classified post author."""
-    return crud.delete_intermediatory_classified_post_author(
+    """Delete an intermediatory author class."""
+    return crud.delete_intermediatory_author_class(
         session=session,
         project_id=project_id,
         classifier_id=classifier_id,
