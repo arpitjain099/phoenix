@@ -98,7 +98,9 @@ class Settings(BaseSettings):
     # Pipelines
     # If True; don't make real Apify calls, read static sample data from within module instead
     USE_MOCK_APIFY: bool = False
-    # If True; don't make real writes to BigQuery, write to local parquet files instead
+    # If True; don't make real writes to BigQuery, attempt to use local "eumlator" instead. Note,
+    # currently emulation doesn't cover all project BQ queries, as such breaks can occur - use with
+    # caution.
     USE_MOCK_BQ: bool = False
     # Root directory for mock BigQuery data, defined relative to this config file, computed by
     # validator function.
