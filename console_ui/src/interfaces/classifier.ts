@@ -24,3 +24,13 @@ export interface ClassifierResponse {
 		version_id: number;
 	};
 }
+
+
+export interface ClassifierPayload {
+	name: string;
+}
+
+export interface ClassifierClassPayload {
+	name: string;
+	description: string;
+}
