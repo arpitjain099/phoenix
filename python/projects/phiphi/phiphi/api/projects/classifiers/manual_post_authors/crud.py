@@ -13,8 +13,8 @@ def create_intermediatory_classified_post_authors(
     session: sa.orm.Session,
     project_id: int,
     classifier_id: int,
-    create_obj: schemas.IntermediatoryClassifiedPostAuthorsCreate,
-) -> schemas.IntermediatoryClassifiedPostAuthorsResponse:
+    create_obj: schemas.IntermediatoryAuthorClassCreate,
+) -> schemas.IntermediatoryAuthorClassResponse:
     """Create an intermediatory classified post author."""
     with crud.get_orm_classifier_with_edited_context(
         session=session, project_id=project_id, classifier_id=classifier_id
@@ -43,7 +43,7 @@ def create_intermediatory_classified_post_authors(
                 raise exceptions.HttpException400(UNIQUE_ERROR_MESSAGE)
             raise exceptions.UnknownIntegrityError()
     session.refresh(orm_classifier)
-    return schemas.IntermediatoryClassifiedPostAuthorsResponse.model_validate(orm)
+    return schemas.IntermediatoryAuthorClassResponse.model_validate(orm)
 
 
 def delete_intermediatory_classified_post_author(
