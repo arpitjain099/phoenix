@@ -83,6 +83,13 @@ class Classifiers(ClassifiersBase, base_models.TimestampModel):
         lazy="select",
     )
 
+    intermediatory_classified_post_authors = orm.relationship(
+        "IntermediatoryClassifiedPostAuthors",
+        cascade="all, delete-orphan",
+        order_by="asc(IntermediatoryClassifiedPostAuthors.id)",
+        lazy="select",
+    )
+
     # Relationship to get all related JobRuns, ordered by id descending
     job_runs = orm.relationship(
         "JobRuns",
@@ -148,5 +155,12 @@ class IntermediatoryClasses(IntermediatoryClassesBase, base_models.TimestampMode
         back_populates="intermediatory_class",
         cascade="all, delete-orphan",
         order_by="asc(IntermediatoryClassToKeywordConfig.id)",
+        lazy="select",
+    )
+    intermediatory_classified_post_authors = orm.relationship(
+        "IntermediatoryClassifiedPostAuthors",
+        back_populates="intermediatory_class",
+        cascade="all, delete-orphan",
+        order_by="asc(IntermediatoryClassifiedPostAuthors.id)",
         lazy="select",
     )
