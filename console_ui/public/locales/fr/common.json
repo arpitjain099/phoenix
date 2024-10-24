@@ -566,20 +566,44 @@
 			"show": "Afficher le classificateur",
 			"select_type": "Sélectionnez le type de classificateur que vous souhaitez créer"
 		},
+		"fields": {
+			"class_name": "Nom de la classe",
+			"keywords": "Mots-clés",
+			"latest_version_applyed_at": "Dernière version appliquée le",
+			"latest_edits_made_at": "Dernières modifications effectuées le :"
+		},
+		"info": {
+			"create_keywords": "Les mots-clés ajoutés dans une séquence ont un opérateur `et` entre eux. Pour créer des relations `ou` pour cette classe, ajoutez plus d'une séquence de mots-clés.",
+			"edit_keywords": "Pour créer des relations `ou` pour cette classe, ajoutez plus d'une séquence de mots-clés."
+		},
 		"types": {
 			"post_author_classifier": {
 				"create": "Créer un classificateur d'auteur de post",
-				"create_description": "À partir des données recueillies, vous pouvez ajouter une ou plusieurs classes à chaque auteur ayant des publications. Les auteurs seront classés par le nombre de publications recueillies (le plus élevé en premier) et vous pourrez ajouter des classes à chaque auteur.",
+				"create_description": "À partir des données collectées, vous pouvez ajouter une ou plusieurs classes à chaque auteur ayant des posts. Les auteurs seront classés par le nombre de posts collectés (du plus élevé au plus bas) et vous pourrez ajouter des classes à chaque auteur.",
 				"proceed_text": "Commencer à créer"
 			},
 			"keyword_match": {
+				"run": "Exécuter et appliquer aux futures collectes",
 				"create": "Créer un classificateur de texte par mots-clés",
-				"create_description": "Définissez un classificateur qui ajoutera automatiquement des classes à un post et/ou un commentaire lorsque son texte contient certains mots-clés. Cela s'appliquera aux publications et/ou commentaires recueillis, ainsi qu'aux données collectées à l'avenir.",
-				"proceed_text": "Commencer à créer"
+				"create_description": "Définissez un classificateur qui ajoutera automatiquement des classes à un post et/ou commentaire lorsque son texte contient certains mots-clés. Cela sera appliqué aux posts et/ou commentaires qui ont été collectés, ainsi qu'aux données collectées à l'avenir.",
+				"create_description_2": "Vous devrez créer le classificateur avec les classes avant de modifier les mots-clés.",
+				"proceed_text": "Commencer à créer",
+				"edit": "Modifier un classificateur de texte par mots-clés",
+				"edit_description": "Définissez un classificateur qui ajoutera automatiquement des classes à un post et/ou commentaire lorsque son texte contient certains mots-clés. Cela sera appliqué aux posts et/ou commentaires qui ont été collectés, ainsi qu'aux données collectées à l'avenir.",
+				"edit_description_2": "Les modifications seront automatiquement enregistrées, mais vous devez `Exécuter et appliquer aux futures collectes` pour que le classificateur mette à jour le jeu de données du tableau de bord.",
+				"view": {
+					"text": "Voir votre classificateur de texte par mots-clés.",
+					"accordion": {
+						"status": "Statut",
+						"general": "Général",
+						"classes": "Classes",
+						"keywords": "Mots-clés"
+					}
+				}
 			},
 			"perspective_classifier_text": {
 				"create": "Appliquer l'API Perspective pour classifier le texte",
-				"create_description": "L'API Perspective est un classificateur gratuit qui utilise l'apprentissage automatique pour identifier les commentaires `toxiques`. Vous pouvez utiliser l'API Perspective pour classifier en fonction du texte d'un post et/ou commentaire. Cela s'appliquera à tous les posts et/ou commentaires qui ont été recueillis, ainsi qu'aux données collectées à l'avenir. Pour plus d'informations sur le modèle, consultez ",
+				"create_description": "L'API Perspective est un classificateur gratuit qui utilise l'apprentissage automatique pour identifier les commentaires `toxiques`. Vous pouvez utiliser l'API Perspective pour classifier en fonction du texte d'un post et/ou commentaire. Cela sera appliqué à tous les posts et/ou commentaires qui ont été collectés, ainsi qu'aux données collectées à l'avenir. Pour plus d'informations sur le modèle, consultez",
 				"proceed_text": "Commencer à appliquer"
 			}
 		},
@@ -590,12 +614,19 @@
 				"restore": "Restaurer"
 			},
 			"text": {
-				"archive": "Voulez-vous ARCHIVER ce classificateur ?",
-				"restore": "Voulez-vous RESTAURER ce classificateur ?"
+				"archive": "Souhaitez-vous ARCHIVER ce classificateur ?",
+				"restore": "Souhaitez-vous RESTAURER ce classificateur ?"
+			},
+			"tooltips": {
+				"save_class": "Enregistrer les données de la classe et des mots-clés",
+				"add_keyword": "Ajouter un groupe de mots-clés",
+				"delete_class": "Supprimer cette classe",
+				"delete_keyword": "Supprimer ce groupe de mots-clés"
 			}
 		},
-		"caution": "Votre classificateur a des modifications qui n'ont pas été appliquées. Cliquez sur l'icône pour aller à la page de modification puis cliquez sur `Exécuter et appliquer aux futures collectes` pour mettre à jour le jeu de données du tableau de bord.",
+		"caution": "Votre classificateur a des modifications qui n'ont pas été appliquées. Cliquez sur l'icône pour aller à la page de modification, puis cliquez sur `Exécuter et appliquer aux futures collectes` pour mettre à jour le jeu de données du tableau de bord.",
 		"success": {
+			"success": "Succès",
 			"archive": "Archivage du classificateur.",
 			"restore": "Restauration du classificateur."
 		},

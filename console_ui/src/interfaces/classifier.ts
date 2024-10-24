@@ -25,7 +25,6 @@ export interface ClassifierResponse {
 	};
 }
 
-
 export interface ClassifierPayload {
 	name: string;
 }

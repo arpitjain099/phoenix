@@ -566,25 +566,49 @@
 			"show": "Mostrar clasificador",
 			"select_type": "Seleccione el tipo de clasificador que desea crear"
 		},
+		"fields": {
+			"class_name": "Nombre de la clase",
+			"keywords": "Palabras clave",
+			"latest_version_applyed_at": "Última versión aplicada en",
+			"latest_edits_made_at": "Últimas ediciones realizadas en:"
+		},
+		"info": {
+			"create_keywords": "Las palabras clave añadidas en una secuencia tienen un operador `y` entre ellas. Para crear relaciones `o` para esta clase, agregue más de una secuencia de palabras clave.",
+			"edit_keywords": "Para crear relaciones `o` para esta clase, agregue más de una secuencia de palabras clave."
+		},
 		"types": {
 			"post_author_classifier": {
-				"create": "Crear un clasificador de autor de publicaciones",
+				"create": "Crear un clasificador de autor de post",
 				"create_description": "A partir de los datos recopilados, puede agregar una o más clases a cada autor que tenga publicaciones. Los autores se ordenarán por el número de publicaciones recopiladas (de mayor a menor) y podrá agregar clases a cada autor.",
 				"proceed_text": "Comenzar a crear"
 			},
 			"keyword_match": {
+				"run": "Ejecutar y aplicar a futuras recopilaciones",
 				"create": "Crear un clasificador de texto por palabras clave",
-				"create_description": "Defina un clasificador que agregue automáticamente clases a una publicación y/o comentario cuando su texto contenga ciertas palabras clave. Esto se aplicará a publicaciones y/o comentarios que se hayan recopilado, así como a datos recopilados en el futuro.",
-				"proceed_text": "Comenzar a crear"
+				"create_description": "Defina un clasificador que agregará automáticamente clases a una publicación y/o comentario cuando su texto contenga ciertas palabras clave. Esto se aplicará a publicaciones y/o comentarios que hayan sido recopilados, así como a datos recopilados en el futuro.",
+				"create_description_2": "Deberá crear el clasificador con las clases antes de editar las palabras clave.",
+				"proceed_text": "Comenzar a crear",
+				"edit": "Editar un clasificador de texto por palabras clave",
+				"edit_description": "Defina un clasificador que agregará automáticamente clases a una publicación y/o comentario cuando su texto contenga ciertas palabras clave. Esto se aplicará a publicaciones y/o comentarios que hayan sido recopilados, así como a datos recopilados en el futuro.",
+				"edit_description_2": "Las ediciones se guardarán automáticamente, pero debe `Ejecutar y aplicar a futuras recopilaciones` para que el clasificador actualice el conjunto de datos del panel.",
+				"view": {
+					"text": "Ver su clasificador de texto por palabras clave.",
+					"accordion": {
+						"status": "Estado",
+						"general": "General",
+						"classes": "Clases",
+						"keywords": "Palabras clave"
+					}
+				}
 			},
 			"perspective_classifier_text": {
-				"create": "Aplicar la API de Perspective para clasificar texto",
-				"create_description": "La API de Perspective es un clasificador gratuito que utiliza aprendizaje automático para identificar comentarios `tóxicos`. Puede usar la API de Perspective para clasificar según el texto de una publicación y/o comentario. Esto se aplicará a todas las publicaciones y/o comentarios que se hayan recopilado, así como a los datos recopilados en el futuro. Para más información sobre el modelo, consulte ",
+				"create": "Aplicar API de Perspectiva para clasificar texto",
+				"create_description": "La API de Perspectiva es un clasificador gratuito que utiliza aprendizaje automático para identificar comentarios `tóxicos`. Puede utilizar la API de Perspectiva para clasificar en función del texto de una publicación y/o comentario. Esto se aplicará a todas las publicaciones y/o comentarios que hayan sido recopilados, así como a datos recopilados en el futuro. Para obtener más información sobre el modelo, consulte",
 				"proceed_text": "Comenzar a aplicar"
 			}
 		},
 		"actions": {
-			"button": "Sí, continuar",
+			"button": "Sí, proceder",
 			"titles": {
 				"archive": "Archivar",
 				"restore": "Restaurar"
@@ -592,10 +616,17 @@
 			"text": {
 				"archive": "¿Te gustaría ARCHIVAR este clasificador?",
 				"restore": "¿Te gustaría RESTAURAR este clasificador?"
+			},
+			"tooltips": {
+				"save_class": "Guardar datos de clase y palabras clave",
+				"add_keyword": "Agregar grupo de palabras clave",
+				"delete_class": "Eliminar esta clase",
+				"delete_keyword": "Eliminar este grupo de palabras clave"
 			}
 		},
-		"caution": "Su clasificador tiene modificaciones que no se han aplicado. Haga clic en el ícono para ir a la página de edición y luego haga clic en `Ejecutar y aplicar a futuras recopilaciones` para actualizar el conjunto de datos del tablero.",
+		"caution": "Su clasificador tiene ediciones que no han sido aplicadas. Haga clic en el ícono para ir a la página de edición y luego haga clic en `Ejecutar y aplicar a futuras recopilaciones` para actualizar el conjunto de datos del panel.",
 		"success": {
+			"success": "Éxito",
 			"archive": "Archivando clasificador.",
 			"restore": "Restaurando clasificador."
 		},
