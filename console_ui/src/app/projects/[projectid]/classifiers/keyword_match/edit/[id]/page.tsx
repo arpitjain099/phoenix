@@ -12,7 +12,7 @@ import {
 	Divider,
 } from "@mantine/core";
 import { IconTrash, IconPlus, IconCheck, IconInfoCircle } from "@tabler/icons";
-import { useState, useEffect, ChangeEvent } from "react";
+import { useState, useEffect, ChangeEvent, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useTranslate } from "@refinedev/core";
 import { classifierService } from "src/services";
@@ -46,7 +46,7 @@ const EditKeywordClassifier: React.FC = () => {
 	const [isModified, setIsModified] = useState<boolean>(false);
 
 	// Fetch initial data on mount
-	async function fetchData() {
+	const fetchData = useCallback(async () => {
 		try {
 			const response = await classifierService.getClassifierData({
 				project_id: projectid as string,
@@ -60,7 +60,7 @@ const EditKeywordClassifier: React.FC = () => {
 		} catch (error) {
 			console.error("Error fetching classifier data", error);
 		}
-	}
+	}, [id, projectid]);
 
 	useEffect(() => {
 		if (id && projectid) {
@@ -73,7 +73,7 @@ const EditKeywordClassifier: React.FC = () => {
 		return () => {
 			window.onbeforeunload = null;
 		};
-	}, [isModified, id, projectid]);
+	}, [isModified, id, projectid, fetchData]);
 
 	// Input change handlers
 	const handleClassChange = (

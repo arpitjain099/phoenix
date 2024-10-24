@@ -193,7 +193,7 @@ const CreateKeywordClassifier: React.FC = () => {
 									}
 								/>
 							</td>
-							<td></td>
+							<td />
 							<td>
 								<div className="w-full h-full flex gap-1 items-center justify-center">
 									<Tooltip
