@@ -9,11 +9,19 @@ import {
 	EditButton,
 	EditButtonProps,
 } from "@refinedev/mantine";
-import { Accordion, Container, Group, Table, Title } from "@mantine/core";
+import {
+	Accordion,
+	Container,
+	Group,
+	Table,
+	Title,
+	Tooltip,
+} from "@mantine/core";
 import { useParams } from "next/navigation";
 import URLInputList from "@components/gather/url-list";
 import GatherViewBreadcrumb from "@components/breadcrumbs/gatherView";
 import { statusTextStyle } from "src/utils";
+import { IconInfoCircle } from "@tabler/icons";
 
 export default function KeywordClassifierShow(): JSX.Element {
 	const { projectid, id } = useParams();
@@ -68,6 +76,23 @@ export default function KeywordClassifierShow(): JSX.Element {
 						</Accordion.Control>
 						<Accordion.Panel>
 							<Container className="mx-0 flex flex-col my-4">
+								{(!record?.latest_version ||
+									(record?.latest_version &&
+										new Date(record?.latest_version?.created_at) <
+											new Date(record?.last_edited_at))) && (
+									<p className="flex items-center text-red-500">
+										{`Your classifier has edit's that have not been applied`}
+										<Tooltip
+											multiline
+											width={350}
+											label={translate("classifiers.caution")}
+										>
+											<span className="flex">
+												<IconInfoCircle size={12} />
+											</span>
+										</Tooltip>
+									</p>
+								)}
 								<Group>
 									<Title my="xs" order={5}>
 										{translate("gathers.fields.status")}:
