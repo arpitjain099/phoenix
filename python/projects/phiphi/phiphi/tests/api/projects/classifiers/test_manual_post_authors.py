@@ -78,10 +78,8 @@ def test_create_intermediatory_classified_post_author(reseed_tables, client: Tes
     assert response.status_code == 200
     json = response.json()
     assert json["last_edited_at"] == UPDATED_TIME.isoformat()
-    assert len(json["intermediatory_classified_post_authors"]) == 1
-    assert (
-        json["intermediatory_classified_post_authors"][0] == intermediatory_classified_post_author
-    )
+    assert len(json["intermediatory_author_classes"]) == 1
+    assert json["intermediatory_author_classes"][0] == intermediatory_classified_post_author
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
@@ -91,7 +89,7 @@ def test_create_intermediatory_classified_post_author_non_unique_error(
     """Test create intermediatory classified post author not unique."""
     classifier = manual_post_authors_seed.TEST_MANUAL_POST_AUTHORS_CLASSIFIERS[1]
     project_id = classifier.project_id
-    duplicated_obj = classifier.intermediatory_classified_post_authors[0]
+    duplicated_obj = classifier.intermediatory_author_classes[0]
     data = {
         "class_id": duplicated_obj.class_id,
         "phoenix_platform_message_author_id": duplicated_obj.phoenix_platform_message_author_id,
@@ -117,9 +115,7 @@ def test_create_intermediatory_classified_post_author_class_not_found(
     """Test create intermediatory classified post author class not found."""
     classifier = manual_post_authors_seed.TEST_MANUAL_POST_AUTHORS_CLASSIFIERS[1]
     project_id = classifier.project_id
-    author_id = classifier.intermediatory_classified_post_authors[
-        0
-    ].phoenix_platform_message_author_id
+    author_id = classifier.intermediatory_author_classes[0].phoenix_platform_message_author_id
     data = {
         "class_id": 0,
         "phoenix_platform_message_author_id": author_id,
@@ -143,7 +139,7 @@ def test_delete_intermediatory_classified_post_author(reseed_tables, client: Tes
     """Test delete intermediatory classified post author."""
     classifier = manual_post_authors_seed.TEST_MANUAL_POST_AUTHORS_CLASSIFIERS[1]
     project_id = classifier.project_id
-    obj_id = classifier.intermediatory_classified_post_authors[0].id
+    obj_id = classifier.intermediatory_author_classes[0].id
 
     with freezegun.freeze_time(UPDATED_TIME):
         response = client.delete(
@@ -160,7 +156,7 @@ def test_delete_intermediatory_classified_post_author(reseed_tables, client: Tes
     assert response.status_code == 200
     json = response.json()
     assert json["last_edited_at"] == UPDATED_TIME.isoformat()
-    assert len(json["intermediatory_classified_post_authors"]) == 0
+    assert len(json["intermediatory_author_classes"]) == 0
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
@@ -193,8 +189,8 @@ def test_patch_manual_post_authors_classes(reseed_tables, client: TestClient) ->
     assert json["last_edited_at"] == UPDATED_TIME.isoformat()
     assert len(json["intermediatory_classes"]) == 2
     assert json["intermediatory_classes"][0] == updated_class
-    # Important to check that the intermediatory_classified_post_authors class name is now updated
-    assert json["intermediatory_classified_post_authors"][0]["class_name"] == data["name"]
+    # Important to check that the intermediatory_author_classes class name is now updated
+    assert json["intermediatory_author_classes"][0]["class_name"] == data["name"]
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
@@ -221,4 +217,4 @@ def test_deleted_manual_post_authors_classes(reseed_tables, client: TestClient) 
     assert json["last_edited_at"] == UPDATED_TIME.isoformat()
     assert len(json["intermediatory_classes"]) == 1
     assert json["intermediatory_classes"][0]["id"] == classifier.intermediatory_classes[1].id
-    assert len(json["intermediatory_classified_post_authors"]) == 0
+    assert len(json["intermediatory_author_classes"]) == 0

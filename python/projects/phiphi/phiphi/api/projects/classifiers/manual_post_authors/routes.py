@@ -33,8 +33,8 @@ def create_intermediatory_classified_post_author(
     session: deps.SessionDep,
     project_id: int,
     classifier_id: int,
-    create_obj: schemas.IntermediatoryClassifiedPostAuthorsCreate,
-) -> schemas.IntermediatoryClassifiedPostAuthorsResponse:
+    create_obj: schemas.IntermediatoryAuthorClassCreate,
+) -> schemas.IntermediatoryAuthorClassResponse:
     """Create an intermediatory classified post author."""
     return crud.create_intermediatory_classified_post_authors(
         session=session,

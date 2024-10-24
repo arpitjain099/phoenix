@@ -39,9 +39,7 @@ TEST_MANUAL_POST_AUTHORS_CLASSIFIERS: list[schemas.ManualPostAuthorsClassifierDe
 def create_intermediatory_classified_post_authors(
     session: Session,
     classifier: schemas.ManualPostAuthorsClassifierDetail,
-    intermediatory_classified_post_authors_create: list[
-        schemas.IntermediatoryClassifiedPostAuthorsCreate
-    ],
+    intermediatory_classified_post_authors_create: list[schemas.IntermediatoryAuthorClassCreate],
 ) -> schemas.ManualPostAuthorsClassifierDetail:
     """Create intermediatory classified post authors."""
     for create_obj in intermediatory_classified_post_authors_create:
@@ -86,7 +84,7 @@ def seed_test_classifiers_manual_post_authors(session: Session) -> None:
         session=session,
         classifier=classifier_to_create_intermediatory,
         intermediatory_classified_post_authors_create=[
-            schemas.IntermediatoryClassifiedPostAuthorsCreate(
+            schemas.IntermediatoryAuthorClassCreate(
                 class_id=classifier_to_create_intermediatory.intermediatory_classes[0].id,
                 phoenix_platform_message_author_id="author1",
             )
