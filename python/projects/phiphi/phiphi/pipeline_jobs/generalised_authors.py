@@ -3,12 +3,11 @@
 Functionality and schemas for generalised authors.
 """
 import json
-import pathlib
 
 import pandas as pd
 import pandera as pa
 
-from phiphi import config
+from phiphi import config, utils
 from phiphi.pipeline_jobs import constants
 from phiphi.pipeline_jobs import utils as pipeline_jobs_utils
 
@@ -73,16 +72,11 @@ def load_sample_authors(
     limit: int = 1000,
 ) -> pd.DataFrame:
     """Load a sample of generalised authors."""
-    path = get_generalised_post_author_sample_data_path()
+    base_path = utils.get_pipeline_sample_data_path()
+    path = base_path.joinpath("generalised_post_authors.json").resolve()
     with open(path, "r") as f:
         sample_authors = json.load(f)
 
     sample_authors_df = pd.DataFrame(sample_authors)
     deduplicated_generalised_authors_schema.validate(sample_authors_df)
     return sample_authors_df[offset : offset + limit]
-
-
-def get_generalised_post_author_sample_data_path() -> pathlib.Path:
-    """Return the path to the sample data for generalised post authors."""
-    base_path = pathlib.Path(__file__).parent
-    return base_path.joinpath("sample_data/generalised_post_authors.json").resolve()
