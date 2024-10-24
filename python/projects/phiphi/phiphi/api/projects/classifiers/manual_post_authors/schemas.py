@@ -7,15 +7,15 @@ import pydantic
 from phiphi.api.projects.classifiers import base_schemas
 
 
-class IntermediatoryClassifiedPostAuthorsCreate(pydantic.BaseModel):
-    """Intermediatory classified post authors create schema."""
+class IntermediatoryAuthorClassCreate(pydantic.BaseModel):
+    """Intermediatory author classe create schema."""
 
     class_id: int
     phoenix_platform_message_author_id: str
 
 
-class IntermediatoryClassifiedPostAuthorsResponse(IntermediatoryClassifiedPostAuthorsCreate):
-    """Intermediatory classified post authors response schema."""
+class IntermediatoryAuthorClassResponse(IntermediatoryAuthorClassCreate):
+    """Intermediatory authors class response schema."""
 
     model_config = pydantic.ConfigDict(from_attributes=True)
 
@@ -54,4 +54,4 @@ class ManualPostAuthorsClassifierDetail(
 ):
     """Manual post authors classifier response."""
 
-    intermediatory_classified_post_authors: list[IntermediatoryClassifiedPostAuthorsResponse] = []
+    intermediatory_author_classes: list[IntermediatoryAuthorClassResponse] = []

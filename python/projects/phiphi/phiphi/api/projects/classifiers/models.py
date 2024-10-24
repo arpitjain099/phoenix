@@ -83,10 +83,10 @@ class Classifiers(ClassifiersBase, base_models.TimestampModel):
         lazy="select",
     )
 
-    intermediatory_classified_post_authors = orm.relationship(
-        "IntermediatoryClassifiedPostAuthors",
+    intermediatory_author_classes = orm.relationship(
+        "IntermediatoryAuthorClasses",
         cascade="all, delete-orphan",
-        order_by="asc(IntermediatoryClassifiedPostAuthors.id)",
+        order_by="asc(IntermediatoryAuthorClasses.id)",
         lazy="select",
     )
 
@@ -157,10 +157,10 @@ class IntermediatoryClasses(IntermediatoryClassesBase, base_models.TimestampMode
         order_by="asc(IntermediatoryClassToKeywordConfig.id)",
         lazy="select",
     )
-    intermediatory_classified_post_authors = orm.relationship(
-        "IntermediatoryClassifiedPostAuthors",
+    intermediatory_author_classes = orm.relationship(
+        "IntermediatoryAuthorClasses",
         back_populates="intermediatory_class",
         cascade="all, delete-orphan",
-        order_by="asc(IntermediatoryClassifiedPostAuthors.id)",
+        order_by="asc(IntermediatoryAuthorClasses.id)",
         lazy="select",
     )
