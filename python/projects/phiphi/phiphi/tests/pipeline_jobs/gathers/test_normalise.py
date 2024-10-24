@@ -31,6 +31,7 @@ def test_normalise_batch(normalised_facebook_posts_df, facebook_posts_gather_fix
     pd.testing.assert_frame_equal(processed_df, normalised_facebook_posts_df)
 
 
+@pytest.mark.skip(reason="Emulating BQ locally for this test is not currently supported.")
 @pytest.mark.patch_settings(
     {
         "USE_MOCK_APIFY": True,
@@ -87,6 +88,7 @@ def test_normalise_batches(
     pd.testing.assert_frame_equal(processed_df, normalised_facebook_posts_df)
 
 
+@pytest.mark.skip(reason="Emulating BQ locally for this test is not currently supported.")
 @mock.patch("phiphi.pipeline_jobs.gathers.utils.load_sample_raw_data")
 @pytest.mark.patch_settings(
     {
