@@ -574,7 +574,9 @@
 		},
 		"fields": {
 			"class_name": "Class Name",
-			"keywords": "Keywords"
+			"keywords": "Keywords",
+			"latest_version_applyed_at": "Latest version applyed at",
+			"latest_edits_made_at": "Latest edits made at:"
 		},
 		"info": {
 			"create_keywords": "Keywords added in one sequence have an `and` operator between them. To create `or` releationships for this class add more then one keyword sequence.",
@@ -596,7 +598,13 @@
 				"edit_description": "Define a classifier that will automatically add classes to a post and/or comment when its text contains certain keywords. This will be applied to posts and/or comments that have been gathered, and data gathered in the future.",
 				"edit_description_2": "Edits will be automatically saved but you must `Run and apply to future Gathers` to have the classifier update the dashboard dataset.",
 				"view": {
-					"text": "View your keyword text classifier."
+					"text": "View your keyword text classifier.",
+					"accordion": {
+						"status": "Status",
+						"general": "General",
+						"classes": "Classes",
+						"keywords": "Keywords"
+					}
 				}
 			},
 			"perspective_classifier_text": {

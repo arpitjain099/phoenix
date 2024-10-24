@@ -345,7 +345,7 @@ const EditKeywordClassifier: React.FC = () => {
 				className="mb-4"
 				onClick={handleApplyClassifier}
 			>
-				{translate("classifiers.types.keyword_match_run")}
+				{translate("classifiers.types.keyword_match.run")}
 			</Button>
 
 			<Space h="md" />
