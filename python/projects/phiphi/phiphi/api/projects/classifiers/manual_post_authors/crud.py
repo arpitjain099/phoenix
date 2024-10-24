@@ -121,7 +121,7 @@ def get_authors(
     results = []
     for idx, row in post_authors_df.iterrows():
         pid = row["phoenix_platform_message_author_id"]
-        intermediatory_author_classes = author_classes_dict.get(pid, [])
+        intermediatory_author_classes_responses = author_classes_dict.get(pid, [])
         response = schemas.AuthorsResponse(
             phoenix_platform_message_author_id=row["phoenix_platform_message_author_id"],
             pi_platform_message_author_id=row["pi_platform_message_author_id"],
@@ -129,7 +129,7 @@ def get_authors(
             phoenix_processed_at=row["phoenix_processed_at"],
             platform=row["platform"],
             post_count=row["post_count"],
-            intermediatory_author_classes=intermediatory_author_classes,
+            intermediatory_author_classes=intermediatory_author_classes_responses,
         )
         results.append(response)
     return results
