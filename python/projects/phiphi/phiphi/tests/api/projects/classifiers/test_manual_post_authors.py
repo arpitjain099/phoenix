@@ -215,3 +215,36 @@ def test_deleted_manual_post_authors_classes(reseed_tables, client: TestClient) 
     assert len(json["intermediatory_classes"]) == 1
     assert json["intermediatory_classes"][0]["id"] == classifier.intermediatory_classes[1].id
     assert len(json["intermediatory_author_classes"]) == 0
+
+
+@pytest.mark.patch_settings({"USE_MOCK_BQ": True})
+@pytest.mark.freeze_time(CREATED_TIME)
+def test_manual_post_authors_get_post_authors_with_mock_bq(
+    patch_settings,
+    reseed_tables,
+    client: TestClient,
+    pipeline_jobs_sample_generalised_post_authors,
+) -> None:
+    """Test get post authors when USE_MOCK_BQ is enabled."""
+    classifier = manual_post_authors_seed.TEST_MANUAL_POST_AUTHORS_CLASSIFIERS[1]
+    class_1 = classifier.intermediatory_classes[0].name
+    response = client.get(
+        f"/projects/{classifier.project_id}/classifiers/manual_post_authors/{classifier.id}/authors/"
+    )
+    assert response.status_code == 200
+    json = response.json()
+    assert len(json) == 10
+    assert json[0]["phoenix_platform_message_author_id"] == "id_1"
+    assert len(json[0]["intermediatory_author_classes"]) == 1
+    assert json[0]["intermediatory_author_classes"][0]["class_name"] == class_1
+    assert json[1]["phoenix_platform_message_author_id"] == "id_2"
+    assert len(json[1]["intermediatory_author_classes"]) == 0
+    expected_df = pipeline_jobs_sample_generalised_post_authors[:10]
+    assert (
+        json[0]["phoenix_platform_message_author_id"]
+        == expected_df.iloc[0]["phoenix_platform_message_author_id"]
+    )
+    assert (
+        json[9]["phoenix_platform_message_author_id"]
+        == expected_df.iloc[9]["phoenix_platform_message_author_id"]
+    )
