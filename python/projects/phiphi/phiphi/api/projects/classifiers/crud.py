@@ -25,6 +25,7 @@ def create_classifier(
     orm_classifier = models.Classifiers(
         project_id=project_id,
         name=classifier_create.name,
+        description=classifier_create.description,
         type=classifier_type,
         archived_at=None,
     )
