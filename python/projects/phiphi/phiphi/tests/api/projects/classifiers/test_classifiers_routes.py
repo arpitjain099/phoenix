@@ -104,6 +104,16 @@ def test_patch_classifier(reseed_tables, client: TestClient) -> None:
     assert response.json()["name"] == patch_data["name"]
     assert response.json()["last_edited_at"] == TIMESTAMP.isoformat()
 
+    patch_data = {"description": "New description"}
+    assert classifier.name != patch_data["description"]
+    response = client.patch(
+        f"/projects/{classifier.project_id}/classifiers/{classifier.id}",
+        json=patch_data,
+    )
+    assert response.status_code == 200
+    assert response.json()["description"] == patch_data["description"]
+    assert response.json()["last_edited_at"] == TIMESTAMP.isoformat()
+
     response = client.get(f"/projects/{classifier.project_id}/classifiers/{classifier.id}")
     assert response.status_code == 200
     assert response.json()["name"] == "New Name"
