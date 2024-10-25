@@ -76,14 +76,25 @@ def delete_intermediatory_author_class(
     return None
 
 
-def get_authors(
+def get_post_authors_with_intermediatory_author_classes(
     session: sa.orm.Session,
     project_id: int,
     classifier_id: int,
     offset: int = 0,
     limit: int = 10,
 ) -> list[schemas.AuthorsResponse]:
-    """Retrieve authors."""
+    """Retrieve post authors with intermediatory_author_classes.
+
+    Args:
+        session (sa.orm.Session): The database session.
+        project_id (int): The project id.
+        classifier_id (int): The classifier id.
+        offset (int, optional): Offset for pagination. Defaults to 0.
+        limit (int, optional): Limit for pagination. Defaults to 10.
+
+    Returns:
+        list[schemas.AuthorsResponse]: List of AuthorsResponse objects.
+    """
     orm_classifier = crud.get_orm_classifier(
         session=session, project_id=project_id, classifier_id=classifier_id
     )
