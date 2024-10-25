@@ -47,6 +47,7 @@ def test_keyword_match_classifier(tmp_bq_project):
         "id": 1,
         "project_id": 10,
         "name": "test_classifier",
+        "description": "Test keyword match classifier",
         "type": "keyword_match",
         "latest_version": {
             "version_id": 1,
