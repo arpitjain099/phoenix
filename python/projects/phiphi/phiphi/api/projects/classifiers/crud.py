@@ -169,18 +169,37 @@ def get_pipeline_classifier(
 def get_pipeline_classifiers(
     session: sqlalchemy.orm.Session,
     project_id: int,
+    include_single_run_classifiers: bool = False,
 ) -> list[response_schemas.ClassifierPipeline]:
     """Get a list of pipeline classifiers for a project.
 
     Pipeline classifiers are classifiers that have at least one version and are not archived.
+
+    By default single run classified are not included. This is because they are not used in the
+    pipeline when we need to re run a classifier for a gather.
+
+    Args:
+        session: SQLAlchemy session.
+        project_id: Project ID.
+        include_single_run_classifiers: Include single run classifiers.
+
+    Returns:
+        List of pipeline classifiers.
     """
-    orm_classifiers = (
+    query = (
         session.query(models.Classifiers)
         .filter(models.Classifiers.project_id == project_id)
         .filter(models.Classifiers.archived_at.is_(None))
+    )
+    if not include_single_run_classifiers:
+        query = query.filter(
+            models.Classifiers.type.notin_(base_schemas.SINGLE_RUN_CLASSIFIER_TYPES)
+        )
+
+    orm_classifiers = (
+        query
         # The order will be the order that they where added
-        .order_by(models.Classifiers.id.asc())
-        .all()
+        .order_by(models.Classifiers.id.asc()).all()
     )
 
     return [

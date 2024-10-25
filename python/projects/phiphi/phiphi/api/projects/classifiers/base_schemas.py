@@ -15,6 +15,10 @@ class ClassifierType(str, Enum):
     manual_post_authors = "manual_post_authors"
 
 
+# There are classifier types that should not be re run on every gather.
+SINGLE_RUN_CLASSIFIER_TYPES = [ClassifierType.manual_post_authors]
+
+
 class IntermediatoryClassBase(pydantic.BaseModel):
     """Class schema."""
 

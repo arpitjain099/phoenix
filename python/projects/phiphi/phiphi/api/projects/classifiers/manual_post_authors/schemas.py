@@ -85,6 +85,9 @@ class ManualPostAuthorsClassifierDetail(
 class ManualPostAuthorsClassifierPipeline(
     ManualPostAuthorsClassifierResponse, base_schemas.ClassifierPipelineBase
 ):
-    """Manual post authors classifier response."""
+    """Manual post authors classifier response.
+
+    This is a single run classifier and should not be re run for each gather.
+    """
 
     latest_version: ManualPostAuthorsVersionResponse
