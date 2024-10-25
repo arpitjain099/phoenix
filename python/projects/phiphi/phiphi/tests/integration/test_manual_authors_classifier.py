@@ -2,6 +2,7 @@
 import datetime
 
 import pandas as pd
+import pytest
 
 from phiphi.pipeline_jobs import constants as pipeline_jobs_constants
 from phiphi.pipeline_jobs.classify import flow as classify_flow
@@ -81,3 +82,11 @@ def test_manual_post_authors_classifier(tmp_bq_project):
         expected_classified_authors_df.sort_index(axis=1),
         check_like=True,
     )
+
+    # Step 4: Run the classifier again
+    with pytest.raises(ValueError):
+        classify_flow.classify_flow(
+            classifier_dict=classifier,
+            project_namespace=test_project_namespace,
+            job_run_id=job_run_id,
+        )
