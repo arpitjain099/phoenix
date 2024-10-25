@@ -72,7 +72,7 @@ def get_authors(
     start: int = 0,
     end: int = 10,
 ) -> list[schemas.AuthorResponse]:
-    """Get authors to classified and configure."""
+    """Get post authors with intermediatory author classes."""
     return crud.get_post_authors_with_intermediatory_author_classes(
         session=session,
         project_id=project_id,
