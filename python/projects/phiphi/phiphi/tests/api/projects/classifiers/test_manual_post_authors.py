@@ -13,6 +13,29 @@ UPDATED_TIME = datetime.datetime(2021, 1, 2, 0, 0, 0)
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
+def test_create_manaual_post_authors_version(reseed_tables, client: TestClient, session) -> None:
+    """Test create manual post authors version."""
+    classifier = manual_post_authors_seed.TEST_MANUAL_POST_AUTHORS_CLASSIFIERS[1]
+    project_id = classifier.project_id
+    classifier_id = classifier.id
+
+    version = crud.create_version(session, project_id, classifier_id)
+
+    assert version.classifier_id == classifier_id
+    assert len(version.classes) == 2
+    assert version.classes[0].name == classifier.intermediatory_classes[0].name
+    assert version.classes[1].name == classifier.intermediatory_classes[1].name
+    expected_author_classes = classifier.intermediatory_author_classes
+    assert len(version.params["author_classes"]) == len(expected_author_classes)
+    for i, author_class in enumerate(version.params["author_classes"]):
+        assert author_class["class_name"] == expected_author_classes[i].class_name
+        assert (
+            author_class["phoenix_platform_message_author_id"]
+            == expected_author_classes[i].phoenix_platform_message_author_id
+        )
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
 def test_create_manual_post_authors_classifier(reseed_tables, client: TestClient) -> None:
     """Test create keyword match classifier."""
     data = {
