@@ -320,6 +320,7 @@ def test_create_keyword_match_intermediatory_config(reseed_tables, client: TestC
     assert json["musts"] == intermediatory_config["musts"]
     assert json["nots"] == ""
     assert json["class_name"] == classifier.intermediatory_classes[0].name
+    assert json["class_description"] == classifier.intermediatory_classes[0].description
 
     # Get the classifier again to check the change
     response = client.get(f"/projects/{classifier.project_id}/classifiers/{classifier.id}")
