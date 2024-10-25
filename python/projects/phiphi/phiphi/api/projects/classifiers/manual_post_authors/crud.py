@@ -154,6 +154,7 @@ def get_post_authors_with_intermediatory_author_classes(
     # Query classified post authors filtered by the IDs
     intermediatory_author_classes = (
         session.query(models.IntermediatoryAuthorClasses)
+        .filter(models.IntermediatoryAuthorClasses.classifier_id == orm_classifier.id)
         .filter(
             models.IntermediatoryAuthorClasses.phoenix_platform_message_author_id.in_(list_of_ids)
         )
