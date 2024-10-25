@@ -35,6 +35,21 @@ TEST_MANUAL_POST_AUTHORS_CREATE_NO_VERSION_CLASSIFIED = base_schemas.ClassifierC
     ],
 )
 
+TEST_MANUAL_POST_AUTHORS_CREATE_VERSION = base_schemas.ClassifierCreate(
+    name="Test manual_post_authors Classifier 3 version with intermediatory author classes",
+    description="Test Classifier 3 Description",
+    intermediatory_classes=[
+        base_schemas.IntermediatoryClassCreate(
+            name="Test Class 1",
+            description="Test Class 1 Description",
+        ),
+        base_schemas.IntermediatoryClassCreate(
+            name="Test Class 2",
+            description="Test Class 2 Description",
+        ),
+    ],
+)
+
 TEST_MANUAL_POST_AUTHORS_CLASSIFIERS: list[schemas.ManualPostAuthorsClassifierDetail] = []
 
 
@@ -69,6 +84,7 @@ def seed_test_classifiers_manual_post_authors(session: Session) -> None:
     classifiers_create = [
         TEST_MANUAL_POST_AUTHORS_CREATE_NO_VERSION,
         TEST_MANUAL_POST_AUTHORS_CREATE_NO_VERSION_CLASSIFIED,
+        TEST_MANUAL_POST_AUTHORS_CREATE_VERSION,
     ]
 
     for classifier_create in classifiers_create:
@@ -81,7 +97,7 @@ def seed_test_classifiers_manual_post_authors(session: Session) -> None:
         assert isinstance(classifier, schemas.ManualPostAuthorsClassifierDetail)
         TEST_MANUAL_POST_AUTHORS_CLASSIFIERS.append(classifier)
 
-    classifier_indexes_to_create_intermediatory = [1]
+    classifier_indexes_to_create_intermediatory = [1, 2]
     for index in classifier_indexes_to_create_intermediatory:
         classifier_to_create_intermediatory = TEST_MANUAL_POST_AUTHORS_CLASSIFIERS[index]
         TEST_MANUAL_POST_AUTHORS_CLASSIFIERS[index] = create_intermediatory_author_classes(
@@ -106,3 +122,21 @@ def seed_test_classifiers_manual_post_authors(session: Session) -> None:
                 ),
             ],
         )
+
+    classifier_indexes_to_create_version = [2]
+    for index in classifier_indexes_to_create_version:
+        classifier_to_create_version = TEST_MANUAL_POST_AUTHORS_CLASSIFIERS[index]
+        crud.create_version(
+            session=session,
+            project_id=project_id,
+            classifier_id=classifier_to_create_version.id,
+        )
+        # Need to refresh the classifier to get the latest version
+        classifier_versioned = classifiers.crud.get_classifier(
+            session=session,
+            project_id=project_id,
+            classifier_id=classifier.id,
+        )
+        # Need for mypy
+        assert isinstance(classifier_versioned, schemas.ManualPostAuthorsClassifierDetail)
+        TEST_MANUAL_POST_AUTHORS_CLASSIFIERS[index] = classifier_versioned
