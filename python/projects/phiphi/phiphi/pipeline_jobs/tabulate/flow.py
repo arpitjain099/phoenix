@@ -40,8 +40,8 @@ def tabulate(
     classified_messages_table_name = (
         f"{bigquery_dataset}.{pipeline_jobs_constants.CLASSIFIED_MESSAGES_TABLE_NAME}"
     )
-    manually_classified_authors_table_name = (
-        f"{bigquery_dataset}.{pipeline_jobs_constants.MANUALLY_CLASSIFIED_AUTHORS_TABLE_NAME}"
+    classified_authors_table_name = (
+        f"{bigquery_dataset}.{pipeline_jobs_constants.CLASSIFIED_AUTHORS_TABLE_NAME}"
     )
 
     # Note, we could convert the classifier dicts into their pydantic models, and then get type
@@ -54,7 +54,16 @@ def tabulate(
 
     tabulate_query = f"""
     CREATE OR REPLACE TABLE `{tabulate_table_name}` AS
-    WITH active_only_classified_messages AS (
+    WITH active_only_classified_authors AS (
+        SELECT DISTINCT
+            classifier_id,
+            classifier_version_id,
+            phoenix_platform_message_author_id,
+            class_name
+        FROM `{classified_authors_table_name}`
+        WHERE (classifier_id, classifier_version_id) IN ({classifier_ids})
+    ),
+    active_only_classified_messages AS (
         SELECT DISTINCT
             classifier_id,
             classifier_version_id,
@@ -75,9 +84,9 @@ def tabulate(
         ON
             m.phoenix_platform_message_id = cm.phoenix_platform_message_id
         LEFT JOIN
-            `{manually_classified_authors_table_name}` mca
+            active_only_classified_authors mca
         ON
-            m.phoenix_platform_message_author_id = mca.phoenix_platform_author_id
+            m.phoenix_platform_message_author_id = mca.phoenix_platform_message_author_id
     ),
     posts AS (
         SELECT
