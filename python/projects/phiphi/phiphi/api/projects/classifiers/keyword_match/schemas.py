@@ -46,6 +46,8 @@ class IntermediatoryClassToKeywordConfigResponse(IntermediatoryClassToKeywordCon
     created_at: datetime.datetime
     updated_at: datetime.datetime
     class_name: str
+    # Class description is added as this makes the UI for the console to compute easier
+    class_description: str
 
 
 class ClassToKeywordConfig(TypedDict):
