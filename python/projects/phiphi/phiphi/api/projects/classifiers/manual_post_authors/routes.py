@@ -80,3 +80,19 @@ def get_authors(
         offset=start,
         limit=end,
     )
+
+
+@router.post(
+    "/projects/{project_id}/classifiers/manual_post_authors/{classifier_id}/version_and_run",
+)
+async def create_version_and_run(
+    session: deps.SessionDep,
+    project_id: int,
+    classifier_id: int,
+) -> schemas.ManualPostAuthorsClassifierDetail:
+    """Create a manual post authors version and run."""
+    return await crud.create_version_and_run(
+        session=session,
+        project_id=project_id,
+        classifier_id=classifier_id,
+    )
