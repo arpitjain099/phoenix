@@ -3,6 +3,7 @@ import datetime
 from typing import Literal, Optional
 
 import pydantic
+from typing_extensions import TypedDict
 
 from phiphi.api.projects.classifiers import base_schemas
 
@@ -38,12 +39,24 @@ class AuthorResponse(pydantic.BaseModel):
     intermediatory_author_classes: list[IntermediatoryAuthorClassResponse] = []
 
 
+class AuthorClassLabel(TypedDict):
+    """Author class label schema."""
+
+    class_name: str
+    phoenix_platform_message_author_id: str
+
+
+class ManaulPostAuthorsParams(TypedDict):
+    """Manual post authors params schema."""
+
+    author_classes: list[AuthorClassLabel]
+
+
 class ManualPostAuthorsVersionBase(pydantic.BaseModel):
     """Manual post authors version base schema."""
 
     classes: list[base_schemas.ClassLabel]
-    # TODO: define the type of this
-    params: dict
+    params: ManaulPostAuthorsParams
 
 
 class ManualPostAuthorsVersionResponse(
