@@ -13,6 +13,46 @@ from phiphi.pipeline_jobs import generalised_authors
 UNIQUE_ERROR_MESSAGE = "The author id and class id pair already exists."
 
 
+def create_version(
+    session: sa.orm.Session,
+    project_id: int,
+    classifier_id: int,
+) -> schemas.ManualPostAuthorsVersionResponse:
+    """Create a manual post authors version."""
+    orm_classifier = crud.get_orm_classifier(session, project_id, classifier_id)
+    if orm_classifier is None:
+        raise exceptions.ClassifierNotFound()
+
+    classes = crud.get_classes(session, orm_classifier)
+    params = get_manual_post_authors_params(session, orm_classifier)
+
+    orm_version = classifiers_models.ClassifierVersions(
+        classifier_id=orm_classifier.id,
+        classes=[class_label.model_dump() for class_label in classes],
+        params=params,
+    )
+    session.add(orm_version)
+    session.commit()
+    session.refresh(orm_version)
+    return schemas.ManualPostAuthorsVersionResponse.model_validate(orm_version)
+
+
+def get_manual_post_authors_params(
+    session: sa.orm.Session,
+    orm_classifier: classifiers_models.Classifiers,
+) -> schemas.ManaulPostAuthorsParams:
+    """Get manual post authors."""
+    all_configs = orm_classifier.intermediatory_author_classes
+    author_classes = []
+    for orm_intermediatory_author_class in all_configs:
+        author_class = schemas.AuthorClassLabel(
+            class_name=orm_intermediatory_author_class.class_name,
+            phoenix_platform_message_author_id=orm_intermediatory_author_class.phoenix_platform_message_author_id,
+        )
+        author_classes.append(author_class)
+    return schemas.ManaulPostAuthorsParams(author_classes=author_classes)
+
+
 def create_intermediatory_author_class(
     session: sa.orm.Session,
     project_id: int,
