@@ -8,6 +8,8 @@ from phiphi.api import exceptions
 from phiphi.api.projects.classifiers import base_schemas, crud
 from phiphi.api.projects.classifiers import models as classifiers_models
 from phiphi.api.projects.classifiers.manual_post_authors import models, schemas
+from phiphi.api.projects.job_runs import crud as job_run_crud
+from phiphi.api.projects.job_runs import schemas as job_run_schemas
 from phiphi.pipeline_jobs import generalised_authors
 
 UNIQUE_ERROR_MESSAGE = "The author id and class id pair already exists."
@@ -51,6 +53,28 @@ def get_manual_post_authors_params(
         )
         author_classes.append(author_class)
     return schemas.ManaulPostAuthorsParams(author_classes=author_classes)
+
+
+async def create_version_and_run(
+    session: sa.orm.Session,
+    project_id: int,
+    classifier_id: int,
+) -> schemas.ManualPostAuthorsClassifierDetail:
+    """Create a manual post authors version and run."""
+    orm_classifier = crud.get_orm_classifier(session, project_id, classifier_id)
+    if orm_classifier is None:
+        raise exceptions.ClassifierNotFound()
+    _ = create_version(session, project_id, classifier_id)
+    _ = await job_run_crud.create_and_run_job_run(
+        session,
+        project_id,
+        job_run_schemas.JobRunCreate(
+            foreign_id=orm_classifier.id,
+            foreign_job_type=job_run_schemas.ForeignJobType.classify_tabulate,
+        ),
+    )
+    session.refresh(orm_classifier)
+    return schemas.ManualPostAuthorsClassifierDetail.model_validate(orm_classifier)
 
 
 def create_intermediatory_author_class(
