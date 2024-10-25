@@ -177,8 +177,7 @@ def prefect_test_fixture():
 @pytest.fixture
 def pipeline_jobs_sample_generalised_post_authors() -> pd.DataFrame:
     """Sample generalised post authors."""
-    base_path = utils.get_pipeline_sample_data_path()
-    path = base_path.joinpath("generalised_post_authors.json").resolve()
+    path = utils.get_pipeline_sample_data_path("generalised_post_authors.json")
     with open(path, "r") as f:
         sample_authors = json.load(f)
 
