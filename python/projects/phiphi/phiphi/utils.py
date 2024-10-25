@@ -121,7 +121,8 @@ def get_default_bigquery_project() -> str:
     return project_id
 
 
-def get_pipeline_sample_data_path() -> pathlib.Path:
+def get_pipeline_sample_data_path(file_name: str) -> pathlib.Path:
     """Return the path to the sample data for pipelines."""
     base_path = pathlib.Path(__file__).parent
-    return base_path / "pipeline_jobs" / "sample_data"
+    path = base_path / "pipeline_jobs" / "sample_data" / file_name
+    return path.resolve()
