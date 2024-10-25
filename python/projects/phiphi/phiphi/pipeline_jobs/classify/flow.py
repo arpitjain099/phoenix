@@ -5,7 +5,7 @@ import prefect
 
 from phiphi import constants
 from phiphi.api.projects.classifiers import base_schemas, response_schemas
-from phiphi.pipeline_jobs.classify import keyword_match_classifier
+from phiphi.pipeline_jobs.classify import keyword_match_classifier, manual_authors_classifier
 
 
 @prefect.flow(name="classify_flow")
@@ -19,6 +19,10 @@ def classify_flow(
 
     if classifier.type == base_schemas.ClassifierType.keyword_match:
         keyword_match_classifier.classify(
+            classifier=classifier, bigquery_dataset=project_namespace, job_run_id=job_run_id
+        )
+    elif classifier.type == base_schemas.ClassifierType.manual_post_authors:
+        manual_authors_classifier.classify(
             classifier=classifier, bigquery_dataset=project_namespace, job_run_id=job_run_id
         )
     else:
