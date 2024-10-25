@@ -26,8 +26,8 @@ class IntermediatoryAuthorClassResponse(IntermediatoryAuthorClassCreate):
     # We don't return the updated at as classified_post_authors should not be updated.
 
 
-class AuthorsResponse(pydantic.BaseModel):
-    """Authors response schema."""
+class AuthorResponse(pydantic.BaseModel):
+    """Author response schema."""
 
     phoenix_platform_message_author_id: str
     pi_platform_message_author_id: Optional[str]

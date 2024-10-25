@@ -82,7 +82,7 @@ def get_post_authors_with_intermediatory_author_classes(
     classifier_id: int,
     offset: int = 0,
     limit: int = 10,
-) -> list[schemas.AuthorsResponse]:
+) -> list[schemas.AuthorResponse]:
     """Retrieve post authors with intermediatory_author_classes.
 
     Args:
@@ -93,7 +93,7 @@ def get_post_authors_with_intermediatory_author_classes(
         limit (int, optional): Limit for pagination. Defaults to 10.
 
     Returns:
-        list[schemas.AuthorsResponse]: List of AuthorsResponse objects.
+        list[schemas.AuthorResponse]: List of AuthorResponse objects.
     """
     orm_classifier = crud.get_orm_classifier(
         session=session, project_id=project_id, classifier_id=classifier_id
@@ -133,7 +133,7 @@ def get_post_authors_with_intermediatory_author_classes(
     for idx, row in post_authors_df.iterrows():
         pid = row["phoenix_platform_message_author_id"]
         intermediatory_author_classes_responses = author_classes_dict.get(pid, [])
-        response = schemas.AuthorsResponse(
+        response = schemas.AuthorResponse(
             phoenix_platform_message_author_id=row["phoenix_platform_message_author_id"],
             pi_platform_message_author_id=row["pi_platform_message_author_id"],
             pi_platform_message_author_name=row["pi_platform_message_author_name"],
