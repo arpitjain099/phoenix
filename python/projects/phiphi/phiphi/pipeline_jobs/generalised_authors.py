@@ -2,9 +2,12 @@
 
 Functionality and schemas for generalised authors.
 """
+import json
+
 import pandas as pd
 import pandera as pa
 
+from phiphi import config, utils
 from phiphi.pipeline_jobs import constants
 from phiphi.pipeline_jobs import utils as pipeline_jobs_utils
 
@@ -31,6 +34,9 @@ def get_post_authors(
 ) -> pd.DataFrame:
     """Retrieve authors with posts, ordered by post_count.
 
+    If `config.settings.USE_MOCK_BQ` is enabled, a sample of generalised authors is returned.
+    This is then used for development and testing purposes.
+
     Args:
         project_namespace (str): The project namespace.
         offset (int, optional): Offset for pagination. Defaults to 0.
@@ -45,6 +51,9 @@ def get_post_authors(
     Raises:
         pa.errors.SchemaError: If schema validation fails for the resulting DataFrame.
     """
+    if config.settings.USE_MOCK_BQ:
+        return load_sample_authors(offset=offset, limit=limit)
+
     query = f"""
     SELECT *
     FROM `{project_namespace}.{deduplicated_authors_table_name}`
@@ -56,3 +65,17 @@ def get_post_authors(
     post_authors_df = pd.read_gbq(query)
     deduplicated_generalised_authors_schema.validate(post_authors_df)
     return post_authors_df
+
+
+def load_sample_authors(
+    offset: int = 0,
+    limit: int = 1000,
+) -> pd.DataFrame:
+    """Load a sample of generalised authors."""
+    path = utils.get_pipeline_sample_data_path("generalised_post_authors.json")
+    with open(path, "r") as f:
+        sample_authors = json.load(f)
+
+    sample_authors_df = pd.DataFrame(sample_authors)
+    deduplicated_generalised_authors_schema.validate(sample_authors_df)
+    return sample_authors_df[offset : offset + limit]

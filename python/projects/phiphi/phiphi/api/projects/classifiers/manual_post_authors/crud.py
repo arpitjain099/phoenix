@@ -1,10 +1,14 @@
 """Crud functionality for manual post authors."""
+from collections import defaultdict
+
 import sqlalchemy as sa
 
+from phiphi import utils
 from phiphi.api import exceptions
 from phiphi.api.projects.classifiers import base_schemas, crud
 from phiphi.api.projects.classifiers import models as classifiers_models
 from phiphi.api.projects.classifiers.manual_post_authors import models, schemas
+from phiphi.pipeline_jobs import generalised_authors
 
 UNIQUE_ERROR_MESSAGE = "The author id and class id pair already exists."
 
@@ -70,3 +74,73 @@ def delete_intermediatory_author_class(
         session.commit()
     session.refresh(orm_classifier)
     return None
+
+
+def get_post_authors_with_intermediatory_author_classes(
+    session: sa.orm.Session,
+    project_id: int,
+    classifier_id: int,
+    offset: int = 0,
+    limit: int = 10,
+) -> list[schemas.AuthorResponse]:
+    """Retrieve post authors with intermediatory_author_classes.
+
+    Args:
+        session (sa.orm.Session): The database session.
+        project_id (int): The project id.
+        classifier_id (int): The classifier id.
+        offset (int, optional): Offset for pagination. Defaults to 0.
+        limit (int, optional): Limit for pagination. Defaults to 10.
+
+    Returns:
+        list[schemas.AuthorResponse]: List of AuthorResponse objects.
+    """
+    orm_classifier = crud.get_orm_classifier(
+        session=session, project_id=project_id, classifier_id=classifier_id
+    )
+    if orm_classifier is None:
+        raise exceptions.ClassifierNotFound()
+
+    if orm_classifier.type != base_schemas.ClassifierType.manual_post_authors:
+        raise exceptions.HttpException400("Invalid classifier type")
+
+    project_namespace = utils.get_project_namespace(project_id)
+    post_authors_df = generalised_authors.get_post_authors(
+        project_namespace=project_namespace, offset=offset, limit=limit
+    )
+    # Get list of phoenix_platform_message_author_ids from post_authors_df
+    list_of_ids = post_authors_df["phoenix_platform_message_author_id"].tolist()
+
+    # Query classified post authors filtered by the IDs
+    intermediatory_author_classes = (
+        session.query(models.IntermediatoryAuthorClasses)
+        .filter(
+            models.IntermediatoryAuthorClasses.phoenix_platform_message_author_id.in_(list_of_ids)
+        )
+        .all()
+    )
+
+    # Organize intermediatory author classes by phoenix_platform_message_author_id
+    author_classes_dict = defaultdict(list)
+    for item in intermediatory_author_classes:
+        pid = item.phoenix_platform_message_author_id
+        author_classes_dict[pid].append(
+            schemas.IntermediatoryAuthorClassResponse.model_validate(item)
+        )
+
+    # Build response
+    results = []
+    for idx, row in post_authors_df.iterrows():
+        pid = row["phoenix_platform_message_author_id"]
+        intermediatory_author_classes_responses = author_classes_dict.get(pid, [])
+        response = schemas.AuthorResponse(
+            phoenix_platform_message_author_id=row["phoenix_platform_message_author_id"],
+            pi_platform_message_author_id=row["pi_platform_message_author_id"],
+            pi_platform_message_author_name=row["pi_platform_message_author_name"],
+            phoenix_processed_at=row["phoenix_processed_at"],
+            platform=row["platform"],
+            post_count=row["post_count"],
+            intermediatory_author_classes=intermediatory_author_classes_responses,
+        )
+        results.append(response)
+    return results

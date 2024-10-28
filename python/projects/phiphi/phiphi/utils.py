@@ -2,6 +2,7 @@
 import json
 import logging
 import os
+import pathlib
 import re
 from typing import Optional, cast
 
@@ -118,3 +119,10 @@ def get_default_bigquery_project() -> str:
             "No default project found. Please set GOOGLE_CLOUD_PROJECT environment variable."
         )
     return project_id
+
+
+def get_pipeline_sample_data_path(file_name: str) -> pathlib.Path:
+    """Return the path to the sample data for pipelines."""
+    base_path = pathlib.Path(__file__).parent
+    path = base_path / "pipeline_jobs" / "sample_data" / file_name
+    return path.resolve()
