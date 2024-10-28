@@ -40,7 +40,8 @@ def classify(
         raise ValueError(
             f"Classifier ID {classifier_id} with version ID {classifier_version_id} "
             "already exists in the classified_authors table. "
-            "It is not possible to recreate a manual authors classifier. "
+            "It is not possible to re-run a manual authors classifier with the same version ID "
+            "as this could lead to unexpected behaviour. "
             "Please run again with a new version id."
         )
 
