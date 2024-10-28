@@ -169,6 +169,12 @@ def get_post_authors_with_intermediatory_author_classes(
         raise exceptions.HttpException400("Invalid classifier type")
 
     project_namespace = utils.get_project_namespace(project_id)
+    post_authors_count = generalised_authors.get_total_count_post_authors(
+        project_namespace=project_namespace
+    )
+    if post_authors_count == 0:
+        return schemas.AuthorsListResponse(authors=[], total_count=0)
+
     post_authors_df = generalised_authors.get_post_authors(
         project_namespace=project_namespace, offset=offset, limit=limit
     )
@@ -208,7 +214,4 @@ def get_post_authors_with_intermediatory_author_classes(
             intermediatory_author_classes=intermediatory_author_classes_responses,
         )
         results.append(response)
-    post_authors_count = generalised_authors.get_total_count_post_authors(
-        project_namespace=project_namespace
-    )
     return schemas.AuthorsListResponse(authors=results, total_count=post_authors_count)

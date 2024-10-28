@@ -343,3 +343,24 @@ def test_manual_post_authors_get_post_authors_with_mock_bq(
         authors[9]["phoenix_platform_message_author_id"]
         == expected_df.iloc[9]["phoenix_platform_message_author_id"]
     )
+
+
+@pytest.mark.patch_settings({"USE_MOCK_BQ": True})
+@mock.patch("phiphi.pipeline_jobs.generalised_authors.get_total_count_post_authors")
+def test_manual_post_authors_get_post_authors_with_count_zero(
+    m_get_total_count_post_authors,
+    patch_settings,
+    reseed_tables,
+    client: TestClient,
+) -> None:
+    """Test get post authors when USE_MOCK_BQ is enabled total count is zero."""
+    m_get_total_count_post_authors.return_value = 0
+    classifier = manual_post_authors_seed.TEST_MANUAL_POST_AUTHORS_CLASSIFIERS[1]
+    response = client.get(
+        f"/projects/{classifier.project_id}/classifiers/manual_post_authors/{classifier.id}/authors/"
+    )
+    assert response.status_code == 200
+    json = response.json()
+    authors = json["authors"]
+    assert json["total_count"] == 0
+    assert len(authors) == 0
