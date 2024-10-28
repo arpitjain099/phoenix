@@ -61,3 +61,8 @@ class IntermediatoryClassToKeywordConfig(
     def class_name(self) -> str:
         """Retrieve the class name from the intermediatory_classes table."""
         return self.intermediatory_class.name
+
+    @property
+    def class_description(self) -> str:
+        """Retrieve the class description from the intermediatory_classes table."""
+        return self.intermediatory_class.description
