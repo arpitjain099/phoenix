@@ -11,10 +11,17 @@ import {
 	Space,
 	Divider,
 } from "@mantine/core";
-import { IconTrash, IconPlus, IconCheck, IconInfoCircle } from "@tabler/icons";
+import {
+	IconTrash,
+	IconPlus,
+	IconCheck,
+	IconInfoCircle,
+	IconArrowLeft,
+	IconDeviceFloppy,
+} from "@tabler/icons";
 import { useState, ChangeEvent } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useTranslate } from "@refinedev/core";
+import { useBack, useTranslate } from "@refinedev/core";
 import { classifierService } from "src/services";
 import { showNotification } from "@mantine/notifications";
 
@@ -36,14 +43,17 @@ interface KeywordGroup {
 }
 
 const CreateKeywordClassifier: React.FC = () => {
+	const back = useBack();
 	const router = useRouter();
 	const translate = useTranslate();
 	const { projectid, id } = useParams();
 	// State to manage classes and keyword groups
 	const [classifierName, setClassifierName] = useState("");
+	const [classifierDescription, setClassifierDescription] = useState("");
 	const [classes, setClasses] = useState<ClassData[]>([
 		{ name: "", description: "" },
 	]);
+	const [loading, setLoading] = useState(false);
 	const [keywordGroups, setKeywordGroups] = useState<KeywordGroup[]>([]);
 
 	// Input change handlers
@@ -82,37 +92,27 @@ const CreateKeywordClassifier: React.FC = () => {
 		}
 	};
 
-	const handleSubmitClass = async (classIndex: number): Promise<void> => {
-		const classToAdd = classes[classIndex];
+	const handleSave = async (): Promise<void> => {
+		setLoading(true);
 		try {
-			await classifierService.createClassifierClassData(
+			const res = await classifierService.createKeywordClassifier(
 				{
 					project_id: projectid,
-					classifier_id: id,
 				},
 				{
-					name: classToAdd.name,
-					description: classToAdd.description,
+					name: classifierName,
+					description: classifierDescription,
+					intermediatory_classes: classes,
 				}
 			);
-			// todo redirect out
-		} catch (error: any) {
-			showNotification({
-				title: "Error",
-				color: "red",
-				message: error?.response?.data?.message || "An Error Occured",
-			});
-			console.error("Error creating class", error);
-		}
-	};
-
-	const handleSave = async (): Promise<void> => {
-		try {
-			classes.map(async (_, idx) => await handleSubmitClass(idx));
+			const { data } = res;
 			showNotification({
 				title: "success",
 				message: translate("classifiers.success.success"),
 			});
+			router.push(
+				`/projects/${projectid}/classifiers/${data?.type}/${data.id}`
+			);
 		} catch (error: any) {
 			showNotification({
 				title: "Error",
@@ -120,12 +120,17 @@ const CreateKeywordClassifier: React.FC = () => {
 				message: error?.response?.data?.message || "An Error Occured",
 			});
 			console.error("Error creating/updating class", error);
+		} finally {
+			setLoading(false);
 		}
 	};
 
 	return (
 		<div className="p-8 bg-white min-h-screen">
-			<h1 className="text-2xl font-semibold">
+			<h1 className="flex items-center gap-2 text-2xl font-semibold">
+				<ActionIcon onClick={back}>
+					<IconArrowLeft />
+				</ActionIcon>
 				{translate("classifiers.types.keyword_match.create")}
 			</h1>
 			<p className="mb-2">
@@ -147,6 +152,16 @@ const CreateKeywordClassifier: React.FC = () => {
 					}}
 					required
 				/>
+				<Space h="sm" />
+				<TextInput
+					label="Description"
+					placeholder="Classifier Description"
+					value={classifierDescription}
+					onChange={(e) => {
+						setClassifierDescription(e.target.value);
+					}}
+					required
+				/>
 			</div>
 			<Space h="lg" />
 
@@ -159,7 +174,10 @@ const CreateKeywordClassifier: React.FC = () => {
 						<th>{translate("projects.fields.description")}</th>
 						<th className="flex items-center">
 							{translate("classifiers.fields.keywords")}
-							<Tooltip label={translate("classifiers.info.create_keywords")}>
+							<Tooltip
+								label={translate("classifiers.info.create_keywords")}
+								width={200}
+							>
 								<span className="flex">
 									<IconInfoCircle size={12} />
 								</span>
@@ -193,7 +211,9 @@ const CreateKeywordClassifier: React.FC = () => {
 									}
 								/>
 							</td>
-							<td />
+							<td>
+								<TextInput placeholder="Keyword1 kewyord2" disabled />
+							</td>
 							<td>
 								<div className="w-full h-full flex gap-1 items-center justify-center">
 									<Tooltip
@@ -225,12 +245,14 @@ const CreateKeywordClassifier: React.FC = () => {
 					Add Class
 				</Button>
 				<Button
-					rightIcon={<IconCheck size={16} />}
+					rightIcon={<IconDeviceFloppy size={16} />}
 					mt="sm"
 					// fullWidth
+					loading={loading}
+					disabled={!classifierName}
 					onClick={handleSave}
 				>
-					Save
+					Create
 				</Button>
 			</div>
 		</div>

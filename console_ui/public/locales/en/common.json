@@ -576,7 +576,7 @@
 			"class_name": "Class Name",
 			"keywords": "Keywords",
 			"latest_version_applyed_at": "Latest version applyed at",
-			"latest_edits_made_at": "Latest edits made at:"
+			"latest_edits_made_at": "Latest edits made at"
 		},
 		"info": {
 			"create_keywords": "Keywords added in one sequence have an `and` operator between them. To create `or` releationships for this class add more then one keyword sequence.",
@@ -602,8 +602,7 @@
 					"accordion": {
 						"status": "Status",
 						"general": "General",
-						"classes": "Classes",
-						"keywords": "Keywords"
+						"configuration": "Configuration"
 					}
 				}
 			},
@@ -631,6 +630,16 @@
 			}
 		},
 		"caution": "Your classifier has edit's that have not been applied. Click icon to go to edit page and then click `Run and apply to future Gathers` to update dashboard dataset.",
+		"cautions": {
+			"not_run": {
+				"title": "Your classifier has not been applied.",
+				"description": "Click 'Run and apply to future Gathers' so your classifier to have the classifier applied to the dashboard dataset and future gathers."
+			},
+			"not_applied": {
+				"title": "Your classifier has edit's that have not been applied.",
+				"description": "Click 'Run and apply to future Gathers' so your classifier to have the classifier applied to the dashboard dataset and future gathers."
+			}
+		},
 		"success": {
 			"success": "Success",
 			"archive": "Archiving Classifier.",

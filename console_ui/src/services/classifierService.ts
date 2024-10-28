@@ -48,6 +48,14 @@ export default class ClassifierService {
 		return response;
 	}
 
+	async createKeywordClassifier(params: any, data: ClassifierPayload) {
+		const response = await axios.post(
+			`${API_URL}/projects/${params?.project_id}/classifiers/keyword_match`,
+			data
+		);
+		return response;
+	}
+
 	async createClassifierClassData(params: any, data: ClassifierClassPayload) {
 		const response = await axios.post(
 			`${API_URL}/projects/${params?.project_id}/classifiers/${params?.classifier_id}/intermediatory_classes`,

@@ -27,6 +27,8 @@ export interface ClassifierResponse {
 
 export interface ClassifierPayload {
 	name: string;
+	description: string;
+	intermediatory_classes?: ClassifierClassPayload[];
 }
 
 export interface ClassifierClassPayload {
