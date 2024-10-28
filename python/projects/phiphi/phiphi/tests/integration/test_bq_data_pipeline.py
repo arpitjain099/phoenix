@@ -100,6 +100,12 @@ def test_bq_pipeline_integration(tmp_bq_project):
     )
     assert messages_exists["table_exists"][0] == 0
 
+    # Check that the get total count post authors returns 0 if no table
+    total_post_authors = generalised_authors.get_total_count_post_authors(
+        project_namespace=test_project_namespace
+    )
+    assert total_post_authors == 0
+
     # Using patch_settings and mocking APIFY_API_KEYS does not work here
     # You need to set this in the environment
     gather_flow.gather_flow(
