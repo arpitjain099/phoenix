@@ -11,12 +11,20 @@ import {
 	Space,
 	Divider,
 } from "@mantine/core";
-import { IconTrash, IconPlus, IconCheck, IconInfoCircle } from "@tabler/icons";
+import {
+	IconTrash,
+	IconPlus,
+	IconCheck,
+	IconInfoCircle,
+	IconChevronDown,
+	IconChevronUp,
+} from "@tabler/icons";
 import { useState, useEffect, ChangeEvent, useCallback } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useTranslate } from "@refinedev/core";
 import { classifierService } from "src/services";
 import { showNotification } from "@mantine/notifications";
+import ClassifierViewBreadcrumb from "@components/breadcrumbs/classifierView";
 
 // Define types for class and keyword group structures
 interface ClassData {
@@ -36,14 +44,25 @@ interface KeywordGroup {
 }
 
 const EditKeywordClassifier: React.FC = () => {
-	const router = useRouter();
 	const translate = useTranslate();
 	const { projectid, id } = useParams();
 	// State to manage classes and keyword groups
 	const [classifierName, setClassifierName] = useState("");
+	const [classifierDescription, setClassifierDescription] = useState("");
+	const [classifier, setClassifier] = useState();
 	const [classes, setClasses] = useState<ClassData[]>([]);
 	const [keywordGroups, setKeywordGroups] = useState<KeywordGroup[]>([]);
 	const [isModified, setIsModified] = useState<boolean>(false);
+	const [refetch, setRefetch] = useState<boolean>(true);
+	const [openRows, setOpenRows] = useState<{ [key: number]: boolean }>({});
+
+	const showRow = (index: number) => {
+		setOpenRows((prev) => ({ ...prev, [index]: true }));
+	};
+
+	const toggleRow = (index: number) => {
+		setOpenRows((prev) => ({ ...prev, [index]: !prev[index] }));
+	};
 
 	// Fetch initial data on mount
 	const fetchData = useCallback(async () => {
@@ -53,17 +72,20 @@ const EditKeywordClassifier: React.FC = () => {
 				classifier_id: id as string,
 			});
 			const { data } = response;
+			setClassifier(data);
 			setClassifierName(data?.name);
+			setClassifierDescription(data?.description);
 			// Set classes and keyword groups from API response
 			setClasses(data.intermediatory_classes);
 			setKeywordGroups(data.intermediatory_class_to_keyword_configs);
+			setRefetch(false);
 		} catch (error) {
 			console.error("Error fetching classifier data", error);
 		}
 	}, [id, projectid]);
 
 	useEffect(() => {
-		if (id && projectid) {
+		if (id && projectid && refetch) {
 			fetchData();
 		}
 
@@ -73,7 +95,7 @@ const EditKeywordClassifier: React.FC = () => {
 		return () => {
 			window.onbeforeunload = null;
 		};
-	}, [isModified, id, projectid, fetchData]);
+	}, [isModified, id, projectid, fetchData, refetch]);
 
 	// Input change handlers
 	const handleClassChange = (
@@ -101,28 +123,6 @@ const EditKeywordClassifier: React.FC = () => {
 		setIsModified(true);
 	};
 
-	//
-	const handleApplyClassifier = async (): Promise<void> => {
-		try {
-			await classifierService.runKeywordClassifier({
-				project_id: projectid,
-				classifier_id: id,
-			});
-			setIsModified(false);
-			showNotification({
-				title: "Success",
-				message: translate("classifiers.success.success"),
-			});
-		} catch (error: any) {
-			showNotification({
-				title: "Error",
-				color: "red",
-				message: error?.response?.data?.message || "An Error Occured",
-			});
-			console.error("Error applying classifier", error);
-		}
-	};
-
 	const handleUpdateBasicInfo = async () => {
 		try {
 			await classifierService.updateClassifierBasicData(
@@ -132,6 +132,7 @@ const EditKeywordClassifier: React.FC = () => {
 				},
 				{
 					name: classifierName,
+					description: classifierDescription,
 				}
 			);
 			showNotification({
@@ -155,10 +156,10 @@ const EditKeywordClassifier: React.FC = () => {
 		setIsModified(true);
 	};
 
-	const handleRemoveKeywordGroup = async (
-		groupIndex: number
-	): Promise<void> => {
-		const groupToRemove = keywordGroups[groupIndex];
+	const handleRemoveKeywordGroup = async (groupId: number): Promise<void> => {
+		const groupToRemove = keywordGroups.find(
+			(group) => group.id === groupId || group.tempId === groupId
+		);
 		if (groupToRemove?.id) {
 			try {
 				await classifierService.removeKeywordClassifierConfig({
@@ -167,12 +168,15 @@ const EditKeywordClassifier: React.FC = () => {
 					config_id: groupToRemove.id,
 				});
 				setIsModified(true);
+				setRefetch(true);
 			} catch (error) {
 				console.error("Error removing keyword group", error);
 			}
 		} else {
 			try {
-				setKeywordGroups(keywordGroups.filter((_, i) => i !== groupIndex));
+				setKeywordGroups(
+					keywordGroups.filter((item) => item.tempId !== groupId)
+				);
 				setIsModified(true);
 			} catch (error) {
 				console.error("Error removing keyword group", error);
@@ -198,6 +202,7 @@ const EditKeywordClassifier: React.FC = () => {
 					class_id: classToRemove.id,
 				});
 				setIsModified(true);
+				setRefetch(true);
 			} catch (error) {
 				console.error("Error removing class", error);
 			}
@@ -301,7 +306,7 @@ const EditKeywordClassifier: React.FC = () => {
 				const { data } = res;
 				await handleSubmitKeywords(classToAdd.tempId, data.id);
 			}
-			fetchData();
+			setRefetch(true);
 			setIsModified(true);
 		} catch (error: any) {
 			showNotification({
@@ -332,21 +337,16 @@ const EditKeywordClassifier: React.FC = () => {
 
 	return (
 		<div className="p-8 bg-white min-h-screen">
+			<ClassifierViewBreadcrumb
+				record={classifier}
+				projectid={projectid as string}
+			/>
 			<h1 className="text-2xl font-semibold">
 				{translate("classifiers.types.keyword_match.edit")}
 			</h1>
 			<p className="mb-4">
 				{translate("classifiers.types.keyword_match.edit_description")}
 			</p>
-
-			<Button
-				variant="filled"
-				color="blue"
-				className="mb-4"
-				onClick={handleApplyClassifier}
-			>
-				{translate("classifiers.types.keyword_match.run")}
-			</Button>
 
 			<Space h="md" />
 			<div>
@@ -358,6 +358,16 @@ const EditKeywordClassifier: React.FC = () => {
 					onChange={(e) => {
 						setIsModified(true);
 						setClassifierName(e.target.value);
+					}}
+					required
+				/>
+				<Space h="sm" />
+				<TextInput
+					label="Description"
+					placeholder="Classifier Description"
+					value={classifierDescription}
+					onChange={(e) => {
+						setClassifierDescription(e.target.value);
 					}}
 					required
 				/>
@@ -375,13 +385,14 @@ const EditKeywordClassifier: React.FC = () => {
 			<Space h="lg" />
 
 			{/* Classes Section */}
-			<Divider my="sm" label="Classes" />
+			<Divider my="sm" label="Configuration" />
 			<Table highlightOnHover withBorder>
 				<thead>
 					<tr>
+						<th aria-label="Accordion Control" />
 						<th>{translate("classifiers.fields.class_name")}</th>
 						<th>{translate("projects.fields.description")}</th>
-						<th className="flex items-center">
+						<th className="flex items-center justify-center">
 							{translate("classifiers.fields.keywords")}
 							<Tooltip label={translate("classifiers.info.create_keywords")}>
 								<span className="flex">
@@ -395,7 +406,20 @@ const EditKeywordClassifier: React.FC = () => {
 				<tbody>
 					{classes?.map((classItem, classIndex) => (
 						<tr key={classIndex}>
-							<td>
+							<td className="align-baseline">
+								<ActionIcon
+									color="dark"
+									variant="light"
+									onClick={() => toggleRow(classIndex)}
+								>
+									{openRows[classIndex] ? (
+										<IconChevronUp size={16} />
+									) : (
+										<IconChevronDown size={16} />
+									)}
+								</ActionIcon>
+							</td>
+							<td className="align-baseline">
 								<TextInput
 									placeholder="Class name"
 									value={classItem.name}
@@ -404,7 +428,7 @@ const EditKeywordClassifier: React.FC = () => {
 									}
 								/>
 							</td>
-							<td>
+							<td className="align-baseline">
 								<TextInput
 									placeholder="Class description"
 									value={classItem.description}
@@ -417,61 +441,109 @@ const EditKeywordClassifier: React.FC = () => {
 									}
 								/>
 							</td>
-							<td>
+							<td className="!pt-0">
 								<Table>
-									<tbody>
-										{keywordGroups
-											?.filter(
-												(group) =>
-													group.class_id === classItem?.id ||
-													group.class_id === classItem?.tempId
-											)
-											.map((keywordGroup, keywordIndex) => (
-												<tr key={keywordIndex}>
-													<td>
-														<TextInput
-															placeholder="Keywords"
-															value={keywordGroup.musts}
-															onChange={(
-																event: ChangeEvent<HTMLInputElement>
-															) => {
-																if (keywordGroup?.id) {
-																	handleKeywordChange(
-																		keywordGroup.id,
-																		event.target.value
-																	);
-																} else if (keywordGroup?.tempId) {
-																	handleKeywordChange(
-																		keywordGroup.tempId,
-																		event.target.value
-																	);
-																}
-															}}
-														/>
-													</td>
-													<td>
-														<Tooltip
-															label={translate(
-																"classifiers.actions.tooltips.delete_keyword"
-															)}
-														>
-															<ActionIcon
-																color="red"
-																variant="light"
-																onClick={() =>
-																	handleRemoveKeywordGroup(keywordIndex)
-																}
-															>
-																<IconTrash size={16} />
-															</ActionIcon>
-														</Tooltip>
-													</td>
-												</tr>
-											))}
+									<tbody className="flex flex-col items-center">
+										{openRows[classIndex]
+											? keywordGroups
+													?.filter(
+														(group) =>
+															group.class_id === classItem?.id ||
+															group.class_id === classItem?.tempId
+													)
+													.map((keywordGroup, keywordIndex) => (
+														<>
+															<tr key={keywordIndex}>
+																<td>
+																	<TextInput
+																		placeholder="e.g Keyword1 keyword2"
+																		value={keywordGroup.musts}
+																		onChange={(
+																			event: ChangeEvent<HTMLInputElement>
+																		) => {
+																			if (keywordGroup?.id) {
+																				handleKeywordChange(
+																					keywordGroup.id,
+																					event.target.value
+																				);
+																			} else if (keywordGroup?.tempId) {
+																				handleKeywordChange(
+																					keywordGroup.tempId,
+																					event.target.value
+																				);
+																			}
+																		}}
+																	/>
+																</td>
+																<td>
+																	<Tooltip
+																		label={translate(
+																			"classifiers.actions.tooltips.delete_keyword"
+																		)}
+																	>
+																		<ActionIcon
+																			color="red"
+																			variant="light"
+																			onClick={() => {
+																				if (keywordGroup?.id) {
+																					handleRemoveKeywordGroup(
+																						keywordGroup.id
+																					);
+																				} else if (keywordGroup?.tempId) {
+																					handleRemoveKeywordGroup(
+																						keywordGroup.tempId
+																					);
+																				}
+																			}}
+																		>
+																			<IconTrash size={16} />
+																		</ActionIcon>
+																	</Tooltip>
+																</td>
+															</tr>
+															{keywordGroups.length > 0 &&
+																keywordIndex <
+																	keywordGroups.filter(
+																		(group) =>
+																			group.class_id === classItem?.id ||
+																			group.class_id === classItem?.tempId
+																	).length -
+																		1 && <td className="text-center">or</td>}
+														</>
+													))
+											: `${
+													keywordGroups?.filter(
+														(group) =>
+															group.class_id === classItem?.id ||
+															group.class_id === classItem?.tempId
+													).length
+												} added`}
+										<Tooltip
+											label={translate(
+												"classifiers.actions.tooltips.add_keyword"
+											)}
+										>
+											<ActionIcon
+												color="blue"
+												variant="light"
+												onClick={() => {
+													showRow(classIndex);
+													if (classItem?.tempId) {
+														return handleAddKeywordGroup(classItem.tempId);
+													}
+													if (classItem?.id) {
+														return handleAddKeywordGroup(classItem.id);
+													}
+													return null;
+												}}
+											>
+												<IconPlus size={16} />
+											</ActionIcon>
+										</Tooltip>
 									</tbody>
 								</Table>
 							</td>
-							<td>
+							<td className="align-baseline">
 								<div className="w-full h-full flex gap-1 items-center justify-center">
 									<Tooltip
 										label={translate("classifiers.actions.tooltips.save_class")}
@@ -482,27 +554,6 @@ const EditKeywordClassifier: React.FC = () => {
 											onClick={() => handleSubmitClass(classIndex)}
 										>
 											<IconCheck size={16} />
-										</ActionIcon>
-									</Tooltip>
-									<Tooltip
-										label={translate(
-											"classifiers.actions.tooltips.add_keyword"
-										)}
-									>
-										<ActionIcon
-											color="blue"
-											variant="light"
-											onClick={() => {
-												if (classItem?.tempId) {
-													return handleAddKeywordGroup(classItem.tempId);
-												}
-												if (classItem?.id) {
-													return handleAddKeywordGroup(classItem.id);
-												}
-												return null;
-											}}
-										>
-											<IconPlus size={16} />
 										</ActionIcon>
 									</Tooltip>
 									<Tooltip
