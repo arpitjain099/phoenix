@@ -52,9 +52,16 @@ class ClassifierSummary(base_schemas.ClassifierResponseBase):
     latest_job_run: job_runs_schemas.JobRunResponse | None = None
 
 
+classifier_pipeline_union = Union[
+    keyword_match_schemas.KeywordMatchClassifierPipeline,
+    manual_post_authors_schemas.ManualPostAuthorsClassifierPipeline,
+]
+
 ClassifierPipeline = Annotated[
-    Union[keyword_match_schemas.KeywordMatchClassifierPipeline],
+    classifier_pipeline_union,
     pydantic.Field(description="Any classifier response", discriminator="type"),
 ]
 
-classifier_pipeline_adapter = pydantic.TypeAdapter(ClassifierPipeline)
+classifier_pipeline_adapter: pydantic.TypeAdapter[
+    classifier_pipeline_union
+] = pydantic.TypeAdapter(ClassifierPipeline)

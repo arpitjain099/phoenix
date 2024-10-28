@@ -22,6 +22,7 @@ import pandas as pd
 from phiphi import config
 from phiphi.pipeline_jobs import constants, generalised_authors
 from phiphi.pipeline_jobs import utils as pipeline_jobs_utils
+from phiphi.pipeline_jobs.classify import flow as classify_flow
 from phiphi.pipeline_jobs.composite_flows import (
     delete_gather_tabulate_flow,
     recompute_all_batches_tabulate_flow,
@@ -390,34 +391,66 @@ def test_bq_pipeline_integration(tmp_bq_project):
     # Testing author manual classifications
 
     # Manually create and add some manually_classified_authors
-    # Grab rows just to make a dataframe
-    manually_classified_authors_df = deduped_messages_df.iloc[:5][
-        ["phoenix_platform_message_author_id"]
-    ].copy()
-    # Explicitly set the author IDs - this is brittle, but better than doing anything smart.
-    manually_classified_authors_df["phoenix_platform_author_id"] = [
-        normalisers.anonymize("100064878993116"),
-        normalisers.anonymize("100064381045972"),
-        normalisers.anonymize("100064381045972"),
-        normalisers.anonymize("100024915288912"),
-        normalisers.anonymize("100024915288912"),
-    ]
-    manually_classified_authors_df = manually_classified_authors_df.drop(
-        "phoenix_platform_message_author_id", axis=1
+    manual_post_classifier = {
+        "id": 2,
+        "project_id": 1,
+        "name": "test_manual_authors_classifier",
+        "description": "Test manual authors classifier",
+        "type": "manual_post_authors",
+        "latest_version": {
+            "version_id": 1,
+            "classifier_id": 1,
+            "created_at": datetime.datetime.now(),
+            "updated_at": datetime.datetime.now(),
+            "classes": [
+                {"name": "news_outlet", "description": "News outlets"},
+                {"name": "journalist", "description": "Journalists"},
+                {"name": "individual", "description": "Individuals"},
+                {"name": "blogger", "description": "Bloggers"},
+            ],
+            "params": {
+                "author_classes": [
+                    {
+                        "class_name": "news_outlet",
+                        "phoenix_platform_message_author_id": normalisers.anonymize(
+                            "100064878993116"
+                        ),
+                    },
+                    {
+                        "class_name": "news_outlet",
+                        "phoenix_platform_message_author_id": normalisers.anonymize(
+                            "100064381045972"
+                        ),
+                    },
+                    {
+                        "class_name": "journalist",
+                        "phoenix_platform_message_author_id": normalisers.anonymize(
+                            "100064381045972"
+                        ),
+                    },
+                    {
+                        "class_name": "individual",
+                        "phoenix_platform_message_author_id": normalisers.anonymize(
+                            "100024915288912"
+                        ),
+                    },
+                    {
+                        "class_name": "blogger",
+                        "phoenix_platform_message_author_id": normalisers.anonymize(
+                            "100024915288912"
+                        ),
+                    },
+                ]
+            },
+        },
+    }
+    classify_flow.classify_flow(
+        classifier_dict=manual_post_classifier,
+        project_namespace=test_project_namespace,
+        job_run_id=5,
     )
-    manually_classified_authors_df["class_name"] = [
-        "news_outlet",  # post author 1 and comment author 1
-        "news_outlet",  # post author 2
-        "journalist",  # post author 2
-        "individual",  # comment author 2
-        "blogger",  # comment author 2
-    ]
-    manually_classified_authors_df["last_updated_at"] = datetime.datetime.now()
-    pipeline_jobs_utils.write_data(
-        df=manually_classified_authors_df,
-        dataset=test_project_namespace,
-        table=constants.MANUALLY_CLASSIFIED_AUTHORS_TABLE_NAME,
-    )
+    active_classifiers_versions = [(1, 2), (2, 1)]
+
     # Re-tabulate, now with the classified authors
     tabulate_flow.tabulate_flow(
         job_run_id=5,

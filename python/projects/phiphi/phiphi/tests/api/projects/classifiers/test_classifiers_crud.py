@@ -1,6 +1,6 @@
 """Test classifiers crud."""
 
-from phiphi.api.projects.classifiers import crud
+from phiphi.api.projects.classifiers import base_schemas, crud
 
 
 def test_get_pipeline_classifiers(reseed_tables):
@@ -15,6 +15,16 @@ def test_get_pipeline_classifiers(reseed_tables):
     assert classifiers[3].id == 8
     assert classifiers[4].id == 9
     assert classifiers[5].id == 10
+    for classifier in classifiers:
+        assert classifier.type not in base_schemas.SINGLE_RUN_CLASSIFIER_TYPES
+
+    # Currently project 2 is the only project with manual_post_authors classifiers
+    non_single_run_classifiers = crud.get_pipeline_classifiers(reseed_tables, 2)
+    all_classifiers = crud.get_pipeline_classifiers(
+        reseed_tables, 2, include_single_run_classifiers=True
+    )
+    # There should be more classifiers when including single run classifiers
+    assert len(all_classifiers) > len(non_single_run_classifiers)
 
 
 def test_get_pipeline_classifier(reseed_tables):

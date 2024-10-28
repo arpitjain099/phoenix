@@ -80,3 +80,14 @@ class ManualPostAuthorsClassifierDetail(
     """Manual post authors classifier response."""
 
     intermediatory_author_classes: list[IntermediatoryAuthorClassResponse] = []
+
+
+class ManualPostAuthorsClassifierPipeline(
+    ManualPostAuthorsClassifierResponse, base_schemas.ClassifierPipelineBase
+):
+    """Manual post authors classifier response.
+
+    This is a single run classifier and should not be re run for each gather.
+    """
+
+    latest_version: ManualPostAuthorsVersionResponse

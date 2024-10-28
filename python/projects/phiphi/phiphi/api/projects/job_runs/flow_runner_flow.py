@@ -54,8 +54,9 @@ def get_classify_flow_params(project_id: int, classifier_id: int) -> dict[str, A
 def get_all_classifiers_params(project_id: int) -> dict[str, Any]:
     """Get list of specs for all classifiers."""
     with platform_db.get_session_context() as session:
+        # We don't want to include single run classifiers in the gather classify tabulate flow
         classifiers_list = classifiers.crud.get_pipeline_classifiers(
-            session=session, project_id=project_id
+            session=session, project_id=project_id, include_single_run_classifiers=False
         )
     params = {
         "classifiers_dict_list": [_classifier.model_dump() for _classifier in classifiers_list],
@@ -70,8 +71,9 @@ def get_tabulate_flow_params(project_id: int) -> dict[str, Any]:
     version is, so that it can pull the correct classification data.
     """
     with platform_db.get_session_context() as session:
+        # We want to include_single_run_classifiers in the active classifiers
         classifiers_list = classifiers.crud.get_pipeline_classifiers(
-            session=session, project_id=project_id
+            session=session, project_id=project_id, include_single_run_classifiers=True
         )
     params = {
         "active_classifiers_versions": [

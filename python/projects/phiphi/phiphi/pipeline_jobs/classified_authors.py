@@ -26,3 +26,23 @@ manually_classified_authors_table = sa.Table(
     sa.Column("phoenix_platform_author_id", sa.String, nullable=False),
     sa.Column("last_updated_at", sa.TIMESTAMP, nullable=False),
 )
+
+classified_authors_schema = pa.DataFrameSchema(
+    {
+        "classifier_id": pa.Column(pa.Int, nullable=False),
+        "classifier_version_id": pa.Column(pa.Int, nullable=False),
+        "class_name": pa.Column(pa.String, nullable=False),
+        "phoenix_platform_message_author_id": pa.Column(pa.String, nullable=False),
+        "job_run_id": pa.Column(pa.Int, nullable=False),
+    }
+)
+
+classified_authors_table = sa.Table(
+    constants.CLASSIFIED_AUTHORS_TABLE_NAME,
+    project_db.metadata,
+    sa.Column("classifier_id", sa.Integer, nullable=False),
+    sa.Column("classifier_version_id", sa.Integer, nullable=False),
+    sa.Column("class_name", sa.String, nullable=False),
+    sa.Column("phoenix_platform_message_author_id", sa.String, nullable=False),
+    sa.Column("job_run_id", sa.Integer, nullable=False),
+)
