@@ -71,7 +71,7 @@ def get_authors(
     classifier_id: int,
     start: int = 0,
     end: int = 10,
-) -> list[schemas.AuthorResponse]:
+) -> schemas.AuthorsListResponse:
     """Get post authors with intermediatory author classes."""
     return crud.get_post_authors_with_intermediatory_author_classes(
         session=session,

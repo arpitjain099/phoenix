@@ -39,6 +39,13 @@ class AuthorResponse(pydantic.BaseModel):
     intermediatory_author_classes: list[IntermediatoryAuthorClassResponse] = []
 
 
+class AuthorsListResponse(pydantic.BaseModel):
+    """Authors list response schema."""
+
+    authors: list[AuthorResponse]
+    total_count: int
+
+
 class AuthorClassLabel(TypedDict):
     """Author class label schema."""
 

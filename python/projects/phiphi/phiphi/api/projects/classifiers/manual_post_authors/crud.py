@@ -146,7 +146,7 @@ def get_post_authors_with_intermediatory_author_classes(
     classifier_id: int,
     offset: int = 0,
     limit: int = 10,
-) -> list[schemas.AuthorResponse]:
+) -> schemas.AuthorsListResponse:
     """Retrieve post authors with intermediatory_author_classes.
 
     Args:
@@ -157,7 +157,7 @@ def get_post_authors_with_intermediatory_author_classes(
         limit (int, optional): Limit for pagination. Defaults to 10.
 
     Returns:
-        list[schemas.AuthorResponse]: List of AuthorResponse objects.
+        schemas.AuthorsListResponse: The list of post authors with intermediatory_author_classes.
     """
     orm_classifier = crud.get_orm_classifier(
         session=session, project_id=project_id, classifier_id=classifier_id
@@ -208,4 +208,7 @@ def get_post_authors_with_intermediatory_author_classes(
             intermediatory_author_classes=intermediatory_author_classes_responses,
         )
         results.append(response)
-    return results
+    post_authors_count = generalised_authors.get_total_count_post_authors(
+        project_namespace=project_namespace
+    )
+    return schemas.AuthorsListResponse(authors=results, total_count=post_authors_count)

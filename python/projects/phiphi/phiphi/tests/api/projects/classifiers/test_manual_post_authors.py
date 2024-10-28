@@ -323,21 +323,23 @@ def test_manual_post_authors_get_post_authors_with_mock_bq(
     )
     assert response.status_code == 200
     json = response.json()
-    assert len(json) == 10
-    assert json[0]["phoenix_platform_message_author_id"] == "id_1"
-    assert len(json[0]["intermediatory_author_classes"]) == 2
-    assert json[0]["intermediatory_author_classes"][0]["class_name"] == class_1
-    assert json[0]["intermediatory_author_classes"][1]["class_name"] == class_2
-    assert json[1]["phoenix_platform_message_author_id"] == "id_2"
-    assert len(json[1]["intermediatory_author_classes"]) == 0
-    assert len(json[2]["intermediatory_author_classes"]) == 1
-    assert json[2]["intermediatory_author_classes"][0]["class_name"] == class_1
+    authors = json["authors"]
+    assert json["total_count"] == 12
+    assert len(authors) == 10
+    assert authors[0]["phoenix_platform_message_author_id"] == "id_1"
+    assert len(authors[0]["intermediatory_author_classes"]) == 2
+    assert authors[0]["intermediatory_author_classes"][0]["class_name"] == class_1
+    assert authors[0]["intermediatory_author_classes"][1]["class_name"] == class_2
+    assert authors[1]["phoenix_platform_message_author_id"] == "id_2"
+    assert len(authors[1]["intermediatory_author_classes"]) == 0
+    assert len(authors[2]["intermediatory_author_classes"]) == 1
+    assert authors[2]["intermediatory_author_classes"][0]["class_name"] == class_1
     expected_df = pipeline_jobs_sample_generalised_post_authors[:10]
     assert (
-        json[0]["phoenix_platform_message_author_id"]
+        authors[0]["phoenix_platform_message_author_id"]
         == expected_df.iloc[0]["phoenix_platform_message_author_id"]
     )
     assert (
-        json[9]["phoenix_platform_message_author_id"]
+        authors[9]["phoenix_platform_message_author_id"]
         == expected_df.iloc[9]["phoenix_platform_message_author_id"]
     )
