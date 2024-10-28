@@ -1,15 +1,102 @@
 """Test Manual Post Authors."""
 import datetime
+from unittest import mock
 
 import freezegun
 import pytest
 from fastapi.testclient import TestClient
+from prefect.client.schemas import objects
 
 from phiphi.api.projects.classifiers.manual_post_authors import crud
+from phiphi.api.projects.job_runs import schemas as job_run_schemas
 from phiphi.seed.classifiers import manual_post_authors_seed
 
 CREATED_TIME = datetime.datetime(2021, 1, 1, 0, 0, 0)
 UPDATED_TIME = datetime.datetime(2021, 1, 2, 0, 0, 0)
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
+@mock.patch("phiphi.api.projects.job_runs.prefect_deployment.wrapped_run_deployment")
+def test_manual_post_authors_version_and_run(
+    m_run_deployment, reseed_tables, client: TestClient
+) -> None:
+    """Test create manual post authors version and run."""
+    mock_flow_run = mock.MagicMock(spec=objects.FlowRun)
+    mock_flow_run.id = "mock_uuid"
+    mock_flow_run.name = "mock_flow_run"
+    m_run_deployment.return_value = mock_flow_run
+    classifier = manual_post_authors_seed.TEST_MANUAL_POST_AUTHORS_CLASSIFIERS[1]
+    assert classifier.latest_version is None
+    with freezegun.freeze_time(UPDATED_TIME):
+        response = client.post(
+            f"/projects/{classifier.project_id}/classifiers/manual_post_authors/{classifier.id}/version_and_run"
+        )
+
+    assert response.status_code == 200
+    m_run_deployment.assert_called_once_with(
+        name="flow_runner_flow/flow_runner_flow",
+        parameters={
+            "project_id": classifier.project_id,
+            "job_type": job_run_schemas.ForeignJobType.classify_tabulate,
+            "job_source_id": classifier.id,
+            "job_run_id": mock.ANY,
+        },
+    )
+    json = response.json()
+    assert json["latest_version"] is not None
+    assert json["latest_version"]["created_at"] == UPDATED_TIME.isoformat()
+    expected_params = {
+        "author_classes": [
+            {
+                "class_name": classifier.intermediatory_author_classes[0].class_name,
+                "phoenix_platform_message_author_id": classifier.intermediatory_author_classes[
+                    0
+                ].phoenix_platform_message_author_id,
+            },
+            {
+                "class_name": classifier.intermediatory_author_classes[1].class_name,
+                "phoenix_platform_message_author_id": classifier.intermediatory_author_classes[
+                    1
+                ].phoenix_platform_message_author_id,
+            },
+            {
+                "class_name": classifier.intermediatory_author_classes[2].class_name,
+                "phoenix_platform_message_author_id": classifier.intermediatory_author_classes[
+                    2
+                ].phoenix_platform_message_author_id,
+            },
+        ]
+    }
+    assert json["latest_version"]["params"] == expected_params
+
+    response = client.get(f"/projects/{classifier.project_id}/classifiers/{classifier.id}")
+    assert response.status_code == 200
+    json = response.json()
+    assert json["latest_version"] is not None
+    assert json["latest_version"]["created_at"] == UPDATED_TIME.isoformat()
+
+
+@pytest.mark.freeze_time(CREATED_TIME)
+def test_create_manaual_post_authors_version(reseed_tables, client: TestClient, session) -> None:
+    """Test create manual post authors version."""
+    classifier = manual_post_authors_seed.TEST_MANUAL_POST_AUTHORS_CLASSIFIERS[1]
+    project_id = classifier.project_id
+    classifier_id = classifier.id
+
+    version = crud.create_version(session, project_id, classifier_id)
+
+    assert version.classifier_id == classifier_id
+    assert len(version.classes) == 2
+    assert version.classes[0].name == classifier.intermediatory_classes[0].name
+    assert version.classes[1].name == classifier.intermediatory_classes[1].name
+    expected_author_classes = classifier.intermediatory_author_classes
+    assert len(version.params["author_classes"]) == len(expected_author_classes)
+    for i, author_class in enumerate(version.params["author_classes"]):
+        assert author_class["class_name"] == expected_author_classes[i].class_name
+        assert (
+            author_class["phoenix_platform_message_author_id"]
+            == expected_author_classes[i].phoenix_platform_message_author_id
+        )
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
