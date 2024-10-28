@@ -202,6 +202,11 @@ def test_bq_pipeline_integration(tmp_bq_project):
     )
     assert len(post_authors_df) == 2
 
+    total_post_authors = generalised_authors.get_total_count_post_authors(
+        project_namespace=test_project_namespace
+    )
+    assert total_post_authors == 2
+
     tabulate_flow.tabulate_flow(
         job_run_id=4, project_namespace=test_project_namespace, active_classifiers_versions=[]
     )

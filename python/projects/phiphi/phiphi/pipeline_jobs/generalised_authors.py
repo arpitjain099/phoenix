@@ -4,6 +4,7 @@ Functionality and schemas for generalised authors.
 """
 import json
 
+import numpy as np
 import pandas as pd
 import pandera as pa
 
@@ -79,3 +80,35 @@ def load_sample_authors(
     sample_authors_df = pd.DataFrame(sample_authors)
     deduplicated_generalised_authors_schema.validate(sample_authors_df)
     return sample_authors_df[offset : offset + limit]
+
+
+def get_total_count_post_authors(
+    project_namespace: str,
+    deduplicated_authors_table_name: str = constants.DEDUPLICATED_GENERALISED_AUTHORS_TABLE_NAME,
+) -> int:
+    """Retrieve the total count of authors with posts.
+
+    Args:
+        project_namespace (str): The project namespace.
+        deduplicated_authors_table_name (str, optional): Name of the table containing deduplicated
+            generalised authors. Defaults to constants.DEDUPLICATED_GENERALISED_AUTHORS_TABLE_NAME.
+
+    Returns:
+        int: Total count of authors with posts.
+    """
+    if config.settings.USE_MOCK_BQ:
+        return len(load_sample_authors())
+
+    query = f"""
+    SELECT COUNT(*) as count
+    FROM `{project_namespace}.{deduplicated_authors_table_name}`
+    WHERE post_count > 0
+    """
+    # Read data using the utility function
+    count_df = pipeline_jobs_utils.read_data(
+        query, project_namespace, deduplicated_authors_table_name
+    )
+    count = count_df.iloc[0]["count"]
+    # Needed for mypy
+    assert isinstance(count, np.int64)
+    return int(count)
