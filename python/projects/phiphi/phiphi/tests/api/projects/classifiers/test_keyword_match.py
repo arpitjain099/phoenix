@@ -48,6 +48,7 @@ def test_create_keyword_match_classifier_crud(reseed_tables) -> None:
         classifier_type=base_schemas.ClassifierType.keyword_match,
         classifier_create=base_schemas.ClassifierCreate(
             name="First keyword match classifier",
+            description="Test Classifier 1 Description",
             intermediatory_classes=intermediatory_classes,
         ),
     )
@@ -88,6 +89,7 @@ def test_create_keyword_match_classifier(reseed_tables, client: TestClient) -> N
     """Test create keyword match classifier."""
     data = {
         "name": "First keyword match classifier",
+        "description": "Test Classifier Description",
         "intermediatory_classes": [
             {"name": "class1", "description": "des"},
             {"name": "class2", "description": "desc"},

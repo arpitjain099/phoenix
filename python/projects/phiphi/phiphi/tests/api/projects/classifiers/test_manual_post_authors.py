@@ -17,6 +17,7 @@ def test_create_manual_post_authors_classifier(reseed_tables, client: TestClient
     """Test create keyword match classifier."""
     data = {
         "name": "First manual post authors classifier",
+        "description": "First manual post authors classifier description",
         "intermediatory_classes": [
             {"name": "class1", "description": "des"},
             {"name": "class2", "description": "desc"},

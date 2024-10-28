@@ -72,6 +72,7 @@ class ClassifierCreate(pydantic.BaseModel):
     """
 
     name: Annotated[str, pydantic.Field(description="The name of the Classifier")]
+    description: Annotated[str, pydantic.Field(description="The description of the Classifier")]
     intermediatory_classes: list[IntermediatoryClassCreate]
 
 
@@ -81,7 +82,13 @@ class ClassifierPatch(pydantic.BaseModel):
     Properties to receive via API on update.
     """
 
-    name: Annotated[Optional[str], pydantic.Field(description="The name of the Classifier")]
+    name: Annotated[
+        Optional[str], pydantic.Field(description="The name of the Classifier", default=None)
+    ]
+    description: Annotated[
+        Optional[str],
+        pydantic.Field(description="The description of the Classifier", default=None),
+    ]
 
 
 class ClassifierVersionResponse(pydantic.BaseModel):
@@ -116,6 +123,7 @@ class ClassifierResponseBase(pydantic.BaseModel):
     id: int
     project_id: int
     name: str
+    description: str
     type: ClassifierType
     # It is possible to have a classifier without any versions
     # This then uses the intermediatory tables to store data about the version
