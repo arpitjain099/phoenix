@@ -101,6 +101,9 @@
 		"import": "Import",
 		"clone": "Clone",
 		"start_run": "Start run",
+		"add_class": "Add Class",
+		"save_all": "Save All",
+		"update_basic_info": "Update Basic Info",
 		"notAccessTitle": "You don't have permission to access"
 	},
 	"inputs": {
@@ -574,7 +577,12 @@
 		},
 		"fields": {
 			"class_name": "Class Name",
-			"keywords": "Keywords",
+			"name_placeholder": "My classifier",
+			"description_placeholder": "Classifier Description",
+			"class_name_placeholder": "Class name",
+			"class_description_placeholder": "Class Description",
+			"keywords": "Must contain all these words",
+			"keywords_placeholder": "e.g Keyword1 keyword2",
 			"latest_version_applyed_at": "Latest version applyed at",
 			"latest_edits_made_at": "Latest edits made at"
 		},
@@ -602,6 +610,7 @@
 					"accordion": {
 						"status": "Status",
 						"general": "General",
+						"basic_setup": "Basic Setup",
 						"configuration": "Configuration"
 					}
 				}
@@ -633,13 +642,15 @@
 		"cautions": {
 			"not_run": {
 				"title": "Your classifier has not been applied.",
-				"description": "Click 'Run and apply to future Gathers' so your classifier to have the classifier applied to the dashboard dataset and future gathers."
+				"description": "Edit and then click 'Run and apply to future Gathers' so your classifier to have the classifier applied to the dashboard dataset and future gathers."
 			},
 			"not_applied": {
 				"title": "Your classifier has edit's that have not been applied.",
 				"description": "Click 'Run and apply to future Gathers' so your classifier to have the classifier applied to the dashboard dataset and future gathers."
 			}
 		},
+		"or": "Or",
+		"keyword_configurations": "keyword configurations",
 		"success": {
 			"success": "Success",
 			"archive": "Archiving Classifier.",
@@ -683,6 +694,8 @@
 		"actions": "Actions"
 	},
 	"status": {
+		"success": "Success",
+		"error": "Error",
 		"in_queue": "In Queue",
 		"awaiting_start": "Awaiting Start",
 		"processing": "Processing",

@@ -101,6 +101,9 @@
 		"import": "استيراد",
 		"clone": "نسخ",
 		"start_run": "بدء التشغيل",
+		"add_class": "إضافة فصل",
+		"save_all": "حفظ الكل",
+		"update_basic_info": "تحديث المعلومات الأساسية",
 		"notAccessTitle": "ليس لديك إذن للوصول"
 	},
 	"inputs": {
@@ -567,10 +570,15 @@
 			"select_type": "اختر نوع المصنف الذي ترغب في إنشائه"
 		},
 		"fields": {
-			"class_name": "اسم الفئة",
-			"keywords": "الكلمات الرئيسية",
-			"latest_version_applyed_at": "آخر إصدار تم تطبيقه في",
-			"latest_edits_made_at": "آخر تعديلات تم إجراؤها في"
+			"class_name": "اسم الفصل",
+			"name_placeholder": "المصنف الخاص بي",
+			"description_placeholder": "وصف المصنف",
+			"class_name_placeholder": "اسم الفصل",
+			"class_description_placeholder": "وصف الفصل",
+			"keywords": "يجب أن تحتوي على جميع هذه الكلمات",
+			"keywords_placeholder": "مثل كلمة1 كلمة2",
+			"latest_version_applyed_at": "أحدث إصدار تم تطبيقه في",
+			"latest_edits_made_at": "أحدث التعديلات التي تم إجراؤها في"
 		},
 		"info": {
 			"create_keywords": "الكلمات الرئيسية المضافة في تسلسل واحد تحتوي على عامل `و` بينها. لإنشاء علاقات `أو` لهذه الفئة، أضف أكثر من تسلسل واحد من الكلمات الرئيسية.",
@@ -596,7 +604,8 @@
 					"accordion": {
 						"status": "الحالة",
 						"general": "عام",
-						"configuration": "إعدادات"
+						"configuration": "إعدادات",
+						"basic_setup": "الإعدادات الأساسية"
 					}
 				}
 			},
@@ -634,6 +643,8 @@
 				"description": "انقر على 'تشغيل وتطبيق على التجميعات المستقبلية' حتى يتم تطبيق المصنف على مجموعة بيانات لوحة التحكم والتجميعات المستقبلية."
 			}
 		},
+		"or": "أو",
+		"keyword_configurations": "إعدادات الكلمات الرئيسية",
 		"success": {
 			"success": "نجاح",
 			"archive": "أرشفة المصنف.",
@@ -676,6 +687,8 @@
 		"actions": "الإجراءات"
 	},
 	"status": {
+		"success": "نجاح",
+		"error": "خطأ",
 		"in_queue": "في الطابور",
 		"awaiting_start": "في انتظار البدء",
 		"processing": "قيد المعالجة",

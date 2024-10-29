@@ -21,7 +21,7 @@ import {
 	Title,
 	Tooltip,
 } from "@mantine/core";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { statusTextStyle } from "src/utils";
 import { IconChevronDown, IconChevronUp, IconInfoCircle } from "@tabler/icons";
 import { classifierService } from "src/services";
@@ -31,6 +31,7 @@ import ClassifierViewBreadcrumb from "@components/breadcrumbs/classifierView";
 export default function KeywordClassifierShow(): JSX.Element {
 	const { projectid, id } = useParams();
 	const translate = useTranslate();
+	const router = useRouter();
 	const [openRows, setOpenRows] = useState<{ [key: number]: boolean }>({});
 	const { queryResult } = useShow({
 		resource: `projects/${projectid}/classifiers`,
@@ -45,10 +46,6 @@ export default function KeywordClassifierShow(): JSX.Element {
 		recordItemId: id as string,
 	};
 
-	const showRow = (index: number) => {
-		setOpenRows((prev) => ({ ...prev, [index]: true }));
-	};
-
 	const toggleRow = (index: number) => {
 		setOpenRows((prev) => ({ ...prev, [index]: !prev[index] }));
 	};
@@ -60,12 +57,13 @@ export default function KeywordClassifierShow(): JSX.Element {
 				classifier_id: id,
 			});
 			showNotification({
-				title: "Success",
+				title: translate("status.success"),
 				message: translate("classifiers.success.success"),
 			});
+			router.replace(`/projects/show/${projectid}?activeItem=classify`);
 		} catch (error: any) {
 			showNotification({
-				title: "Error",
+				title: translate("status.error"),
 				color: "red",
 				message: error?.response?.data?.message || "An Error Occured",
 			});
@@ -89,7 +87,7 @@ export default function KeywordClassifierShow(): JSX.Element {
 				value={translate("classifiers.types.keyword_match.view.text")}
 			/>
 			<Space h="md" />
-			{!record?.latest_version && record?.last_edited_at && (
+			{!record?.latest_version && (
 				<p className="flex items-center text-red-500">
 					{translate("classifiers.cautions.not_run.title")}
 					<Tooltip
@@ -103,23 +101,22 @@ export default function KeywordClassifierShow(): JSX.Element {
 					</Tooltip>
 				</p>
 			)}
-			{(!record?.latest_version ||
-				(record?.latest_version &&
-					new Date(record?.latest_version?.created_at) <
-						new Date(record?.last_edited_at))) && (
-				<p className="flex items-center text-red-500">
-					{translate("classifiers.cautions.not_applied.title")}
-					<Tooltip
-						multiline
-						width={350}
-						label={translate("classifiers.cautions.not_applied.description")}
-					>
-						<span className="flex">
-							<IconInfoCircle size={12} />
-						</span>
-					</Tooltip>
-				</p>
-			)}
+			{record?.latest_version &&
+				new Date(record?.latest_version?.created_at) <
+					new Date(record?.last_edited_at) && (
+					<p className="flex items-center text-red-500">
+						{translate("classifiers.cautions.not_applied.title")}
+						<Tooltip
+							multiline
+							width={350}
+							label={translate("classifiers.cautions.not_applied.description")}
+						>
+							<span className="flex">
+								<IconInfoCircle size={12} />
+							</span>
+						</Tooltip>
+					</p>
+				)}
 			<Space h="md" />
 			<div className="flex gap-4 items-center mb-4">
 				<EditButton {...editButtonProps} />
@@ -128,7 +125,7 @@ export default function KeywordClassifierShow(): JSX.Element {
 					color="blue"
 					onClick={handleApplyClassifier}
 					disabled={
-						!record?.latest_version ||
+						(!record?.latest_version && !record?.last_edited_at) ||
 						(record?.latest_version &&
 							new Date(record?.latest_version?.created_at) <
 								new Date(record?.last_edited_at))
@@ -341,7 +338,7 @@ export default function KeywordClassifierShow(): JSX.Element {
 																								).length -
 																									1 && (
 																								<td className="text-center">
-																									or
+																									{translate("classifiers.or")}
 																								</td>
 																							)}
 																					</>
@@ -352,7 +349,7 @@ export default function KeywordClassifierShow(): JSX.Element {
 																				(group: any) =>
 																					group.class_id === classItem?.id
 																			).length
-																		} added`}
+																		} ${translate("classifiers.keyword_configurations")}`}
 															</tbody>
 														</Table>
 													</td>

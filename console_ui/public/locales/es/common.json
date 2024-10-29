@@ -101,6 +101,9 @@
 		"import": "Importar",
 		"clone": "Clonar",
 		"start_run": "Iniciar ejecución",
+		"add_class": "Agregar clase",
+		"save_all": "Guardar todo",
+		"update_basic_info": "Actualizar información básica",
 		"notAccessTitle": "No tiene permiso para acceder"
 	},
 	"inputs": {
@@ -567,8 +570,13 @@
 			"select_type": "Seleccione el tipo de clasificador que le gustaría crear"
 		},
 		"fields": {
-			"class_name": "Nombre de la Clase",
-			"keywords": "Palabras clave",
+			"class_name": "Nombre de la clase",
+			"name_placeholder": "Mi clasificador",
+			"description_placeholder": "Descripción del clasificador",
+			"class_name_placeholder": "Nombre de la clase",
+			"class_description_placeholder": "Descripción de la clase",
+			"keywords": "Debe contener todas estas palabras",
+			"keywords_placeholder": "p. ej. PalabraClave1 PalabraClave2",
 			"latest_version_applyed_at": "Última versión aplicada en",
 			"latest_edits_made_at": "Últimas ediciones realizadas en"
 		},
@@ -596,7 +604,8 @@
 					"accordion": {
 						"status": "Estado",
 						"general": "General",
-						"configuration": "Configuración"
+						"configuration": "Configuración",
+						"basic_setup": "Configuración básica"
 					}
 				}
 			},
@@ -634,6 +643,8 @@
 				"description": "Haga clic en 'Ejecutar y aplicar a futuras recolecciones' para que su clasificador se aplique al conjunto de datos del tablero y a futuras recolecciones."
 			}
 		},
+		"or": "O",
+		"keyword_configurations": "configuraciones de palabras clave",
 		"success": {
 			"success": "Éxito",
 			"archive": "Archivando clasificador.",
@@ -676,6 +687,8 @@
 		"actions": "Acciones"
 	},
 	"status": {
+		"success": "Éxito",
+		"error": "Error",
 		"in_queue": "En cola",
 		"awaiting_start": "En espera de inicio",
 		"processing": "Procesando",

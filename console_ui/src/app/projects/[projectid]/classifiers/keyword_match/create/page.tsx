@@ -107,7 +107,7 @@ const CreateKeywordClassifier: React.FC = () => {
 			);
 			const { data } = res;
 			showNotification({
-				title: "success",
+				title: translate("status.success"),
 				message: translate("classifiers.success.success"),
 			});
 			router.push(
@@ -115,7 +115,7 @@ const CreateKeywordClassifier: React.FC = () => {
 			);
 		} catch (error: any) {
 			showNotification({
-				title: "Error",
+				title: translate("status.error"),
 				color: "red",
 				message: error?.response?.data?.message || "An Error Occured",
 			});
@@ -142,10 +142,15 @@ const CreateKeywordClassifier: React.FC = () => {
 
 			<Space h="md" />
 			<div>
-				<Divider my="sm" label="Basic Setup" />
+				<Divider
+					my="sm"
+					label={translate(
+						"classifiers.types.keyword_match.view.accordion.basic_setup"
+					)}
+				/>
 				<TextInput
 					label="Name"
-					placeholder="My classifier"
+					placeholder={translate("classifiers.fields.name_placeholder")}
 					value={classifierName}
 					onChange={(e) => {
 						setClassifierName(e.target.value);
@@ -155,7 +160,7 @@ const CreateKeywordClassifier: React.FC = () => {
 				<Space h="sm" />
 				<TextInput
 					label="Description"
-					placeholder="Classifier Description"
+					placeholder={translate("classifiers.fields.description_placeholder")}
 					value={classifierDescription}
 					onChange={(e) => {
 						setClassifierDescription(e.target.value);
@@ -166,7 +171,12 @@ const CreateKeywordClassifier: React.FC = () => {
 			<Space h="lg" />
 
 			{/* Classes Section */}
-			<Divider my="sm" label="Classes" />
+			<Divider
+				my="sm"
+				label={translate(
+					`classifiers.types.keyword_match.view.accordion.configuration`
+				)}
+			/>
 			<Table highlightOnHover withBorder>
 				<thead>
 					<tr>
@@ -177,6 +187,7 @@ const CreateKeywordClassifier: React.FC = () => {
 							<Tooltip
 								label={translate("classifiers.info.create_keywords")}
 								width={200}
+								multiline
 							>
 								<span className="flex">
 									<IconInfoCircle size={12} />
@@ -191,7 +202,9 @@ const CreateKeywordClassifier: React.FC = () => {
 						<tr key={classIndex}>
 							<td>
 								<TextInput
-									placeholder="Class name"
+									placeholder={translate(
+										"classifiers.fields.class_name_placeholder"
+									)}
 									value={classItem.name}
 									onChange={(event: ChangeEvent<HTMLInputElement>) =>
 										handleClassChange(classIndex, "name", event.target.value)
@@ -200,7 +213,9 @@ const CreateKeywordClassifier: React.FC = () => {
 							</td>
 							<td>
 								<TextInput
-									placeholder="Class description"
+									placeholder={translate(
+										"classifiers.fields.class_description_placeholder"
+									)}
 									value={classItem.description}
 									onChange={(event: ChangeEvent<HTMLInputElement>) =>
 										handleClassChange(
@@ -212,7 +227,12 @@ const CreateKeywordClassifier: React.FC = () => {
 								/>
 							</td>
 							<td>
-								<TextInput placeholder="Keyword1 kewyord2" disabled />
+								<TextInput
+									placeholder={translate(
+										"classifiers.fields.keywords_placeholder"
+									)}
+									disabled
+								/>
 							</td>
 							<td>
 								<div className="w-full h-full flex gap-1 items-center justify-center">
@@ -242,7 +262,7 @@ const CreateKeywordClassifier: React.FC = () => {
 					mt="sm"
 					onClick={handleAddClass}
 				>
-					Add Class
+					{translate("buttons.add_class")}
 				</Button>
 				<Button
 					rightIcon={<IconDeviceFloppy size={16} />}
@@ -252,7 +272,7 @@ const CreateKeywordClassifier: React.FC = () => {
 					disabled={!classifierName}
 					onClick={handleSave}
 				>
-					Create
+					{translate("buttons.save_all")}
 				</Button>
 			</div>
 		</div>

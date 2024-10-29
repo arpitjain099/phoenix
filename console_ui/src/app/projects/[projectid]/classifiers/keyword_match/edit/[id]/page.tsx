@@ -136,7 +136,7 @@ const EditKeywordClassifier: React.FC = () => {
 				}
 			);
 			showNotification({
-				title: "Success",
+				title: translate("status.success"),
 				message: translate("classifiers.success.success"),
 			});
 		} catch (error) {
@@ -217,7 +217,7 @@ const EditKeywordClassifier: React.FC = () => {
 				setIsModified(true);
 			} catch (error: any) {
 				showNotification({
-					title: "Error",
+					title: translate("status.error"),
 					color: "red",
 					message: error?.response?.data?.message || "An Error Occured",
 				});
@@ -259,7 +259,12 @@ const EditKeywordClassifier: React.FC = () => {
 				);
 				setIsModified(true);
 			}
-		} catch (error) {
+		} catch (error: any) {
+			showNotification({
+				title: "Error",
+				color: "red",
+				message: error?.response?.data?.detail || "An Error Occured",
+			});
 			console.error("Error removing class", error);
 		}
 	};
@@ -322,12 +327,12 @@ const EditKeywordClassifier: React.FC = () => {
 		try {
 			classes.map(async (_, idx) => await handleSubmitClass(idx));
 			showNotification({
-				title: "success",
+				title: translate("status.success"),
 				message: translate("classifiers.success.success"),
 			});
 		} catch (error: any) {
 			showNotification({
-				title: "Error",
+				title: translate("status.error"),
 				color: "red",
 				message: error?.response?.data?.message || "An Error Occured",
 			});
@@ -350,10 +355,15 @@ const EditKeywordClassifier: React.FC = () => {
 
 			<Space h="md" />
 			<div>
-				<Divider my="sm" label="Basic Setup" />
+				<Divider
+					my="sm"
+					label={translate(
+						"classifiers.types.keyword_match.view.accordion.basic_setup"
+					)}
+				/>
 				<TextInput
 					label="Name"
-					placeholder="My classifier"
+					placeholder={translate("classifiers.fields.name_placeholder")}
 					value={classifierName}
 					onChange={(e) => {
 						setIsModified(true);
@@ -364,7 +374,7 @@ const EditKeywordClassifier: React.FC = () => {
 				<Space h="sm" />
 				<TextInput
 					label="Description"
-					placeholder="Classifier Description"
+					placeholder={translate("classifiers.fields.description_placeholder")}
 					value={classifierDescription}
 					onChange={(e) => {
 						setClassifierDescription(e.target.value);
@@ -378,14 +388,19 @@ const EditKeywordClassifier: React.FC = () => {
 						mt="sm"
 						onClick={handleUpdateBasicInfo}
 					>
-						Update Basic Info
+						{translate("buttons.update_basic_info")}
 					</Button>
 				</div>
 			</div>
 			<Space h="lg" />
 
 			{/* Classes Section */}
-			<Divider my="sm" label="Configuration" />
+			<Divider
+				my="sm"
+				label={translate(
+					"classifiers.types.keyword_match.view.accordion.configuration"
+				)}
+			/>
 			<Table highlightOnHover withBorder>
 				<thead>
 					<tr>
@@ -394,7 +409,11 @@ const EditKeywordClassifier: React.FC = () => {
 						<th>{translate("projects.fields.description")}</th>
 						<th className="flex items-center justify-center">
 							{translate("classifiers.fields.keywords")}
-							<Tooltip label={translate("classifiers.info.create_keywords")}>
+							<Tooltip
+								width={350}
+								multiline
+								label={translate("classifiers.info.create_keywords")}
+							>
 								<span className="flex">
 									<IconInfoCircle size={12} />
 								</span>
@@ -421,7 +440,9 @@ const EditKeywordClassifier: React.FC = () => {
 							</td>
 							<td className="align-baseline">
 								<TextInput
-									placeholder="Class name"
+									placeholder={translate(
+										"classifiers.fields.class_name_placeholder"
+									)}
 									value={classItem.name}
 									onChange={(event: ChangeEvent<HTMLInputElement>) =>
 										handleClassChange(classIndex, "name", event.target.value)
@@ -430,7 +451,9 @@ const EditKeywordClassifier: React.FC = () => {
 							</td>
 							<td className="align-baseline">
 								<TextInput
-									placeholder="Class description"
+									placeholder={translate(
+										"classifiers.fields.class_description_placeholder"
+									)}
 									value={classItem.description}
 									onChange={(event: ChangeEvent<HTMLInputElement>) =>
 										handleClassChange(
@@ -456,7 +479,9 @@ const EditKeywordClassifier: React.FC = () => {
 															<tr key={keywordIndex}>
 																<td>
 																	<TextInput
-																		placeholder="e.g Keyword1 keyword2"
+																		placeholder={translate(
+																			"classifiers.fields.keywords_placeholder"
+																		)}
 																		value={keywordGroup.musts}
 																		onChange={(
 																			event: ChangeEvent<HTMLInputElement>
@@ -508,7 +533,11 @@ const EditKeywordClassifier: React.FC = () => {
 																			group.class_id === classItem?.id ||
 																			group.class_id === classItem?.tempId
 																	).length -
-																		1 && <td className="text-center">or</td>}
+																		1 && (
+																	<td className="text-center">
+																		{translate("classifiers.or")}
+																	</td>
+																)}
 														</>
 													))
 											: `${
@@ -517,7 +546,7 @@ const EditKeywordClassifier: React.FC = () => {
 															group.class_id === classItem?.id ||
 															group.class_id === classItem?.tempId
 													).length
-												} added`}
+												} ${translate("classifiers.keyword_configurations")}`}
 										<Tooltip
 											label={translate(
 												"classifiers.actions.tooltips.add_keyword"
@@ -551,7 +580,10 @@ const EditKeywordClassifier: React.FC = () => {
 										<ActionIcon
 											color="green"
 											variant="light"
-											onClick={() => handleSubmitClass(classIndex)}
+											onClick={() => {
+												// handleSubmitClass(classIndex);
+												handleSaveAll();
+											}}
 										>
 											<IconCheck size={16} />
 										</ActionIcon>
@@ -582,14 +614,14 @@ const EditKeywordClassifier: React.FC = () => {
 					mt="sm"
 					onClick={handleAddClass}
 				>
-					Add Class
+					{translate("buttons.add_class")}
 				</Button>
 				<Button
 					rightIcon={<IconCheck size={16} />}
 					mt="sm"
 					onClick={handleSaveAll}
 				>
-					Save All
+					{translate("buttons.save_all")}
 				</Button>
 			</div>
 		</div>
