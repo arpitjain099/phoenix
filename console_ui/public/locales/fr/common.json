@@ -101,6 +101,9 @@
 		"import": "Importer",
 		"clone": "Cloner",
 		"start_run": "Démarrer l'exécution",
+		"add_class": "Ajouter une classe",
+		"save_all": "Tout enregistrer",
+		"update_basic_info": "Mettre à jour les informations de base",
 		"notAccessTitle": "Vous n'avez pas la permission d'accéder"
 	},
 	"inputs": {
@@ -568,7 +571,12 @@
 		},
 		"fields": {
 			"class_name": "Nom de la classe",
-			"keywords": "Mots-clés",
+			"name_placeholder": "Mon classificateur",
+			"description_placeholder": "Description du classificateur",
+			"class_name_placeholder": "Nom de la classe",
+			"class_description_placeholder": "Description de la classe",
+			"keywords": "Doit contenir tous ces mots",
+			"keywords_placeholder": "ex. MotClé1 MotClé2",
 			"latest_version_applyed_at": "Dernière version appliquée à",
 			"latest_edits_made_at": "Dernières modifications effectuées à"
 		},
@@ -596,7 +604,8 @@
 					"accordion": {
 						"status": "Statut",
 						"general": "Général",
-						"configuration": "Configuration"
+						"configuration": "Configuration",
+						"basic_setup": "Configuration de base"
 					}
 				}
 			},
@@ -634,6 +643,8 @@
 				"description": "Cliquez sur 'Exécuter et appliquer aux futures collectes' pour que votre classificateur soit appliqué au jeu de données du tableau de bord et aux futures collectes."
 			}
 		},
+		"or": "Ou",
+		"keyword_configurations": "configurations de mots-clés",
 		"success": {
 			"success": "Succès",
 			"archive": "Archivage du classificateur.",
@@ -676,6 +687,8 @@
 		"actions": "Actions"
 	},
 	"status": {
+		"success": "Succès",
+		"error": "Erreur",
 		"in_queue": "En file d'attente",
 		"awaiting_start": "En attente de début",
 		"processing": "Traitement",
