@@ -6,6 +6,7 @@ from google.cloud import bigquery
 
 from phiphi import constants
 from phiphi.pipeline_jobs import constants as pipeline_jobs_constants
+from phiphi.pipeline_jobs.tabulate import quality_check
 
 
 def escape_sql_value(value: str) -> str:
@@ -182,6 +183,7 @@ def tabulate_flow(
         bigquery_dataset=project_namespace,
         active_classifiers_versions=active_classifiers_versions,
     )
+    quality_check.run_quality_checks(bigquery_dataset=project_namespace)
 
 
 def create_deployments(
