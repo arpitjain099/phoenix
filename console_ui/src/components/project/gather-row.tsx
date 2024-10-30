@@ -38,23 +38,19 @@ const GatherRow: React.FC<GatherRowProps> = ({
 
 	// Function to refresh the gather data
 	// !!! IMPORTANT THIS NEEDS TO BE REFACTORED TO WORK
-	const handleGatherRefresh = useCallback(
-		async (
-			handle_project_id: number,
-			latest_job_run_id: number,
-			delete_job_run_id: number | null
-		) => {
-			setIsLoading(true);
+	const handleGatherRefresh = useCallback(async () => {
+		setIsLoading(true);
+		if (project_id) {
 			try {
 				const latestJobRunFetch = await jobRunService.fetchJobRun({
-					project_id: handle_project_id,
-					id: latest_job_run_id,
+					project_id: Number(project_id),
+					id: latestJobRun?.id,
 				});
 				let deleteJobRunFetch = { data: null };
-				if (delete_job_run_id) {
+				if (deleteJobRun?.id) {
 					deleteJobRunFetch = await jobRunService.fetchJobRun({
-						project_id: handle_project_id,
-						id: delete_job_run_id,
+						project_id: Number(project_id),
+						id: deleteJobRun.id,
 					});
 				}
 
@@ -66,9 +62,8 @@ const GatherRow: React.FC<GatherRowProps> = ({
 			} finally {
 				setIsLoading(false);
 			}
-		},
-		[]
-	);
+		}
+	}, [project_id, latestJobRun?.id, deleteJobRun?.id]);
 
 	// Use effect to refresh pending gathers at intervals
 	useEffect(() => {
