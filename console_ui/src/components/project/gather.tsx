@@ -102,7 +102,6 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid }) => {
 				opened={deleteModalOpen}
 				setOpened={setDeleteModalOpen}
 				gatherDetail={selected}
-				handleUpdate={handleGatherUpdate}
 			/>
 		</>
 	);
