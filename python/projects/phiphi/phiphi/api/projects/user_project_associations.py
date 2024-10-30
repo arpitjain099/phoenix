@@ -75,3 +75,17 @@ def create_user_project_association(
             raise exceptions.HttpException400("User project association already exists")
     session.refresh(association)
     return UserProjectAssociationResponse.model_validate(association)
+
+
+def delete_user_project_association(session: orm.Session, project_id: int, user_id: int) -> None:
+    """Delete a user project association."""
+    association = (
+        session.query(UserProjectAssociations)
+        .filter(UserProjectAssociations.project_id == project_id)
+        .filter(UserProjectAssociations.user_id == user_id)
+        .first()
+    )
+    if association is None:
+        raise exceptions.HttpException404("User project association not found")
+    session.delete(association)
+    session.commit()

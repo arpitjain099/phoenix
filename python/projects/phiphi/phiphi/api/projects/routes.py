@@ -80,3 +80,12 @@ def add_user_to_project(
     return user_project_associations.create_user_project_association(
         session, project_id, user_id, create_obj
     )
+
+
+@router.delete("/projects/{project_id}/users/{user_id}")
+def remove_user_from_project(
+    admin_user: deps.AdminOnlyUser, project_id: int, user_id: int, session: deps.SessionDep
+) -> None:
+    """Remove a user from a project."""
+    user_project_associations.delete_user_project_association(session, project_id, user_id)
+    return None

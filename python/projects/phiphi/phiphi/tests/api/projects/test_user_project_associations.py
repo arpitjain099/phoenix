@@ -25,3 +25,21 @@ def test_user_project_associations_create_duplicate(
     assert response.status_code == 400
     json = response.json()
     assert json == {"detail": "User project association already exists"}
+
+
+def test_user_project_associations_delete(
+    reseed_tables: sa.orm.Session, client_admin: TestClient
+) -> None:
+    """Test deleting a user project association."""
+    response = client_admin.delete("/projects/1/users/2")
+    assert response.status_code == 200
+
+
+def test_user_project_associations_delete_not_found(
+    reseed_tables: sa.orm.Session, client_admin: TestClient
+) -> None:
+    """Test deleting a user project association."""
+    response = client_admin.delete("/projects/1/users/3")
+    assert response.status_code == 404
+    json = response.json()
+    assert json == {"detail": "User project association not found"}
