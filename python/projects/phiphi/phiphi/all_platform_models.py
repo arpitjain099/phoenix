@@ -5,6 +5,7 @@ Alembic migrations and testing.
 """
 from phiphi import platform_db
 from phiphi.api.projects import models as project_models  # noqa: F401
+from phiphi.api.projects import user_project_associations  # noqa: F401
 from phiphi.api.projects.classifiers import models as classifier_models  # noqa: F401
 from phiphi.api.projects.classifiers.keyword_match import (
     models as keyword_match_models,  # noqa: F401
