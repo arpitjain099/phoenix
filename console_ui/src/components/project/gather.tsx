@@ -10,6 +10,7 @@ import GatherDeleteModal from "@components/modals/delete-gather";
 import { GatherResponse } from "src/interfaces/gather";
 import Link from "next/link";
 import GatherRow from "@components/project/gather-row";
+import TableWithChildComponent from "@components/table/TableWithChildComponent";
 
 const PHEONIX_MANUAL_GATHER =
 	"https://howtobuildup.notion.site/Decide-where-you-will-get-data-from-167f039d54874316be086734be194654";
@@ -26,12 +27,14 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid }) => {
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 	const [selected, setSelected] = useState(null);
 
-	const apiResponse = useList({
+	const apiResponse: any = useList({
 		resource: projectid ? `projects/${projectid}/gathers` : "",
 		pagination: {
 			mode: "off",
 		},
 	});
+
+	const { refetch } = apiResponse;
 
 	return (
 		<>
@@ -68,7 +71,7 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid }) => {
 						</Button>
 					</Link>
 				</Group>
-				<TableComponent>
+				<TableWithChildComponent>
 					<thead>
 						<tr>
 							<th>{translate("gathers.fields.name")}</th>
@@ -90,17 +93,19 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid }) => {
 							/>
 						))}
 					</tbody>
-				</TableComponent>
+				</TableWithChildComponent>
 			</div>
 			<GatherRunModal
 				opened={opened}
 				setOpened={setOpened}
 				gatherDetail={selected}
+				refetch={refetch}
 			/>
 			<GatherDeleteModal
 				opened={deleteModalOpen}
 				setOpened={setDeleteModalOpen}
 				gatherDetail={selected}
+				refetch={refetch}
 			/>
 		</>
 	);

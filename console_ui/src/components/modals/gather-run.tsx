@@ -3,7 +3,6 @@
 import { Modal, Button, Text } from "@mantine/core";
 import { useTranslate } from "@refinedev/core";
 import { useEffect, useState } from "react";
-import { GatherResponse } from "src/interfaces/gather";
 import { jobRunService, gatherService } from "src/services";
 import { formatToCurrency } from "src/utils";
 
@@ -11,6 +10,7 @@ interface Props {
 	opened: boolean;
 	setOpened: any;
 	gatherDetail: any;
+	refetch: any;
 }
 
 const GATHER_RUN_JOB_TYPE = "gather_classify_tabulate";
@@ -19,6 +19,7 @@ const GatherRunModal: React.FC<Props> = ({
 	opened,
 	setOpened,
 	gatherDetail,
+	refetch,
 }) => {
 	const translate = useTranslate();
 	const [loading, setLoading] = useState(false);
@@ -58,6 +59,7 @@ const GatherRunModal: React.FC<Props> = ({
 				type: GATHER_RUN_JOB_TYPE,
 			})
 			.then((res) => {
+				refetch();
 				handleClose();
 				setLoading(false);
 			})
