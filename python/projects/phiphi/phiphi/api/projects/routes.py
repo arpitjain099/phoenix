@@ -70,6 +70,7 @@ def delete_project(project_id: int, session: deps.SessionDep) -> None:
 
 @router.post("/projects/{project_id}/users/{user_id}")
 def add_user_to_project(
+    admin_user: deps.AdminOnlyUser,
     project_id: int,
     user_id: int,
     create_obj: user_project_associations.UserProjectAssociationCreate,
