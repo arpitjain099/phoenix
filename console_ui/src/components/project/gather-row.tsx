@@ -36,6 +36,40 @@ const GatherRow: React.FC<GatherRowProps> = ({
 		setDeleteJobRun(row.delete_job_run);
 	}, [row.latest_job_run, row.delete_job_run]);
 
+	// Function to refresh the gather data
+	// !!! IMPORTANT THIS NEEDS TO BE REFACTORED TO WORK
+	const handleGatherRefresh = useCallback(
+		async (
+			handle_project_id: number,
+			latest_job_run_id: number,
+			delete_job_run_id: number | null
+		) => {
+			setIsLoading(true);
+			try {
+				const latestJobRunFetch = await jobRunService.fetchJobRun({
+					project_id: handle_project_id,
+					id: latest_job_run_id,
+				});
+				let deleteJobRunFetch = { data: null };
+				if (delete_job_run_id) {
+					deleteJobRunFetch = await jobRunService.fetchJobRun({
+						project_id: handle_project_id,
+						id: delete_job_run_id,
+					});
+				}
+
+				// Update local state
+				setLatestJobRun(latestJobRunFetch.data);
+				if (deleteJobRunFetch.data) setDeleteJobRun(deleteJobRunFetch.data);
+			} catch (error) {
+				console.error("Error fetching gather details:", error);
+			} finally {
+				setIsLoading(false);
+			}
+		},
+		[]
+	);
+
 	// Use effect to refresh pending gathers at intervals
 	useEffect(() => {
 		let interval: NodeJS.Timeout | undefined;
