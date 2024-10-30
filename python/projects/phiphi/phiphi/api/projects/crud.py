@@ -66,7 +66,7 @@ def get_project(
     return schemas.ProjectResponse.model_validate(orm_project)
 
 
-def get_projects(
+def get_all_projects(
     session: sqlalchemy.orm.Session, start: int = 0, end: int = 100
 ) -> list[schemas.ProjectListResponse]:
     """Get projects."""

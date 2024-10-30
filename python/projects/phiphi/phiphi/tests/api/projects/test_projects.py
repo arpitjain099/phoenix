@@ -108,7 +108,7 @@ def test_create_project_error_init(
     patch_settings,
 ) -> None:
     """Test create project if there is an error in init_project_db."""
-    project_list = crud.get_projects(session=session)
+    project_list = crud.get_all_projects(session=session)
     mock_project_init_db.side_effect = ValueError("Error")
     data = {
         "name": "first project",
@@ -121,7 +121,7 @@ def test_create_project_error_init(
     response = client_admin.post("/projects/", json=data)
     mock_project_init_db.assert_called_once()
     assert response.status_code == 500
-    project_list_after_failed_create = crud.get_projects(session=session)
+    project_list_after_failed_create = crud.get_all_projects(session=session)
     assert len(project_list) == len(project_list_after_failed_create)
 
 
@@ -158,12 +158,12 @@ def test_delete_project_error_init(
     patch_settings,
 ) -> None:
     """Test delete project if there is an error in delete_project_db."""
-    project_list = crud.get_projects(session=session)
+    project_list = crud.get_all_projects(session=session)
     mock_project_delete_db.side_effect = ValueError("Error")
     response = client.delete("/projects/1")
     mock_project_delete_db.assert_called_once()
     assert response.status_code == 500
-    project_list_after_failed_delete = crud.get_projects(session=session)
+    project_list_after_failed_delete = crud.get_all_projects(session=session)
     assert len(project_list) == len(project_list_after_failed_delete)
 
 
