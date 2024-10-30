@@ -6,10 +6,10 @@ import datetime
 from enum import Enum
 
 import pydantic
-from sqlalchemy import ForeignKey, Index, orm
+from sqlalchemy import ForeignKey, Index, exc, orm
 
 from phiphi import platform_db
-from phiphi.api import base_models
+from phiphi.api import base_models, exceptions
 
 
 class UserProjectAssociationsBase(platform_db.Base):
@@ -63,10 +63,15 @@ def create_user_project_association(
     user_project_association: UserProjectAssociationCreate,
 ) -> UserProjectAssociationResponse:
     """Create a user project association."""
-    association = UserProjectAssociations(
-        **user_project_association.dict(), project_id=project_id, user_id=user_id
-    )
-    session.add(association)
-    session.commit()
+    try:
+        association = UserProjectAssociations(
+            **user_project_association.dict(), project_id=project_id, user_id=user_id
+        )
+        session.add(association)
+        session.commit()
+    except exc.IntegrityError as e:
+        session.rollback()
+        if "unique constraint" in str(e):
+            raise exceptions.HttpException400("User project association already exists")
     session.refresh(association)
     return UserProjectAssociationResponse.model_validate(association)
