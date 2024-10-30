@@ -11,7 +11,6 @@ interface Props {
 	opened: boolean;
 	setOpened: any;
 	gatherDetail: any;
-	handleRefresh: (value: GatherResponse) => void;
 }
 
 const GATHER_RUN_JOB_TYPE = "gather_classify_tabulate";
@@ -20,7 +19,6 @@ const GatherRunModal: React.FC<Props> = ({
 	opened,
 	setOpened,
 	gatherDetail,
-	handleRefresh,
 }) => {
 	const translate = useTranslate();
 	const [loading, setLoading] = useState(false);
@@ -60,10 +58,6 @@ const GatherRunModal: React.FC<Props> = ({
 				type: GATHER_RUN_JOB_TYPE,
 			})
 			.then((res) => {
-				handleRefresh({
-					...gatherDetail,
-					latest_job_run: { id: res?.data?.id },
-				});
 				handleClose();
 				setLoading(false);
 			})
