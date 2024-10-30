@@ -272,7 +272,7 @@ const CreateKeywordClassifier: React.FC = () => {
 					disabled={!classifierName}
 					onClick={handleSave}
 				>
-					{translate("buttons.save_all")}
+					{translate("buttons.create")}
 				</Button>
 			</div>
 		</div>

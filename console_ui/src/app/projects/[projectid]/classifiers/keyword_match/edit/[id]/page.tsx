@@ -617,7 +617,7 @@ const EditKeywordClassifier: React.FC = () => {
 					mt="sm"
 					onClick={handleSaveAll}
 				>
-					{translate("buttons.create")}
+					{translate("buttons.save_all")}
 				</Button>
 			</div>
 		</div>
