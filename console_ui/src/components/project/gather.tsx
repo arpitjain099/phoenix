@@ -1,26 +1,15 @@
 "use client";
 
-import React, { useEffect, useState, useMemo, useCallback } from "react";
+import React, { useState } from "react";
 import { useTranslate, useList } from "@refinedev/core";
-import { ColumnDef } from "@tanstack/react-table";
-import {
-	Group,
-	Button,
-	Tooltip,
-	Loader,
-	Text,
-	Title,
-	Anchor,
-} from "@mantine/core";
-import { DateField } from "@refinedev/mantine";
+import { Group, Button, Text, Title, Anchor } from "@mantine/core";
 import TableComponent from "@components/table";
-import { isJobRunRunning, statusTextStyle } from "src/utils";
-import { IconPlayerPlay, IconSquarePlus, IconTrash } from "@tabler/icons";
+import { IconSquarePlus } from "@tabler/icons";
 import GatherRunModal from "@components/modals/gather-run";
-import { jobRunService } from "src/services";
+import GatherDeleteModal from "@components/modals/delete-gather";
 import { GatherResponse } from "src/interfaces/gather";
 import Link from "next/link";
-import GatherDeleteModal from "@components/modals/delete-gather";
+import GatherRow from "@components/project/gather-row";
 
 const PHEONIX_MANUAL_GATHER =
 	"https://howtobuildup.notion.site/Decide-where-you-will-get-data-from-167f039d54874316be086734be194654";
@@ -29,18 +18,13 @@ const PHEONIX_MANUAL_GATHER_MORE =
 
 interface IGatherProps {
 	projectid: any;
-	refetch: any;
 }
 
-const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
+const GatherComponent: React.FC<IGatherProps> = ({ projectid }) => {
 	const translate = useTranslate();
 	const [opened, setOpened] = useState(false);
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 	const [selected, setSelected] = useState(null);
-	const [gatherList, setGatherList] = useState<any>([]);
-	const [loadingStates, setLoadingStates] = useState<{
-		[key: string]: boolean;
-	}>({});
 
 	const apiResponse = useList({
 		resource: projectid ? `projects/${projectid}/gathers` : "",
@@ -48,231 +32,6 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 			mode: "off",
 		},
 	});
-
-	const handleGatherRefresh = useCallback(
-		async (gatherDetail: GatherResponse) => {
-			setLoadingStates((prev) => ({ ...prev, [gatherDetail.id]: true }));
-			try {
-				const latest_job_run_fetch = await jobRunService.fetchJobRun({
-					project_id: gatherDetail.project_id,
-					id: gatherDetail?.latest_job_run?.id,
-				});
-				let delete_job_run_fetch = { data: null };
-				if (gatherDetail?.delete_job_run) {
-					delete_job_run_fetch = await jobRunService.fetchJobRun({
-						project_id: gatherDetail.project_id,
-						id: gatherDetail?.delete_job_run?.id,
-					});
-				}
-				setGatherList((prevList: GatherResponse[]) =>
-					prevList.map((gather) =>
-						gather.id === gatherDetail.id
-							? {
-									...gather,
-									latest_job_run: latest_job_run_fetch.data,
-									delete_job_run: delete_job_run_fetch.data,
-								}
-							: gather
-					)
-				);
-			} catch (error) {
-				console.error("Error fetching gather details:", error);
-			} finally {
-				refetch();
-				setLoadingStates((prev) => ({ ...prev, [gatherDetail.id]: false }));
-			}
-		},
-		[refetch]
-	);
-
-	const handleGatherUpdate = useCallback(
-		async (gatherDetail: GatherResponse) => {
-			setLoadingStates((prev) => ({ ...prev, [gatherDetail.id]: true }));
-			try {
-				setGatherList((prevList: GatherResponse[]) =>
-					prevList.map((gather) =>
-						gather.id === gatherDetail.id ? gatherDetail : gather
-					)
-				);
-			} catch (error) {
-				console.error("Error fetching gather details:", error);
-			} finally {
-				refetch();
-				setLoadingStates((prev) => ({ ...prev, [gatherDetail.id]: false }));
-			}
-		},
-		[refetch]
-	);
-
-	const columns = useMemo<ColumnDef<any>[]>(
-		() => [
-			{
-				id: "name",
-				accessorKey: "name",
-				header: translate("gathers.fields.name"),
-				cell: ({ row }) => {
-					const { id, name, child_type, project_id } = row.original;
-					return (
-						<Link
-							href={`/projects/${project_id}/gathers/${child_type}/${id}`}
-							className="no-underline text-blue-500"
-						>
-							{name}
-						</Link>
-					);
-				},
-			},
-			{
-				id: "started_processing_at",
-				accessorKey: "latest_job_run.started_processing_at",
-				header: translate("gathers.fields.started_run_at"),
-				cell: function render({ row }) {
-					const { latest_job_run, delete_job_run } = row.original;
-					const started_processing_at = latest_job_run
-						? latest_job_run.started_processing_at
-						: null;
-					return started_processing_at ? (
-						<span
-							className={`${delete_job_run?.status === "completed_successfully" ? statusTextStyle("deleted") : ""}`}
-						>
-							<DateField format="LLL" value={started_processing_at} />
-						</span>
-					) : (
-						""
-					);
-				},
-			},
-			{
-				id: "completed_at",
-				accessorKey: "latest_job_run.completed_at",
-				header: translate("gathers.fields.completed_at"),
-				cell: function render({ row }) {
-					const { latest_job_run, delete_job_run } = row.original;
-					const completed_at = latest_job_run
-						? latest_job_run.completed_at
-						: null;
-					return completed_at ? (
-						<span
-							className={`${delete_job_run?.status === "completed_successfully" ? statusTextStyle("deleted") : ""}`}
-						>
-							<DateField format="LLL" value={completed_at} />
-						</span>
-					) : (
-						""
-					);
-				},
-			},
-			{
-				id: "status",
-				accessorKey: "latest_job_run.status",
-				header: translate("projects.fields.status"),
-				cell: function render({ row }) {
-					const { latest_job_run, delete_job_run } = row.original;
-					const status = latest_job_run ? latest_job_run.status : null;
-					return (
-						<span
-							className={`${statusTextStyle(delete_job_run?.status === "completed_successfully" ? "deleted" : delete_job_run?.status ? delete_job_run?.status : status)}`}
-						>
-							{delete_job_run
-								? translate(`status.delete_status.${delete_job_run.status}`)
-								: status
-									? translate(`status.${status}`)
-									: ""}
-						</span>
-					);
-				},
-			},
-			{
-				id: "actions",
-				accessorKey: "id",
-				header: translate("table.actions"),
-				cell: function render({ row }) {
-					const gatherId = row.original.id;
-					const { latest_job_run, delete_job_run } = row.original;
-					const status = latest_job_run ? latest_job_run.status : null;
-					const isLoading = loadingStates[gatherId];
-					return (
-						<Group spacing="xs" noWrap>
-							{isLoading ? (
-								<Loader size="sm" />
-							) : (
-								<>
-									{!status && (
-										<Tooltip label="Start">
-											<Button
-												p={0}
-												variant="subtle"
-												color="green"
-												onClick={() => {
-													setSelected(row.original);
-													setOpened(true);
-												}}
-											>
-												<IconPlayerPlay size={20} color="green" />
-											</Button>
-										</Tooltip>
-									)}
-									{(isJobRunRunning(latest_job_run) ||
-										isJobRunRunning(delete_job_run)) && <Loader size="sm" />}
-									{latest_job_run?.completed_at &&
-										!isJobRunRunning(delete_job_run) &&
-										delete_job_run?.status !== "completed_successfully" && (
-											<Tooltip label="Delete">
-												<Button
-													p={0}
-													variant="subtle"
-													color="red"
-													onClick={() => {
-														setSelected(row.original);
-														setDeleteModalOpen(true);
-													}}
-												>
-													<IconTrash size={20} color="red" />
-												</Button>
-											</Tooltip>
-										)}
-								</>
-							)}
-						</Group>
-					);
-				},
-			},
-		],
-		[translate, loadingStates]
-	);
-
-	useEffect(() => {
-		if (apiResponse?.data?.data) {
-			setGatherList(apiResponse.data.data);
-		}
-	}, [apiResponse?.data?.data]);
-
-	useEffect(() => {
-		let interval: NodeJS.Timeout | undefined;
-		if (
-			gatherList.some(
-				(gather: any) =>
-					!gather.latest_job_run?.completed_at ||
-					(gather.delete_job_run && !gather.delete_job_run?.completed_at)
-			)
-		) {
-			interval = setInterval(() => {
-				const pendingGathers = gatherList.filter(
-					(gather: any) =>
-						(gather.latest_job_run && !gather.latest_job_run?.completed_at) ||
-						(gather.delete_job_run && !gather.delete_job_run?.completed_at)
-				);
-				Promise.all(
-					pendingGathers.map((gather: any) => handleGatherRefresh(gather))
-				).catch((error) => console.error("Error refreshing gathers:", error));
-			}, 10000);
-		}
-		return () => {
-			if (interval) {
-				clearInterval(interval);
-			}
-		};
-	}, [gatherList, handleGatherRefresh, handleGatherUpdate]);
 
 	return (
 		<>
@@ -309,10 +68,29 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid, refetch }) => {
 						</Button>
 					</Link>
 				</Group>
-				<TableComponent
-					columns={columns}
-					data={apiResponse?.data?.data || []}
-				/>
+				<TableComponent>
+					<thead>
+						<tr>
+							<th>{translate("gathers.fields.name")}</th>
+							<th>{translate("gathers.fields.started_run_at")}</th>
+							<th>{translate("gathers.fields.completed_at")}</th>
+							<th>{translate("projects.fields.status")}</th>
+							<th>{translate("table.actions")}</th>
+						</tr>
+					</thead>
+					<tbody>
+						{(apiResponse.data?.data || []).map((gather: GatherResponse) => (
+							<GatherRow
+								key={gather.id}
+								row={gather}
+								setSelected={setSelected}
+								setOpened={setOpened}
+								setDeleteModalOpen={setDeleteModalOpen}
+								translate={translate}
+							/>
+						))}
+					</tbody>
+				</TableComponent>
 			</div>
 			<GatherRunModal
 				opened={opened}
