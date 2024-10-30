@@ -53,6 +53,7 @@ const EditKeywordClassifier: React.FC = () => {
 	const [classes, setClasses] = useState<ClassData[]>([]);
 	const [keywordGroups, setKeywordGroups] = useState<KeywordGroup[]>([]);
 	const [isModified, setIsModified] = useState<boolean>(false);
+	const [isBasicModified, setIsBasicModified] = useState<boolean>(false);
 	const [refetch, setRefetch] = useState<boolean>(true);
 	const [openRows, setOpenRows] = useState<{ [key: number]: boolean }>({});
 
@@ -90,12 +91,12 @@ const EditKeywordClassifier: React.FC = () => {
 		}
 
 		// Warn user on exit without saving
-		window.onbeforeunload = isModified ? () => true : null;
+		window.onbeforeunload = isModified || isBasicModified ? () => true : null;
 
 		return () => {
 			window.onbeforeunload = null;
 		};
-	}, [isModified, id, projectid, fetchData, refetch]);
+	}, [isModified, isBasicModified, id, projectid, fetchData, refetch]);
 
 	// Input change handlers
 	const handleClassChange = (
@@ -135,6 +136,7 @@ const EditKeywordClassifier: React.FC = () => {
 					description: classifierDescription,
 				}
 			);
+			setIsBasicModified(false);
 			showNotification({
 				title: translate("status.success"),
 				message: translate("classifiers.success.success"),
@@ -167,7 +169,6 @@ const EditKeywordClassifier: React.FC = () => {
 					classifier_id: id,
 					config_id: groupToRemove.id,
 				});
-				setIsModified(true);
 				setRefetch(true);
 			} catch (error) {
 				console.error("Error removing keyword group", error);
@@ -177,7 +178,6 @@ const EditKeywordClassifier: React.FC = () => {
 				setKeywordGroups(
 					keywordGroups.filter((item) => item.tempId !== groupId)
 				);
-				setIsModified(true);
 			} catch (error) {
 				console.error("Error removing keyword group", error);
 			}
@@ -189,7 +189,6 @@ const EditKeywordClassifier: React.FC = () => {
 			...classes,
 			{ tempId: Math.random(), name: "", description: "" },
 		]);
-		setIsModified(true);
 	};
 
 	const handleRemoveClass = async (index: number): Promise<void> => {
@@ -201,7 +200,6 @@ const EditKeywordClassifier: React.FC = () => {
 					classifier_id: id,
 					class_id: classToRemove.id,
 				});
-				setIsModified(true);
 				setRefetch(true);
 			} catch (error) {
 				console.error("Error removing class", error);
@@ -214,7 +212,6 @@ const EditKeywordClassifier: React.FC = () => {
 						(group) => group.class_id !== classToRemove.tempId
 					)
 				);
-				setIsModified(true);
 			} catch (error: any) {
 				showNotification({
 					title: translate("status.error"),
@@ -243,7 +240,6 @@ const EditKeywordClassifier: React.FC = () => {
 						nots: group.nots || "",
 					}
 				);
-				setIsModified(true);
 			} else {
 				await classifierService.createKeywordClassifierConfig(
 					{
@@ -257,7 +253,6 @@ const EditKeywordClassifier: React.FC = () => {
 						nots: group.nots || "",
 					}
 				);
-				setIsModified(true);
 			}
 		} catch (error: any) {
 			showNotification({
@@ -312,7 +307,6 @@ const EditKeywordClassifier: React.FC = () => {
 				await handleSubmitKeywords(classToAdd.tempId, data.id);
 			}
 			setRefetch(true);
-			setIsModified(true);
 		} catch (error: any) {
 			showNotification({
 				title: "Error",
@@ -326,6 +320,7 @@ const EditKeywordClassifier: React.FC = () => {
 	const handleSaveAll = async (): Promise<void> => {
 		try {
 			classes.map(async (_, idx) => await handleSubmitClass(idx));
+			setIsModified(false);
 			showNotification({
 				title: translate("status.success"),
 				message: translate("classifiers.success.success"),
@@ -366,7 +361,7 @@ const EditKeywordClassifier: React.FC = () => {
 					placeholder={translate("classifiers.fields.name_placeholder")}
 					value={classifierName}
 					onChange={(e) => {
-						setIsModified(true);
+						setIsBasicModified(true);
 						setClassifierName(e.target.value);
 					}}
 					required
@@ -377,6 +372,7 @@ const EditKeywordClassifier: React.FC = () => {
 					placeholder={translate("classifiers.fields.description_placeholder")}
 					value={classifierDescription}
 					onChange={(e) => {
+						setIsBasicModified(true);
 						setClassifierDescription(e.target.value);
 					}}
 					required
