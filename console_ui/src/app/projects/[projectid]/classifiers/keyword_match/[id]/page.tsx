@@ -126,8 +126,9 @@ export default function KeywordClassifierShow(): JSX.Element {
 					onClick={handleApplyClassifier}
 					disabled={
 						(!record?.latest_version && !record?.last_edited_at) ||
+						(record?.latest_job_run && !record?.latest_job_run?.completed_at) ||
 						(record?.latest_version &&
-							new Date(record?.latest_version?.created_at) <
+							new Date(record?.latest_version?.created_at) >
 								new Date(record?.last_edited_at))
 					}
 				>
