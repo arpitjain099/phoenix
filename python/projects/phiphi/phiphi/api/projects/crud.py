@@ -83,6 +83,14 @@ def get_all_projects(
     return [schemas.ProjectListResponse.model_validate(project) for project in projects]
 
 
+def get_user_projects(
+    session: sqlalchemy.orm.Session, user_id: int, start: int = 0, end: int = 100
+) -> list[schemas.ProjectListResponse]:
+    """Get projects for a user."""
+    # To be implemented
+    pass
+
+
 def get_orm_project_with_guard(session: sqlalchemy.orm.Session, project_id: int) -> None:
     """Guard for null instnaces."""
     orm_project = get_non_deleted_project_model(session, project_id)

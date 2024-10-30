@@ -210,9 +210,10 @@ def test_get_project_not_found(client: TestClient, recreate_tables) -> None:
     assert response.json() == {"detail": "Project not found"}
 
 
-def test_get_projects(client: TestClient, reseed_tables) -> None:
-    """Test getting projects."""
-    response = client.get("/projects/")
+@pytest.mark.patch_settings({"USE_COOKIE_AUTH": False})
+def test_get_projects_admin(client_admin: TestClient, reseed_tables, patch_settings) -> None:
+    """Test getting projects with admin user."""
+    response = client_admin.get("/projects/")
     assert response.status_code == 200
     projects = response.json()
     assert len(projects) == 3
@@ -225,9 +226,9 @@ def test_get_projects(client: TestClient, reseed_tables) -> None:
     assert "last_job_run_completed_at" not in projects[0]
 
 
-def test_get_projects_pagination(client: TestClient, reseed_tables) -> None:
+def test_get_projects_pagination(client_admin: TestClient, reseed_tables, patch_settings) -> None:
     """Test getting users with pagination."""
-    response = client.get("/projects/?start=1&end=1")
+    response = client_admin.get("/projects/?start=1&end=1")
     assert response.status_code == 200
     projects = response.json()
     assert len(projects) == 1
