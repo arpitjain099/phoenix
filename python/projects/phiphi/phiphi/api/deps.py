@@ -70,3 +70,16 @@ def get_current_user(
 
 
 CurrentUser = Annotated[user_schemas.UserResponse, fastapi.Depends(get_current_user)]
+
+
+def admin_only(current_user: CurrentUser) -> None:
+    """Check if the current user is an admin."""
+    if not current_user.is_admin():
+        raise fastapi.HTTPException(
+            status_code=fastapi.status.HTTP_403_FORBIDDEN,
+            detail="You do not have permission to access this resource.",
+        )
+    return None
+
+
+AdminOnlyUser = Annotated[None, fastapi.Depends(admin_only)]

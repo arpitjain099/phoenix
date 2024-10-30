@@ -44,6 +44,10 @@ class UserResponse(UserBase):
     id: int
     created_at: datetime.datetime
 
+    def is_admin(self) -> bool:
+        """Check if the user is an admin."""
+        return self.app_role == AppRole.admin
+
 
 class UserUpdate(pydantic.BaseModel):
     """User update schema."""
