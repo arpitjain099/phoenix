@@ -20,7 +20,7 @@ class UserBase(pydantic.BaseModel):
 
     email: pydantic.EmailStr | None = None
     display_name: str | None = None
-    app_role: AppRole | None = None
+    app_role: AppRole | None = AppRole.user
 
 
 class UserCreate(UserBase):

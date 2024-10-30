@@ -42,6 +42,8 @@ def test_create_read_user(reseed_tables, client_admin: TestClient, patch_setting
     assert user["email"] == data["email"]
     assert user["display_name"] == data["display_name"]
     assert user["created_at"] == CREATED_TIME
+    # Default
+    assert user["app_role"] == "user"
 
     response = client_admin.get(f"/users/{user['id']}")
     assert response.status_code == 200

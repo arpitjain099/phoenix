@@ -15,8 +15,8 @@ class UserBase(platform_db.Base):
     id: orm.Mapped[int] = orm.mapped_column(primary_key=True)
     email: orm.Mapped[str] = orm.mapped_column(index=True, unique=True)
     display_name: orm.Mapped[Optional[str]]
-    # We decided not to go for enums in the database, because it's difficult to migrate
-    app_role: orm.Mapped[Optional[str]]
+    # This must be set
+    app_role: orm.Mapped[str]
 
 
 class User(UserBase, base_models.TimestampModel):
