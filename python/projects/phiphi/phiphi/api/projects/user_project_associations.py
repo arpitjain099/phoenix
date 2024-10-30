@@ -2,6 +2,10 @@
 
 This is used to create permissions for users on projects.
 """
+import datetime
+from enum import Enum
+
+import pydantic
 from sqlalchemy import ForeignKey, Index, orm
 
 from phiphi import platform_db
@@ -27,3 +31,42 @@ class UserProjectAssociations(UserProjectAssociationsBase, base_models.Timestamp
 
     user = orm.relationship("User")
     project = orm.relationship("Project")
+
+
+class Role(str, Enum):
+    """Role for user project associations."""
+
+    # Currently user but we plan to have `manager` and `viewer` roles
+    user = "user"
+
+
+class UserProjectAssociationCreate(pydantic.BaseModel):
+    """User project association create."""
+
+    role: Role = Role.user
+
+
+class UserProjectAssociationResponse(pydantic.BaseModel):
+    """User project association response."""
+
+    model_config = pydantic.ConfigDict(from_attributes=True)
+    user_id: int
+    project_id: int
+    role: Role
+    created_at: datetime.datetime
+
+
+def create_user_project_association(
+    session: orm.Session,
+    project_id: int,
+    user_id: int,
+    user_project_association: UserProjectAssociationCreate,
+) -> UserProjectAssociationResponse:
+    """Create a user project association."""
+    association = UserProjectAssociations(
+        **user_project_association.dict(), project_id=project_id, user_id=user_id
+    )
+    session.add(association)
+    session.commit()
+    session.refresh(association)
+    return UserProjectAssociationResponse.model_validate(association)

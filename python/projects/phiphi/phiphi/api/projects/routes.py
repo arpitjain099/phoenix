@@ -4,7 +4,7 @@ import logging
 import fastapi
 
 from phiphi.api import deps
-from phiphi.api.projects import crud, schemas
+from phiphi.api.projects import crud, schemas, user_project_associations
 
 router = fastapi.APIRouter()
 
@@ -66,3 +66,16 @@ def delete_project(project_id: int, session: deps.SessionDep) -> None:
     except Exception as e:
         logger.error(f"Project deletion failed: {e}")
         raise fastapi.HTTPException(status_code=500, detail="Project deletion failed")
+
+
+@router.post("/projects/{project_id}/users/{user_id}")
+def add_user_to_project(
+    project_id: int,
+    user_id: int,
+    create_obj: user_project_associations.UserProjectAssociationCreate,
+    session: deps.SessionDep,
+) -> user_project_associations.UserProjectAssociationResponse:
+    """Add a user to a project."""
+    return user_project_associations.create_user_project_association(
+        session, project_id, user_id, create_obj
+    )
