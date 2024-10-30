@@ -16,7 +16,9 @@ def read_me(current_user: deps.CurrentUser) -> schemas.UserResponse:
 
 
 @router.post("/users/", response_model=schemas.UserResponse)
-def create_user(user: schemas.UserCreate, session: deps.SessionDep) -> schemas.UserResponse:
+def create_user(
+    admin_user: deps.AdminOnlyUser, user: schemas.UserCreate, session: deps.SessionDep
+) -> schemas.UserResponse:
     """Create a new user."""
     return crud.create_user(session, user)
 
