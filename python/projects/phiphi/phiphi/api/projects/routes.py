@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 @router.post("/projects/", response_model=schemas.ProjectResponse)
 def create_project(
-    project: schemas.ProjectCreate, session: deps.SessionDep
+    admin_user: deps.AdminOnlyUser, project: schemas.ProjectCreate, session: deps.SessionDep
 ) -> schemas.ProjectResponse:
     """Create a new project."""
     try:
