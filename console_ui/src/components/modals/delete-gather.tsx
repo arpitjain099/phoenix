@@ -11,14 +11,12 @@ interface Props {
 	opened: boolean;
 	setOpened: any;
 	gatherDetail: any;
-	handleUpdate: (value: GatherResponse) => void;
 }
 
 const GatherDeleteModal: React.FC<Props> = ({
 	opened,
 	setOpened,
 	gatherDetail,
-	handleUpdate,
 }) => {
 	const translate = useTranslate();
 	const [loading, setLoading] = useState(false);
@@ -39,7 +37,6 @@ const GatherDeleteModal: React.FC<Props> = ({
 					title: "Success",
 					message: translate("gathers.success.delete"),
 				});
-				handleUpdate(res?.data);
 				handleClose();
 				setLoading(false);
 			})
