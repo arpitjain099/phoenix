@@ -101,6 +101,9 @@
 		"import": "Importar",
 		"clone": "Clonar",
 		"start_run": "Iniciar ejecución",
+		"add_class": "Agregar clase",
+		"save_all": "Guardar todo",
+		"update_basic_info": "Actualizar información básica",
 		"notAccessTitle": "No tiene permiso para acceder"
 	},
 	"inputs": {
@@ -560,42 +563,90 @@
 		"classifiers": "Clasificadores",
 		"details": "Detalles de los clasificadores",
 		"titles": {
-			"create": "Crear clasificador",
-			"edit": "Editar clasificador",
+			"create": "Crear Clasificador",
+			"edit": "Editar Clasificador",
 			"list": "Clasificadores",
-			"show": "Mostrar clasificador",
-			"select_type": "Seleccione el tipo de clasificador que desea crear"
+			"show": "Mostrar Clasificador",
+			"select_type": "Seleccione el tipo de clasificador que le gustaría crear"
+		},
+		"fields": {
+			"class_name": "Nombre de la clase",
+			"name_placeholder": "Mi clasificador",
+			"description_placeholder": "Descripción del clasificador",
+			"class_name_placeholder": "Nombre de la clase",
+			"class_description_placeholder": "Descripción de la clase",
+			"keywords": "Debe contener todas estas palabras",
+			"keywords_placeholder": "p. ej. PalabraClave1 PalabraClave2",
+			"latest_version_applyed_at": "Última versión aplicada en",
+			"latest_edits_made_at": "Últimas ediciones realizadas en"
+		},
+		"info": {
+			"create_keywords": "Las palabras clave añadidas en una secuencia tienen un operador `y` entre ellas. Para crear relaciones `o` para esta clase, añada más de una secuencia de palabras clave.",
+			"edit_keywords": "Para crear relaciones `o` para esta clase, añada más de una secuencia de palabras clave."
 		},
 		"types": {
 			"post_author_classifier": {
-				"create": "Crear un clasificador de autor de publicaciones",
-				"create_description": "A partir de los datos recopilados, puede agregar una o más clases a cada autor que tenga publicaciones. Los autores se ordenarán por el número de publicaciones recopiladas (de mayor a menor) y podrá agregar clases a cada autor.",
+				"create": "Crear un clasificador de autor de publicación",
+				"create_description": "A partir de los datos recogidos, puede añadir una o más clases a cada autor que tenga publicaciones. Los autores se ordenarán por el número de publicaciones recogidas (de mayor a menor) y podrá añadir clases a cada autor.",
 				"proceed_text": "Comenzar a crear"
 			},
 			"keyword_match": {
-				"create": "Crear un clasificador de texto por palabras clave",
-				"create_description": "Defina un clasificador que agregue automáticamente clases a una publicación y/o comentario cuando su texto contenga ciertas palabras clave. Esto se aplicará a publicaciones y/o comentarios que se hayan recopilado, así como a datos recopilados en el futuro.",
-				"proceed_text": "Comenzar a crear"
+				"run": "Ejecutar y aplicar a futuras recolecciones",
+				"create": "Crear un clasificador de texto por palabra clave",
+				"create_description": "Defina un clasificador que añadirá automáticamente clases a una publicación y/o comentario cuando su texto contenga ciertas palabras clave. Esto se aplicará a publicaciones y/o comentarios que han sido recogidos, y a los datos recogidos en el futuro.",
+				"create_description_2": "Necesitará crear el clasificador con las clases antes de editar las palabras clave.",
+				"proceed_text": "Comenzar a crear",
+				"edit": "Editar un clasificador de texto por palabra clave",
+				"edit_description": "Defina un clasificador que añadirá automáticamente clases a una publicación y/o comentario cuando su texto contenga ciertas palabras clave. Esto se aplicará a publicaciones y/o comentarios que han sido recogidos, y a los datos recogidos en el futuro.",
+				"edit_description_2": "Las ediciones se guardarán automáticamente, pero debe `Ejecutar y aplicar a futuras recolecciones` para que el clasificador actualice el conjunto de datos del tablero.",
+				"view": {
+					"text": "Ver su clasificador de texto por palabra clave.",
+					"accordion": {
+						"status": "Estado",
+						"general": "General",
+						"configuration": "Configuración",
+						"basic_setup": "Configuración básica"
+					}
+				}
 			},
 			"perspective_classifier_text": {
 				"create": "Aplicar la API de Perspective para clasificar texto",
-				"create_description": "La API de Perspective es un clasificador gratuito que utiliza aprendizaje automático para identificar comentarios `tóxicos`. Puede usar la API de Perspective para clasificar según el texto de una publicación y/o comentario. Esto se aplicará a todas las publicaciones y/o comentarios que se hayan recopilado, así como a los datos recopilados en el futuro. Para más información sobre el modelo, consulte ",
+				"create_description": "La API de Perspective es un clasificador gratuito que utiliza el aprendizaje automático para identificar comentarios `tóxicos`. Puede utilizar la API de Perspective para clasificar en función del texto de una publicación y/o comentario. Esto se aplicará a todas las publicaciones y/o comentarios que han sido recogidos, y a los datos recogidos en el futuro. Para más información sobre el modelo, consulte",
 				"proceed_text": "Comenzar a aplicar"
 			}
 		},
 		"actions": {
-			"button": "Sí, continuar",
+			"button": "Sí, proceder",
 			"titles": {
 				"archive": "Archivar",
 				"restore": "Restaurar"
 			},
 			"text": {
-				"archive": "¿Te gustaría ARCHIVAR este clasificador?",
-				"restore": "¿Te gustaría RESTAURAR este clasificador?"
+				"archive": "¿Le gustaría ARCHIVAR este clasificador?",
+				"restore": "¿Le gustaría RESTAURAR este clasificador?"
+			},
+			"tooltips": {
+				"save_class": "Guardar datos de clase y palabras clave",
+				"add_keyword": "Añadir grupo de palabras clave",
+				"delete_class": "Eliminar esta clase",
+				"delete_keyword": "Eliminar este grupo de palabras clave"
 			}
 		},
-		"caution": "Su clasificador tiene modificaciones que no se han aplicado. Haga clic en el ícono para ir a la página de edición y luego haga clic en `Ejecutar y aplicar a futuras recopilaciones` para actualizar el conjunto de datos del tablero.",
+		"caution": "Su clasificador tiene ediciones que no se han aplicado. Haga clic en el ícono para ir a la página de edición y luego haga clic en `Ejecutar y aplicar a futuras recolecciones` para actualizar el conjunto de datos del tablero.",
+		"cautions": {
+			"not_run": {
+				"title": "Su clasificador no ha sido aplicado.",
+				"description": "Haga clic en 'Ejecutar y aplicar a futuras recolecciones' para que su clasificador se aplique al conjunto de datos del tablero y a futuras recolecciones."
+			},
+			"not_applied": {
+				"title": "Su clasificador tiene ediciones que no se han aplicado.",
+				"description": "Haga clic en 'Ejecutar y aplicar a futuras recolecciones' para que su clasificador se aplique al conjunto de datos del tablero y a futuras recolecciones."
+			}
+		},
+		"or": "O",
+		"keyword_configurations": "configuraciones de palabras clave",
 		"success": {
+			"success": "Éxito",
 			"archive": "Archivando clasificador.",
 			"restore": "Restaurando clasificador."
 		},
@@ -636,6 +687,8 @@
 		"actions": "Acciones"
 	},
 	"status": {
+		"success": "Éxito",
+		"error": "Error",
 		"in_queue": "En cola",
 		"awaiting_start": "En espera de inicio",
 		"processing": "Procesando",

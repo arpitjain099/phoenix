@@ -24,3 +24,14 @@ export interface ClassifierResponse {
 		version_id: number;
 	};
 }
+
+export interface ClassifierPayload {
+	name: string;
+	description: string;
+	intermediatory_classes?: ClassifierClassPayload[];
+}
+
+export interface ClassifierClassPayload {
+	name: string;
+	description: string;
+}

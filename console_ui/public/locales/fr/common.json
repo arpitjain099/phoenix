@@ -101,6 +101,9 @@
 		"import": "Importer",
 		"clone": "Cloner",
 		"start_run": "Démarrer l'exécution",
+		"add_class": "Ajouter une classe",
+		"save_all": "Tout enregistrer",
+		"update_basic_info": "Mettre à jour les informations de base",
 		"notAccessTitle": "Vous n'avez pas la permission d'accéder"
 	},
 	"inputs": {
@@ -566,41 +569,89 @@
 			"show": "Afficher le classificateur",
 			"select_type": "Sélectionnez le type de classificateur que vous souhaitez créer"
 		},
+		"fields": {
+			"class_name": "Nom de la classe",
+			"name_placeholder": "Mon classificateur",
+			"description_placeholder": "Description du classificateur",
+			"class_name_placeholder": "Nom de la classe",
+			"class_description_placeholder": "Description de la classe",
+			"keywords": "Doit contenir tous ces mots",
+			"keywords_placeholder": "ex. MotClé1 MotClé2",
+			"latest_version_applyed_at": "Dernière version appliquée à",
+			"latest_edits_made_at": "Dernières modifications effectuées à"
+		},
+		"info": {
+			"create_keywords": "Les mots-clés ajoutés dans une séquence ont un opérateur `et` entre eux. Pour créer des relations `ou` pour cette classe, ajoutez plus d'une séquence de mots-clés.",
+			"edit_keywords": "Pour créer des relations `ou` pour cette classe, ajoutez plus d'une séquence de mots-clés."
+		},
 		"types": {
 			"post_author_classifier": {
-				"create": "Créer un classificateur d'auteur de post",
-				"create_description": "À partir des données recueillies, vous pouvez ajouter une ou plusieurs classes à chaque auteur ayant des publications. Les auteurs seront classés par le nombre de publications recueillies (le plus élevé en premier) et vous pourrez ajouter des classes à chaque auteur.",
+				"create": "Créer un classificateur d'auteur de publication",
+				"create_description": "À partir des données collectées, vous pouvez ajouter une ou plusieurs classes à chaque auteur ayant des publications. Les auteurs seront classés par le nombre de publications collectées (du plus élevé au plus bas) et vous pourrez ajouter des classes à chaque auteur.",
 				"proceed_text": "Commencer à créer"
 			},
 			"keyword_match": {
-				"create": "Créer un classificateur de texte par mots-clés",
-				"create_description": "Définissez un classificateur qui ajoutera automatiquement des classes à un post et/ou un commentaire lorsque son texte contient certains mots-clés. Cela s'appliquera aux publications et/ou commentaires recueillis, ainsi qu'aux données collectées à l'avenir.",
-				"proceed_text": "Commencer à créer"
+				"run": "Exécuter et appliquer aux futures collectes",
+				"create": "Créer un classificateur de texte par mot-clé",
+				"create_description": "Définissez un classificateur qui ajoutera automatiquement des classes à une publication et/ou un commentaire lorsque son texte contient certains mots-clés. Cela sera appliqué aux publications et/ou commentaires qui ont été collectés, et aux données collectées à l'avenir.",
+				"create_description_2": "Vous devez créer le classificateur avec les classes avant de modifier les mots-clés.",
+				"proceed_text": "Commencer à créer",
+				"edit": "Modifier un classificateur de texte par mot-clé",
+				"edit_description": "Définissez un classificateur qui ajoutera automatiquement des classes à une publication et/ou un commentaire lorsque son texte contient certains mots-clés. Cela sera appliqué aux publications et/ou commentaires qui ont été collectés, et aux données collectées à l'avenir.",
+				"edit_description_2": "Les modifications seront enregistrées automatiquement, mais vous devez `Exécuter et appliquer aux futures collectes` pour que le classificateur mette à jour le jeu de données du tableau de bord.",
+				"view": {
+					"text": "Afficher votre classificateur de texte par mot-clé.",
+					"accordion": {
+						"status": "Statut",
+						"general": "Général",
+						"configuration": "Configuration",
+						"basic_setup": "Configuration de base"
+					}
+				}
 			},
 			"perspective_classifier_text": {
 				"create": "Appliquer l'API Perspective pour classifier le texte",
-				"create_description": "L'API Perspective est un classificateur gratuit qui utilise l'apprentissage automatique pour identifier les commentaires `toxiques`. Vous pouvez utiliser l'API Perspective pour classifier en fonction du texte d'un post et/ou commentaire. Cela s'appliquera à tous les posts et/ou commentaires qui ont été recueillis, ainsi qu'aux données collectées à l'avenir. Pour plus d'informations sur le modèle, consultez ",
+				"create_description": "L'API Perspective est un classificateur gratuit qui utilise l'apprentissage automatique pour identifier les commentaires `toxiques`. Vous pouvez utiliser l'API Perspective pour classifier en fonction du texte d'une publication et/ou d'un commentaire. Cela sera appliqué à toutes les publications et/ou commentaires qui ont été collectés, et aux données collectées à l'avenir. Pour plus d'informations sur le modèle, consultez",
 				"proceed_text": "Commencer à appliquer"
 			}
 		},
 		"actions": {
-			"button": "Oui, continuer",
+			"button": "Oui, procéder",
 			"titles": {
 				"archive": "Archiver",
 				"restore": "Restaurer"
 			},
 			"text": {
-				"archive": "Voulez-vous ARCHIVER ce classificateur ?",
-				"restore": "Voulez-vous RESTAURER ce classificateur ?"
+				"archive": "Souhaitez-vous ARCHIVER ce classificateur ?",
+				"restore": "Souhaitez-vous RESTAURER ce classificateur ?"
+			},
+			"tooltips": {
+				"save_class": "Enregistrer les données de classe et de mots-clés",
+				"add_keyword": "Ajouter un groupe de mots-clés",
+				"delete_class": "Supprimer cette classe",
+				"delete_keyword": "Supprimer ce groupe de mots-clés"
 			}
 		},
-		"caution": "Votre classificateur a des modifications qui n'ont pas été appliquées. Cliquez sur l'icône pour aller à la page de modification puis cliquez sur `Exécuter et appliquer aux futures collectes` pour mettre à jour le jeu de données du tableau de bord.",
+		"caution": "Votre classificateur a des modifications qui n'ont pas été appliquées. Cliquez sur l'icône pour aller à la page de modification, puis cliquez sur `Exécuter et appliquer aux futures collectes` pour mettre à jour le jeu de données du tableau de bord.",
+		"cautions": {
+			"not_run": {
+				"title": "Votre classificateur n'a pas été appliqué.",
+				"description": "Cliquez sur 'Exécuter et appliquer aux futures collectes' pour que votre classificateur soit appliqué au jeu de données du tableau de bord et aux futures collectes."
+			},
+			"not_applied": {
+				"title": "Votre classificateur a des modifications qui n'ont pas été appliquées.",
+				"description": "Cliquez sur 'Exécuter et appliquer aux futures collectes' pour que votre classificateur soit appliqué au jeu de données du tableau de bord et aux futures collectes."
+			}
+		},
+		"or": "Ou",
+		"keyword_configurations": "configurations de mots-clés",
 		"success": {
+			"success": "Succès",
 			"archive": "Archivage du classificateur.",
 			"restore": "Restauration du classificateur."
 		},
 		"errors": {
-			"create": "Une erreur s'est produite lors de la création"
+			"create": "Quelque chose s'est mal passé lors de la création"
 		}
 	},
 	"tabulate": {
@@ -636,6 +687,8 @@
 		"actions": "Actions"
 	},
 	"status": {
+		"success": "Succès",
+		"error": "Erreur",
 		"in_queue": "En file d'attente",
 		"awaiting_start": "En attente de début",
 		"processing": "Traitement",
