@@ -16,9 +16,13 @@ const PHEONIX_MANUAL_GATHER_MORE =
 
 interface IGatherProps {
 	projectid: any;
+	refetch: any;
 }
 
-const GatherComponent: React.FC<IGatherProps> = ({ projectid }) => {
+const GatherComponent: React.FC<IGatherProps> = ({
+	projectid,
+	refetch: projectRefetch,
+}) => {
 	const translate = useTranslate();
 	const [opened, setOpened] = useState(false);
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -31,7 +35,12 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid }) => {
 		},
 	});
 
-	const { refetch } = apiResponse;
+	const { refetch: gatherRefetch } = apiResponse;
+
+	const refetch = () => {
+		projectRefetch();
+		gatherRefetch();
+	};
 
 	return (
 		<>
