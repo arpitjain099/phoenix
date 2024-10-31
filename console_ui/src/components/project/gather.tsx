@@ -3,14 +3,11 @@
 import React, { useState } from "react";
 import { useTranslate, useList } from "@refinedev/core";
 import { Group, Button, Text, Title, Anchor } from "@mantine/core";
-import TableComponent from "@components/table";
 import { IconSquarePlus } from "@tabler/icons";
 import GatherRunModal from "@components/modals/gather-run";
 import GatherDeleteModal from "@components/modals/delete-gather";
-import { GatherResponse } from "src/interfaces/gather";
 import Link from "next/link";
-import GatherRow from "@components/project/gather-row";
-import TableWithChildComponent from "@components/table/TableWithChildComponent";
+import GatherTable from "@components/table/GatherTable";
 
 const PHEONIX_MANUAL_GATHER =
 	"https://howtobuildup.notion.site/Decide-where-you-will-get-data-from-167f039d54874316be086734be194654";
@@ -71,29 +68,12 @@ const GatherComponent: React.FC<IGatherProps> = ({ projectid }) => {
 						</Button>
 					</Link>
 				</Group>
-				<TableWithChildComponent>
-					<thead>
-						<tr>
-							<th>{translate("gathers.fields.name")}</th>
-							<th>{translate("gathers.fields.started_run_at")}</th>
-							<th>{translate("gathers.fields.completed_at")}</th>
-							<th>{translate("projects.fields.status")}</th>
-							<th>{translate("table.actions")}</th>
-						</tr>
-					</thead>
-					<tbody>
-						{(apiResponse.data?.data || []).map((gather: GatherResponse) => (
-							<GatherRow
-								key={gather.id}
-								row={gather}
-								setSelected={setSelected}
-								setOpened={setOpened}
-								setDeleteModalOpen={setDeleteModalOpen}
-								translate={translate}
-							/>
-						))}
-					</tbody>
-				</TableWithChildComponent>
+				<GatherTable
+					data={apiResponse.data?.data}
+					setSelected={setSelected}
+					setOpened={setOpened}
+					setDeleteModalOpen={setDeleteModalOpen}
+				/>
 			</div>
 			<GatherRunModal
 				opened={opened}
