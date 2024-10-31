@@ -45,7 +45,7 @@ data:
           "namespace": {
             "type": "string",
             "title": "Namespace",
-            "default": "default",
+            "default": {{ .Release.Namespace | quote }},
             "description": "The Kubernetes namespace to create jobs within."
           },
           "stream_output": {
