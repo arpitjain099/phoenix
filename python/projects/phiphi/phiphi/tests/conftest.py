@@ -39,7 +39,22 @@ def test_app(session) -> Generator[main.FastAPI, None, None]:
 
 @pytest.fixture(scope="session")
 def client(test_app) -> Generator[TestClient, None, None]:
-    """Client for testing."""
+    """Client for testing.
+
+    This client is deprecated and should be replaced with `client_no_user`, `client_admin` or
+    something like that.
+    """
+    with TestClient(test_app) as client:
+        yield client
+
+
+@pytest.fixture(scope="session")
+def client_no_user(test_app) -> Generator[TestClient, None, None]:
+    """Client that has no authenticated user.
+
+    This is useful for testing endpoints that do not require authentication and should replace any
+    users of the `client` fixture that do not require authentication.
+    """
     with TestClient(test_app) as client:
         yield client
 
