@@ -80,7 +80,8 @@ class AutheRemoteUserViewCustom(AuthView):  # type: ignore[no-any-unimported]
         logger.debug("Login View: Auth header value: %s", email)
         logger.debug(f"Login View: Current user: {current_user}")
         logger.debug(f"Login View: Current user: {g.user}")
-        logger.debug(f"Login View: headers {request.headers}")
+        sanitized_headers = str(request.headers).replace('\r\n', '').replace('\n', '')
+        logger.debug(f"Login View: headers {sanitized_headers}")
         if g.user is not None and g.user.is_authenticated and g.user.email == email:
             next_url = request.args.get("next", "")
             return redirect(get_safe_redirect(next_url))
@@ -211,8 +212,10 @@ class PhoenixCustomSSOSecurityManager(SupersetSecurityManager):  # type: ignore[
         challenging. It should be tested by hand :(.
         """
         logger.debug("Before request")
-        logger.debug(f"Request: {request}")
-        logger.debug(f"Request environment {request.environ}")
+        sanitized_request = str(request).replace('\r\n', '').replace('\n', '')
+        logger.debug(f"Request: {sanitized_request}")
+        sanitized_environ = {key: str(value).replace('\r\n', '').replace('\n', '') for key, value in request.environ.items()}
+        logger.debug(f"Request environment {sanitized_environ}")
         # Ignoring the attr-defined as appbuilder is an attribute of a flast app builder
         sm = current_app.appbuilder.sm  # type: ignore[attr-defined]
         email = sm.auth_remote_key
