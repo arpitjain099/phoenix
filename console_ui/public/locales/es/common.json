@@ -86,6 +86,7 @@
 	},
 	"buttons": {
 		"create": "Crear",
+		"create_edit": "Crear y empezar a editar",
 		"save": "Guardar",
 		"logout": "Cerrar sesión",
 		"delete": "Eliminar",
@@ -585,10 +586,33 @@
 			"edit_keywords": "Para crear relaciones `o` para esta clase, añada más de una secuencia de palabras clave."
 		},
 		"types": {
-			"post_author_classifier": {
-				"create": "Crear un clasificador de autor de publicación",
-				"create_description": "A partir de los datos recogidos, puede añadir una o más clases a cada autor que tenga publicaciones. Los autores se ordenarán por el número de publicaciones recogidas (de mayor a menor) y podrá añadir clases a cada autor.",
-				"proceed_text": "Comenzar a crear"
+			"manual_post_authors": {
+				"create": "Crear un clasificador de autores de post",
+				"create_description": "A partir de los datos recopilados, puedes añadir una o más clases a cada autor que tenga posts. Los autores se ordenarán por el número de posts recopilados (de mayor a menor) y podrás añadir clases a cada autor.",
+				"create_description_2": "Primero debes crear el clasificador con las clases antes de poder añadir clases a los autores.",
+				"proceed_text": "Comenzar a crear",
+				"fields": {
+					"classes": "Clases",
+					"author_name": "Nombre del autor",
+					"author_link": "Enlace del autor",
+					"no_of_posts": "Número de posts recopilados para el autor",
+					"author_platform": "Plataforma del autor",
+					"author_anon_id": "ID Anónimo del autor",
+					"create": {
+						"class_section": "Clases (esto se puede modificar más tarde)",
+						"authors_section": "Autores (se puede editar después de crear)"
+					}
+				},
+				"view": {
+					"text": "Ver tu clasificador de autores de post.",
+					"accordion": {
+						"status": "Estado",
+						"general": "General",
+						"basic_setup": "Configuración básica",
+						"class_configuration": "Configuración de clases",
+						"author_configuration": "Configuración de autores"
+					}
+				}
 			},
 			"keyword_match": {
 				"run": "Ejecutar y aplicar a futuras recolecciones",

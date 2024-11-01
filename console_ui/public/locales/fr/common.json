@@ -86,6 +86,7 @@
 	},
 	"buttons": {
 		"create": "Créer",
+		"create_edit": "Créer et commencer à éditer",
 		"save": "Enregistrer",
 		"logout": "Déconnexion",
 		"delete": "Supprimer",
@@ -585,10 +586,33 @@
 			"edit_keywords": "Pour créer des relations `ou` pour cette classe, ajoutez plus d'une séquence de mots-clés."
 		},
 		"types": {
-			"post_author_classifier": {
-				"create": "Créer un classificateur d'auteur de publication",
-				"create_description": "À partir des données collectées, vous pouvez ajouter une ou plusieurs classes à chaque auteur ayant des publications. Les auteurs seront classés par le nombre de publications collectées (du plus élevé au plus bas) et vous pourrez ajouter des classes à chaque auteur.",
-				"proceed_text": "Commencer à créer"
+			"manual_post_authors": {
+				"create": "Créer un classificateur d'auteur de post",
+				"create_description": "À partir des données collectées, vous pouvez ajouter une ou plusieurs classes à chaque auteur ayant des posts. Les auteurs seront classés par le nombre de posts collectés (du plus élevé au plus bas) et vous pourrez ajouter des classes à chaque auteur.",
+				"create_description_2": "Vous devez d'abord créer le classificateur avec les classes avant de pouvoir ajouter des classes aux auteurs.",
+				"proceed_text": "Commencer à créer",
+				"fields": {
+					"classes": "Classes",
+					"author_name": "Nom de l'auteur",
+					"author_link": "Lien de l'auteur",
+					"no_of_posts": "Nombre de posts collectés pour l'auteur",
+					"author_platform": "Plateforme de l'auteur",
+					"author_anon_id": "Id Anonyme de l'auteur",
+					"create": {
+						"class_section": "Classes (cela peut être modifié plus tard)",
+						"authors_section": "Auteurs (peut être modifié après création)"
+					}
+				},
+				"view": {
+					"text": "Voir votre classificateur d'auteurs de post.",
+					"accordion": {
+						"status": "Statut",
+						"general": "Général",
+						"basic_setup": "Configuration de base",
+						"class_configuration": "Configuration des classes",
+						"author_configuration": "Configuration des auteurs"
+					}
+				}
 			},
 			"keyword_match": {
 				"run": "Exécuter et appliquer aux futures collectes",

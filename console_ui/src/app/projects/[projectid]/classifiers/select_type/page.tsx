@@ -24,13 +24,13 @@ export default function SelectClassifierType(): JSX.Element {
 			</Group>
 			<div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5 mx-4 md:mx-0 justify-center mt-10 self-center">
 				<TypeCard
-					title={translate("classifiers.types.post_author_classifier.create")}
+					title={translate("classifiers.types.manual_post_authors.create")}
 					description={translate(
-						"classifiers.types.post_author_classifier.create_description"
+						"classifiers.types.manual_post_authors.create_description"
 					)}
-					link=""
+					link={`/projects/${projectid}/classifiers/manual_post_authors/create`}
 					link_text={translate(
-						"classifiers.types.post_author_classifier.proceed_text"
+						"classifiers.types.manual_post_authors.proceed_text"
 					)}
 				/>
 				<TypeCard
