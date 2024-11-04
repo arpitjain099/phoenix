@@ -3,7 +3,7 @@
 An open-source social media analysis platform for peacebuilders.
 
 Phoenix is a powerful, multi-tier platform that enables peacebuilders and analysts to monitor,
-analyze, and visualize social media data for conflict prevention and peacebuilding efforts.
+analyze, and visualize social media data for conflict prevention and peacebuilding efforts. 
 
 ## Where to start
 

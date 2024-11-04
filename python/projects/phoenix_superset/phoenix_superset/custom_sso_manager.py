@@ -24,6 +24,7 @@ This will override the default Superset security manager with the custom SSO
 manager defined in this module.
 
 """
+
 import logging
 from typing import Union
 
@@ -41,6 +42,12 @@ from superset.security import SupersetSecurityManager  # type: ignore[import-unt
 from werkzeug.wrappers import Response as WerkzeugResponse
 
 logger = logging.getLogger(__name__)
+
+
+def sanitize_log_input(input_str: str) -> str:
+    """Sanitize input to prevent log injection."""
+    return input_str.replace("\r", "").replace("\n", "").replace("%0d", "").replace("%0a", "")
+
 
 ######
 ### Uncomment to see logs in the superset server output
@@ -80,7 +87,7 @@ class AutheRemoteUserViewCustom(AuthView):  # type: ignore[no-any-unimported]
         logger.debug("Login View: Auth header value: %s", email)
         logger.debug(f"Login View: Current user: {current_user}")
         logger.debug(f"Login View: Current user: {g.user}")
-        sanitized_headers = str(request.headers).replace('\r\n', '').replace('\n', '')
+        sanitized_headers = str(request.headers).replace("\r\n", "").replace("\n", "")
         logger.debug(f"Login View: headers {sanitized_headers}")
         if g.user is not None and g.user.is_authenticated and g.user.email == email:
             next_url = request.args.get("next", "")
@@ -212,9 +219,12 @@ class PhoenixCustomSSOSecurityManager(SupersetSecurityManager):  # type: ignore[
         challenging. It should be tested by hand :(.
         """
         logger.debug("Before request")
-        sanitized_request = str(request).replace('\r\n', '').replace('\n', '')
+        sanitized_request = str(request).replace("\r\n", "").replace("\n", "")
         logger.debug(f"Request: {sanitized_request}")
-        sanitized_environ = {key: str(value).replace('\r\n', '').replace('\n', '') for key, value in request.environ.items()}
+        sanitized_environ = {
+            sanitize_log_input(key): sanitize_log_input(str(value))
+            for key, value in request.environ.items()
+        }
         logger.debug(f"Request environment {sanitized_environ}")
         # Ignoring the attr-defined as appbuilder is an attribute of a flast app builder
         sm = current_app.appbuilder.sm  # type: ignore[attr-defined]
