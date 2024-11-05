@@ -22,6 +22,7 @@ from phiphi.seed import (
     classifiers,
     job_runs,
     projects,
+    user_project_associations,
     users,
     workspaces,
 )
@@ -59,6 +60,7 @@ def main(session: Session, testing: bool = False) -> None:
         job_runs.seed_test_job_runs(session)
         classifiers.keyword_match_seed.seed_test_classifier_keyword_match(session)
         classifiers.manual_post_authors_seed.seed_test_classifiers_manual_post_authors(session)
+        user_project_associations.seed_test_user_project_associations(session)
 
 
 if __name__ == "__main__":
