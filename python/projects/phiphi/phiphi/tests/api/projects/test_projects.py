@@ -226,6 +226,15 @@ def test_get_projects_admin(client_admin: TestClient, reseed_tables, patch_setti
     assert "last_job_run_completed_at" not in projects[0]
 
 
+def test_get_projects_user(client_user_1: TestClient, reseed_tables, patch_settings) -> None:
+    """Test getting projects with user."""
+    response = client_user_1.get("/projects/")
+    assert response.status_code == 200
+    projects = response.json()
+    assert len(projects) == 1
+    assert projects[0]["id"] == 1
+
+
 def test_get_projects_pagination(client_admin: TestClient, reseed_tables, patch_settings) -> None:
     """Test getting users with pagination."""
     response = client_admin.get("/projects/?start=1&end=1")
