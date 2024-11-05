@@ -324,7 +324,7 @@ def test_manual_post_authors_get_post_authors_with_mock_bq(
     assert response.status_code == 200
     json = response.json()
     authors = json["authors"]
-    assert json["total_count"] == 12
+    assert json["meta"]["total_count"] == 12
     assert len(authors) == 10
     assert authors[0]["phoenix_platform_message_author_id"] == "id_1"
     assert len(authors[0]["intermediatory_author_classes"]) == 2
@@ -362,5 +362,5 @@ def test_manual_post_authors_get_post_authors_with_count_zero(
     assert response.status_code == 200
     json = response.json()
     authors = json["authors"]
-    assert json["total_count"] == 0
+    assert json["meta"]["total_count"] == 0
     assert len(authors) == 0
