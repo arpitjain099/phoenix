@@ -107,4 +107,13 @@ export default class ClassifierService {
 		);
 		return response;
 	}
+
+	// Manual Post Authors
+	async createManualPostClassifier(params: any, data: ClassifierPayload) {
+		const response = await axios.post(
+			`${API_URL}/projects/${params?.project_id}/classifiers/manual_post_authors`,
+			data
+		);
+		return response;
+	}
 }

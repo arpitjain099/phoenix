@@ -86,6 +86,7 @@
 	},
 	"buttons": {
 		"create": "Create",
+		"create_edit": "Create and start editing",
 		"save": "Save",
 		"logout": "Logout",
 		"delete": "Delete",
@@ -591,10 +592,33 @@
 			"edit_keywords": "To create `or` releationships for this class add more then one keyword sequence."
 		},
 		"types": {
-			"post_author_classifier": {
+			"manual_post_authors": {
 				"create": "Create a post author classifier",
 				"create_description": "From the data that has been gathered you can add one or more classes to each author that has posts. The authors will be ordered by the number of posts gathered (highest first) and you will be able to add classes to each author.",
-				"proceed_text": "Start creating"
+				"create_description_2": "You first need to create the classifier with the classes before you can add classes to the authors.",
+				"proceed_text": "Start creating",
+				"fields": {
+					"classes": "Classes",
+					"author_name": "Author Name",
+					"author_link": "Author Link",
+					"no_of_posts": "Number of posts gathered for author",
+					"author_platform": "Author Platform",
+					"author_anon_id": "Author Anonymous Id",
+					"create": {
+						"class_section": "Classes (this can be amended later)",
+						"authors_section": "Authors (can be edited after create)"
+					}
+				},
+				"view": {
+					"text": "View your post authors classifier.",
+					"accordion": {
+						"status": "Status",
+						"general": "General",
+						"basic_setup": "Basic Setup",
+						"class_configuration": "Classes Configuration",
+						"author_configuration": "Authors Configuration"
+					}
+				}
 			},
 			"keyword_match": {
 				"run": "Run and apply to future Gathers",

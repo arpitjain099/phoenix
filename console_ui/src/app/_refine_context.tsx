@@ -185,6 +185,18 @@ const RefineContext = ({ children }: PropsWithChildren) => {
 										},
 									},
 									{
+										name: "manual_post_authors",
+										create:
+											"/projects/:projectid/classifiers/manual_post_authors/create",
+										edit: "/projects/:projectid/classifiers/manual_post_authors/edit/:id",
+										show: "/projects/:projectid/classifiers/manual_post_authors/:id",
+										meta: {
+											label: "Classify Post Authors",
+											parent: "projects",
+											hide: true,
+										},
+									},
+									{
 										name: "profile",
 										list: "/profile",
 										meta: {
