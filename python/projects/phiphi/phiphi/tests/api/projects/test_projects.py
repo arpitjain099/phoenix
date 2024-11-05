@@ -28,7 +28,11 @@ UPDATE_TIME = "2024-04-01T12:00:02"
 @mock.patch("phiphi.pipeline_jobs.projects.init_project_db")
 @pytest.mark.freeze_time(CREATED_TIME)
 def test_create_get_delete_project(
-    mock_project_init_db, mock_delete_db, reseed_tables, client: TestClient, patch_settings
+    mock_project_init_db,
+    mock_delete_db,
+    reseed_tables,
+    client_admin: TestClient,
+    patch_settings,
 ) -> None:
     """Test create and then get of an project."""
     data = {
@@ -39,7 +43,7 @@ def test_create_get_delete_project(
         "delete_after_days": 20,
         "expected_usage": "weekly",
     }
-    response = client.post("/projects/", json=data)
+    response = client_admin.post("/projects/", json=data)
     assert response.status_code == 200
     project = response.json()
     assert project["name"] == data["name"]
@@ -62,7 +66,7 @@ def test_create_get_delete_project(
         f"project_id{project['id']}", "main", with_dummy_data=True
     )
 
-    response = client.get(f"/projects/{project['id']}")
+    response = client_admin.get(f"/projects/{project['id']}")
     assert response.status_code == 200
 
     project = response.json()
@@ -76,19 +80,19 @@ def test_create_get_delete_project(
     assert project["last_job_run_completed_at"] is None
     assert project["latest_job_run"] is None
 
-    response = client.get("/projects/")
+    response = client_admin.get("/projects/")
     assert response.status_code == 200
     projects = response.json()
     assert len(projects) == 4
 
-    response = client.delete(f"/projects/{project['id']}")
+    response = client_admin.delete(f"/projects/{project['id']}")
     assert response.status_code == 200
     mock_delete_db.assert_called_once_with(f"project_id{project['id']}")
 
-    response = client.get(f"/projects/{project['id']}")
+    response = client_admin.get(f"/projects/{project['id']}")
     assert response.status_code == 404
 
-    response = client.get("/projects/")
+    response = client_admin.get("/projects/")
     assert response.status_code == 200
     projects = response.json()
     assert len(projects) == 3
@@ -97,10 +101,14 @@ def test_create_get_delete_project(
 @pytest.mark.patch_settings({"USE_MOCK_BQ": False})
 @mock.patch("phiphi.pipeline_jobs.projects.init_project_db")
 def test_create_project_error_init(
-    mock_project_init_db, reseed_tables, client: TestClient, session, patch_settings
+    mock_project_init_db,
+    reseed_tables,
+    client_admin: TestClient,
+    session,
+    patch_settings,
 ) -> None:
     """Test create project if there is an error in init_project_db."""
-    project_list = crud.get_projects(session=session)
+    project_list = crud.get_all_projects(session=session)
     mock_project_init_db.side_effect = ValueError("Error")
     data = {
         "name": "first project",
@@ -110,32 +118,63 @@ def test_create_project_error_init(
         "delete_after_days": 20,
         "expected_usage": "weekly",
     }
-    response = client.post("/projects/", json=data)
+    response = client_admin.post("/projects/", json=data)
     mock_project_init_db.assert_called_once()
     assert response.status_code == 500
-    project_list_after_failed_create = crud.get_projects(session=session)
+    project_list_after_failed_create = crud.get_all_projects(session=session)
     assert len(project_list) == len(project_list_after_failed_create)
+
+
+@pytest.mark.patch_settings({"USE_MOCK_BQ": False})
+@mock.patch("phiphi.pipeline_jobs.projects.init_project_db")
+def test_create_project_not_authorised(
+    mock_project_init_db,
+    reseed_tables,
+    client_no_user: TestClient,
+    session,
+    patch_settings,
+) -> None:
+    """Test create project with unauthorised user."""
+    data = {
+        "name": "first project",
+        "description": "Project 1",
+        "workspace_slug": "main",
+        "pi_deleted_after_days": 90,
+        "delete_after_days": 20,
+        "expected_usage": "weekly",
+    }
+    response = client_no_user.post("/projects/", json=data)
+    mock_project_init_db.assert_not_called()
+    assert response.status_code == 401
 
 
 @pytest.mark.patch_settings({"USE_MOCK_BQ": False})
 @mock.patch("phiphi.pipeline_jobs.projects.delete_project_db")
 def test_delete_project_error_init(
-    mock_project_delete_db, reseed_tables, client: TestClient, session, patch_settings
+    mock_project_delete_db,
+    reseed_tables,
+    client: TestClient,
+    session,
+    patch_settings,
 ) -> None:
     """Test delete project if there is an error in delete_project_db."""
-    project_list = crud.get_projects(session=session)
+    project_list = crud.get_all_projects(session=session)
     mock_project_delete_db.side_effect = ValueError("Error")
     response = client.delete("/projects/1")
     mock_project_delete_db.assert_called_once()
     assert response.status_code == 500
-    project_list_after_failed_delete = crud.get_projects(session=session)
+    project_list_after_failed_delete = crud.get_all_projects(session=session)
     assert len(project_list) == len(project_list_after_failed_delete)
 
 
 @mock.patch("phiphi.pipeline_jobs.projects.init_project_db")
 @pytest.mark.patch_settings({"USE_MOCK_BQ": True})
 def test_create_project_mock_bq(
-    mock_project_init_db, reseed_tables, client: TestClient, session, patch_settings
+    mock_project_init_db,
+    reseed_tables,
+    client_admin: TestClient,
+    session,
+    patch_settings,
 ) -> None:
     """Test create project if there is an error in init_project_db."""
     mock_project_init_db.side_effect = ValueError("Error")
@@ -147,7 +186,7 @@ def test_create_project_mock_bq(
         "delete_after_days": 20,
         "expected_usage": "weekly",
     }
-    response = client.post("/projects/", json=data)
+    response = client_admin.post("/projects/", json=data)
     mock_project_init_db.assert_not_called()
     assert response.status_code == 200
 
@@ -171,9 +210,10 @@ def test_get_project_not_found(client: TestClient, recreate_tables) -> None:
     assert response.json() == {"detail": "Project not found"}
 
 
-def test_get_projects(client: TestClient, reseed_tables) -> None:
-    """Test getting projects."""
-    response = client.get("/projects/")
+@pytest.mark.patch_settings({"USE_COOKIE_AUTH": False})
+def test_get_projects_admin(client_admin: TestClient, reseed_tables, patch_settings) -> None:
+    """Test getting projects with admin user."""
+    response = client_admin.get("/projects/")
     assert response.status_code == 200
     projects = response.json()
     assert len(projects) == 3
@@ -186,9 +226,18 @@ def test_get_projects(client: TestClient, reseed_tables) -> None:
     assert "last_job_run_completed_at" not in projects[0]
 
 
-def test_get_projects_pagination(client: TestClient, reseed_tables) -> None:
+def test_get_projects_user(client_user_1: TestClient, reseed_tables, patch_settings) -> None:
+    """Test getting projects with user."""
+    response = client_user_1.get("/projects/")
+    assert response.status_code == 200
+    projects = response.json()
+    assert len(projects) == 1
+    assert projects[0]["id"] == 1
+
+
+def test_get_projects_pagination(client_admin: TestClient, reseed_tables, patch_settings) -> None:
     """Test getting users with pagination."""
-    response = client.get("/projects/?start=1&end=1")
+    response = client_admin.get("/projects/?start=1&end=1")
     assert response.status_code == 200
     projects = response.json()
     assert len(projects) == 1
@@ -222,7 +271,9 @@ def test_update_project_not_found(client: TestClient, recreate_tables) -> None:
 
 
 @mock.patch("phiphi.pipeline_jobs.projects.init_project_db")
-def test_workspace_defaults_main(mock_project_init_db, client: TestClient, reseed_tables) -> None:
+def test_workspace_defaults_main(
+    mock_project_init_db, client_admin: TestClient, reseed_tables, patch_settings
+) -> None:
     """Test that workspace defaults to main, when nothing is passed as parameter."""
     data = {
         "name": "first project",
@@ -231,7 +282,7 @@ def test_workspace_defaults_main(mock_project_init_db, client: TestClient, resee
         "delete_after_days": 20,
         "expected_usage": "one_off",
     }
-    response = client.post("/projects/", json=data)
+    response = client_admin.post("/projects/", json=data)
     mock_project_init_db.assert_called_once()
     assert response.status_code == 200
     project = response.json()
@@ -241,7 +292,7 @@ def test_workspace_defaults_main(mock_project_init_db, client: TestClient, resee
 @mock.patch("phiphi.pipeline_jobs.projects.init_project_db")
 @pytest.mark.freeze_time(CREATED_TIME)
 def test_create_project_with_non_existing_workspace(
-    mock_project_init_db, recreate_tables, client: TestClient
+    mock_project_init_db, reseed_tables, client_admin: TestClient, patch_settings
 ) -> None:
     """Test create and then get of an project, with a workspace that doesn't exist."""
     data = {
@@ -252,7 +303,7 @@ def test_create_project_with_non_existing_workspace(
         "delete_after_days": 20,
         "expected_usage": "weekly",
     }
-    response = client.post("/projects/", json=data)
+    response = client_admin.post("/projects/", json=data)
     mock_project_init_db.assert_not_called()
     assert response.status_code == 400
     assert response.json() == {"detail": "Workspace not found"}

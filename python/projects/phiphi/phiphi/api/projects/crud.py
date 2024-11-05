@@ -5,7 +5,7 @@ import sqlalchemy.orm
 
 from phiphi import config, utils
 from phiphi.api import exceptions
-from phiphi.api.projects import models, schemas
+from phiphi.api.projects import models, schemas, user_project_associations
 from phiphi.api.workspaces import models as workspace_models
 from phiphi.pipeline_jobs import projects
 
@@ -66,7 +66,7 @@ def get_project(
     return schemas.ProjectResponse.model_validate(orm_project)
 
 
-def get_projects(
+def get_all_projects(
     session: sqlalchemy.orm.Session, start: int = 0, end: int = 100
 ) -> list[schemas.ProjectListResponse]:
     """Get projects."""
@@ -78,6 +78,25 @@ def get_projects(
         .limit(end)
     )
     projects = session.scalars(query).all()
+    if not projects:
+        return []
+    return [schemas.ProjectListResponse.model_validate(project) for project in projects]
+
+
+def get_user_projects(
+    session: sqlalchemy.orm.Session, user_id: int, start: int = 0, end: int = 100
+) -> list[schemas.ProjectListResponse]:
+    """Get projects for a user."""
+    # To be implemented
+    query = (
+        session.query(models.Project)
+        .join(user_project_associations.UserProjectAssociations)
+        .filter(user_project_associations.UserProjectAssociations.user_id == user_id)
+        .order_by(models.Project.id.desc())
+        .offset(start)
+        .limit(end)
+    )
+    projects = query.all()
     if not projects:
         return []
     return [schemas.ProjectListResponse.model_validate(project) for project in projects]

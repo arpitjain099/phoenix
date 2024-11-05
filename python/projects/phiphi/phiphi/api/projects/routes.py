@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 @router.post("/projects/", response_model=schemas.ProjectResponse)
 def create_project(
-    project: schemas.ProjectCreate, session: deps.SessionDep
+    admin_user: deps.AdminOnlyUser, project: schemas.ProjectCreate, session: deps.SessionDep
 ) -> schemas.ProjectResponse:
     """Create a new project."""
     try:
@@ -49,10 +49,13 @@ def get_project(project_id: int, session: deps.SessionDep) -> schemas.ProjectRes
 
 @router.get("/projects/", response_model=list[schemas.ProjectListResponse])
 def get_projects(
-    session: deps.SessionDep, start: int = 0, end: int = 100
+    user: deps.CurrentUser, session: deps.SessionDep, start: int = 0, end: int = 100
 ) -> list[schemas.ProjectListResponse]:
     """Get Projects."""
-    return crud.get_projects(session, start, end)
+    if user.is_admin():
+        return crud.get_all_projects(session, start, end)
+
+    return crud.get_user_projects(session, user.id, start, end)
 
 
 @router.delete("/projects/{project_id}")
