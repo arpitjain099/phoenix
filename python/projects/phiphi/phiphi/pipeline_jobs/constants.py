@@ -9,6 +9,7 @@ CLASSIFIED_MESSAGES_TABLE_NAME = "classified_messages"
 TABULATED_MESSAGES_TABLE_NAME = "tabulated_messages"
 MANUALLY_CLASSIFIED_AUTHORS_TABLE_NAME = "manually_classified_authors"
 CLASSIFIED_AUTHORS_TABLE_NAME = "classified_authors"
+DATA_QUALITY_MISSING_AUTHOR_POSTS_TABLE_NAME = "data_quality_post_authors_with_no_posts_on_months"
 # We are going for 2,000 as there is a limit of 1500 load jobs in a 24 hour period for Big Query,
 # This will mean that most gathers will have a max a handful of load jobs.
 # Furthermore there is a limit of 10MB per row. The hope is that 2000 batch size will keep the

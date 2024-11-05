@@ -527,3 +527,25 @@ def test_bq_pipeline_integration(tmp_bq_project):
         """
     )
     assert len(tabulated_messages_df) == 14
+
+    missing_author_posts_df = pd.read_gbq(
+        f"""
+            SELECT *
+            FROM {test_project_namespace}.{constants.DATA_QUALITY_MISSING_AUTHOR_POSTS_TABLE_NAME}
+            """
+    )
+    expected_missing_authors = pd.DataFrame(
+        {
+            "post_author_id": [
+                "44f1a515-b823-0a45-cb66-2c6226fef283",
+                "44f1a515-b823-0a45-cb66-2c6226fef283",
+            ],
+            "post_author_name_pi": ["United Nations", "United Nations"],
+            "post_author_link_pi": [pd.NA, pd.NA],
+            "post_year": [2024, 2024],
+            "post_month": [3, 2],
+        }
+    )
+    pd.testing.assert_frame_equal(
+        expected_missing_authors, missing_author_posts_df, check_like=True, check_dtype=False
+    )
