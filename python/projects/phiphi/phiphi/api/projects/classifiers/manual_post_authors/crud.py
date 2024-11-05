@@ -176,7 +176,7 @@ def get_post_authors_with_intermediatory_author_classes(
     if post_authors_count == 0:
         return schemas.AuthorsListResponse(
             authors=[],
-            meta=base_schemas.ListMeta(total_count=0),
+            meta=base_schemas.ListMeta(total_count=0, start_index=0, end_index=0),
         )
 
     post_authors_df = generalised_authors.get_post_authors(
@@ -218,7 +218,12 @@ def get_post_authors_with_intermediatory_author_classes(
             intermediatory_author_classes=intermediatory_author_classes_responses,
         )
         results.append(response)
+    start_index = offset
+    possible_end_index = offset + limit
+    end_index = min(possible_end_index, post_authors_count)
     return schemas.AuthorsListResponse(
         authors=results,
-        meta=base_schemas.ListMeta(total_count=post_authors_count),
+        meta=base_schemas.ListMeta(
+            total_count=post_authors_count, start_index=start_index, end_index=end_index
+        ),
     )
