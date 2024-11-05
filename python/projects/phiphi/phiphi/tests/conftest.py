@@ -39,17 +39,43 @@ def test_app(session) -> Generator[main.FastAPI, None, None]:
 
 @pytest.fixture(scope="session")
 def client(test_app) -> Generator[TestClient, None, None]:
-    """Client for testing."""
+    """Client for testing.
+
+    This client is deprecated and should be replaced with `client_no_user`, `client_admin` or
+    something like that.
+    """
     with TestClient(test_app) as client:
         yield client
 
 
 @pytest.fixture(scope="session")
-def client_first_admin_user(test_app) -> Generator[TestClient, None, None]:
-    """Client for testing authenticated with first admin user."""
+def client_no_user(test_app) -> Generator[TestClient, None, None]:
+    """Client that has no authenticated user.
+
+    This is useful for testing endpoints that do not require authentication and should replace any
+    users of the `client` fixture that do not require authentication.
+    """
+    with TestClient(test_app) as client:
+        yield client
+
+
+@pytest.fixture(scope="session")
+def client_admin(test_app) -> Generator[TestClient, None, None]:
+    """Client for testing authenticated with main admin user.
+
+    Must be used with the `reseed_tables` fixture to ensure the admin user is in the database.
+
+    The fixture will work with the header or cookie authentication depending on the settings and
+    means that the tests will pass if `USE_COOKIE_AUTH` is set to `True` or `False`.
+    """
+    if config.settings.COOKIE_AUTH_NAME:
+        cookies = {config.settings.COOKIE_AUTH_NAME: config.settings.FIRST_ADMIN_USER_EMAIL}
+    else:
+        cookies = None
     with TestClient(
         test_app,
         headers={config.settings.HEADER_AUTH_NAME: config.settings.FIRST_ADMIN_USER_EMAIL},
+        cookies=cookies,
     ) as client:
         yield client
 

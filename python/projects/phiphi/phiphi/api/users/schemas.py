@@ -20,7 +20,7 @@ class UserBase(pydantic.BaseModel):
 
     email: pydantic.EmailStr | None = None
     display_name: str | None = None
-    app_role: AppRole | None = None
+    app_role: AppRole | None = AppRole.user
 
 
 class UserCreate(UserBase):
@@ -43,6 +43,10 @@ class UserResponse(UserBase):
 
     id: int
     created_at: datetime.datetime
+
+    def is_admin(self) -> bool:
+        """Check if the user is an admin."""
+        return self.app_role == AppRole.admin
 
 
 class UserUpdate(pydantic.BaseModel):

@@ -33,17 +33,19 @@ UPDATE_TIME = "2024-01-01T12:00:02"
 
 
 @pytest.mark.freeze_time(CREATED_TIME)
-def test_create_read_user(recreate_tables, client: TestClient) -> None:
+def test_create_read_user(reseed_tables, client_admin: TestClient, patch_settings) -> None:
     """Test creating a user."""
     data = {"email": "test@test.com", "display_name": "test"}
-    response = client.post("/users/", json=data)
+    response = client_admin.post("/users/", json=data)
     assert response.status_code == 200
     user = response.json()
     assert user["email"] == data["email"]
     assert user["display_name"] == data["display_name"]
     assert user["created_at"] == CREATED_TIME
+    # Default
+    assert user["app_role"] == "user"
 
-    response = client.get(f"/users/{user['id']}")
+    response = client_admin.get(f"/users/{user['id']}")
     assert response.status_code == 200
 
     user = response.json()
@@ -52,7 +54,7 @@ def test_create_read_user(recreate_tables, client: TestClient) -> None:
     assert user["display_name"] == data["display_name"]
     assert user["created_at"] == CREATED_TIME
 
-    response = client.post("/users/", json=data)
+    response = client_admin.post("/users/", json=data)
     assert response.status_code == 400
 
 
@@ -103,10 +105,10 @@ def test_update_user_not_found(client: TestClient, recreate_tables) -> None:
     assert response.json() == {"detail": "User not found"}
 
 
-def test_app_role_post(client: TestClient, recreate_tables) -> None:
+def test_app_role_post(client_admin: TestClient, reseed_tables) -> None:
     """Test if app_role is set in users on creation."""
     data = {"email": "test@phoenix.com", "display_name": "test", "app_role": "admin"}
-    response = client.post("/users/", json=data)
+    response = client_admin.post("/users/", json=data)
     assert response.status_code == 200
     user = response.json()
     assert user["email"] == data["email"]
