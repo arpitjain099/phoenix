@@ -91,7 +91,9 @@ const CreateKeywordClassifier: React.FC = () => {
 				{
 					name: classifierName,
 					description: classifierDescription,
-					intermediatory_classes: classes,
+					intermediatory_classes: classes.filter(
+						(cls) => cls.name && cls.name.trim() !== ""
+					),
 				}
 			);
 			const { data } = res;
