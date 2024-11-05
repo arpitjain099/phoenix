@@ -4,8 +4,11 @@ Functionality and schemas for generalised authors.
 """
 import json
 
+import numpy as np
 import pandas as pd
 import pandera as pa
+from google.api_core import exceptions
+from google.cloud import bigquery
 
 from phiphi import config, utils
 from phiphi.pipeline_jobs import constants
@@ -36,6 +39,8 @@ def get_post_authors(
 
     If `config.settings.USE_MOCK_BQ` is enabled, a sample of generalised authors is returned.
     This is then used for development and testing purposes.
+
+    Be aware that if the table does not exist, the function will raise an error.
 
     Args:
         project_namespace (str): The project namespace.
@@ -79,3 +84,47 @@ def load_sample_authors(
     sample_authors_df = pd.DataFrame(sample_authors)
     deduplicated_generalised_authors_schema.validate(sample_authors_df)
     return sample_authors_df[offset : offset + limit]
+
+
+def get_total_count_post_authors(
+    project_namespace: str,
+    deduplicated_authors_table_name: str = constants.DEDUPLICATED_GENERALISED_AUTHORS_TABLE_NAME,
+) -> int:
+    """Retrieve the total count of authors with posts.
+
+    If the tables do not exist, the function will return 0.
+
+    Args:
+        project_namespace (str): The project namespace.
+        deduplicated_authors_table_name (str, optional): Name of the table containing deduplicated
+            generalised authors. Defaults to constants.DEDUPLICATED_GENERALISED_AUTHORS_TABLE_NAME.
+
+    Returns:
+        int: Total count of authors with posts.
+    """
+    if config.settings.USE_MOCK_BQ:
+        return len(load_sample_authors())
+
+    # Initialize BigQuery client
+    client = bigquery.Client()
+
+    # Check if the table exists
+    table_id = f"{project_namespace}.{deduplicated_authors_table_name}"
+    try:
+        client.get_table(table_id)  # API request to check table existence
+    except exceptions.NotFound:
+        return 0
+
+    query = f"""
+    SELECT COUNT(*) as count
+    FROM `{table_id}`
+    WHERE post_count > 0
+    """
+    # Read data using the utility function
+    count_df = pipeline_jobs_utils.read_data(
+        query, project_namespace, deduplicated_authors_table_name
+    )
+    count = count_df.iloc[0]["count"]
+    # Needed for mypy
+    assert isinstance(count, np.int64)
+    return int(count)

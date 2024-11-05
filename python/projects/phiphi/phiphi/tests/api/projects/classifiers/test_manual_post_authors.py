@@ -323,21 +323,57 @@ def test_manual_post_authors_get_post_authors_with_mock_bq(
     )
     assert response.status_code == 200
     json = response.json()
-    assert len(json) == 10
-    assert json[0]["phoenix_platform_message_author_id"] == "id_1"
-    assert len(json[0]["intermediatory_author_classes"]) == 2
-    assert json[0]["intermediatory_author_classes"][0]["class_name"] == class_1
-    assert json[0]["intermediatory_author_classes"][1]["class_name"] == class_2
-    assert json[1]["phoenix_platform_message_author_id"] == "id_2"
-    assert len(json[1]["intermediatory_author_classes"]) == 0
-    assert len(json[2]["intermediatory_author_classes"]) == 1
-    assert json[2]["intermediatory_author_classes"][0]["class_name"] == class_1
+    authors = json["authors"]
+    assert json["meta"]["total_count"] == 12
+    assert json["meta"]["start_index"] == 0
+    assert json["meta"]["end_index"] == 10
+    assert len(authors) == 10
+    assert authors[0]["phoenix_platform_message_author_id"] == "id_1"
+    assert len(authors[0]["intermediatory_author_classes"]) == 2
+    assert authors[0]["intermediatory_author_classes"][0]["class_name"] == class_1
+    assert authors[0]["intermediatory_author_classes"][1]["class_name"] == class_2
+    assert authors[1]["phoenix_platform_message_author_id"] == "id_2"
+    assert len(authors[1]["intermediatory_author_classes"]) == 0
+    assert len(authors[2]["intermediatory_author_classes"]) == 1
+    assert authors[2]["intermediatory_author_classes"][0]["class_name"] == class_1
     expected_df = pipeline_jobs_sample_generalised_post_authors[:10]
     assert (
-        json[0]["phoenix_platform_message_author_id"]
+        authors[0]["phoenix_platform_message_author_id"]
         == expected_df.iloc[0]["phoenix_platform_message_author_id"]
     )
     assert (
-        json[9]["phoenix_platform_message_author_id"]
+        authors[9]["phoenix_platform_message_author_id"]
         == expected_df.iloc[9]["phoenix_platform_message_author_id"]
     )
+    response = client.get(
+        f"/projects/{classifier.project_id}/classifiers/manual_post_authors/{classifier.id}/authors/?start=10"
+    )
+    assert response.status_code == 200
+    json = response.json()
+    authors = json["authors"]
+    assert json["meta"]["total_count"] == 12
+    assert json["meta"]["start_index"] == 10
+    assert json["meta"]["end_index"] == 12
+
+
+@pytest.mark.patch_settings({"USE_MOCK_BQ": True})
+@mock.patch("phiphi.pipeline_jobs.generalised_authors.get_total_count_post_authors")
+def test_manual_post_authors_get_post_authors_with_count_zero(
+    m_get_total_count_post_authors,
+    patch_settings,
+    reseed_tables,
+    client: TestClient,
+) -> None:
+    """Test get post authors when USE_MOCK_BQ is enabled total count is zero."""
+    m_get_total_count_post_authors.return_value = 0
+    classifier = manual_post_authors_seed.TEST_MANUAL_POST_AUTHORS_CLASSIFIERS[1]
+    response = client.get(
+        f"/projects/{classifier.project_id}/classifiers/manual_post_authors/{classifier.id}/authors/"
+    )
+    assert response.status_code == 200
+    json = response.json()
+    authors = json["authors"]
+    assert json["meta"]["total_count"] == 0
+    assert json["meta"]["start_index"] == 0
+    assert json["meta"]["end_index"] == 0
+    assert len(authors) == 0

@@ -4,8 +4,9 @@ from collections import defaultdict
 import sqlalchemy as sa
 
 from phiphi import utils
-from phiphi.api import exceptions
-from phiphi.api.projects.classifiers import base_schemas, crud
+from phiphi.api import base_schemas, exceptions
+from phiphi.api.projects.classifiers import base_schemas as classifiers_base_schemas
+from phiphi.api.projects.classifiers import crud
 from phiphi.api.projects.classifiers import models as classifiers_models
 from phiphi.api.projects.classifiers.manual_post_authors import models, schemas
 from phiphi.api.projects.job_runs import crud as job_run_crud
@@ -87,7 +88,7 @@ def create_intermediatory_author_class(
     with crud.get_orm_classifier_with_edited_context(
         session=session, project_id=project_id, classifier_id=classifier_id
     ) as orm_classifier:
-        if orm_classifier.type != base_schemas.ClassifierType.manual_post_authors:
+        if orm_classifier.type != classifiers_base_schemas.ClassifierType.manual_post_authors:
             raise exceptions.HttpException400("Invalid classifier type")
 
         orm_intermediate_class = session.query(classifiers_models.IntermediatoryClasses).get(
@@ -124,7 +125,7 @@ def delete_intermediatory_author_class(
     with crud.get_orm_classifier_with_edited_context(
         session=session, project_id=project_id, classifier_id=classifier_id
     ) as orm_classifier:
-        if orm_classifier.type != base_schemas.ClassifierType.manual_post_authors:
+        if orm_classifier.type != classifiers_base_schemas.ClassifierType.manual_post_authors:
             raise exceptions.HttpException400("Invalid classifier type")
 
         orm = (
@@ -146,7 +147,7 @@ def get_post_authors_with_intermediatory_author_classes(
     classifier_id: int,
     offset: int = 0,
     limit: int = 10,
-) -> list[schemas.AuthorResponse]:
+) -> schemas.AuthorsListResponse:
     """Retrieve post authors with intermediatory_author_classes.
 
     Args:
@@ -157,7 +158,7 @@ def get_post_authors_with_intermediatory_author_classes(
         limit (int, optional): Limit for pagination. Defaults to 10.
 
     Returns:
-        list[schemas.AuthorResponse]: List of AuthorResponse objects.
+        schemas.AuthorsListResponse: The list of post authors with intermediatory_author_classes.
     """
     orm_classifier = crud.get_orm_classifier(
         session=session, project_id=project_id, classifier_id=classifier_id
@@ -165,10 +166,19 @@ def get_post_authors_with_intermediatory_author_classes(
     if orm_classifier is None:
         raise exceptions.ClassifierNotFound()
 
-    if orm_classifier.type != base_schemas.ClassifierType.manual_post_authors:
+    if orm_classifier.type != classifiers_base_schemas.ClassifierType.manual_post_authors:
         raise exceptions.HttpException400("Invalid classifier type")
 
     project_namespace = utils.get_project_namespace(project_id)
+    post_authors_count = generalised_authors.get_total_count_post_authors(
+        project_namespace=project_namespace
+    )
+    if post_authors_count == 0:
+        return schemas.AuthorsListResponse(
+            authors=[],
+            meta=base_schemas.ListMeta(total_count=0, start_index=0, end_index=0),
+        )
+
     post_authors_df = generalised_authors.get_post_authors(
         project_namespace=project_namespace, offset=offset, limit=limit
     )
@@ -208,4 +218,12 @@ def get_post_authors_with_intermediatory_author_classes(
             intermediatory_author_classes=intermediatory_author_classes_responses,
         )
         results.append(response)
-    return results
+    start_index = offset
+    possible_end_index = offset + limit
+    end_index = min(possible_end_index, post_authors_count)
+    return schemas.AuthorsListResponse(
+        authors=results,
+        meta=base_schemas.ListMeta(
+            total_count=post_authors_count, start_index=start_index, end_index=end_index
+        ),
+    )

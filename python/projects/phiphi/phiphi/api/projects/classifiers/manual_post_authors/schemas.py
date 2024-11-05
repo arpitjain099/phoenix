@@ -5,7 +5,8 @@ from typing import Literal, Optional
 import pydantic
 from typing_extensions import TypedDict
 
-from phiphi.api.projects.classifiers import base_schemas
+from phiphi.api import base_schemas
+from phiphi.api.projects.classifiers import base_schemas as classifier_base_schemas
 
 
 class IntermediatoryAuthorClassCreate(pydantic.BaseModel):
@@ -39,6 +40,13 @@ class AuthorResponse(pydantic.BaseModel):
     intermediatory_author_classes: list[IntermediatoryAuthorClassResponse] = []
 
 
+class AuthorsListResponse(pydantic.BaseModel):
+    """Authors list response schema."""
+
+    authors: list[AuthorResponse]
+    meta: base_schemas.ListMeta
+
+
 class AuthorClassLabel(TypedDict):
     """Author class label schema."""
 
@@ -55,27 +63,27 @@ class ManaulPostAuthorsParams(TypedDict):
 class ManualPostAuthorsVersionBase(pydantic.BaseModel):
     """Manual post authors version base schema."""
 
-    classes: list[base_schemas.ClassLabel]
+    classes: list[classifier_base_schemas.ClassLabel]
     params: ManaulPostAuthorsParams
 
 
 class ManualPostAuthorsVersionResponse(
-    ManualPostAuthorsVersionBase, base_schemas.ClassifierVersionResponse
+    ManualPostAuthorsVersionBase, classifier_base_schemas.ClassifierVersionResponse
 ):
     """Manual post authors version schema."""
 
 
-class ManualPostAuthorsClassifierResponse(base_schemas.ClassifierResponseBase):
+class ManualPostAuthorsClassifierResponse(classifier_base_schemas.ClassifierResponseBase):
     """Manual post authors classifier response."""
 
     # This seems to be the correct way to do this:
     # https://github.com/pydantic/pydantic/issues/8708
-    type: Literal[base_schemas.ClassifierType.manual_post_authors]
+    type: Literal[classifier_base_schemas.ClassifierType.manual_post_authors]
     latest_version: Optional[ManualPostAuthorsVersionResponse] = None
 
 
 class ManualPostAuthorsClassifierDetail(
-    ManualPostAuthorsClassifierResponse, base_schemas.ClassifierDetailBase
+    ManualPostAuthorsClassifierResponse, classifier_base_schemas.ClassifierDetailBase
 ):
     """Manual post authors classifier response."""
 
@@ -83,7 +91,7 @@ class ManualPostAuthorsClassifierDetail(
 
 
 class ManualPostAuthorsClassifierPipeline(
-    ManualPostAuthorsClassifierResponse, base_schemas.ClassifierPipelineBase
+    ManualPostAuthorsClassifierResponse, classifier_base_schemas.ClassifierPipelineBase
 ):
     """Manual post authors classifier response.
 
