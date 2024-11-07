@@ -32,7 +32,7 @@ interface ClassData {
 	description: string;
 }
 
-const CreateKeywordClassifier: React.FC = () => {
+const CreateManualPostClassifier: React.FC = () => {
 	const back = useBack();
 	const router = useRouter();
 	const translate = useTranslate();
@@ -302,4 +302,4 @@ const CreateKeywordClassifier: React.FC = () => {
 	);
 };
 
-export default CreateKeywordClassifier;
+export default CreateManualPostClassifier;

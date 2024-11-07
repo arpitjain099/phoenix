@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import axios from "@providers/data-provider/axios";
 import {
+	AddClassToAuthorPayload,
 	ClassifierClassPayload,
 	ClassifierPayload,
 	IClassifierArchiveRestore,
@@ -113,6 +114,34 @@ export default class ClassifierService {
 		const response = await axios.post(
 			`${API_URL}/projects/${params?.project_id}/classifiers/manual_post_authors`,
 			data
+		);
+		return response;
+	}
+
+	async getManualPostAuthors(params: {
+		project_id: string;
+		classifier_id: string;
+	}) {
+		const response = await axios.get(
+			`${API_URL}/projects/${params?.project_id}/classifiers/manual_post_authors/${params?.classifier_id}/authors`
+		);
+		return response;
+	}
+
+	async addClassToManualPostAuthorClassifier(
+		params: any,
+		data: AddClassToAuthorPayload
+	) {
+		const response = await axios.post(
+			`${API_URL}/projects/${params?.project_id}/classifiers/manual_post_authors/${params?.classifier_id}/intermediatory_author_classes`,
+			data
+		);
+		return response;
+	}
+
+	async removeClassToManualPostAuthorClassifier(params: any) {
+		const response = await axios.delete(
+			`${API_URL}/projects/${params?.project_id}/classifiers/manual_post_authors/${params?.classifier_id}/intermediatory_author_classes/${params?.classified_post_author_id}`
 		);
 		return response;
 	}

@@ -4,9 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { useGetIdentity, useList, useTranslate } from "@refinedev/core";
 import { ColumnDef } from "@tanstack/react-table";
-import { Pagination, ScrollArea } from "@mantine/core";
 import { DateField, List } from "@refinedev/mantine";
-import { useTable } from "@refinedev/react-table";
 import { UserInfo } from "src/interfaces/user";
 import TableComponent from "../../components/table";
 

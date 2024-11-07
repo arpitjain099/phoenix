@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useShow, useTranslate } from "@refinedev/core";
 import {
 	Show,
 	TextField,
-	DateField,
 	EditButton,
 	EditButtonProps,
 } from "@refinedev/mantine";
@@ -17,23 +16,23 @@ import {
 	Group,
 	Space,
 	Table,
-	TextInput,
 	Title,
 	Tooltip,
 } from "@mantine/core";
 import { useParams, useRouter } from "next/navigation";
-import { statusTextStyle } from "src/utils";
 import { IconChevronDown, IconChevronUp, IconInfoCircle } from "@tabler/icons";
 import { classifierService } from "src/services";
 import { showNotification } from "@mantine/notifications";
 import ClassifierViewBreadcrumb from "@components/breadcrumbs/classifierView";
 import ClassifierViewStatus from "@components/classifier/view-status";
 import ClassifierViewGeneral from "@components/classifier/view-general";
+import { Author } from "../model";
 
-export default function KeywordClassifierShow(): JSX.Element {
+export default function ManualPostClassifierShow(): JSX.Element {
 	const { projectid, id } = useParams();
 	const translate = useTranslate();
 	const router = useRouter();
+	const [authors, setAuthors] = useState<Author[]>([]);
 	const [openRows, setOpenRows] = useState<{ [key: number]: boolean }>({});
 	const { queryResult } = useShow({
 		resource: `projects/${projectid}/classifiers`,
@@ -73,6 +72,25 @@ export default function KeywordClassifierShow(): JSX.Element {
 		}
 	};
 
+	// Fetch initial data on mount
+	const fetchData = useCallback(async () => {
+		try {
+			const authorsResponse = await classifierService.getManualPostAuthors({
+				project_id: projectid as string,
+				classifier_id: id as string,
+			});
+			setAuthors(authorsResponse?.data);
+		} catch (error) {
+			console.error("Error fetching classifier data", error);
+		}
+	}, [id, projectid]);
+
+	useEffect(() => {
+		if (id && projectid) {
+			fetchData();
+		}
+	}, [id, projectid, fetchData]);
+
 	return (
 		<Show
 			title={<Title order={3}>{record?.name}</Title>}
@@ -86,10 +104,10 @@ export default function KeywordClassifierShow(): JSX.Element {
 			headerButtons={() => null}
 		>
 			<TextField
-				value={translate("classifiers.types.keyword_match.view.text")}
+				value={translate("classifiers.types.manual_post_authors.view.text")}
 			/>
 			<Space h="md" />
-			{!record?.latest_version && (
+			{!record?.latest_version && record?.last_edited_at && (
 				<p className="flex items-center text-red-500">
 					{translate("classifiers.cautions.not_run.title")}
 					<Tooltip
@@ -150,13 +168,13 @@ export default function KeywordClassifierShow(): JSX.Element {
 						},
 					}}
 					multiple
-					defaultValue={["status", "general", "configuration"]}
+					defaultValue={["status", "general", "classes", "authors"]}
 				>
 					<Accordion.Item value="status" className="mb-4">
 						<Accordion.Control>
 							<Title order={5}>
 								{translate(
-									"classifiers.types.keyword_match.view.accordion.status"
+									"classifiers.types.manual_post_authors.view.accordion.status"
 								)}
 							</Title>
 						</Accordion.Control>
@@ -168,7 +186,7 @@ export default function KeywordClassifierShow(): JSX.Element {
 						<Accordion.Control>
 							<Title order={5}>
 								{translate(
-									"classifiers.types.keyword_match.view.accordion.general"
+									"classifiers.types.manual_post_authors.view.accordion.general"
 								)}
 							</Title>
 						</Accordion.Control>
@@ -176,11 +194,44 @@ export default function KeywordClassifierShow(): JSX.Element {
 							<ClassifierViewGeneral record={record} />
 						</Accordion.Panel>
 					</Accordion.Item>
-					<Accordion.Item value="configuration" mb="md">
+					<Accordion.Item value="classes" mb="md">
 						<Accordion.Control>
 							<Title order={5}>
 								{translate(
-									`classifiers.types.keyword_match.view.accordion.configuration`
+									"classifiers.types.manual_post_authors.view.accordion.class_configuration"
+								)}
+							</Title>
+						</Accordion.Control>
+						<Accordion.Panel>
+							<Container className="mx-0 flex flex-col my-4">
+								<Table highlightOnHover withBorder>
+									<thead>
+										<tr>
+											<th>{translate("classifiers.fields.class_name")}</th>
+											<th>{translate("projects.fields.description")}</th>
+										</tr>
+									</thead>
+									<tbody>
+										{record?.intermediatory_classes?.map(
+											(classItem: any, classIndex: number) => (
+												<tr key={classIndex}>
+													<td className="align-baseline">{classItem?.name}</td>
+													<td className="align-baseline">
+														{classItem?.description}
+													</td>
+												</tr>
+											)
+										)}
+									</tbody>
+								</Table>
+							</Container>
+						</Accordion.Panel>
+					</Accordion.Item>
+					<Accordion.Item value="authors" mb="md">
+						<Accordion.Control>
+							<Title order={5}>
+								{translate(
+									"classifiers.types.manual_post_authors.view.accordion.author_configuration"
 								)}
 							</Title>
 						</Accordion.Control>
@@ -190,87 +241,79 @@ export default function KeywordClassifierShow(): JSX.Element {
 									<thead>
 										<tr>
 											<th aria-label="Accordion Control" />
-											<th>{translate("classifiers.fields.class_name")}</th>
-											<th>{translate("projects.fields.description")}</th>
-											<th className="flex items-center justify-center">
-												{translate("classifiers.fields.keywords")}
+											<th>
+												{translate(
+													"classifiers.types.manual_post_authors.fields.classes"
+												)}
+											</th>
+											<th>
+												{translate(
+													"classifiers.types.manual_post_authors.fields.author_name"
+												)}
+											</th>
+											<th>
+												{translate(
+													"classifiers.types.manual_post_authors.fields.author_link"
+												)}
+											</th>
+											<th>
+												{translate(
+													"classifiers.types.manual_post_authors.fields.no_of_posts"
+												)}
+											</th>
+											<th>
+												{translate(
+													"classifiers.types.manual_post_authors.fields.author_platform"
+												)}
+											</th>
+											<th>
+												{translate(
+													"classifiers.types.manual_post_authors.fields.author_anon_id"
+												)}
 											</th>
 										</tr>
 									</thead>
 									<tbody>
-										{record?.intermediatory_classes?.map(
-											(classItem: any, classIndex: number) => (
-												<tr key={classIndex}>
-													<td className="align-baseline">
-														<ActionIcon
-															color="dark"
-															variant="light"
-															onClick={() => toggleRow(classIndex)}
-														>
-															{openRows[classIndex] ? (
-																<IconChevronUp size={16} />
-															) : (
-																<IconChevronDown size={16} />
-															)}
-														</ActionIcon>
-													</td>
-													<td className="align-baseline">{classItem?.name}</td>
-													<td className="align-baseline">
-														{classItem?.description}
-													</td>
-													<td className="!pt-0">
-														<Table>
-															<tbody className="flex flex-col items-center">
-																{openRows[classIndex]
-																	? record?.intermediatory_class_to_keyword_configs
-																			?.filter(
-																				(group: any) =>
-																					group.class_id === classItem?.id
-																			)
-																			.map(
-																				(
-																					keywordGroup: any,
-																					keywordIndex: number
-																				) => (
-																					<>
-																						<tr key={keywordIndex}>
-																							<td>
-																								<TextInput
-																									placeholder="Keywords"
-																									value={keywordGroup.musts}
-																									contentEditable={false}
-																								/>
-																							</td>
-																						</tr>
-																						{record
-																							?.intermediatory_class_to_keyword_configs
-																							?.length > 0 &&
-																							keywordIndex <
-																								record.intermediatory_class_to_keyword_configs.filter(
-																									(group: any) =>
-																										group.class_id ===
-																										classItem?.id
-																								).length -
-																									1 && (
-																								<td className="text-center">
-																									{translate("classifiers.or")}
-																								</td>
-																							)}
-																					</>
-																				)
-																			)
-																	: `${
-																			record?.intermediatory_class_to_keyword_configs?.filter(
-																				(group: any) =>
-																					group.class_id === classItem?.id
-																			).length
-																		} ${translate("classifiers.keyword_configurations")}`}
-															</tbody>
-														</Table>
-													</td>
-												</tr>
-											)
-										)}
+										{authors.map((author, authorIndex) => (
+											<tr key={author.phoenix_platform_message_author_id}>
+												<td className="align-baseline">
+													<ActionIcon
+														color="dark"
+														variant="light"
+														onClick={() => toggleRow(authorIndex)}
+													>
+														{openRows[authorIndex] ? (
+															<IconChevronUp size={16} />
+														) : (
+															<IconChevronDown size={16} />
+														)}
+													</ActionIcon>
+												</td>
+												<td>
+													<div className="flex flex-wrap">
+														{openRows[authorIndex]
+															? author.intermediatory_author_classes.map(
+																	(cls) => (
+																		<span
+																			key={cls.class_id}
+																			className="mr-2 mb-2 px-2 py-1 bg-gray-200 rounded text-sm sm:text-base"
+																		>
+																			{cls.class_name}
+																		</span>
+																	)
+																)
+															: `${
+																	author.intermediatory_author_classes.length
+																} ${translate("classifiers.types.manual_post_authors.fields.classes")}`}
+													</div>
+												</td>
+												<td>{author.pi_platform_message_author_name}</td>
+												<td>{author.phoenix_platform_message_author_id}</td>
+												<td>{author.post_count}</td>
+												<td className="capitalize">{author.platform}</td>
+												<td>{author.pi_platform_message_author_id}</td>
+											</tr>
+										))}
 									</tbody>
 								</Table>
 							</Container>
