@@ -10,6 +10,8 @@ from sqlalchemy import ForeignKey, Index, exc, orm
 
 from phiphi import platform_db
 from phiphi.api import base_models, exceptions
+from phiphi.api.projects import models as projects_models
+from phiphi.api.users import models as users_models
 
 
 class UserProjectAssociationsBase(platform_db.Base):
@@ -29,8 +31,8 @@ class UserProjectAssociations(UserProjectAssociationsBase, base_models.Timestamp
 
     __table_args__ = (Index("idx_user_id_project_id_role", "user_id", "project_id", "role"),)
 
-    user = orm.relationship("User")
-    project = orm.relationship("Project")
+    user: orm.Mapped[users_models.User] = orm.relationship("User")
+    project: orm.Mapped[projects_models.Project] = orm.relationship("Project")
 
 
 class Role(str, Enum):
