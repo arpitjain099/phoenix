@@ -65,7 +65,7 @@ def delete_intermediatory_author_class(
 @router.get(
     "/projects/{project_id}/classifiers/manual_post_authors/{classifier_id}/authors/",
 )
-def get_authors(
+def get_post_authors_with_intermediatory_author_classes(
     session: deps.SessionDep,
     project_id: int,
     classifier_id: int,
@@ -77,6 +77,27 @@ def get_authors(
         session=session,
         project_id=project_id,
         classifier_id=classifier_id,
+        offset=start,
+        limit=end,
+    )
+
+
+@router.get(
+    "/projects/{project_id}/classifiers/manual_post_authors/authors/",
+)
+def get_authors(
+    session: deps.SessionDep,
+    project_id: int,
+    start: int = 0,
+    end: int = 10,
+) -> schemas.AuthorsListResponse:
+    """Get post authors with empty intermediatory_author_classes.
+
+    This endpoint can be used to show the possible authors that can be classified.
+    """
+    return crud.get_post_authors(
+        session=session,
+        project_id=project_id,
         offset=start,
         limit=end,
     )

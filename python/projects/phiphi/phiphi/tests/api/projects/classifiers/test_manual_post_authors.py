@@ -377,3 +377,36 @@ def test_manual_post_authors_get_post_authors_with_count_zero(
     assert json["meta"]["start_index"] == 0
     assert json["meta"]["end_index"] == 0
     assert len(authors) == 0
+
+
+@pytest.mark.patch_settings({"USE_MOCK_BQ": True})
+@pytest.mark.freeze_time(CREATED_TIME)
+def test_manual_post_authors_get_post_authors_empty_classes_with_mock_bq(
+    patch_settings,
+    reseed_tables,
+    client: TestClient,
+    pipeline_jobs_sample_generalised_post_authors,
+) -> None:
+    """Test get post authors with empty classes."""
+    response = client.get("/projects/1/classifiers/manual_post_authors/authors/")
+    assert response.status_code == 200
+    json = response.json()
+    authors = json["authors"]
+    assert json["meta"]["total_count"] == 12
+    assert json["meta"]["start_index"] == 0
+    assert json["meta"]["end_index"] == 10
+    assert len(authors) == 10
+    assert authors[0]["phoenix_platform_message_author_id"] == "id_1"
+    assert len(authors[0]["intermediatory_author_classes"]) == 0
+    assert authors[1]["phoenix_platform_message_author_id"] == "id_2"
+    assert len(authors[1]["intermediatory_author_classes"]) == 0
+    assert len(authors[2]["intermediatory_author_classes"]) == 0
+    expected_df = pipeline_jobs_sample_generalised_post_authors[:10]
+    assert (
+        authors[0]["phoenix_platform_message_author_id"]
+        == expected_df.iloc[0]["phoenix_platform_message_author_id"]
+    )
+    assert (
+        authors[9]["phoenix_platform_message_author_id"]
+        == expected_df.iloc[9]["phoenix_platform_message_author_id"]
+    )
