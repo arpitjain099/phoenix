@@ -2,6 +2,8 @@
 import sqlalchemy as sa
 from fastapi.testclient import TestClient
 
+from phiphi.seed import users as seed_users
+
 
 def test_user_project_associations_create(
     reseed_tables: sa.orm.Session, client_admin: TestClient
@@ -43,3 +45,18 @@ def test_user_project_associations_delete_not_found(
     assert response.status_code == 404
     json = response.json()
     assert json == {"detail": "User project association not found"}
+
+
+def test_user_project_associations_get(
+    reseed_tables: sa.orm.Session, client_admin: TestClient
+) -> None:
+    """Test getting user project associations."""
+    response = client_admin.get("/projects/1/users/")
+    assert response.status_code == 200
+    associations = response.json()
+    assert len(associations) == 1
+    assert associations[0]["user_id"] == 2
+    assert associations[0]["project_id"] == 1
+    assert associations[0]["email"] == seed_users.TEST_USER_1_CREATE.email
+    assert associations[0]["display_name"] == seed_users.TEST_USER_1_CREATE.display_name
+    assert associations[0]["role"] == "user"
