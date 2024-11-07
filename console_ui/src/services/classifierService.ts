@@ -131,6 +131,18 @@ export default class ClassifierService {
 		return response;
 	}
 
+	async getRefreshManualPostAuthors(query: {
+		project_id: string;
+	params: {
+		start: number;
+		end: number
+	}}) {
+		const response = await axios.get(
+			`${API_URL}/projects/${query?.project_id}/classifiers/manual_post_authors/authors?start=${query.params.start}&end=${query.params.end}`
+		);
+		return response;
+	}
+
 	async addClassToManualPostAuthorClassifier(
 		params: any,
 		data: AddClassToAuthorPayload
