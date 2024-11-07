@@ -10,22 +10,22 @@ import {
 } from "@refinedev/mantine";
 import {
 	Accordion,
-	ActionIcon,
 	Button,
 	Container,
-	Group,
+	ScrollArea,
 	Space,
 	Table,
 	Title,
 	Tooltip,
 } from "@mantine/core";
 import { useParams, useRouter } from "next/navigation";
-import { IconChevronDown, IconChevronUp, IconInfoCircle } from "@tabler/icons";
+import { IconInfoCircle } from "@tabler/icons";
 import { classifierService } from "src/services";
 import { showNotification } from "@mantine/notifications";
 import ClassifierViewBreadcrumb from "@components/breadcrumbs/classifierView";
 import ClassifierViewStatus from "@components/classifier/view-status";
 import ClassifierViewGeneral from "@components/classifier/view-general";
+import PaginationComponent from "@components/table/pagination";
 import { Author } from "../model";
 
 export default function ManualPostClassifierShow(): JSX.Element {
@@ -33,6 +33,9 @@ export default function ManualPostClassifierShow(): JSX.Element {
 	const translate = useTranslate();
 	const router = useRouter();
 	const [authors, setAuthors] = useState<Author[]>([]);
+	const [totalAuthors, setTotalAuthors] = useState(0);
+	const [activePage, setActivePage] = useState(1);
+	const authorsPerPage = 10; // Set the number of authors to show per page
 	const { queryResult } = useShow({
 		resource: `projects/${projectid}/classifiers`,
 		id: id as string,
@@ -68,23 +71,30 @@ export default function ManualPostClassifierShow(): JSX.Element {
 	};
 
 	// Fetch initial data on mount
-	const fetchData = useCallback(async () => {
-		try {
-			const authorsResponse = await classifierService.getManualPostAuthors({
-				project_id: projectid as string,
-				classifier_id: id as string,
-			});
-			setAuthors(authorsResponse?.data);
-		} catch (error) {
-			console.error("Error fetching classifier data", error);
-		}
-	}, [id, projectid]);
+	const fetchData = useCallback(
+		async (page: number) => {
+			const start = (page - 1) * authorsPerPage;
+			const end = start + authorsPerPage;
+			try {
+				const authorsResponse = await classifierService.getManualPostAuthors({
+					project_id: projectid as string,
+					classifier_id: id as string,
+					params: { start, end },
+				});
+				setAuthors(authorsResponse?.data?.authors);
+				setTotalAuthors(authorsResponse?.data?.meta?.total_count);
+			} catch (error) {
+				console.error("Error fetching classifier data", error);
+			}
+		},
+		[id, projectid, setAuthors]
+	);
 
 	useEffect(() => {
 		if (id && projectid) {
-			fetchData();
+			fetchData(activePage);
 		}
-	}, [id, projectid, fetchData]);
+	}, [id, projectid, activePage, fetchData]);
 
 	return (
 		<Show
@@ -232,65 +242,75 @@ export default function ManualPostClassifierShow(): JSX.Element {
 						</Accordion.Control>
 						<Accordion.Panel>
 							<Container className="mx-0 flex flex-col my-4">
-								<Table highlightOnHover withBorder>
-									<thead>
-										<tr>
-											<th>
-												{translate(
-													"classifiers.types.manual_post_authors.fields.classes"
-												)}
-											</th>
-											<th>
-												{translate(
-													"classifiers.types.manual_post_authors.fields.author_name"
-												)}
-											</th>
-											<th>
-												{translate(
-													"classifiers.types.manual_post_authors.fields.author_link"
-												)}
-											</th>
-											<th>
-												{translate(
-													"classifiers.types.manual_post_authors.fields.no_of_posts"
-												)}
-											</th>
-											<th>
-												{translate(
-													"classifiers.types.manual_post_authors.fields.author_platform"
-												)}
-											</th>
-											<th>
-												{translate(
-													"classifiers.types.manual_post_authors.fields.author_anon_id"
-												)}
-											</th>
-										</tr>
-									</thead>
-									<tbody>
-										{authors.map((author) => (
-											<tr key={author.phoenix_platform_message_author_id}>
-												<td>
-													<div className="flex flex-wrap">
-														{author.intermediatory_author_classes.map((cls) => (
-															<span
-																key={cls.class_id}
-																className="mr-2 mb-2 px-2 py-1 bg-gray-200 rounded text-sm sm:text-base"
-															>
-																{cls.class_name}
-															</span>
-														))}
-													</div>
-												</td>
-												<td>{author.pi_platform_message_author_name}</td>
-												<td>{author.phoenix_platform_message_author_id}</td>
-												<td>{author.post_count}</td>
-												<td className="capitalize">{author.platform}</td>
-												<td>{author.pi_platform_message_author_id}</td>
+								<ScrollArea>
+									<Table highlightOnHover withBorder>
+										<thead>
+											<tr>
+												<th>
+													{translate(
+														"classifiers.types.manual_post_authors.fields.classes"
+													)}
+												</th>
+												<th>
+													{translate(
+														"classifiers.types.manual_post_authors.fields.author_name"
+													)}
+												</th>
+												<th>
+													{translate(
+														"classifiers.types.manual_post_authors.fields.author_link"
+													)}
+												</th>
+												<th>
+													{translate(
+														"classifiers.types.manual_post_authors.fields.no_of_posts"
+													)}
+												</th>
+												<th>
+													{translate(
+														"classifiers.types.manual_post_authors.fields.author_platform"
+													)}
+												</th>
+												<th>
+													{translate(
+														"classifiers.types.manual_post_authors.fields.author_anon_id"
+													)}
+												</th>
 											</tr>
-										))}
-									</tbody>
-								</Table>
+										</thead>
+										<tbody>
+											{authors.map((author) => (
+												<tr key={author.phoenix_platform_message_author_id}>
+													<td>
+														<div className="flex flex-wrap">
+															{author.intermediatory_author_classes.map(
+																(cls) => (
+																	<span
+																		key={cls.class_id}
+																		className="mr-2 mb-2 px-2 py-1 bg-gray-200 rounded text-sm sm:text-base"
+																	>
+																		{cls.class_name}
+																	</span>
+																)
+															)}
+														</div>
+													</td>
+													<td>{author.pi_platform_message_author_name}</td>
+													<td>{author.phoenix_platform_message_author_id}</td>
+													<td>{author.post_count}</td>
+													<td className="capitalize">{author.platform}</td>
+													<td>{author.pi_platform_message_author_id}</td>
+												</tr>
+											))}
+										</tbody>
+									</Table>
+								</ScrollArea>
+								<br />
+								<PaginationComponent
+									pages={Math.ceil(totalAuthors / authorsPerPage)}
+									_activeIndex={activePage}
+									_setActiveIndex={setActivePage}
+								/>
 							</Container>
 						</Accordion.Panel>
 					</Accordion.Item>

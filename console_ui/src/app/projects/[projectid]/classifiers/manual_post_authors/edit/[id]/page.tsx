@@ -13,20 +13,14 @@ import {
 	Group,
 	ScrollArea,
 } from "@mantine/core";
-import {
-	IconTrash,
-	IconPlus,
-	IconCheck,
-	IconChevronUp,
-	IconChevronDown,
-} from "@tabler/icons";
+import { IconTrash, IconPlus, IconCheck } from "@tabler/icons";
 import { useState, useEffect, ChangeEvent, useCallback } from "react";
 import { useParams } from "next/navigation";
 import { useTranslate } from "@refinedev/core";
 import { classifierService } from "src/services";
 import { showNotification } from "@mantine/notifications";
 import ClassifierViewBreadcrumb from "@components/breadcrumbs/classifierView";
-import Link from "next/link";
+import PaginationComponent from "@components/table/pagination";
 import ClassifyAuthorModal from "@components/modals/manual-post-author";
 import { Author, ClassData } from "../../model";
 
@@ -45,15 +39,37 @@ const EditKeywordClassifier: React.FC = () => {
 	const [isModified, setIsModified] = useState<boolean>(false);
 	const [isBasicModified, setIsBasicModified] = useState<boolean>(false);
 	const [refetch, setRefetch] = useState<boolean>(true);
+	const [totalAuthors, setTotalAuthors] = useState(0);
+	const [activePage, setActivePage] = useState(1);
+
+	const authorsPerPage = 10; // Number of authors per page
 
 	// Fetch initial data on mount
+	const fetchAuthors = useCallback(
+		async (page: number) => {
+			const start = (page - 1) * authorsPerPage;
+			const end = start + authorsPerPage;
+			try {
+				const authorsResponse = await classifierService.getManualPostAuthors({
+					project_id: projectid as string,
+					classifier_id: id as string,
+					params: { start, end },
+				});
+				setAuthors(authorsResponse?.data?.authors);
+				setTotalAuthors(authorsResponse?.data?.meta?.total_count);
+			} catch (error) {
+				console.error("Failed to fetch authors:", error);
+			}
+		},
+		[id, projectid, setAuthors]
+	);
+
+	useEffect(() => {
+		fetchAuthors(activePage);
+	}, [activePage, fetchAuthors]);
 	const fetchData = useCallback(async () => {
 		try {
 			const response = await classifierService.getClassifierData({
-				project_id: projectid as string,
-				classifier_id: id as string,
-			});
-			const authorsResponse = await classifierService.getManualPostAuthors({
 				project_id: projectid as string,
 				classifier_id: id as string,
 			});
@@ -64,7 +80,6 @@ const EditKeywordClassifier: React.FC = () => {
 			setClassifierDescription(data?.description);
 			// Set classes and authors from API response
 			setClasses(data.intermediatory_classes);
-			setAuthors(authorsResponse?.data);
 			setRefetch(false);
 		} catch (error) {
 			console.error("Error fetching classifier data", error);
@@ -452,7 +467,13 @@ const EditKeywordClassifier: React.FC = () => {
 						))}
 					</tbody>
 				</Table>
+				<br />
 			</ScrollArea>
+			<PaginationComponent
+				pages={Math.ceil(totalAuthors / authorsPerPage)}
+				_activeIndex={activePage}
+				_setActiveIndex={setActivePage}
+			/>
 			{/* Classify Author Modal */}
 			{selectedAuthor && authorIdx?.toString && (
 				<ClassifyAuthorModal

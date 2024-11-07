@@ -118,12 +118,15 @@ export default class ClassifierService {
 		return response;
 	}
 
-	async getManualPostAuthors(params: {
+	async getManualPostAuthors(query: {
 		project_id: string;
 		classifier_id: string;
-	}) {
+	params: {
+		start: number;
+		end: number
+	}}) {
 		const response = await axios.get(
-			`${API_URL}/projects/${params?.project_id}/classifiers/manual_post_authors/${params?.classifier_id}/authors`
+			`${API_URL}/projects/${query?.project_id}/classifiers/manual_post_authors/${query?.classifier_id}/authors?start=${query.params.start}&end=${query.params.end}`
 		);
 		return response;
 	}
