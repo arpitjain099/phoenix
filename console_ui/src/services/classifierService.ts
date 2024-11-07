@@ -121,10 +121,11 @@ export default class ClassifierService {
 	async getManualPostAuthors(query: {
 		project_id: string;
 		classifier_id: string;
-	params: {
-		start: number;
-		end: number
-	}}) {
+		params: {
+			start: number;
+			end: number;
+		};
+	}) {
 		const response = await axios.get(
 			`${API_URL}/projects/${query?.project_id}/classifiers/manual_post_authors/${query?.classifier_id}/authors?start=${query.params.start}&end=${query.params.end}`
 		);
@@ -133,10 +134,11 @@ export default class ClassifierService {
 
 	async getRefreshManualPostAuthors(query: {
 		project_id: string;
-	params: {
-		start: number;
-		end: number
-	}}) {
+		params: {
+			start: number;
+			end: number;
+		};
+	}) {
 		const response = await axios.get(
 			`${API_URL}/projects/${query?.project_id}/classifiers/manual_post_authors/authors?start=${query.params.start}&end=${query.params.end}`
 		);

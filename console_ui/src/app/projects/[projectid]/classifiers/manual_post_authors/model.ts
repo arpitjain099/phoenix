@@ -12,5 +12,9 @@ export interface Author {
 	phoenix_processed_at: string;
 	platform: string;
 	post_count: number;
-	intermediatory_author_classes: { class_id: number; class_name: string; id: number }[];
+	intermediatory_author_classes: {
+		class_id: number;
+		class_name: string;
+		id: number;
+	}[];
 }
