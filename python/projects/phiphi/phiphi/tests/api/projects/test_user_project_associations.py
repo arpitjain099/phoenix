@@ -60,3 +60,11 @@ def test_user_project_associations_get(
     assert associations[0]["email"] == seed_users.TEST_USER_1_CREATE.email
     assert associations[0]["display_name"] == seed_users.TEST_USER_1_CREATE.display_name
     assert associations[0]["role"] == "user"
+
+
+def test_user_project_associations_403(
+    reseed_tables: sa.orm.Session, client_user_1: TestClient
+) -> None:
+    """Test getting user project associations no permission."""
+    response = client_user_1.get("/projects/1/users/")
+    assert response.status_code == 403
