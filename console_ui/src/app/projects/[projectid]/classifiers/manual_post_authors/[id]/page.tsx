@@ -33,7 +33,6 @@ export default function ManualPostClassifierShow(): JSX.Element {
 	const translate = useTranslate();
 	const router = useRouter();
 	const [authors, setAuthors] = useState<Author[]>([]);
-	const [openRows, setOpenRows] = useState<{ [key: number]: boolean }>({});
 	const { queryResult } = useShow({
 		resource: `projects/${projectid}/classifiers`,
 		id: id as string,
@@ -45,10 +44,6 @@ export default function ManualPostClassifierShow(): JSX.Element {
 
 	const editButtonProps: EditButtonProps = {
 		recordItemId: id as string,
-	};
-
-	const toggleRow = (index: number) => {
-		setOpenRows((prev) => ({ ...prev, [index]: !prev[index] }));
 	};
 
 	const handleApplyClassifier = async (): Promise<void> => {
@@ -240,7 +235,6 @@ export default function ManualPostClassifierShow(): JSX.Element {
 								<Table highlightOnHover withBorder>
 									<thead>
 										<tr>
-											<th aria-label="Accordion Control" />
 											<th>
 												{translate(
 													"classifiers.types.manual_post_authors.fields.classes"
@@ -274,37 +268,18 @@ export default function ManualPostClassifierShow(): JSX.Element {
 										</tr>
 									</thead>
 									<tbody>
-										{authors.map((author, authorIndex) => (
+										{authors.map((author) => (
 											<tr key={author.phoenix_platform_message_author_id}>
-												<td className="align-baseline">
-													<ActionIcon
-														color="dark"
-														variant="light"
-														onClick={() => toggleRow(authorIndex)}
-													>
-														{openRows[authorIndex] ? (
-															<IconChevronUp size={16} />
-														) : (
-															<IconChevronDown size={16} />
-														)}
-													</ActionIcon>
-												</td>
 												<td>
 													<div className="flex flex-wrap">
-														{openRows[authorIndex]
-															? author.intermediatory_author_classes.map(
-																	(cls) => (
-																		<span
-																			key={cls.class_id}
-																			className="mr-2 mb-2 px-2 py-1 bg-gray-200 rounded text-sm sm:text-base"
-																		>
-																			{cls.class_name}
-																		</span>
-																	)
-																)
-															: `${
-																	author.intermediatory_author_classes.length
-																} ${translate("classifiers.types.manual_post_authors.fields.classes")}`}
+														{author.intermediatory_author_classes.map((cls) => (
+															<span
+																key={cls.class_id}
+																className="mr-2 mb-2 px-2 py-1 bg-gray-200 rounded text-sm sm:text-base"
+															>
+																{cls.class_name}
+															</span>
+														))}
 													</div>
 												</td>
 												<td>{author.pi_platform_message_author_name}</td>

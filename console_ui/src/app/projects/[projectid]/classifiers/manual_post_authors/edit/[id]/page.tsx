@@ -45,11 +45,6 @@ const EditKeywordClassifier: React.FC = () => {
 	const [isModified, setIsModified] = useState<boolean>(false);
 	const [isBasicModified, setIsBasicModified] = useState<boolean>(false);
 	const [refetch, setRefetch] = useState<boolean>(true);
-	const [openRows, setOpenRows] = useState<{ [key: number]: boolean }>({});
-
-	const toggleRow = (index: number) => {
-		setOpenRows((prev) => ({ ...prev, [index]: !prev[index] }));
-	};
 
 	// Fetch initial data on mount
 	const fetchData = useCallback(async () => {
@@ -389,7 +384,6 @@ const EditKeywordClassifier: React.FC = () => {
 				<Table highlightOnHover withBorder>
 					<thead>
 						<tr>
-							<th aria-label="Accordion Control" />
 							<th>
 								{translate(
 									"classifiers.types.manual_post_authors.fields.classes"
@@ -426,33 +420,16 @@ const EditKeywordClassifier: React.FC = () => {
 					<tbody>
 						{authors.map((author, authorIndex) => (
 							<tr key={author.phoenix_platform_message_author_id}>
-								<td className="align-baseline">
-									<ActionIcon
-										color="dark"
-										variant="light"
-										onClick={() => toggleRow(authorIndex)}
-									>
-										{openRows[authorIndex] ? (
-											<IconChevronUp size={16} />
-										) : (
-											<IconChevronDown size={16} />
-										)}
-									</ActionIcon>
-								</td>
 								<td>
 									<div className="flex flex-wrap">
-										{openRows[authorIndex]
-											? author.intermediatory_author_classes.map((cls) => (
-													<span
-														key={cls.class_id}
-														className="mr-2 mb-2 px-2 py-1 bg-gray-200 rounded text-sm sm:text-base"
-													>
-														{cls.class_name}
-													</span>
-												))
-											: `${
-													author.intermediatory_author_classes.length
-												} ${translate("classifiers.types.manual_post_authors.fields.classes")}`}
+										{author.intermediatory_author_classes.map((cls) => (
+											<span
+												key={cls.class_id}
+												className="mr-2 mb-2 px-2 py-1 bg-gray-200 rounded text-sm sm:text-base"
+											>
+												{cls.class_name}
+											</span>
+										))}
 									</div>
 								</td>
 								<td>{author.pi_platform_message_author_name}</td>
