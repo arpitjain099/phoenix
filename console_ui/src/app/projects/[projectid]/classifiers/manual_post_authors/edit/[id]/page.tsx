@@ -22,6 +22,8 @@ import { showNotification } from "@mantine/notifications";
 import ClassifierViewBreadcrumb from "@components/breadcrumbs/classifierView";
 import PaginationComponent from "@components/table/pagination";
 import ClassifyAuthorModal from "@components/modals/manual-post-author";
+import Link from "next/link";
+import { getAuthorProfileLink } from "src/utils";
 import { Author, ClassData } from "../../model";
 
 const EditKeywordClassifier: React.FC = () => {
@@ -73,6 +75,7 @@ const EditKeywordClassifier: React.FC = () => {
 				project_id: projectid as string,
 				classifier_id: id as string,
 			});
+			fetchAuthors(activePage);
 
 			const { data } = response;
 			setClassifier(data);
@@ -84,7 +87,7 @@ const EditKeywordClassifier: React.FC = () => {
 		} catch (error) {
 			console.error("Error fetching classifier data", error);
 		}
-	}, [id, projectid]);
+	}, [id, projectid, activePage, fetchAuthors]);
 
 	useEffect(() => {
 		if (id && projectid && refetch) {
@@ -448,7 +451,18 @@ const EditKeywordClassifier: React.FC = () => {
 									</div>
 								</td>
 								<td>{author.pi_platform_message_author_name}</td>
-								<td>{author.phoenix_platform_message_author_id}</td>
+								<td>
+									<Link
+										target="_blank"
+										href={getAuthorProfileLink(
+											author.platform,
+											author.phoenix_platform_message_author_id,
+											author.pi_platform_message_author_name
+										)}
+									>
+										{author.phoenix_platform_message_author_id}
+									</Link>
+								</td>
 								<td>{author.post_count}</td>
 								<td className="capitalize">{author.platform}</td>
 								<td>{author.pi_platform_message_author_id}</td>

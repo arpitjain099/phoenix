@@ -58,3 +58,17 @@ export const formatToCurrency = (value: number | string): string => {
 
 export const PHEONIX_MANUAL_URL =
 	"https://docs.google.com/document/d/1Rs3WYgvkAtZJ9y1ho68AnGfC8mDuOFE9aG52bkJSG24/edit";
+
+export const getAuthorProfileLink = (
+	platform: string,
+	authorId: string,
+	authorName: string
+): string => {
+	if (platform.toLowerCase() === "facebook") {
+		return `https://www.facebook.com/${authorId}`;
+	}
+	if (platform.toLowerCase() === "tiktok") {
+		return `https://www.tiktok.com/@${authorName}`;
+	}
+	return "#";
+};

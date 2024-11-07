@@ -11,6 +11,7 @@ import {
 	Space,
 	Divider,
 	ScrollArea,
+	Group,
 } from "@mantine/core";
 import {
 	IconTrash,
@@ -312,6 +313,7 @@ const CreateManualPostClassifier: React.FC = () => {
 									"classifiers.types.manual_post_authors.fields.author_anon_id"
 								)}
 							</th>
+							<th className="!text-gray-400">{translate("table.actions")}</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -329,11 +331,24 @@ const CreateManualPostClassifier: React.FC = () => {
 										))}
 									</div>
 								</td>
-								<td>{author.pi_platform_message_author_name}</td>
-								<td>{author.phoenix_platform_message_author_id}</td>
-								<td>{author.post_count}</td>
-								<td className="capitalize">{author.platform}</td>
-								<td>{author.pi_platform_message_author_id}</td>
+								<td className="!text-gray-400">
+									{author.pi_platform_message_author_name}
+								</td>
+								<td className="!text-gray-400">
+									{author.phoenix_platform_message_author_id}
+								</td>
+								<td className="!text-gray-400">{author.post_count}</td>
+								<td className="capitalize !text-gray-400">{author.platform}</td>
+								<td className="!text-gray-400">
+									{author.pi_platform_message_author_id}
+								</td>
+								<td>
+									<Group spacing="xs">
+										<Button size="xs" variant="default" disabled>
+											{translate("buttons.edit")}
+										</Button>
+									</Group>
+								</td>
 							</tr>
 						))}
 					</tbody>

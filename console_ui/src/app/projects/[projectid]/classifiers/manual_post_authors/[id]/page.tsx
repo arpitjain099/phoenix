@@ -26,6 +26,8 @@ import ClassifierViewBreadcrumb from "@components/breadcrumbs/classifierView";
 import ClassifierViewStatus from "@components/classifier/view-status";
 import ClassifierViewGeneral from "@components/classifier/view-general";
 import PaginationComponent from "@components/table/pagination";
+import Link from "next/link";
+import { getAuthorProfileLink } from "src/utils";
 import { Author } from "../model";
 
 export default function ManualPostClassifierShow(): JSX.Element {
@@ -296,7 +298,18 @@ export default function ManualPostClassifierShow(): JSX.Element {
 														</div>
 													</td>
 													<td>{author.pi_platform_message_author_name}</td>
-													<td>{author.phoenix_platform_message_author_id}</td>
+													<td>
+														<Link
+															target="_blank"
+															href={getAuthorProfileLink(
+																author.platform,
+																author.phoenix_platform_message_author_id,
+																author.pi_platform_message_author_name
+															)}
+														>
+															{author.phoenix_platform_message_author_id}
+														</Link>
+													</td>
 													<td>{author.post_count}</td>
 													<td className="capitalize">{author.platform}</td>
 													<td>{author.pi_platform_message_author_id}</td>

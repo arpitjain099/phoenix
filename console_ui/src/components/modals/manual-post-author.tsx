@@ -65,14 +65,15 @@ const ClassifyAuthorModal: React.FC<ClassifyAuthorModalProps> = ({
 	const removeClassMutation = async (classId: string) => {
 		setIsLoading(true);
 		try {
-			const classAuthorId = author.intermediatory_author_classes.find(
+			const classAuthor = author.intermediatory_author_classes.find(
 				(item) => item.class_id === Number(classId)
-			)?.id;
-			await classifierService.removeClassToManualPostAuthorClassifier({
-				project_id: projectId,
-				classifier_id: classifierId,
-				classified_post_author_id: Number(classAuthorId),
-			});
+			);
+			if (classAuthor?.id)
+				await classifierService.removeClassToManualPostAuthorClassifier({
+					project_id: projectId,
+					classifier_id: classifierId,
+					classified_post_author_id: classAuthor.id,
+				});
 		} catch (error: any) {
 			showNotification({
 				title: "Error",
