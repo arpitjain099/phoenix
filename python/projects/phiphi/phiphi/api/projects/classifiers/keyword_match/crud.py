@@ -2,6 +2,7 @@
 import sqlalchemy as sa
 
 from phiphi.api import exceptions
+from phiphi.api.projects.classifiers import base_schemas as classifiers_base_schemas
 from phiphi.api.projects.classifiers import crud
 from phiphi.api.projects.classifiers import models as classifiers_models
 from phiphi.api.projects.classifiers.keyword_match import models, schemas
@@ -21,6 +22,9 @@ def create_version(
     orm_classifier = crud.get_orm_classifier(session, project_id, classifier_id)
     if orm_classifier is None:
         raise exceptions.ClassifierNotFound()
+
+    if orm_classifier.type != classifiers_base_schemas.ClassifierType.keyword_match:
+        raise exceptions.HttpException400("The classifier is not a keyword match classifier.")
 
     classes = crud.get_classes(session, orm_classifier)
     params = get_keyword_match_params(session, orm_classifier)

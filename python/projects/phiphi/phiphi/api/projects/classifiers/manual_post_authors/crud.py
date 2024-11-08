@@ -26,6 +26,11 @@ def create_version(
     if orm_classifier is None:
         raise exceptions.ClassifierNotFound()
 
+    if orm_classifier.type != classifiers_base_schemas.ClassifierType.manual_post_authors:
+        raise exceptions.HttpException400(
+            "The classifier is not a manual post authors classifier."
+        )
+
     classes = crud.get_classes(session, orm_classifier)
     params = get_manual_post_authors_params(session, orm_classifier)
 
