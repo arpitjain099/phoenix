@@ -65,7 +65,7 @@ export const getAuthorProfileLink = (author: Author): string => {
 		return author.pi_author_link;
 	}
 	if (author?.platform?.toLowerCase() === "facebook") {
-		return `https://www.facebook.com/${author?.phoenix_platform_message_author_id}`;
+		return `https://www.facebook.com/${author?.pi_platform_message_author_id}`;
 	}
 	if (author?.platform?.toLowerCase() === "tiktok") {
 		return `https://www.tiktok.com/@${author.pi_platform_message_author_name}`;
