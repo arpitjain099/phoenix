@@ -133,6 +133,10 @@ const ClassifyAuthorModal: React.FC<ClassifyAuthorModalProps> = ({
 	};
 
 	useEffect(() => {
+		setAuthorData(author);
+	}, [author]);
+
+	useEffect(() => {
 		// Ensure the selected classes state is updated whenever authorData changes
 		setSelectedClasses(
 			authorData.intermediatory_author_classes.map((c) => c.class_id.toString())
