@@ -114,7 +114,7 @@ export default function ManualPostClassifierShow(): JSX.Element {
 				value={translate("classifiers.types.manual_post_authors.view.text")}
 			/>
 			<Space h="md" />
-			{!record?.latest_version && record?.last_edited_at && (
+			{!record?.latest_version && (
 				<p className="flex items-center text-red-500">
 					{translate("classifiers.cautions.not_run.title")}
 					<Tooltip
