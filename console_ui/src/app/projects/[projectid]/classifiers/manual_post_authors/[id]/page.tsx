@@ -53,7 +53,7 @@ export default function ManualPostClassifierShow(): JSX.Element {
 
 	const handleApplyClassifier = async (): Promise<void> => {
 		try {
-			await classifierService.runKeywordClassifier({
+			await classifierService.runManualPostAuthorsClassifier({
 				project_id: projectid,
 				classifier_id: id,
 			});
