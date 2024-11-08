@@ -41,6 +41,13 @@ export default class ClassifierService {
 		return response;
 	}
 
+	async runManualPostAuthorsClassifier(params: any) {
+		const response = await axios.post(
+			`${API_URL}/projects/${params?.project_id}/classifiers/manual_post_authors/${params?.classifier_id}/version_and_run`
+		);
+		return response;
+	}
+
 	async updateClassifierBasicData(params: any, data: ClassifierPayload) {
 		const response = await axios.patch(
 			`${API_URL}/projects/${params?.project_id}/classifiers/${params?.classifier_id}`,
