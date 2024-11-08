@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Button, MultiSelect, Text, Group, Loader } from "@mantine/core";
+import { Modal, Button, MultiSelect, Text, Group } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
-import {
-	Author,
-	ClassData,
-} from "@pages/projects/[projectid]/classifiers/manual_post_authors/model";
+import { Author } from "@pages/projects/[projectid]/classifiers/manual_post_authors/model";
 import { classifierService } from "src/services";
 import { useTranslate } from "@refinedev/core";
 
@@ -17,7 +14,7 @@ interface ClassifyAuthorModalProps {
 	author: Author;
 	projectId: string;
 	classifierId: string;
-	availableClasses: Array<ClassData>;
+	availableClasses: Array<{ value: string; label: string }>;
 }
 
 const ClassifyAuthorModal: React.FC<ClassifyAuthorModalProps> = ({
@@ -194,21 +191,15 @@ const ClassifyAuthorModal: React.FC<ClassifyAuthorModalProps> = ({
 							"classifiers.types.manual_post_authors.fields.classes"
 						)}
 						placeholder="Select classes"
-						data={(availableClasses || []) // Ensure availableClasses is defined
-							.filter((c) => c?.id && c?.name)
-							.map((c) => ({
-								value: c?.id?.toString() || "",
-								label: c.name,
-							}))}
+						data={availableClasses}
 						value={selectedClasses}
 						onChange={handleClassChange}
 						searchable
 						clearable
-						disabled={isLoading}
 					/>
 				</div>
 
-				{isLoading && (
+				{/* {isLoading && (
 					<Group position="center" mt="md">
 						<Loader size="sm" />
 						<Text>
@@ -218,7 +209,7 @@ const ClassifyAuthorModal: React.FC<ClassifyAuthorModalProps> = ({
 							...
 						</Text>
 					</Group>
-				)}
+				)} */}
 
 				<Group position="right" mt="lg">
 					<Button variant="outline" onClick={onClose}>

@@ -414,11 +414,6 @@ const EditKeywordClassifier: React.FC = () => {
 							</th>
 							<th>
 								{translate(
-									"classifiers.types.manual_post_authors.fields.author_link"
-								)}
-							</th>
-							<th>
-								{translate(
 									"classifiers.types.manual_post_authors.fields.no_of_posts"
 								)}
 							</th>
@@ -450,7 +445,6 @@ const EditKeywordClassifier: React.FC = () => {
 										))}
 									</div>
 								</td>
-								<td>{author.pi_platform_message_author_name}</td>
 								<td>
 									<Link
 										target="_blank"
@@ -460,7 +454,7 @@ const EditKeywordClassifier: React.FC = () => {
 											author.pi_platform_message_author_name
 										)}
 									>
-										{author.phoenix_platform_message_author_id}
+										{author.pi_platform_message_author_name}
 									</Link>
 								</td>
 								<td>{author.post_count}</td>
@@ -499,7 +493,12 @@ const EditKeywordClassifier: React.FC = () => {
 					author={selectedAuthor}
 					projectId={projectid as string}
 					classifierId={id as string}
-					availableClasses={classes}
+					availableClasses={(classes || [])
+						.filter((c) => c?.id && c?.name)
+						.map((c) => ({
+							value: c?.id?.toString() || "",
+							label: c.name,
+						}))}
 				/>
 			)}
 		</div>

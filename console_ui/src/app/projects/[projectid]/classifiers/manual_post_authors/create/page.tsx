@@ -295,11 +295,6 @@ const CreateManualPostClassifier: React.FC = () => {
 							</th>
 							<th className="!text-gray-400">
 								{translate(
-									"classifiers.types.manual_post_authors.fields.author_link"
-								)}
-							</th>
-							<th className="!text-gray-400">
-								{translate(
 									"classifiers.types.manual_post_authors.fields.no_of_posts"
 								)}
 							</th>
@@ -333,9 +328,6 @@ const CreateManualPostClassifier: React.FC = () => {
 								</td>
 								<td className="!text-gray-400">
 									{author.pi_platform_message_author_name}
-								</td>
-								<td className="!text-gray-400">
-									{author.phoenix_platform_message_author_id}
 								</td>
 								<td className="!text-gray-400">{author.post_count}</td>
 								<td className="capitalize !text-gray-400">{author.platform}</td>

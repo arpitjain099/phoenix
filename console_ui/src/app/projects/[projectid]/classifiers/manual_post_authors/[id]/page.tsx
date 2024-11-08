@@ -260,11 +260,6 @@ export default function ManualPostClassifierShow(): JSX.Element {
 												</th>
 												<th>
 													{translate(
-														"classifiers.types.manual_post_authors.fields.author_link"
-													)}
-												</th>
-												<th>
-													{translate(
 														"classifiers.types.manual_post_authors.fields.no_of_posts"
 													)}
 												</th>
@@ -297,7 +292,6 @@ export default function ManualPostClassifierShow(): JSX.Element {
 															)}
 														</div>
 													</td>
-													<td>{author.pi_platform_message_author_name}</td>
 													<td>
 														<Link
 															target="_blank"
@@ -307,7 +301,7 @@ export default function ManualPostClassifierShow(): JSX.Element {
 																author.pi_platform_message_author_name
 															)}
 														>
-															{author.phoenix_platform_message_author_id}
+															{author.pi_platform_message_author_name}
 														</Link>
 													</td>
 													<td>{author.post_count}</td>
