@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Modal, Button, MultiSelect, Text, Group } from "@mantine/core";
+import React, { useCallback, useEffect, useState } from "react";
+import { Modal, Button, MultiSelect, Text, Group, Loader } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { Author } from "@pages/projects/[projectid]/classifiers/manual_post_authors/model";
 import { classifierService } from "src/services";
@@ -30,10 +30,26 @@ const ClassifyAuthorModal: React.FC<ClassifyAuthorModalProps> = ({
 }) => {
 	const translate = useTranslate();
 	const [isLoading, setIsLoading] = useState(false);
+	const [authorData, setAuthorData] = useState(author);
 	const [selectedClasses, setSelectedClasses] = useState(
-		author.intermediatory_author_classes.map((c) => c.class_id.toString())
+		authorData?.intermediatory_author_classes.map((c) => c.class_id.toString())
 	);
 
+	// Fetch the latest author data
+	const fetchAuthor = useCallback(async () => {
+		try {
+			const authorsResponse = await classifierService.getManualPostAuthorById({
+				project_id: projectId,
+				classifier_id: classifierId,
+				id: author.phoenix_platform_message_author_id,
+			});
+			setAuthorData(authorsResponse?.data);
+		} catch (error) {
+			console.error("Failed to fetch authors:", error);
+		}
+	}, [classifierId, author, projectId]);
+
+	// Mutation to add class to the author
 	const addClassMutation = async (classId: string) => {
 		setIsLoading(true);
 		try {
@@ -48,6 +64,8 @@ const ClassifyAuthorModal: React.FC<ClassifyAuthorModalProps> = ({
 						author.phoenix_platform_message_author_id,
 				}
 			);
+			// Re-fetch author data after adding the class to get the correct class author ID
+			await fetchAuthor();
 		} catch (error: any) {
 			showNotification({
 				title: "Error",
@@ -59,18 +77,25 @@ const ClassifyAuthorModal: React.FC<ClassifyAuthorModalProps> = ({
 		}
 	};
 
+	// Mutation to remove class from the author
 	const removeClassMutation = async (classId: string) => {
 		setIsLoading(true);
 		try {
-			const classAuthor = author.intermediatory_author_classes.find(
+			// Find the class author to remove
+			const classAuthor = authorData.intermediatory_author_classes.find(
 				(item) => item.class_id === Number(classId)
 			);
-			if (classAuthor?.id)
+
+			// If the class is found and it has an ID, delete it
+			if (classAuthor?.id) {
 				await classifierService.removeClassToManualPostAuthorClassifier({
 					project_id: projectId,
 					classifier_id: classifierId,
 					classified_post_author_id: classAuthor.id,
 				});
+				// Re-fetch author data after removing the class
+				await fetchAuthor();
+			}
 		} catch (error: any) {
 			showNotification({
 				title: "Error",
@@ -94,13 +119,13 @@ const ClassifyAuthorModal: React.FC<ClassifyAuthorModalProps> = ({
 		);
 
 		// Add newly selected classes
-		addedClasses.forEach((classId) => {
-			addClassMutation(classId);
+		addedClasses.forEach(async (classId) => {
+			await addClassMutation(classId);
 		});
 
 		// Remove unselected classes
-		removedClasses.forEach((classId) => {
-			removeClassMutation(classId);
+		removedClasses.forEach(async (classId) => {
+			await removeClassMutation(classId);
 		});
 
 		// Update selected classes in state
@@ -108,10 +133,11 @@ const ClassifyAuthorModal: React.FC<ClassifyAuthorModalProps> = ({
 	};
 
 	useEffect(() => {
+		// Ensure the selected classes state is updated whenever authorData changes
 		setSelectedClasses(
-			author.intermediatory_author_classes.map((c) => c.class_id.toString())
+			authorData.intermediatory_author_classes.map((c) => c.class_id.toString())
 		);
-	}, [author]);
+	}, [authorData]);
 
 	return (
 		<Modal opened={isOpen} onClose={onClose} size="lg">
@@ -133,7 +159,7 @@ const ClassifyAuthorModal: React.FC<ClassifyAuthorModalProps> = ({
 					<div className="w-full flex mb-5 p-1">
 						<div className="w-1/2 flex flex-col">
 							<Text className="font-medium text-lg capitalize">
-								{author.pi_platform_message_author_name}
+								{authorData.pi_platform_message_author_name}
 							</Text>
 							<Text className="text-base text-neutral-500 font-normal">
 								{translate(
@@ -143,7 +169,7 @@ const ClassifyAuthorModal: React.FC<ClassifyAuthorModalProps> = ({
 						</div>
 						<div className="w-1/2 flex flex-col">
 							<Text className="font-medium text-lg capitalize">
-								{author.phoenix_platform_message_author_id}
+								{authorData.phoenix_platform_message_author_id}
 							</Text>
 							<Text className="text-base text-neutral-500 font-normal">
 								{translate(
@@ -155,7 +181,7 @@ const ClassifyAuthorModal: React.FC<ClassifyAuthorModalProps> = ({
 					<div className="w-full flex mb-5 p-1">
 						<div className="w-1/2 flex flex-col">
 							<Text className="font-medium text-lg capitalize">
-								{author.post_count}
+								{authorData.post_count}
 							</Text>
 							<Text className="text-base text-neutral-500 font-normal">
 								{translate(
@@ -165,7 +191,7 @@ const ClassifyAuthorModal: React.FC<ClassifyAuthorModalProps> = ({
 						</div>
 						<div className="w-1/2 flex flex-col">
 							<Text className="font-medium capitalize text-lg">
-								{author.platform}
+								{authorData.platform}
 							</Text>
 							<Text className="text-base text-neutral-500 font-normal">
 								{translate(
@@ -177,7 +203,7 @@ const ClassifyAuthorModal: React.FC<ClassifyAuthorModalProps> = ({
 					<div className="w-full flex mb-5 p-1">
 						<div className="w-1/2 flex flex-col">
 							<Text className="font-medium text-lg">
-								{author.pi_platform_message_author_id}
+								{authorData.pi_platform_message_author_id}
 							</Text>
 							<Text className="text-base text-neutral-500 font-normal">
 								{translate(
@@ -199,7 +225,7 @@ const ClassifyAuthorModal: React.FC<ClassifyAuthorModalProps> = ({
 					/>
 				</div>
 
-				{/* {isLoading && (
+				{isLoading && (
 					<Group position="center" mt="md">
 						<Loader size="sm" />
 						<Text>
@@ -209,7 +235,7 @@ const ClassifyAuthorModal: React.FC<ClassifyAuthorModalProps> = ({
 							...
 						</Text>
 					</Group>
-				)} */}
+				)}
 
 				<Group position="right" mt="lg">
 					<Button variant="outline" onClick={onClose}>
