@@ -35,3 +35,8 @@ export interface ClassifierClassPayload {
 	name: string;
 	description: string;
 }
+
+export interface AddClassToAuthorPayload {
+	class_id: number;
+	phoenix_platform_message_author_id: string;
+}

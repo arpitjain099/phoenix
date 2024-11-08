@@ -93,6 +93,7 @@
 		"duplicate": "Duplicate",
 		"edit": "Edit",
 		"cancel": "Cancel",
+		"close": "Close",
 		"confirm": "Are you sure?",
 		"filter": "Filter",
 		"clear": "Clear",
@@ -591,12 +592,16 @@
 			"create_keywords": "Keywords added in one sequence have an `and` operator between them. To create `or` releationships for this class add more then one keyword sequence.",
 			"edit_keywords": "To create `or` releationships for this class add more then one keyword sequence."
 		},
+		"run": "Run and apply to future Gathers",
 		"types": {
 			"manual_post_authors": {
 				"create": "Create a post author classifier",
 				"create_description": "From the data that has been gathered you can add one or more classes to each author that has posts. The authors will be ordered by the number of posts gathered (highest first) and you will be able to add classes to each author.",
 				"create_description_2": "You first need to create the classifier with the classes before you can add classes to the authors.",
 				"proceed_text": "Start creating",
+				"edit": "Edit post authors classifier",
+				"edit_description": "Define a classifier that will automatically add classes to a post and/or comment when its text contains certain keywords. This will be applied to posts and/or comments that have been gathered, and data gathered in the future.",
+				"edit_description_2": "Edits will be automatically saved but you must `Run and apply to future Gathers` to have the classifier update the dashboard dataset.",
 				"fields": {
 					"classes": "Classes",
 					"author_name": "Author Name",
@@ -608,6 +613,15 @@
 						"class_section": "Classes (this can be amended later)",
 						"authors_section": "Authors (can be edited after create)"
 					}
+				},
+				"author_count": "Total number of authors that have posts:",
+				"author_edit": {
+					"title": "Classify a Post Author",
+					"instruction": "Each edit will automatically saved but you will need to `Run and apply to future Gathers` (on edit page) if you want your dashboard dataset to update.",
+					"count": "You are on author",
+					"processing": "Processing",
+					"go_to_next": "Go to next author",
+					"go_back_to_list": "Go back to author list"
 				},
 				"view": {
 					"text": "View your post authors classifier.",
@@ -621,7 +635,6 @@
 				}
 			},
 			"keyword_match": {
-				"run": "Run and apply to future Gathers",
 				"create": "Create a keyword text classifier",
 				"create_description": "Define a classifier that will automatically add classes to a post and/or comment when its text contains certain keywords. This will be applied to posts and/or comments that have been gathered, and data gathered in the future.",
 				"create_description_2": "You will need to create the classifier with the classes before you edit the keywords.",

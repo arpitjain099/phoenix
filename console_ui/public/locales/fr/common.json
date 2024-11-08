@@ -93,6 +93,7 @@
 		"duplicate": "Dupliquer",
 		"edit": "Modifier",
 		"cancel": "Annuler",
+		"close": "Fermer",
 		"confirm": "Êtes-vous sûr ?",
 		"filter": "Filtrer",
 		"clear": "Effacer",
@@ -585,12 +586,16 @@
 			"create_keywords": "Les mots-clés ajoutés dans une séquence ont un opérateur `et` entre eux. Pour créer des relations `ou` pour cette classe, ajoutez plus d'une séquence de mots-clés.",
 			"edit_keywords": "Pour créer des relations `ou` pour cette classe, ajoutez plus d'une séquence de mots-clés."
 		},
+		"run": "Exécuter et appliquer aux futures collectes",
 		"types": {
 			"manual_post_authors": {
 				"create": "Créer un classificateur d'auteur de post",
 				"create_description": "À partir des données collectées, vous pouvez ajouter une ou plusieurs classes à chaque auteur ayant des posts. Les auteurs seront classés par le nombre de posts collectés (du plus élevé au plus bas) et vous pourrez ajouter des classes à chaque auteur.",
 				"create_description_2": "Vous devez d'abord créer le classificateur avec les classes avant de pouvoir ajouter des classes aux auteurs.",
 				"proceed_text": "Commencer à créer",
+				"edit": "Modifier le classificateur des auteurs de publication",
+				"edit_description": "Définissez un classificateur qui ajoutera automatiquement des classes à un post et/ou un commentaire lorsque son texte contiendra certains mots-clés. Cela sera appliqué aux posts et/ou commentaires collectés, ainsi qu'aux données collectées à l'avenir.",
+				"edit_description_2": "Les modifications seront automatiquement enregistrées, mais vous devez `Exécuter et appliquer aux futurs collectes` pour que le classificateur mette à jour l'ensemble de données du tableau de bord.",
 				"fields": {
 					"classes": "Classes",
 					"author_name": "Nom de l'auteur",
@@ -602,6 +607,15 @@
 						"class_section": "Classes (cela peut être modifié plus tard)",
 						"authors_section": "Auteurs (peut être modifié après création)"
 					}
+				},
+				"author_count": "Nombre total d'auteurs ayant des publications :",
+				"author_edit": {
+					"title": "Classer un auteur de publication",
+					"instruction": "Chaque modification sera enregistrée automatiquement, mais vous devrez `Exécuter et appliquer aux futurs collectes` (sur la page de modification) si vous voulez mettre à jour l'ensemble de données du tableau de bord.",
+					"count": "Vous êtes sur l'auteur",
+					"processing": "Traitement",
+					"go_to_next": "Passer à l'auteur suivant",
+					"go_back_to_list": "Retourner à la liste des auteurs"
 				},
 				"view": {
 					"text": "Voir votre classificateur d'auteurs de post.",
@@ -615,7 +629,6 @@
 				}
 			},
 			"keyword_match": {
-				"run": "Exécuter et appliquer aux futures collectes",
 				"create": "Créer un classificateur de texte par mot-clé",
 				"create_description": "Définissez un classificateur qui ajoutera automatiquement des classes à une publication et/ou un commentaire lorsque son texte contient certains mots-clés. Cela sera appliqué aux publications et/ou commentaires qui ont été collectés, et aux données collectées à l'avenir.",
 				"create_description_2": "Vous devez créer le classificateur avec les classes avant de modifier les mots-clés.",

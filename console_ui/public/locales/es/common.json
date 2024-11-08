@@ -93,6 +93,7 @@
 		"duplicate": "Dupliquer",
 		"edit": "Editar",
 		"cancel": "Cancelar",
+		"close": "Cerrar",
 		"confirm": "¿Está seguro?",
 		"filter": "Filtrar",
 		"clear": "Limpiar",
@@ -585,12 +586,16 @@
 			"create_keywords": "Las palabras clave añadidas en una secuencia tienen un operador `y` entre ellas. Para crear relaciones `o` para esta clase, añada más de una secuencia de palabras clave.",
 			"edit_keywords": "Para crear relaciones `o` para esta clase, añada más de una secuencia de palabras clave."
 		},
+		"run": "Ejecutar y aplicar a futuras recolecciones",
 		"types": {
 			"manual_post_authors": {
 				"create": "Crear un clasificador de autores de post",
 				"create_description": "A partir de los datos recopilados, puedes añadir una o más clases a cada autor que tenga posts. Los autores se ordenarán por el número de posts recopilados (de mayor a menor) y podrás añadir clases a cada autor.",
 				"create_description_2": "Primero debes crear el clasificador con las clases antes de poder añadir clases a los autores.",
 				"proceed_text": "Comenzar a crear",
+				"edit": "Editar el clasificador de autores de publicaciones",
+				"edit_description": "Defina un clasificador que agregará automáticamente clases a una publicación y/o comentario cuando su texto contenga ciertas palabras clave. Esto se aplicará a publicaciones y/o comentarios que se hayan recopilado, así como a datos recopilados en el futuro.",
+				"edit_description_2": "Las ediciones se guardarán automáticamente, pero debe `Ejecutar y aplicar a futuras recopilaciones` para que el clasificador actualice el conjunto de datos del panel de control.",
 				"fields": {
 					"classes": "Clases",
 					"author_name": "Nombre del autor",
@@ -602,6 +607,15 @@
 						"class_section": "Clases (esto se puede modificar más tarde)",
 						"authors_section": "Autores (se puede editar después de crear)"
 					}
+				},
+				"author_count": "Número total de autores que tienen publicaciones: ",
+				"author_edit": {
+					"title": "Clasificar un autor de publicación",
+					"instruction": "Cada edición se guardará automáticamente, pero deberá `Ejecutar y aplicar a futuras recopilaciones` (en la página de edición) si desea que el conjunto de datos del panel de control se actualice.",
+					"count": "Está en el autor",
+					"processing": "Procesando",
+					"go_to_next": "Ir al siguiente autor",
+					"go_back_to_list": "Volver a la lista de autores"
 				},
 				"view": {
 					"text": "Ver tu clasificador de autores de post.",
@@ -615,7 +629,6 @@
 				}
 			},
 			"keyword_match": {
-				"run": "Ejecutar y aplicar a futuras recolecciones",
 				"create": "Crear un clasificador de texto por palabra clave",
 				"create_description": "Defina un clasificador que añadirá automáticamente clases a una publicación y/o comentario cuando su texto contenga ciertas palabras clave. Esto se aplicará a publicaciones y/o comentarios que han sido recogidos, y a los datos recogidos en el futuro.",
 				"create_description_2": "Necesitará crear el clasificador con las clases antes de editar las palabras clave.",

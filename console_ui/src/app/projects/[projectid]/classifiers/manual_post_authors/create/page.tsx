@@ -11,6 +11,7 @@ import {
 	Space,
 	Divider,
 	ScrollArea,
+	Group,
 } from "@mantine/core";
 import {
 	IconTrash,
@@ -18,11 +19,13 @@ import {
 	IconArrowLeft,
 	IconDeviceFloppy,
 } from "@tabler/icons";
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useCallback, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useBack, useTranslate } from "@refinedev/core";
 import { classifierService } from "src/services";
 import { showNotification } from "@mantine/notifications";
+import PaginationComponent from "@components/table/pagination";
+import { Author } from "../model";
 
 // Define types for class and keyword group structures
 interface ClassData {
@@ -32,22 +35,22 @@ interface ClassData {
 	description: string;
 }
 
-const CreateKeywordClassifier: React.FC = () => {
+const CreateManualPostClassifier: React.FC = () => {
 	const back = useBack();
 	const router = useRouter();
 	const translate = useTranslate();
 	const { projectid } = useParams();
 	// State to manage classes and keyword groups
-	const [classifierName, setClassifierName] = useState(
-		"Manual Author classifier"
-	);
-	const [classifierDescription, setClassifierDescription] = useState(
-		"Manual Author classifier"
-	);
+	const [classifierName, setClassifierName] = useState("");
+	const [classifierDescription, setClassifierDescription] = useState("");
 	const [classes, setClasses] = useState<ClassData[]>([
 		{ name: "", description: "" },
 	]);
 	const [loading, setLoading] = useState(false);
+	const [authors, setAuthors] = useState<Author[]>([]);
+	const [totalAuthors, setTotalAuthors] = useState(0);
+	const [activePage, setActivePage] = useState(1);
+	const authorsPerPage = 10; // Set the number of authors to show per page
 
 	// Input change handlers
 	const handleClassChange = (
@@ -102,7 +105,7 @@ const CreateKeywordClassifier: React.FC = () => {
 				message: translate("classifiers.success.success"),
 			});
 			router.push(
-				`/projects/${projectid}/classifiers/${data?.type}/edit/${data.id}`
+				`/projects/${projectid}/classifiers/${data?.type}/${data.id}`
 			);
 		} catch (error: any) {
 			showNotification({
@@ -115,6 +118,32 @@ const CreateKeywordClassifier: React.FC = () => {
 			setLoading(false);
 		}
 	};
+
+	// Fetch initial data on mount
+	const fetchData = useCallback(
+		async (page: number) => {
+			const start = (page - 1) * authorsPerPage;
+			const end = start + authorsPerPage;
+			try {
+				const authorsResponse =
+					await classifierService.getRefreshManualPostAuthors({
+						project_id: projectid as string,
+						params: { start, end },
+					});
+				setAuthors(authorsResponse?.data?.authors);
+				setTotalAuthors(authorsResponse?.data?.meta?.total_count);
+			} catch (error) {
+				console.error("Error fetching classifier data", error);
+			}
+		},
+		[projectid, setAuthors]
+	);
+
+	useEffect(() => {
+		if (projectid) {
+			fetchData(activePage);
+		}
+	}, [projectid, activePage, fetchData]);
 
 	return (
 		<div className="p-8 bg-white min-h-screen">
@@ -262,11 +291,6 @@ const CreateKeywordClassifier: React.FC = () => {
 							</th>
 							<th className="!text-gray-400">
 								{translate(
-									"classifiers.types.manual_post_authors.fields.author_link"
-								)}
-							</th>
-							<th className="!text-gray-400">
-								{translate(
 									"classifiers.types.manual_post_authors.fields.no_of_posts"
 								)}
 							</th>
@@ -280,10 +304,50 @@ const CreateKeywordClassifier: React.FC = () => {
 									"classifiers.types.manual_post_authors.fields.author_anon_id"
 								)}
 							</th>
+							<th className="!text-gray-400">{translate("table.actions")}</th>
 						</tr>
 					</thead>
+					<tbody>
+						{authors.map((author) => (
+							<tr key={author.phoenix_platform_message_author_id}>
+								<td>
+									<div className="flex flex-wrap">
+										{author.intermediatory_author_classes.map((cls) => (
+											<span
+												key={cls.class_id}
+												className="mr-2 mb-2 px-2 py-1 bg-gray-200 rounded text-sm sm:text-base"
+											>
+												{cls.class_name}
+											</span>
+										))}
+									</div>
+								</td>
+								<td className="!text-gray-400">
+									{author.pi_platform_message_author_name}
+								</td>
+								<td className="!text-gray-400">{author.post_count}</td>
+								<td className="capitalize !text-gray-400">{author.platform}</td>
+								<td className="!text-gray-400">
+									{author.pi_platform_message_author_id}
+								</td>
+								<td>
+									<Group spacing="xs">
+										<Button size="xs" variant="default" disabled>
+											{translate("buttons.edit")}
+										</Button>
+									</Group>
+								</td>
+							</tr>
+						))}
+					</tbody>
 				</Table>
 			</ScrollArea>
+			<br />
+			<PaginationComponent
+				pages={Math.ceil(totalAuthors / authorsPerPage)}
+				_activeIndex={activePage}
+				_setActiveIndex={setActivePage}
+			/>
 
 			<Space h="lg" />
 			<div className="flex justify-end gap-2 w-full">
@@ -302,4 +366,4 @@ const CreateKeywordClassifier: React.FC = () => {
 	);
 };
 
-export default CreateKeywordClassifier;
+export default CreateManualPostClassifier;
