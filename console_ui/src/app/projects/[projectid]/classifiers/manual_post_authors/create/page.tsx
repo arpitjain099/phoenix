@@ -41,12 +41,8 @@ const CreateManualPostClassifier: React.FC = () => {
 	const translate = useTranslate();
 	const { projectid } = useParams();
 	// State to manage classes and keyword groups
-	const [classifierName, setClassifierName] = useState(
-		"Manual Author classifier"
-	);
-	const [classifierDescription, setClassifierDescription] = useState(
-		"Manual Author classifier"
-	);
+	const [classifierName, setClassifierName] = useState();
+	const [classifierDescription, setClassifierDescription] = useState();
 	const [classes, setClasses] = useState<ClassData[]>([
 		{ name: "", description: "" },
 	]);
