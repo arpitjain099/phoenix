@@ -227,3 +227,58 @@ def get_post_authors_with_intermediatory_author_classes(
             total_count=post_authors_count, start_index=start_index, end_index=end_index
         ),
     )
+
+
+def get_post_authors(
+    session: sa.orm.Session,
+    project_id: int,
+    offset: int = 0,
+    limit: int = 10,
+) -> schemas.AuthorsListResponse:
+    """Retrieve post authors with empty intermediatory_author_classes.
+
+    Args:
+        session (sa.orm.Session): The database session.
+        project_id (int): The project id.
+        offset (int, optional): Offset for pagination. Defaults to 0.
+        limit (int, optional): Limit for pagination. Defaults to 10.
+
+    Returns:
+        schemas.AuthorsListResponse: The list of post authors with empty
+            intermediatory_author_classes.
+    """
+    project_namespace = utils.get_project_namespace(project_id)
+    post_authors_count = generalised_authors.get_total_count_post_authors(
+        project_namespace=project_namespace
+    )
+    if post_authors_count == 0:
+        return schemas.AuthorsListResponse(
+            authors=[],
+            meta=base_schemas.ListMeta(total_count=0, start_index=0, end_index=0),
+        )
+
+    post_authors_df = generalised_authors.get_post_authors(
+        project_namespace=project_namespace, offset=offset, limit=limit
+    )
+
+    # Build response
+    results = []
+    for idx, row in post_authors_df.iterrows():
+        response = schemas.AuthorResponse(
+            phoenix_platform_message_author_id=row["phoenix_platform_message_author_id"],
+            pi_platform_message_author_id=row["pi_platform_message_author_id"],
+            pi_platform_message_author_name=row["pi_platform_message_author_name"],
+            phoenix_processed_at=row["phoenix_processed_at"],
+            platform=row["platform"],
+            post_count=row["post_count"],
+        )
+        results.append(response)
+    start_index = offset
+    possible_end_index = offset + limit
+    end_index = min(possible_end_index, post_authors_count)
+    return schemas.AuthorsListResponse(
+        authors=results,
+        meta=base_schemas.ListMeta(
+            total_count=post_authors_count, start_index=start_index, end_index=end_index
+        ),
+    )
