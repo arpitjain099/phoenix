@@ -12,6 +12,7 @@ export interface Author {
 	phoenix_processed_at: string;
 	platform: string;
 	post_count: number;
+	pi_author_link?: string;
 	intermediatory_author_classes: {
 		class_id: number;
 		class_name: string;

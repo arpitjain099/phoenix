@@ -1,5 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 
+import { Author } from "@pages/projects/[projectid]/classifiers/manual_post_authors/model";
 import { JobRunResponse } from "src/interfaces/job-run";
 
 /**
@@ -59,16 +60,15 @@ export const formatToCurrency = (value: number | string): string => {
 export const PHEONIX_MANUAL_URL =
 	"https://docs.google.com/document/d/1Rs3WYgvkAtZJ9y1ho68AnGfC8mDuOFE9aG52bkJSG24/edit";
 
-export const getAuthorProfileLink = (
-	platform: string,
-	authorId: string,
-	authorName: string
-): string => {
-	if (platform.toLowerCase() === "facebook") {
-		return `https://www.facebook.com/${authorId}`;
+export const getAuthorProfileLink = (author: Author): string => {
+	if (author?.pi_author_link) {
+		return author.pi_author_link;
 	}
-	if (platform.toLowerCase() === "tiktok") {
-		return `https://www.tiktok.com/@${authorName}`;
+	if (author?.platform?.toLowerCase() === "facebook") {
+		return `https://www.facebook.com/${author?.phoenix_platform_message_author_id}`;
+	}
+	if (author?.platform?.toLowerCase() === "tiktok") {
+		return `https://www.tiktok.com/@${author.pi_platform_message_author_name}`;
 	}
 	return "#";
 };

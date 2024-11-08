@@ -295,11 +295,7 @@ export default function ManualPostClassifierShow(): JSX.Element {
 													<td>
 														<Link
 															target="_blank"
-															href={getAuthorProfileLink(
-																author.platform,
-																author.phoenix_platform_message_author_id,
-																author.pi_platform_message_author_name
-															)}
+															href={getAuthorProfileLink(author)}
 														>
 															{author.pi_platform_message_author_name}
 														</Link>

@@ -12,6 +12,7 @@ import {
 	Divider,
 	Group,
 	ScrollArea,
+	Text,
 } from "@mantine/core";
 import { IconTrash, IconPlus, IconCheck } from "@tabler/icons";
 import { useState, useEffect, ChangeEvent, useCallback } from "react";
@@ -398,6 +399,10 @@ const EditKeywordClassifier: React.FC = () => {
 					"classifiers.types.manual_post_authors.view.accordion.author_configuration"
 				)}
 			/>
+			<Text size="sm" color="dimmed" className="mb-4">
+				{translate("classifiers.types.manual_post_authors.author_count")}
+				{totalAuthors}
+			</Text>
 			<ScrollArea>
 				<Table highlightOnHover withBorder>
 					<thead>
@@ -446,14 +451,7 @@ const EditKeywordClassifier: React.FC = () => {
 									</div>
 								</td>
 								<td>
-									<Link
-										target="_blank"
-										href={getAuthorProfileLink(
-											author.platform,
-											author.phoenix_platform_message_author_id,
-											author.pi_platform_message_author_name
-										)}
-									>
+									<Link target="_blank" href={getAuthorProfileLink(author)}>
 										{author.pi_platform_message_author_name}
 									</Link>
 								</td>

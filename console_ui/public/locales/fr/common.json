@@ -608,6 +608,7 @@
 						"authors_section": "Auteurs (peut être modifié après création)"
 					}
 				},
+				"author_count": "Nombre total d'auteurs ayant des publications :",
 				"author_edit": {
 					"title": "Classer un auteur de publication",
 					"instruction": "Chaque modification sera enregistrée automatiquement, mais vous devrez `Exécuter et appliquer aux futurs collectes` (sur la page de modification) si vous voulez mettre à jour l'ensemble de données du tableau de bord.",

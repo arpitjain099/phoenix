@@ -608,6 +608,7 @@
 						"authors_section": "Autores (se puede editar después de crear)"
 					}
 				},
+				"author_count": "Número total de autores que tienen publicaciones: ",
 				"author_edit": {
 					"title": "Clasificar un autor de publicación",
 					"instruction": "Cada edición se guardará automáticamente, pero deberá `Ejecutar y aplicar a futuras recopilaciones` (en la página de edición) si desea que el conjunto de datos del panel de control se actualice.",

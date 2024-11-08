@@ -614,6 +614,7 @@
 						"authors_section": "Authors (can be edited after create)"
 					}
 				},
+				"author_count": "Total number of authors that have posts:",
 				"author_edit": {
 					"title": "Classify a Post Author",
 					"instruction": "Each edit will automatically saved but you will need to `Run and apply to future Gathers` (on edit page) if you want your dashboard dataset to update.",
