@@ -109,7 +109,7 @@ const CreateManualPostClassifier: React.FC = () => {
 				message: translate("classifiers.success.success"),
 			});
 			router.push(
-				`/projects/${projectid}/classifiers/${data?.type}/edit/${data.id}`
+				`/projects/${projectid}/classifiers/${data?.type}/show/${data.id}`
 			);
 		} catch (error: any) {
 			showNotification({

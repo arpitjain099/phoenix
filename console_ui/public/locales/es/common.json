@@ -613,7 +613,8 @@
 					"instruction": "Cada edición se guardará automáticamente, pero deberá `Ejecutar y aplicar a futuras recopilaciones` (en la página de edición) si desea que el conjunto de datos del panel de control se actualice.",
 					"count": "Está en el autor",
 					"processing": "Procesando",
-					"go_to_next": "Ir al siguiente autor"
+					"go_to_next": "Ir al siguiente autor",
+					"go_back_to_list": "Volver a la lista de autores"
 				},
 				"view": {
 					"text": "Ver tu clasificador de autores de post.",

@@ -613,7 +613,8 @@
 					"instruction": "Chaque modification sera enregistrée automatiquement, mais vous devrez `Exécuter et appliquer aux futurs collectes` (sur la page de modification) si vous voulez mettre à jour l'ensemble de données du tableau de bord.",
 					"count": "Vous êtes sur l'auteur",
 					"processing": "Traitement",
-					"go_to_next": "Passer à l'auteur suivant"
+					"go_to_next": "Passer à l'auteur suivant",
+					"go_back_to_list": "Retourner à la liste des auteurs"
 				},
 				"view": {
 					"text": "Voir votre classificateur d'auteurs de post.",

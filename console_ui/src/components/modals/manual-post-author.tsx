@@ -213,7 +213,9 @@ const ClassifyAuthorModal: React.FC<ClassifyAuthorModalProps> = ({
 
 				<Group position="right" mt="lg">
 					<Button variant="outline" onClick={onClose}>
-						{translate("buttons.close")}
+						{translate(
+							"classifiers.types.manual_post_authors.author_edit.go_back_to_list"
+						)}
 					</Button>
 					<Button
 						onClick={() => goToNext(authorIdx)}

@@ -619,7 +619,8 @@
 					"instruction": "Each edit will automatically saved but you will need to `Run and apply to future Gathers` (on edit page) if you want your dashboard dataset to update.",
 					"count": "You are on author",
 					"processing": "Processing",
-					"go_to_next": "Go to next author"
+					"go_to_next": "Go to next author",
+					"go_back_to_list": "Go back to author list"
 				},
 				"view": {
 					"text": "View your post authors classifier.",
