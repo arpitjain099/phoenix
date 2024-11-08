@@ -92,3 +92,15 @@ def remove_user_from_project(
     """Remove a user from a project."""
     user_project_associations.delete_user_project_association(session, project_id, user_id)
     return None
+
+
+# Get for all users in a project
+@router.get(
+    "/projects/{project_id}/users/",
+    response_model=list[user_project_associations.UserProjectAssociationResponse],
+)
+def get_users_in_project(
+    admin_user: deps.AdminOnlyUser, project_id: int, session: deps.SessionDep
+) -> list[user_project_associations.UserProjectAssociationResponse]:
+    """Get all users in a project."""
+    return user_project_associations.get_user_project_associations(session, project_id)
