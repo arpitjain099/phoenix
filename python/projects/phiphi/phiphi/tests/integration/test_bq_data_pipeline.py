@@ -560,6 +560,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
         f"""
             SELECT *
             FROM {test_project_namespace}.{constants.DATA_QUALITY_MISSING_AUTHOR_POSTS_TABLE_NAME}
+            ORDER BY post_year, post_month
             """
     )
     expected_missing_authors = pd.DataFrame(
@@ -571,7 +572,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
             "post_author_name_pi": ["United Nations", "United Nations"],
             "post_author_link_pi": [pd.NA, pd.NA],
             "post_year": [2024, 2024],
-            "post_month": [3, 2],
+            "post_month": [2, 3],
         }
     )
     pd.testing.assert_frame_equal(
