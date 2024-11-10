@@ -273,20 +273,23 @@ const ClassifyComponent: React.FC<IClassifierProps> = ({
 								<Loader size="sm" />
 							) : (
 								<>
-									<Tooltip
-										label={translate("classifiers.actions.titles.view_and_run")}
-									>
-										<Button
-											component="a"
-											p={0}
-											href={`/projects/${project_id}/classifiers/${classifierType}/${classifierId}`}
-											variant="subtle"
-											color="green"
+									{!status && (
+										<Tooltip
+											label={translate(
+												"classifiers.actions.titles.view_and_run"
+											)}
 										>
-											<IconPlayerPlay size={20} color="green" />
-										</Button>
-									</Tooltip>
-									&nbsp;
+											<Button
+												component="a"
+												p={0}
+												href={`/projects/${project_id}/classifiers/${classifierType}/${classifierId}`}
+												variant="subtle"
+												color="green"
+											>
+												<IconPlayerPlay size={20} color="green" />
+											</Button>
+										</Tooltip>
+									)}
 									{type === "classify_tabulate" &&
 										isJobRunRunning(latest_job_run) && <Loader size="sm" />}
 									{type === "classifier_archive" &&
