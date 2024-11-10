@@ -14,7 +14,12 @@ import {
 	ScrollArea,
 	Text,
 } from "@mantine/core";
-import { IconTrash, IconPlus, IconCheck } from "@tabler/icons";
+import {
+	IconTrash,
+	IconPlus,
+	IconCheck,
+	IconExternalLink,
+} from "@tabler/icons";
 import { useState, useEffect, ChangeEvent, useCallback } from "react";
 import { useParams } from "next/navigation";
 import { useTranslate } from "@refinedev/core";
@@ -23,7 +28,6 @@ import { showNotification } from "@mantine/notifications";
 import ClassifierViewBreadcrumb from "@components/breadcrumbs/classifierView";
 import PaginationComponent from "@components/table/pagination";
 import ClassifyAuthorModal from "@components/modals/manual-post-author";
-import Link from "next/link";
 import { getAuthorProfileLink } from "src/utils";
 import { Author, ClassData } from "../../model";
 
@@ -451,9 +455,17 @@ const EditKeywordClassifier: React.FC = () => {
 									</div>
 								</td>
 								<td>
-									<Link target="_blank" href={getAuthorProfileLink(author)}>
-										{author.pi_platform_message_author_name}
-									</Link>
+									{author.pi_platform_message_author_name}
+									<Button
+										component="a"
+										href={getAuthorProfileLink(author)}
+										target="_blank"
+										rel="noopener noreferrer"
+										p={0}
+										variant="subtle"
+									>
+										<IconExternalLink size={16} />
+									</Button>
 								</td>
 								<td>{author.post_count}</td>
 								<td className="capitalize">{author.platform}</td>

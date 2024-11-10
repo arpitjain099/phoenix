@@ -19,14 +19,13 @@ import {
 	Tooltip,
 } from "@mantine/core";
 import { useParams, useRouter } from "next/navigation";
-import { IconInfoCircle } from "@tabler/icons";
+import { IconInfoCircle, IconExternalLink } from "@tabler/icons";
 import { classifierService } from "src/services";
 import { showNotification } from "@mantine/notifications";
 import ClassifierViewBreadcrumb from "@components/breadcrumbs/classifierView";
 import ClassifierViewStatus from "@components/classifier/view-status";
 import ClassifierViewGeneral from "@components/classifier/view-general";
 import PaginationComponent from "@components/table/pagination";
-import Link from "next/link";
 import { getAuthorProfileLink } from "src/utils";
 import { Author } from "../model";
 
@@ -293,12 +292,18 @@ export default function ManualPostClassifierShow(): JSX.Element {
 														</div>
 													</td>
 													<td>
-														<Link
-															target="_blank"
+														{author.pi_platform_message_author_name}
+														&nbsp;
+														<Button
+															component="a"
 															href={getAuthorProfileLink(author)}
+															target="_blank"
+															rel="noopener noreferrer"
+															p={0}
+															variant="subtle"
 														>
-															{author.pi_platform_message_author_name}
-														</Link>
+															<IconExternalLink size={20} />
+														</Button>
 													</td>
 													<td>{author.post_count}</td>
 													<td className="capitalize">{author.platform}</td>

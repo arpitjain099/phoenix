@@ -18,7 +18,9 @@ import {
 	IconPlus,
 	IconArrowLeft,
 	IconDeviceFloppy,
+	IconExternalLink,
 } from "@tabler/icons";
+import { getAuthorProfileLink } from "src/utils";
 import { useState, ChangeEvent, useCallback, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useBack, useTranslate } from "@refinedev/core";
@@ -324,6 +326,17 @@ const CreateManualPostClassifier: React.FC = () => {
 								</td>
 								<td className="!text-gray-400">
 									{author.pi_platform_message_author_name}
+									&nbsp;
+									<Button
+										component="a"
+										href={getAuthorProfileLink(author)}
+										target="_blank"
+										rel="noopener noreferrer"
+										p={0}
+										variant="subtle"
+									>
+										<IconExternalLink size={20} />
+									</Button>
 								</td>
 								<td className="!text-gray-400">{author.post_count}</td>
 								<td className="capitalize !text-gray-400">{author.platform}</td>
