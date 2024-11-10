@@ -72,6 +72,56 @@ def get_post_authors(
     return post_authors_df
 
 
+def get_author(
+    project_namespace: str,
+    phoenix_platform_message_author_id: str,
+    deduplicated_authors_table_name: str = constants.DEDUPLICATED_GENERALISED_AUTHORS_TABLE_NAME,
+) -> pd.Series | None:
+    """Retrieve a single author with posts.
+
+    If `config.settings.USE_MOCK_BQ` is enabled, an author from the sample of generalised authors
+    is returned.
+    This is then used for development and testing purposes.
+
+    Be aware that if the table does not exist, the function will raise an error.
+
+    Args:
+        project_namespace (str): The project namespace.
+        phoenix_platform_message_author_id (str): The phoenix platform message author ID.
+        deduplicated_authors_table_name (str, optional): Name of the table containing deduplicated
+            generalised authors. Defaults to constants.DEDUPLICATED_GENERALISED_AUTHORS_TABLE_NAME.
+
+    Returns:
+        None: If the author is not found.
+        pd.Series: Series or a single row containing an author with a post count, adhering to
+        the `deduplicated_generalised_authors_schema` schema.
+
+    Raises:
+        pa.errors.SchemaError: If schema validation fails for the resulting DataFrame.
+    """
+    if config.settings.USE_MOCK_BQ:
+        all_authors_df = load_sample_authors()
+        single_author_df = all_authors_df[
+            all_authors_df["phoenix_platform_message_author_id"]
+            == phoenix_platform_message_author_id
+        ]
+        if single_author_df.empty:
+            return None
+        deduplicated_generalised_authors_schema.validate(single_author_df)
+        return single_author_df.iloc[0]
+
+    query = f"""
+    SELECT *
+    FROM `{project_namespace}.{deduplicated_authors_table_name}`
+    WHERE phoenix_platform_message_author_id = '{phoenix_platform_message_author_id}'
+    """
+    post_author_df = pd.read_gbq(query)
+    if post_author_df.empty:
+        return None
+    deduplicated_generalised_authors_schema.validate(post_author_df)
+    return post_author_df.iloc[0]
+
+
 def load_sample_authors(
     offset: int = 0,
     limit: int = 1000,

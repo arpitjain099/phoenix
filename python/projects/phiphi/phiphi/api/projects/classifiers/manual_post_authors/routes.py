@@ -83,6 +83,24 @@ def get_post_authors_with_intermediatory_author_classes(
 
 
 @router.get(
+    "/projects/{project_id}/classifiers/manual_post_authors/{classifier_id}/authors/{author_id}",
+)
+def get_post_author_with_intermediatory_author_classes(
+    session: deps.SessionDep,
+    project_id: int,
+    classifier_id: int,
+    author_id: str,
+) -> schemas.AuthorResponse:
+    """Get post author with intermediatory author classes."""
+    return crud.get_post_author_with_intermediatory_author_classes(
+        session=session,
+        project_id=project_id,
+        classifier_id=classifier_id,
+        author_id=author_id,
+    )
+
+
+@router.get(
     "/projects/{project_id}/classifiers/manual_post_authors/authors/",
 )
 def get_authors(

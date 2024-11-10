@@ -32,6 +32,8 @@ from phiphi.pipeline_jobs.gathers import normalisers
 from phiphi.pipeline_jobs.tabulate import flow as tabulate_flow
 from phiphi.tests.pipeline_jobs.gathers import example_gathers
 
+PHOENIX_AUTHOR_ID_FACEBOOK_POSTER = "c36c0135-7179-25f2-08b4-30fb2f96ff04"
+
 
 def assert_tabulated_messages_are_equal(
     tabulated_messages_df: pd.DataFrame, tabulated_messages_after_recompute_df: pd.DataFrame
@@ -165,6 +167,21 @@ def test_bq_pipeline_integration(tmp_bq_project):
     # Should be the second author that was gotten
     assert post_authors_df.iloc[0]["post_count"] == 4
     assert post_authors_df.iloc[0]["comment_count"] == 0
+
+    facebook_author = generalised_authors.get_author(
+        project_namespace=test_project_namespace,
+        phoenix_platform_message_author_id=PHOENIX_AUTHOR_ID_FACEBOOK_POSTER,
+    )
+    assert facebook_author is not None
+    assert (
+        facebook_author["phoenix_platform_message_author_id"] == PHOENIX_AUTHOR_ID_FACEBOOK_POSTER
+    )
+
+    # Check that the get author returns None if not found
+    facebook_author = generalised_authors.get_author(
+        project_namespace=test_project_namespace, phoenix_platform_message_author_id="not_found"
+    )
+    assert facebook_author is None
 
     gather_flow.gather_flow(
         gather_dict=example_gathers.facebook_comments_gather_example().dict(),
@@ -543,6 +560,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
         f"""
             SELECT *
             FROM {test_project_namespace}.{constants.DATA_QUALITY_MISSING_AUTHOR_POSTS_TABLE_NAME}
+            ORDER BY post_year, post_month
             """
     )
     expected_missing_authors = pd.DataFrame(
@@ -554,7 +572,7 @@ def test_bq_pipeline_integration(tmp_bq_project):
             "post_author_name_pi": ["United Nations", "United Nations"],
             "post_author_link_pi": [pd.NA, pd.NA],
             "post_year": [2024, 2024],
-            "post_month": [3, 2],
+            "post_month": [2, 3],
         }
     )
     pd.testing.assert_frame_equal(

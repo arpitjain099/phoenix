@@ -287,3 +287,67 @@ def get_post_authors(
             total_count=post_authors_count, start_index=start_index, end_index=end_index
         ),
     )
+
+
+def get_post_author_with_intermediatory_author_classes(
+    session: sa.orm.Session,
+    project_id: int,
+    classifier_id: int,
+    author_id: str,
+) -> schemas.AuthorResponse:
+    """Retrieve post author with intermediatory_author_classes.
+
+    Args:
+        session (sa.orm.Session): The database session.
+        project_id (int): The project id.
+        classifier_id (int): The classifier id.
+        author_id (int): The author id.
+
+    Returns:
+        schemas.AuthorResponse: The post author with intermediatory_author_classes.
+    """
+    orm_classifier = crud.get_orm_classifier(
+        session=session, project_id=project_id, classifier_id=classifier_id
+    )
+    if orm_classifier is None:
+        raise exceptions.ClassifierNotFound()
+
+    if orm_classifier.type != classifiers_base_schemas.ClassifierType.manual_post_authors:
+        raise exceptions.HttpException400("Invalid classifier type")
+
+    project_namespace = utils.get_project_namespace(project_id)
+    post_authors_count = generalised_authors.get_total_count_post_authors(
+        project_namespace=project_namespace
+    )
+    if post_authors_count == 0:
+        raise exceptions.HttpException404("Post author not found")
+
+    author = generalised_authors.get_author(
+        project_namespace=project_namespace, phoenix_platform_message_author_id=author_id
+    )
+
+    if author is None:
+        raise exceptions.HttpException404("Post author not found")
+
+    # Query classified post authors filtered by the IDs
+    intermediatory_author_classes = (
+        session.query(models.IntermediatoryAuthorClasses)
+        .filter(models.IntermediatoryAuthorClasses.classifier_id == orm_classifier.id)
+        .filter(models.IntermediatoryAuthorClasses.phoenix_platform_message_author_id == author_id)
+        .all()
+    )
+
+    intermediatory_author_classes_responses = [
+        schemas.IntermediatoryAuthorClassResponse.model_validate(item)
+        for item in intermediatory_author_classes
+    ]
+
+    return schemas.AuthorResponse(
+        phoenix_platform_message_author_id=author["phoenix_platform_message_author_id"],
+        pi_platform_message_author_id=author["pi_platform_message_author_id"],
+        pi_platform_message_author_name=author["pi_platform_message_author_name"],
+        phoenix_processed_at=author["phoenix_processed_at"],
+        platform=author["platform"],
+        post_count=author["post_count"],
+        intermediatory_author_classes=intermediatory_author_classes_responses,
+    )

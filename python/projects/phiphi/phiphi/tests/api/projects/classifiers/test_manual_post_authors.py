@@ -410,3 +410,44 @@ def test_manual_post_authors_get_post_authors_empty_classes_with_mock_bq(
         authors[9]["phoenix_platform_message_author_id"]
         == expected_df.iloc[9]["phoenix_platform_message_author_id"]
     )
+
+
+@pytest.mark.patch_settings({"USE_MOCK_BQ": True})
+@pytest.mark.freeze_time(CREATED_TIME)
+def test_manual_post_authors_get_author_with_mock_bq(
+    patch_settings,
+    reseed_tables,
+    client: TestClient,
+    pipeline_jobs_sample_generalised_post_authors,
+) -> None:
+    """Test get author when USE_MOCK_BQ is enabled."""
+    classifier = manual_post_authors_seed.TEST_MANUAL_POST_AUTHORS_CLASSIFIERS[1]
+    class_1 = classifier.intermediatory_classes[0].name
+    class_2 = classifier.intermediatory_classes[1].name
+    author_id = classifier.intermediatory_author_classes[0].phoenix_platform_message_author_id
+    response = client.get(
+        f"/projects/{classifier.project_id}/classifiers/manual_post_authors/{classifier.id}/authors/{author_id}"
+    )
+    assert response.status_code == 200
+    json = response.json()
+    assert json["phoenix_platform_message_author_id"] == author_id
+    assert len(json["intermediatory_author_classes"]) == 2
+    assert json["intermediatory_author_classes"][0]["class_name"] == class_1
+    assert json["intermediatory_author_classes"][1]["class_name"] == class_2
+
+
+@pytest.mark.patch_settings({"USE_MOCK_BQ": True})
+@pytest.mark.freeze_time(CREATED_TIME)
+def test_manual_post_authors_get_author_not_found_with_mock_bq(
+    patch_settings,
+    reseed_tables,
+    client: TestClient,
+    pipeline_jobs_sample_generalised_post_authors,
+) -> None:
+    """Test get author not found when USE_MOCK_BQ is enabled."""
+    classifier = manual_post_authors_seed.TEST_MANUAL_POST_AUTHORS_CLASSIFIERS[1]
+    author_id = "not_found"
+    response = client.get(
+        f"/projects/{classifier.project_id}/classifiers/manual_post_authors/{classifier.id}/authors/{author_id}"
+    )
+    assert response.status_code == 404
