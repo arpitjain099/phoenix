@@ -21,6 +21,7 @@ import {
 	IconArchive,
 	IconCreativeCommonsSa,
 	IconAlertTriangle,
+	IconPlayerPlay,
 } from "@tabler/icons";
 import { classifierService, jobRunService } from "src/services";
 import { GatherResponse } from "src/interfaces/gather";
@@ -259,7 +260,9 @@ const ClassifyComponent: React.FC<IClassifierProps> = ({
 				accessorKey: "id",
 				header: translate("table.actions"),
 				cell: function render({ row }) {
+					const { project_id } = row.original;
 					const classifierId = row.original.id;
+					const classifierType = row.original.type;
 					const { latest_job_run } = row.original;
 					const status = latest_job_run ? latest_job_run.status : null;
 					const type = latest_job_run ? latest_job_run.foreign_job_type : null;
@@ -270,13 +273,26 @@ const ClassifyComponent: React.FC<IClassifierProps> = ({
 								<Loader size="sm" />
 							) : (
 								<>
+									<Tooltip
+										label={translate("classifiers.actions.titles.view_and_run")}
+									>
+										<Button
+											component="a"
+											p={0}
+											href={`/projects/${project_id}/classifiers/${classifierType}/${classifierId}`}
+											variant="subtle"
+											color="green"
+										>
+											<IconPlayerPlay size={20} color="green" />
+										</Button>
+									</Tooltip>
+									&nbsp;
 									{type === "classify_tabulate" &&
 										isJobRunRunning(latest_job_run) && <Loader size="sm" />}
 									{type === "classifier_archive" &&
 										isJobRunRunning(latest_job_run) && <Loader size="sm" />}
 									{type === "classifier_restore" &&
 										isJobRunRunning(latest_job_run) && <Loader size="sm" />}
-
 									{type === "classify_tabulate" &&
 										status === "completed_successfully" && (
 											<Popover position="bottom" withArrow shadow="md">
@@ -310,7 +326,6 @@ const ClassifyComponent: React.FC<IClassifierProps> = ({
 												</Popover.Dropdown>
 											</Popover>
 										)}
-
 									{type === "classify_tabulate" &&
 										!isJobRunRunning(latest_job_run) &&
 										status !== "completed_successfully" && (

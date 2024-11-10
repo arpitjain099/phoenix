@@ -662,6 +662,7 @@
 			"button": "Yes, Proceed",
 			"titles": {
 				"archive": "Archive",
+				"view_and_run": "View and run",
 				"restore": "Restore"
 			},
 			"text": {

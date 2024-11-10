@@ -656,6 +656,7 @@
 			"button": "نعم، تابع",
 			"titles": {
 				"archive": "أرشفة",
+				"view_and_run": "عرض وتشغيل",
 				"restore": "استعادة"
 			},
 			"text": {

@@ -656,6 +656,7 @@
 			"button": "Sí, proceder",
 			"titles": {
 				"archive": "Archivar",
+				"view_and_run": "Ver y ejecutar",
 				"restore": "Restaurar"
 			},
 			"text": {

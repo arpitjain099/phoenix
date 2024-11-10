@@ -4,6 +4,8 @@ import { showNotification } from "@mantine/notifications";
 import { Author } from "@pages/projects/[projectid]/classifiers/manual_post_authors/model";
 import { classifierService } from "src/services";
 import { useTranslate } from "@refinedev/core";
+import { getAuthorProfileLink } from "src/utils";
+import { IconExternalLink } from "@tabler/icons";
 
 interface ClassifyAuthorModalProps {
 	authorIdx: number;
@@ -162,22 +164,25 @@ const ClassifyAuthorModal: React.FC<ClassifyAuthorModalProps> = ({
 				<div>
 					<div className="w-full flex mb-5 p-1">
 						<div className="w-1/2 flex flex-col">
-							<Text className="font-medium text-lg capitalize">
-								{authorData.pi_platform_message_author_name}
-							</Text>
+							<div className="flex items-center">
+								<Text className="font-medium text-lg capitalize">
+									{authorData.pi_platform_message_author_name}
+								</Text>
+								&nbsp;
+								<Button
+									component="a"
+									href={getAuthorProfileLink(author)}
+									target="_blank"
+									rel="noopener noreferrer"
+									p={0}
+									variant="subtle"
+								>
+									<IconExternalLink size={20} />
+								</Button>
+							</div>
 							<Text className="text-base text-neutral-500 font-normal">
 								{translate(
 									"classifiers.types.manual_post_authors.fields.author_name"
-								)}
-							</Text>
-						</div>
-						<div className="w-1/2 flex flex-col">
-							<Text className="font-medium text-lg capitalize">
-								{authorData.phoenix_platform_message_author_id}
-							</Text>
-							<Text className="text-base text-neutral-500 font-normal">
-								{translate(
-									"classifiers.types.manual_post_authors.fields.author_link"
 								)}
 							</Text>
 						</div>
