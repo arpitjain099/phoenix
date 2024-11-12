@@ -85,9 +85,10 @@ def read_data(query: str, dataset: str, table: str) -> pd.DataFrame:
         pd.DataFrame: The resulting DataFrame from the query.
     """
     if config.settings.USE_MOCK_BQ:
-        parquet_file_path = os.path.join(
-            config.settings.MOCK_BQ_ROOT_DIR, dataset, table + ".parquet"
-        )
+        base_path = config.settings.MOCK_BQ_ROOT_DIR
+        parquet_file_path = os.path.normpath(os.path.join(base_path, dataset, table + ".parquet"))
+        if not parquet_file_path.startswith(base_path):
+            raise Exception("Access to the specified path is not allowed.")
         if os.path.exists(parquet_file_path):
             full_table_df = pd.read_parquet(parquet_file_path)
             # Simulate SQL query using pandas query
