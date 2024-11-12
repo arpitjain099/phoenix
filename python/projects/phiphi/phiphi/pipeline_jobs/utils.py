@@ -106,12 +106,16 @@ def translate_bq_to_pandas_query(bq_query: str) -> str:
     if not match:
         raise ValueError("Only simple WHERE clauses are supported.")
     where_clause = match.group(1)
+    
+    # Validate and sanitize the WHERE clause
+    allowed_chars = re.compile(r"^[a-zA-Z0-9_ ='<>()]+$")
+    if not allowed_chars.match(where_clause):
+        raise ValueError("Invalid characters in WHERE clause.")
+    
     # Replace BigQuery operators with Pandas equivalents
     pandas_query = where_clause.replace(" AND ", " and ").replace(" OR ", " or ")
     # Change "=" to "=="
     pandas_query = re.sub(r"(?<!=)=(?!=)", "==", pandas_query)
-    # Remove backticks if present
-    pandas_query = pandas_query.replace("`", "")
     return pandas_query
 
 
