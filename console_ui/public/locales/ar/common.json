@@ -338,7 +338,7 @@
 				"fields": {
 					"limit_replies": "تحديد الردود",
 					"nested_replies": "الردود المتداخلة",
-					"limit_comments_per_post": "تحديد التعليقات لكل منشور",
+					"limit_comments_per_post": "تحديد الحد الأقصى لعدد التعليقات",
 					"include_comment_replies": "شمل الردود على التعليقات",
 					"sort_comments_by": "ترتيب التعليقات حسب",
 					"sort_comments_by_options": {
@@ -454,7 +454,7 @@
 					"limit_comments_per_post": "تحديد عدد التعليقات لكل منشور",
 					"include_comment_replies": "الردود على التعليقات",
 					"input": {
-						"url_list": "أضف منشورات تيك توك التي ترغب في جمع التعليقات منها"
+						"url_list": "أضف عنوان URL للمنشورات على تيك توك التي ترغب في جمعها منها."
 					},
 					"info": {
 						"limit_comments_per_post": "تحديد عدد التعليقات التي يتم جمعها لكل منشور."

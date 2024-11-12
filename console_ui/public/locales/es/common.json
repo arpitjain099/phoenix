@@ -338,7 +338,7 @@
 				"fields": {
 					"limit_replies": "Limitar respuestas",
 					"nested_replies": "Respuestas anidadas",
-					"limit_comments_per_post": "Limitar comentarios por publicación",
+					"limit_comments_per_post": "Limitar el número total de comentarios",
 					"include_comment_replies": "Incluir respuestas a comentarios",
 					"sort_comments_by": "Ordenar comentarios por",
 					"sort_comments_by_options": {
@@ -454,7 +454,7 @@
 					"limit_comments_per_post": "Limitar comentarios por publicación",
 					"include_comment_replies": "Respuestas a comentarios",
 					"input": {
-						"url_list": "Añadir publicaciones de Tiktok de las que te gustaría recopilar comentarios"
+						"url_list": "Añade la URL de las publicaciones de TikTok de las que te gustaría recopilar."
 					},
 					"info": {
 						"limit_comments_per_post": "Limitar el número de comentarios que se recopilan para cada publicación."
