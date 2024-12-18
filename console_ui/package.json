@@ -46,7 +46,7 @@
 		"i18next-resources-to-backend": "^1.2.0",
 		"i18next-xhr-backend": "^3.2.2",
 		"js-cookie": "^3.0.5",
-		"next": "^14.2.3",
+		"next": "^14.2.20",
 		"next-i18next": "^8.9.0",
 		"nookies": "^2.5.2",
 		"react": "^18.0.0",
