@@ -21,7 +21,7 @@ identify==2.5.33
 iniconfig==2.0.0
     # via pytest
 mypy==1.8.0
-    # via -r requirments.in
+    # via -r dev-requirements.in
 mypy-extensions==1.0.0
     # via mypy
 nodeenv==1.8.0
@@ -31,28 +31,28 @@ packaging==23.2
     #   build
     #   pytest
 pip-tools==7.3.0
-    # via -r requirments.in
+    # via -r dev-requirements.in
 platformdirs==4.2.0
     # via virtualenv
 pluggy==1.4.0
     # via pytest
 pre-commit==3.6.0
-    # via -r requirments.in
+    # via -r dev-requirements.in
 pyproject-hooks==1.0.0
     # via build
 pytest==8.0.0
     # via
-    #   -r requirments.in
+    #   -r dev-requirements.in
     #   pytest-cov
 pytest-cov==4.1.0
-    # via -r requirments.in
+    # via -r dev-requirements.in
 pyyaml==6.0.1
     # via pre-commit
 ruff==0.2.1
-    # via -r requirments.in
+    # via -r dev-requirements.in
 typing-extensions==4.9.0
     # via mypy
-virtualenv==20.25.0
+virtualenv==20.26.6
     # via pre-commit
 wheel==0.42.0
     # via pip-tools
