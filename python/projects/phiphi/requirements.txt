@@ -516,7 +516,7 @@ ujson==5.10.0
     # via
     #   fastapi
     #   prefect
-urllib3==2.2.2
+urllib3==2.5.0
     # via
     #   docker
     #   kubernetes
