@@ -51,7 +51,7 @@ certifi==2024.7.4
     #   kubernetes
     #   requests
     #   sentry-sdk
-cffi==1.17.0
+cffi==2.0.0
     # via cryptography
 cfgv==3.4.0
     # via
@@ -79,7 +79,7 @@ coverage[toml]==7.4.1
     #   pytest-cov
 croniter==2.0.7
     # via prefect
-cryptography==44.0.1
+cryptography==46.0.5
     # via prefect
 dateparser==1.2.0
     # via prefect
